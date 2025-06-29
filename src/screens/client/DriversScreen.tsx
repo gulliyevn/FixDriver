@@ -40,6 +40,9 @@ interface Driver {
   hasCharger: boolean;
   forMember: 'me' | 'daughter' | 'son' | 'wife' | 'husband'; // для кого водитель
   tripDays: string; // дни поездок
+  addresses: string[]; // массив адресов для поездки
+  departureTime: string; // время выезда
+  arrivalTime: string; // время доезда
 }
 
 // Добавляем определение familyMembers с иконками (как в MapScreen)
@@ -72,6 +75,9 @@ const drivers: Driver[] = [
     hasCharger: true,
     forMember: 'me',
     tripDays: 'пн, ср, пт',
+    addresses: ['Дом ул. Низами 10', 'Офис БЦ Port Baku', 'Торговый центр 28 Mall'],
+    departureTime: '08:00',
+    arrivalTime: '18:30',
   },
   {
     id: 'driver2',
@@ -93,6 +99,9 @@ const drivers: Driver[] = [
     hasCharger: true,
     forMember: 'me',
     tripDays: 'вт, чт',
+    addresses: ['БЦ Port Baku', 'Аэропорт', 'ТЦ 28 Mall', 'Вокзал'],
+    departureTime: '09:00',
+    arrivalTime: '19:00',
   },
   {
     id: 'driver3',
@@ -114,6 +123,9 @@ const drivers: Driver[] = [
     hasCharger: true,
     forMember: 'daughter',
     tripDays: 'пн-пт',
+    addresses: ['Школа №132 Ясамал', 'Дом ул. Низами 10'],
+    departureTime: '07:30',
+    arrivalTime: '16:00',
   },
   {
     id: 'driver4',
@@ -135,6 +147,9 @@ const drivers: Driver[] = [
     hasCharger: false,
     forMember: 'daughter',
     tripDays: 'сб, вс',
+    addresses: ['Дом ул. Низами 10', 'Парк Bulvar', 'Торговый центр'],
+    departureTime: '10:00',
+    arrivalTime: '18:00',
   },
   {
     id: 'driver5',
@@ -156,6 +171,9 @@ const drivers: Driver[] = [
     hasCharger: false,
     forMember: 'son',
     tripDays: 'пн, ср, пт, сб',
+    addresses: ['Спорткомплекс Наримановский', 'Дом ул. Низами 10', 'Стадион'],
+    departureTime: '15:00',
+    arrivalTime: '20:00',
   },
   {
     id: 'driver6',
@@ -177,6 +195,9 @@ const drivers: Driver[] = [
     hasCharger: true,
     forMember: 'wife',
     tripDays: 'вт, чт, сб',
+    addresses: ['Салон красоты ул. Физули', 'ТЦ 28 Mall', 'Торговый квартал'],
+    departureTime: '09:00',
+    arrivalTime: '19:00',
   },
   {
     id: 'driver7',
@@ -198,6 +219,9 @@ const drivers: Driver[] = [
     hasCharger: false,
     forMember: 'wife',
     tripDays: 'пн-вс',
+    addresses: ['Дом ул. Низами 10', 'Аптека', 'Продуктовый'],
+    departureTime: '08:00',
+    arrivalTime: '22:00',
   },
   {
     id: 'driver8',
@@ -219,6 +243,9 @@ const drivers: Driver[] = [
     hasCharger: true,
     forMember: 'husband',
     tripDays: 'ежедневно',
+    addresses: ['Автосервис ул. Гянджа', 'Дом ул. Низами 10', 'Заправка', 'Рынок', 'Банк'],
+    departureTime: '07:00',
+    arrivalTime: '20:00',
   },
 ];
 
@@ -243,6 +270,13 @@ const DriversScreen: React.FC = () => {
     hasWifi: false,
     hasCharger: false,
     onlyAvailable: false,
+    // Новые фильтры
+    timeSlot: 'all', // утром, днем, вечером, круглосуточно
+    workDays: 'all', // будни, выходные, все дни
+    minExperience: 0, // минимальный опыт в годах
+    maxCarAge: 10, // максимальный возраст авто (лет)
+    familyMember: 'all', // для кого водитель (me, daughter, son, wife, husband)
+    priceRange: 'all', // экономичные, стандартные, премиум
   });
 
   useEffect(() => {
@@ -395,6 +429,13 @@ const DriversScreen: React.FC = () => {
       hasWifi: false,
       hasCharger: false,
       onlyAvailable: false,
+      // Новые фильтры
+      timeSlot: 'all',
+      workDays: 'all',
+      minExperience: 0,
+      maxCarAge: 10,
+      familyMember: 'all',
+      priceRange: 'all',
     });
   };
 
@@ -510,6 +551,11 @@ const DriversScreen: React.FC = () => {
     { id: 'nearby', label: 'Близко', icon: 'location' },
     { id: 'top', label: 'Топ', icon: 'star' },
     { id: 'available', label: 'Свободны', icon: 'checkmark-circle' },
+    { id: 'morning', label: 'Утром', icon: 'sunny' },
+    { id: 'evening', label: 'Вечером', icon: 'moon' },
+    { id: 'weekdays', label: 'Будни', icon: 'calendar' },
+    { id: 'premium', label: 'Премиум', icon: 'diamond' },
+    { id: 'budget', label: 'Эконом', icon: 'wallet' },
   ];
 
   const filteredDrivers = drivers.filter(driver => {
@@ -518,6 +564,22 @@ const DriversScreen: React.FC = () => {
     if (selectedFilter === 'nearby' && parseFloat(driver.distance) > 1.0) return false;
     if (selectedFilter === 'top' && driver.rating < 4.8) return false;
     if (selectedFilter === 'available' && !driver.isAvailable) return false;
+    
+    // Новые быстрые фильтры
+    if (selectedFilter === 'morning') {
+      const departureHour = parseInt(driver.departureTime.split(':')[0]);
+      if (!(departureHour >= 6 && departureHour <= 12)) return false;
+    }
+    if (selectedFilter === 'evening') {
+      const departureHour = parseInt(driver.departureTime.split(':')[0]);
+      if (!(departureHour >= 18 && departureHour <= 24)) return false;
+    }
+    if (selectedFilter === 'weekdays') {
+      const tripDays = driver.tripDays.toLowerCase();
+      if (!(tripDays.includes('пн') || tripDays.includes('вт') || tripDays.includes('ср') || tripDays.includes('чт') || tripDays.includes('пт') || tripDays.includes('пн-пт'))) return false;
+    }
+    if (selectedFilter === 'premium' && driver.package !== 'premium') return false;
+    if (selectedFilter === 'budget' && driver.price > 8) return false;
 
     // Поиск по имени
     if (searchQuery && !driver.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -531,6 +593,46 @@ const DriversScreen: React.FC = () => {
     if (activeFilters.hasWifi && !driver.hasWifi) return false;
     if (activeFilters.hasCharger && !driver.hasCharger) return false;
     if (activeFilters.onlyAvailable && !driver.isAvailable) return false;
+
+    // Новые умные фильтры
+    
+    // Фильтр по времени работы
+    if (activeFilters.timeSlot !== 'all') {
+      const departureHour = parseInt(driver.departureTime.split(':')[0]);
+      const arrivalHour = parseInt(driver.arrivalTime.split(':')[0]);
+      
+      if (activeFilters.timeSlot === 'morning' && !(departureHour >= 6 && departureHour <= 12)) return false;
+      if (activeFilters.timeSlot === 'afternoon' && !(departureHour >= 12 && departureHour <= 18)) return false;
+      if (activeFilters.timeSlot === 'evening' && !(departureHour >= 18 && departureHour <= 24)) return false;
+      if (activeFilters.timeSlot === 'night' && !(departureHour >= 0 && departureHour <= 6)) return false;
+      if (activeFilters.timeSlot === '24h' && !((arrivalHour - departureHour) >= 12 || (arrivalHour + 24 - departureHour) >= 12)) return false;
+    }
+
+    // Фильтр по дням недели
+    if (activeFilters.workDays !== 'all') {
+      const tripDays = driver.tripDays.toLowerCase();
+      if (activeFilters.workDays === 'weekdays' && !(tripDays.includes('пн') || tripDays.includes('вт') || tripDays.includes('ср') || tripDays.includes('чт') || tripDays.includes('пт') || tripDays.includes('пн-пт'))) return false;
+      if (activeFilters.workDays === 'weekends' && !(tripDays.includes('сб') || tripDays.includes('вс'))) return false;
+      if (activeFilters.workDays === 'daily' && !tripDays.includes('ежедневно') && !tripDays.includes('пн-вс')) return false;
+    }
+
+    // Фильтр по опыту водителя
+    if (driver.experience < activeFilters.minExperience) return false;
+
+    // Фильтр по возрасту автомобиля
+    const currentYear = new Date().getFullYear();
+    const carAge = currentYear - driver.vehicleYear;
+    if (carAge > activeFilters.maxCarAge) return false;
+
+    // Фильтр по семейному члену
+    if (activeFilters.familyMember !== 'all' && driver.forMember !== activeFilters.familyMember) return false;
+
+    // Фильтр по ценовому диапазону
+    if (activeFilters.priceRange !== 'all') {
+      if (activeFilters.priceRange === 'budget' && driver.price > 8) return false;
+      if (activeFilters.priceRange === 'standard' && (driver.price < 8 || driver.price > 12)) return false;
+      if (activeFilters.priceRange === 'premium' && driver.price < 12) return false;
+    }
 
     return true;
   });
@@ -555,6 +657,22 @@ const DriversScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.filterButton} onPress={handleFilterPress}>
             <Ionicons name="options-outline" size={24} color="#1E3A8A" />
+            {/* Индикатор активных фильтров */}
+            {(activeFilters.package !== 'all' || 
+              activeFilters.timeSlot !== 'all' || 
+              activeFilters.workDays !== 'all' ||
+              activeFilters.familyMember !== 'all' ||
+              activeFilters.priceRange !== 'all' ||
+              activeFilters.minExperience > 0 ||
+              activeFilters.maxCarAge < 10 ||
+              activeFilters.hasAirCondition ||
+              activeFilters.hasWifi ||
+              activeFilters.hasCharger ||
+              activeFilters.onlyAvailable) && (
+              <View style={styles.filterBadge}>
+                <Text style={styles.filterBadgeText}>•</Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -614,7 +732,11 @@ const DriversScreen: React.FC = () => {
           
           return (
             <AppCard key={driver.id} style={styles.driverCard} margin={8}>
-              <View style={styles.driverContent}>
+              <TouchableOpacity 
+                style={styles.driverContent}
+                onPress={() => toggleDriverExpansion(driver.id)}
+                activeOpacity={0.9}
+              >
                 {/* Компактная карточка водителя */}
                 <View style={styles.driverCompactHeader}>
                   {/* Аватар слева */}
@@ -641,33 +763,19 @@ const DriversScreen: React.FC = () => {
                       </Text>
                     </View>
                     
-                    {/* Статус и кнопка раскрывания в одной строке */}
-                    <View style={styles.statusExpandRow}>
-                       <View style={styles.statusInfo}>
-                         <View style={[
-                           styles.statusDot,
-                           { backgroundColor: driver.isOnline ? '#10B981' : '#6B7280' }
-                         ]} />
-                         <Text style={[styles.statusText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                           {driver.isOnline ? 'Онлайн' : 'Офлайн'}
-                         </Text>
-                       </View>
-                       
-                       <TouchableOpacity 
-                         style={styles.expandButton}
-                         onPress={() => toggleDriverExpansion(driver.id)}
-                         activeOpacity={0.7}
-                       >
-                         <Ionicons 
-                           name={isExpanded ? "chevron-up" : "chevron-down"} 
-                           size={20} 
-                           color="#1E3A8A" 
-                         />
-                       </TouchableOpacity>
-                     </View>
+                    {/* Статус водителя */}
+                    <View style={styles.statusInfo}>
+                      <View style={[
+                        styles.statusDot,
+                        { backgroundColor: driver.isOnline ? '#10B981' : '#6B7280' }
+                      ]} />
+                      <Text style={[styles.statusText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                        {driver.isOnline ? 'Онлайн' : 'Офлайн'}
+                      </Text>
+                    </View>
                      
-                     {/* Тег для кого водитель */}
-                                            <View style={styles.memberTagRow}>
+                     {/* Тег для кого водитель - с большим отступом */}
+                     <View style={styles.memberTagRowSpaced}>
                         <View style={[styles.memberTagCompact, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}>
                           <Ionicons 
                             name={getMemberIcon(driver.forMember) as any} 
@@ -679,42 +787,64 @@ const DriversScreen: React.FC = () => {
                             {getMemberData(driver.forMember).name}
                           </Text>
                         </View>
-                       </View>
+                     </View>
                   </View>
                 </View>
 
                 {/* Раскрывающиеся детали */}
                 {isExpanded && (
                   <View style={styles.driverExpanded}>
-                    {/* Маршрутная информация */}
+                    {/* Маршрутная информация с временем справа от каждого адреса */}
                     <View style={styles.routeSection}>
-                      <View style={styles.routePoint}>
-                        <View style={[styles.routeIcon, { backgroundColor: '#10B981' }]}>
-                          <Text style={styles.routeIconText}>A</Text>
-                        </View>
-                        <Text style={[styles.routeText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-                          {getMemberData(driver.forMember).addressA}
-                        </Text>
-                      </View>
-                      
-                      <View style={styles.routePoint}>
-                        <View style={[styles.routeIcon, { backgroundColor: '#EF4444' }]}>
-                          <Text style={styles.routeIconText}>B</Text>
-                        </View>
-                        <Text style={[styles.routeText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-                          {getMemberData(driver.forMember).addressB}
-                        </Text>
-                      </View>
+                      {driver.addresses.map((address, index) => {
+                        // Определяем цвет и тип точки: зеленая для выезда, синие для промежуточных, синяя капля для финиша
+                        let pinColor: string;
+                        let pinIcon: string;
+                        let timeToShow: string;
+                        
+                        if (index === 0) {
+                          pinColor = '#10B981'; // зеленая для выезда
+                          pinIcon = 'ellipse';
+                          timeToShow = driver.departureTime;
+                        } else if (index === driver.addresses.length - 1) {
+                          pinColor = '#3B82F6'; // синяя для приезда
+                          pinIcon = 'location';
+                          timeToShow = driver.arrivalTime;
+                        } else {
+                          pinColor = '#3B82F6'; // синяя для промежуточных точек
+                          pinIcon = 'ellipse';
+                          // Для промежуточных точек можно показать примерное время или пустую строку
+                          const hours = parseInt(driver.departureTime.split(':')[0]);
+                          const minutes = parseInt(driver.departureTime.split(':')[1]);
+                          const intermediateTime = new Date();
+                          intermediateTime.setHours(hours + index, minutes + (index * 15));
+                          timeToShow = `${intermediateTime.getHours().toString().padStart(2, '0')}:${intermediateTime.getMinutes().toString().padStart(2, '0')}`;
+                        }
+                        
+                        return (
+                          <View key={index} style={styles.routePointWithTime}>
+                            <View style={styles.routeLeftSide}>
+                              <View style={styles.routePinContainer}>
+                                <Ionicons 
+                                  name={pinIcon as any}
+                                  size={pinIcon === 'ellipse' ? 12 : 20} 
+                                  color={pinColor} 
+                                />
+                              </View>
+                              <Text style={[styles.routeText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+                                {address}
+                              </Text>
+                            </View>
+                            <Text style={[styles.routeTime, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                              {timeToShow}
+                            </Text>
+                          </View>
+                        );
+                      })}
                     </View>
 
-                    {/* Время и расстояние */}
+                    {/* Дополнительная информация */}
                     <View style={styles.tripDetails}>
-                      <View style={styles.tripDetailItem}>
-                        <Ionicons name="location" size={16} color="#6B7280" />
-                        <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                          {driver.distance}
-                        </Text>
-                      </View>
                       <View style={styles.tripDetailItem}>
                         <Ionicons name="calendar" size={16} color="#6B7280" />
                         <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
@@ -722,9 +852,15 @@ const DriversScreen: React.FC = () => {
                         </Text>
                       </View>
                       <View style={styles.tripDetailItem}>
-                        <Ionicons name="car" size={16} color="#6B7280" />
+                        <Ionicons name="diamond" size={16} color="#6B7280" />
                         <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                          {driver.totalRides} поездок
+                          {driver.package === 'base' ? 'Базовый' : 
+                           driver.package === 'plus' ? 'Плюс' : 'Премиум'}
+                        </Text>
+                      </View>
+                      <View style={styles.tripDetailItem}>
+                        <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                          {driver.addresses.length} остановок
                         </Text>
                       </View>
                     </View>
@@ -761,7 +897,7 @@ const DriversScreen: React.FC = () => {
                     </View>
                   </View>
                 )}
-              </View>
+              </TouchableOpacity>
             </AppCard>
           );
         })}
@@ -934,6 +1070,126 @@ const DriversScreen: React.FC = () => {
           )}
         </View>
       </Modal>
+
+      {/* Модал расширенных фильтров */}
+      <Modal
+        visible={showFilterModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <View style={[styles.modalContainer, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: isDark ? '#333333' : '#E5E5EA' }]}>
+            <Text style={[styles.modalTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+              Фильтры водителей
+            </Text>
+            <TouchableOpacity onPress={() => setShowFilterModal(false)} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color={isDark ? '#FFFFFF' : '#000000'} />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={styles.filterContent} showsVerticalScrollIndicator={false}>
+            {/* Быстрые настройки */}
+            <View style={styles.filterGroup}>
+              <Text style={[styles.filterGroupTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                Быстрые настройки
+              </Text>
+              
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, timeSlot: 'morning', familyMember: 'all' }));
+                }}
+              >
+                <Ionicons name="sunny" size={20} color="#F59E0B" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Утренние водители (6:00-12:00)
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, priceRange: 'budget', package: 'base' }));
+                }}
+              >
+                <Ionicons name="wallet" size={20} color="#10B981" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Экономичные (до 8 ман)
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, package: 'premium', hasAirCondition: true, hasWifi: true }));
+                }}
+              >
+                <Ionicons name="diamond" size={20} color="#8B5CF6" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Премиум сервис
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, workDays: 'weekdays', timeSlot: 'morning' }));
+                }}
+              >
+                <Ionicons name="briefcase" size={20} color="#3B82F6" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Для работы (будни, утром)
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, familyMember: 'daughter', timeSlot: 'morning' }));
+                }}
+              >
+                <Ionicons name="flower" size={20} color="#EC4899" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Для дочери (школа)
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+                onPress={() => {
+                  setActiveFilters(prev => ({ ...prev, minExperience: 5, minRating: 4.5 }));
+                }}
+              >
+                <Ionicons name="shield-checkmark" size={20} color="#059669" />
+                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Опытные водители (5+ лет)
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Кнопки действий */}
+            <View style={styles.filterActions}>
+              <TouchableOpacity 
+                style={[styles.resetButton, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}
+                onPress={resetFilters}
+              >
+                <Text style={[styles.resetButtonText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Сбросить
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.applyButton}
+                onPress={() => setShowFilterModal(false)}
+              >
+                <Text style={styles.applyButtonText}>
+                  Применить
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -959,6 +1215,23 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     padding: 8,
+    position: 'relative',
+  },
+  filterBadge: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+    backgroundColor: '#EF4444',
+    borderRadius: 6,
+    width: 12,
+    height: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  filterBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   searchBarWrapper: {
     paddingHorizontal: 16,
@@ -1032,6 +1305,7 @@ const styles = StyleSheet.create({
   },
   driverContent: {
     paddingVertical: 8,
+    borderRadius: 12,
   },
   driverHeader: {
     flexDirection: 'row',
@@ -1513,6 +1787,100 @@ const styles = StyleSheet.create({
   memberTagText: {
     fontSize: 11,
     fontWeight: '500',
+  },
+  // Новые стили для адресов с временем
+  addAddressButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    opacity: 0.7,
+  },
+  addAddressText: {
+    fontSize: 13,
+    fontWeight: '500',
+    marginLeft: 8,
+  },
+  routePinContainer: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  routePointWithTime: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  routeLeftSide: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  routeTime: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
+  memberTagRowSpaced: {
+    flexDirection: 'row',
+    marginTop: 8,
+    marginLeft: -4, // сдвигаем левее для выравнивания с "Онлайн"
+  },
+  
+  // Стили модала фильтров
+  filterContent: {
+    flex: 1,
+    padding: 16,
+  },
+  filterGroup: {
+    marginBottom: 24,
+  },
+  filterGroupTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  filterOptionText: {
+    fontSize: 16,
+    marginLeft: 12,
+    flex: 1,
+  },
+  filterActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+    gap: 12,
+  },
+  resetButton: {
+    flex: 1,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  resetButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  applyButton: {
+    flex: 2,
+    backgroundColor: '#1E3A8A',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  applyButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 
 });
