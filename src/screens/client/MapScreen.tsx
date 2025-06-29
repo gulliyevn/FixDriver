@@ -80,6 +80,8 @@ const memberRoutes = {
     traffic: 'Сильные пробки',
     pointA: { latitude: 40.4093, longitude: 49.8671 }, // Низами
     pointB: { latitude: 40.3650, longitude: 49.8350 }, // Port Baku
+    departureTime: '08:30',
+    arrivalTime: '08:48',
   },
   daughter: {
     addressA: 'Школа №132, Ясамал',
@@ -88,6 +90,8 @@ const memberRoutes = {
     traffic: 'Легкие пробки',
     pointA: { latitude: 40.3950, longitude: 49.8820 }, // Ясамал
     pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
+    departureTime: '13:15',
+    arrivalTime: '13:27',
   },
   son: {
     addressA: 'Спорткомплекс, Наримановский р-н',
@@ -96,6 +100,8 @@ const memberRoutes = {
     traffic: 'Очень сильные пробки',
     pointA: { latitude: 40.4200, longitude: 49.9100 }, // Нариманов
     pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
+    departureTime: '16:00',
+    arrivalTime: '16:25',
   },
   wife: {
     addressA: 'Салон красоты, ул. Физули',
@@ -104,6 +110,8 @@ const memberRoutes = {
     traffic: 'Свободно',
     pointA: { latitude: 40.3780, longitude: 49.8480 }, // Физули
     pointB: { latitude: 40.3850, longitude: 49.8550 }, // 28 Mall
+    departureTime: '11:45',
+    arrivalTime: '11:53',
   },
   husband: {
     addressA: 'Автосервис, ул. Гянджа',
@@ -112,6 +120,8 @@ const memberRoutes = {
     traffic: 'Средние пробки',
     pointA: { latitude: 40.4300, longitude: 49.8200 }, // Гянджа
     pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
+    departureTime: '18:20',
+    arrivalTime: '18:42',
   },
 };
 
@@ -648,13 +658,19 @@ const MapScreen: React.FC = () => {
               <>
                 {/* Информация о маршруте */}
                 <View style={styles.routeInfoSection}>
-                  <View style={styles.routePointInfo}>
-                    <Ionicons name="location" size={16} color="#1E3A8A" />
-                    <Text style={styles.routePointText}>{currentRoute.addressA}</Text>
+                  <View style={styles.routePointWithTime}>
+                    <View style={styles.routePointLeft}>
+                      <Ionicons name="location" size={16} color="#1E3A8A" />
+                      <Text style={styles.routePointText}>{currentRoute.addressA}</Text>
+                    </View>
+                    <Text style={[styles.routeTimeText, { color: '#1E3A8A' }]}>{currentRoute.departureTime}</Text>
                   </View>
-                  <View style={styles.routePointInfo}>
-                    <Ionicons name="location" size={16} color="#22C55E" />
-                    <Text style={styles.routePointText}>{currentRoute.addressB}</Text>
+                  <View style={styles.routePointWithTime}>
+                    <View style={styles.routePointLeft}>
+                      <Ionicons name="location" size={16} color="#22C55E" />
+                      <Text style={styles.routePointText}>{currentRoute.addressB}</Text>
+                    </View>
+                    <Text style={[styles.routeTimeText, { color: '#22C55E' }]}>{currentRoute.arrivalTime}</Text>
                   </View>
                   <View style={styles.routeMetaInfo}>
                     <Text style={styles.routeMetaText}>
@@ -1566,6 +1582,19 @@ const styles = StyleSheet.create({
   bottomButtonText: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  
+  // Новые стили для маршрута с временем
+  routePointWithTime: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  routePointLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
 });
 
