@@ -34,6 +34,7 @@ interface MapViewProps {
   totalDuration?: number;
   scrollToUserLocation?: boolean;
   mapType?: 'standard' | 'satellite' | 'hybrid' | 'terrain';
+  driverLocation?: { latitude: number; longitude: number } | null;
 }
 
 const MapViewComponent = forwardRef<any, MapViewProps>(({
@@ -48,6 +49,7 @@ const MapViewComponent = forwardRef<any, MapViewProps>(({
   totalDuration = 0,
   scrollToUserLocation = false,
   mapType = 'standard',
+  driverLocation = null,
 }, ref) => {
   const { theme } = useTheme();
   const { user } = useAuth();
@@ -319,6 +321,35 @@ const MapViewComponent = forwardRef<any, MapViewProps>(({
             </View>
           </Marker>,
         ]}
+
+        {/* Маркер водителя */}
+        {driverLocation && (
+          <Marker
+            key="driver"
+            coordinate={driverLocation}
+            title="Водитель"
+            description="Ваш водитель"
+            anchor={{ x: 0.5, y: 0.5 }}
+          >
+            <View style={{
+              backgroundColor: '#1E3A8A',
+              borderRadius: 20,
+              width: 40,
+              height: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 3,
+              borderColor: '#FFFFFF',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 5,
+            }}>
+              <Ionicons name="car" size={20} color="#FFFFFF" />
+            </View>
+          </Marker>
+        )}
 
         {/* Базовая линия маршрута */}
         {getAllRouteCoordinates().length > 0 && (

@@ -72,57 +72,190 @@ const memberDrivers = {
   },
 };
 
-const memberRoutes = {
-  me: {
-    addressA: 'Дом, ул. Низами, 10',
-    addressB: 'Офис, БЦ "Port Baku"',
-    eta: '18 мин',
-    traffic: 'Сильные пробки',
-    pointA: { latitude: 40.4093, longitude: 49.8671 }, // Низами
-    pointB: { latitude: 40.3650, longitude: 49.8350 }, // Port Baku
-    departureTime: '08:30',
-    arrivalTime: '08:48',
-  },
-  daughter: {
-    addressA: 'Школа №132, Ясамал',
-    addressB: 'Дом, ул. Низами, 10',
-    eta: '12 мин',
-    traffic: 'Легкие пробки',
-    pointA: { latitude: 40.3950, longitude: 49.8820 }, // Ясамал
-    pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
-    departureTime: '13:15',
-    arrivalTime: '13:27',
-  },
-  son: {
-    addressA: 'Спорткомплекс, Наримановский р-н',
-    addressB: 'Дом, ул. Низами, 10',
-    eta: '25 мин',
-    traffic: 'Очень сильные пробки',
-    pointA: { latitude: 40.4200, longitude: 49.9100 }, // Нариманов
-    pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
-    departureTime: '16:00',
-    arrivalTime: '16:25',
-  },
-  wife: {
-    addressA: 'Салон красоты, ул. Физули',
-    addressB: 'ТЦ "28 Mall"',
-    eta: '8 мин',
-    traffic: 'Свободно',
-    pointA: { latitude: 40.3780, longitude: 49.8480 }, // Физули
-    pointB: { latitude: 40.3850, longitude: 49.8550 }, // 28 Mall
-    departureTime: '11:45',
-    arrivalTime: '11:53',
-  },
-  husband: {
-    addressA: 'Автосервис, ул. Гянджа',
-    addressB: 'Дом, ул. Низами, 10',
-    eta: '22 мин',
-    traffic: 'Средние пробки',
-    pointA: { latitude: 40.4300, longitude: 49.8200 }, // Гянджа
-    pointB: { latitude: 40.4093, longitude: 49.8671 }, // Низами
-    departureTime: '18:20',
-    arrivalTime: '18:42',
-  },
+// Расписание поездок для каждого члена семьи (несколько поездок в день)
+const memberSchedules = {
+  me: [
+    {
+      id: '1',
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Офис, БЦ "Port Baku"',
+      eta: '18 мин',
+      traffic: 'Сильные пробки',
+      pointA: { latitude: 40.4093, longitude: 49.8671 }, 
+      pointB: { latitude: 40.3650, longitude: 49.8350 },
+      departureTime: '08:30',
+      arrivalTime: '08:48',
+      days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+    },
+    {
+      id: '2',
+      addressA: 'Офис, БЦ "Port Baku"',
+      addressB: 'Дом, ул. Низами, 10',
+      eta: '22 мин',
+      traffic: 'Очень сильные пробки',
+      pointA: { latitude: 40.3650, longitude: 49.8350 },
+      pointB: { latitude: 40.4093, longitude: 49.8671 },
+      departureTime: '18:00',
+      arrivalTime: '18:22',
+      days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+    }
+  ],
+  daughter: [
+    {
+      id: '1',
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Школа №132, Ясамал',
+      eta: '15 мин',
+      traffic: 'Легкие пробки',
+      pointA: { latitude: 40.4093, longitude: 49.8671 },
+      pointB: { latitude: 40.3950, longitude: 49.8820 },
+      departureTime: '07:45',
+      arrivalTime: '08:00',
+      days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+    },
+    {
+      id: '2',
+      addressA: 'Школа №132, Ясамал',
+      addressB: 'Дом, ул. Низами, 10',
+      eta: '12 мин',
+      traffic: 'Свободно',
+      pointA: { latitude: 40.3950, longitude: 49.8820 },
+      pointB: { latitude: 40.4093, longitude: 49.8671 },
+      departureTime: '13:15',
+      arrivalTime: '13:27',
+      days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+    }
+  ],
+  son: [
+    {
+      id: '1',
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Спорткомплекс, Наримановский р-н',
+      eta: '20 мин',
+      traffic: 'Средние пробки',
+      pointA: { latitude: 40.4093, longitude: 49.8671 },
+      pointB: { latitude: 40.4200, longitude: 49.9100 },
+      departureTime: '15:30',
+      arrivalTime: '15:50',
+      days: ['tuesday', 'thursday', 'saturday']
+    },
+    {
+      id: '2',
+      addressA: 'Спорткомплекс, Наримановский р-н',
+      addressB: 'Дом, ул. Низами, 10',
+      eta: '25 мин',
+      traffic: 'Сильные пробки',
+      pointA: { latitude: 40.4200, longitude: 49.9100 },
+      pointB: { latitude: 40.4093, longitude: 49.8671 },
+      departureTime: '17:30',
+      arrivalTime: '17:55',
+      days: ['tuesday', 'thursday', 'saturday']
+    }
+  ],
+  wife: [
+    {
+      id: '1',
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Салон красоты, ул. Физули',
+      eta: '10 мин',
+      traffic: 'Свободно',
+      pointA: { latitude: 40.4093, longitude: 49.8671 },
+      pointB: { latitude: 40.3780, longitude: 49.8480 },
+      departureTime: '11:00',
+      arrivalTime: '11:10',
+      days: ['wednesday', 'friday']
+    },
+    {
+      id: '2',
+      addressA: 'Салон красоты, ул. Физули',
+      addressB: 'ТЦ "28 Mall"',
+      eta: '8 мин',
+      traffic: 'Свободно',
+      pointA: { latitude: 40.3780, longitude: 49.8480 },
+      pointB: { latitude: 40.3850, longitude: 49.8550 },
+      departureTime: '12:30',
+      arrivalTime: '12:38',
+      days: ['wednesday', 'friday']
+    }
+  ],
+  husband: [
+    {
+      id: '1',
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Автосервис, ул. Гянджа',
+      eta: '25 мин',
+      traffic: 'Средние пробки',
+      pointA: { latitude: 40.4093, longitude: 49.8671 },
+      pointB: { latitude: 40.4300, longitude: 49.8200 },
+      departureTime: '09:00',
+      arrivalTime: '09:25',
+      days: ['monday', 'wednesday', 'friday']
+    },
+    {
+      id: '2',
+      addressA: 'Автосервис, ул. Гянджа',
+      addressB: 'Дом, ул. Низами, 10',
+      eta: '22 мин',
+      traffic: 'Легкие пробки',
+      pointA: { latitude: 40.4300, longitude: 49.8200 },
+      pointB: { latitude: 40.4093, longitude: 49.8671 },
+      departureTime: '18:20',
+      arrivalTime: '18:42',
+      days: ['monday', 'wednesday', 'friday']
+    }
+  ],
+};
+
+// Функция для получения дня недели на английском
+const getCurrentDayOfWeek = () => {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  return days[new Date().getDay()];
+};
+
+// Функция для получения ближайшей предстоящей поездки
+const getNextTripForMember = (memberId: string) => {
+  const schedules = memberSchedules[memberId as keyof typeof memberSchedules] || [];
+  const currentDay = getCurrentDayOfWeek();
+  const currentTime = new Date();
+  const currentHours = currentTime.getHours();
+  const currentMinutes = currentTime.getMinutes();
+  const currentTimeInMinutes = currentHours * 60 + currentMinutes;
+
+  // Фильтруем поездки для текущего дня недели
+  const todayTrips = schedules.filter(trip => trip.days.includes(currentDay));
+  
+  // Находим ближайшую поездку которая еще не прошла
+  const upcomingTrips = todayTrips.filter(trip => {
+    const [depHours, depMinutes] = trip.departureTime.split(':').map(Number);
+    const depTimeInMinutes = depHours * 60 + depMinutes;
+    return depTimeInMinutes > currentTimeInMinutes;
+  });
+
+  // Сортируем по времени отправления и возвращаем ближайшую
+  if (upcomingTrips.length > 0) {
+    return upcomingTrips.sort((a, b) => {
+      const aTime = a.departureTime.split(':').map(Number);
+      const bTime = b.departureTime.split(':').map(Number);
+      const aMinutes = aTime[0] * 60 + aTime[1];
+      const bMinutes = bTime[0] * 60 + bTime[1];
+      return aMinutes - bMinutes;
+    })[0];
+  }
+
+  // Если сегодня больше нет поездок, возвращаем null
+  return null;
+};
+
+// Для обратной совместимости - получаем текущий маршрут для выбранного члена семьи
+const getCurrentRoute = (memberId: string) => {
+  const nextTrip = getNextTripForMember(memberId);
+  if (nextTrip) {
+    return nextTrip;
+  }
+  
+  // Fallback - если нет поездок сегодня, показываем первую из расписания
+  const schedules = memberSchedules[memberId as keyof typeof memberSchedules] || [];
+  return schedules[0] || null;
 };
 
 const memberTrips = {
@@ -204,6 +337,13 @@ const MapScreen: React.FC = () => {
   const [mapType, setMapType] = useState<'standard' | 'satellite' | 'hybrid'>('standard');
   const [userLocation, setUserLocation] = useState<{latitude: number, longitude: number} | null>(null);
   const [locationPermission, setLocationPermission] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [showMapControls, setShowMapControls] = useState(false);
+  
+  // Состояния для слежения
+  const [isTracking, setIsTracking] = useState(false);
+  const [driverLocation, setDriverLocation] = useState<{latitude: number, longitude: number} | null>(null);
+  const [tripStatus, setTripStatus] = useState<'waiting' | 'pickup' | 'inProgress' | 'completed'>('waiting');
 
   
   const tripAnim = useRef(new Animated.Value(0)).current; // 0 - открыто, 1 - скрыто
@@ -222,6 +362,110 @@ const MapScreen: React.FC = () => {
 
     return unsubscribe;
   }, []);
+
+  // Обновление времени каждую минуту для актуализации поездок
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Обновляем каждую минуту
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Симуляция движения водителя
+  const startDriverTracking = () => {
+    if (!currentRoute) return;
+    
+    console.log('[СЛЕЖЕНИЕ] Начинается слежение за водителем');
+    setIsTracking(true);
+    setTripStatus('pickup');
+    
+    // Начальная позиция водителя (немного в стороне от точки А)
+    const startLat = currentRoute.pointA.latitude + 0.005;
+    const startLng = currentRoute.pointA.longitude + 0.005;
+    
+    console.log(`[СЛЕЖЕНИЕ] Водитель стартует с позиции: ${startLat}, ${startLng}`);
+    setDriverLocation({ latitude: startLat, longitude: startLng });
+    
+    // Симуляция движения к клиенту
+    simulateDriverMovement();
+  };
+
+  const simulateDriverMovement = () => {
+    if (!currentRoute) return;
+    
+    console.log('[СЛЕЖЕНИЕ] Водитель начал движение к клиенту');
+    let progress = 0;
+    const totalSteps = 12; // 1 минута симуляции (12 * 3 секунды)
+    
+    const interval = setInterval(() => {
+      progress += 1;
+      
+      // Интерполяция позиции водителя к клиенту
+      const startLat = currentRoute.pointA.latitude + 0.005; // Водитель стартует рядом с точкой А
+      const startLng = currentRoute.pointA.longitude + 0.005;
+      const targetLat = userLocation?.latitude || currentRoute.pointA.latitude;
+      const targetLng = userLocation?.longitude || currentRoute.pointA.longitude;
+      
+      const newLat = startLat + (targetLat - startLat) * (progress / totalSteps);
+      const newLng = startLng + (targetLng - startLng) * (progress / totalSteps);
+      
+      console.log(`[СЛЕЖЕНИЕ] Шаг ${progress}/${totalSteps}, позиция: ${newLat.toFixed(6)}, ${newLng.toFixed(6)}`);
+      setDriverLocation({ latitude: newLat, longitude: newLng });
+      
+      // Статусы и завершение
+      if (progress === totalSteps) {
+        console.log('[СЛЕЖЕНИЕ] Водитель прибыл к клиенту, начинается поездка');
+        setTripStatus('inProgress');
+        clearInterval(interval);
+        
+        // Сразу начинаем поездку
+        setTimeout(() => {
+          startTrip();
+        }, 1000);
+      }
+    }, 3000); // Обновление каждые 3 секунды для более плавного движения
+  };
+
+  const startTrip = () => {
+    if (!currentRoute) return;
+    
+    setTripStatus('inProgress');
+    let progress = 0;
+    const totalSteps = 20; // 1 минута поездки (20 * 3 секунды)
+    
+    const interval = setInterval(() => {
+      progress += 1;
+      
+      // Движение от клиента к точке Б
+      const startLat = userLocation?.latitude || currentRoute.pointA.latitude;
+      const startLng = userLocation?.longitude || currentRoute.pointA.longitude;
+      const targetLat = currentRoute.pointB.latitude;
+      const targetLng = currentRoute.pointB.longitude;
+      
+      const newLat = startLat + (targetLat - startLat) * (progress / totalSteps);
+      const newLng = startLng + (targetLng - startLng) * (progress / totalSteps);
+      
+      setDriverLocation({ latitude: newLat, longitude: newLng });
+      
+      if (progress === totalSteps) {
+        setTripStatus('completed');
+        setIsTracking(false);
+        clearInterval(interval);
+        
+        // Очищаем позицию водителя через 3 секунды
+        setTimeout(() => {
+          setDriverLocation(null);
+        }, 3000);
+      }
+    }, 3000); // Обновление каждые 3 секунды
+  };
+
+  const stopTracking = () => {
+    setIsTracking(false);
+    setTripStatus('waiting');
+    setDriverLocation(null);
+  };
 
   const getCurrentLocation = async () => {
     try {
@@ -269,8 +513,11 @@ const MapScreen: React.FC = () => {
       const routes: {[key: string]: RouteResponse} = {};
       
       // Загружаем маршруты для каждого члена семьи
-      for (const [memberId, routeData] of Object.entries(memberRoutes)) {
+      for (const memberId of Object.keys(memberSchedules)) {
         try {
+          const routeData = getCurrentRoute(memberId);
+          if (!routeData) continue;
+          
           console.log(`Загружаем самый быстрый маршрут для ${memberId}...`);
           const realRoute = await RouteService.getFastestRoute(
             routeData.pointA,
@@ -280,13 +527,16 @@ const MapScreen: React.FC = () => {
           console.log(`Маршрут для ${memberId} загружен успешно`);
         } catch (error) {
           console.error(`Ошибка загрузки маршрута для ${memberId}:`, error);
-          // Создаем fallback маршрут с mock данными
-          routes[memberId] = {
-            coordinates: [routeData.pointA, routeData.pointB], // Простая линия
-            duration: parseInt(routeData.eta) * 60, // Конвертируем в секунды
-            distance: estimateDistance(routeData.pointA, routeData.pointB) * 1000, // В метры
-            segments: generateRouteSegments(routeData.pointA, routeData.pointB, routeData.traffic)
-          };
+          const routeData = getCurrentRoute(memberId);
+          if (routeData) {
+            // Создаем fallback маршрут с mock данными
+            routes[memberId] = {
+              coordinates: [routeData.pointA, routeData.pointB], // Простая линия
+              duration: parseInt(routeData.eta) * 60, // Конвертируем в секунды
+              distance: estimateDistance(routeData.pointA, routeData.pointB) * 1000, // В метры
+              segments: generateRouteSegments(routeData.pointA, routeData.pointB, routeData.traffic)
+            };
+          }
         }
       }
       
@@ -495,7 +745,8 @@ const MapScreen: React.FC = () => {
     }
   };
 
-  const currentRoute = memberRoutes[selectedMember.id];
+  // Получаем актуальную ближайшую поездку (пересчитывается при изменении времени)
+  const currentRoute = getCurrentRoute(selectedMember.id);
   const currentDriver = memberDrivers[selectedMember.id];
   const currentTrip = memberTrips[selectedMember.id];
   
@@ -519,7 +770,7 @@ const MapScreen: React.FC = () => {
   const showTripAutoOpen = nextTrip && ((nextTrip.nextTrip.getTime() - now.getTime()) / 1000 / 60 <= 15);
   const tripMember = nextTrip ? familyMembers.find(m => m.id === nextTrip.id) : null;
   const tripDriver = nextTrip ? memberDrivers[nextTrip.id] : null;
-  const tripRoute = nextTrip ? memberRoutes[nextTrip.id] : null;
+  const tripRoute = nextTrip ? getCurrentRoute(selectedMember.id) : null;
 
   const toggleTripSection = () => {
     const newCollapsed = !isTripCollapsed;
@@ -536,6 +787,32 @@ const MapScreen: React.FC = () => {
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start();
+  };
+
+  // Проверяем, нужно ли показывать кнопку слежения (за 15 минут до поездки)
+  const shouldShowTrackingButton = () => {
+    if (!currentRoute) return false;
+    
+    // МОК: Делаем вид что сейчас за 10 минут до поездки
+    const now = new Date();
+    const [hours, minutes] = currentRoute.departureTime.split(':').map(Number);
+    const departureTime = new Date();
+    departureTime.setHours(hours, minutes, 0, 0);
+    
+    // Если время уже прошло, считаем что это завтрашний день
+    if (departureTime < now) {
+      departureTime.setDate(departureTime.getDate() + 1);
+    }
+    
+    // МОК: Искусственно ставим текущее время за 10 минут до поездки
+    const mockNow = new Date(departureTime.getTime() - 10 * 60 * 1000); // за 10 минут
+    const timeDiff = departureTime.getTime() - mockNow.getTime();
+    const minutesUntilDeparture = Math.floor(timeDiff / (1000 * 60));
+    
+    console.log(`[МОК] До поездки ${currentRoute.departureTime} осталось: ${minutesUntilDeparture} минут`);
+    
+    // Показываем кнопку за 15 минут до поездки
+    return minutesUntilDeparture <= 15 && minutesUntilDeparture >= 0;
   };
 
   const tripTranslateY = tripAnim.interpolate({
@@ -560,7 +837,8 @@ const MapScreen: React.FC = () => {
           showUserLocation={true}
           showDrivers={false}
           mapType={mapType}
-                />
+          driverLocation={isTracking ? driverLocation : null}
+        />
 
         {/* Кнопка уведомлений */}
         <TouchableOpacity 
@@ -582,28 +860,60 @@ const MapScreen: React.FC = () => {
 
 
 
-      {/* Группа кнопок управления картой */}
+      {/* Главная кнопка управления картой */}
       <View style={styles.mapControlsContainer} pointerEvents="box-none">
-        {/* Кнопка приближения */}
-        <TouchableOpacity style={styles.mapControlButton} onPress={handleZoomIn}>
-          <Ionicons name="add" size={24} color="#1E3A8A" />
+        <TouchableOpacity 
+          style={[styles.mapControlButton, styles.mainControlButton]} 
+          onPress={() => setShowMapControls(!showMapControls)}
+        >
+          <Ionicons 
+            name={showMapControls ? "close" : "settings"} 
+            size={24} 
+            color="#1E3A8A" 
+          />
         </TouchableOpacity>
         
-        {/* Кнопка удаления */}
-        <TouchableOpacity style={styles.mapControlButton} onPress={handleZoomOut}>
-          <Ionicons name="remove" size={24} color="#1E3A8A" />
-        </TouchableOpacity>
-        
-        {/* Кнопка геолокации */}
-        <TouchableOpacity style={styles.mapControlButton} onPress={() => mapRef.current?.scrollToUserLocation()}>
-          <Ionicons name="locate" size={24} color="#1E3A8A" />
-        </TouchableOpacity>
-        
-        {/* Кнопка слоев карты */}
-        <TouchableOpacity style={styles.mapControlButton} onPress={handleMapTypeChange}>
-          <Ionicons name={getMapTypeIcon() as any} size={24} color="#1E3A8A" />
-        </TouchableOpacity>
+        {/* Группа скрытых кнопок управления */}
+        {showMapControls && (
+          <>
+            {/* Кнопка слежения - активируется за 15 минут до поездки */}
+            {currentRoute && shouldShowTrackingButton() && (
+              <TouchableOpacity 
+                style={[styles.mapControlButton, { backgroundColor: isTracking ? '#EF4444' : '#10B981' }]} 
+                onPress={isTracking ? stopTracking : startDriverTracking}
+              >
+                <Ionicons 
+                  name={isTracking ? "stop" : "navigate"} 
+                  size={24} 
+                  color="#FFFFFF" 
+                />
+              </TouchableOpacity>
+            )}
+            
+            {/* Кнопка приближения */}
+            <TouchableOpacity style={styles.mapControlButton} onPress={handleZoomIn}>
+              <Ionicons name="add" size={24} color="#1E3A8A" />
+            </TouchableOpacity>
+            
+            {/* Кнопка удаления */}
+            <TouchableOpacity style={styles.mapControlButton} onPress={handleZoomOut}>
+              <Ionicons name="remove" size={24} color="#1E3A8A" />
+            </TouchableOpacity>
+            
+            {/* Кнопка геолокации */}
+            <TouchableOpacity style={styles.mapControlButton} onPress={() => mapRef.current?.scrollToUserLocation()}>
+              <Ionicons name="locate" size={24} color="#1E3A8A" />
+            </TouchableOpacity>
+            
+            {/* Кнопка слоев карты */}
+            <TouchableOpacity style={styles.mapControlButton} onPress={handleMapTypeChange}>
+              <Ionicons name={getMapTypeIcon() as any} size={24} color="#1E3A8A" />
+            </TouchableOpacity>
+          </>
+        )}
       </View>
+
+
 
       {/* Секция предстоящей поездки */}
       {showTripSection && (
@@ -658,26 +968,37 @@ const MapScreen: React.FC = () => {
               <>
                 {/* Информация о маршруте */}
                 <View style={styles.routeInfoSection}>
-                  <View style={styles.routePointWithTime}>
-                    <View style={styles.routePointLeft}>
-                      <Ionicons name="location" size={16} color="#1E3A8A" />
-                      <Text style={styles.routePointText}>{currentRoute.addressA}</Text>
+                  {currentRoute ? (
+                    <>
+                      <View style={styles.routePointWithTime}>
+                        <View style={styles.routePointLeft}>
+                          <Ionicons name="location" size={16} color="#1E3A8A" />
+                          <Text style={styles.routePointText}>{currentRoute.addressA}</Text>
+                        </View>
+                        <Text style={[styles.routeTimeText, { color: '#1E3A8A' }]}>{currentRoute.departureTime}</Text>
+                      </View>
+                      <View style={styles.routePointWithTime}>
+                        <View style={styles.routePointLeft}>
+                          <Ionicons name="location" size={16} color="#22C55E" />
+                          <Text style={styles.routePointText}>{currentRoute.addressB}</Text>
+                        </View>
+                        <Text style={[styles.routeTimeText, { color: '#22C55E' }]}>{currentRoute.arrivalTime}</Text>
+                      </View>
+                      <View style={styles.routeMetaInfo}>
+                        <Text style={styles.routeMetaText}>
+                          {currentRoute.eta} • {currentRoute.traffic}
+                          {realDistance && ` • ${realDistance} км`}
+                        </Text>
+                      </View>
+                    </>
+                  ) : (
+                    <View style={styles.noTripsContainer}>
+                      <Ionicons name="calendar-outline" size={24} color="#6B7280" />
+                      <Text style={[styles.noTripsText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                        Сегодня нет запланированных поездок
+                      </Text>
                     </View>
-                    <Text style={[styles.routeTimeText, { color: '#1E3A8A' }]}>{currentRoute.departureTime}</Text>
-                  </View>
-                  <View style={styles.routePointWithTime}>
-                    <View style={styles.routePointLeft}>
-                      <Ionicons name="location" size={16} color="#22C55E" />
-                      <Text style={styles.routePointText}>{currentRoute.addressB}</Text>
-                    </View>
-                    <Text style={[styles.routeTimeText, { color: '#22C55E' }]}>{currentRoute.arrivalTime}</Text>
-                  </View>
-                  <View style={styles.routeMetaInfo}>
-                    <Text style={styles.routeMetaText}>
-                      {currentRoute.eta} • {currentRoute.traffic}
-                      {realDistance && ` • ${realDistance} км`}
-                    </Text>
-                  </View>
+                  )}
                 </View>
 
                 <View style={styles.driverInfo}>
@@ -1061,14 +1382,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#F8F9FA',
     borderRadius: 8,
     paddingVertical: 12,
+    marginLeft: 8,
   },
   chatButtonText: {
     color: '#1E3A8A',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
     marginLeft: 6,
   },
   overlayContainer: {
@@ -1286,7 +1608,7 @@ const styles = StyleSheet.create({
   },
   notificationButtonFixed: {
     position: 'absolute',
-    top: 20,
+    top: 40,
     left: 20,
     backgroundColor: '#fff',
     borderRadius: 24,
@@ -1340,6 +1662,10 @@ const styles = StyleSheet.create({
     elevation: 4,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  mainControlButton: {
+    // Выравниваем по высоте с кнопкой слева (tripToggleButton)
+    alignSelf: 'flex-end',
   },
   tripCardActive: {
     borderColor: '#1E3A8A',
@@ -1595,6 +1921,87 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+  },
+  
+  // Стили для случая когда нет поездок
+  noTripsContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  noTripsText: {
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  
+  // Стили для слежения водителя
+  driverMarker: {
+    zIndex: 1000,
+  },
+  driverIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#1E3A8A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  trackButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#10B981',
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginLeft: 8,
+  },
+  trackButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  stopButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EF4444',
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  stopButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  
+
+  
+  // Стиль для кнопки слежения сверху справа
+  trackingButtonFixed: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#10B981',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 10,
   },
 });
 

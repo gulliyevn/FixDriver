@@ -43,6 +43,7 @@ interface Driver {
   addresses: string[]; // массив адресов для поездки
   departureTime: string; // время выезда
   arrivalTime: string; // время доезда
+  schedule?: string; // расписание поездок (пн-пт, вт/чт/сб, etc)
 }
 
 // Добавляем определение familyMembers с иконками (как в MapScreen)
@@ -78,6 +79,7 @@ const drivers: Driver[] = [
     addresses: ['Дом ул. Низами 10', 'Офис БЦ Port Baku', 'Торговый центр 28 Mall'],
     departureTime: '08:00',
     arrivalTime: '18:30',
+    schedule: 'пн, ср, пт (8:00-18:30)',
   },
   {
     id: 'driver2',
@@ -102,6 +104,7 @@ const drivers: Driver[] = [
     addresses: ['БЦ Port Baku', 'Аэропорт', 'ТЦ 28 Mall', 'Вокзал'],
     departureTime: '09:00',
     arrivalTime: '19:00',
+    schedule: 'вт, чт (деловые поездки)',
   },
   {
     id: 'driver3',
@@ -126,6 +129,7 @@ const drivers: Driver[] = [
     addresses: ['Школа №132 Ясамал', 'Дом ул. Низами 10'],
     departureTime: '07:30',
     arrivalTime: '16:00',
+    schedule: 'пн-пт (школьные поездки)',
   },
   {
     id: 'driver4',
@@ -259,8 +263,8 @@ const DriversScreen: React.FC = () => {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
 
-  const [showFilterModal, setShowFilterModal] = useState(false);
   const [expandedDrivers, setExpandedDrivers] = useState<string[]>([]);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   const [activeFilters, setActiveFilters] = useState({
     package: 'all',
     maxDistance: 5,
@@ -410,34 +414,7 @@ const DriversScreen: React.FC = () => {
     );
   };
 
-  const handleFilterPress = () => {
-    setShowFilterModal(true);
-  };
 
-  const applyFilters = (filters: typeof activeFilters) => {
-    setActiveFilters(filters);
-    setShowFilterModal(false);
-  };
-
-  const resetFilters = () => {
-    setActiveFilters({
-      package: 'all',
-      maxDistance: 5,
-      minRating: 0,
-      maxPrice: 20,
-      hasAirCondition: false,
-      hasWifi: false,
-      hasCharger: false,
-      onlyAvailable: false,
-      // Новые фильтры
-      timeSlot: 'all',
-      workDays: 'all',
-      minExperience: 0,
-      maxCarAge: 10,
-      familyMember: 'all',
-      priceRange: 'all',
-    });
-  };
 
   const toggleDriverExpansion = (driverId: string) => {
     setExpandedDrivers(prev => 
@@ -637,6 +614,8 @@ const DriversScreen: React.FC = () => {
     return true;
   });
 
+
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
@@ -647,30 +626,14 @@ const DriversScreen: React.FC = () => {
           Мои водители
         </Text>
         <View style={styles.headerActions}>
+          <TouchableOpacity style={styles.filterBtn} onPress={() => setShowFilterModal(true)}>
+            <Ionicons name="filter-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.notificationBtn} onPress={handleNotifications}>
             <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
             {notificationService.getUnreadCount() > 0 && (
               <View style={styles.notificationBadge}>
                 <Text style={styles.notificationBadgeText}>{notificationService.getUnreadCount()}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.filterButton} onPress={handleFilterPress}>
-            <Ionicons name="options-outline" size={24} color="#1E3A8A" />
-            {/* Индикатор активных фильтров */}
-            {(activeFilters.package !== 'all' || 
-              activeFilters.timeSlot !== 'all' || 
-              activeFilters.workDays !== 'all' ||
-              activeFilters.familyMember !== 'all' ||
-              activeFilters.priceRange !== 'all' ||
-              activeFilters.minExperience > 0 ||
-              activeFilters.maxCarAge < 10 ||
-              activeFilters.hasAirCondition ||
-              activeFilters.hasWifi ||
-              activeFilters.hasCharger ||
-              activeFilters.onlyAvailable) && (
-              <View style={styles.filterBadge}>
-                <Text style={styles.filterBadgeText}>•</Text>
               </View>
             )}
           </TouchableOpacity>
@@ -693,40 +656,17 @@ const DriversScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* Filters */}
-      <View style={styles.filtersContainer}>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filtersContent}
-        >
-          {filters.map((filter) => (
-            <TouchableOpacity
-              key={filter.id}
-              style={[
-                styles.filterChip,
-                selectedFilter === filter.id && styles.filterChipActive
-              ]}
-              onPress={() => setSelectedFilter(filter.id)}
-            >
-              <Ionicons 
-                name={filter.icon as any} 
-                size={14} 
-                color={selectedFilter === filter.id ? '#FFFFFF' : '#1E3A8A'} 
-              />
-              <Text style={[
-                styles.filterText,
-                { color: selectedFilter === filter.id ? '#FFFFFF' : '#1E3A8A' }
-              ]}>
-                {filter.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+
+
+
+
+
 
       {/* Drivers List */}
-      <ScrollView style={styles.driversList} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.driversList} 
+        showsVerticalScrollIndicator={false}
+      >
         {filteredDrivers.map((driver) => {
           const isExpanded = expandedDrivers.includes(driver.id);
           
@@ -1069,127 +1009,74 @@ const DriversScreen: React.FC = () => {
             </View>
           )}
         </View>
-      </Modal>
+              </Modal>
 
-      {/* Модал расширенных фильтров */}
-      <Modal
-        visible={showFilterModal}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <View style={[styles.modalContainer, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
-          <View style={[styles.modalHeader, { borderBottomColor: isDark ? '#333333' : '#E5E5EA' }]}>
-            <Text style={[styles.modalTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-              Фильтры водителей
-            </Text>
-            <TouchableOpacity onPress={() => setShowFilterModal(false)} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color={isDark ? '#FFFFFF' : '#000000'} />
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={styles.filterContent} showsVerticalScrollIndicator={false}>
-            {/* Быстрые настройки */}
-            <View style={styles.filterGroup}>
-              <Text style={[styles.filterGroupTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                Быстрые настройки
-              </Text>
-              
+        {/* Модал фильтров */}
+        <Modal
+          visible={showFilterModal}
+          animationType="slide"
+          presentationStyle="pageSheet"
+        >
+          <SafeAreaView style={[styles.modalContainer, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
+            <View style={styles.modalHeaderEmpty}>
               <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, timeSlot: 'morning', familyMember: 'all' }));
-                }}
+                style={styles.closeButtonCustom} 
+                onPress={() => setShowFilterModal(false)}
               >
-                <Ionicons name="sunny" size={20} color="#F59E0B" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Утренние водители (6:00-12:00)
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, priceRange: 'budget', package: 'base' }));
-                }}
-              >
-                <Ionicons name="wallet" size={20} color="#10B981" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Экономичные (до 8 ман)
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, package: 'premium', hasAirCondition: true, hasWifi: true }));
-                }}
-              >
-                <Ionicons name="diamond" size={20} color="#8B5CF6" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Премиум сервис
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, workDays: 'weekdays', timeSlot: 'morning' }));
-                }}
-              >
-                <Ionicons name="briefcase" size={20} color="#3B82F6" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Для работы (будни, утром)
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, familyMember: 'daughter', timeSlot: 'morning' }));
-                }}
-              >
-                <Ionicons name="flower" size={20} color="#EC4899" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Для дочери (школа)
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.filterOption, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
-                onPress={() => {
-                  setActiveFilters(prev => ({ ...prev, minExperience: 5, minRating: 4.5 }));
-                }}
-              >
-                <Ionicons name="shield-checkmark" size={20} color="#059669" />
-                <Text style={[styles.filterOptionText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-                  Опытные водители (5+ лет)
-                </Text>
+                <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
               </TouchableOpacity>
             </View>
 
+            <ScrollView style={styles.filterModalContent} showsVerticalScrollIndicator={false}>
+              <View style={styles.filterSection}>
+                <View style={styles.filterGrid}>
+                  {filters.map((filter) => (
+                    <TouchableOpacity
+                      key={filter.id}
+                      style={[
+                        styles.filterGridItem,
+                        selectedFilter === filter.id && styles.filterGridItemActive,
+                        { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
+                      ]}
+                      onPress={() => setSelectedFilter(filter.id)}
+                    >
+                      <Ionicons 
+                        name={filter.icon as any} 
+                        size={20} 
+                        color={selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A')} 
+                      />
+                      <Text style={[
+                        styles.filterGridText,
+                        { color: selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A') }
+                      ]}>
+                        {filter.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </ScrollView>
+
             {/* Кнопки действий */}
-            <View style={styles.filterActions}>
+            <View style={[styles.filterModalActions, { borderTopColor: isDark ? '#374151' : '#E5E7EB' }]}>
               <TouchableOpacity 
-                style={[styles.resetButton, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}
-                onPress={resetFilters}
+                style={[styles.filterResetButton, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}
+                onPress={() => setSelectedFilter('all')}
               >
-                <Text style={[styles.resetButtonText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                <Text style={[styles.filterResetButtonText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
                   Сбросить
                 </Text>
               </TouchableOpacity>
-              
               <TouchableOpacity 
-                style={styles.applyButton}
+                style={styles.filterApplyButton}
                 onPress={() => setShowFilterModal(false)}
               >
-                <Text style={styles.applyButtonText}>
-                  Применить
-                </Text>
+                <Text style={styles.filterApplyButtonText}>Применить</Text>
               </TouchableOpacity>
             </View>
-          </ScrollView>
-        </View>
-      </Modal>
+          </SafeAreaView>
+        </Modal>
+
     </SafeAreaView>
   );
 };
@@ -1205,6 +1092,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
+
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
@@ -1212,6 +1100,10 @@ const styles = StyleSheet.create({
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
+  },
+  filterBtn: {
+    padding: 8,
   },
   filterButton: {
     padding: 8,
@@ -1261,37 +1153,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     backgroundColor: 'transparent',
   },
-  filtersContainer: {
-    marginBottom: 0,
-    paddingBottom: 0,
-    marginTop: 8,
-    height: 32,
-    minHeight: 32,
-  },
-  filtersContent: {
-    paddingHorizontal: 16,
-  },
-  filterChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    borderRadius: 16,
-    height: 32,
-    paddingHorizontal: 12,
-    paddingVertical: 0,
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  filterChipActive: {
-    backgroundColor: '#1E3A8A',
-    borderColor: '#1E3A8A',
-  },
-  filterText: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginLeft: 4,
-  },
+
   driversList: {
     flex: 1,
     paddingHorizontal: 8,
@@ -1461,6 +1323,16 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 4,
+  },
+  modalHeaderEmpty: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  closeButtonCustom: {
+    padding: 8,
+    marginLeft: 8,
+    marginTop: 8,
   },
   cancelButton: {
     paddingHorizontal: 12,
@@ -1878,6 +1750,69 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   applyButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  // Стили для модала фильтров
+  filterModalContent: {
+    flex: 1,
+    padding: 20,
+  },
+  filterSection: {
+    marginBottom: 24,
+  },
+  filterSectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  filterGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  filterGridItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    minWidth: '45%',
+    gap: 8,
+  },
+  filterGridItemActive: {
+    backgroundColor: '#1E3A8A',
+  },
+  filterGridText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  filterModalActions: {
+    flexDirection: 'row',
+    padding: 20,
+    gap: 12,
+    borderTopWidth: 1,
+  },
+  filterResetButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  filterResetButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  filterApplyButton: {
+    flex: 1,
+    backgroundColor: '#1E3A8A',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  filterApplyButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
