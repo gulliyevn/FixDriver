@@ -9,13 +9,15 @@ import {
   Alert,
   TextInput,
   StatusBar,
-  Modal
+  Modal,
+  Linking
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
 import RatingStars from '../../components/RatingStars';
 import { notificationService, Notification } from '../../services/NotificationService';
+import { useNavigation } from '@react-navigation/native';
 
 interface Driver {
   id: string;
@@ -29,10 +31,200 @@ interface Driver {
   estimatedTime: string;
   isAvailable: boolean;
   photo?: string;
+  package: 'base' | 'plus' | 'premium';
+  price: number;
+  experience: number; // лет опыта
+  vehicleYear: number;
+  hasAirCondition: boolean;
+  hasWifi: boolean;
+  hasCharger: boolean;
+  forMember: 'me' | 'daughter' | 'son' | 'wife' | 'husband'; // для кого водитель
+  tripDays: string; // дни поездок
 }
+
+// Добавляем определение familyMembers с иконками (как в MapScreen)
+const familyMembers = [
+  { id: 'me', name: 'Я', icon: 'person-circle' },
+  { id: 'daughter', name: 'Дочь', icon: 'flower' },
+  { id: 'son', name: 'Сын', icon: 'football' },
+  { id: 'wife', name: 'Жена', icon: 'heart' },
+  { id: 'husband', name: 'Муж', icon: 'car-sport' },
+];
+
+const drivers: Driver[] = [
+  {
+    id: 'driver1',
+    name: 'Рашад Алиев',
+    rating: 4.8,
+    totalRides: 1247,
+    carModel: 'Toyota Camry',
+    carNumber: '10-AA-123',
+    isOnline: true,
+    distance: '0.8 км',
+    estimatedTime: '5 мин',
+    isAvailable: true,
+    package: 'premium' as const,
+    price: 12,
+    experience: 8,
+    vehicleYear: 2020,
+    hasAirCondition: true,
+    hasWifi: true,
+    hasCharger: true,
+    forMember: 'me',
+    tripDays: 'пн, ср, пт',
+  },
+  {
+    id: 'driver2',
+    name: 'Эльхан Мустафаев',
+    rating: 4.9,
+    totalRides: 892,
+    carModel: 'Mercedes E-Class',
+    carNumber: '90-MB-789',
+    isOnline: true,
+    distance: '1.2 км',
+    estimatedTime: '7 мин',
+    isAvailable: true,
+    package: 'premium' as const,
+    price: 15,
+    experience: 12,
+    vehicleYear: 2021,
+    hasAirCondition: true,
+    hasWifi: true,
+    hasCharger: true,
+    forMember: 'me',
+    tripDays: 'вт, чт',
+  },
+  {
+    id: 'driver3',
+    name: 'Эльнур Мамедов',
+    rating: 4.9,
+    totalRides: 654,
+    carModel: 'Hyundai Elantra',
+    carNumber: '90-BB-456',
+    isOnline: true,
+    distance: '1.5 км',
+    estimatedTime: '8 мин',
+    isAvailable: true,
+    package: 'plus' as const,
+    price: 8,
+    experience: 5,
+    vehicleYear: 2019,
+    hasAirCondition: true,
+    hasWifi: false,
+    hasCharger: true,
+    forMember: 'daughter',
+    tripDays: 'пн-пт',
+  },
+  {
+    id: 'driver4',
+    name: 'Фарид Джафаров',
+    rating: 4.7,
+    totalRides: 423,
+    carModel: 'Kia Rio',
+    carNumber: '77-KR-321',
+    isOnline: false,
+    distance: '2.1 км',
+    estimatedTime: '12 мин',
+    isAvailable: false,
+    package: 'base' as const,
+    price: 6,
+    experience: 3,
+    vehicleYear: 2018,
+    hasAirCondition: true,
+    hasWifi: false,
+    hasCharger: false,
+    forMember: 'daughter',
+    tripDays: 'сб, вс',
+  },
+  {
+    id: 'driver5',
+    name: 'Орхан Гасанов',
+    rating: 4.7,
+    totalRides: 789,
+    carModel: 'Kia Cerato',
+    carNumber: '77-CC-789',
+    isOnline: true,
+    distance: '0.9 км',
+    estimatedTime: '6 мин',
+    isAvailable: true,
+    package: 'plus' as const,
+    price: 9,
+    experience: 6,
+    vehicleYear: 2020,
+    hasAirCondition: true,
+    hasWifi: true,
+    hasCharger: false,
+    forMember: 'son',
+    tripDays: 'пн, ср, пт, сб',
+  },
+  {
+    id: 'driver6',
+    name: 'Самир Исмаилов',
+    rating: 4.6,
+    totalRides: 567,
+    carModel: 'Nissan Altima',
+    carNumber: '99-DD-321',
+    isOnline: true,
+    distance: '1.8 км',
+    estimatedTime: '10 мин',
+    isAvailable: true,
+    package: 'plus' as const,
+    price: 10,
+    experience: 7,
+    vehicleYear: 2019,
+    hasAirCondition: true,
+    hasWifi: false,
+    hasCharger: true,
+    forMember: 'wife',
+    tripDays: 'вт, чт, сб',
+  },
+  {
+    id: 'driver7',
+    name: 'Ровшан Алиев',
+    rating: 4.5,
+    totalRides: 234,
+    carModel: 'Volkswagen Polo',
+    carNumber: '55-VW-654',
+    isOnline: false,
+    distance: '3.2 км',
+    estimatedTime: '18 мин',
+    isAvailable: false,
+    package: 'base' as const,
+    price: 7,
+    experience: 2,
+    vehicleYear: 2017,
+    hasAirCondition: false,
+    hasWifi: false,
+    hasCharger: false,
+    forMember: 'wife',
+    tripDays: 'пн-вс',
+  },
+  {
+    id: 'driver8',
+    name: 'Турал Мамедов',
+    rating: 4.8,
+    totalRides: 1103,
+    carModel: 'Volkswagen Jetta',
+    carNumber: '55-EE-654',
+    isOnline: true,
+    distance: '1.0 км',
+    estimatedTime: '6 мин',
+    isAvailable: true,
+    package: 'premium' as const,
+    price: 13,
+    experience: 10,
+    vehicleYear: 2021,
+    hasAirCondition: true,
+    hasWifi: true,
+    hasCharger: true,
+    forMember: 'husband',
+    tripDays: 'ежедневно',
+  },
+];
 
 const DriversScreen: React.FC = () => {
   const { isDark } = useTheme();
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -40,7 +232,18 @@ const DriversScreen: React.FC = () => {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
 
-  const drivers: Driver[] = [];
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [expandedDrivers, setExpandedDrivers] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState({
+    package: 'all',
+    maxDistance: 5,
+    minRating: 0,
+    maxPrice: 20,
+    hasAirCondition: false,
+    hasWifi: false,
+    hasCharger: false,
+    onlyAvailable: false,
+  });
 
   useEffect(() => {
     setNotifications(notificationService.getNotifications());
@@ -174,7 +377,131 @@ const DriversScreen: React.FC = () => {
   };
 
   const handleFilterPress = () => {
-    Alert.alert('Фильтры', 'Расширенные фильтры будут доступны в следующем обновлении');
+    setShowFilterModal(true);
+  };
+
+  const applyFilters = (filters: typeof activeFilters) => {
+    setActiveFilters(filters);
+    setShowFilterModal(false);
+  };
+
+  const resetFilters = () => {
+    setActiveFilters({
+      package: 'all',
+      maxDistance: 5,
+      minRating: 0,
+      maxPrice: 20,
+      hasAirCondition: false,
+      hasWifi: false,
+      hasCharger: false,
+      onlyAvailable: false,
+    });
+  };
+
+  const toggleDriverExpansion = (driverId: string) => {
+    setExpandedDrivers(prev => 
+      prev.includes(driverId) 
+        ? prev.filter(id => id !== driverId)
+        : [...prev, driverId]
+    );
+  };
+
+  const handleCallDriver = (driver: Driver) => {
+    const phoneNumber = '+994516995513'; // Номер водителя
+    
+    Alert.alert(
+      'Позвонить водителю',
+      `${driver.name}\n${phoneNumber}`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        { 
+          text: 'Позвонить', 
+          onPress: () => {
+            const telUrl = `tel:${phoneNumber}`;
+            Linking.canOpenURL(telUrl)
+              .then((supported) => {
+                if (supported) {
+                  return Linking.openURL(telUrl);
+                } else {
+                  Alert.alert('Ошибка', 'Не удалось открыть приложение для звонков');
+                }
+              })
+              .catch((err) => console.error('Error opening phone app:', err));
+          }
+        }
+      ]
+    );
+  };
+
+  const handleChatDriver = (driver: Driver) => {
+    if (!driver.isOnline) {
+      Alert.alert('Недоступно', 'Водитель офлайн. Чат недоступен.');
+      return;
+    }
+    
+    // Переходим в чат с конкретным водителем (к табу Chat -> экран ChatConversation)
+    try {
+      (navigation as any).navigate('Chat', {
+        screen: 'ChatConversation',
+        params: {
+          driverId: driver.id,
+          driverName: driver.name,
+          driverCar: driver.carModel,
+          driverNumber: driver.carNumber,
+          driverRating: driver.rating.toString(),
+          driverStatus: driver.isOnline ? 'online' : 'offline',
+          driverPhoto: driver.photo
+        }
+      });
+    } catch (error) {
+      console.log('Навигация в чат:', error);
+      Alert.alert('Чат', `Открываем чат с ${driver.name}`);
+    }
+  };
+
+  // Заменяем getMemberDisplayName на getMemberIcon
+  const getMemberIcon = (memberId: string): string => {
+    const member = familyMembers.find(m => m.id === memberId);
+    return member?.icon || 'person-circle';
+  };
+
+  // Добавляем данные о семейных членах с адресами и расписанием
+  const memberRoutes = {
+    me: {
+      addressA: 'Дом, ул. Низами, 10',
+      addressB: 'Офис, БЦ "Port Baku"',
+      schedule: 'пн-пт 08:00-18:00'
+    },
+    daughter: {
+      addressA: 'Школа №132, Ясамал',
+      addressB: 'Дом, ул. Низами, 10',
+      schedule: 'пн-пт 08:00-16:00'
+    },
+    son: {
+      addressA: 'Спорткомплекс, Наримановский р-н',
+      addressB: 'Дом, ул. Низами, 10',
+      schedule: 'пн-сб 10:00-20:00'
+    },
+    wife: {
+      addressA: 'Салон красоты, ул. Физули',
+      addressB: 'ТЦ "28 Mall"',
+      schedule: 'пн-пт 09:00-19:00'
+    },
+    husband: {
+      addressA: 'Автосервис, ул. Гянджа',
+      addressB: 'Дом, ул. Низами, 10',
+      schedule: 'пн-сб 08:00-18:00'
+    },
+  };
+
+  const getMemberData = (memberId: string) => {
+    const member = familyMembers.find(m => m.id === memberId);
+    const route = memberRoutes[memberId as keyof typeof memberRoutes];
+    return {
+      name: member?.name || '',
+      icon: member?.icon || 'person-circle',
+      ...route
+    };
   };
 
   const filters = [
@@ -186,10 +513,25 @@ const DriversScreen: React.FC = () => {
   ];
 
   const filteredDrivers = drivers.filter(driver => {
-    if (selectedFilter === 'online') return driver.isOnline;
-    if (selectedFilter === 'nearby') return parseFloat(driver.distance) <= 1.0;
-    if (selectedFilter === 'top') return driver.rating >= 4.8;
-    if (selectedFilter === 'available') return driver.isAvailable;
+    // Базовые фильтры
+    if (selectedFilter === 'online' && !driver.isOnline) return false;
+    if (selectedFilter === 'nearby' && parseFloat(driver.distance) > 1.0) return false;
+    if (selectedFilter === 'top' && driver.rating < 4.8) return false;
+    if (selectedFilter === 'available' && !driver.isAvailable) return false;
+
+    // Поиск по имени
+    if (searchQuery && !driver.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+
+    // Расширенные фильтры
+    if (activeFilters.package !== 'all' && driver.package !== activeFilters.package) return false;
+    if (parseFloat(driver.distance) > activeFilters.maxDistance) return false;
+    if (driver.rating < activeFilters.minRating) return false;
+    if (driver.price > activeFilters.maxPrice) return false;
+    if (activeFilters.hasAirCondition && !driver.hasAirCondition) return false;
+    if (activeFilters.hasWifi && !driver.hasWifi) return false;
+    if (activeFilters.hasCharger && !driver.hasCharger) return false;
+    if (activeFilters.onlyAvailable && !driver.isAvailable) return false;
+
     return true;
   });
 
@@ -267,82 +609,162 @@ const DriversScreen: React.FC = () => {
 
       {/* Drivers List */}
       <ScrollView style={styles.driversList} showsVerticalScrollIndicator={false}>
-        {filteredDrivers.map((driver) => (
-          <AppCard key={driver.id} style={styles.driverCard} margin={8}>
-            <View style={styles.driverContent}>
-              <View style={styles.driverHeader}>
-                <View style={styles.driverInfo}>
+        {filteredDrivers.map((driver) => {
+          const isExpanded = expandedDrivers.includes(driver.id);
+          
+          return (
+            <AppCard key={driver.id} style={styles.driverCard} margin={8}>
+              <View style={styles.driverContent}>
+                {/* Компактная карточка водителя */}
+                <View style={styles.driverCompactHeader}>
+                  {/* Аватар слева */}
                   <View style={styles.driverAvatar}>
-                    {driver.photo ? (
-                      <Ionicons name="person" size={24} color="#1E3A8A" />
-                    ) : (
-                      <Ionicons name="person" size={24} color="#1E3A8A" />
-                    )}
+                    <Ionicons name="person" size={24} color="#1E3A8A" />
                   </View>
-                  <View style={styles.driverDetails}>
-                    <Text style={styles.driverName}>{driver.name}</Text>
-                    <Text style={styles.carInfo}>
-                      {driver.carModel} • {driver.carNumber}
-                    </Text>
+                  
+                  {/* Информация о водителе */}
+                  <View style={styles.driverInfo}>
+                                        {/* Имя и рейтинг в одной строке */}
+                    <View style={styles.nameRatingRow}>
+                      <Text style={[styles.driverName, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+                        {driver.name}
+                      </Text>
+                      <Text style={[styles.ratingNumber, { color: isDark ? '#10B981' : '#059669' }]}>
+                        {driver.rating}
+                      </Text>
+                    </View>
+                    
+                    {/* Автомобиль и номер */}
+                    <View style={styles.carInfoRow}>
+                      <Text style={[styles.carInfoText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                        {driver.carModel} • {driver.carNumber}
+                      </Text>
+                    </View>
+                    
+                    {/* Статус и кнопка раскрывания в одной строке */}
+                    <View style={styles.statusExpandRow}>
+                       <View style={styles.statusInfo}>
+                         <View style={[
+                           styles.statusDot,
+                           { backgroundColor: driver.isOnline ? '#10B981' : '#6B7280' }
+                         ]} />
+                         <Text style={[styles.statusText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                           {driver.isOnline ? 'Онлайн' : 'Офлайн'}
+                         </Text>
+                       </View>
+                       
+                       <TouchableOpacity 
+                         style={styles.expandButton}
+                         onPress={() => toggleDriverExpansion(driver.id)}
+                         activeOpacity={0.7}
+                       >
+                         <Ionicons 
+                           name={isExpanded ? "chevron-up" : "chevron-down"} 
+                           size={20} 
+                           color="#1E3A8A" 
+                         />
+                       </TouchableOpacity>
+                     </View>
+                     
+                     {/* Тег для кого водитель */}
+                                            <View style={styles.memberTagRow}>
+                        <View style={[styles.memberTagCompact, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}>
+                          <Ionicons 
+                            name={getMemberIcon(driver.forMember) as any} 
+                            size={16} 
+                            color={isDark ? '#9CA3AF' : '#6B7280'} 
+                            style={styles.memberIcon}
+                          />
+                          <Text style={[styles.memberName, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                            {getMemberData(driver.forMember).name}
+                          </Text>
+                        </View>
+                       </View>
                   </View>
                 </View>
-                <View style={styles.driverStatus}>
-                  <View style={[
-                    styles.statusDot,
-                    { backgroundColor: driver.isOnline ? '#10B981' : '#6B7280' }
-                  ]} />
-                  <Text style={styles.statusText}>
-                    {driver.isOnline ? 'Онлайн' : 'Офлайн'}
-                  </Text>
-                </View>
-              </View>
 
-              <View style={styles.driverStats}>
-                <View style={styles.statItem}>
-                  <RatingStars rating={driver.rating} size={16} />
-                  <Text style={styles.statText}>{driver.rating}</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Ionicons name="car" size={16} color="#6B7280" />
-                  <Text style={styles.statText}>{driver.totalRides} поездок</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Ionicons name="location" size={16} color="#6B7280" />
-                  <Text style={styles.statText}>{driver.distance}</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Ionicons name="time" size={16} color="#6B7280" />
-                  <Text style={styles.statText}>{driver.estimatedTime}</Text>
-                </View>
-              </View>
+                {/* Раскрывающиеся детали */}
+                {isExpanded && (
+                  <View style={styles.driverExpanded}>
+                    {/* Маршрутная информация */}
+                    <View style={styles.routeSection}>
+                      <View style={styles.routePoint}>
+                        <View style={[styles.routeIcon, { backgroundColor: '#10B981' }]}>
+                          <Text style={styles.routeIconText}>A</Text>
+                        </View>
+                        <Text style={[styles.routeText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+                          {getMemberData(driver.forMember).addressA}
+                        </Text>
+                      </View>
+                      
+                      <View style={styles.routePoint}>
+                        <View style={[styles.routeIcon, { backgroundColor: '#EF4444' }]}>
+                          <Text style={styles.routeIconText}>B</Text>
+                        </View>
+                        <Text style={[styles.routeText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+                          {getMemberData(driver.forMember).addressB}
+                        </Text>
+                      </View>
+                    </View>
 
-              <View style={styles.driverFooter}>
-                <View style={styles.actionButtons}>
-                  {driver.isAvailable ? (
-                    <>
+                    {/* Время и расстояние */}
+                    <View style={styles.tripDetails}>
+                      <View style={styles.tripDetailItem}>
+                        <Ionicons name="location" size={16} color="#6B7280" />
+                        <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                          {driver.distance}
+                        </Text>
+                      </View>
+                      <View style={styles.tripDetailItem}>
+                        <Ionicons name="calendar" size={16} color="#6B7280" />
+                        <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                          {driver.tripDays}
+                        </Text>
+                      </View>
+                      <View style={styles.tripDetailItem}>
+                        <Ionicons name="car" size={16} color="#6B7280" />
+                        <Text style={[styles.tripDetailText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                          {driver.totalRides} поездок
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Кнопки действий */}
+                    <View style={styles.expandedActions}>
                       <TouchableOpacity 
-                        style={styles.selectButton}
-                        onPress={() => handleDriverSelect(driver)}
+                        style={styles.callButtonExpanded}
+                        onPress={() => handleCallDriver(driver)}
                       >
-                        <Text style={styles.selectButtonText}>Выбрать</Text>
+                        <Ionicons name="call" size={20} color="#FFFFFF" />
+                        <Text style={styles.callButtonText}>Позвонить</Text>
                       </TouchableOpacity>
                       <TouchableOpacity 
-                        style={styles.bookButton}
-                        onPress={() => handleBookDriver(driver)}
+                        style={[
+                          styles.chatButtonExpanded,
+                          !driver.isOnline && styles.chatButtonDisabled
+                        ]}
+                        onPress={() => handleChatDriver(driver)}
+                        disabled={!driver.isOnline}
                       >
-                        <Text style={styles.bookButtonText}>Забронировать</Text>
+                        <Ionicons 
+                          name="chatbubble" 
+                          size={20} 
+                          color={driver.isOnline ? "#1E3A8A" : "#9CA3AF"} 
+                        />
+                        <Text style={[
+                          styles.chatButtonText,
+                          !driver.isOnline && styles.chatButtonTextDisabled
+                        ]}>
+                          Чат
+                        </Text>
                       </TouchableOpacity>
-                    </>
-                  ) : (
-                    <TouchableOpacity style={styles.unavailableButton} disabled>
-                      <Text style={styles.unavailableButtonText}>Недоступен</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+                    </View>
+                  </View>
+                )}
               </View>
-            </View>
-          </AppCard>
-        ))}
+            </AppCard>
+          );
+        })}
       </ScrollView>
 
       {/* Модал центра уведомлений */}
@@ -618,9 +1040,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   driverInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
     flex: 1,
+    marginLeft: 12,
   },
   driverAvatar: {
     width: 48,
@@ -637,7 +1058,7 @@ const styles = StyleSheet.create({
   driverName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    flex: 1,
   },
   carInfo: {
     fontSize: 14,
@@ -656,7 +1077,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: '#6B7280',
+    fontWeight: '500',
+    marginLeft: 6,
   },
   driverStats: {
     flexDirection: 'row',
@@ -881,6 +1303,218 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Новые стили для компактной карточки водителя
+  driverCompactHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: 12,
+  },
+  nameRatingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  carInfoRow: {
+    marginBottom: 6,
+  },
+  carInfoText: {
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  ratingNumber: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  statusExpandRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statusInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  unavailableText: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginLeft: 4,
+  },
+  expandButton: {
+    padding: 4,
+    marginLeft: 8,
+  },
+  driverExpanded: {
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5EA',
+    paddingTop: 16,
+    marginTop: 12,
+  },
+  carInfoSection: {
+    marginBottom: 16,
+  },
+  routeSection: {
+    marginBottom: 16,
+  },
+  routePoint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  routeIcon: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  routeIconText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  routeText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  tripDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  tripDetailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  tripDetailText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  expandedActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  callButtonExpanded: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1E3A8A',
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  callButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  chatButtonExpanded: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  chatButtonText: {
+    color: '#1E3A8A',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  chatButtonDisabled: {
+    backgroundColor: '#F9FAFB',
+    opacity: 0.6,
+  },
+  chatButtonTextDisabled: {
+    color: '#9CA3AF',
+  },
+  unavailableButtonExpanded: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  memberTagRow: {
+    flexDirection: 'row',
+  },
+  memberTag: {
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginTop: 6,
+  },
+  memberTagCompact: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  memberTagContent: {
+    flex: 1,
+  },
+  memberHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  memberIcon: {
+    marginRight: 6,
+  },
+  memberName: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  memberRoute: {
+    fontSize: 10,
+    fontWeight: '400',
+    marginBottom: 2,
+    lineHeight: 14,
+  },
+  memberSchedule: {
+    fontSize: 10,
+    fontWeight: '500',
+  },
+  memberDetailSection: {
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  memberDetailHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginBottom: 8,
+  },
+  memberDetailName: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  memberDetailRoute: {
+    fontSize: 12,
+    fontWeight: '400',
+    marginBottom: 4,
+    lineHeight: 16,
+  },
+  memberDetailSchedule: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  memberTagText: {
+    fontSize: 11,
+    fontWeight: '500',
+  },
+
 });
 
 export default DriversScreen;

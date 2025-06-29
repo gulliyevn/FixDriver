@@ -8,6 +8,9 @@ export type ClientStackParamList = {
     driverRating: string;
     driverStatus?: string;
   };
+  OrderDetails: {
+    orderId: string;
+  };
 };
 
 export type RootTabParamList = {
