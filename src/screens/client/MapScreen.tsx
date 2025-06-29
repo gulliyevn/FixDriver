@@ -24,6 +24,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../types/navigation';
 import * as Location from 'expo-location';
 import { notificationService, Notification } from '../../services/NotificationService';
+import { CommonActions } from '@react-navigation/native';
 
 
 const familyMembers = [
@@ -469,19 +470,17 @@ const MapScreen: React.FC = () => {
 
   const getCurrentLocation = async () => {
     try {
-      // Запрос разрешения на геолокацию
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Разрешение на геолокацию отклонено');
         setLocationPermission(false);
+        console.log('📍 Разрешение на геолокацию не предоставлено');
         return;
       }
-      
+
       setLocationPermission(true);
       
-      // Получение текущего местоположения
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Location.Accuracy.Balanced,
       });
       
       const userCoords = {
@@ -491,19 +490,25 @@ const MapScreen: React.FC = () => {
       
       setUserLocation(userCoords);
       
-      // Автоматически центрируем карту на пользователе
+      // Центрируем карту на пользователе
       if (mapRef.current) {
         mapRef.current.animateToRegion({
           ...userCoords,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
         });
       }
       
-      console.log('Геолокация получена:', userCoords);
+      console.log('📍 Геолокация получена:', userCoords);
     } catch (error) {
-      console.error('Ошибка получения геолокации:', error);
+      console.log('📍 Геолокация недоступна, используется центр Баку');
       setLocationPermission(false);
+      // Устанавливаем центр Баку как fallback
+      const fallbackLocation = {
+        latitude: 40.4093,
+        longitude: 49.8671,
+      };
+      setUserLocation(fallbackLocation);
     }
   };
 
@@ -518,18 +523,18 @@ const MapScreen: React.FC = () => {
           const routeData = getCurrentRoute(memberId);
           if (!routeData) continue;
           
-          console.log(`Загружаем самый быстрый маршрут для ${memberId}...`);
+          console.log(`📍 Построение маршрута для ${memberId}...`);
           const realRoute = await RouteService.getFastestRoute(
             routeData.pointA,
             routeData.pointB
           );
           routes[memberId] = realRoute;
-          console.log(`Маршрут для ${memberId} загружен успешно`);
+          console.log(`✅ Маршрут для ${memberId} готов`);
         } catch (error) {
-          console.error(`Ошибка загрузки маршрута для ${memberId}:`, error);
+          // Тихо создаем fallback маршрут без лишних ошибок
           const routeData = getCurrentRoute(memberId);
           if (routeData) {
-            // Создаем fallback маршрут с mock данными
+            console.log(`📍 Создание маршрута для ${memberId}...`);
             routes[memberId] = {
               coordinates: [routeData.pointA, routeData.pointB], // Простая линия
               duration: parseInt(routeData.eta) * 60, // Конвертируем в секунды
@@ -541,9 +546,9 @@ const MapScreen: React.FC = () => {
       }
       
       setRealRoutes(routes);
-      console.log('Все маршруты обработаны');
+      console.log('🗺️ Все маршруты готовы');
     } catch (error) {
-      console.error('Общая ошибка загрузки маршрутов:', error);
+      console.log('📍 Используются резервные маршруты');
     } finally {
       setLoadingRoutes(false);
     }
@@ -592,18 +597,44 @@ const MapScreen: React.FC = () => {
 
   const handleChatDriver = () => {
     const currentDriver = memberDrivers[selectedMember.id];
-    // Переходим на вкладку Chat и сразу открываем чат с конкретным водителем
-    navigation.navigate('Chat', {
-      screen: 'ChatConversation',
-      params: {
-        driverId: selectedMember.id,
-        driverName: currentDriver.name,
-        driverCar: currentDriver.car,
-        driverNumber: currentDriver.number,
-        driverRating: currentDriver.rating.toString(),
-        driverStatus: 'online'
-      }
-    });
+    
+    console.log('💬 Переход в чат с водителем из карты:', currentDriver.name);
+    
+    try {
+      // Создаем правильный стек навигации: ChatList -> ChatConversation
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'Chat',
+              state: {
+                routes: [
+                  { name: 'ChatList' },
+                  { 
+                    name: 'ChatConversation',
+                    params: {
+                      driverId: selectedMember.id,
+                      driverName: currentDriver.name,
+                      driverCar: currentDriver.car,
+                      driverNumber: currentDriver.number,
+                      driverRating: currentDriver.rating.toString(),
+                      driverStatus: 'online'
+                    }
+                  }
+                ],
+                index: 1
+              }
+            }
+          ]
+        })
+      );
+      
+      console.log('✅ Успешная навигация в чат с правильным стеком из карты');
+    } catch (error) {
+      console.error('❌ Ошибка навигации в чат из карты:', error);
+      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);
+    }
   };
 
   const handleNotifications = () => {

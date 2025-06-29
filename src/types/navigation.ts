@@ -7,6 +7,7 @@ export type ClientStackParamList = {
     driverNumber: string;
     driverRating: string;
     driverStatus?: string;
+    driverPhoto?: string;
   };
   OrderDetails: {
     orderId: string;
@@ -22,4 +23,13 @@ export type RootTabParamList = {
     params?: ClientStackParamList[keyof ClientStackParamList];
   };
   Profile: undefined;
-}; 
+};
+
+// Тип для навигации с поддержкой вложенных экранов
+export type RootTabScreenProps<Screen extends keyof RootTabParamList> = {
+  navigation: BottomTabNavigationProp<RootTabParamList, Screen>;
+  route: RouteProp<RootTabParamList, Screen>;
+};
+
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { RouteProp } from '@react-navigation/native'; 

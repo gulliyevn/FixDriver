@@ -70,14 +70,23 @@ const ChatListScreen: React.FC = () => {
   }, []);
 
   const handleChatPress = (chat: ChatPreview) => {
-    navigation.navigate('ChatConversation', {
-      driverId: chat.driverId,
-      driverName: chat.driverName,
-      driverCar: chat.driverCar,
-      driverNumber: chat.driverNumber,
-      driverRating: chat.driverRating,
-      driverStatus: chat.driverStatus
-    });
+    console.log('📱 ChatListScreen: переход в чат с', chat.driverName);
+    
+    try {
+      navigation.navigate('ChatConversation', {
+        driverId: chat.driverId,
+        driverName: chat.driverName,
+        driverCar: chat.driverCar,
+        driverNumber: chat.driverNumber,
+        driverRating: chat.driverRating,
+        driverStatus: chat.driverStatus
+      });
+      
+      console.log('✅ Успешная навигация в чат:', chat.driverName);
+    } catch (error) {
+      console.error('❌ Ошибка навигации в чат:', error);
+      Alert.alert('Ошибка', 'Не удалось открыть чат. Попробуйте еще раз.');
+    }
   };
 
   const handleNotifications = () => {

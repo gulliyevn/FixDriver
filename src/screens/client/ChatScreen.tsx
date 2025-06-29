@@ -16,6 +16,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
 
 interface Message {
@@ -27,11 +28,12 @@ interface Message {
 }
 
 type ChatScreenRouteProp = RouteProp<ClientStackParamList, 'ChatConversation'>;
+type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatConversation'>;
 
 const ChatScreen: React.FC = () => {
   const { isDark } = useTheme();
   const route = useRoute<ChatScreenRouteProp>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<ChatScreenNavigationProp>();
   
   // Получаем данные водителя из параметров навигации
   const driverData = route.params || {
@@ -42,6 +44,11 @@ const ChatScreen: React.FC = () => {
     driverRating: '4.8',
     driverStatus: 'online'
   };
+
+  // Логируем параметры для отладки
+  React.useEffect(() => {
+    console.log('💬 ChatScreen mounted with params:', route.params);
+  }, [route.params]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -111,6 +118,21 @@ const ChatScreen: React.FC = () => {
     );
   };
 
+  // Обработчик кнопки назад - всегда возвращаемся на главный список чатов
+  const handleGoBack = () => {
+    console.log('🔙 ChatScreen: пользователь нажал назад - переход на главный чат');
+    
+    try {
+      // Всегда переходим на главный список чатов
+      navigation.navigate('ChatList');
+      console.log('✅ Успешный переход на главный список чатов');
+    } catch (error) {
+      console.error('❌ Ошибка перехода на главный чат:', error);
+      // Fallback - стандартный goBack
+      navigation.goBack();
+    }
+  };
+
   const formatTime = (timestamp: string) => {
     return timestamp;
   };
@@ -122,7 +144,7 @@ const ChatScreen: React.FC = () => {
       {/* Header */}
       <AppCard style={styles.header} margin={16}>
         <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
             <Ionicons name="arrow-back" size={24} color="#1E3A8A" />
           </TouchableOpacity>
           <View style={styles.driverInfo}>

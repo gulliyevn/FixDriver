@@ -5,6 +5,7 @@ class ChatService {
   private messages: { [chatId: string]: Message[] } = {};
 
   constructor() {
+    console.log('💬 ChatService: инициализация сервиса чата');
     this.initializeMockData();
   }
 
@@ -198,6 +199,7 @@ class ChatService {
 
   // Получение списка чатов
   async getChats(userId: string): Promise<Chat[]> {
+    console.log('📋 ChatService: получение списка чатов для пользователя', userId);
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([...this.chats].sort((a, b) => 
@@ -209,6 +211,7 @@ class ChatService {
 
   // Получение сообщений чата
   async getMessages(chatId: string): Promise<Message[]> {
+    console.log('💌 ChatService: получение сообщений для чата', chatId);
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(this.messages[chatId] || []);
@@ -218,6 +221,7 @@ class ChatService {
 
   // Отправка сообщения
   async sendMessage(chatId: string, content: string, senderId: string): Promise<Message> {
+    console.log('📤 ChatService: отправка сообщения в чат', chatId, 'от', senderId);
     return new Promise((resolve) => {
       const message: Message = {
         id: `msg_${chatId}_${Date.now()}`,

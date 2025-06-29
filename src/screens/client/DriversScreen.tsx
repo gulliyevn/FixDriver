@@ -17,7 +17,11 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
 import RatingStars from '../../components/RatingStars';
 import { notificationService, Notification } from '../../services/NotificationService';
+import { isDriverAvailableForChat } from '../../utils/navigationHelpers';
+import { CommonActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { RootTabParamList } from '../../types/navigation';
 
 interface Driver {
   id: string;
@@ -255,7 +259,7 @@ const drivers: Driver[] = [
 
 const DriversScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList, 'Drivers'>>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -452,28 +456,49 @@ const DriversScreen: React.FC = () => {
   };
 
   const handleChatDriver = (driver: Driver) => {
-    if (!driver.isOnline) {
+    // Проверяем доступность водителя для чата
+    if (!isDriverAvailableForChat(driver.isOnline ? 'online' : 'offline')) {
       Alert.alert('Недоступно', 'Водитель офлайн. Чат недоступен.');
       return;
     }
     
-    // Переходим в чат с конкретным водителем (к табу Chat -> экран ChatConversation)
+    console.log('💬 Переход в чат с водителем из списка:', driver.name);
+    
     try {
-      (navigation as any).navigate('Chat', {
-        screen: 'ChatConversation',
-        params: {
-          driverId: driver.id,
-          driverName: driver.name,
-          driverCar: driver.carModel,
-          driverNumber: driver.carNumber,
-          driverRating: driver.rating.toString(),
-          driverStatus: driver.isOnline ? 'online' : 'offline',
-          driverPhoto: driver.photo
-        }
-      });
+      // Создаем правильный стек навигации: ChatList -> ChatConversation
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'Chat',
+              state: {
+                routes: [
+                  { name: 'ChatList' },
+                  { 
+                    name: 'ChatConversation',
+                    params: {
+                      driverId: driver.id,
+                      driverName: driver.name,
+                      driverCar: driver.carModel,
+                      driverNumber: driver.carNumber,
+                      driverRating: driver.rating.toString(),
+                      driverStatus: driver.isOnline ? 'online' : 'offline',
+                      driverPhoto: driver.photo
+                    }
+                  }
+                ],
+                index: 1
+              }
+            }
+          ]
+        })
+      );
+      
+      console.log('✅ Успешная навигация в чат с правильным стеком');
     } catch (error) {
-      console.log('Навигация в чат:', error);
-      Alert.alert('Чат', `Открываем чат с ${driver.name}`);
+      console.error('❌ Ошибка навигации в чат:', error);
+      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);
     }
   };
 
@@ -681,7 +706,7 @@ const DriversScreen: React.FC = () => {
                 <View style={styles.driverCompactHeader}>
                   {/* Аватар слева */}
                   <View style={styles.driverAvatar}>
-                    <Ionicons name="person" size={24} color="#1E3A8A" />
+                    <Ionicons name="person" size={32} color="#1E3A8A" />
                   </View>
                   
                   {/* Информация о водителе */}
@@ -728,6 +753,15 @@ const DriversScreen: React.FC = () => {
                           </Text>
                         </View>
                      </View>
+                  </View>
+                  
+                  {/* Стрелка раскрытия */}
+                  <View style={styles.expandArrow}>
+                    <Ionicons 
+                      name={isExpanded ? "chevron-up-outline" : "chevron-down-outline"} 
+                      size={20} 
+                      color={isDark ? '#9CA3AF' : '#6B7280'} 
+                    />
                   </View>
                 </View>
 
@@ -1180,13 +1214,14 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   driverAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: '#F3F4F6',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 18,
+    marginTop: 10,
   },
   driverDetails: {
     flex: 1,
@@ -1454,6 +1489,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 12,
+  },
+  expandArrow: {
+    position: 'absolute',
+    right: 8, // сдвигаем еще правее на 8px
+    bottom: 12, // в самом низу карточки
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+    height: 24,
   },
   nameRatingRow: {
     flexDirection: 'row',
