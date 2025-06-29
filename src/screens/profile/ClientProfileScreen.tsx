@@ -113,11 +113,23 @@ const ClientProfileScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
-      {/* Profile Header */}
-      <AppCard style={styles.profileCard} margin={16}>
+      {/* Notifications Button */}
+      <TouchableOpacity 
+        style={styles.notificationButton} 
+        onPress={handleNotificationsCenter}
+      >
+        <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+        <View style={styles.notificationBadge}>
+          <Text style={styles.notificationBadgeText}>3</Text>
+        </View>
+      </TouchableOpacity>
+      
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Profile Header */}
+        <AppCard style={styles.profileCard} margin={16}>
         <View style={styles.profileHeader}>
           <AppAvatar 
             source={{ uri: "https://via.placeholder.com/80" }}
@@ -382,7 +394,8 @@ const ClientProfileScreen: React.FC = () => {
           </ScrollView>
         </View>
       </Modal>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -632,6 +645,36 @@ const styles = StyleSheet.create({
   deleteButton: {
     padding: 8,
     marginLeft: 8,
+  },
+  notificationButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    zIndex: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: '#EF4444',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  notificationBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
 

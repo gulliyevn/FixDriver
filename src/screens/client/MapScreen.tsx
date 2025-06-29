@@ -607,17 +607,16 @@ const MapScreen: React.FC = () => {
         }}>
           <AppCard style={showTripAutoOpen ? { ...styles.tripCard, ...styles.tripCardActive } : styles.tripCard} margin={16}>
             <TouchableOpacity style={styles.tripHeader} onPress={toggleTripSection} activeOpacity={0.8}>
-              <View style={styles.tripTitleContainer}>
-                <Ionicons name={selectedMember.icon as any} size={20} color="#1E3A8A" style={{ marginRight: 8 }} />
-                                <Text style={styles.tripTitle}>{selectedMember.name}</Text>
-              </View>
               <TouchableOpacity 
                 style={styles.memberSelector}
                 onPress={() => setShowMemberList(!showMemberList)}
                 activeOpacity={0.7}
               >
-                <Ionicons name="people" size={20} color="#1E3A8A" />
+                <Ionicons name={selectedMember.icon as any} size={20} color="#1E3A8A" />
               </TouchableOpacity>
+              <View style={styles.tripTitleContainer}>
+                <Text style={styles.tripTitle}>{selectedMember.name}</Text>
+              </View>
               <Ionicons name={isTripCollapsed ? 'chevron-up' : 'chevron-down'} size={24} color="#1E3A8A" />
             </TouchableOpacity>
             
@@ -675,7 +674,6 @@ const MapScreen: React.FC = () => {
                   </View>
                   <View style={styles.rating}>
                     <Text style={styles.ratingText}>{currentDriver.rating}</Text>
-                    <Text style={styles.ratingStar}>⭐</Text>
                   </View>
 
                 </View>

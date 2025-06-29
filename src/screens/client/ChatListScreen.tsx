@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -6,7 +6,9 @@ import {
   TouchableOpacity, 
   SafeAreaView,
   ScrollView,
-  StatusBar
+  StatusBar,
+  Modal,
+  Alert
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +16,7 @@ import AppCard from '../../components/AppCard';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
+import { notificationService, Notification } from '../../services/NotificationService';
 
 type NavigationProp = StackNavigationProp<ClientStackParamList, 'ChatList'>;
 
@@ -32,6 +35,10 @@ interface ChatPreview {
 const ChatListScreen: React.FC = () => {
   const { isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
 
   const chats: ChatPreview[] = [
     {
@@ -58,6 +65,10 @@ const ChatListScreen: React.FC = () => {
     }
   ];
 
+  useEffect(() => {
+    setNotifications(notificationService.getNotifications());
+  }, []);
+
   const handleChatPress = (chat: ChatPreview) => {
     navigation.navigate('ChatConversation', {
       driverId: chat.driverId,
@@ -70,8 +81,108 @@ const ChatListScreen: React.FC = () => {
   };
 
   const handleNotifications = () => {
-    // TODO: Navigate to notifications screen
-    console.log('Open notifications');
+    setNotifications(notificationService.getNotifications());
+    setShowNotificationsModal(true);
+    setIsSelectionMode(false);
+    setSelectedNotifications([]);
+  };
+
+  const handleDeleteNotification = (notificationId: string) => {
+    Alert.alert(
+      'Удалить уведомление',
+      'Вы уверены, что хотите удалить это уведомление?',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            notificationService.removeNotification(notificationId);
+            setNotifications(notificationService.getNotifications());
+          },
+        },
+      ]
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    notificationService.markAllAsRead();
+    setNotifications(notificationService.getNotifications());
+  };
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'trip':
+        return 'car';
+      case 'payment':
+        return 'card';
+      case 'driver':
+        return 'person';
+      case 'system':
+        return 'settings';
+      default:
+        return 'notifications';
+    }
+  };
+
+  const getNotificationColor = (type: string) => {
+    switch (type) {
+      case 'trip':
+        return '#10B981';
+      case 'payment':
+        return '#F59E0B';
+      case 'driver':
+        return '#3B82F6';
+      case 'system':
+        return '#6B7280';
+      default:
+        return '#6B7280';
+    }
+  };
+
+  const toggleSelectionMode = () => {
+    setIsSelectionMode(!isSelectionMode);
+    setSelectedNotifications([]);
+  };
+
+  const toggleNotificationSelection = (notificationId: string) => {
+    setSelectedNotifications(prev => 
+      prev.includes(notificationId)
+        ? prev.filter(id => id !== notificationId)
+        : [...prev, notificationId]
+    );
+  };
+
+  const selectAllNotifications = () => {
+    if (selectedNotifications.length === notifications.length) {
+      setSelectedNotifications([]);
+    } else {
+      setSelectedNotifications(notifications.map(n => n.id));
+    }
+  };
+
+  const deleteSelectedNotifications = () => {
+    if (selectedNotifications.length === 0) return;
+    
+    Alert.alert(
+      'Удалить уведомления',
+      `Вы уверены, что хотите удалить ${selectedNotifications.length} уведомлений?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            selectedNotifications.forEach(id => {
+              notificationService.removeNotification(id);
+            });
+            setNotifications(notificationService.getNotifications());
+            setSelectedNotifications([]);
+            setIsSelectionMode(false);
+          },
+        },
+      ]
+    );
   };
 
   const getStatusColor = (status: string) => {
@@ -100,9 +211,11 @@ const ChatListScreen: React.FC = () => {
       <View style={styles.header}>
         <TouchableOpacity style={styles.notificationBtn} onPress={handleNotifications}>
           <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-          <View style={styles.notificationBadge}>
-            <Text style={styles.notificationBadgeText}>3</Text>
-          </View>
+          {notificationService.getUnreadCount() > 0 && (
+            <View style={styles.notificationBadge}>
+              <Text style={styles.notificationBadgeText}>{notificationService.getUnreadCount()}</Text>
+            </View>
+          )}
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
           Чаты
@@ -157,6 +270,174 @@ const ChatListScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      {/* Модал центра уведомлений */}
+      <Modal
+        visible={showNotificationsModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <View style={[styles.modalContainer, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
+          <View style={[styles.modalHeader, { borderBottomColor: isDark ? '#333333' : '#E5E5EA' }]}>
+            <Text style={[styles.modalTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+              Центр уведомлений
+            </Text>
+            <View style={styles.modalHeaderActions}>
+              {!isSelectionMode ? (
+                <>
+                  <TouchableOpacity onPress={toggleSelectionMode} style={styles.modalSelectButton}>
+                    <Text style={[styles.modalSelectButtonText, { color: isDark ? '#FFFFFF' : '#1E3A8A' }]}>
+                      Выбрать
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setShowNotificationsModal(false)} style={styles.closeButton}>
+                    <Ionicons name="close" size={24} color={isDark ? '#FFFFFF' : '#000000'} />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <TouchableOpacity onPress={toggleSelectionMode} style={styles.cancelButton}>
+                  <Text style={[styles.cancelButtonText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                    Отмена
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          {!isSelectionMode && notifications.filter(n => !n.isRead).length > 0 && (
+            <TouchableOpacity style={styles.markAllButton} onPress={handleMarkAllAsRead}>
+              <Text style={styles.markAllButtonText}>
+                Прочитать все ({notifications.filter(n => !n.isRead).length})
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          <ScrollView style={styles.notificationsList} showsVerticalScrollIndicator={false}>
+            {notifications.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Ionicons 
+                  name="notifications-off" 
+                  size={64} 
+                  color={isDark ? '#6B7280' : '#9CA3AF'} 
+                />
+                <Text style={[styles.emptyStateText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+                  Нет уведомлений
+                </Text>
+                <Text style={[styles.emptyStateSubtext, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                  Все уведомления будут отображаться здесь
+                </Text>
+              </View>
+            ) : (
+              notifications.map((notification) => (
+                <TouchableOpacity
+                  key={notification.id}
+                  style={[
+                    styles.notificationItem,
+                    { 
+                      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+                      borderColor: isDark ? '#374151' : '#E5E5EA'
+                    },
+                    !notification.isRead && styles.unreadNotification,
+                    isSelectionMode && selectedNotifications.includes(notification.id) && styles.selectedNotification,
+                  ]}
+                  onPress={() => isSelectionMode ? toggleNotificationSelection(notification.id) : null}
+                  disabled={!isSelectionMode}
+                >
+                  <View style={styles.notificationContent}>
+                    {isSelectionMode && (
+                      <TouchableOpacity
+                        style={styles.checkbox}
+                        onPress={() => toggleNotificationSelection(notification.id)}
+                      >
+                        <Ionicons
+                          name={selectedNotifications.includes(notification.id) ? "checkbox" : "square-outline"}
+                          size={24}
+                          color={selectedNotifications.includes(notification.id) ? "#1E3A8A" : "#9CA3AF"}
+                        />
+                      </TouchableOpacity>
+                    )}
+
+                    <View
+                      style={[
+                        styles.notificationIcon,
+                        { backgroundColor: getNotificationColor(notification.type) + '20' },
+                      ]}
+                    >
+                      <Ionicons
+                        name={getNotificationIcon(notification.type)}
+                        size={20}
+                        color={getNotificationColor(notification.type)}
+                      />
+                    </View>
+
+                    <View style={styles.notificationTextContainer}>
+                      <Text
+                        style={[
+                          styles.notificationTitle,
+                          { color: isDark ? '#FFFFFF' : '#000000' },
+                          !notification.isRead && styles.unreadTitle,
+                        ]}
+                      >
+                        {notification.title}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.notificationMessage,
+                          { color: isDark ? '#9CA3AF' : '#6B7280' }
+                        ]}
+                      >
+                        {notification.message}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.notificationTime,
+                          { color: isDark ? '#6B7280' : '#9CA3AF' }
+                        ]}
+                      >
+                        {notification.time.toLocaleString('ru-RU')}
+                      </Text>
+                    </View>
+
+                    {!isSelectionMode && (
+                      <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => handleDeleteNotification(notification.id)}
+                      >
+                        <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
+          </ScrollView>
+
+          {/* Кнопки снизу модала */}
+          {isSelectionMode && (
+            <View style={[styles.bottomActions, { borderTopColor: isDark ? '#333333' : '#E5E5EA' }]}>
+              <TouchableOpacity 
+                style={[styles.bottomButton, styles.selectAllButton]} 
+                onPress={selectAllNotifications}
+              >
+                <Text style={[styles.bottomButtonText, { color: '#1E3A8A' }]}>
+                  {selectedNotifications.length === notifications.length ? 'Снять все' : 'Выбрать все'}
+                </Text>
+              </TouchableOpacity>
+              
+              {selectedNotifications.length > 0 && (
+                <TouchableOpacity 
+                  style={[styles.bottomButton, styles.deleteAllButton]} 
+                  onPress={deleteSelectedNotifications}
+                >
+                  <Text style={[styles.bottomButtonText, { color: '#FFFFFF' }]}>
+                    Удалить ({selectedNotifications.length})
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -294,6 +575,152 @@ const styles = StyleSheet.create({
   ratingStar: {
     fontSize: 14,
     marginTop: 2,
+  },
+  modalContainer: {
+    flex: 1,
+    padding: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  modalHeaderActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  modalSelectButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  modalSelectButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  closeButton: {
+    padding: 4,
+  },
+  cancelButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  markAllButton: {
+    backgroundColor: '#F3F4F6',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  markAllButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1E3A8A',
+  },
+  notificationsList: {
+    flex: 1,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginTop: 8,
+  },
+  notificationItem: {
+    marginBottom: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+  },
+  unreadNotification: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#1E3A8A',
+  },
+  selectedNotification: {
+    borderColor: '#1E3A8A',
+    borderWidth: 2,
+  },
+  notificationContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    marginRight: 12,
+    padding: 4,
+  },
+  notificationIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  notificationTextContainer: {
+    flex: 1,
+  },
+  notificationTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  unreadTitle: {
+    fontWeight: '700',
+  },
+  notificationMessage: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  notificationTime: {
+    fontSize: 12,
+  },
+  deleteButton: {
+    padding: 4,
+  },
+  bottomActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    gap: 12,
+  },
+  bottomButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectAllButton: {
+    backgroundColor: '#F3F4F6',
+    borderWidth: 1,
+    borderColor: '#1E3A8A',
+  },
+  deleteAllButton: {
+    backgroundColor: '#EF4444',
+  },
+  bottomButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
