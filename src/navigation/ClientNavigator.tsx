@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../context/ThemeContext';
 import TabBar from './TabBar';
@@ -14,6 +15,7 @@ const ClientNavigator: React.FC = () => {
   const { isDark } = useTheme();
   return (
     <Tab.Navigator
+      id={undefined}
       tabBar={props => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -28,7 +30,7 @@ const ClientNavigator: React.FC = () => {
         component={MapScreen}
         options={{
           tabBarLabel: 'Карта',
-          tabBarIcon: '🗺️',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🗺️</Text>,
         }}
       />
       <Tab.Screen 
@@ -36,7 +38,7 @@ const ClientNavigator: React.FC = () => {
         component={DriversScreen}
         options={{
           tabBarLabel: 'Водители',
-          tabBarIcon: '🚗',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🚗</Text>,
         }}
       />
       <Tab.Screen 
@@ -44,7 +46,7 @@ const ClientNavigator: React.FC = () => {
         component={PlusScreen}
         options={{
           tabBarLabel: '',
-          tabBarIcon: '➕',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>➕</Text>,
         }}
       />
       <Tab.Screen 
@@ -52,7 +54,7 @@ const ClientNavigator: React.FC = () => {
         component={ChatNavigator}
         options={{
           tabBarLabel: 'Чат',
-          tabBarIcon: '💬',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💬</Text>,
         }}
       />
       <Tab.Screen 
@@ -60,7 +62,7 @@ const ClientNavigator: React.FC = () => {
         component={ClientProfileScreen}
         options={{
           tabBarLabel: 'Профиль',
-          tabBarIcon: '👤',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>👤</Text>,
         }}
       />
     </Tab.Navigator>

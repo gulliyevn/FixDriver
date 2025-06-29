@@ -67,9 +67,12 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
     // Симуляция регистрации
     setTimeout(() => {
       setIsLoading(false);
-      Alert.alert('Успех', 'Регистрация завершена! Добро пожаловать в FixDrive!', [
-        { text: 'OK', onPress: () => navigation.navigate('Login' as never) }
-      ]);
+      // Переходим на экран OTP верификации
+      navigation.navigate('OTPVerification' as never, {
+        phoneNumber: phone,
+        userRole: 'client',
+        userData: { name, surname, email, phone },
+      } as never);
     }, 2000);
   };
 

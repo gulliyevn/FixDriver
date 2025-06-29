@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from '../context/ThemeContext';
 import TabBar from './TabBar';
@@ -17,6 +18,7 @@ const DriverNavigator: React.FC = () => {
 
   return (
     <Tab.Navigator
+      id={undefined}
       tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -31,7 +33,7 @@ const DriverNavigator: React.FC = () => {
         component={MapScreen}
         options={{
           tabBarLabel: 'Карта',
-          tabBarIcon: '🗺️',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🗺️</Text>,
         }}
       />
       <Tab.Screen 
@@ -39,7 +41,7 @@ const DriverNavigator: React.FC = () => {
         component={OrdersScreen}
         options={{
           tabBarLabel: 'Заказы',
-          tabBarIcon: '📋',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>📋</Text>,
         }}
       />
       <Tab.Screen 
@@ -47,7 +49,7 @@ const DriverNavigator: React.FC = () => {
         component={EarningsScreen}
         options={{
           tabBarLabel: '',
-          tabBarIcon: '💰',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💰</Text>,
         }}
       />
       <Tab.Screen 
@@ -55,7 +57,7 @@ const DriverNavigator: React.FC = () => {
         component={ChatScreen}
         options={{
           tabBarLabel: 'Чат',
-          tabBarIcon: '💬',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💬</Text>,
         }}
       />
       <Tab.Screen 
@@ -63,7 +65,7 @@ const DriverNavigator: React.FC = () => {
         component={DriverProfileScreen}
         options={{
           tabBarLabel: 'Профиль',
-          tabBarIcon: '👤',
+          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>👤</Text>,
         }}
       />
     </Tab.Navigator>

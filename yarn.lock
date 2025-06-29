@@ -3107,7 +3107,7 @@ expo-status-bar@~2.2.3:
 
 expo@^53.0.13:
   version "53.0.13"
-  resolved "https://registry.npmjs.org/expo/-/expo-53.0.13.tgz"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-53.0.13.tgz#8a4617ca67ac6cfd7c92092370937b38ef5c53b9"
   integrity sha512-QDdEEbFErUmm2IHR/UPKKIRLN3z5MmN2QLx0aPlOEGOx295buSUE42u6f7TppkgJn0BUX3f7wFaHRo86+G+Trg==
   dependencies:
     "@babel/runtime" "^7.20.0"

@@ -34,60 +34,7 @@ const DriversScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
 
-  const drivers: Driver[] = [
-    {
-      id: '1',
-      name: 'Александр Петров',
-      rating: 4.9,
-      totalRides: 1247,
-      carModel: 'Toyota Camry',
-      carNumber: 'А123БВ777',
-      isOnline: true,
-      isAvailable: true,
-      distance: '0.8 км',
-      estimatedTime: '3 мин',
-      photo: 'https://via.placeholder.com/60',
-    },
-    {
-      id: '2',
-      name: 'Михаил Иванов',
-      rating: 4.8,
-      totalRides: 892,
-      carModel: 'Honda Accord',
-      carNumber: 'В456ГД888',
-      isOnline: true,
-      isAvailable: true,
-      distance: '1.2 км',
-      estimatedTime: '5 мин',
-      photo: 'https://via.placeholder.com/60',
-    },
-    {
-      id: '3',
-      name: 'Дмитрий Сидоров',
-      rating: 4.7,
-      totalRides: 1563,
-      carModel: 'BMW 3 Series',
-      carNumber: 'Е789ЖЗ999',
-      isOnline: false,
-      isAvailable: false,
-      distance: '2.1 км',
-      estimatedTime: '8 мин',
-      photo: 'https://via.placeholder.com/60',
-    },
-    {
-      id: '4',
-      name: 'Сергей Козлов',
-      rating: 4.9,
-      totalRides: 2034,
-      carModel: 'Mercedes C-Class',
-      carNumber: 'И012КЛ777',
-      isOnline: true,
-      isAvailable: true,
-      distance: '0.5 км',
-      estimatedTime: '2 мин',
-      photo: 'https://via.placeholder.com/60',
-    },
-  ];
+  const drivers: Driver[] = [];
 
   const handleDriverSelect = (driver: Driver) => {
     Alert.alert(

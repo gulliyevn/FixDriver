@@ -23,6 +23,41 @@ export interface CreateOrderPayload {
   scheduledFor?: Date;
 }
 
+// Вспомогательные mock объекты для тестирования
+const mockClient = {
+  id: '1',
+  name: 'Тестовый',
+  surname: 'Клиент',
+  email: 'test@example.com',
+  address: 'Москва',
+  role: UserRole.CLIENT as UserRole.CLIENT,
+  phone: '+7 (999) 123-45-67',
+  avatar: null,
+  rating: 4.5,
+  createdAt: new Date().toISOString(),
+};
+
+const mockDriver = {
+  id: '1',
+  name: 'Алексей',
+  surname: 'Петров',
+  email: 'alex@example.com',
+  address: 'Москва',
+  role: UserRole.DRIVER as UserRole.DRIVER,
+  phone: '+7 (999) 234-56-78',
+  avatar: null,
+  rating: 4.8,
+  createdAt: new Date().toISOString(),
+  vehicle: {
+    make: 'Toyota',
+    model: 'Camry',
+    year: 2020,
+    color: 'белый',
+    licensePlate: 'A123BC',
+  },
+  isAvailable: true,
+};
+
 export class OrderService {
   static async createOrder(payload: CreateOrderPayload): Promise<Order> {
     // TODO: заменить на реальный API запрос
@@ -30,14 +65,7 @@ export class OrderService {
       setTimeout(() => {
         resolve({
           id: Date.now().toString(),
-          client: {
-            id: payload.clientId,
-            name: 'Тестовый',
-            surname: 'Клиент',
-            email: 'test@example.com',
-            address: 'Москва',
-            role: UserRole.CLIENT,
-          },
+          client: { ...mockClient, id: payload.clientId },
           from: payload.from,
           to: payload.to,
           status: 'pending',
@@ -56,25 +84,8 @@ export class OrderService {
         resolve([
           {
             id: '1',
-            client: {
-              id: clientId,
-              name: 'Тестовый',
-              surname: 'Клиент',
-              email: 'test@example.com',
-              address: 'Москва',
-              role: UserRole.CLIENT,
-            },
-            driver: {
-              id: '1',
-              name: 'Алексей',
-              surname: 'Петров',
-              email: 'alex@example.com',
-              address: 'Москва',
-              role: UserRole.DRIVER,
-              car: 'Toyota Camry',
-              carInfo: 'A123BC, белый',
-              clientsPerDay: 3,
-            },
+            client: { ...mockClient, id: clientId },
+            driver: mockDriver,
             from: {
               latitude: 55.7558,
               longitude: 37.6176,
@@ -102,29 +113,8 @@ export class OrderService {
         resolve([
           {
             id: '1',
-            client: {
-              id: '1',
-              name: 'Иван',
-              surname: 'Сидоров',
-              email: 'test@example.com',
-              address: 'Москва',
-              role: UserRole.CLIENT,
-              phone: '+7 (999) 123-45-67',
-              avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-              rating: 4.8,
-              createdAt: '2024-01-01',
-            },
-            driver: {
-              id: driverId,
-              name: 'Алексей',
-              surname: 'Петров',
-              email: 'alex@example.com',
-              address: 'Москва',
-              role: UserRole.DRIVER,
-              car: 'Toyota Camry',
-              carInfo: 'A123BC, белый',
-              clientsPerDay: 3,
-            },
+            client: mockClient,
+            driver: { ...mockDriver, id: driverId },
             from: {
               latitude: 55.7558,
               longitude: 37.6176,
@@ -150,25 +140,8 @@ export class OrderService {
       setTimeout(() => {
         resolve({
           id: orderId,
-          client: {
-            id: '1',
-            name: 'Тестовый',
-            surname: 'Клиент',
-            email: 'test@example.com',
-            address: 'Москва',
-            role: UserRole.CLIENT,
-          },
-          driver: {
-            id: driverId,
-            name: 'Алексей',
-            surname: 'Петров',
-            email: 'alex@example.com',
-            address: 'Москва',
-            role: UserRole.DRIVER,
-            car: 'Toyota Camry',
-            carInfo: 'A123BC, белый',
-            clientsPerDay: 3,
-          },
+          client: mockClient,
+          driver: { ...mockDriver, id: driverId },
           from: {
             latitude: 55.7558,
             longitude: 37.6176,
@@ -193,25 +166,8 @@ export class OrderService {
       setTimeout(() => {
         resolve({
           id: orderId,
-          client: {
-            id: '1',
-            name: 'Тестовый',
-            surname: 'Клиент',
-            email: 'test@example.com',
-            address: 'Москва',
-            role: UserRole.CLIENT,
-          },
-          driver: {
-            id: '1',
-            name: 'Алексей',
-            surname: 'Петров',
-            email: 'alex@example.com',
-            address: 'Москва',
-            role: UserRole.DRIVER,
-            car: 'Toyota Camry',
-            carInfo: 'A123BC, белый',
-            clientsPerDay: 3,
-          },
+          client: mockClient,
+          driver: mockDriver,
           from: {
             latitude: 55.7558,
             longitude: 37.6176,

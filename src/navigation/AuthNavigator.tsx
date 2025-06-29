@@ -5,6 +5,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import ClientRegisterScreen from '../screens/auth/ClientRegisterScreen';
 import DriverRegisterScreen from '../screens/auth/DriverRegisterScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
 
 export type AuthStackParamList = {
   RoleSelect: undefined;
@@ -12,6 +13,11 @@ export type AuthStackParamList = {
   ClientRegister: undefined;
   DriverRegister: undefined;
   ForgotPassword: undefined;
+  OTPVerification: {
+    phoneNumber: string;
+    userRole: 'client' | 'driver';
+    userData?: any;
+  };
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -19,6 +25,7 @@ const Stack = createStackNavigator<AuthStackParamList>();
 const AuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator
+      id={undefined}
       initialRouteName="RoleSelect"
       screenOptions={{
         headerShown: false,
@@ -29,6 +36,7 @@ const AuthNavigator: React.FC = () => {
       <Stack.Screen name="ClientRegister" component={ClientRegisterScreen} />
       <Stack.Screen name="DriverRegister" component={DriverRegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
     </Stack.Navigator>
   );
 };

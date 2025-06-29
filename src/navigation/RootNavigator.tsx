@@ -17,7 +17,7 @@ const RootNavigator: React.FC = () => {
   }
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator id={undefined} screenOptions={{ headerShown: false }}>
       {user ? (
         // Аутентифицированный пользователь
         user.role === UserRole.DRIVER ? (

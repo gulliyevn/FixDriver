@@ -9,6 +9,7 @@ const Stack = createStackNavigator<ClientStackParamList>();
 const ChatNavigator: React.FC = () => {
   return (
     <Stack.Navigator
+      id={undefined}
       screenOptions={{
         headerShown: false,
       }}
