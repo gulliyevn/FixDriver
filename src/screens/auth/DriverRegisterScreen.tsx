@@ -535,7 +535,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
           </View>
 
           {/* Form */}
-                      <View style={styles.form}>
+          <View style={styles.form}>
             {/* Personal Info Section */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, { color: isDark ? '#F9FAFB' : '#111827' }]}>
@@ -567,12 +567,12 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
 
               <InputField
                 label="Email"
-                value={formData.email}
-                onChangeText={(value) => updateFormData('email', value)}
+                  value={formData.email}
+                  onChangeText={(value) => updateFormData('email', value)}
                 leftIcon="mail-outline"
                 placeholder="example@mail.com"
-                keyboardType="email-address"
-                autoCapitalize="none"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
                 error={errors.email}
                 required
                 containerStyle={styles.inputSpacing}
@@ -594,7 +594,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
               <Text style={[styles.sectionTitle, { color: isDark ? '#F9FAFB' : '#111827' }]}>
                 Данные для входа
               </Text>
-
+              
               <InputField
                 label="Пароль"
                 value={formData.password}
@@ -617,8 +617,8 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 error={errors.confirmPassword}
                 required
                 containerStyle={styles.inputSpacing}
-              />
-            </View>
+                />
+              </View>
 
             {/* License Section */}
             <View style={styles.section}>
@@ -632,7 +632,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 onChangeText={(value) => updateFormData('license_number', value)}
                 leftIcon="card-outline"
                 placeholder="AZ12345678"
-                autoCapitalize="characters"
+                  autoCapitalize="characters"
                 error={errors.license_number}
                 required
                 containerStyle={styles.inputSpacing}
@@ -655,7 +655,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
               <Text style={[styles.sectionTitle, { color: isDark ? '#F9FAFB' : '#111827' }]}>
                 Информация об автомобиле
               </Text>
-
+              
               <InputField
                 label="Номер автомобиля"
                 value={formData.vehicle_number}
@@ -727,7 +727,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
 
             {/* Agreements Section */}
             <View style={styles.agreementsSection}>
-              <TouchableOpacity
+              <TouchableOpacity 
                 style={styles.agreementRow}
                 onPress={() => setAgreeToTermsAndPrivacy(!agreeToTermsAndPrivacy)}
               >
@@ -772,7 +772,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
             />
 
             {/* Support */}
-            <TouchableOpacity 
+              <TouchableOpacity 
               style={styles.supportButton}
               onPress={() => {
                 const whatsappNumber = '+994516995513';
@@ -798,11 +798,11 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
         presentationStyle="overFullScreen"
         onRequestClose={() => setShowTermsModal(false)}
       >
-        <TouchableOpacity 
+              <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => setShowTermsModal(false)}
-        >
+                onPress={() => setShowTermsModal(false)}
+              >
           <TouchableOpacity
             style={[styles.modalContent, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
             activeOpacity={1}
@@ -880,7 +880,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 Чем лучше водитель работает — тем выше рейтинг и доход.
               </Text>
             </ScrollView>
-          </TouchableOpacity>
+            </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
 
@@ -892,11 +892,11 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
         presentationStyle="overFullScreen"
         onRequestClose={() => setShowPrivacyModal(false)}
       >
-        <TouchableOpacity 
+              <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => setShowPrivacyModal(false)}
-        >
+                onPress={() => setShowPrivacyModal(false)}
+              >
           <TouchableOpacity
             style={[styles.modalContent, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
             activeOpacity={1}
@@ -982,7 +982,7 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 Ваша конфиденциальность — наш приоритет.
               </Text>
             </ScrollView>
-          </TouchableOpacity>
+            </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
     </SafeAreaView>

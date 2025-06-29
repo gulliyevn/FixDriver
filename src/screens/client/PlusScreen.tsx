@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
   ScrollView,
   Alert,
   SafeAreaView,
@@ -274,7 +274,7 @@ const PlusScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* Заголовок */}
-        <View style={styles.header}>
+      <View style={styles.header}>
           <Text style={[styles.title, { color: isDark ? '#FFFFFF' : '#1F2937' }]}>
             Бронирование поездки
           </Text>
@@ -355,7 +355,7 @@ const PlusScreen: React.FC = () => {
 
         {/* БЛОК 2: Анкета поездки */}
         {currentStep === 'form' && (
-          <View style={styles.section}>
+        <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: isDark ? '#FFFFFF' : '#1F2937' }]}>
               Детали поездки
             </Text>
@@ -463,7 +463,7 @@ const PlusScreen: React.FC = () => {
                 style={styles.notesInput}
                 leftIcon="chatbubble"
               />
-            </View>
+                    </View>
 
             {/* Расчет стоимости */}
             {routeDistance > 0 && (
@@ -493,7 +493,7 @@ const PlusScreen: React.FC = () => {
                       </Text>
                     </View>
                   )}
-                  
+
                   <Text style={[styles.totalPrice, { color: isDark ? '#10B981' : '#059669' }]}>
                     Итого: {estimatedPrice + extraPaymentAmount} ₼
                   </Text>
@@ -527,7 +527,7 @@ const PlusScreen: React.FC = () => {
                 <Text style={[styles.confirmationValue, { color: isDark ? '#FFFFFF' : '#1F2937' }]}>
                   {availablePackages.find(p => p.id === selectedPackageId)?.name || activePackage?.name}
                 </Text>
-              </View>
+        </View>
 
               {/* Пассажир */}
               <View style={styles.confirmationSection}>
@@ -542,7 +542,7 @@ const PlusScreen: React.FC = () => {
                     {passenger.phone}
                   </Text>
                 )}
-              </View>
+                </View>
 
               {/* Маршрут */}
               <View style={styles.confirmationSection}>
@@ -554,7 +554,7 @@ const PlusScreen: React.FC = () => {
                     {index === 0 ? '🟢' : index === route.length - 1 ? '🔴' : '🟡'} {point.address}
                   </Text>
                 ))}
-              </View>
+        </View>
 
               {/* Время */}
               <View style={styles.confirmationSection}>
@@ -614,7 +614,7 @@ const PlusScreen: React.FC = () => {
                 style={styles.confirmButton}
                 loading={loading}
               />
-            </View>
+        </View>
           </View>
         )}
       </ScrollView>

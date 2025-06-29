@@ -43,7 +43,7 @@ export default function TabBar({ state, descriptors, navigation }: any) {
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              onPress={() => navigation.navigate('Schedule')}
+              onPress={() => navigation.navigate('Plus')}
               style={styles.centerButtonWrap}
               activeOpacity={0.85}
             >
