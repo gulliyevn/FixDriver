@@ -417,8 +417,6 @@ const DriversScreen: React.FC = () => {
     );
   };
 
-
-
   const toggleDriverExpansion = (driverId: string) => {
     setExpandedDrivers(prev => 
       prev.includes(driverId) 
@@ -455,13 +453,23 @@ const DriversScreen: React.FC = () => {
   };
 
   const handleChatDriver = (driver: Driver) => {
-    console.log('💬 Переход в главный список чатов из списка водителей');
+    console.log('💬 Переход в чат с водителем из списка водителей');
     
     try {
-      // Переключаемся на таб Chat (главный список чатов)
-      navigation.navigate('Chat' as never);
+      // Переходим в таб Chat с параметрами для открытия конкретного чата
+      (navigation as any).navigate('Chat', {
+        screen: 'ChatConversation',
+        params: {
+          driverId: driver.id,
+          driverName: driver.name,
+          driverCar: driver.carModel,
+          driverNumber: driver.carNumber,
+          driverRating: driver.rating.toString(),
+          driverStatus: driver.isOnline ? 'online' : 'offline',
+        }
+      });
       
-      console.log('✅ Успешная навигация в главный список чатов из списка водителей');
+      console.log('✅ Успешная навигация в чат с водителем из списка водителей');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат:', error);
       const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
@@ -606,8 +614,6 @@ const DriversScreen: React.FC = () => {
     return true;
   });
 
-
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
@@ -648,12 +654,6 @@ const DriversScreen: React.FC = () => {
         </View>
       </View>
 
-
-
-
-
-
-
       {/* Drivers List */}
       <ScrollView 
         style={styles.driversList} 
@@ -678,7 +678,7 @@ const DriversScreen: React.FC = () => {
                   
                   {/* Информация о водителе */}
                   <View style={styles.driverInfo}>
-                                        {/* Имя и рейтинг в одной строке */}
+                    {/* Имя и рейтинг в одной строке */}
                     <View style={styles.nameRatingRow}>
                       <Text style={[styles.driverName, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
                         {driver.name}
@@ -1010,74 +1010,73 @@ const DriversScreen: React.FC = () => {
             </View>
           )}
         </View>
-              </Modal>
+      </Modal>
 
-        {/* Модал фильтров */}
-        <Modal
-          visible={showFilterModal}
-          animationType="slide"
-          presentationStyle="pageSheet"
-        >
-          <SafeAreaView style={[styles.modalContainer, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
-            <View style={styles.modalHeaderEmpty}>
-              <TouchableOpacity 
-                style={styles.closeButtonCustom} 
-                onPress={() => setShowFilterModal(false)}
-              >
-                <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-              </TouchableOpacity>
-            </View>
+      {/* Модал фильтров */}
+      <Modal
+        visible={showFilterModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
+        <SafeAreaView style={[styles.modalContainer, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
+          <View style={styles.modalHeaderEmpty}>
+            <TouchableOpacity 
+              style={styles.closeButtonCustom} 
+              onPress={() => setShowFilterModal(false)}
+            >
+              <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+            </TouchableOpacity>
+          </View>
 
-            <ScrollView style={styles.filterModalContent} showsVerticalScrollIndicator={false}>
-              <View style={styles.filterSection}>
-                <View style={styles.filterGrid}>
-                  {filters.map((filter) => (
-                    <TouchableOpacity
-                      key={filter.id}
-                      style={[
-                        styles.filterGridItem,
-                        selectedFilter === filter.id && styles.filterGridItemActive,
-                        { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
-                      ]}
-                      onPress={() => setSelectedFilter(filter.id)}
-                    >
-                      <Ionicons 
-                        name={filter.icon as any} 
-                        size={20} 
-                        color={selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A')} 
-                      />
-                      <Text style={[
-                        styles.filterGridText,
-                        { color: selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A') }
-                      ]}>
-                        {filter.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+          <ScrollView style={styles.filterModalContent} showsVerticalScrollIndicator={false}>
+            <View style={styles.filterSection}>
+              <View style={styles.filterGrid}>
+                {filters.map((filter) => (
+                  <TouchableOpacity
+                    key={filter.id}
+                    style={[
+                      styles.filterGridItem,
+                      selectedFilter === filter.id && styles.filterGridItemActive,
+                      { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
+                    ]}
+                    onPress={() => setSelectedFilter(filter.id)}
+                  >
+                    <Ionicons 
+                      name={filter.icon as any} 
+                      size={20} 
+                      color={selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A')} 
+                    />
+                    <Text style={[
+                      styles.filterGridText,
+                      { color: selectedFilter === filter.id ? '#FFFFFF' : (isDark ? '#9CA3AF' : '#1E3A8A') }
+                    ]}>
+                      {filter.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
               </View>
-            </ScrollView>
-
-            {/* Кнопки действий */}
-            <View style={[styles.filterModalActions, { borderTopColor: isDark ? '#374151' : '#E5E7EB' }]}>
-              <TouchableOpacity 
-                style={[styles.filterResetButton, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}
-                onPress={() => setSelectedFilter('all')}
-              >
-                <Text style={[styles.filterResetButtonText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                  Сбросить
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.filterApplyButton}
-                onPress={() => setShowFilterModal(false)}
-              >
-                <Text style={styles.filterApplyButtonText}>Применить</Text>
-              </TouchableOpacity>
             </View>
-          </SafeAreaView>
-        </Modal>
+          </ScrollView>
 
+          {/* Кнопки действий */}
+          <View style={[styles.filterModalActions, { borderTopColor: isDark ? '#374151' : '#E5E7EB' }]}>
+            <TouchableOpacity 
+              style={[styles.filterResetButton, { backgroundColor: isDark ? '#374151' : '#F3F4F6' }]}
+              onPress={() => setSelectedFilter('all')}
+            >
+              <Text style={[styles.filterResetButtonText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                Сбросить
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.filterApplyButton}
+              onPress={() => setShowFilterModal(false)}
+            >
+              <Text style={styles.filterApplyButtonText}>Применить</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 };
