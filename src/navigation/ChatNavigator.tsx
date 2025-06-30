@@ -13,21 +13,7 @@ const ChatNavigator: React.FC = () => {
       initialRouteName="ChatList"
       screenOptions={{
         headerShown: false,
-        // Улучшаем анимации навигации
-        cardStyleInterpolator: ({ current, layouts }) => {
-          return {
-            cardStyle: {
-              transform: [
-                {
-                  translateX: current.progress.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [layouts.screen.width, 0],
-                  }),
-                },
-              ],
-            },
-          };
-        },
+        gestureEnabled: true,
       }}
     >
       <Stack.Screen 
@@ -42,8 +28,6 @@ const ChatNavigator: React.FC = () => {
         component={ChatScreen}
         options={{
           title: 'Чат',
-          // Включаем свайп назад
-          gestureEnabled: true,
         }}
       />
     </Stack.Navigator>

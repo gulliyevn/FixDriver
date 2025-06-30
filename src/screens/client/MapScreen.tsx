@@ -24,7 +24,6 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../types/navigation';
 import * as Location from 'expo-location';
 import { notificationService, Notification } from '../../services/NotificationService';
-import { CommonActions } from '@react-navigation/native';
 
 
 const familyMembers = [
@@ -596,41 +595,13 @@ const MapScreen: React.FC = () => {
   };
 
   const handleChatDriver = () => {
-    const currentDriver = memberDrivers[selectedMember.id];
-    
-    console.log('💬 Переход в чат с водителем из карты:', currentDriver.name);
+    console.log('💬 Переход в главный список чатов из карты');
     
     try {
-      // Создаем правильный стек навигации: ChatList -> ChatConversation
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'Chat',
-              state: {
-                routes: [
-                  { name: 'ChatList' },
-                  { 
-                    name: 'ChatConversation',
-                    params: {
-                      driverId: selectedMember.id,
-                      driverName: currentDriver.name,
-                      driverCar: currentDriver.car,
-                      driverNumber: currentDriver.number,
-                      driverRating: currentDriver.rating.toString(),
-                      driverStatus: 'online'
-                    }
-                  }
-                ],
-                index: 1
-              }
-            }
-          ]
-        })
-      );
+      // Переключаемся на таб Chat (главный список чатов)
+      navigation.navigate('Chat');
       
-      console.log('✅ Успешная навигация в чат с правильным стеком из карты');
+      console.log('✅ Успешная навигация в главный список чатов из карты');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат из карты:', error);
       Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);

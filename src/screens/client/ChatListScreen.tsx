@@ -8,7 +8,10 @@ import {
   ScrollView,
   StatusBar,
   Modal,
-  Alert
+  Alert,
+  Animated,
+  PanResponder,
+  Dimensions
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +20,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
 import { notificationService, Notification } from '../../services/NotificationService';
+import { chatService } from '../../services/ChatService';
+import { Chat } from '../../types/chat';
 
 type NavigationProp = StackNavigationProp<ClientStackParamList, 'ChatList'>;
 
@@ -32,6 +37,282 @@ interface ChatPreview {
   driverStatus: 'online' | 'offline' | 'busy';
 }
 
+interface SwipeableChatProps {
+  chat: Chat;
+  isDark: boolean;
+  isChatSelectionMode: boolean;
+  selectedChats: string[];
+  pinnedChats: string[];
+  onPress: () => void;
+  onToggleSelection: () => void;
+  onTogglePin: () => void;
+  onDelete: () => void;
+  getStatusColor: (status: string) => string;
+  getStatusText: (status: string) => string;
+  chatService: typeof chatService;
+}
+
+
+
+const SwipeableChat: React.FC<SwipeableChatProps> = ({
+  chat,
+  isDark,
+  isChatSelectionMode,
+  selectedChats,
+  pinnedChats,
+  onPress,
+  onToggleSelection,
+  onTogglePin,
+  onDelete,
+  getStatusColor,
+  getStatusText,
+  chatService
+}) => {
+  const translateX = React.useRef(new Animated.Value(0)).current;
+  const [isSwipeActive, setIsSwipeActive] = React.useState(false);
+
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        // Активируем только при горизонтальном свайпе
+        const isHorizontal = Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+        const isSignificant = Math.abs(gestureState.dx) > 15;
+        return isHorizontal && isSignificant && !isChatSelectionMode;
+      },
+      
+      onPanResponderGrant: () => {
+        setIsSwipeActive(true);
+      },
+      
+      onPanResponderMove: (evt, gestureState) => {
+        let value = gestureState.dx;
+        
+        // Ограничиваем движение с эластичностью
+        if (value > 90) {
+          value = 90 + (value - 90) * 0.2;
+        } else if (value < -90) {
+          value = -90 + (value + 90) * 0.2;
+        }
+        
+        translateX.setValue(value);
+      },
+      
+      onPanResponderRelease: (evt, gestureState) => {
+        setIsSwipeActive(false);
+        
+        const { dx, vx } = gestureState;
+        
+        if (dx > 60 || (dx > 30 && vx > 0.8)) {
+          // PIN - свайп вправо
+          console.log('📌 PIN чат');
+          Animated.sequence([
+            Animated.timing(translateX, {
+              toValue: 120,
+              duration: 150,
+              useNativeDriver: true,
+            }),
+            Animated.timing(translateX, {
+              toValue: 0,
+              duration: 250,
+              useNativeDriver: true,
+            })
+          ]).start();
+          onTogglePin();
+          
+        } else if (dx < -60 || (dx < -30 && vx < -0.8)) {
+          // DELETE - свайп влево
+          console.log('🗑️ DELETE чат');
+          Animated.timing(translateX, {
+            toValue: -400,
+            duration: 300,
+            useNativeDriver: true,
+          }).start(() => {
+            onDelete();
+          });
+          
+        } else {
+          // Возврат в центр
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            tension: 200,
+            friction: 8,
+          }).start();
+        }
+      },
+      
+      onPanResponderTerminationRequest: () => false,
+    })
+  ).current;
+
+  // Интерполяция для кнопок
+  const leftActionOpacity = translateX.interpolate({
+    inputRange: [0, 30, 90],
+    outputRange: [0, 0.7, 1],
+    extrapolate: 'clamp',
+  });
+
+  const rightActionOpacity = translateX.interpolate({
+    inputRange: [-90, -30, 0],
+    outputRange: [1, 0.7, 0],
+    extrapolate: 'clamp',
+  });
+
+  const leftActionScale = translateX.interpolate({
+    inputRange: [0, 90],
+    outputRange: [0.5, 1.1],
+    extrapolate: 'clamp',
+  });
+
+  const rightActionScale = translateX.interpolate({
+    inputRange: [-90, 0],
+    outputRange: [1.1, 0.5],
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <View style={swipeStyles.container}>
+      {/* Кнопка закрепления - левая */}
+      <Animated.View style={[
+        swipeStyles.leftAction,
+        { 
+          opacity: leftActionOpacity,
+          transform: [{ scale: leftActionScale }]
+        }
+      ]}>
+        <Ionicons name="bookmark" size={24} color="#FFFFFF" />
+      </Animated.View>
+      
+      {/* Кнопка удаления - правая */}
+      <Animated.View style={[
+        swipeStyles.rightAction,
+        { 
+          opacity: rightActionOpacity,
+          transform: [{ scale: rightActionScale }]
+        }
+      ]}>
+        <Ionicons name="trash" size={24} color="#FFFFFF" />
+      </Animated.View>
+      
+      {/* Основной чат */}
+      <View
+        {...panResponder.panHandlers}
+        style={swipeStyles.chatContainer}
+      >
+        <Animated.View
+          style={[
+            { 
+              backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+              transform: [{ translateX: translateX }],
+            },
+            // Явно убираем все границы для выбранных чатов
+            isChatSelectionMode && selectedChats.includes(chat.id) && {
+              borderWidth: 0,
+              borderColor: 'transparent',
+            }
+          ]}
+        >
+          <TouchableOpacity 
+            onPress={!isSwipeActive ? onPress : undefined} 
+            activeOpacity={0.8}
+            disabled={isSwipeActive}
+            style={[
+              swipeStyles.chatItem,
+              // Явно убираем все границы для выбранных чатов
+              isChatSelectionMode && selectedChats.includes(chat.id) && {
+                borderWidth: 0,
+                borderColor: 'transparent',
+              }
+            ]}
+          >
+            <View style={[
+              swipeStyles.chatContent,
+              // Явно убираем все границы для выбранных чатов
+              isChatSelectionMode && selectedChats.includes(chat.id) && {
+                borderWidth: 0,
+                borderColor: 'transparent',
+              }
+            ]}>
+              <View style={swipeStyles.leftSection}>
+                {isChatSelectionMode && (
+                  <TouchableOpacity
+                    style={swipeStyles.checkbox}
+                    onPress={onToggleSelection}
+                  >
+                    <Ionicons
+                      name={selectedChats.includes(chat.id) ? "checkbox" : "square-outline"}
+                      size={24}
+                      color={selectedChats.includes(chat.id) ? "#1E3A8A" : "#9CA3AF"}
+                    />
+                  </TouchableOpacity>
+                )}
+                <View style={swipeStyles.driverAvatar}>
+                  <Text style={{ fontSize: 20 }}>👨‍💼</Text>
+                  <View style={[swipeStyles.statusDot, { backgroundColor: getStatusColor(chat.isOnline ? 'online' : 'offline') }]} />
+                </View>
+              </View>
+              <View style={swipeStyles.chatDetails}>
+                <View style={swipeStyles.chatHeader}>
+                  <View style={swipeStyles.driverNameContainer}>
+                    <Text style={[swipeStyles.driverName, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+                      {chat.participantName}
+                    </Text>
+                    {pinnedChats.includes(chat.id) && !isChatSelectionMode && (
+                      <Ionicons 
+                        name="bookmark" 
+                        size={14} 
+                        color="#F59E0B" 
+                        style={swipeStyles.pinIndicator}
+                      />
+                    )}
+                  </View>
+                </View>
+                <Text style={swipeStyles.carInfo}>Toyota Camry • А123БВ777</Text>
+                <View style={swipeStyles.statusContainer}>
+                  <Text style={[swipeStyles.statusText, { color: getStatusColor(chat.isOnline ? 'online' : 'offline') }]}>
+                    {getStatusText(chat.isOnline ? 'online' : 'offline')}
+                  </Text>
+                </View>
+                <Text style={[swipeStyles.lastMessage, { color: isDark ? '#D1D5DB' : '#6B7280' }]} numberOfLines={1}>
+                  {chat.lastMessage || 'Напишите первое сообщение'}
+                </Text>
+              </View>
+              <View style={swipeStyles.rightSection}>
+                <Text style={swipeStyles.timestamp}>
+                  {chatService.formatMessageTime(chat.lastMessageTime)}
+                </Text>
+                {chat.unreadCount > 0 && (
+                  <View style={swipeStyles.unreadBadge}>
+                    <Text style={swipeStyles.unreadText}>{chat.unreadCount}</Text>
+                  </View>
+                )}
+                {isChatSelectionMode && (
+                  <TouchableOpacity 
+                    style={swipeStyles.pinButtonSelection}
+                    onPress={onTogglePin}
+                  >
+                    <Ionicons 
+                      name={pinnedChats.includes(chat.id) ? "bookmark" : "bookmark-outline"} 
+                      size={20} 
+                      color={pinnedChats.includes(chat.id) ? "#F59E0B" : "#6B7280"} 
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            {/* Разделитель */}
+            <View style={[
+              swipeStyles.separator,
+              { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
+            ]} />
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    </View>
+  );
+};
+
 const ChatListScreen: React.FC = () => {
   const { isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
@@ -39,50 +320,57 @@ const ChatListScreen: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
+  
+  // Состояние для режима выбора чатов
+  const [isChatSelectionMode, setIsChatSelectionMode] = useState(false);
+  const [selectedChats, setSelectedChats] = useState<string[]>([]);
+  const [pinnedChats, setPinnedChats] = useState<string[]>([]);
+  
+  // Состояние для свайпов
+  const [swipingChatId, setSwipingChatId] = useState<string | null>(null);
 
-  const chats: ChatPreview[] = [
-    {
-      driverId: 'driver1',
-      driverName: 'Александр Петров',
-      driverCar: 'Toyota Camry',
-      driverNumber: 'А123БВ777',
-      driverRating: '4.8',
-      lastMessage: 'Приеду через 5 минут. Буду на белой Toyota Camry.',
-      timestamp: '14:32',
-      unreadCount: 2,
-      driverStatus: 'online'
-    },
-    {
-      driverId: 'driver2',
-      driverName: 'Мурад Алиев',
-      driverCar: 'Mercedes E-Class',
-      driverNumber: 'В456ГД888',
-      driverRating: '4.9',
-      lastMessage: 'Спасибо за поездку!',
-      timestamp: 'Вчера',
-      unreadCount: 0,
-      driverStatus: 'offline'
-    }
-  ];
+  const [chats, setChats] = useState<Chat[]>([]);
 
   useEffect(() => {
     setNotifications(notificationService.getNotifications());
+    loadChats();
   }, []);
 
-  const handleChatPress = (chat: ChatPreview) => {
-    console.log('📱 ChatListScreen: переход в чат с', chat.driverName);
+  const loadChats = async () => {
+    try {
+      const userChats = await chatService.getChats('me');
+      setChats(userChats);
+    } catch (error) {
+      console.error('❌ Ошибка загрузки чатов:', error);
+    }
+  };
+
+  const restoreChats = async () => {
+    console.log('🔄 Восстанавливаем чаты...');
+    chatService.resetToMockData();
+    await loadChats();
+  };
+
+  const handleChatPress = (chat: Chat) => {
+    // Если режим выбора активен, добавляем/убираем чат из выбранных
+    if (isChatSelectionMode) {
+      toggleChatSelection(chat.id);
+      return;
+    }
+    
+    console.log('📱 ChatListScreen: переход в чат с', chat.participantName);
     
     try {
       navigation.navigate('ChatConversation', {
-        driverId: chat.driverId,
-        driverName: chat.driverName,
-        driverCar: chat.driverCar,
-        driverNumber: chat.driverNumber,
-        driverRating: chat.driverRating,
-        driverStatus: chat.driverStatus
+        driverId: chat.participantId,
+        driverName: chat.participantName,
+        driverCar: 'Toyota Camry', // Можно добавить в Chat тип машины
+        driverNumber: 'А123БВ777', // Можно добавить в Chat номер машины
+        driverRating: '4.8', // Можно добавить в Chat рейтинг
+        driverStatus: chat.isOnline ? 'online' : 'offline'
       });
       
-      console.log('✅ Успешная навигация в чат:', chat.driverName);
+      console.log('✅ Успешная навигация в чат:', chat.participantName);
     } catch (error) {
       console.error('❌ Ошибка навигации в чат:', error);
       Alert.alert('Ошибка', 'Не удалось открыть чат. Попробуйте еще раз.');
@@ -212,6 +500,81 @@ const ChatListScreen: React.FC = () => {
     }
   };
 
+  // Функции для работы с чатами
+  const toggleChatSelectionMode = () => {
+    setIsChatSelectionMode(!isChatSelectionMode);
+    setSelectedChats([]);
+  };
+
+  const toggleChatSelection = (chatId: string) => {
+    setSelectedChats(prev => 
+      prev.includes(chatId)
+        ? prev.filter(id => id !== chatId)
+        : [...prev, chatId]
+    );
+  };
+
+  const selectAllChats = () => {
+    if (selectedChats.length === sortedChats.length) {
+      setSelectedChats([]);
+    } else {
+      setSelectedChats(sortedChats.map(chat => chat.id));
+    }
+  };
+
+  const deleteSelectedChats = () => {
+    if (selectedChats.length === 0) return;
+    
+    Alert.alert(
+      'Удалить чаты',
+      `Вы уверены, что хотите удалить ${selectedChats.length} чатов?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            // Здесь можно добавить логику удаления чатов через chatService
+            console.log('Удаление чатов:', selectedChats);
+            setSelectedChats([]);
+            setIsChatSelectionMode(false);
+            // Перезагрузка списка чатов
+            loadChats();
+          },
+        },
+      ]
+    );
+  };
+
+  const togglePinChat = (chatId: string) => {
+    console.log('🔖 Переключение закрепления для чата:', chatId);
+    setPinnedChats(prev => {
+      const newPinned = prev.includes(chatId)
+        ? prev.filter(id => id !== chatId)
+        : [...prev, chatId];
+      
+      console.log('📌 Закрепленные чаты:', newPinned);
+      return newPinned;
+    });
+  };
+
+  const handleDeleteChat = (chatId: string) => {
+    console.log('🗑️ Удаляем чат:', chatId);
+    
+    // Мгновенное удаление как закрепление
+    setChats(prevChats => prevChats.filter(c => c.id !== chatId));
+    console.log('✅ Чат удален:', chatId);
+  };
+
+  // Сортировка чатов: закрепленные сверху, как в Telegram
+  const sortedChats = React.useMemo(() => {
+    const pinned = chats.filter(chat => pinnedChats.includes(chat.id));
+    const unpinned = chats.filter(chat => !pinnedChats.includes(chat.id));
+    
+    // Возвращаем закрепленные сверху, затем обычные
+    return [...pinned, ...unpinned];
+  }, [chats, pinnedChats]);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
@@ -229,56 +592,82 @@ const ChatListScreen: React.FC = () => {
         <Text style={[styles.headerTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
           Чаты
         </Text>
-        <View style={{ width: 40 }} />
+        <TouchableOpacity style={styles.selectBtn} onPress={toggleChatSelectionMode}>
+          <Text style={[styles.selectBtnText, { color: isDark ? '#F9FAFB' : '#1E3A8A' }]}>
+            {isChatSelectionMode ? 'Отмена' : 'Выбрать'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Chat List */}
+            {/* Chat List */}
       <ScrollView style={styles.chatList} showsVerticalScrollIndicator={false}>
-        {chats.map((chat) => (
-          <TouchableOpacity key={chat.driverId} onPress={() => handleChatPress(chat)}>
-            <AppCard style={styles.chatItem} margin={16}>
-              <View style={styles.chatContent}>
-                <View style={styles.driverInfo}>
-                  <View style={styles.driverAvatar}>
-                    <Text style={{ fontSize: 20 }}>👨‍💼</Text>
-                    <View style={[styles.statusDot, { backgroundColor: getStatusColor(chat.driverStatus) }]} />
-                  </View>
-                  <View style={styles.chatDetails}>
-                    <View style={styles.chatHeader}>
-                      <Text style={[styles.driverName, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-                        {chat.driverName}
-                      </Text>
-                      <Text style={styles.timestamp}>{chat.timestamp}</Text>
-                    </View>
-                    <Text style={styles.carInfo}>{chat.driverCar} • {chat.driverNumber}</Text>
-                    <Text style={[styles.lastMessage, { color: isDark ? '#D1D5DB' : '#6B7280' }]} numberOfLines={1}>
-                      {chat.lastMessage}
-                    </Text>
-                    <View style={styles.chatFooter}>
-                      <View style={styles.statusContainer}>
-                        <Text style={[styles.statusText, { color: getStatusColor(chat.driverStatus) }]}>
-                          {getStatusText(chat.driverStatus)}
-                        </Text>
-                      </View>
-                      {chat.unreadCount > 0 && (
-                        <View style={styles.unreadBadge}>
-                          <Text style={styles.unreadText}>{chat.unreadCount}</Text>
-                        </View>
-                      )}
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.rating}>
-                  <Text style={[styles.ratingText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-                    {chat.driverRating}
-                  </Text>
-                  <Text style={styles.ratingStar}>⭐</Text>
-                </View>
-              </View>
-            </AppCard>
-          </TouchableOpacity>
-        ))}
+        {sortedChats.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons 
+              name="chatbox-outline" 
+              size={64} 
+              color={isDark ? '#6B7280' : '#9CA3AF'} 
+            />
+            <Text style={[styles.emptyStateText, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+              Нет чатов
+            </Text>
+            <Text style={[styles.emptyStateSubtext, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+              Все чаты отображаются здесь
+            </Text>
+            <TouchableOpacity 
+              style={[styles.restoreButton, { backgroundColor: isDark ? '#1F2937' : '#F3F4F6' }]}
+              onPress={restoreChats}
+            >
+              <Text style={[styles.restoreButtonText, { color: isDark ? '#FFFFFF' : '#1F2937' }]}>
+                Восстановить чаты
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          sortedChats.map((chat) => (
+            <SwipeableChat
+              key={chat.id}
+              chat={chat}
+              isDark={isDark}
+              isChatSelectionMode={isChatSelectionMode}
+              selectedChats={selectedChats}
+              pinnedChats={pinnedChats}
+              onPress={() => handleChatPress(chat)}
+              onToggleSelection={() => toggleChatSelection(chat.id)}
+              onTogglePin={() => togglePinChat(chat.id)}
+              onDelete={() => handleDeleteChat(chat.id)}
+              getStatusColor={getStatusColor}
+              getStatusText={getStatusText}
+              chatService={chatService}
+            />
+          ))
+        )}
       </ScrollView>
+
+      {/* Нижняя панель для режима выбора чатов */}
+      {isChatSelectionMode && (
+        <View style={[styles.bottomActions, { borderTopColor: isDark ? '#333333' : '#E5E5EA' }]}>
+          <TouchableOpacity 
+            style={[styles.bottomButton, styles.selectAllButton]} 
+            onPress={selectAllChats}
+          >
+            <Text style={[styles.bottomButtonText, { color: '#1E3A8A' }]}>
+              {selectedChats.length === sortedChats.length ? 'Снять все' : 'Выбрать все'}
+            </Text>
+          </TouchableOpacity>
+          
+          {selectedChats.length > 0 && (
+            <TouchableOpacity 
+              style={[styles.bottomButton, styles.deleteAllButton]} 
+              onPress={deleteSelectedChats}
+            >
+              <Text style={[styles.bottomButtonText, { color: '#FFFFFF' }]}>
+                Удалить ({selectedChats.length})
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
 
       {/* Модал центра уведомлений */}
       <Modal
@@ -485,6 +874,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    zIndex: 1,
   },
   chatList: {
     flex: 1,
@@ -495,6 +889,15 @@ const styles = StyleSheet.create({
   chatContent: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  pinButton: {
+    marginTop: 8,
+    padding: 4,
   },
   driverInfo: {
     flex: 1,
@@ -530,13 +933,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  driverName: {
+  rightSection: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    minWidth: 60,
+  },
+  selectBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  selectBtnText: {
     fontSize: 16,
     fontWeight: '600',
   },
+
+  driverNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  driverName: {
+    fontSize: 16,
+    fontWeight: '600',
+    flex: 1,
+  },
+  pinIndicator: {
+    marginLeft: 4,
+  },
   timestamp: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#6B7280',
+    marginBottom: 8,
   },
   carInfo: {
     fontSize: 12,
@@ -544,17 +971,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   lastMessage: {
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  chatFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    fontSize: 13,
+    marginBottom: 4,
   },
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 4,
   },
   statusText: {
     fontSize: 12,
@@ -562,29 +985,19 @@ const styles = StyleSheet.create({
   },
   unreadBadge: {
     backgroundColor: '#1E3A8A',
-    borderRadius: 12,
-    minWidth: 24,
-    height: 24,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 6,
   },
   unreadText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
   },
-  rating: {
-    alignItems: 'center',
-    marginLeft: 8,
-  },
-  ratingText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  ratingStar: {
-    fontSize: 14,
-    marginTop: 2,
-  },
+
   modalContainer: {
     flex: 1,
     padding: 20,
@@ -654,6 +1067,16 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginTop: 8,
   },
+  restoreButton: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  restoreButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
   notificationItem: {
     marginBottom: 12,
     borderRadius: 12,
@@ -673,7 +1096,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkbox: {
-    marginRight: 12,
+    marginRight: 8,
     padding: 4,
   },
   notificationIcon: {
@@ -729,6 +1152,150 @@ const styles = StyleSheet.create({
   },
   bottomButtonText: {
     fontSize: 16,
+    fontWeight: '600',
+  },
+});
+
+const swipeStyles = StyleSheet.create({
+  container: {
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  leftAction: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 80,
+    backgroundColor: '#F59E0B',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  rightAction: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 80,
+    backgroundColor: '#EF4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  pinButtonSelection: {
+    padding: 8,
+  },
+
+  chatContainer: {
+    backgroundColor: 'transparent',
+    zIndex: 2,
+    position: 'relative',
+  },
+  chatItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  separator: {
+    height: 0.5,
+    marginLeft: 72, // Отступ от аватара
+    opacity: 0.3,
+  },
+  chatContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  checkbox: {
+    marginRight: 8,
+    padding: 4,
+  },
+  driverAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+    position: 'relative',
+  },
+  statusDot: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  chatDetails: {
+    flex: 1,
+  },
+  chatHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  driverNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  driverName: {
+    fontSize: 16,
+    fontWeight: '600',
+    flex: 1,
+  },
+  pinIndicator: {
+    marginLeft: 4,
+  },
+  carInfo: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 4,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  lastMessage: {
+    fontSize: 13,
+    marginBottom: 4,
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    minWidth: 60,
+  },
+  timestamp: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginBottom: 8,
+  },
+  unreadBadge: {
+    backgroundColor: '#1E3A8A',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6,
+  },
+  unreadText: {
+    color: '#FFFFFF',
+    fontSize: 11,
     fontWeight: '600',
   },
 });

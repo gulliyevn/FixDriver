@@ -18,7 +18,6 @@ import AppCard from '../../components/AppCard';
 import RatingStars from '../../components/RatingStars';
 import { notificationService, Notification } from '../../services/NotificationService';
 import { isDriverAvailableForChat } from '../../utils/navigationHelpers';
-import { CommonActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../types/navigation';
@@ -456,46 +455,13 @@ const DriversScreen: React.FC = () => {
   };
 
   const handleChatDriver = (driver: Driver) => {
-    // Проверяем доступность водителя для чата
-    if (!isDriverAvailableForChat(driver.isOnline ? 'online' : 'offline')) {
-      Alert.alert('Недоступно', 'Водитель офлайн. Чат недоступен.');
-      return;
-    }
-    
-    console.log('💬 Переход в чат с водителем из списка:', driver.name);
+    console.log('💬 Переход в главный список чатов из списка водителей');
     
     try {
-      // Создаем правильный стек навигации: ChatList -> ChatConversation
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'Chat',
-              state: {
-                routes: [
-                  { name: 'ChatList' },
-                  { 
-                    name: 'ChatConversation',
-                    params: {
-                      driverId: driver.id,
-                      driverName: driver.name,
-                      driverCar: driver.carModel,
-                      driverNumber: driver.carNumber,
-                      driverRating: driver.rating.toString(),
-                      driverStatus: driver.isOnline ? 'online' : 'offline',
-                      driverPhoto: driver.photo
-                    }
-                  }
-                ],
-                index: 1
-              }
-            }
-          ]
-        })
-      );
+      // Переключаемся на таб Chat (главный список чатов)
+      navigation.navigate('Chat');
       
-      console.log('✅ Успешная навигация в чат с правильным стеком');
+      console.log('✅ Успешная навигация в главный список чатов из списка водителей');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат:', error);
       Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);

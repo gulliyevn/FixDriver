@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, 
   Text, 
@@ -10,7 +10,8 @@ import {
   Alert,
   StatusBar,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Linking
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,8 +19,10 @@ import AppCard from '../../components/AppCard';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
+import { chatService } from '../../services/ChatService';
+import { Message as ChatMessage } from '../../types/chat';
 
-interface Message {
+interface DisplayMessage {
   id: string;
   text: string;
   sender: 'client' | 'driver';
@@ -30,7 +33,7 @@ interface Message {
 type ChatScreenRouteProp = RouteProp<ClientStackParamList, 'ChatConversation'>;
 type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatConversation'>;
 
-const ChatScreen: React.FC = () => {
+  const ChatScreen: React.FC = () => {
   const { isDark } = useTheme();
   const route = useRoute<ChatScreenRouteProp>();
   const navigation = useNavigation<ChatScreenNavigationProp>();
@@ -47,43 +50,99 @@ const ChatScreen: React.FC = () => {
 
   // Логируем параметры для отладки
   React.useEffect(() => {
-    console.log('💬 ChatScreen mounted with params:', route.params);
+    console.log('💬 ChatScreen НАЧАЛО РЕНДЕРИНГА with params:', route.params);
+    console.log('💬 ChatScreen driver data:', driverData);
   }, [route.params]);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: 'Добрый день! Я буду вашим водителем сегодня.',
-      sender: 'driver',
-      timestamp: '14:30',
-      isRead: true,
-    },
-    {
-      id: '2',
-      text: 'Здравствуйте! Спасибо, буду ждать у подъезда.',
-      sender: 'client',
-      timestamp: '14:31',
-      isRead: true,
-    },
-    {
-      id: '3',
-      text: 'Приеду через 5 минут. Буду на белой Toyota Camry.',
-      sender: 'driver',
-      timestamp: '14:32',
-      isRead: true,
-    },
-    {
-      id: '4',
-      text: 'Отлично, буду ждать!',
-      sender: 'client',
-      timestamp: '14:33',
-      isRead: false,
-    },
-  ]);
+  const [messages, setMessages] = useState<DisplayMessage[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      const newMessage: Message = {
+  // Загрузка сообщений чата при монтировании компонента
+  useEffect(() => {
+    loadChatMessages();
+  }, [route.params?.driverId]);
+
+  const loadChatMessages = async () => {
+    try {
+      const driverId = route.params?.driverId;
+      if (!driverId) return;
+
+      console.log('📋 Загрузка истории чата с водителем:', driverId);
+      
+      // Ищем существующий чат с водителем
+      const chats = await chatService.getChats('me');
+      const existingChat = chats.find(chat => chat.participantId === driverId);
+      
+      let chatId: string;
+      
+      if (existingChat) {
+        // Если чат существует, загружаем его сообщения
+        chatId = existingChat.id;
+        console.log('✅ Найден существующий чат:', chatId);
+      } else {
+        // Если чата нет, создаем новый
+        const newChat = await chatService.createChat(
+          driverId,
+          route.params?.driverName || 'Водитель'
+        );
+        chatId = newChat.id;
+        console.log('✅ Создан новый чат:', chatId);
+      }
+      
+      // Загружаем сообщения
+      const chatMessages = await chatService.getMessages(chatId);
+      
+      // Конвертируем сообщения в формат для отображения
+      const displayMessages: DisplayMessage[] = chatMessages.map(msg => ({
+        id: msg.id,
+        text: msg.content,
+        sender: msg.senderId === 'me' ? 'client' : 'driver',
+        timestamp: msg.timestamp.toLocaleTimeString('ru-RU', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }),
+        isRead: msg.isRead,
+      }));
+      
+      setMessages(displayMessages);
+      
+      // Отмечаем сообщения как прочитанные
+      await chatService.markMessagesAsRead(chatId);
+      
+      // Автопрокрутка вниз после загрузки сообщений
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+      
+    } catch (error) {
+      console.error('❌ Ошибка загрузки чата:', error);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) return;
+    
+    try {
+      const driverId = route.params?.driverId;
+      if (!driverId) {
+        Alert.alert('Ошибка', 'Не найден идентификатор водителя');
+        return;
+      }
+
+      // Находим чат с водителем
+      const chats = await chatService.getChats('me');
+      const chat = chats.find(chat => chat.participantId === driverId);
+      
+      if (!chat) {
+        Alert.alert('Ошибка', 'Чат не найден');
+        return;
+      }
+
+      // Отправляем сообщение
+      await chatService.sendMessage(chat.id, message.trim(), 'me');
+      
+      // Обновляем локальное состояние
+      const newMessage: DisplayMessage = {
         id: Date.now().toString(),
         text: message.trim(),
         sender: 'client',
@@ -93,12 +152,25 @@ const ChatScreen: React.FC = () => {
         }),
         isRead: false,
       };
+      
       setMessages([...messages, newMessage]);
       setMessage('');
+      
+      // Автопрокрутка вниз после отправки сообщения
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+      
+    } catch (error) {
+      console.error('❌ Ошибка отправки сообщения:', error);
+      Alert.alert('Ошибка', 'Не удалось отправить сообщение');
     }
   };
 
   const handleCallDriver = () => {
+    const phoneNumber = '+994501234567'; // Номер телефона водителя
+    console.log('🔔 Звонок водителю:', driverData.driverName, phoneNumber);
+    
     Alert.alert(
       'Звонок водителю',
       `Позвонить водителю ${driverData.driverName}?`,
@@ -107,45 +179,40 @@ const ChatScreen: React.FC = () => {
         { 
           text: 'Позвонить', 
           onPress: () => {
-            Alert.alert(
-              'Звонок',
-              `Выполняется звонок водителю ${driverData.driverName}...`,
-              [{ text: 'OK' }]
-            );
+            try {
+              const url = `tel:${phoneNumber}`;
+              Linking.openURL(url).catch((err) => {
+                console.error('❌ Ошибка при открытии звонка:', err);
+                Alert.alert('Ошибка', 'Не удалось совершить звонок');
+              });
+            } catch (error) {
+              console.error('❌ Ошибка звонка:', error);
+              Alert.alert('Ошибка', 'Не удалось совершить звонок');
+            }
           }
         }
       ]
     );
   };
 
-  // Обработчик кнопки назад - всегда возвращаемся на главный список чатов
-  const handleGoBack = () => {
-    console.log('🔙 ChatScreen: пользователь нажал назад - переход на главный чат');
-    
-    try {
-      // Всегда переходим на главный список чатов
-      navigation.navigate('ChatList');
-      console.log('✅ Успешный переход на главный список чатов');
-    } catch (error) {
-      console.error('❌ Ошибка перехода на главный чат:', error);
-      // Fallback - стандартный goBack
-      navigation.goBack();
-    }
-  };
+
 
   const formatTime = (timestamp: string) => {
     return timestamp;
   };
+
+  console.log('💬 ChatScreen РЕНДЕРИТСЯ messages.length:', messages.length);
+  console.log('💬 ChatScreen isDark:', isDark);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
       {/* Header */}
-      <AppCard style={styles.header} margin={16}>
+      <View style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-            <Ionicons name="arrow-back" size={24} color="#1E3A8A" />
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={28} color="#1E3A8A" />
           </TouchableOpacity>
           <View style={styles.driverInfo}>
             <View style={styles.driverAvatar}>
@@ -164,61 +231,70 @@ const ChatScreen: React.FC = () => {
             <Ionicons name="call" size={24} color="#1E3A8A" />
           </TouchableOpacity>
         </View>
-      </AppCard>
+      </View>
 
       {/* Messages */}
       <KeyboardAvoidingView 
         style={styles.messagesContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={100}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <ScrollView 
+          ref={scrollViewRef}
           style={styles.messagesList}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.messagesContent}
         >
-          {messages.map((msg) => (
-            <View 
-              key={msg.id} 
-              style={[
-                styles.messageContainer,
-                msg.sender === 'client' ? styles.clientMessage : styles.driverMessage
-              ]}
-            >
-              <View style={[
-                styles.messageBubble,
-                msg.sender === 'client' 
-                  ? { backgroundColor: '#1E3A8A' } 
-                  : { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
-              ]}>
-                <Text style={[
-                  styles.messageText,
-                  { color: msg.sender === 'client' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937') }
+          {messages.length === 0 ? (
+            <View style={styles.emptyChat}>
+              <Text style={[styles.emptyChatText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+                Напишите первое сообщение
+              </Text>
+            </View>
+          ) : (
+            messages.map((msg) => (
+              <View 
+                key={msg.id} 
+                style={[
+                  styles.messageContainer,
+                  msg.sender === 'client' ? styles.clientMessage : styles.driverMessage
+                ]}
+              >
+                <View style={[
+                  styles.messageBubble,
+                  msg.sender === 'client' 
+                    ? { backgroundColor: '#1E3A8A' } 
+                    : { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
                 ]}>
-                  {msg.text}
-                </Text>
-                <View style={styles.messageFooter}>
                   <Text style={[
-                    styles.messageTime,
-                    { color: msg.sender === 'client' ? '#E5E7EB' : '#6B7280' }
+                    styles.messageText,
+                    { color: msg.sender === 'client' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937') }
                   ]}>
-                    {formatTime(msg.timestamp)}
+                    {msg.text}
                   </Text>
-                  {msg.sender === 'client' && (
-                    <Ionicons 
-                      name={msg.isRead ? "checkmark-done" : "checkmark"} 
-                      size={14} 
-                      color={msg.isRead ? "#10B981" : "#E5E7EB"} 
-                    />
-                  )}
+                  <View style={styles.messageFooter}>
+                    <Text style={[
+                      styles.messageTime,
+                      { color: msg.sender === 'client' ? '#E5E7EB' : '#6B7280' }
+                    ]}>
+                      {formatTime(msg.timestamp)}
+                    </Text>
+                    {msg.sender === 'client' && (
+                      <Ionicons 
+                        name={msg.isRead ? "checkmark-done" : "checkmark"} 
+                        size={14} 
+                        color={msg.isRead ? "#10B981" : "#E5E7EB"} 
+                      />
+                    )}
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))
+          )}
         </ScrollView>
 
         {/* Message Input */}
-        <AppCard style={styles.inputContainer} margin={16}>
+        <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
             <TextInput
               style={styles.messageInput}
@@ -243,7 +319,7 @@ const ChatScreen: React.FC = () => {
               />
             </TouchableOpacity>
           </View>
-        </AppCard>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -254,6 +330,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginHorizontal: 16,
     marginBottom: 8,
   },
   headerContent: {
@@ -263,7 +345,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   backButton: {
-    padding: 8,
+    padding: 4,
     marginRight: 8,
   },
   driverInfo: {
@@ -319,10 +401,10 @@ const styles = StyleSheet.create({
   },
   messagesContent: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   messageContainer: {
-    marginVertical: 4,
+    marginVertical: 8,
   },
   clientMessage: {
     alignItems: 'flex-end',
@@ -362,7 +444,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   inputContainer: {
-    marginBottom: 20,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 6,
+    backgroundColor: 'transparent',
   },
   inputRow: {
     flexDirection: 'row',
@@ -386,6 +471,16 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyChat: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 50,
+  },
+  emptyChatText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 
