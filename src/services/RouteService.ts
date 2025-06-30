@@ -109,7 +109,7 @@ class RouteService {
         segments,
       };
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         this.isAPIBlocked = true; // При timeout тоже блокируем
       }
       return null;
@@ -311,7 +311,7 @@ class RouteService {
 
       return fastestRoute;
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         this.isAPIBlocked = true; // При timeout тоже блокируем
       }
       return null;
@@ -326,7 +326,7 @@ class RouteService {
     const reverseLevels = ['free', 'low', 'medium', 'high', 'heavy'] as const;
     
     const avgLevel = trafficData.reduce((sum, data) => {
-      return sum + levels[data.level];
+      return sum + (levels[data.level as keyof typeof levels] || 2);
     }, 0) / trafficData.length;
     
     return reverseLevels[Math.round(avgLevel)];

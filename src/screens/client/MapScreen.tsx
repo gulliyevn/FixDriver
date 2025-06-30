@@ -277,9 +277,22 @@ const memberTrips = {
 };
 
 // Генерация сегментов маршрута с пробками (5 уровней)
-const generateRouteSegments = (pointA: any, pointB: any, traffic: string) => {
+const generateRouteSegments = (pointA: { latitude: number; longitude: number }, pointB: { latitude: number; longitude: number }, traffic: string) => {
   const segments = [];
   const steps = 6; // Увеличиваем количество сегментов для более детального отображения
+  
+  // Вспомогательная функция для расчета расстояния между точками
+  const calculateDistance = (point1: { latitude: number; longitude: number }, point2: { latitude: number; longitude: number }): number => {
+    const R = 6371000; // Радиус Земли в метрах
+    const dLat = (point2.latitude - point1.latitude) * Math.PI / 180;
+    const dLon = (point2.longitude - point1.longitude) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(point1.latitude * Math.PI / 180) * Math.cos(point2.latitude * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
   
   for (let i = 0; i < steps; i++) {
     const progress1 = i / steps;
@@ -306,13 +319,16 @@ const generateRouteSegments = (pointA: any, pointB: any, traffic: string) => {
       trafficLevel = i < 2 ? 'high' : 'heavy';
     }
     
+    const segmentCoords = [
+      { latitude: lat1, longitude: lng1 },
+      { latitude: lat2, longitude: lng2 },
+    ];
+    
     segments.push({
-      coordinates: [
-        { latitude: lat1, longitude: lng1 },
-        { latitude: lat2, longitude: lng2 },
-      ],
+      coordinates: segmentCoords,
       trafficLevel,
       duration: Math.ceil(parseInt(traffic.includes('Очень') ? '4' : traffic.includes('Сильные') ? '3' : traffic.includes('Средние') ? '2.5' : traffic.includes('Легкие') ? '1.5' : '1')), // Реалистичное время на сегмент
+      distance: calculateDistance(segmentCoords[0], segmentCoords[1]), // Добавляем distance
     });
   }
   
@@ -599,12 +615,13 @@ const MapScreen: React.FC = () => {
     
     try {
       // Переключаемся на таб Chat (главный список чатов)
-      navigation.navigate('Chat');
+      navigation.navigate('Chat' as never);
       
       console.log('✅ Успешная навигация в главный список чатов из карты');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат из карты:', error);
-      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);
+      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + message);
     }
   };
 
@@ -749,8 +766,8 @@ const MapScreen: React.FC = () => {
 
   // Получаем актуальную ближайшую поездку (пересчитывается при изменении времени)
   const currentRoute = getCurrentRoute(selectedMember.id);
-  const currentDriver = memberDrivers[selectedMember.id];
-  const currentTrip = memberTrips[selectedMember.id];
+  const currentDriver = memberDrivers[selectedMember.id as keyof typeof memberDrivers];
+  const currentTrip = memberTrips[selectedMember.id as keyof typeof memberTrips];
   
   // Используем реальный маршрут если загружен, иначе mock данные
   const realRoute = realRoutes[selectedMember.id];
@@ -771,7 +788,7 @@ const MapScreen: React.FC = () => {
   const showTripSection = !!nextTrip;
   const showTripAutoOpen = nextTrip && ((nextTrip.nextTrip.getTime() - now.getTime()) / 1000 / 60 <= 15);
   const tripMember = nextTrip ? familyMembers.find(m => m.id === nextTrip.id) : null;
-  const tripDriver = nextTrip ? memberDrivers[nextTrip.id] : null;
+  const tripDriver = nextTrip ? memberDrivers[nextTrip.id as keyof typeof memberDrivers] : null;
   const tripRoute = nextTrip ? getCurrentRoute(selectedMember.id) : null;
 
   const toggleTripSection = () => {

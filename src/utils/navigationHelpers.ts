@@ -1,5 +1,5 @@
 // Утилитарные функции для навигации
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, NavigationProp } from '@react-navigation/native';
 
 export interface ChatNavigationParams {
   driverId: string;
@@ -12,15 +12,22 @@ export interface ChatNavigationParams {
 }
 
 /**
+ * Проверка, является ли ошибка Error объектом
+ */
+const isError = (error: unknown): error is Error => {
+  return error instanceof Error;
+};
+
+/**
  * Безопасная навигация в чат из любого экрана
  * @param navigation - объект навигации
  * @param params - параметры водителя для чата
  */
-export const navigateToChat = (navigation: any, params: ChatNavigationParams) => {
+export const navigateToChat = (navigation: NavigationProp<any>, params: ChatNavigationParams): boolean => {
   console.log('🚀 NavigationHelper: начинаем навигацию в чат с', params.driverName);
   
   try {
-    // Способ 1: Использование CommonActions для сброса стека и перехода к чату
+    // Метод 1: Использование CommonActions для безопасной навигации
     try {
       console.log('📱 Метод 1: Использование CommonActions');
       navigation.dispatch(
@@ -35,83 +42,29 @@ export const navigateToChat = (navigation: any, params: ChatNavigationParams) =>
       console.log('✅ Метод 1: CommonActions навигация успешна');
       return true;
     } catch (error1) {
-      console.log('❌ Метод 1 не сработал:', error1.message);
+      const message = isError(error1) ? error1.message : 'Неизвестная ошибка';
+      console.log('❌ Метод 1 не сработал:', message);
     }
 
-    // Способ 2: Простая навигация (может работать в некоторых случаях)
+    // Метод 2: Простая навигация как fallback
     try {
       console.log('📱 Метод 2: Простая навигация');
-      navigation.navigate('Chat', {
+      (navigation as any).navigate('Chat', {
         screen: 'ChatConversation',
         params
       });
       console.log('✅ Метод 2: Простая навигация успешна');
       return true;
     } catch (error2) {
-      console.log('❌ Метод 2 не сработал:', error2.message);
-    }
-
-    // Способ 3: Через getParent (для доступа к tab navigator)
-    try {
-      console.log('📱 Метод 3: Навигация через parent');
-      const parent = navigation.getParent();
-      if (parent) {
-        parent.navigate('Chat', {
-          screen: 'ChatConversation',
-          params
-        });
-        console.log('✅ Метод 3: Parent навигация успешна');
-        return true;
-      }
-    } catch (error3) {
-      console.log('❌ Метод 3 не сработал:', error3.message);
-    }
-
-    // Способ 4: Сначала переходим на Chat вкладку, потом на конкретный экран
-    try {
-      console.log('📱 Метод 4: Поэтапная навигация');
-      // Сначала переходим на вкладку Chat
-      navigation.navigate('Chat');
-      // Через небольшую задержку переходим на конкретный экран
-      setTimeout(() => {
-        navigation.navigate('Chat', {
-          screen: 'ChatConversation',
-          params
-        });
-      }, 100);
-      console.log('✅ Метод 4: Поэтапная навигация запущена');
-      return true;
-    } catch (error4) {
-      console.log('❌ Метод 4 не сработал:', error4.message);
-    }
-
-    // Способ 5: Принудительный сброс состояния навигации
-    try {
-      console.log('📱 Метод 5: Сброс состояния навигации');
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'Chat',
-              params: {
-                screen: 'ChatConversation',
-                params
-              }
-            }
-          ]
-        })
-      );
-      console.log('✅ Метод 5: Сброс навигации успешен');
-      return true;  
-    } catch (error5) {
-      console.log('❌ Метод 5 не сработал:', error5.message);
+      const message = isError(error2) ? error2.message : 'Неизвестная ошибка';
+      console.log('❌ Метод 2 не сработал:', message);
     }
     
     console.error('❌ Все методы навигации провалились');
     return false;
   } catch (error) {
-    console.error('❌ Общая ошибка навигации в чат:', error);
+    const message = isError(error) ? error.message : 'Неизвестная ошибка навигации';
+    console.error('❌ Общая ошибка навигации в чат:', message);
     return false;
   }
 };
@@ -128,7 +81,7 @@ export const isDriverAvailableForChat = (driverStatus?: string): boolean => {
  * Форматирование параметров водителя для чата
  * @param driver - объект водителя
  */
-export const formatDriverForChat = (driver: any): ChatNavigationParams => {
+export const formatDriverForChat = (driver: Record<string, any>): ChatNavigationParams => {
   return {
     driverId: driver.id || driver.driverId || 'unknown',
     driverName: driver.name || driver.driverName || 'Неизвестный водитель',

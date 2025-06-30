@@ -2,7 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ProfileHeader = ({ name, phone, color = '#27ae60' }) => (
+interface ProfileHeaderProps {
+  name: string;
+  phone: string;
+  color?: string;
+}
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ name, phone, color = '#27ae60' }) => (
   <View style={styles.header}>
     <View style={[styles.avatar, { backgroundColor: color }]}> 
       <Ionicons name="person" size={40} color="#fff" />

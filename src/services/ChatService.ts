@@ -289,7 +289,7 @@ class ChatService {
         lastMessageTime: new Date(),
         unreadCount: 0,
         isOnline: Math.random() > 0.3, // 70% шанс быть онлайн
-        tripId,
+        tripId: tripId || null,
       };
 
       this.chats.unshift(chat);

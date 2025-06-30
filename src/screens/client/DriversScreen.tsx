@@ -20,7 +20,7 @@ import { notificationService, Notification } from '../../services/NotificationSe
 import { isDriverAvailableForChat } from '../../utils/navigationHelpers';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { RootTabParamList } from '../../types/navigation';
+import { ClientStackParamList } from '../../types/navigation';
 
 interface Driver {
   id: string;
@@ -258,7 +258,7 @@ const drivers: Driver[] = [
 
 const DriversScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList, 'Drivers'>>();
+  const navigation = useNavigation<BottomTabNavigationProp<ClientStackParamList, 'Drivers'>>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -459,12 +459,13 @@ const DriversScreen: React.FC = () => {
     
     try {
       // Переключаемся на таб Chat (главный список чатов)
-      navigation.navigate('Chat');
+      navigation.navigate('Chat' as never);
       
       console.log('✅ Успешная навигация в главный список чатов из списка водителей');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат:', error);
-      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + error.message);
+      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+      Alert.alert('Ошибка', 'Не удалось открыть чат: ' + message);
     }
   };
 

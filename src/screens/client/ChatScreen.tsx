@@ -60,11 +60,11 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
   // Загрузка сообщений чата при монтировании компонента
   useEffect(() => {
     loadChatMessages();
-  }, [route.params?.driverId]);
+  }, [route.params.driverId]);
 
   const loadChatMessages = async () => {
     try {
-      const driverId = route.params?.driverId;
+      const driverId = route.params.driverId;
       if (!driverId) return;
 
       console.log('📋 Загрузка истории чата с водителем:', driverId);
@@ -83,7 +83,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
         // Если чата нет, создаем новый
         const newChat = await chatService.createChat(
           driverId,
-          route.params?.driverName || 'Водитель'
+          route.params.driverName || 'Водитель'
         );
         chatId = newChat.id;
         console.log('✅ Создан новый чат:', chatId);
@@ -123,7 +123,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     if (!message.trim()) return;
     
     try {
-      const driverId = route.params?.driverId;
+      const driverId = route.params.driverId;
       if (!driverId) {
         Alert.alert('Ошибка', 'Не найден идентификатор водителя');
         return;
