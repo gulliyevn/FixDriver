@@ -611,30 +611,13 @@ const MapScreen: React.FC = () => {
   };
 
   const handleChatDriver = () => {
-    console.log('💬 Переход в чат с водителем из карты');
+    console.log('💬 Переход в главный список чатов из карты');
     
     try {
-      // Получаем данные текущего водителя
-      const driver = currentDriver;
-      if (!driver) {
-        Alert.alert('Ошибка', 'Водитель не найден');
-        return;
-      }
-
-      // Переходим в таб Chat с параметрами для открытия конкретного чата
-      (navigation as any).navigate('Chat', {
-        screen: 'ChatConversation',
-        params: {
-          driverId: selectedMember.id, // Используем ID члена семьи как ID водителя
-          driverName: driver.name,
-          driverCar: driver.car,
-          driverNumber: driver.number,
-          driverRating: driver.rating.toString(),
-          driverStatus: 'online', // Предполагаем что водитель онлайн
-        }
-      });
+      // Переключаемся на таб Chat (главный список чатов)
+      (navigation as any).navigate('Chat');
       
-      console.log('✅ Успешная навигация в чат с водителем из карты');
+      console.log('✅ Успешная навигация в главный список чатов из карты');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат из карты:', error);
       const message = error instanceof Error ? error.message : 'Неизвестная ошибка';

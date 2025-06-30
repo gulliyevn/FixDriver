@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import ChatListScreen from '../screens/client/ChatListScreen';
 import ChatScreen from '../screens/client/ChatScreen';
 import { ClientStackParamList } from '../types/navigation';
@@ -8,18 +7,6 @@ import { ClientStackParamList } from '../types/navigation';
 const Stack = createStackNavigator<ClientStackParamList>();
 
 const ChatNavigator: React.FC = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-
-  // Обрабатываем параметры для открытия конкретного чата
-  useEffect(() => {
-    const params = route.params as any;
-    if (params?.screen === 'ChatConversation' && params?.params) {
-      // Навигация к конкретному чату
-      (navigation as any).navigate('ChatConversation', params.params);
-    }
-  }, [route.params, navigation]);
-
   return (
     <Stack.Navigator
       id={undefined}
