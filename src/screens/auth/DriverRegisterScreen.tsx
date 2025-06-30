@@ -804,7 +804,10 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 onPress={() => setShowTermsModal(false)}
               >
           <TouchableOpacity
-            style={[styles.modalContent, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+            style={[styles.modalContent, { 
+              backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+              borderColor: isDark ? '#4B5563' : '#E5E7EB'
+            }]}
             activeOpacity={1}
             onPress={(e) => e.stopPropagation()}
           >
@@ -898,7 +901,10 @@ const DriverRegisterScreen: React.FC<DriverRegisterScreenProps> = ({ navigation 
                 onPress={() => setShowPrivacyModal(false)}
               >
           <TouchableOpacity
-            style={[styles.modalContent, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}
+            style={[styles.modalContent, { 
+              backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+              borderColor: isDark ? '#4B5563' : '#E5E7EB'
+            }]}
             activeOpacity={1}
             onPress={(e) => e.stopPropagation()}
           >
@@ -1105,7 +1111,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -1119,6 +1125,8 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 1001,
     elevation: 1001,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
   },
   modalHeader: {
     flexDirection: 'row',

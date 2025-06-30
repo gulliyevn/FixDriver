@@ -581,7 +581,10 @@ const ChatListScreen: React.FC = () => {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.notificationBtn} onPress={handleNotifications}>
+        <TouchableOpacity 
+          onPress={handleNotifications}
+          style={styles.notificationBtn}
+        >
           <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
           {notificationService.getUnreadCount() > 0 && (
             <View style={styles.notificationBadge}>
@@ -589,17 +592,22 @@ const ChatListScreen: React.FC = () => {
             </View>
           )}
         </TouchableOpacity>
+        
         <Text style={[styles.headerTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
           Чаты
         </Text>
-        <TouchableOpacity style={styles.selectBtn} onPress={toggleChatSelectionMode}>
+        
+        <TouchableOpacity 
+          onPress={toggleChatSelectionMode}
+          style={styles.selectBtn}
+        >
           <Text style={[styles.selectBtnText, { color: isDark ? '#F9FAFB' : '#1E3A8A' }]}>
             {isChatSelectionMode ? 'Отмена' : 'Выбрать'}
           </Text>
         </TouchableOpacity>
       </View>
 
-            {/* Chat List */}
+      {/* Chat List */}
       <ScrollView style={styles.chatList} showsVerticalScrollIndicator={false}>
         {sortedChats.length === 0 ? (
           <View style={styles.emptyState}>
@@ -850,10 +858,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
+    backgroundColor: 'transparent',
   },
   notificationBtn: {
     padding: 8,
     position: 'relative',
+  },
+  selectBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   notificationBadge: {
     position: 'absolute',
@@ -874,11 +887,8 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    position: 'absolute',
-    left: 0,
-    right: 0,
     textAlign: 'center',
-    zIndex: 1,
+    flex: 1,
   },
   chatList: {
     flex: 1,
@@ -937,10 +947,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     minWidth: 60,
-  },
-  selectBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
   },
   selectBtnText: {
     fontSize: 16,
