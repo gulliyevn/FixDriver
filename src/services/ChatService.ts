@@ -299,6 +299,60 @@ class ChatService {
     });
   }
 
+  // Создание или получение чата с водителем по ID
+  async createChatByDriverId(driverId: string, driverName: string, driverCar?: string, driverNumber?: string, driverRating?: string, driverStatus?: string): Promise<Chat> {
+    console.log('📋 ChatService: поиск или создание чата с водителем', driverId);
+    
+    return new Promise((resolve) => {
+      // Сначала ищем существующий чат с этим водителем
+      const existingChat = this.chats.find(chat => chat.participantId === driverId);
+      
+      if (existingChat) {
+        console.log('✅ Найден существующий чат:', existingChat.id);
+        setTimeout(() => resolve(existingChat), 100);
+        return;
+      }
+
+      // Если чат не найден, создаем новый
+      console.log('🆕 Создаем новый чат с водителем:', driverId);
+      const chat: Chat = {
+        id: `chat_${Date.now()}`,
+        participantId: driverId,
+        participantName: driverName,
+        participantAvatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        participantRole: 'driver',
+        lastMessage: '',
+        lastMessageTime: new Date(),
+        unreadCount: 0,
+        isOnline: driverStatus === 'online',
+        tripId: null,
+      };
+
+      // Добавляем чат в начало списка
+      this.chats.unshift(chat);
+      this.messages[chat.id] = [];
+
+      console.log('✅ Создан новый чат:', chat.id);
+      setTimeout(() => resolve(chat), 200);
+    });
+  }
+
+  // Удаление чата
+  async deleteChat(chatId: string): Promise<void> {
+    console.log('🗑️ ChatService: удаление чата', chatId);
+    
+    return new Promise((resolve) => {
+      // Удаляем чат из списка
+      this.chats = this.chats.filter(chat => chat.id !== chatId);
+      
+      // Удаляем сообщения чата
+      delete this.messages[chatId];
+      
+      console.log('✅ Чат удален:', chatId);
+      setTimeout(() => resolve(), 100);
+    });
+  }
+
   // Получение общего количества непрочитанных сообщений
   getTotalUnreadCount(): number {
     return this.chats.reduce((total, chat) => total + chat.unreadCount, 0);

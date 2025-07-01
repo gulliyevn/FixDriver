@@ -16,7 +16,7 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
 import { notificationService, Notification } from '../../services/NotificationService';
@@ -316,6 +316,7 @@ const SwipeableChat: React.FC<SwipeableChatProps> = ({
 const ChatListScreen: React.FC = () => {
   const { isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute();
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -330,11 +331,41 @@ const ChatListScreen: React.FC = () => {
   const [swipingChatId, setSwipingChatId] = useState<string | null>(null);
 
   const [chats, setChats] = useState<Chat[]>([]);
+  const [hasNavigated, setHasNavigated] = React.useState(false);
 
   useEffect(() => {
     setNotifications(notificationService.getNotifications());
     loadChats();
   }, []);
+
+  // Обновляем список чатов при возврате на экран
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('🔄 ChatListScreen: обновляем список чатов при фокусе');
+      loadChats();
+      // Сбрасываем флаг при возврате на главный экран чатов
+      setHasNavigated(false);
+    }, [])
+  );
+
+  // Автоматический переход в чат с водителем, если пришли параметры
+  React.useEffect(() => {
+    const params = route.params as any;
+    if (params?.driverId && !hasNavigated) {
+      setHasNavigated(true);
+      // Откладываем навигацию до полной инициализации стека
+      setTimeout(() => {
+        navigation.navigate('ChatConversation', {
+          driverId: params.driverId,
+          driverName: params.driverName,
+          driverCar: params.driverCar,
+          driverNumber: params.driverNumber,
+          driverRating: params.driverRating,
+          driverStatus: params.driverStatus,
+        });
+      }, 300);
+    }
+  }, [route.params, hasNavigated]);
 
   const loadChats = async () => {
     try {
@@ -522,7 +553,7 @@ const ChatListScreen: React.FC = () => {
     }
   };
 
-  const deleteSelectedChats = () => {
+  const deleteSelectedChats = async () => {
     if (selectedChats.length === 0) return;
     
     Alert.alert(
@@ -533,13 +564,23 @@ const ChatListScreen: React.FC = () => {
         {
           text: 'Удалить',
           style: 'destructive',
-          onPress: () => {
-            // Здесь можно добавить логику удаления чатов через chatService
-            console.log('Удаление чатов:', selectedChats);
-            setSelectedChats([]);
-            setIsChatSelectionMode(false);
-            // Перезагрузка списка чатов
-            loadChats();
+          onPress: async () => {
+            try {
+              // Удаляем все выбранные чаты через сервис
+              for (const chatId of selectedChats) {
+                await chatService.deleteChat(chatId);
+              }
+              
+              // Обновляем локальное состояние
+              setChats(prevChats => prevChats.filter(chat => !selectedChats.includes(chat.id)));
+              
+              console.log('✅ Удалены чаты:', selectedChats);
+              setSelectedChats([]);
+              setIsChatSelectionMode(false);
+            } catch (error) {
+              console.error('❌ Ошибка удаления чатов:', error);
+              Alert.alert('Ошибка', 'Не удалось удалить некоторые чаты. Попробуйте еще раз.');
+            }
           },
         },
       ]
@@ -558,12 +599,21 @@ const ChatListScreen: React.FC = () => {
     });
   };
 
-  const handleDeleteChat = (chatId: string) => {
+  const handleDeleteChat = async (chatId: string) => {
     console.log('🗑️ Удаляем чат:', chatId);
     
-    // Мгновенное удаление как закрепление
-    setChats(prevChats => prevChats.filter(c => c.id !== chatId));
-    console.log('✅ Чат удален:', chatId);
+    try {
+      // Удаляем чат через сервис
+      await chatService.deleteChat(chatId);
+      
+      // Обновляем локальное состояние
+      setChats(prevChats => prevChats.filter(c => c.id !== chatId));
+      
+      console.log('✅ Чат удален:', chatId);
+    } catch (error) {
+      console.error('❌ Ошибка удаления чата:', error);
+      Alert.alert('Ошибка', 'Не удалось удалить чат. Попробуйте еще раз.');
+    }
   };
 
   // Сортировка чатов: закрепленные сверху, как в Telegram

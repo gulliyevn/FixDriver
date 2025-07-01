@@ -623,20 +623,15 @@ const MapScreen: React.FC = () => {
 
       // Создаем ID водителя на основе ID члена семьи
       const driverId = `driver_${selectedMember.id}`;
-      
-      // Переходим в таб Chat с параметрами для создания чата
+      // Переходим в главный чат с параметрами водителя
       (navigation as any).navigate('Chat', {
-        screen: 'ChatConversation',
-        params: {
-          driverId: driverId,
-          driverName: driver.name,
-          driverCar: driver.car,
-          driverNumber: driver.number,
-          driverRating: driver.rating.toString(),
-          driverStatus: 'online',
-        }
+        driverId: driverId,
+        driverName: driver.name,
+        driverCar: driver.car,
+        driverNumber: driver.number,
+        driverRating: driver.rating.toString(),
+        driverStatus: 'online',
       });
-      
       console.log('✅ Успешная навигация в чат с водителем из карты');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат из карты:', error);

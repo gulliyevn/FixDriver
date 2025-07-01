@@ -456,19 +456,15 @@ const DriversScreen: React.FC = () => {
     console.log('💬 Создание чата с водителем из списка водителей');
     
     try {
-      // Переходим в таб Chat с параметрами для создания чата
+      // Переходим в главный чат с параметрами водителя
       (navigation as any).navigate('Chat', {
-        screen: 'ChatConversation',
-        params: {
-          driverId: driver.id,
-          driverName: driver.name,
-          driverCar: driver.carModel,
-          driverNumber: driver.carNumber,
-          driverRating: driver.rating.toString(),
-          driverStatus: driver.isOnline ? 'online' : 'offline',
-        }
+        driverId: driver.id,
+        driverName: driver.name,
+        driverCar: driver.carModel,
+        driverNumber: driver.carNumber,
+        driverRating: driver.rating.toString(),
+        driverStatus: driver.isOnline ? 'online' : 'offline',
       });
-      
       console.log('✅ Успешная навигация в чат с водителем из списка водителей');
     } catch (error) {
       console.error('❌ Ошибка навигации в чат:', error);
