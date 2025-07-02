@@ -14,6 +14,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import Validators from '../../utils/validators';
+import ErrorDisplay from '../../components/ErrorDisplay';
+import { AppError, ErrorHandler } from '../../utils/errorHandler';
 
 interface LoginScreenProps {
   navigation: any;
@@ -24,22 +27,61 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<AppError | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   const { login } = useAuth();
   const { isDark } = useTheme();
 
+  const validateForm = (): boolean => {
+    const validation = Validators.validateLogin({ email, password });
+    const errors: { [key: string]: string } = {};
+    
+    if (validation.errors.length > 0) {
+      validation.errors.forEach(error => {
+        if (error.includes('Email')) errors.email = error;
+        if (error.includes('Пароль')) errors.password = error;
+      });
+    }
+    
+    setValidationErrors(errors);
+    setError(null);
+    return validation.isValid;
+  };
+
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Ошибка', 'Пожалуйста, заполните все поля');
+    if (!validateForm()) {
       return;
     }
     
     setIsLoading(true);
+    setError(null);
+    
     try {
       await login(email, password);
     } catch (error) {
-      console.error('Login error:', error);
+      const appError = ErrorHandler.handleAuthError(error);
+      setError(appError);
+      ErrorHandler.logError(appError, 'LoginScreen');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    handleLogin();
+  };
+
+  const handleAction = (action: string) => {
+    switch (action) {
+      case 'Зарегистрироваться':
+        navigation.navigate('RoleSelect');
+        break;
+      case 'Восстановить пароль':
+        navigation.navigate('ForgotPassword');
+        break;
+      case 'Попробуйте войти снова':
+        setError(null);
+        break;
     }
   };
 
@@ -95,12 +137,20 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Email"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  if (validationErrors.email) {
+                    setValidationErrors(prev => ({ ...prev, email: '' }));
+                  }
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
             </View>
+            {validationErrors.email && (
+              <Text style={styles.errorText}>{validationErrors.email}</Text>
+            )}
 
             <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
               <Ionicons 
@@ -113,7 +163,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Пароль"
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (validationErrors.password) {
+                    setValidationErrors(prev => ({ ...prev, password: '' }));
+                  }
+                }}
                 secureTextEntry={!showPassword}
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
@@ -128,6 +183,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 />
               </TouchableOpacity>
             </View>
+            {validationErrors.password && (
+              <Text style={styles.errorText}>{validationErrors.password}</Text>
+            )}
 
             {/* Forgot Password */}
             <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
@@ -137,6 +195,14 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             </TouchableOpacity>
 
             {/* Login Button */}
+            {/* Error Display */}
+            <ErrorDisplay
+              error={error}
+              onRetry={handleRetry}
+              onAction={handleAction}
+              showDetails={__DEV__}
+            />
+
             <TouchableOpacity 
               style={[styles.loginButton, isLoading && styles.loginButtonDisabled]} 
               onPress={handleLogin}
@@ -413,6 +479,12 @@ const styles = StyleSheet.create({
     color: '#1E3A8A',
     fontSize: 16,
     fontWeight: '600',
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 16,
   },
 });
 

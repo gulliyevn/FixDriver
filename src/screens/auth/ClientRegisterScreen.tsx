@@ -16,6 +16,10 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
+import Validators, { PasswordStrength } from '../../utils/validators';
+import ErrorDisplay from '../../components/ErrorDisplay';
+import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
+import { AppError, ErrorHandler } from '../../utils/errorHandler';
 
 interface ClientRegisterScreenProps {
   navigation: any;
@@ -38,42 +42,97 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
   const [agreeToPrivacy, setAgreeToPrivacy] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [error, setError] = useState<AppError | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength | null>(null);
+
+  const validateForm = (): boolean => {
+    const validation = Validators.validateClientRegistration(formData);
+    const errors: { [key: string]: string } = {};
+    
+    if (validation.errors.length > 0) {
+      validation.errors.forEach(error => {
+        if (error.includes('Имя')) errors.name = error;
+        if (error.includes('Фамилия')) errors.surname = error;
+        if (error.includes('email') || error.includes('Email')) errors.email = error;
+        if (error.includes('телефон') || error.includes('Телефон')) errors.phone = error;
+        if (error.includes('пароль') || error.includes('Пароль')) errors.password = error;
+        if (error.includes('совпадают')) errors.confirmPassword = error;
+      });
+    }
+    
+    setValidationErrors(errors);
+    setError(null);
+    return validation.isValid;
+  };
+
+  const handlePasswordChange = (password: string) => {
+    setFormData(prev => ({ ...prev, password }));
+    setPasswordStrength(Validators.getPasswordStrength(password));
+    if (validationErrors.password) {
+      setValidationErrors(prev => ({ ...prev, password: '' }));
+    }
+  };
 
   const handleRegister = async () => {
-    const { name, surname, email, phone, password, confirmPassword } = formData;
-    
-    if (!name || !surname || !email || !phone || !password || !confirmPassword) {
-      Alert.alert('Ошибка', 'Пожалуйста, заполните все поля');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Ошибка', 'Пароли не совпадают');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Ошибка', 'Пароль должен содержать минимум 6 символов');
+    if (!validateForm()) {
       return;
     }
 
     if (!agreeToTerms || !agreeToPrivacy) {
-      Alert.alert('Ошибка', 'Необходимо согласиться с условиями использования и политикой конфиденциальности');
+      setError(ErrorHandler.createError(
+        ErrorHandler.VALIDATION_ERRORS.MISSING_FIELDS,
+        'Необходимо согласиться с условиями',
+        'Отметьте все необходимые согласия'
+      ));
       return;
     }
 
     setIsLoading(true);
+    setError(null);
     
-    // Симуляция регистрации
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Симуляция регистрации
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       // Переходим на экран OTP верификации
       navigation.navigate('OTPVerification' as never, {
-        phoneNumber: phone,
+        phoneNumber: formData.phone,
         userRole: 'client',
-        userData: { name, surname, email, phone },
+        userData: { 
+          name: formData.name, 
+          surname: formData.surname, 
+          email: formData.email, 
+          phone: formData.phone,
+          password: formData.password
+        },
       } as never);
-    }, 2000);
+    } catch (error) {
+      const appError = ErrorHandler.handleAuthError(error);
+      setError(appError);
+      ErrorHandler.logError(appError, 'ClientRegisterScreen');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    handleRegister();
+  };
+
+  const handleAction = (action: string) => {
+    switch (action) {
+      case 'Войти':
+        navigation.navigate('Login');
+        break;
+      case 'Проверить данные':
+        setError(null);
+        break;
+    }
+  };
+
+  const updateFormData = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleGoogleRegister = () => {
@@ -116,9 +175,7 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
       });
   };
 
-  const updateFormData = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+
 
   return (
     <SafeAreaView style={[styles.container, isDark && styles.containerDark]}>
@@ -164,7 +221,12 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                   style={[styles.input, isDark && styles.inputDark]}
                   placeholder="Имя"
                   value={formData.name}
-                  onChangeText={(value) => updateFormData('name', value)}
+                  onChangeText={(value) => {
+                    updateFormData('name', value);
+                    if (validationErrors.name) {
+                      setValidationErrors(prev => ({ ...prev, name: '' }));
+                    }
+                  }}
                   placeholderTextColor={isDark ? '#6B7280' : '#999'}
                 />
               </View>
@@ -179,11 +241,22 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                   style={[styles.input, isDark && styles.inputDark]}
                   placeholder="Фамилия"
                   value={formData.surname}
-                  onChangeText={(value) => updateFormData('surname', value)}
+                  onChangeText={(value) => {
+                    updateFormData('surname', value);
+                    if (validationErrors.surname) {
+                      setValidationErrors(prev => ({ ...prev, surname: '' }));
+                    }
+                  }}
                   placeholderTextColor={isDark ? '#6B7280' : '#999'}
                 />
               </View>
             </View>
+            {(validationErrors.name || validationErrors.surname) && (
+              <View style={styles.errorRow}>
+                {validationErrors.name && <Text style={styles.errorText}>{validationErrors.name}</Text>}
+                {validationErrors.surname && <Text style={styles.errorText}>{validationErrors.surname}</Text>}
+              </View>
+            )}
 
             <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
               <Ionicons 
@@ -196,12 +269,20 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Email"
                 value={formData.email}
-                onChangeText={(value) => updateFormData('email', value)}
+                onChangeText={(value) => {
+                  updateFormData('email', value);
+                  if (validationErrors.email) {
+                    setValidationErrors(prev => ({ ...prev, email: '' }));
+                  }
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
             </View>
+            {validationErrors.email && (
+              <Text style={styles.errorText}>{validationErrors.email}</Text>
+            )}
 
             <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
               <Ionicons 
@@ -214,11 +295,19 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Телефон"
                 value={formData.phone}
-                onChangeText={(value) => updateFormData('phone', value)}
+                onChangeText={(value) => {
+                  updateFormData('phone', value);
+                  if (validationErrors.phone) {
+                    setValidationErrors(prev => ({ ...prev, phone: '' }));
+                  }
+                }}
                 keyboardType="phone-pad"
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
             </View>
+            {validationErrors.phone && (
+              <Text style={styles.errorText}>{validationErrors.phone}</Text>
+            )}
 
             <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
               <Ionicons 
@@ -231,7 +320,7 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Пароль"
                 value={formData.password}
-                onChangeText={(value) => updateFormData('password', value)}
+                onChangeText={handlePasswordChange}
                 secureTextEntry={!showPassword}
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
@@ -246,6 +335,15 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 />
               </TouchableOpacity>
             </View>
+            {passwordStrength && (
+              <PasswordStrengthIndicator
+                strength={passwordStrength}
+                showFeedback={true}
+              />
+            )}
+            {validationErrors.password && (
+              <Text style={styles.errorText}>{validationErrors.password}</Text>
+            )}
 
             <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
               <Ionicons 
@@ -258,7 +356,12 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 style={[styles.input, isDark && styles.inputDark]}
                 placeholder="Подтвердите пароль"
                 value={formData.confirmPassword}
-                onChangeText={(value) => updateFormData('confirmPassword', value)}
+                onChangeText={(value) => {
+                  updateFormData('confirmPassword', value);
+                  if (validationErrors.confirmPassword) {
+                    setValidationErrors(prev => ({ ...prev, confirmPassword: '' }));
+                  }
+                }}
                 secureTextEntry={!showConfirmPassword}
                 placeholderTextColor={isDark ? '#6B7280' : '#999'}
               />
@@ -273,6 +376,9 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 />
               </TouchableOpacity>
             </View>
+            {validationErrors.confirmPassword && (
+              <Text style={styles.errorText}>{validationErrors.confirmPassword}</Text>
+            )}
 
             {/* Agreement Checkbox */}
             <View style={styles.agreementSection}>
@@ -311,6 +417,14 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Error Display */}
+            <ErrorDisplay
+              error={error}
+              onRetry={handleRetry}
+              onAction={handleAction}
+              showDetails={__DEV__}
+            />
 
             {/* Register Button */}
             <TouchableOpacity 
@@ -872,6 +986,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  errorRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 12,
+    marginTop: 4,
+    flex: 1,
   },
 });
 

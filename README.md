@@ -43,3 +43,5 @@ npm install
 npx expo start
 ```
 cd /Users/gulliyevn/Projects/FixDrive && npx expo start 
+
+FixDrive % npx expo start --clear

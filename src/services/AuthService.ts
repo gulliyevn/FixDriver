@@ -1,4 +1,6 @@
 import { Driver, Client, UserRole } from '../types/user';
+import APIClient, { APIResponse } from './APIClient';
+import JWTService from './JWTService';
 
 // Конфигурация API - будет заменена на реальные данные
 const API_CONFIG = {
@@ -21,165 +23,193 @@ export type VerifyOTPPayload = {
   userData: any;
 };
 
+export interface AuthResponse {
+  user: Driver | Client;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: number;
+    tokenType: 'Bearer';
+  };
+}
+
 export class AuthService {
   /**
    * Регистрация пользователя после OTP верификации
    */
-  static async registerWithOTP(payload: VerifyOTPPayload): Promise<Driver | Client> {
+  static async registerWithOTP(payload: VerifyOTPPayload): Promise<AuthResponse> {
     if (__DEV__) {
       // Мок для разработки
       return this.mockRegisterWithOTP(payload);
     }
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/register-with-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Ошибка регистрации');
+      const response = await APIClient.post<AuthResponse>('/auth/register-with-otp', payload);
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Registration failed');
       }
 
-      const result = await response.json();
-      return result.user;
+      // Сохраняем токены
+      await JWTService.saveTokens(response.data.tokens);
+
+      return response.data;
     } catch (error) {
       console.error('API Registration error:', error);
       throw error;
     }
   }
 
-  static async register(payload: RegisterPayload): Promise<Driver | Client> {
+  /**
+   * Регистрация пользователя
+   */
+  static async register(payload: RegisterPayload): Promise<AuthResponse> {
     if (__DEV__) {
       // Мок для разработки
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          if (payload.role === 'driver') {
-            resolve({ ...(payload as any), id: Date.now().toString() });
-          } else {
-            resolve({ ...(payload as any), id: Date.now().toString() });
-          }
-        }, 1000);
-      });
+      return this.mockRegister(payload);
     }
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Ошибка регистрации');
+      const response = await APIClient.post<AuthResponse>('/auth/register', payload);
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Registration failed');
       }
 
-      return await response.json();
+      // Сохраняем токены
+      await JWTService.saveTokens(response.data.tokens);
+
+      return response.data;
     } catch (error) {
       console.error('API Registration error:', error);
       throw error;
     }
   }
 
-  static async login(payload: LoginPayload): Promise<Driver | Client> {
+  /**
+   * Вход в систему
+   */
+  static async login(payload: LoginPayload): Promise<AuthResponse> {
     if (__DEV__) {
-      // Мок для разработки - быстрая загрузка
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (payload.email && payload.password) {
-            resolve({
-              id: '1',
-              name: 'Иван',
-              surname: 'Иванов',
-              email: 'ivan@example.com',
-              address: 'Москва, ул. Примерная, 1',
-              role: UserRole.CLIENT,
-              phone: '+7 (999) 123-45-67',
-              avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-              rating: 4.8,
-              createdAt: '2024-01-01',
-            } as Client);
-          } else {
-            reject(new Error('Неверные данные'));
-          }
-        }, 500); // Мок - быстро
-      });
+      // Мок для разработки
+      return this.mockLogin(payload);
     }
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Ошибка входа');
+      const response = await APIClient.post<AuthResponse>('/auth/login', payload);
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Login failed');
       }
 
-      return await response.json();
+      // Сохраняем токены
+      await JWTService.saveTokens(response.data.tokens);
+
+      return response.data;
     } catch (error) {
       console.error('API Login error:', error);
       throw error;
     }
   }
 
+  /**
+   * Выход из системы
+   */
   static async logout(): Promise<void> {
     if (__DEV__) {
       // Мок для разработки
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log('🚪 Мок выход из системы');
-          resolve();
-        }, 300);
-      });
+      console.log('🚪 Мок выход из системы');
+      await JWTService.clearTokens();
+      return;
     }
 
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await this.getToken()}`,
-        },
-        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при выходе');
-      }
+      await APIClient.post('/auth/logout');
     } catch (error) {
       console.error('API Logout error:', error);
-      throw error;
+    } finally {
+      // Всегда очищаем токены локально
+      await JWTService.clearTokens();
     }
   }
 
   /**
-   * Получить токен из хранилища
+   * Обновление токена
    */
-  private static async getToken(): Promise<string | null> {
-    // Реализация получения токена из AsyncStorage
-    // return await AsyncStorage.getItem('authToken');
-    return null;
+  static async refreshToken(): Promise<boolean> {
+    try {
+      const newToken = await JWTService.refreshAccessToken();
+      return !!newToken;
+    } catch (error) {
+      console.error('Token refresh error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Проверка валидности токена
+   */
+  static async validateToken(): Promise<boolean> {
+    try {
+      const response = await APIClient.get('/auth/validate');
+      return response.success;
+    } catch (error) {
+      console.error('Token validation error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Изменение пароля
+   */
+  static async changePassword(payload: {
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<boolean> {
+    try {
+      const response = await APIClient.post('/auth/change-password', payload);
+      return response.success;
+    } catch (error) {
+      console.error('Change password error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Сброс пароля
+   */
+  static async resetPassword(payload: {
+    email: string;
+  }): Promise<boolean> {
+    try {
+      const response = await APIClient.post('/auth/reset-password', payload);
+      return response.success;
+    } catch (error) {
+      console.error('Reset password error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Подтверждение сброса пароля
+   */
+  static async confirmResetPassword(payload: {
+    token: string;
+    newPassword: string;
+  }): Promise<boolean> {
+    try {
+      const response = await APIClient.post('/auth/confirm-reset-password', payload);
+      return response.success;
+    } catch (error) {
+      console.error('Confirm reset password error:', error);
+      return false;
+    }
   }
 
   /**
    * Мок регистрации для разработки
    */
-  private static async mockRegisterWithOTP(payload: VerifyOTPPayload): Promise<Driver | Client> {
+  private static async mockRegisterWithOTP(payload: VerifyOTPPayload): Promise<AuthResponse> {
     return new Promise((resolve) => {
       setTimeout(() => {
         console.log('🧪 Мок регистрация после OTP:', {
@@ -195,54 +225,127 @@ export class AuthService {
           rating: 0.0,
         };
 
+        let user: Driver | Client;
         if (payload.userData.role === 'driver') {
-          resolve({
+          user = {
             ...baseUser,
             name: payload.userData.first_name || '',
             surname: payload.userData.last_name || '',
+            address: payload.userData.address || '',
             role: UserRole.DRIVER,
+            avatar: null,
             vehicle: {
               make: payload.userData.vehicle_brand || 'Toyota',
               model: payload.userData.vehicle_model || 'Camry',
               year: payload.userData.vehicle_year || 2020,
-              color: 'White',
-              licensePlate: payload.userData.vehicle_number || 'ABC123',
+              color: payload.userData.carColor || 'White',
+              licensePlate: payload.userData.carPlate || 'ABC123',
             },
             isAvailable: false,
-            address: '',
-            avatar: null,
-          } as Driver);
+            currentLocation: undefined,
+          } as Driver;
         } else {
-          resolve({
+          user = {
             ...baseUser,
             name: payload.userData.name || '',
-            surname: '',
+            surname: payload.userData.surname || '',
+            address: payload.userData.address || '',
             role: UserRole.CLIENT,
-            address: '',
             avatar: null,
-          } as Client);
+          } as Client;
         }
-      }, 800); // Имитация сетевой задержки
+
+        // Генерируем JWT токены
+        const tokens = JWTService.generateTokens({
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+        });
+
+        resolve({
+          user,
+          tokens,
+        });
+      }, 1000);
     });
   }
 
   /**
-   * Проверка доступности API
+   * Мок регистрации для разработки
+   */
+  private static async mockRegister(payload: RegisterPayload): Promise<AuthResponse> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const user = {
+          ...payload,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+        };
+
+        // Генерируем JWT токены
+        const tokens = JWTService.generateTokens({
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+        });
+
+        resolve({
+          user: user as Driver | Client,
+          tokens,
+        });
+      }, 1000);
+    });
+  }
+
+  /**
+   * Мок входа для разработки
+   */
+  private static async mockLogin(payload: LoginPayload): Promise<AuthResponse> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (payload.email && payload.password) {
+          const user: Client = {
+            id: '1',
+            name: 'Иван',
+            surname: 'Иванов',
+            email: payload.email,
+            address: 'Москва, ул. Примерная, 1',
+            role: UserRole.CLIENT,
+            phone: '+7 (999) 123-45-67',
+            avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+            rating: 4.8,
+            createdAt: '2024-01-01',
+          };
+
+          // Генерируем JWT токены
+          const tokens = JWTService.generateTokens({
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+            phone: user.phone,
+          });
+
+          resolve({
+            user,
+            tokens,
+          });
+        } else {
+          reject(new Error('Неверные данные'));
+        }
+      }, 500);
+    });
+  }
+
+  /**
+   * Проверка здоровья API
    */
   static async checkAPIHealth(): Promise<boolean> {
-    if (__DEV__) {
-      console.log('🧪 Мок: API здоров');
-      return true;
-    }
-
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/health`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000),
-      });
-      return response.ok;
+      return await APIClient.healthCheck();
     } catch (error) {
-      console.error('API Health check failed:', error);
+      console.error('API health check failed:', error);
       return false;
     }
   }
