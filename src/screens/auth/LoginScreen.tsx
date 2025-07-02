@@ -17,6 +17,8 @@ import { useTheme } from '../../context/ThemeContext';
 import Validators from '../../utils/validators';
 import ErrorDisplay from '../../components/ErrorDisplay';
 import { AppError, ErrorHandler } from '../../utils/errorHandler';
+import SocialAuthService from '../../services/SocialAuthService';
+import SocialAuthButtons from '../../components/SocialAuthButtons';
 
 interface LoginScreenProps {
   navigation: any;
@@ -85,12 +87,85 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    Alert.alert('Google вход', 'Функция входа через Google будет добавлена в следующем обновлении');
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithGoogle();
+      
+      if (result.success && result.user) {
+        // Создаем пользователя из социальных данных
+        const userData = SocialAuthService.createUserFromSocial(result.user);
+        await login(result.user.email, 'google_auth');
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Google');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Google',
+        'Попробуйте войти через email или другой способ'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleFacebookLogin = () => {
-    Alert.alert('Facebook вход', 'Функция входа через Facebook будет добавлена в следующем обновлении');
+  const handleFacebookLogin = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithFacebook();
+      
+      if (result.success && result.user) {
+        // Создаем пользователя из социальных данных
+        const userData = SocialAuthService.createUserFromSocial(result.user);
+        await login(result.user.email, 'facebook_auth');
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Facebook');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Facebook',
+        'Попробуйте войти через email или другой способ'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithApple();
+      
+      if (result.success && result.user) {
+        // Создаем пользователя из социальных данных
+        const userData = SocialAuthService.createUserFromSocial(result.user);
+        await login(result.user.email, 'apple_auth');
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Apple');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Apple',
+        'Попробуйте войти через email или другой способ'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleQuickFill = () => {
@@ -222,27 +297,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             </View>
 
             {/* Social Login Buttons */}
-            <View style={styles.socialButtons}>
-              <TouchableOpacity 
-                style={[styles.socialButton, styles.googleButton, isDark && styles.socialButtonDark]} 
-                onPress={handleGoogleLogin}
-              >
-                <Ionicons name="logo-google" size={24} color="#DB4437" />
-                <Text style={[styles.socialButtonText, isDark && styles.socialButtonTextDark]}>
-                  Google
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.socialButton, styles.facebookButton, isDark && styles.socialButtonDark]} 
-                onPress={handleFacebookLogin}
-              >
-                <Ionicons name="logo-facebook" size={24} color="#4267B2" />
-                <Text style={[styles.socialButtonText, isDark && styles.socialButtonTextDark]}>
-                  Facebook
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <SocialAuthButtons
+              onGooglePress={handleGoogleLogin}
+              onFacebookPress={handleFacebookLogin}
+              onApplePress={handleAppleLogin}
+              isLoading={isLoading}
+              disabled={isLoading}
+            />
 
             {/* Quick Fill Button */}
             <TouchableOpacity style={styles.quickFillButton} onPress={handleQuickFill}>

@@ -89,10 +89,10 @@ export class AuthService {
   /**
    * Вход в систему
    */
-  static async login(payload: LoginPayload): Promise<AuthResponse> {
+  static async login(payload: LoginPayload | { email: string; authMethod: string }): Promise<AuthResponse> {
     if (__DEV__) {
       // Мок для разработки
-      return this.mockLogin(payload);
+      return this.mockLogin(payload as LoginPayload);
     }
 
     try {
@@ -302,19 +302,47 @@ export class AuthService {
   /**
    * Мок входа для разработки
    */
-  private static async mockLogin(payload: LoginPayload): Promise<AuthResponse> {
+  private static async mockLogin(payload: LoginPayload | { email: string; authMethod: string }): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (payload.email && payload.password) {
+        // Проверяем тип payload
+        const isSocialAuth = 'authMethod' in payload;
+        
+        if (payload.email && (isSocialAuth || payload.password)) {
+          // Определяем имя пользователя в зависимости от метода аутентификации
+          let userName = 'Иван';
+          let userSurname = 'Иванов';
+          let userAvatar = 'https://randomuser.me/api/portraits/men/1.jpg';
+          
+          if (isSocialAuth) {
+            switch (payload.authMethod) {
+              case 'google_auth':
+                userName = 'Google';
+                userSurname = 'User';
+                userAvatar = 'https://via.placeholder.com/150';
+                break;
+              case 'facebook_auth':
+                userName = 'Facebook';
+                userSurname = 'User';
+                userAvatar = 'https://via.placeholder.com/150';
+                break;
+              case 'apple_auth':
+                userName = 'Apple';
+                userSurname = 'User';
+                userAvatar = null;
+                break;
+            }
+          }
+          
           const user: Client = {
-            id: '1',
-            name: 'Иван',
-            surname: 'Иванов',
+            id: isSocialAuth ? `social_${Date.now()}` : '1',
+            name: userName,
+            surname: userSurname,
             email: payload.email,
             address: 'Москва, ул. Примерная, 1',
             role: UserRole.CLIENT,
             phone: '+7 (999) 123-45-67',
-            avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+            avatar: userAvatar,
             rating: 4.8,
             createdAt: '2024-01-01',
           };
@@ -325,6 +353,11 @@ export class AuthService {
             email: user.email,
             role: user.role,
             phone: user.phone,
+          });
+
+          console.log(`🧪 Мок вход ${isSocialAuth ? `через ${payload.authMethod}` : 'с email'}:`, {
+            email: payload.email,
+            method: isSocialAuth ? payload.authMethod : 'email'
           });
 
           resolve({

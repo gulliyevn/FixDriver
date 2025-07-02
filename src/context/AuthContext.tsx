@@ -7,7 +7,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string, authMethod?: string) => Promise<boolean>;
   register: (userData: Partial<User>, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Вход в систему
    */
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string, authMethod?: string): Promise<boolean> => {
     try {
       setIsLoading(true);
       
@@ -92,15 +92,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
+        // Определяем имя пользователя в зависимости от метода аутентификации
+        let userName = 'Иван';
+        let userSurname = 'Иванов';
+        let userAvatar = null;
+        
+        if (authMethod) {
+          switch (authMethod) {
+            case 'google_auth':
+              userName = 'Google';
+              userSurname = 'User';
+              userAvatar = 'https://via.placeholder.com/150';
+              break;
+            case 'facebook_auth':
+              userName = 'Facebook';
+              userSurname = 'User';
+              userAvatar = 'https://via.placeholder.com/150';
+              break;
+            case 'apple_auth':
+              userName = 'Apple';
+              userSurname = 'User';
+              userAvatar = null;
+              break;
+          }
+        }
+        
         const mockUser: User = {
-          id: '1',
+          id: authMethod ? `social_${Date.now()}` : '1',
           email,
-          name: 'Иван',
-          surname: 'Иванов',
+          name: userName,
+          surname: userSurname,
           address: 'Москва, ул. Примерная, 1',
           role: UserRole.CLIENT,
           phone: '+1234567890',
-          avatar: null,
+          avatar: userAvatar,
           rating: 4.5,
           createdAt: new Date().toISOString(),
         };
@@ -118,6 +143,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           JWTService.saveTokens(tokens),
           AsyncStorage.setItem('user', JSON.stringify(mockUser)),
         ]);
+
+        console.log(`🧪 Мок вход ${authMethod ? `через ${authMethod}` : 'с email'}:`, {
+          email,
+          method: authMethod || 'email'
+        });
 
         setUser(mockUser);
         return true;
