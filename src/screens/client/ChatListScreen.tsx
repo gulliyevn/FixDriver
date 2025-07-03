@@ -614,30 +614,34 @@ const ChatListScreen: React.FC = () => {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={handleNotifications}
-          style={styles.notificationBtn}
-        >
-          <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-          {notificationService.getUnreadCount() > 0 && (
-            <View style={styles.notificationBadge}>
-              <Text style={styles.notificationBadgeText}>{notificationService.getUnreadCount()}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-        
         <Text style={[styles.headerTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
           Чаты
         </Text>
         
-        <TouchableOpacity 
-          onPress={toggleChatSelectionMode}
-          style={styles.selectBtn}
-        >
-          <Text style={[styles.selectBtnText, { color: isDark ? '#F9FAFB' : '#1E3A8A' }]}>
-            {isChatSelectionMode ? 'Отмена' : 'Выбрать'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity 
+            onPress={toggleChatSelectionMode}
+            style={styles.selectBtn}
+          >
+            <Ionicons 
+              name={isChatSelectionMode ? "close" : "checkmark-circle-outline"} 
+              size={24} 
+              color={isDark ? '#F9FAFB' : '#1E3A8A'} 
+            />
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            onPress={handleNotifications}
+            style={styles.notificationBtn}
+          >
+            <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+            {notificationService.getUnreadCount() > 0 && (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationBadgeText}>{notificationService.getUnreadCount()}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Chat List */}
@@ -898,8 +902,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   selectBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    padding: 8,
   },
   notificationBadge: {
     position: 'absolute',
@@ -917,11 +920,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
     textAlign: 'center',
-    flex: 1,
   },
   chatList: {
     flex: 1,
