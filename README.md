@@ -44,4 +44,4 @@ npx expo start
 ```
 cd /Users/gulliyevn/Projects/FixDrive && npx expo start 
 
-FixDrive % npx expo start --clear
+npx expo start --clear

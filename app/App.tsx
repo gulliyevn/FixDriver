@@ -13,8 +13,8 @@ function App() {
   useEffect(() => {
     // Тестируем JWT систему при запуске
     if (__DEV__) {
-      setTimeout(() => {
-        testJWT();
+      setTimeout(async () => {
+        await testJWT();
       }, 2000);
     }
   }, []);

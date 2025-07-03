@@ -20,6 +20,10 @@ import Validators, { PasswordStrength } from '../../utils/validators';
 import ErrorDisplay from '../../components/ErrorDisplay';
 import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
 import { AppError, ErrorHandler } from '../../utils/errorHandler';
+import SocialAuthService from '../../services/SocialAuthService';
+import SocialAuthButtons from '../../components/SocialAuthButtons';
+import { useAuth } from '../../context/AuthContext';
+import AuthService from '../../services/AuthService';
 
 interface ClientRegisterScreenProps {
   navigation: any;
@@ -27,6 +31,7 @@ interface ClientRegisterScreenProps {
 
 const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -135,12 +140,137 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleGoogleRegister = () => {
-    Alert.alert('Google регистрация', 'Функция регистрации через Google будет добавлена в следующем обновлении');
+  const handleGoogleRegister = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithGoogle();
+      
+      if (result.success && result.user) {
+        // Проверяем, существует ли пользователь
+        const userExists = await checkUserExists(result.user.email);
+        
+        if (userExists) {
+          // Пользователь существует - выполняем вход
+          console.log('🔍 Пользователь найден, выполняем вход');
+          await login(result.user.email, 'SecurePass123!', 'google_auth');
+        } else {
+          // Пользователь не существует - выполняем регистрацию
+          console.log('🆕 Новый пользователь, выполняем регистрацию');
+          await registerSocialUser(result.user);
+        }
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Google');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Google',
+        'Попробуйте другой способ регистрации'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleFacebookRegister = () => {
-    Alert.alert('Facebook регистрация', 'Функция регистрации через Facebook будет добавлена в следующем обновлении');
+  const handleFacebookRegister = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithFacebook();
+      
+      if (result.success && result.user) {
+        // Проверяем, существует ли пользователь
+        const userExists = await checkUserExists(result.user.email);
+        
+        if (userExists) {
+          // Пользователь существует - выполняем вход
+          console.log('🔍 Пользователь найден, выполняем вход');
+          await login(result.user.email, 'SecurePass123!', 'facebook_auth');
+        } else {
+          // Пользователь не существует - выполняем регистрацию
+          console.log('🆕 Новый пользователь, выполняем регистрацию');
+          await registerSocialUser(result.user);
+        }
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Facebook');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Facebook',
+        'Попробуйте другой способ регистрации'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleRegister = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const result = await SocialAuthService.signInWithApple();
+      
+      if (result.success && result.user) {
+        // Проверяем, существует ли пользователь
+        const userExists = await checkUserExists(result.user.email);
+        
+        if (userExists) {
+          // Пользователь существует - выполняем вход
+          console.log('🔍 Пользователь найден, выполняем вход');
+          await login(result.user.email, 'SecurePass123!', 'apple_auth');
+        } else {
+          // Пользователь не существует - выполняем регистрацию
+          console.log('🆕 Новый пользователь, выполняем регистрацию');
+          await registerSocialUser(result.user);
+        }
+      } else {
+        throw new Error(result.error || 'Ошибка входа через Apple');
+      }
+      
+    } catch (error) {
+      const appError = ErrorHandler.createError(
+        ErrorHandler.AUTH_ERRORS.INVALID_CREDENTIALS,
+        'Ошибка входа через Apple',
+        'Попробуйте другой способ регистрации'
+      );
+      setError(appError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Проверка существования пользователя
+  const checkUserExists = async (email: string): Promise<boolean> => {
+    return await AuthService.checkUserExists(email);
+  };
+
+  // Регистрация социального пользователя
+  const registerSocialUser = async (socialUser: any) => {
+    try {
+      const result = await AuthService.registerWithSocial(socialUser);
+      
+      // Успешная регистрация - пользователь автоматически входит в систему
+      console.log('✅ Социальная регистрация успешна:', {
+        provider: socialUser.provider,
+        email: socialUser.email
+      });
+      
+      // Можно добавить дополнительную логику, например переход на главный экран
+      // navigation.navigate('Main');
+      
+    } catch (error) {
+      console.error('❌ Ошибка социальной регистрации:', error);
+      throw error;
+    }
   };
 
   const handleQuickFill = () => {
@@ -451,27 +581,13 @@ const ClientRegisterScreen: React.FC<ClientRegisterScreenProps> = ({ navigation 
             </View>
 
             {/* Social Register Buttons */}
-            <View style={styles.socialButtons}>
-              <TouchableOpacity 
-                style={[styles.socialButton, styles.googleButton, isDark && styles.socialButtonDark]} 
-                onPress={handleGoogleRegister}
-              >
-                <Ionicons name="logo-google" size={24} color="#DB4437" />
-                <Text style={[styles.socialButtonText, isDark && styles.socialButtonTextDark]}>
-                  Google
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.socialButton, styles.facebookButton, isDark && styles.socialButtonDark]} 
-                onPress={handleFacebookRegister}
-              >
-                <Ionicons name="logo-facebook" size={24} color="#4267B2" />
-                <Text style={[styles.socialButtonText, isDark && styles.socialButtonTextDark]}>
-                  Facebook
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <SocialAuthButtons
+              onGooglePress={handleGoogleRegister}
+              onFacebookPress={handleFacebookRegister}
+              onApplePress={handleAppleRegister}
+              isLoading={isLoading}
+              disabled={isLoading}
+            />
 
             {/* Quick Fill Button */}
             <TouchableOpacity style={styles.quickFillButton} onPress={handleQuickFill}>

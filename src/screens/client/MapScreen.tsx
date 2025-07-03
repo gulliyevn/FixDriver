@@ -24,6 +24,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../types/navigation';
 import * as Location from 'expo-location';
 import { notificationService, Notification } from '../../services/NotificationService';
+import { navigateToChat, formatDriverForChat } from '../../utils/navigationHelpers';
 
 
 const familyMembers = [
@@ -339,7 +340,7 @@ type MapScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Map'>;
 
 const MapScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const navigation = useNavigation<MapScreenNavigationProp>();
+  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
   const [selectedMember, setSelectedMember] = useState(familyMembers[0]);
   const [showMemberList, setShowMemberList] = useState(false);
   const [isTripCollapsed, setIsTripCollapsed] = useState(false);
@@ -611,8 +612,6 @@ const MapScreen: React.FC = () => {
   };
 
   const handleChatDriver = () => {
-    console.log('💬 Создание чата с водителем из карты');
-    
     try {
       // Получаем данные текущего водителя
       const driver = currentDriver;
@@ -623,18 +622,24 @@ const MapScreen: React.FC = () => {
 
       // Создаем ID водителя на основе ID члена семьи
       const driverId = `driver_${selectedMember.id}`;
-      // Переходим в главный чат с параметрами водителя
-      (navigation as any).navigate('Chat', {
+      
+      // Формируем параметры для чата
+      const chatParams = {
         driverId: driverId,
         driverName: driver.name,
         driverCar: driver.car,
         driverNumber: driver.number,
         driverRating: driver.rating.toString(),
         driverStatus: 'online',
-      });
-      console.log('✅ Успешная навигация в чат с водителем из карты');
+      };
+      
+      // Используем улучшенную функцию навигации
+      const success = navigateToChat(navigation, chatParams);
+      
+      if (!success) {
+        Alert.alert('Ошибка', 'Не удалось открыть чат. Попробуйте еще раз.');
+      }
     } catch (error) {
-      console.error('❌ Ошибка навигации в чат из карты:', error);
       const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
       Alert.alert('Ошибка', 'Не удалось открыть чат: ' + message);
     }
@@ -854,6 +859,8 @@ const MapScreen: React.FC = () => {
     outputRange: [0, 200],
   });
 
+
+
   return (
     <>
       <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
@@ -943,6 +950,8 @@ const MapScreen: React.FC = () => {
             <TouchableOpacity style={styles.mapControlButton} onPress={handleMapTypeChange}>
               <Ionicons name={getMapTypeIcon() as any} size={24} color="#1E3A8A" />
             </TouchableOpacity>
+            
+
           </>
         )}
       </View>

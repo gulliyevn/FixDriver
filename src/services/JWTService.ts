@@ -189,7 +189,12 @@ export class JWTService {
       const decoded = SimpleJWT.verify(token, SECURITY_CONFIG.JWT.SECRET) as JWTPayload;
       return decoded;
     } catch (error) {
-      console.error('JWT verification error:', error);
+      // Log expired tokens as warnings instead of errors since this is expected behavior
+      if (error.message.includes('Token expired')) {
+        console.warn('JWT token expired (expected behavior):', error.message);
+      } else {
+        console.error('JWT verification error:', error);
+      }
       return null;
     }
   }

@@ -372,6 +372,118 @@ export class AuthService {
   }
 
   /**
+   * Проверка существования пользователя по email
+   */
+  static async checkUserExists(email: string): Promise<boolean> {
+    if (__DEV__) {
+      // Мок для разработки
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Для демонстрации: некоторые email считаем существующими
+      const existingEmails = [
+        'user@gmail.com',
+        'user@facebook.com', 
+        'user@icloud.com',
+        'client@fixdrive.com',
+        'test@example.com'
+      ];
+      
+      return existingEmails.includes(email);
+    }
+
+    try {
+      const response = await APIClient.get(`/auth/check-user?email=${encodeURIComponent(email)}`);
+      return response.success && response.data?.exists === true;
+    } catch (error) {
+      console.error('Check user exists error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Регистрация пользователя через социальную сеть
+   */
+  static async registerWithSocial(socialUser: any): Promise<AuthResponse> {
+    if (__DEV__) {
+      // Мок для разработки
+      return this.mockSocialRegister(socialUser);
+    }
+
+    try {
+      const userData = {
+        email: socialUser.email,
+        name: socialUser.name,
+        phone: '', // Социальные сети не предоставляют телефон
+        role: 'client',
+        socialProvider: socialUser.provider,
+        socialId: socialUser.id,
+        photo: socialUser.photo,
+        isEmailVerified: true,
+        password: 'SecurePass123!' // Генерируем сильный пароль
+      };
+
+      const response = await APIClient.post<AuthResponse>('/auth/register-social', {
+        userData,
+        socialProvider: socialUser.provider,
+        socialToken: socialUser.accessToken
+      });
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Social registration failed');
+      }
+
+      // Сохраняем токены
+      await JWTService.saveTokens(response.data.tokens);
+
+      return response.data;
+    } catch (error) {
+      console.error('Social registration error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Мок социальной регистрации для разработки
+   */
+  private static async mockSocialRegister(socialUser: any): Promise<AuthResponse> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('🧪 Мок социальная регистрация:', {
+          provider: socialUser.provider,
+          email: socialUser.email,
+          name: socialUser.name
+        });
+
+        const user: Client = {
+          id: `social_${Date.now()}`,
+          name: socialUser.name,
+          surname: '',
+          email: socialUser.email,
+          address: 'Москва, ул. Примерная, 1',
+          role: UserRole.CLIENT,
+          phone: '',
+          avatar: socialUser.photo,
+          rating: 0,
+          createdAt: new Date().toISOString(),
+        };
+
+        // Генерируем JWT токены
+        const tokens = JWTService.generateTokens({
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+        });
+
+        resolve({
+          user,
+          tokens,
+        });
+      }, 1000);
+    });
+  }
+
+  /**
    * Проверка здоровья API
    */
   static async checkAPIHealth(): Promise<boolean> {

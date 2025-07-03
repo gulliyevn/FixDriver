@@ -1,10 +1,13 @@
 // Простой тест для проверки JWT системы
 import JWTService from '../services/JWTService';
 
-export const testJWT = () => {
+export const testJWT = async () => {
   console.log('🧪 Тестирование JWT системы...');
 
   try {
+    // Очищаем существующие токены перед тестированием
+    await JWTService.clearTokens();
+    
     // Тестовые данные пользователя
     const testUserData = {
       userId: 'test_user_123',

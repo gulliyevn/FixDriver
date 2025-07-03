@@ -50,8 +50,11 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
 
   // Логируем параметры для отладки
   React.useEffect(() => {
-    console.log('💬 ChatScreen НАЧАЛО РЕНДЕРИНГА with params:', route.params);
-    console.log('💬 ChatScreen driver data:', driverData);
+    console.log('💬 ChatScreen: получены параметры водителя:', {
+      driverId: driverData.driverId,
+      driverName: driverData.driverName,
+      driverStatus: driverData.driverStatus
+    });
   }, [route.params]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
@@ -66,8 +69,6 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     try {
       const driverId = route.params.driverId;
       if (!driverId) return;
-
-      console.log('📋 Загрузка истории чата с водителем:', driverId);
       
       // Ищем существующий чат с водителем
       const chats = await chatService.getChats('me');
@@ -78,7 +79,6 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       if (existingChat) {
         // Если чат существует, загружаем его сообщения
         chatId = existingChat.id;
-        console.log('✅ Найден существующий чат:', chatId);
       } else {
         // Если чата нет, создаем новый
         const newChat = await chatService.createChat(
@@ -86,7 +86,6 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
           route.params.driverName || 'Водитель'
         );
         chatId = newChat.id;
-        console.log('✅ Создан новый чат:', chatId);
       }
       
       // Загружаем сообщения
@@ -162,14 +161,12 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       }, 100);
       
     } catch (error) {
-      console.error('❌ Ошибка отправки сообщения:', error);
       Alert.alert('Ошибка', 'Не удалось отправить сообщение');
     }
   };
 
   const handleCallDriver = () => {
     const phoneNumber = '+994501234567'; // Номер телефона водителя
-    console.log('🔔 Звонок водителю:', driverData.driverName, phoneNumber);
     
     Alert.alert(
       'Звонок водителю',
@@ -182,11 +179,9 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
             try {
               const url = `tel:${phoneNumber}`;
               Linking.openURL(url).catch((err) => {
-                console.error('❌ Ошибка при открытии звонка:', err);
                 Alert.alert('Ошибка', 'Не удалось совершить звонок');
               });
             } catch (error) {
-              console.error('❌ Ошибка звонка:', error);
               Alert.alert('Ошибка', 'Не удалось совершить звонок');
             }
           }
@@ -201,8 +196,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     return timestamp;
   };
 
-  console.log('💬 ChatScreen РЕНДЕРИТСЯ messages.length:', messages.length);
-  console.log('💬 ChatScreen isDark:', isDark);
+
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
@@ -211,7 +205,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Chat', { screen: 'ChatList' })}>
             <Ionicons name="chevron-back-outline" size={28} color="#1E3A8A" />
           </TouchableOpacity>
           <View style={styles.driverInfo}>

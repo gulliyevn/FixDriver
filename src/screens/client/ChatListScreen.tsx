@@ -105,7 +105,6 @@ const SwipeableChat: React.FC<SwipeableChatProps> = ({
         
         if (dx > 60 || (dx > 30 && vx > 0.8)) {
           // PIN - свайп вправо
-          console.log('📌 PIN чат');
           Animated.sequence([
             Animated.timing(translateX, {
               toValue: 120,
@@ -122,7 +121,6 @@ const SwipeableChat: React.FC<SwipeableChatProps> = ({
           
         } else if (dx < -60 || (dx < -30 && vx < -0.8)) {
           // DELETE - свайп влево
-          console.log('🗑️ DELETE чат');
           Animated.timing(translateX, {
             toValue: -400,
             duration: 300,
@@ -332,6 +330,7 @@ const ChatListScreen: React.FC = () => {
 
   const [chats, setChats] = useState<Chat[]>([]);
   const [hasNavigated, setHasNavigated] = React.useState(false);
+  const [hasNavigatedToChat, setHasNavigatedToChat] = React.useState(false);
 
   useEffect(() => {
     setNotifications(notificationService.getNotifications());
@@ -341,19 +340,17 @@ const ChatListScreen: React.FC = () => {
   // Обновляем список чатов при возврате на экран
   useFocusEffect(
     React.useCallback(() => {
-      console.log('🔄 ChatListScreen: обновляем список чатов при фокусе');
       loadChats();
       // Сбрасываем флаг при возврате на главный экран чатов
       setHasNavigated(false);
     }, [])
   );
 
-  // Автоматический переход в чат с водителем, если пришли параметры
+  // Автоматический переход в чат, если пришли с параметрами
   React.useEffect(() => {
     const params = route.params as any;
-    if (params?.driverId && !hasNavigated) {
-      setHasNavigated(true);
-      // Откладываем навигацию до полной инициализации стека
+    if (params?.driverId && !hasNavigatedToChat) {
+      // Небольшая задержка для корректной навигации
       setTimeout(() => {
         navigation.navigate('ChatConversation', {
           driverId: params.driverId,
@@ -363,21 +360,21 @@ const ChatListScreen: React.FC = () => {
           driverRating: params.driverRating,
           driverStatus: params.driverStatus,
         });
-      }, 300);
+        setHasNavigatedToChat(true);
+      }, 100);
     }
-  }, [route.params, hasNavigated]);
+  }, [route.params, navigation, hasNavigatedToChat]);
 
   const loadChats = async () => {
     try {
       const userChats = await chatService.getChats('me');
       setChats(userChats);
     } catch (error) {
-      console.error('❌ Ошибка загрузки чатов:', error);
+      // Ошибка загрузки чатов
     }
   };
 
   const restoreChats = async () => {
-    console.log('🔄 Восстанавливаем чаты...');
     chatService.resetToMockData();
     await loadChats();
   };
@@ -389,8 +386,6 @@ const ChatListScreen: React.FC = () => {
       return;
     }
     
-    console.log('📱 ChatListScreen: переход в чат с', chat.participantName);
-    
     try {
       navigation.navigate('ChatConversation', {
         driverId: chat.participantId,
@@ -400,10 +395,7 @@ const ChatListScreen: React.FC = () => {
         driverRating: '4.8', // Можно добавить в Chat рейтинг
         driverStatus: chat.isOnline ? 'online' : 'offline'
       });
-      
-      console.log('✅ Успешная навигация в чат:', chat.participantName);
     } catch (error) {
-      console.error('❌ Ошибка навигации в чат:', error);
       Alert.alert('Ошибка', 'Не удалось открыть чат. Попробуйте еще раз.');
     }
   };
@@ -574,11 +566,9 @@ const ChatListScreen: React.FC = () => {
               // Обновляем локальное состояние
               setChats(prevChats => prevChats.filter(chat => !selectedChats.includes(chat.id)));
               
-              console.log('✅ Удалены чаты:', selectedChats);
               setSelectedChats([]);
               setIsChatSelectionMode(false);
             } catch (error) {
-              console.error('❌ Ошибка удаления чатов:', error);
               Alert.alert('Ошибка', 'Не удалось удалить некоторые чаты. Попробуйте еще раз.');
             }
           },
@@ -588,30 +578,23 @@ const ChatListScreen: React.FC = () => {
   };
 
   const togglePinChat = (chatId: string) => {
-    console.log('🔖 Переключение закрепления для чата:', chatId);
     setPinnedChats(prev => {
       const newPinned = prev.includes(chatId)
         ? prev.filter(id => id !== chatId)
         : [...prev, chatId];
       
-      console.log('📌 Закрепленные чаты:', newPinned);
       return newPinned;
     });
   };
 
   const handleDeleteChat = async (chatId: string) => {
-    console.log('🗑️ Удаляем чат:', chatId);
-    
     try {
       // Удаляем чат через сервис
       await chatService.deleteChat(chatId);
       
       // Обновляем локальное состояние
       setChats(prevChats => prevChats.filter(c => c.id !== chatId));
-      
-      console.log('✅ Чат удален:', chatId);
     } catch (error) {
-      console.error('❌ Ошибка удаления чата:', error);
       Alert.alert('Ошибка', 'Не удалось удалить чат. Попробуйте еще раз.');
     }
   };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import SocialAuthService from '../services/SocialAuthService';
@@ -25,11 +25,22 @@ const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
   const isFacebookAvailable = SocialAuthService.isSocialAuthAvailable('facebook');
   const isAppleAvailable = SocialAuthService.isSocialAuthAvailable('apple');
 
+  // Отладочная информация
+  console.log('🔍 Social Auth Availability:', {
+    google: isGoogleAvailable,
+    facebook: isFacebookAvailable,
+    apple: isAppleAvailable,
+    platform: Platform.OS
+  });
+
+  // Временно показываем все кнопки для отладки
+  const showAllButtons = __DEV__;
+
   return (
     <View style={styles.container}>
       {/* Google и Facebook кнопки в ряд */}
       <View style={styles.socialButtons}>
-        {isGoogleAvailable && (
+        {(isGoogleAvailable || showAllButtons) && (
           <TouchableOpacity 
             style={[
               styles.socialButton, 
@@ -51,7 +62,7 @@ const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
           </TouchableOpacity>
         )}
 
-        {isFacebookAvailable && (
+        {(isFacebookAvailable || showAllButtons) && (
           <TouchableOpacity 
             style={[
               styles.socialButton, 
@@ -75,7 +86,7 @@ const SocialAuthButtons: React.FC<SocialAuthButtonsProps> = ({
       </View>
 
       {/* Apple кнопка отдельно */}
-      {isAppleAvailable && (
+      {(isAppleAvailable || showAllButtons) && (
         <TouchableOpacity 
           style={[
             styles.appleButton, 

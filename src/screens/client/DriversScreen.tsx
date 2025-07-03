@@ -17,10 +17,10 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
 import RatingStars from '../../components/RatingStars';
 import { notificationService, Notification } from '../../services/NotificationService';
-import { isDriverAvailableForChat } from '../../utils/navigationHelpers';
+import { isDriverAvailableForChat, navigateToChat, formatDriverForChat } from '../../utils/navigationHelpers';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { ClientStackParamList } from '../../types/navigation';
+import { ClientStackParamList, RootTabParamList } from '../../types/navigation';
 
 interface Driver {
   id: string;
@@ -258,7 +258,7 @@ const drivers: Driver[] = [
 
 const DriversScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const navigation = useNavigation<BottomTabNavigationProp<ClientStackParamList, 'Drivers'>>();
+  const navigation = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -453,21 +453,24 @@ const DriversScreen: React.FC = () => {
   };
 
   const handleChatDriver = (driver: Driver) => {
-    console.log('💬 Создание чата с водителем из списка водителей');
-    
     try {
-      // Переходим в главный чат с параметрами водителя
-      (navigation as any).navigate('Chat', {
+      // Формируем параметры для чата
+      const chatParams = {
         driverId: driver.id,
         driverName: driver.name,
         driverCar: driver.carModel,
         driverNumber: driver.carNumber,
         driverRating: driver.rating.toString(),
         driverStatus: driver.isOnline ? 'online' : 'offline',
-      });
-      console.log('✅ Успешная навигация в чат с водителем из списка водителей');
+      };
+      
+      // Используем улучшенную функцию навигации
+      const success = navigateToChat(navigation, chatParams);
+      
+      if (!success) {
+        Alert.alert('Ошибка', 'Не удалось открыть чат. Попробуйте еще раз.');
+      }
     } catch (error) {
-      console.error('❌ Ошибка навигации в чат:', error);
       const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
       Alert.alert('Ошибка', 'Не удалось открыть чат: ' + message);
     }

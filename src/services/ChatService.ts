@@ -5,7 +5,6 @@ class ChatService {
   private messages: { [chatId: string]: Message[] } = {};
 
   constructor() {
-    console.log('💬 ChatService: инициализация сервиса чата');
     this.initializeMockData();
   }
 

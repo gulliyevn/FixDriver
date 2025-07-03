@@ -24,12 +24,9 @@ const isError = (error: unknown): error is Error => {
  * @param params - параметры водителя для чата
  */
 export const navigateToChat = (navigation: NavigationProp<any>, params: ChatNavigationParams): boolean => {
-  console.log('🚀 NavigationHelper: начинаем навигацию в чат с', params.driverName);
-  
   try {
     // Метод 1: Использование CommonActions для безопасной навигации
     try {
-      console.log('📱 Метод 1: Использование CommonActions');
       navigation.dispatch(
         CommonActions.navigate({
           name: 'Chat',
@@ -39,32 +36,32 @@ export const navigateToChat = (navigation: NavigationProp<any>, params: ChatNavi
           }
         })
       );
-      console.log('✅ Метод 1: CommonActions навигация успешна');
       return true;
     } catch (error1) {
-      const message = isError(error1) ? error1.message : 'Неизвестная ошибка';
-      console.log('❌ Метод 1 не сработал:', message);
+      // Продолжаем к следующему методу
     }
 
     // Метод 2: Простая навигация как fallback
     try {
-      console.log('📱 Метод 2: Простая навигация');
       (navigation as any).navigate('Chat', {
         screen: 'ChatConversation',
         params
       });
-      console.log('✅ Метод 2: Простая навигация успешна');
       return true;
     } catch (error2) {
-      const message = isError(error2) ? error2.message : 'Неизвестная ошибка';
-      console.log('❌ Метод 2 не сработал:', message);
+      // Продолжаем к следующему методу
+    }
+
+    // Метод 3: Прямая навигация в ChatConversation
+    try {
+      (navigation as any).navigate('ChatConversation', params);
+      return true;
+    } catch (error3) {
+      // Все методы провалились
     }
     
-    console.error('❌ Все методы навигации провалились');
     return false;
   } catch (error) {
-    const message = isError(error) ? error.message : 'Неизвестная ошибка навигации';
-    console.error('❌ Общая ошибка навигации в чат:', message);
     return false;
   }
 };
@@ -91,4 +88,6 @@ export const formatDriverForChat = (driver: Record<string, any>): ChatNavigation
     driverStatus: driver.status || driver.driverStatus || (driver.isOnline ? 'online' : 'offline'),
     driverPhoto: driver.photo || driver.driverPhoto
   };
-}; 
+};
+
+ 
