@@ -19,6 +19,7 @@ import AppCard from '../../components/AppCard';
 import MapViewComponent, { MapViewRef } from '../../components/MapView';
 import AppAvatar from '../../components/AppAvatar';
 import RouteService, { RouteResponse } from '../../services/RouteService';
+import TrafficService from '../../services/TrafficService';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../types/navigation';
@@ -380,6 +381,19 @@ const MapScreen: React.FC = () => {
     return unsubscribe;
   }, []);
 
+  // Автоматическое обновление пробок каждые 5 минут
+  useEffect(() => {
+    const trafficInterval = setInterval(() => {
+      if (Object.keys(realRoutes).length > 0) {
+        updateTrafficData();
+      }
+    }, 5 * 60 * 1000); // 5 минут
+    
+    return () => {
+      clearInterval(trafficInterval);
+    };
+  }, [realRoutes]);
+
   // Обновление времени каждую минуту для актуализации поездок
   useEffect(() => {
     const interval = setInterval(() => {
@@ -540,33 +554,75 @@ const MapScreen: React.FC = () => {
           if (!routeData) continue;
           
           console.log(`📍 Построение маршрута для ${memberId}...`);
-          const realRoute = await RouteService.getFastestRoute(
+          
+          // Получаем реальный маршрут через API
+          const realRoute = await RouteService.getRoute(
             routeData.pointA,
             routeData.pointB
           );
-          routes[memberId] = realRoute;
-          console.log(`✅ Маршрут для ${memberId} готов`);
+          
+          if (realRoute && realRoute.coordinates.length > 0) {
+            routes[memberId] = realRoute;
+            console.log(`✅ Маршрут для ${memberId} готов:`, {
+              distance: Math.round(realRoute.distance / 1000 * 10) / 10 + ' км',
+              duration: Math.round(realRoute.duration / 60) + ' мин',
+              segments: realRoute.segments.length
+            });
+          } else {
+            throw new Error('Пустой маршрут');
+          }
         } catch (error) {
-          // Тихо создаем fallback маршрут без лишних ошибок
+          console.log(`📍 Создание fallback маршрута для ${memberId}...`);
           const routeData = getCurrentRoute(memberId);
           if (routeData) {
-            console.log(`📍 Создание маршрута для ${memberId}...`);
-            routes[memberId] = {
-              coordinates: [routeData.pointA, routeData.pointB], // Простая линия
-              duration: parseInt(routeData.eta) * 60, // Конвертируем в секунды
-              distance: estimateDistance(routeData.pointA, routeData.pointB) * 1000, // В метры
-              segments: generateRouteSegments(routeData.pointA, routeData.pointB, routeData.traffic)
-            };
+            // Создаем улучшенный fallback маршрут
+            const fallbackRoute = await RouteService.getRoute(
+              routeData.pointA,
+              routeData.pointB
+            );
+            routes[memberId] = fallbackRoute;
           }
         }
       }
       
       setRealRoutes(routes);
-      console.log('🗺️ Все маршруты готовы');
+      console.log('🗺️ Все маршруты готовы:', Object.keys(routes).length);
     } catch (error) {
       console.log('📍 Используются резервные маршруты');
     } finally {
       setLoadingRoutes(false);
+    }
+  };
+
+  // Обновление пробок в реальном времени
+  const updateTrafficData = async () => {
+    try {
+      const updatedRoutes: {[key: string]: RouteResponse} = {};
+      
+      for (const [memberId, route] of Object.entries(realRoutes)) {
+        if (route && route.coordinates.length > 0) {
+          // Получаем актуальные данные о пробках
+          const trafficData = await TrafficService.getTrafficForRoute(route.coordinates);
+          
+          // Обновляем сегменты с новыми данными о пробках
+          const updatedSegments = route.segments.map((segment, index) => ({
+            ...segment,
+            trafficLevel: trafficData[index]?.level || segment.trafficLevel,
+            duration: Math.round(segment.duration * (trafficData[index]?.delay || 1))
+          }));
+          
+          updatedRoutes[memberId] = {
+            ...route,
+            segments: updatedSegments,
+            duration: updatedSegments.reduce((total, seg) => total + seg.duration, 0)
+          };
+        }
+      }
+      
+      setRealRoutes(updatedRoutes);
+      console.log('🚦 Данные о пробках обновлены');
+    } catch (error) {
+      console.log('📍 Ошибка обновления пробок:', error);
     }
   };
 
@@ -949,6 +1005,19 @@ const MapScreen: React.FC = () => {
             {/* Кнопка слоев карты */}
             <TouchableOpacity style={styles.mapControlButton} onPress={handleMapTypeChange}>
               <Ionicons name={getMapTypeIcon() as any} size={24} color="#1E3A8A" />
+            </TouchableOpacity>
+            
+            {/* Кнопка обновления пробок */}
+            <TouchableOpacity 
+              style={[styles.mapControlButton, loadingRoutes && styles.mapControlButtonDisabled]} 
+              onPress={updateTrafficData}
+              disabled={loadingRoutes}
+            >
+              <Ionicons 
+                name="refresh" 
+                size={24} 
+                color={loadingRoutes ? "#9CA3AF" : "#1E3A8A"} 
+              />
             </TouchableOpacity>
             
 

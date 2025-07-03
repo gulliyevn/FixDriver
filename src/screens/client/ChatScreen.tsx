@@ -205,8 +205,16 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Chat', { screen: 'ChatList' })}>
-            <Ionicons name="chevron-back-outline" size={28} color="#1E3A8A" />
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
+          >
+            <Ionicons 
+              name="chevron-back" 
+              size={20} 
+              color={isDark ? '#F9FAFB' : '#1F2937'} 
+            />
           </TouchableOpacity>
           <View style={styles.driverInfo}>
             <View style={styles.driverAvatar}>
@@ -339,8 +347,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   backButton: {
-    padding: 4,
-    marginRight: 8,
+    padding: 6,
+    marginRight: 12,
   },
   driverInfo: {
     flexDirection: 'row',
