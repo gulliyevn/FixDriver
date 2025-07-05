@@ -14,7 +14,7 @@
 
 import { User, UserRole } from '../types/user';
 import { Driver, DriverStats, DriverStatus } from '../types/driver';
-import { Order, OrderStatus } from '../types/order';
+import { Order } from '../types/order';
 import { Chat, Message } from '../types/chat';
 import { Notification } from '../services/NotificationService';
 import { Package } from '../types/package';
@@ -502,6 +502,7 @@ export const createMockUser = (options: {
     avatar: userAvatar,
     rating: 4.5,
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 };
 

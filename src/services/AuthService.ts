@@ -1,499 +1,187 @@
-import { Driver, Client, UserRole } from '../types/user';
-import APIClient, { APIResponse } from './APIClient';
+import { User, UserRole } from '../types/user';
 import JWTService from './JWTService';
-
-// Конфигурация API - будет заменена на реальные данные
-const API_CONFIG = {
-  BASE_URL: __DEV__ ? 'http://localhost:3000/api' : 'https://your-production-api.com/api',
-  TIMEOUT: 10000, // 10 секунд
-};
-
-export type RegisterPayload =
-  | (Omit<Driver, 'id'> & { password: string })
-  | (Omit<Client, 'id'> & { password: string });
-
-export type LoginPayload = {
-  email: string;
-  password: string;
-};
-
-export type VerifyOTPPayload = {
-  phoneNumber: string;
-  otpCode: string;
-  userData: Record<string, unknown>;
-};
+import mockData from '../utils/mockData';
 
 export interface AuthResponse {
-  user: Driver | Client;
-  tokens: {
+  success: boolean;
+  message?: string;
+  user?: User;
+  tokens?: {
     accessToken: string;
     refreshToken: string;
-    expiresIn: number;
-    tokenType: 'Bearer';
   };
 }
 
 export class AuthService {
   /**
-   * Регистрация пользователя после OTP верификации
+   * Вход в систему
    */
-  static async registerWithOTP(payload: VerifyOTPPayload): Promise<AuthResponse> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockRegisterWithOTP(payload);
-    }
-
+  static async login(email: string, password: string, authMethod?: string): Promise<AuthResponse> {
     try {
-      const response = await APIClient.post<AuthResponse>('/auth/register-with-otp', payload);
-      
-      if (!response.success || !response.data) {
-        throw new Error(response.error || 'Registration failed');
+      // В реальном приложении здесь будет API запрос
+      if (__DEV__) {
+        // Mock для разработки
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Используем централизованные мок-данные
+        const mockUser = mockData.createMockUser({
+          email,
+          authMethod,
+          role: UserRole.CLIENT
+        });
+
+        // Генерируем JWT токены
+        const tokens = JWTService.generateTokens({
+          userId: mockUser.id,
+          email: mockUser.email,
+          role: mockUser.role,
+          phone: mockUser.phone,
+        });
+
+        console.log(`🧪 Мок вход ${authMethod ? `через ${authMethod}` : 'с email'}:`, {
+          email,
+          method: authMethod || 'email'
+        });
+
+        return {
+          success: true,
+          user: mockUser,
+          tokens
+        };
+      } else {
+        // Реальный API запрос
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Login failed');
+        }
+
+        const data = await response.json();
+        return {
+          success: true,
+          user: data.user,
+          tokens: data.tokens
+        };
       }
-
-      // Сохраняем токены
-      await JWTService.saveTokens(response.data.tokens);
-
-      return response.data;
     } catch (error) {
-      console.error('API Registration error:', error);
-      throw error;
+      console.error('Login error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Login failed'
+      };
     }
   }
 
   /**
    * Регистрация пользователя
    */
-  static async register(payload: RegisterPayload): Promise<AuthResponse> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockRegister(payload);
-    }
-
+  static async register(userData: Partial<User>, password: string): Promise<AuthResponse> {
     try {
-      const response = await APIClient.post<AuthResponse>('/auth/register', payload);
-      
-      if (!response.success || !response.data) {
-        throw new Error(response.error || 'Registration failed');
+      // В реальном приложении здесь будет API запрос
+      if (__DEV__) {
+        // Mock для разработки
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const newUser = mockData.createMockUser({
+          ...userData,
+          email: userData.email || 'user@example.com',
+          role: userData.role || UserRole.CLIENT
+        });
+
+        // Генерируем JWT токены
+        const tokens = JWTService.generateTokens({
+          userId: newUser.id,
+          email: newUser.email,
+          role: newUser.role,
+          phone: newUser.phone,
+        });
+
+        return {
+          success: true,
+          user: newUser,
+          tokens
+        };
+      } else {
+        // Реальный API запрос
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...userData, password }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Registration failed');
+        }
+
+        const data = await response.json();
+        return {
+          success: true,
+          user: data.user,
+          tokens: data.tokens
+        };
       }
-
-      // Сохраняем токены
-      await JWTService.saveTokens(response.data.tokens);
-
-      return response.data;
     } catch (error) {
-      console.error('API Registration error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Вход в систему
-   */
-  static async login(payload: LoginPayload | { email: string; authMethod: string }): Promise<AuthResponse> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockLogin(payload as LoginPayload);
-    }
-
-    try {
-      const response = await APIClient.post<AuthResponse>('/auth/login', payload);
-      
-      if (!response.success || !response.data) {
-        throw new Error(response.error || 'Login failed');
-      }
-
-      // Сохраняем токены
-      await JWTService.saveTokens(response.data.tokens);
-
-      return response.data;
-    } catch (error) {
-      console.error('API Login error:', error);
-      throw error;
+      console.error('Registration error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Registration failed'
+      };
     }
   }
 
   /**
    * Выход из системы
    */
-  static async logout(): Promise<void> {
-    if (__DEV__) {
-      // Мок для разработки
-      console.log('🚪 Мок выход из системы');
-      await JWTService.clearTokens();
-      return;
-    }
-
+  static async logout(): Promise<AuthResponse> {
     try {
-      await APIClient.post('/auth/logout');
-    } catch (error) {
-      console.error('API Logout error:', error);
-    } finally {
-      // Всегда очищаем токены локально
+      // Очищаем токены
       await JWTService.clearTokens();
+      
+      return {
+        success: true,
+        message: 'Logged out successfully'
+      };
+    } catch (error) {
+      console.error('Logout error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Logout failed'
+      };
     }
   }
 
   /**
    * Обновление токена
    */
-  static async refreshToken(): Promise<boolean> {
+  static async refreshToken(): Promise<AuthResponse> {
     try {
-      const newToken = await JWTService.refreshAccessToken();
-      return !!newToken;
+      const refreshed = await JWTService.refreshToken();
+      
+      if (refreshed) {
+        return {
+          success: true,
+          message: 'Token refreshed successfully'
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Token refresh failed'
+        };
+      }
     } catch (error) {
       console.error('Token refresh error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Проверка валидности токена
-   */
-  static async validateToken(): Promise<boolean> {
-    try {
-      const response = await APIClient.get('/auth/validate');
-      return response.success;
-    } catch (error) {
-      console.error('Token validation error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Изменение пароля
-   */
-  static async changePassword(payload: {
-    currentPassword: string;
-    newPassword: string;
-  }): Promise<boolean> {
-    try {
-      const response = await APIClient.post('/auth/change-password', payload);
-      return response.success;
-    } catch (error) {
-      console.error('Change password error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Сброс пароля
-   */
-  static async resetPassword(payload: {
-    email: string;
-  }): Promise<boolean> {
-    try {
-      const response = await APIClient.post('/auth/reset-password', payload);
-      return response.success;
-    } catch (error) {
-      console.error('Reset password error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Подтверждение сброса пароля
-   */
-  static async confirmResetPassword(payload: {
-    token: string;
-    newPassword: string;
-  }): Promise<boolean> {
-    try {
-      const response = await APIClient.post('/auth/confirm-reset-password', payload);
-      return response.success;
-    } catch (error) {
-      console.error('Confirm reset password error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Мок регистрации для разработки
-   */
-  private static async mockRegisterWithOTP(payload: VerifyOTPPayload): Promise<AuthResponse> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('🧪 Мок регистрация после OTP:', {
-          phone: payload.phoneNumber,
-          userData: payload.userData,
-        });
-
-        const baseUser = {
-          id: `user_${Date.now()}`,
-          email: payload.userData.email || '',
-          phone: payload.phoneNumber,
-          createdAt: new Date().toISOString(),
-          rating: 0.0,
-        };
-
-        let user: Driver | Client;
-        if (payload.userData.role === 'driver') {
-          user = {
-            ...baseUser,
-            name: payload.userData.first_name || '',
-            surname: payload.userData.last_name || '',
-            address: payload.userData.address || '',
-            role: UserRole.DRIVER,
-            avatar: null,
-            vehicle: {
-              make: payload.userData.vehicle_brand || 'Toyota',
-              model: payload.userData.vehicle_model || 'Camry',
-              year: payload.userData.vehicle_year || 2020,
-              color: payload.userData.carColor || 'White',
-              licensePlate: payload.userData.carPlate || 'ABC123',
-            },
-            isAvailable: false,
-            currentLocation: undefined,
-          } as Driver;
-        } else {
-          user = {
-            ...baseUser,
-            name: payload.userData.name || '',
-            surname: payload.userData.surname || '',
-            address: payload.userData.address || '',
-            role: UserRole.CLIENT,
-            avatar: null,
-          } as Client;
-        }
-
-        // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
-          userId: user.id,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-        });
-
-        resolve({
-          user,
-          tokens,
-        });
-      }, 1000);
-    });
-  }
-
-  /**
-   * Мок регистрации для разработки
-   */
-  private static async mockRegister(payload: RegisterPayload): Promise<AuthResponse> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const user = {
-          ...payload,
-          id: Date.now().toString(),
-          createdAt: new Date().toISOString(),
-        };
-
-        // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
-          userId: user.id,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-        });
-
-        resolve({
-          user: user as Driver | Client,
-          tokens,
-        });
-      }, 1000);
-    });
-  }
-
-  /**
-   * Мок входа для разработки
-   */
-  private static async mockLogin(payload: LoginPayload | { email: string; authMethod: string }): Promise<AuthResponse> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Проверяем тип payload
-        const isSocialAuth = 'authMethod' in payload;
-        
-        if (payload.email && (isSocialAuth || payload.password)) {
-          // Определяем имя пользователя в зависимости от метода аутентификации
-          let userName = 'Иван';
-          let userSurname = 'Иванов';
-          let userAvatar = 'https://randomuser.me/api/portraits/men/1.jpg';
-          
-          if (isSocialAuth) {
-            switch (payload.authMethod) {
-              case 'google_auth':
-                userName = 'Google';
-                userSurname = 'User';
-                userAvatar = 'https://via.placeholder.com/150';
-                break;
-              case 'facebook_auth':
-                userName = 'Facebook';
-                userSurname = 'User';
-                userAvatar = 'https://via.placeholder.com/150';
-                break;
-              case 'apple_auth':
-                userName = 'Apple';
-                userSurname = 'User';
-                userAvatar = null;
-                break;
-            }
-          }
-          
-          const user: Client = {
-            id: isSocialAuth ? `social_${Date.now()}` : '1',
-            name: userName,
-            surname: userSurname,
-            email: payload.email,
-            address: 'Москва, ул. Примерная, 1',
-            role: UserRole.CLIENT,
-            phone: '+7 (999) 123-45-67',
-            avatar: userAvatar,
-            rating: 4.8,
-            createdAt: '2024-01-01',
-          };
-
-          // Генерируем JWT токены
-          const tokens = JWTService.generateTokens({
-            userId: user.id,
-            email: user.email,
-            role: user.role,
-            phone: user.phone,
-          });
-
-          console.log(`🧪 Мок вход ${isSocialAuth ? `через ${payload.authMethod}` : 'с email'}:`, {
-            email: payload.email,
-            method: isSocialAuth ? payload.authMethod : 'email'
-          });
-
-          resolve({
-            user,
-            tokens,
-          });
-        } else {
-          reject(new Error('Неверные данные'));
-        }
-      }, 500);
-    });
-  }
-
-  /**
-   * Проверка существования пользователя по email
-   */
-  static async checkUserExists(email: string): Promise<boolean> {
-    if (__DEV__) {
-      // Мок для разработки
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Для демонстрации: некоторые email считаем существующими
-      const existingEmails = [
-        'user@gmail.com',
-        'user@facebook.com', 
-        'user@icloud.com',
-        'client@fixdrive.com',
-        'test@example.com'
-      ];
-      
-      return existingEmails.includes(email);
-    }
-
-    try {
-      const response = await APIClient.get(`/auth/check-user?email=${encodeURIComponent(email)}`);
-      return response.success && response.data?.exists === true;
-    } catch (error) {
-      console.error('Check user exists error:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Регистрация пользователя через социальную сеть
-   */
-  static async registerWithSocial(socialUser: Record<string, unknown>): Promise<AuthResponse> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockSocialRegister(socialUser);
-    }
-
-    try {
-      const userData = {
-        email: socialUser.email,
-        name: socialUser.name,
-        phone: '', // Социальные сети не предоставляют телефон
-        role: 'client',
-        socialProvider: socialUser.provider,
-        socialId: socialUser.id,
-        photo: socialUser.photo,
-        isEmailVerified: true,
-        password: 'SecurePass123!' // Генерируем сильный пароль
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Token refresh failed'
       };
-
-      const response = await APIClient.post<AuthResponse>('/auth/register-social', {
-        userData,
-        socialProvider: socialUser.provider,
-        socialToken: socialUser.accessToken
-      });
-      
-      if (!response.success || !response.data) {
-        throw new Error(response.error || 'Social registration failed');
-      }
-
-      // Сохраняем токены
-      await JWTService.saveTokens(response.data.tokens);
-
-      return response.data;
-    } catch (error) {
-      console.error('Social registration error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Мок социальной регистрации для разработки
-   */
-  private static async mockSocialRegister(socialUser: Record<string, unknown>): Promise<AuthResponse> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('🧪 Мок социальная регистрация:', {
-          provider: socialUser.provider,
-          email: socialUser.email,
-          name: socialUser.name
-        });
-
-        const user: Client = {
-          id: `social_${Date.now()}`,
-          name: socialUser.name,
-          surname: '',
-          email: socialUser.email,
-          address: 'Москва, ул. Примерная, 1',
-          role: UserRole.CLIENT,
-          phone: '',
-          avatar: socialUser.photo,
-          rating: 0,
-          createdAt: new Date().toISOString(),
-        };
-
-        // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
-          userId: user.id,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-        });
-
-        resolve({
-          user,
-          tokens,
-        });
-      }, 1000);
-    });
-  }
-
-  /**
-   * Проверка здоровья API
-   */
-  static async checkAPIHealth(): Promise<boolean> {
-    try {
-      return await APIClient.healthCheck();
-    } catch (error) {
-      console.error('API health check failed:', error);
-      return false;
     }
   }
 }
-
-export default AuthService;

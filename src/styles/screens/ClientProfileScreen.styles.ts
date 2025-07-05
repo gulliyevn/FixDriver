@@ -235,7 +235,7 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  sectionTitle: {
+  sectionHeaderTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#000000',

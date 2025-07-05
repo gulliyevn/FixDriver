@@ -13,11 +13,7 @@ export type AuthStackParamList = {
   ClientRegister: undefined;
   DriverRegister: undefined;
   ForgotPassword: undefined;
-  OTPVerification: {
-    phoneNumber: string;
-    userRole: 'client' | 'driver';
-    userData?: any;
-  };
+  OTPVerification: { email: string; purpose: 'login' | 'register' };
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -25,7 +21,6 @@ const Stack = createStackNavigator<AuthStackParamList>();
 const AuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      id={undefined}
       initialRouteName="RoleSelect"
       screenOptions={{
         headerShown: false,

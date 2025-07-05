@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, UserRole } from '../types/user';
 import JWTService from '../services/JWTService';
@@ -34,14 +34,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useEffect(() => {
-    initializeAuth();
-  }, []);
-
   /**
    * Инициализация аутентификации при запуске приложения
    */
-  const initializeAuth = async () => {
+  const initializeAuth = useCallback(async () => {
     try {
       setIsLoading(true);
       
@@ -79,12 +75,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   /**
    * Вход в систему
    */
-  const login = async (email: string, password: string, authMethod?: string): Promise<boolean> => {
+  const login = async (email: string, password: string, authMethod?: 'google' | 'facebook' | 'apple'): Promise<boolean> => {
     try {
       setIsLoading(true);
       
@@ -224,7 +224,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Выход из системы
    */
-  const logout = async (): Promise<void> => {
+  const logout = useCallback(async () => {
     try {
       setIsLoading(true);
       
@@ -258,7 +258,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [refreshAuth]);
 
   /**
    * Обновление аутентификации

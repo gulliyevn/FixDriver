@@ -39,15 +39,22 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
     setIsLoading(true);
     
     // Симуляция отправки email
-    setTimeout(() => {
+    try {
+      setTimeout(() => {
+        setIsLoading(false);
+        setEmailSent(true);
+        Alert.alert(
+          'Email отправлен',
+          'Мы отправили инструкции по восстановлению пароля на ваш email адрес.',
+          [{ text: 'OK' }]
+        );
+      }, 2000);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      Alert.alert('Error', errorMessage);
+    } finally {
       setIsLoading(false);
-      setEmailSent(true);
-      Alert.alert(
-        'Email отправлен',
-        'Мы отправили инструкции по восстановлению пароля на ваш email адрес.',
-        [{ text: 'OK' }]
-      );
-    }, 2000);
+    }
   };
 
   const handleBackToLogin = () => {

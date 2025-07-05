@@ -73,7 +73,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
     });
 
     return unsubscribe;
-  }, [visible]);
+  }, [visible, fadeAnim, slideAnim]);
 
   if (!visible) {
     return null;
@@ -108,8 +108,6 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
         return '#6B7280';
     }
   };
-
-
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 

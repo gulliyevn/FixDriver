@@ -1,19 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { supportService, SupportTicket, SupportMessage } from '../../services/SupportService';
+import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
+
+interface Message {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+}
 
 interface SupportChatScreenProps {
   navigation: any;
@@ -27,71 +33,96 @@ interface SupportChatScreenProps {
 
 const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route }) => {
   const { isDark } = useTheme();
-  const [currentTicket, setCurrentTicket] = useState<SupportTicket | null>(null);
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const scrollViewRef = useRef<ScrollView>(null);
+  const flatListRef = useRef<FlatList>(null);
+
+  const quickQuestions = [
+    'Как отменить поездку?',
+    'Проблемы с оплатой',
+    'Водитель не приехал',
+    'Как изменить маршрут?',
+    'Проблемы с приложением',
+  ];
 
   useEffect(() => {
-    // Создаем новый тикет или получаем существующий
-    let ticket = supportService.getCurrentTicket();
-    
-    if (!ticket) {
-      const initialMessage = route?.params?.initialMessage || 
-                           route?.params?.quickQuestion || 
-                           'Здравствуйте! У меня есть вопрос.';
-      
-      ticket = supportService.createSupportTicket('Поддержка пользователя', initialMessage);
+    // Добавляем приветственное сообщение
+    const welcomeMessage: Message = {
+      id: '1',
+      text: 'Здравствуйте! Чем могу помочь?',
+      isUser: false,
+      timestamp: new Date(),
+    };
+    setMessages([welcomeMessage]);
+
+    // Если есть начальное сообщение, добавляем его
+    if (route?.params?.initialMessage) {
+      const userMessage: Message = {
+        id: '2',
+        text: route.params.initialMessage,
+        isUser: true,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, userMessage]);
     }
-    
-    setCurrentTicket(ticket);
 
-    // Подписываемся на обновления тикета
-    const interval = setInterval(() => {
-      const updatedTicket = supportService.getCurrentTicket();
-      if (updatedTicket && updatedTicket.messages.length !== currentTicket?.messages.length) {
-        setCurrentTicket(updatedTicket);
-        setIsTyping(false);
-        // Прокручиваем к последнему сообщению
-        setTimeout(() => {
-          scrollViewRef.current?.scrollToEnd({ animated: true });
-        }, 100);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+    // Если есть быстрый вопрос, выбираем его
+    if (route?.params?.quickQuestion) {
+      selectQuickQuestion(route.params.quickQuestion);
+    }
+  }, [route?.params]);
 
   const sendMessage = () => {
-    if (!message.trim() || !currentTicket) return;
+    if (!inputText.trim()) return;
 
-    supportService.addUserMessage(currentTicket.id, message.trim());
-    
-    // Симулируем ответ поддержки
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: inputText.trim(),
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputText('');
+
+    // Имитация ответа поддержки
     setIsTyping(true);
-    supportService.simulateSupportResponse(currentTicket.id, message.trim());
-    
-    setMessage('');
-    
-    // Обновляем тикет
-    const updatedTicket = supportService.getCurrentTicket();
-    setCurrentTicket(updatedTicket);
-
-    // Прокручиваем к последнему сообщению
     setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
-    }, 100);
+      const supportMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'Спасибо за ваше сообщение. Наш специалист скоро свяжется с вами.',
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, supportMessage]);
+      setIsTyping(false);
+    }, 2000);
   };
 
   const selectQuickQuestion = (question: string) => {
-    if (!currentTicket) return;
-    
-    supportService.addUserMessage(currentTicket.id, question);
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: question,
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+
+    // Имитация ответа поддержки
     setIsTyping(true);
-    supportService.simulateSupportResponse(currentTicket.id, question);
-    
-    const updatedTicket = supportService.getCurrentTicket();
-    setCurrentTicket(updatedTicket);
+    setTimeout(() => {
+      const supportMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: `По вопросу "${question}" - давайте разберем это подробнее. Можете описать ситуацию детальнее?`,
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, supportMessage]);
+      setIsTyping(false);
+    }, 2000);
   };
 
   const formatTime = (date: Date) => {
@@ -103,462 +134,211 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
 
   const handleClose = () => {
     Alert.alert(
-      'Завершить чат?',
-      'Вы уверены, что хотите завершить чат с поддержкой?',
+      'Закрыть чат',
+      'Вы уверены, что хотите закрыть чат?',
       [
         { text: 'Отмена', style: 'cancel' },
-        { 
-          text: 'Завершить', 
-          style: 'destructive',
-          onPress: () => {
-            if (currentTicket) {
-              supportService.closeTicket(currentTicket.id);
-            }
-            navigation.goBack();
-          }
-        }
+        { text: 'Закрыть', onPress: () => navigation.goBack(), style: 'destructive' }
       ]
     );
   };
 
-  if (!currentTicket) {
-    return (
-      <SafeAreaView style={[styles.container, isDark && styles.containerDark]}>
-        <View style={styles.loadingContainer}>
-          <Ionicons name="chatbubbles-outline" size={48} color={isDark ? '#9CA3AF' : '#6B7280'} />
-          <Text style={[styles.loadingText, isDark && styles.loadingTextDark]}>
-            Подключение к поддержке...
+  const renderMessage = ({ item }: { item: Message }) => (
+    <View style={[
+      SupportChatScreenStyles.messageContainer,
+      item.isUser ? SupportChatScreenStyles.userMessage : SupportChatScreenStyles.supportMessage
+    ]}>
+      <View style={[
+        SupportChatScreenStyles.messageBubble,
+        item.isUser 
+          ? [SupportChatScreenStyles.userBubble, isDark && SupportChatScreenStyles.userBubbleDark]
+          : [SupportChatScreenStyles.supportBubble, isDark && SupportChatScreenStyles.supportBubbleDark]
+      ]}>
+        {!item.isUser && (
+          <View style={SupportChatScreenStyles.supportHeader}>
+            <Ionicons name="person-circle" size={16} color="#1E3A8A" />
+            <Text style={SupportChatScreenStyles.supportName}>Поддержка</Text>
+          </View>
+        )}
+        <Text style={[
+          SupportChatScreenStyles.messageText,
+          item.isUser 
+            ? SupportChatScreenStyles.userMessageText
+            : [SupportChatScreenStyles.supportMessageText, isDark && SupportChatScreenStyles.supportMessageTextDark]
+        ]}>
+          {item.text}
+        </Text>
+        <Text style={[
+          SupportChatScreenStyles.messageTime,
+          item.isUser 
+            ? SupportChatScreenStyles.userMessageTime
+            : [SupportChatScreenStyles.supportMessageTime, isDark && SupportChatScreenStyles.supportMessageTimeDark]
+        ]}>
+          {formatTime(item.timestamp)}
+        </Text>
+      </View>
+    </View>
+  );
+
+  const renderQuickQuestions = () => (
+    <View style={SupportChatScreenStyles.quickQuestionsContainer}>
+      <Text style={[
+        SupportChatScreenStyles.quickQuestionsTitle,
+        isDark && SupportChatScreenStyles.quickQuestionsTitleDark
+      ]}>
+        Быстрые вопросы:
+      </Text>
+      {quickQuestions.map((question, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[
+            SupportChatScreenStyles.quickQuestionButton,
+            isDark && SupportChatScreenStyles.quickQuestionButtonDark
+          ]}
+          onPress={() => selectQuickQuestion(question)}
+        >
+          <Text style={[
+            SupportChatScreenStyles.quickQuestionText,
+            isDark && SupportChatScreenStyles.quickQuestionTextDark
+          ]}>
+            {question}
           </Text>
-        </View>
-      </SafeAreaView>
+          <Ionicons 
+            name="chevron-forward" 
+            size={20} 
+            color={isDark ? '#9CA3AF' : '#6B7280'} 
+          />
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+
+  if (isLoading) {
+    return (
+      <View style={[
+        SupportChatScreenStyles.loadingContainer,
+        isDark && SupportChatScreenStyles.containerDark
+      ]}>
+        <ActivityIndicator size="large" color="#1E3A8A" />
+        <Text style={[
+          SupportChatScreenStyles.loadingText,
+          isDark && SupportChatScreenStyles.loadingTextDark
+        ]}>
+          Загрузка чата...
+        </Text>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, isDark && styles.containerDark]}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-        {/* Header */}
-        <View style={[styles.header, isDark && styles.headerDark]}>
-          <TouchableOpacity 
-            style={styles.backButton} 
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons 
-              name="arrow-back" 
-              size={24} 
-              color={isDark ? '#F9FAFB' : '#111827'} 
-            />
-          </TouchableOpacity>
-          
-          <View style={styles.headerInfo}>
-            <Text style={[styles.headerTitle, isDark && styles.headerTitleDark]}>
-              Поддержка FixDrive
-            </Text>
-            <View style={styles.statusContainer}>
-              <View style={styles.onlineIndicator} />
-              <Text style={[styles.statusText, isDark && styles.statusTextDark]}>
-                Онлайн • Отвечаем быстро
-              </Text>
-            </View>
-          </View>
-
-          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-            <Ionicons 
-              name="close" 
-              size={24} 
-              color={isDark ? '#9CA3AF' : '#6B7280'} 
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Messages */}
-        <ScrollView 
-          ref={scrollViewRef}
-          style={styles.messagesContainer}
-          contentContainerStyle={styles.messagesContent}
-          showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView
+      style={[
+        SupportChatScreenStyles.container,
+        isDark && SupportChatScreenStyles.containerDark
+      ]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      {/* Header */}
+      <View style={[
+        SupportChatScreenStyles.header,
+        isDark && SupportChatScreenStyles.headerDark
+      ]}>
+        <TouchableOpacity 
+          style={SupportChatScreenStyles.backButton}
+          onPress={() => navigation.goBack()}
         >
-          {currentTicket.messages.map((msg, index) => (
-            <View
-              key={msg.id}
-              style={[
-                styles.messageContainer,
-                msg.sender === 'user' ? styles.userMessage : styles.supportMessage,
-              ]}
-            >
-              <View
-                style={[
-                  styles.messageBubble,
-                  msg.sender === 'user' 
-                    ? [styles.userBubble, isDark && styles.userBubbleDark]
-                    : [styles.supportBubble, isDark && styles.supportBubbleDark],
-                ]}
-              >
-                {msg.sender === 'support' && (
-                  <View style={styles.supportHeader}>
-                    <Ionicons name="headset" size={16} color="#1E3A8A" />
-                    <Text style={styles.supportName}>Поддержка FixDrive</Text>
-                  </View>
-                )}
-                
-                <Text
-                  style={[
-                    styles.messageText,
-                    msg.sender === 'user' 
-                      ? styles.userMessageText 
-                      : [styles.supportMessageText, isDark && styles.supportMessageTextDark],
-                  ]}
-                >
-                  {msg.text}
-                </Text>
-                
-                <Text
-                  style={[
-                    styles.messageTime,
-                    msg.sender === 'user' 
-                      ? styles.userMessageTime 
-                      : [styles.supportMessageTime, isDark && styles.supportMessageTimeDark],
-                  ]}
-                >
-                  {formatTime(msg.timestamp)}
-                </Text>
-              </View>
-            </View>
-          ))}
-
-          {/* Typing Indicator */}
-          {isTyping && (
-            <View style={[styles.messageContainer, styles.supportMessage]}>
-              <View style={[styles.messageBubble, styles.supportBubble, isDark && styles.supportBubbleDark]}>
-                <View style={styles.typingIndicator}>
-                  <View style={styles.typingDot} />
-                  <View style={styles.typingDot} />
-                  <View style={styles.typingDot} />
-                </View>
-                <Text style={[styles.typingText, isDark && styles.typingTextDark]}>
-                  Поддержка печатает...
-                </Text>
-              </View>
-            </View>
-          )}
-
-          {/* Quick Questions */}
-          {currentTicket.messages.length <= 2 && (
-            <View style={styles.quickQuestionsContainer}>
-              <Text style={[styles.quickQuestionsTitle, isDark && styles.quickQuestionsTitleDark]}>
-                Популярные вопросы:
-              </Text>
-              {supportService.getQuickQuestions().map((question, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[styles.quickQuestionButton, isDark && styles.quickQuestionButtonDark]}
-                  onPress={() => selectQuickQuestion(question)}
-                >
-                  <Text style={[styles.quickQuestionText, isDark && styles.quickQuestionTextDark]}>
-                    {question}
-                  </Text>
-                  <Ionicons name="chevron-forward" size={16} color="#1E3A8A" />
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </ScrollView>
-
-        {/* Input */}
-        <View style={[styles.inputContainer, isDark && styles.inputContainerDark]}>
-          <View style={[styles.inputWrapper, isDark && styles.inputWrapperDark]}>
-            <TextInput
-              style={[styles.textInput, isDark && styles.textInputDark]}
-              placeholder="Напишите сообщение..."
-              placeholderTextColor={isDark ? '#6B7280' : '#9CA3AF'}
-              value={message}
-              onChangeText={setMessage}
-              multiline
-              maxLength={500}
-            />
-            <TouchableOpacity
-              style={[
-                styles.sendButton,
-                message.trim() ? styles.sendButtonActive : styles.sendButtonInactive,
-              ]}
-              onPress={sendMessage}
-              disabled={!message.trim()}
-            >
-              <Ionicons 
-                name="send" 
-                size={20} 
-                color={message.trim() ? '#FFFFFF' : '#9CA3AF'} 
-              />
-            </TouchableOpacity>
+          <Ionicons name="arrow-back" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+        </TouchableOpacity>
+        
+        <View style={SupportChatScreenStyles.headerInfo}>
+          <Text style={[
+            SupportChatScreenStyles.headerTitle,
+            isDark && SupportChatScreenStyles.headerTitleDark
+          ]}>
+            Поддержка
+          </Text>
+          <View style={SupportChatScreenStyles.statusContainer}>
+            <View style={SupportChatScreenStyles.onlineIndicator} />
+            <Text style={[
+              SupportChatScreenStyles.statusText,
+              isDark && SupportChatScreenStyles.statusTextDark
+            ]}>
+              Онлайн
+            </Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        
+        <TouchableOpacity style={SupportChatScreenStyles.closeButton} onPress={handleClose}>
+          <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Messages */}
+      <View style={SupportChatScreenStyles.messagesContainer}>
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={SupportChatScreenStyles.messagesContent}
+          showsVerticalScrollIndicator={false}
+          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          ListFooterComponent={() => (
+            <>
+              {isTyping && (
+                <View style={SupportChatScreenStyles.typingIndicator}>
+                  <View style={SupportChatScreenStyles.typingDot} />
+                  <View style={SupportChatScreenStyles.typingDot} />
+                  <View style={SupportChatScreenStyles.typingDot} />
+                  <Text style={[
+                    SupportChatScreenStyles.typingText,
+                    isDark && SupportChatScreenStyles.typingTextDark
+                  ]}>
+                    Поддержка печатает...
+                  </Text>
+                </View>
+              )}
+              {messages.length === 1 && renderQuickQuestions()}
+            </>
+          )}
+        />
+      </View>
+
+      {/* Input */}
+      <View style={[
+        SupportChatScreenStyles.inputContainer,
+        isDark && SupportChatScreenStyles.inputContainerDark
+      ]}>
+        <TextInput
+          style={[
+            SupportChatScreenStyles.textInput,
+            isDark && SupportChatScreenStyles.textInputDark
+          ]}
+          value={inputText}
+          onChangeText={setInputText}
+          placeholder="Введите сообщение..."
+          placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
+          multiline
+          maxLength={500}
+        />
+        <TouchableOpacity
+          style={[
+            SupportChatScreenStyles.sendButton,
+            isDark && SupportChatScreenStyles.sendButtonDark,
+            !inputText.trim() && SupportChatScreenStyles.sendButtonDisabled
+          ]}
+          onPress={sendMessage}
+          disabled={!inputText.trim()}
+        >
+          <Ionicons 
+            name="send" 
+            size={20} 
+            color="#FFFFFF" 
+          />
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  containerDark: {
-    backgroundColor: '#111827',
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  loadingText: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginTop: 16,
-  },
-  loadingTextDark: {
-    color: '#9CA3AF',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FAFAFA',
-  },
-  headerDark: {
-    borderBottomColor: '#374151',
-    backgroundColor: '#1F2937',
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 8,
-  },
-  headerInfo: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-  },
-  headerTitleDark: {
-    color: '#F9FAFB',
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 2,
-  },
-  onlineIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#10B981',
-    marginRight: 6,
-  },
-  statusText: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  statusTextDark: {
-    color: '#9CA3AF',
-  },
-  closeButton: {
-    padding: 8,
-  },
-  messagesContainer: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  messagesContent: {
-    padding: 16,
-    paddingBottom: 100,
-  },
-  messageContainer: {
-    marginVertical: 4,
-  },
-  userMessage: {
-    alignItems: 'flex-end',
-  },
-  supportMessage: {
-    alignItems: 'flex-start',
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  userBubble: {
-    backgroundColor: '#1E3A8A',
-    borderBottomRightRadius: 6,
-  },
-  userBubbleDark: {
-    backgroundColor: '#3B82F6',
-  },
-  supportBubble: {
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  supportBubbleDark: {
-    backgroundColor: '#374151',
-  },
-  supportHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  supportName: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#1E3A8A',
-    marginLeft: 4,
-  },
-  messageText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  userMessageText: {
-    color: '#FFFFFF',
-  },
-  supportMessageText: {
-    color: '#111827',
-  },
-  supportMessageTextDark: {
-    color: '#F9FAFB',
-  },
-  messageTime: {
-    fontSize: 11,
-    marginTop: 4,
-  },
-  userMessageTime: {
-    color: 'rgba(255, 255, 255, 0.7)',
-  },
-  supportMessageTime: {
-    color: '#6B7280',
-  },
-  supportMessageTimeDark: {
-    color: '#9CA3AF',
-  },
-  typingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  typingDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#6B7280',
-    marginHorizontal: 2,
-  },
-  typingText: {
-    fontSize: 12,
-    color: '#6B7280',
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
-  typingTextDark: {
-    color: '#9CA3AF',
-  },
-  quickQuestionsContainer: {
-    marginTop: 20,
-  },
-  quickQuestionsTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6B7280',
-    marginBottom: 12,
-  },
-  quickQuestionsTitleDark: {
-    color: '#9CA3AF',
-  },
-  quickQuestionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  quickQuestionButtonDark: {
-    backgroundColor: '#374151',
-  },
-  quickQuestionText: {
-    fontSize: 14,
-    color: '#374151',
-    flex: 1,
-  },
-  quickQuestionTextDark: {
-    color: '#D1D5DB',
-  },
-  inputContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
-  },
-  inputContainerDark: {
-    borderTopColor: '#374151',
-    backgroundColor: '#1F2937',
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    backgroundColor: '#F3F4F6',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    minHeight: 48,
-  },
-  inputWrapperDark: {
-    backgroundColor: '#374151',
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#111827',
-    maxHeight: 100,
-    paddingVertical: 8,
-  },
-  textInputDark: {
-    color: '#F9FAFB',
-  },
-  sendButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-  },
-  sendButtonActive: {
-    backgroundColor: '#1E3A8A',
-  },
-  sendButtonInactive: {
-    backgroundColor: '#E5E7EB',
-  },
-});
 
 export default SupportChatScreen; 

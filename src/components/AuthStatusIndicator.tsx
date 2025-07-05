@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
@@ -14,11 +14,11 @@ export default function AuthStatusIndicator({
   showDetails = false,
   onRefresh,
 }: AuthStatusIndicatorProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [tokenStatus, setTokenStatus] = useState<'valid' | 'expired' | 'unknown'>('unknown');
   const [tokenDetails, setTokenDetails] = useState<Record<string, unknown> | null>(null);
 
-  const checkTokenStatus = async () => {
+  const checkTokenStatus = useCallback(async () => {
     if (!isAuthenticated) {
       setTokenStatus('unknown');
       return;
@@ -40,11 +40,11 @@ export default function AuthStatusIndicator({
     } catch {
       setTokenStatus('unknown');
     }
-  };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     checkTokenStatus();
-  }, [isAuthenticated]);
+  }, [checkTokenStatus]);
 
   const handleRefreshToken = async () => {
     try {

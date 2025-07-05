@@ -1,60 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  SafeAreaView,
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
   ScrollView,
-  StatusBar,
+  TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from 'react-native';
-import { useTheme } from '../../context/ThemeContext';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { AuthService } from '../../services/AuthService';
-import { countries } from '../../utils/countries';
-import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
+import { useAuth } from '../../context/AuthContext';
+import { UserRole } from '../../types/user';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
 import InputField from '../../components/InputField';
-import Select from '../../components/Select';
-import PhoneInput from '../../components/PhoneInput';
 import Button from '../../components/Button';
+import PhoneInput from '../../components/PhoneInput';
+import Select from '../../components/Select';
 import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
+import SocialAuthButtons from '../../components/SocialAuthButtons';
+import { Validators } from '../../utils/validators';
+import { COUNTRIES } from '../../utils/countries';
+import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
 
-type NavigationProp = StackNavigationProp<AuthStackParamList, 'ClientRegister'>;
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  country: string;
-  city: string;
-  address: string;
-  birthDate: string;
-  gender: string;
-  emergencyContact: {
-    name: string;
-    phone: string;
-    relationship: string;
-  };
-  preferences: {
-    notifications: boolean;
-    marketing: boolean;
-    terms: boolean;
-  };
-}
+type ClientRegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ClientRegister'>;
 
 const ClientRegisterScreen: React.FC = () => {
-  const { isDark } = useTheme();
-  const navigation = useNavigation<NavigationProp>();
-  
-  const [formData, setFormData] = useState<FormData>({
+  const navigation = useNavigation<ClientRegisterScreenNavigationProp>();
+  const { register } = useAuth();
+
+  // Form state
+  const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
@@ -62,521 +38,307 @@ const ClientRegisterScreen: React.FC = () => {
     password: '',
     confirmPassword: '',
     country: '',
-    city: '',
-    address: '',
-    birthDate: '',
-    gender: '',
-    emergencyContact: {
-      name: '',
-      phone: '',
-      relationship: '',
-    },
-    preferences: {
-      notifications: true,
-      marketing: false,
-      terms: false,
-    },
+    children: [] as Array<{ name: string; age: number; relationship: string }>,
   });
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [loading, setLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const countryOptions = countries.map(country => ({
+  // Options for selects
+  const countryOptions = COUNTRIES.map(country => ({
     label: country.name,
     value: country.code,
   }));
 
-  const genderOptions = [
-    { label: 'Мужской', value: 'male' },
-    { label: 'Женский', value: 'female' },
-    { label: 'Другой', value: 'other' },
-  ];
-
   const relationshipOptions = [
-    { label: 'Супруг/Супруга', value: 'spouse' },
-    { label: 'Родитель', value: 'parent' },
-    { label: 'Ребенок', value: 'child' },
-    { label: 'Друг', value: 'friend' },
-    { label: 'Коллега', value: 'colleague' },
-    { label: 'Другой', value: 'other' },
+    { label: 'Father', value: 'father' },
+    { label: 'Mother', value: 'mother' },
+    { label: 'Guardian', value: 'guardian' },
+    { label: 'Grandparent', value: 'grandparent' },
   ];
 
-  const validateStep = (step: number): boolean => {
-    const newErrors: Partial<FormData> = {};
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
 
-    switch (step) {
-      case 1:
-        if (!formData.firstName.trim()) {
-          newErrors.firstName = 'Введите имя';
-        }
-        if (!formData.lastName.trim()) {
-          newErrors.lastName = 'Введите фамилию';
-        }
-        if (!formData.email.trim()) {
-          newErrors.email = 'Введите email';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = 'Введите корректный email';
-        }
-        if (!formData.phone.trim()) {
-          newErrors.phone = 'Введите номер телефона';
-        }
-        break;
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
 
-      case 2:
-        if (!formData.password) {
-          newErrors.password = 'Введите пароль';
-        } else if (formData.password.length < 8) {
-          newErrors.password = 'Пароль должен содержать минимум 8 символов';
-        }
-        if (!formData.confirmPassword) {
-          newErrors.confirmPassword = 'Подтвердите пароль';
-        } else if (formData.password !== formData.confirmPassword) {
-          newErrors.confirmPassword = 'Пароли не совпадают';
-        }
-        break;
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
 
-      case 3:
-        if (!formData.country) {
-          newErrors.country = 'Выберите страну';
-        }
-        if (!formData.city.trim()) {
-          newErrors.city = 'Введите город';
-        }
-        if (!formData.address.trim()) {
-          newErrors.address = 'Введите адрес';
-        }
-        break;
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    }
 
-      case 4:
-        if (!formData.birthDate) {
-          newErrors.birthDate = 'Выберите дату рождения';
-        }
-        if (!formData.gender) {
-          newErrors.gender = 'Выберите пол';
-        }
-        break;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!Validators.validateEmail(formData.email).isValid) {
+      newErrors.email = 'Please enter a valid email';
+    }
 
-      case 5:
-        if (!formData.emergencyContact.name.trim()) {
-          newErrors.emergencyContact = { ...newErrors.emergencyContact, name: 'Введите имя контакта' };
-        }
-        if (!formData.emergencyContact.phone.trim()) {
-          newErrors.emergencyContact = { ...newErrors.emergencyContact, phone: 'Введите телефон контакта' };
-        }
-        if (!formData.emergencyContact.relationship) {
-          newErrors.emergencyContact = { ...newErrors.emergencyContact, relationship: 'Выберите отношение' };
-        }
-        break;
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!Validators.validatePhone(formData.phone).isValid) {
+      newErrors.phone = 'Please enter a valid phone number';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (!Validators.validatePassword(formData.password).isValid) {
+      newErrors.password = 'Password must be at least 8 characters with uppercase, lowercase, number, and special character';
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password';
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    if (!formData.country) {
+      newErrors.country = 'Please select your country';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      if (currentStep < 5) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        handleRegister();
-      }
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
   const handleRegister = async () => {
-    if (!validateStep(5)) return;
+    if (!validateForm()) {
+      return;
+    }
 
-    setLoading(true);
+    setIsLoading(true);
+
     try {
-      const result = await AuthService.registerClient({
+      const success = await register({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         phone: formData.phone,
-        password: formData.password,
         country: formData.country,
-        city: formData.city,
-        address: formData.address,
-        birthDate: formData.birthDate,
-        gender: formData.gender,
-        emergencyContact: formData.emergencyContact,
-        preferences: formData.preferences,
-      });
+        role: UserRole.CLIENT,
+        children: formData.children,
+      }, formData.password);
 
-      if (result.success) {
+      if (success) {
         Alert.alert(
-          'Успешная регистрация',
-          'Проверьте ваш email для подтверждения аккаунта',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Login'),
-            },
-          ]
+          'Registration Successful',
+          'Your account has been created successfully!',
+          [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
         );
       } else {
-        Alert.alert('Ошибка', result.message || 'Не удалось зарегистрироваться');
+        Alert.alert('Registration Failed', 'Please try again.');
       }
-    } catch (error) {
-      Alert.alert('Ошибка', 'Произошла ошибка при регистрации');
+    } catch (err) {
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const updateFormData = (field: keyof FormData, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const updateEmergencyContact = (field: keyof FormData['emergencyContact'], value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      emergencyContact: {
-        ...prev.emergencyContact,
-        [field]: value,
-      },
-    }));
-  };
-
-  const updatePreferences = (field: keyof FormData['preferences'], value: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        [field]: value,
-      },
-    }));
-  };
-
-  const renderStep1 = () => (
-    <View style={ClientRegisterScreenStyles.stepContainer}>
-      <Text style={[ClientRegisterScreenStyles.stepTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-        Основная информация
-      </Text>
-      
-      <InputField
-        label="Имя"
-        value={formData.firstName}
-        onChangeText={(text) => updateFormData('firstName', text)}
-        error={errors.firstName}
-        placeholder="Введите ваше имя"
-      />
-      
-      <InputField
-        label="Фамилия"
-        value={formData.lastName}
-        onChangeText={(text) => updateFormData('lastName', text)}
-        error={errors.lastName}
-        placeholder="Введите вашу фамилию"
-      />
-      
-      <InputField
-        label="Email"
-        value={formData.email}
-        onChangeText={(text) => updateFormData('email', text)}
-        error={errors.email}
-        placeholder="example@email.com"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      
-      <PhoneInput
-        label="Номер телефона"
-        value={formData.phone}
-        onChangeText={(text) => updateFormData('phone', text)}
-        error={errors.phone}
-        country={formData.country}
-        onCountryChange={(country) => updateFormData('country', country)}
-      />
-    </View>
-  );
-
-  const renderStep2 = () => (
-    <View style={ClientRegisterScreenStyles.stepContainer}>
-      <Text style={[ClientRegisterScreenStyles.stepTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-        Безопасность
-      </Text>
-      
-      <InputField
-        label="Пароль"
-        value={formData.password}
-        onChangeText={(text) => updateFormData('password', text)}
-        error={errors.password}
-        placeholder="Создайте пароль"
-        secureTextEntry={!showPassword}
-        rightIcon={
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons 
-              name={showPassword ? 'eye-off' : 'eye'} 
-              size={20} 
-              color={isDark ? '#9CA3AF' : '#6B7280'} 
-            />
-          </TouchableOpacity>
-        }
-      />
-      
-      <PasswordStrengthIndicator password={formData.password} />
-      
-      <InputField
-        label="Подтвердите пароль"
-        value={formData.confirmPassword}
-        onChangeText={(text) => updateFormData('confirmPassword', text)}
-        error={errors.confirmPassword}
-        placeholder="Повторите пароль"
-        secureTextEntry={!showConfirmPassword}
-        rightIcon={
-          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons 
-              name={showConfirmPassword ? 'eye-off' : 'eye'} 
-              size={20} 
-              color={isDark ? '#9CA3AF' : '#6B7280'} 
-            />
-          </TouchableOpacity>
-        }
-      />
-    </View>
-  );
-
-  const renderStep3 = () => (
-    <View style={ClientRegisterScreenStyles.stepContainer}>
-      <Text style={[ClientRegisterScreenStyles.stepTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-        Адрес
-      </Text>
-      
-      <Select
-        label="Страна"
-        value={formData.country}
-        onValueChange={(value) => updateFormData('country', value)}
-        options={countryOptions}
-        error={errors.country}
-        placeholder="Выберите страну"
-      />
-      
-      <InputField
-        label="Город"
-        value={formData.city}
-        onChangeText={(text) => updateFormData('city', text)}
-        error={errors.city}
-        placeholder="Введите город"
-      />
-      
-      <InputField
-        label="Адрес"
-        value={formData.address}
-        onChangeText={(text) => updateFormData('address', text)}
-        error={errors.address}
-        placeholder="Введите полный адрес"
-        multiline
-        numberOfLines={3}
-      />
-    </View>
-  );
-
-  const renderStep4 = () => (
-    <View style={ClientRegisterScreenStyles.stepContainer}>
-      <Text style={[ClientRegisterScreenStyles.stepTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-        Личная информация
-      </Text>
-      
-      <InputField
-        label="Дата рождения"
-        value={formData.birthDate}
-        onChangeText={(text) => updateFormData('birthDate', text)}
-        error={errors.birthDate}
-        placeholder="ДД.ММ.ГГГГ"
-      />
-      
-      <Select
-        label="Пол"
-        value={formData.gender}
-        onValueChange={(value) => updateFormData('gender', value)}
-        options={genderOptions}
-        error={errors.gender}
-        placeholder="Выберите пол"
-      />
-    </View>
-  );
-
-  const renderStep5 = () => (
-    <View style={ClientRegisterScreenStyles.stepContainer}>
-      <Text style={[ClientRegisterScreenStyles.stepTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-        Экстренный контакт
-      </Text>
-      
-      <InputField
-        label="Имя контакта"
-        value={formData.emergencyContact.name}
-        onChangeText={(text) => updateEmergencyContact('name', text)}
-        error={errors.emergencyContact?.name}
-        placeholder="Введите имя контакта"
-      />
-      
-      <PhoneInput
-        label="Телефон контакта"
-        value={formData.emergencyContact.phone}
-        onChangeText={(text) => updateEmergencyContact('phone', text)}
-        error={errors.emergencyContact?.phone}
-        country={formData.country}
-        onCountryChange={(country) => updateFormData('country', country)}
-      />
-      
-      <Select
-        label="Отношение"
-        value={formData.emergencyContact.relationship}
-        onValueChange={(value) => updateEmergencyContact('relationship', value)}
-        options={relationshipOptions}
-        error={errors.emergencyContact?.relationship}
-        placeholder="Выберите отношение"
-      />
-      
-      <View style={ClientRegisterScreenStyles.preferencesContainer}>
-        <Text style={[ClientRegisterScreenStyles.preferencesTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-          Настройки
-        </Text>
-        
-        <TouchableOpacity
-          style={ClientRegisterScreenStyles.preferenceItem}
-          onPress={() => updatePreferences('notifications', !formData.preferences.notifications)}
-        >
-          <Ionicons
-            name={formData.preferences.notifications ? 'checkbox' : 'square-outline'}
-            size={24}
-            color={isDark ? '#F9FAFB' : '#1F2937'}
-          />
-          <Text style={[ClientRegisterScreenStyles.preferenceText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-            Получать уведомления
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={ClientRegisterScreenStyles.preferenceItem}
-          onPress={() => updatePreferences('marketing', !formData.preferences.marketing)}
-        >
-          <Ionicons
-            name={formData.preferences.marketing ? 'checkbox' : 'square-outline'}
-            size={24}
-            color={isDark ? '#F9FAFB' : '#1F2937'}
-          />
-          <Text style={[ClientRegisterScreenStyles.preferenceText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-            Получать маркетинговые материалы
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={ClientRegisterScreenStyles.preferenceItem}
-          onPress={() => updatePreferences('terms', !formData.preferences.terms)}
-        >
-          <Ionicons
-            name={formData.preferences.terms ? 'checkbox' : 'square-outline'}
-            size={24}
-            color={isDark ? '#F9FAFB' : '#1F2937'}
-          />
-          <Text style={[ClientRegisterScreenStyles.preferenceText, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-            Я согласен с условиями использования
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
-  const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 1:
-        return renderStep1();
-      case 2:
-        return renderStep2();
-      case 3:
-        return renderStep3();
-      case 4:
-        return renderStep4();
-      case 5:
-        return renderStep5();
-      default:
-        return renderStep1();
+  const handleSocialAuth = async (provider: 'google' | 'facebook' | 'apple') => {
+    try {
+      setIsLoading(true);
+      // Handle social authentication
+      console.log(`Social auth with ${provider}`);
+      // Navigate to OTP verification or main app
+    } catch (err) {
+      Alert.alert('Error', `Failed to authenticate with ${provider}`);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const addChild = () => {
+    setFormData(prev => ({
+      ...prev,
+      children: [...prev.children, { name: '', age: 0, relationship: '' }],
+    }));
+  };
+
+  const removeChild = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      children: prev.children.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateChild = (index: number, field: string, value: string | number) => {
+    setFormData(prev => ({
+      ...prev,
+      children: prev.children.map((child, i) =>
+        i === index ? { ...child, [field]: value } : child
+      ),
+    }));
   };
 
   return (
-    <SafeAreaView style={[ClientRegisterScreenStyles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      
-      {/* Header */}
-      <View style={[ClientRegisterScreenStyles.header, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}>
-        <TouchableOpacity
-          style={ClientRegisterScreenStyles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-        </TouchableOpacity>
-        
-        <Text style={[ClientRegisterScreenStyles.title, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-          Регистрация клиента
-        </Text>
-        
-        <View style={ClientRegisterScreenStyles.placeholder} />
-      </View>
-
-      {/* Progress Bar */}
-      <View style={ClientRegisterScreenStyles.progressContainer}>
-        <View style={ClientRegisterScreenStyles.progressBar}>
-          <View 
-            style={[
-              ClientRegisterScreenStyles.progressFill, 
-              { width: `${(currentStep / 5) * 100}%` }
-            ]} 
-          />
-        </View>
-        <Text style={[ClientRegisterScreenStyles.progressText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-          Шаг {currentStep} из 5
-        </Text>
-      </View>
-
-      {/* Content */}
-      <KeyboardAvoidingView 
-        style={ClientRegisterScreenStyles.content}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <KeyboardAvoidingView
+      style={ClientRegisterScreenStyles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        style={ClientRegisterScreenStyles.scrollView}
+        contentContainerStyle={ClientRegisterScreenStyles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView 
-          style={ClientRegisterScreenStyles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={ClientRegisterScreenStyles.scrollContent}
-        >
-          {renderCurrentStep()}
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <View style={ClientRegisterScreenStyles.header}>
+          <Text style={ClientRegisterScreenStyles.title}>Create Account</Text>
+          <Text style={ClientRegisterScreenStyles.subtitle}>Join FixDrive as a client</Text>
+        </View>
 
-      {/* Footer */}
-      <View style={[ClientRegisterScreenStyles.footer, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}>
-        {currentStep > 1 && (
+        <View style={ClientRegisterScreenStyles.form}>
+          {/* Personal Information */}
+          <View style={ClientRegisterScreenStyles.section}>
+            <Text style={ClientRegisterScreenStyles.sectionTitle}>Personal Information</Text>
+            
+            <View style={ClientRegisterScreenStyles.row}>
+              <InputField
+                label="First Name"
+                value={formData.firstName}
+                onChangeText={(value) => handleInputChange('firstName', value)}
+                error={errors.firstName}
+                style={ClientRegisterScreenStyles.halfWidth}
+              />
+              <InputField
+                label="Last Name"
+                value={formData.lastName}
+                onChangeText={(value) => handleInputChange('lastName', value)}
+                error={errors.lastName}
+                style={ClientRegisterScreenStyles.halfWidth}
+              />
+            </View>
+
+            <InputField
+              label="Email"
+              value={formData.email}
+              onChangeText={(value) => handleInputChange('email', value)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email}
+            />
+
+            <PhoneInput
+              label="Phone Number"
+              value={formData.phone}
+              onChangeText={(value) => handleInputChange('phone', value)}
+              error={errors.phone}
+            />
+
+            <Select
+              label="Country"
+              value={formData.country}
+              onSelect={(value) => handleInputChange('country', value)}
+              options={countryOptions}
+              error={errors.country}
+            />
+          </View>
+
+          {/* Security */}
+          <View style={ClientRegisterScreenStyles.section}>
+            <Text style={ClientRegisterScreenStyles.sectionTitle}>Security</Text>
+            
+            <InputField
+              label="Password"
+              value={formData.password}
+              onChangeText={(value) => handleInputChange('password', value)}
+              secureTextEntry={!showPassword}
+              error={errors.password}
+              rightIcon={showPassword ? 'eye-off' : 'eye'}
+              onRightIconPress={() => setShowPassword(!showPassword)}
+            />
+
+            <PasswordStrengthIndicator value={formData.password} />
+
+            <InputField
+              label="Confirm Password"
+              value={formData.confirmPassword}
+              onChangeText={(value) => handleInputChange('confirmPassword', value)}
+              secureTextEntry={!showConfirmPassword}
+              error={errors.confirmPassword}
+              rightIcon={showConfirmPassword ? 'eye-off' : 'eye'}
+              onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            />
+          </View>
+
+          {/* Children Information */}
+          <View style={ClientRegisterScreenStyles.section}>
+            <View style={ClientRegisterScreenStyles.sectionHeader}>
+              <Text style={ClientRegisterScreenStyles.sectionTitle}>Children (Optional)</Text>
+              <TouchableOpacity onPress={addChild} style={ClientRegisterScreenStyles.addButton}>
+                <Text style={ClientRegisterScreenStyles.addButtonText}>+ Add Child</Text>
+              </TouchableOpacity>
+            </View>
+
+            {formData.children.map((child, index) => (
+              <View key={index} style={ClientRegisterScreenStyles.childCard}>
+                <View style={ClientRegisterScreenStyles.childHeader}>
+                  <Text style={ClientRegisterScreenStyles.childTitle}>Child {index + 1}</Text>
+                  <TouchableOpacity
+                    onPress={() => removeChild(index)}
+                    style={ClientRegisterScreenStyles.removeButton}
+                  >
+                    <Text style={ClientRegisterScreenStyles.removeButtonText}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <InputField
+                  label="Name"
+                  value={child.name}
+                  onChangeText={(value) => updateChild(index, 'name', value)}
+                  style={ClientRegisterScreenStyles.halfWidth}
+                />
+
+                <InputField
+                  label="Age"
+                  value={child.age.toString()}
+                  onChangeText={(value) => updateChild(index, 'age', parseInt(value) || 0)}
+                  keyboardType="numeric"
+                  style={ClientRegisterScreenStyles.halfWidth}
+                />
+
+                <Select
+                  label="Relationship"
+                  value={child.relationship}
+                  onSelect={(value) => updateChild(index, 'relationship', value)}
+                  options={relationshipOptions}
+                />
+              </View>
+            ))}
+          </View>
+
+          {/* Social Authentication */}
+          <View style={ClientRegisterScreenStyles.section}>
+            <Text style={ClientRegisterScreenStyles.sectionTitle}>Or continue with</Text>
+            <SocialAuthButtons onPress={handleSocialAuth} />
+          </View>
+
+          {/* Register Button */}
           <Button
-            title="Назад"
-            onPress={handleBack}
-            variant="secondary"
-            style={ClientRegisterScreenStyles.backButtonFooter}
+            title="Create Account"
+            onPress={handleRegister}
+            loading={isLoading}
+            style={ClientRegisterScreenStyles.registerButton}
           />
-        )}
-        
-        <Button
-          title={currentStep === 5 ? 'Зарегистрироваться' : 'Далее'}
-          onPress={handleNext}
-          loading={loading}
-          disabled={loading}
-          style={ClientRegisterScreenStyles.nextButton}
-        />
-      </View>
-    </SafeAreaView>
+
+          {/* Login Link */}
+          <View style={ClientRegisterScreenStyles.loginContainer}>
+            <Text style={ClientRegisterScreenStyles.loginText}>Already have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={ClientRegisterScreenStyles.loginLink}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
