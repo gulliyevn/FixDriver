@@ -1,72 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import JWTService from '../services/JWTService';
+import { AuthStatusIndicatorStyles } from '../styles/components/AuthStatusIndicator.styles';
 
 interface AuthStatusIndicatorProps {
   showDetails?: boolean;
   onRefresh?: () => void;
 }
 
-const AuthStatusIndicator: React.FC<AuthStatusIndicatorProps> = ({ 
-  showDetails = false, 
-  onRefresh 
-}) => {
-  const { user, isAuthenticated, refreshAuth } = useAuth();
-  const { isDark } = useTheme();
+export default function AuthStatusIndicator({
+  showDetails = false,
+  onRefresh,
+}: AuthStatusIndicatorProps) {
+  const { isAuthenticated } = useAuth();
   const [tokenStatus, setTokenStatus] = useState<'valid' | 'expired' | 'unknown'>('unknown');
-  const [lastCheck, setLastCheck] = useState<Date>(new Date());
-
-  useEffect(() => {
-    checkTokenStatus();
-    // Проверяем статус токена каждые 5 минут
-    const interval = setInterval(checkTokenStatus, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const [tokenDetails, setTokenDetails] = useState<Record<string, unknown> | null>(null);
 
   const checkTokenStatus = async () => {
+    if (!isAuthenticated) {
+      setTokenStatus('unknown');
+      return;
+    }
+
     try {
       const token = await JWTService.getAccessToken();
       if (token) {
         const isExpired = JWTService.isTokenExpired(token);
         setTokenStatus(isExpired ? 'expired' : 'valid');
+        
+        if (!isExpired) {
+          const decoded = JWTService.verifyToken(token);
+          setTokenDetails(decoded as unknown as Record<string, unknown>);
+        }
       } else {
         setTokenStatus('unknown');
       }
-      setLastCheck(new Date());
-    } catch (error) {
-      console.error('Error checking token status:', error);
+    } catch {
       setTokenStatus('unknown');
     }
   };
 
+  useEffect(() => {
+    checkTokenStatus();
+  }, [isAuthenticated]);
+
   const handleRefreshToken = async () => {
     try {
-      const success = await refreshAuth();
+      const success = await JWTService.refreshAccessToken();
       if (success) {
-        Alert.alert('✅ Успешно', 'Токен обновлен');
-        checkTokenStatus();
+        await checkTokenStatus();
         onRefresh?.();
-      } else {
-        Alert.alert('⚠️ Внимание', 'Не удалось обновить токен. Попробуйте войти заново.');
       }
-    } catch (error) {
-      Alert.alert('❌ Ошибка', 'Произошла ошибка при обновлении токена');
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (tokenStatus) {
-      case 'valid':
-        return '#10B981'; // green
-      case 'expired':
-        return '#F59E0B'; // amber
-      case 'unknown':
-        return '#6B7280'; // gray
-      default:
-        return '#6B7280';
+    } catch {
+      console.error('Ошибка обновления токена');
     }
   };
 
@@ -77,13 +65,52 @@ const AuthStatusIndicator: React.FC<AuthStatusIndicatorProps> = ({
       case 'expired':
         return 'Токен истек';
       case 'unknown':
-        return 'Статус неизвестен';
+        return 'Проверка токена...';
       default:
-        return 'Неизвестно';
+        return 'Неизвестный статус';
     }
   };
 
-  const getStatusIcon = () => {
+  const getContainerStyle = () => {
+    switch (tokenStatus) {
+      case 'valid':
+        return [AuthStatusIndicatorStyles.container, AuthStatusIndicatorStyles.containerAuthenticated];
+      case 'expired':
+        return [AuthStatusIndicatorStyles.container, AuthStatusIndicatorStyles.containerUnauthenticated];
+      case 'unknown':
+        return [AuthStatusIndicatorStyles.container, AuthStatusIndicatorStyles.containerLoading];
+      default:
+        return AuthStatusIndicatorStyles.container;
+    }
+  };
+
+  const getIconStyle = () => {
+    switch (tokenStatus) {
+      case 'valid':
+        return [AuthStatusIndicatorStyles.icon, AuthStatusIndicatorStyles.iconAuthenticated];
+      case 'expired':
+        return [AuthStatusIndicatorStyles.icon, AuthStatusIndicatorStyles.iconUnauthenticated];
+      case 'unknown':
+        return [AuthStatusIndicatorStyles.icon, AuthStatusIndicatorStyles.iconLoading];
+      default:
+        return AuthStatusIndicatorStyles.icon;
+    }
+  };
+
+  const getTextStyle = () => {
+    switch (tokenStatus) {
+      case 'valid':
+        return [AuthStatusIndicatorStyles.text, AuthStatusIndicatorStyles.textAuthenticated];
+      case 'expired':
+        return [AuthStatusIndicatorStyles.text, AuthStatusIndicatorStyles.textUnauthenticated];
+      case 'unknown':
+        return [AuthStatusIndicatorStyles.text, AuthStatusIndicatorStyles.textLoading];
+      default:
+        return AuthStatusIndicatorStyles.text;
+    }
+  };
+
+  const getIconName = (): string => {
     switch (tokenStatus) {
       case 'valid':
         return 'checkmark-circle';
@@ -97,113 +124,54 @@ const AuthStatusIndicator: React.FC<AuthStatusIndicatorProps> = ({
   };
 
   if (!isAuthenticated) {
-    return null;
+    return (
+      <View style={AuthStatusIndicatorStyles.container}>
+        <Ionicons
+          name="alert-circle"
+          size={20}
+          style={AuthStatusIndicatorStyles.icon}
+        />
+        <Text style={AuthStatusIndicatorStyles.text}>
+          Необходима авторизация
+        </Text>
+      </View>
+    );
   }
 
   return (
-    <View style={[styles.container, isDark && styles.containerDark]}>
-      <View style={styles.statusRow}>
-        <View style={styles.statusInfo}>
-          <Ionicons 
-            name={getStatusIcon() as any} 
-            size={16} 
-            color={getStatusColor()} 
-          />
-          <Text style={[styles.statusText, isDark && styles.statusTextDark]}>
-            {getStatusText()}
-          </Text>
-        </View>
-        
-        {tokenStatus === 'expired' && (
-          <TouchableOpacity 
-            style={styles.refreshButton}
-            onPress={handleRefreshToken}
-          >
-            <Ionicons name="refresh" size={16} color="#3B82F6" />
-            <Text style={styles.refreshText}>Обновить</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+    <View style={getContainerStyle()}>
+      <Ionicons
+        name={getIconName() as keyof typeof Ionicons.glyphMap}
+        size={20}
+        style={getIconStyle()}
+      />
+      <Text style={getTextStyle()}>
+        {getStatusText()}
+      </Text>
 
-      {showDetails && (
-        <View style={styles.detailsContainer}>
-          <Text style={[styles.detailText, isDark && styles.detailTextDark]}>
-            Пользователь: {user?.name} {user?.surname}
+      {tokenStatus === 'expired' && (
+        <TouchableOpacity 
+          style={AuthStatusIndicatorStyles.refreshButton}
+          onPress={handleRefreshToken}
+        >
+          <Ionicons name="refresh" size={16} color={AuthStatusIndicatorStyles.refreshText.color} />
+          <Text style={AuthStatusIndicatorStyles.refreshText}>Обновить</Text>
+        </TouchableOpacity>
+      )}
+
+      {showDetails && tokenDetails && (
+        <View style={AuthStatusIndicatorStyles.detailsContainer}>
+          <Text style={AuthStatusIndicatorStyles.detailText}>
+            User ID: {String(tokenDetails.userId)}
           </Text>
-          <Text style={[styles.detailText, isDark && styles.detailTextDark]}>
-            Email: {user?.email}
+          <Text style={AuthStatusIndicatorStyles.detailText}>
+            Role: {String(tokenDetails.role)}
           </Text>
-          <Text style={[styles.detailText, isDark && styles.detailTextDark]}>
-            Роль: {user?.role === 'client' ? 'Клиент' : 'Водитель'}
-          </Text>
-          <Text style={[styles.detailText, isDark && styles.detailTextDark]}>
-            Последняя проверка: {lastCheck.toLocaleTimeString()}
+          <Text style={AuthStatusIndicatorStyles.detailText}>
+            Expires: {new Date((tokenDetails.exp as number) * 1000).toLocaleString()}
           </Text>
         </View>
       )}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 8,
-    padding: 12,
-    margin: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-  },
-  containerDark: {
-    backgroundColor: '#1F2937',
-    borderColor: '#374151',
-  },
-  statusRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  statusInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  statusText: {
-    fontSize: 14,
-    color: '#374151',
-    fontWeight: '500',
-  },
-  statusTextDark: {
-    color: '#D1D5DB',
-  },
-  refreshButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EFF6FF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    gap: 4,
-  },
-  refreshText: {
-    fontSize: 12,
-    color: '#3B82F6',
-    fontWeight: '500',
-  },
-  detailsContainer: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
-  },
-  detailText: {
-    fontSize: 12,
-    color: '#6B7280',
-    marginBottom: 4,
-  },
-  detailTextDark: {
-    color: '#9CA3AF',
-  },
-});
-
-export default AuthStatusIndicator; 
+} 

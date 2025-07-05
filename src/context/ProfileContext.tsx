@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User, Driver, Client, Child, PaymentMethod } from '../types/user';
+import { User, Client, Child, PaymentMethod } from '../types/user';
 
 interface ProfileContextType {
   profile: User | null;

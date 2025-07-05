@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import TabBar from './TabBar';
 
@@ -33,7 +33,9 @@ const DriverNavigator: React.FC = () => {
         component={MapScreen}
         options={{
           tabBarLabel: 'Карта',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🗺️</Text>,
+          tabBarIcon: () => (
+            <Ionicons name="map-outline" size={24} color="#666" />
+          ),
         }}
       />
       <Tab.Screen 
@@ -41,7 +43,9 @@ const DriverNavigator: React.FC = () => {
         component={OrdersScreen}
         options={{
           tabBarLabel: 'Заказы',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>📋</Text>,
+          tabBarIcon: () => (
+            <Ionicons name="list-outline" size={24} color="#666" />
+          ),
         }}
       />
       <Tab.Screen 
@@ -49,7 +53,9 @@ const DriverNavigator: React.FC = () => {
         component={EarningsScreen}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💰</Text>,
+          tabBarIcon: () => (
+            <Ionicons name="add-circle-outline" size={24} color="#666" />
+          ),
         }}
       />
       <Tab.Screen 
@@ -57,7 +63,9 @@ const DriverNavigator: React.FC = () => {
         component={ChatScreen}
         options={{
           tabBarLabel: 'Чат',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💬</Text>,
+          tabBarIcon: () => (
+            <Ionicons name="chatbubbles-outline" size={24} color="#666" />
+          ),
         }}
       />
       <Tab.Screen 
@@ -65,7 +73,9 @@ const DriverNavigator: React.FC = () => {
         component={DriverProfileScreen}
         options={{
           tabBarLabel: 'Профиль',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>👤</Text>,
+          tabBarIcon: () => (
+            <Ionicons name="person-outline" size={24} color="#666" />
+          ),
         }}
       />
     </Tab.Navigator>

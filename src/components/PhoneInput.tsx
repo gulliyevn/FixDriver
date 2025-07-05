@@ -4,7 +4,6 @@ import {
   Text, 
   TextInput, 
   TouchableOpacity, 
-  StyleSheet, 
   Modal, 
   FlatList,
   ViewStyle,
@@ -12,14 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-
-interface Country {
-  code: string;
-  name: string;
-  flag: string;
-  dialCode: string;
-  format?: string;
-}
+import { PhoneInputStyles } from '../styles/components/PhoneInput.styles';
+import { Country, COUNTRIES } from '../utils/countries';
 
 interface PhoneInputProps {
   value?: string;
@@ -36,37 +29,7 @@ interface PhoneInputProps {
   autoFormat?: boolean;
 }
 
-const COUNTRIES: Country[] = [
-  { code: 'AZ', name: 'Азербайджан', flag: '🇦🇿', dialCode: '+994', format: '(##) ###-##-##' },
-  { code: 'RU', name: 'Россия', flag: '🇷🇺', dialCode: '+7', format: '(###) ###-##-##' },
-  { code: 'TR', name: 'Турция', flag: '🇹🇷', dialCode: '+90', format: '(###) ###-##-##' },
-  { code: 'GE', name: 'Грузия', flag: '🇬🇪', dialCode: '+995', format: '(###) ###-###' },
-  { code: 'KZ', name: 'Казахстан', flag: '🇰🇿', dialCode: '+7', format: '(###) ###-##-##' },
-  { code: 'UZ', name: 'Узбекистан', flag: '🇺🇿', dialCode: '+998', format: '(##) ###-##-##' },
-  { code: 'KG', name: 'Кыргызстан', flag: '🇰🇬', dialCode: '+996', format: '(###) ###-###' },
-  { code: 'TJ', name: 'Таджикистан', flag: '🇹🇯', dialCode: '+992', format: '(##) ###-##-##' },
-  { code: 'TM', name: 'Туркменистан', flag: '🇹🇲', dialCode: '+993', format: '(##) ##-##-##' },
-  { code: 'BY', name: 'Беларусь', flag: '🇧🇾', dialCode: '+375', format: '(##) ###-##-##' },
-  { code: 'UA', name: 'Украина', flag: '🇺🇦', dialCode: '+380', format: '(##) ###-##-##' },
-  { code: 'MD', name: 'Молдова', flag: '🇲🇩', dialCode: '+373', format: '(##) ###-###' },
-  { code: 'US', name: 'США', flag: '🇺🇸', dialCode: '+1', format: '(###) ###-####' },
-  { code: 'CA', name: 'Канада', flag: '🇨🇦', dialCode: '+1', format: '(###) ###-####' },
-  { code: 'GB', name: 'Великобритания', flag: '🇬🇧', dialCode: '+44', format: '#### ######' },
-  { code: 'DE', name: 'Германия', flag: '🇩🇪', dialCode: '+49', format: '### #######' },
-  { code: 'FR', name: 'Франция', flag: '🇫🇷', dialCode: '+33', format: '# ## ## ## ##' },
-  { code: 'IT', name: 'Италия', flag: '🇮🇹', dialCode: '+39', format: '### ### ####' },
-  { code: 'ES', name: 'Испания', flag: '🇪🇸', dialCode: '+34', format: '### ### ###' },
-  { code: 'NL', name: 'Нидерланды', flag: '🇳🇱', dialCode: '+31', format: '# ########' },
-  { code: 'AE', name: 'ОАЭ', flag: '🇦🇪', dialCode: '+971', format: '# ### ####' },
-  { code: 'SA', name: 'Саудовская Аравия', flag: '🇸🇦', dialCode: '+966', format: '# #### ####' },
-  { code: 'IL', name: 'Израиль', flag: '🇮🇱', dialCode: '+972', format: '#-###-####' },
-  { code: 'CN', name: 'Китай', flag: '🇨🇳', dialCode: '+86', format: '### #### ####' },
-  { code: 'JP', name: 'Япония', flag: '🇯🇵', dialCode: '+81', format: '##-####-####' },
-  { code: 'KR', name: 'Южная Корея', flag: '🇰🇷', dialCode: '+82', format: '##-###-####' },
-  { code: 'IN', name: 'Индия', flag: '🇮🇳', dialCode: '+91', format: '##### #####' },
-  { code: 'AU', name: 'Австралия', flag: '🇦🇺', dialCode: '+61', format: '# #### ####' },
-  { code: 'BR', name: 'Бразилия', flag: '🇧🇷', dialCode: '+55', format: '(##) #####-####' },
-];
+
 
 const PhoneInput: React.FC<PhoneInputProps> = ({
   value = '',
@@ -136,7 +99,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   const isValid = validatePhoneNumber(value);
 
   const getContainerStyle = (): ViewStyle => ({
-    ...styles.container,
+    ...PhoneInputStyles.container,
     borderColor: error 
       ? '#DC2626' 
       : isFocused 
@@ -151,7 +114,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   });
 
   const getInputStyle = (): TextStyle => ({
-    ...styles.input,
+    ...PhoneInputStyles.input,
     color: isDark ? '#F9FAFB' : '#1F2937',
   });
 
@@ -160,7 +123,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     return (
       <TouchableOpacity
         style={[
-          styles.countryItem,
+          PhoneInputStyles.countryItem,
           { 
             backgroundColor: isSelected 
               ? '#1E3A8A' 
@@ -171,10 +134,10 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
         ]}
         onPress={() => handleCountrySelect(item)}
       >
-        <Text style={[styles.flag, { fontSize: 24 }]}>{item.flag}</Text>
-        <View style={styles.countryInfo}>
+        <Text style={[PhoneInputStyles.flag, { fontSize: 24 }]}>{item.flag}</Text>
+        <View style={PhoneInputStyles.countryInfo}>
           <Text style={[
-            styles.countryName,
+            PhoneInputStyles.countryName,
             { 
               color: isSelected 
                 ? '#FFFFFF' 
@@ -187,7 +150,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
             {item.name}
           </Text>
           <Text style={[
-            styles.dialCode,
+            PhoneInputStyles.dialCode,
             { 
               color: isSelected 
                 ? 'rgba(255, 255, 255, 0.8)' 
@@ -200,7 +163,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
           </Text>
         </View>
         {isSelected && (
-          <View style={styles.selectedIndicator}>
+          <View style={PhoneInputStyles.selectedIndicator}>
             <Ionicons name="checkmark-circle-outline" size={22} color="#FFFFFF" />
           </View>
         )}
@@ -212,23 +175,23 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     <View style={containerStyle}>
       {label && (
         <Text style={[
-          styles.label,
+          PhoneInputStyles.label,
           { color: error ? '#DC2626' : isDark ? '#F9FAFB' : '#374151' }
         ]}>
           {label}
-          {required && <Text style={styles.required}> *</Text>}
+          {required && <Text style={PhoneInputStyles.required}> *</Text>}
         </Text>
       )}
       
       <View style={getContainerStyle()}>
         <TouchableOpacity
-          style={styles.countrySelector}
+          style={PhoneInputStyles.countrySelector}
           onPress={() => !disabled && setIsCountryModalOpen(true)}
           disabled={disabled}
         >
-          <Text style={styles.flag}>{selectedCountry.flag}</Text>
+          <Text style={PhoneInputStyles.flag}>{selectedCountry.flag}</Text>
           <Text style={[
-            styles.dialCode,
+            PhoneInputStyles.dialCode,
             { color: isDark ? '#F9FAFB' : '#1F2937' }
           ]}>
             {selectedCountry.dialCode}
@@ -240,7 +203,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
           />
         </TouchableOpacity>
         
-        <View style={styles.separator} />
+        <View style={PhoneInputStyles.separator} />
         
         <TextInput
           style={[getInputStyle(), inputStyle]}
@@ -256,7 +219,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
         />
         
         {value && (
-          <View style={styles.validationIcon}>
+          <View style={PhoneInputStyles.validationIcon}>
             <Ionicons
               name={isValid ? 'checkmark-circle' : 'close-circle'}
               size={20}
@@ -267,7 +230,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
       </View>
 
       {error && (
-        <Text style={styles.error}>{error}</Text>
+        <Text style={PhoneInputStyles.error}>{error}</Text>
       )}
 
       <Modal
@@ -277,32 +240,32 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
         onRequestClose={() => setIsCountryModalOpen(false)}
       >
         <TouchableOpacity 
-          style={styles.modalOverlay}
+          style={PhoneInputStyles.modalOverlay}
           activeOpacity={1}
           onPress={() => setIsCountryModalOpen(false)}
         >
           <View
             style={[
-              styles.modalContent,
+              PhoneInputStyles.modalContent,
               { 
                 backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
               }
             ]}
           >
             {/* Индикатор тянущей полоски */}
-            <TouchableOpacity style={styles.modalHandle} activeOpacity={0.7}>
+            <TouchableOpacity style={PhoneInputStyles.modalHandle} activeOpacity={0.7}>
               <View style={[
-                styles.handleBar,
+                PhoneInputStyles.handleBar,
                 { backgroundColor: isDark ? '#4B5563' : '#D1D5DB' }
               ]} />
             </TouchableOpacity>
 
             <View style={[
-              styles.modalHeader,
+              PhoneInputStyles.modalHeader,
               { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }
             ]}>
               <Text style={[
-                styles.modalTitle,
+                PhoneInputStyles.modalTitle,
                 { color: isDark ? '#F9FAFB' : '#1F2937' }
               ]}>
                 Выберите страну
@@ -310,7 +273,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
               <TouchableOpacity
                 onPress={() => setIsCountryModalOpen(false)}
                 style={[
-                  styles.closeButton,
+                  PhoneInputStyles.closeButton,
                   { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
                 ]}
               >
@@ -328,7 +291,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
               keyExtractor={(item) => item.code}
               showsVerticalScrollIndicator={false}
               style={[
-                styles.countriesList,
+                PhoneInputStyles.countriesList,
                 { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }
               ]}
             />
@@ -338,137 +301,5 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 2.84,
-    elevation: 2,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-  },
-  required: {
-    color: '#DC2626',
-  },
-  countrySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  flag: {
-    fontSize: 20,
-    marginRight: 8,
-  },
-  dialCode: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginRight: 4,
-  },
-  separator: {
-    width: 1,
-    height: 30,
-    backgroundColor: '#E5E7EB',
-    marginHorizontal: 8,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingRight: 12,
-  },
-  validationIcon: {
-    paddingHorizontal: 12,
-  },
-  error: {
-    fontSize: 12,
-    color: '#DC2626',
-    marginTop: 4,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    height: '90%',
-    width: '100%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 25,
-    elevation: 10,
-  },
-  modalHandle: {
-    alignItems: 'center',
-    paddingTop: 12,
-    paddingBottom: 8,
-  },
-  handleBar: {
-    width: 40,
-    height: 4,
-    borderRadius: 2,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(229, 231, 235, 0.2)',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  closeButton: {
-    padding: 8,
-    borderRadius: 16,
-  },
-  countriesList: {
-    flex: 1,
-    paddingHorizontal: 4,
-    paddingVertical: 8,
-  },
-  countryItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-    marginHorizontal: 16,
-    marginVertical: 3,
-    borderRadius: 14,
-    borderBottomWidth: 0,
-  },
-  countryInfo: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  countryName: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  selectedIndicator: {
-    marginLeft: 'auto',
-  },
-});
 
 export default PhoneInput;

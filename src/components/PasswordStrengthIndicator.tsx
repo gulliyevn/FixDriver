@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { PasswordStrength } from '../utils/validators';
+import { PasswordStrengthIndicatorStyles } from '../styles/components/PasswordStrengthIndicator.styles';
 
 interface PasswordStrengthIndicatorProps {
   strength: PasswordStrength;
   showFeedback?: boolean;
-  containerStyle?: any;
+  containerStyle?: ViewStyle;
 }
 
 const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
@@ -58,7 +59,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
         <View
           key={i}
           style={[
-            styles.progressBar,
+            PasswordStrengthIndicatorStyles.progressBar,
             {
               backgroundColor: isFilled ? getStrengthColor(strength.level) : isDark ? '#374151' : '#E5E7EB',
             }
@@ -70,19 +71,19 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
   };
 
   return (
-    <View style={[styles.container, containerStyle]}>
-      <View style={styles.strengthRow}>
-        <View style={styles.progressContainer}>
+    <View style={[PasswordStrengthIndicatorStyles.container, containerStyle]}>
+      <View style={PasswordStrengthIndicatorStyles.strengthRow}>
+        <View style={PasswordStrengthIndicatorStyles.progressContainer}>
           {getProgressBars()}
         </View>
-        <View style={styles.strengthInfo}>
+        <View style={PasswordStrengthIndicatorStyles.strengthInfo}>
           <Ionicons
-            name={getStrengthIcon(strength.level) as any}
+            name={getStrengthIcon(strength.level) as keyof typeof Ionicons.glyphMap}
             size={16}
             color={getStrengthColor(strength.level)}
           />
           <Text style={[
-            styles.strengthText,
+            PasswordStrengthIndicatorStyles.strengthText,
             { color: getStrengthColor(strength.level) }
           ]}>
             {getStrengthText(strength.level)}
@@ -91,19 +92,19 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
       </View>
 
       {showFeedback && strength.feedback.length > 0 && (
-        <View style={styles.feedbackContainer}>
+        <View style={PasswordStrengthIndicatorStyles.feedbackContainer}>
           {strength.feedback.slice(0, 3).map((feedback, index) => (
-            <View key={index} style={styles.feedbackItem}>
+            <View key={index} style={PasswordStrengthIndicatorStyles.feedbackItem}>
               <Ionicons
                 name="information-circle-outline"
                 size={14}
                 color={isDark ? '#9CA3AF' : '#6B7280'}
               />
               <Text style={[
-                styles.feedbackText,
+                PasswordStrengthIndicatorStyles.feedbackText,
                 { color: isDark ? '#9CA3AF' : '#6B7280' }
               ]}>
-                {feedback}
+                {String(feedback)}
               </Text>
             </View>
           ))}
@@ -112,50 +113,5 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 8,
-  },
-  strengthRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  progressContainer: {
-    flexDirection: 'row',
-    flex: 1,
-    marginRight: 12,
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-    marginRight: 4,
-  },
-  strengthInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  strengthText: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginLeft: 4,
-  },
-  feedbackContainer: {
-    marginTop: 8,
-  },
-  feedbackItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 4,
-  },
-  feedbackText: {
-    fontSize: 12,
-    marginLeft: 6,
-    flex: 1,
-    lineHeight: 16,
-  },
-});
 
 export default PasswordStrengthIndicator; 

@@ -54,4 +54,19 @@ export interface ActivePackage extends TravelPackage {
   timeUsed: number;
 }
 
-export type PackageType = 'single' | 'weekly' | 'monthly' | 'yearly'; 
+export type PackageType = 'single' | 'weekly' | 'monthly' | 'yearly';
+
+export interface Package {
+  id: string;
+  name: string;
+  description: string;
+  tripsCount: number;
+  price: number;
+  originalPrice?: number;
+  validityDays: number;
+  features: string[];
+  isPopular?: boolean;
+  isActive?: boolean;
+  tripsRemaining?: number;
+  expiresAt?: string;
+} 

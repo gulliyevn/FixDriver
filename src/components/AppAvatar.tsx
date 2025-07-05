@@ -1,79 +1,79 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Text, Image } from 'react-native';
+import { AppAvatarStyles } from '../styles/components/AppAvatar.styles';
 
 interface AppAvatarProps {
-  size: number;
+  size?: 'small' | 'medium' | 'large' | number;
   source?: { uri: string };
   defaultSource?: { uri: string };
   name?: string;
-  style?: any;
+  onPress?: () => void;
 }
 
-const AppAvatar: React.FC<AppAvatarProps> = ({ 
-  size, 
-  source, 
-  defaultSource, 
+export default function AppAvatar({
+  size = 'medium',
+  source,
+  defaultSource,
   name,
-  style 
-}) => {
-  const getInitials = (name: string) => {
-    return name
+}: AppAvatarProps) {
+  const getContainerStyle = () => {
+    if (typeof size === 'number') {
+      return [AppAvatarStyles.container, { width: size, height: size, borderRadius: size / 2 }];
+    }
+    
+    switch (size) {
+      case 'small':
+        return [AppAvatarStyles.container, AppAvatarStyles.sizeSmall];
+      case 'large':
+        return [AppAvatarStyles.container, AppAvatarStyles.sizeLarge];
+      default:
+        return [AppAvatarStyles.container, AppAvatarStyles.sizeMedium];
+    }
+  };
+
+  const getTextStyle = () => {
+    if (typeof size === 'number') {
+      const fontSize = Math.max(12, size * 0.4);
+      return [AppAvatarStyles.text, { fontSize }];
+    }
+    
+    switch (size) {
+      case 'small':
+        return [AppAvatarStyles.text, AppAvatarStyles.textSmall];
+      case 'large':
+        return [AppAvatarStyles.text, AppAvatarStyles.textLarge];
+      default:
+        return [AppAvatarStyles.text, AppAvatarStyles.textMedium];
+    }
+  };
+
+  const getInitials = (fullName: string) => {
+    return fullName
       .split(' ')
-      .map(word => word.charAt(0))
+      .map(name => name.charAt(0))
       .join('')
       .toUpperCase()
       .slice(0, 2);
   };
 
-  const avatarStyle = {
-    width: size,
-    height: size,
-    borderRadius: size / 2,
-  };
-
   if (source?.uri) {
     return (
-      <Image
-        source={source}
-        defaultSource={defaultSource}
-        style={[styles.avatar, avatarStyle, style]}
-        resizeMode="cover"
-      />
-    );
-  }
-
-  if (name) {
-    return (
-      <View style={[styles.avatarPlaceholder, avatarStyle, style]}>
-        <Text style={[styles.initials, { fontSize: size * 0.4 }]}>
-          {getInitials(name)}
-        </Text>
+      <View style={getContainerStyle()}>
+        <Image
+          source={source}
+          defaultSource={defaultSource}
+          style={AppAvatarStyles.image}
+          resizeMode="cover"
+        />
       </View>
     );
   }
 
   return (
-    <View style={[styles.avatarPlaceholder, avatarStyle, style]}>
-      <Text style={[styles.initials, { fontSize: size * 0.4 }]}>
-        👤
+    <View style={getContainerStyle()}>
+      <Text style={getTextStyle()}>
+        {name ? getInitials(name) : '?'}
       </Text>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  avatar: {
-    backgroundColor: '#f0f0f0',
-  },
-  avatarPlaceholder: {
-    backgroundColor: '#007AFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  initials: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-});
-
-export default AppAvatar;
+}

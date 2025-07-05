@@ -60,7 +60,7 @@ class SimpleJWT {
     return Math.abs(hash).toString(16);
   }
 
-  static sign(payload: any, secret: string, options: any = {}): string {
+  static sign(payload: JWTPayload, secret: string, options: Record<string, unknown> = {}): string {
     const header = {
       alg: 'HS256',
       typ: 'JWT',
@@ -85,7 +85,7 @@ class SimpleJWT {
     return `${encodedHeader}.${encodedPayload}.${signature}`;
   }
 
-  static verify(token: string, secret: string): any {
+  static verify(token: string, secret: string): JWTPayload | null {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) {
@@ -119,7 +119,7 @@ class SimpleJWT {
     }
   }
 
-  static decode(token: string): any {
+  static decode(token: string): JWTPayload | null {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) {
@@ -193,7 +193,7 @@ export class JWTService {
       if (error.message.includes('Token expired')) {
         console.warn('JWT token expired (expected behavior):', error.message);
       } else {
-        console.error('JWT verification error:', error);
+      console.error('JWT verification error:', error);
       }
       return null;
     }
@@ -209,7 +209,7 @@ export class JWTService {
         return null;
       }
 
-      const decoded = SimpleJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as any;
+      const decoded = SimpleJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as Record<string, unknown>;
 
       if (decoded.type !== 'refresh') {
         throw new Error('Invalid refresh token type');
@@ -330,7 +330,7 @@ export class JWTService {
   /**
    * Получает данные пользователя из AsyncStorage (для обновления токенов)
    */
-  private static async getUserDataFromStorage(): Promise<any> {
+  static async getUserDataFromStorage(): Promise<JWTPayload | null> {
     try {
       const userData = await AsyncStorage.getItem('user');
       return userData ? JSON.parse(userData) : null;

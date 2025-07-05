@@ -1,5 +1,6 @@
 // Утилитарные функции для навигации
 import { CommonActions, NavigationProp } from '@react-navigation/native';
+import { ChatNavigationParams } from '../types/navigation';
 
 export interface ChatNavigationParams {
   driverId: string;
@@ -23,7 +24,7 @@ const isError = (error: unknown): error is Error => {
  * @param navigation - объект навигации
  * @param params - параметры водителя для чата
  */
-export const navigateToChat = (navigation: NavigationProp<any>, params: ChatNavigationParams): boolean => {
+export const navigateToChat = (navigation: NavigationProp<unknown>, params: ChatNavigationParams): boolean => {
   try {
     // Метод 1: Использование CommonActions для безопасной навигации
     try {
@@ -78,7 +79,7 @@ export const isDriverAvailableForChat = (driverStatus?: string): boolean => {
  * Форматирование параметров водителя для чата
  * @param driver - объект водителя
  */
-export const formatDriverForChat = (driver: Record<string, any>): ChatNavigationParams => {
+export const formatDriverForChat = (driver: Record<string, unknown>): ChatNavigationParams => {
   return {
     driverId: driver.id || driver.driverId || 'unknown',
     driverName: driver.name || driver.driverName || 'Неизвестный водитель',

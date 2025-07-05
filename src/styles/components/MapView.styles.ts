@@ -1,0 +1,62 @@
+import { StyleSheet, Dimensions } from 'react-native';
+
+export const MapViewStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  markerAContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#222',
+    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  markerBContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#10B981',
+    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  driverMarkerContainer: {
+    backgroundColor: '#1E3A8A',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  durationMarkerContainer: {
+    backgroundColor: '#1F2937',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderWidth: 2,
+    borderColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  durationMarkerText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+}); 

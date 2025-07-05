@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { RoutePoint } from '../types/package';
 import { useTheme } from '../context/ThemeContext';
 import InputField from './InputField';
 import Button from './Button';
+import { RouteBuilderStyles } from '../styles/components/RouteBuilder.styles';
 
 interface RouteBuilderProps {
   route: RoutePoint[];
@@ -120,7 +121,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
         Math.round(duration),
         Math.round(basePrice)
       );
-    } catch (error) {
+    } catch {
       Alert.alert('Ошибка', 'Не удалось рассчитать маршрут');
     } finally {
       setIsCalculating(false);
@@ -150,55 +151,55 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
       ];
       onRouteChange(initialRoute);
     }
-  }, []);
+  }, [route.length, onRouteChange]);
 
   return (
-    <View style={styles.container}>
+    <View style={RouteBuilderStyles.container}>
       <Text style={[
-        styles.title,
+        RouteBuilderStyles.title,
         { color: isDark ? '#FFFFFF' : '#1F2937' }
       ]}>
         Построение маршрута
       </Text>
 
-      <ScrollView style={styles.pointsList} showsVerticalScrollIndicator={false}>
+      <ScrollView style={RouteBuilderStyles.pointsList} showsVerticalScrollIndicator={false}>
         {route.map((point, index) => (
-          <View key={point.id} style={styles.pointContainer}>
-            <View style={styles.pointHeader}>
-              <Text style={styles.pointIcon}>{getPointIcon(index)}</Text>
+          <View key={point.id} style={RouteBuilderStyles.pointContainer}>
+            <View style={RouteBuilderStyles.pointHeader}>
+              <Text style={RouteBuilderStyles.pointIcon}>{getPointIcon(index)}</Text>
               <Text style={[
-                styles.pointDescription,
+                RouteBuilderStyles.pointDescription,
                 { color: isDark ? '#9CA3AF' : '#6B7280' }
               ]}>
                 {point.description}
               </Text>
               
               {/* Кнопки управления точками */}
-              <View style={styles.pointControls}>
+              <View style={RouteBuilderStyles.pointControls}>
                 {index > 0 && (
                   <TouchableOpacity
                     onPress={() => movePoint(point.id, 'up')}
-                    style={styles.controlButton}
+                    style={RouteBuilderStyles.controlButton}
                   >
-                    <Text style={styles.controlText}>↑</Text>
+                    <Text style={RouteBuilderStyles.controlText}>↑</Text>
                   </TouchableOpacity>
                 )}
                 
                 {index < route.length - 1 && (
                   <TouchableOpacity
                     onPress={() => movePoint(point.id, 'down')}
-                    style={styles.controlButton}
+                    style={RouteBuilderStyles.controlButton}
                   >
-                    <Text style={styles.controlText}>↓</Text>
+                    <Text style={RouteBuilderStyles.controlText}>↓</Text>
                   </TouchableOpacity>
                 )}
                 
                 {route.length > 2 && (
                   <TouchableOpacity
                     onPress={() => removeRoutePoint(point.id)}
-                    style={[styles.controlButton, styles.deleteButton]}
+                    style={[RouteBuilderStyles.controlButton, RouteBuilderStyles.deleteButton]}
                   >
-                    <Text style={[styles.controlText, styles.deleteText]}>×</Text>
+                    <Text style={[RouteBuilderStyles.controlText, RouteBuilderStyles.deleteText]}>×</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -209,13 +210,13 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
               value={point.address}
               onChangeText={(text) => updatePointAddress(point.id, text)}
               leftIcon="location"
-              style={styles.addressInput}
+              style={RouteBuilderStyles.addressInput}
             />
 
             {/* Линия связи между точками */}
             {index < route.length - 1 && (
-              <View style={styles.connectionLine}>
-                <Text style={styles.arrowDown}>↓</Text>
+              <View style={RouteBuilderStyles.connectionLine}>
+                <Text style={RouteBuilderStyles.arrowDown}>↓</Text>
               </View>
             )}
           </View>
@@ -223,12 +224,12 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
       </ScrollView>
 
       {/* Кнопки действий */}
-      <View style={styles.actions}>
+      <View style={RouteBuilderStyles.actions}>
         <Button
           title="+ Добавить адрес"
           onPress={addRoutePoint}
           variant="outline"
-          style={styles.addButton}
+          style={RouteBuilderStyles.addButton}
           size="small"
         />
 
@@ -238,23 +239,23 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
           variant="primary"
           loading={isCalculating}
           disabled={route.filter(p => p.address.trim()).length < 2}
-          style={styles.calculateButton}
+          style={RouteBuilderStyles.calculateButton}
         />
       </View>
 
       {/* Инфо о маршруте */}
       <View style={[
-        styles.routeInfo,
+        RouteBuilderStyles.routeInfo,
         { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
       ]}>
         <Text style={[
-          styles.routeInfoText,
+          RouteBuilderStyles.routeInfoText,
           { color: isDark ? '#9CA3AF' : '#6B7280' }
         ]}>
           💡 Вы можете добавить несколько адресов для создания сложного маршрута
         </Text>
         <Text style={[
-          styles.routeInfoText,
+          RouteBuilderStyles.routeInfoText,
           { color: isDark ? '#9CA3AF' : '#6B7280' }
         ]}>
           📍 Перетаскивайте точки для изменения порядка
@@ -263,94 +264,5 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  pointsList: {
-    flex: 1,
-    maxHeight: 400,
-  },
-  pointContainer: {
-    marginBottom: 16,
-  },
-  pointHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  pointIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  pointDescription: {
-    flex: 1,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  pointControls: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  controlButton: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#E5E7EB',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  controlText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  deleteButton: {
-    backgroundColor: '#FEE2E2',
-  },
-  deleteText: {
-    color: '#DC2626',
-    fontSize: 14,
-  },
-  addressInput: {
-    marginBottom: 8,
-  },
-  connectionLine: {
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  arrowDown: {
-    fontSize: 16,
-    color: '#9CA3AF',
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 16,
-    marginBottom: 16,
-  },
-  addButton: {
-    flex: 1,
-  },
-  calculateButton: {
-    flex: 2,
-  },
-  routeInfo: {
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  routeInfoText: {
-    fontSize: 12,
-    lineHeight: 16,
-    marginBottom: 4,
-  },
-});
 
 export default RouteBuilder; 

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, 
   Text, 
-  StyleSheet, 
   TouchableOpacity, 
   SafeAreaView,
   ScrollView,
@@ -15,12 +14,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-import AppCard from '../../components/AppCard';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { ClientStackParamList } from '../../types/navigation';
-import { chatService } from '../../services/ChatService';
-import { Message as ChatMessage } from '../../types/chat';
+import { ChatScreenStyles } from '../../styles/screens/ChatScreen.styles';
 
 interface DisplayMessage {
   id: string;
@@ -30,32 +24,8 @@ interface DisplayMessage {
   isRead: boolean;
 }
 
-type ChatScreenRouteProp = RouteProp<ClientStackParamList, 'ChatConversation'>;
-type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatConversation'>;
-
-  const ChatScreen: React.FC = () => {
+const ChatScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const route = useRoute<ChatScreenRouteProp>();
-  const navigation = useNavigation<ChatScreenNavigationProp>();
-  
-  // Получаем данные водителя из параметров навигации
-  const driverData = route.params || {
-    driverId: 'default',
-    driverName: 'Александр Петров',
-    driverCar: 'Toyota Camry',
-    driverNumber: 'А123БВ777',
-    driverRating: '4.8',
-    driverStatus: 'online'
-  };
-
-  // Логируем параметры для отладки
-  React.useEffect(() => {
-    console.log('💬 ChatScreen: получены параметры водителя:', {
-      driverId: driverData.driverId,
-      driverName: driverData.driverName,
-      driverStatus: driverData.driverStatus
-    });
-  }, [route.params]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
@@ -63,16 +33,13 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
   // Загрузка сообщений чата при монтировании компонента
   useEffect(() => {
     loadChatMessages();
-  }, [route.params.driverId]);
+  }, []);
 
   const loadChatMessages = async () => {
     try {
-      const driverId = route.params.driverId;
-      if (!driverId) return;
-      
       // Ищем существующий чат с водителем
-      const chats = await chatService.getChats('me');
-      const existingChat = chats.find(chat => chat.participantId === driverId);
+      const chats = await ChatService.getChats('me');
+      const existingChat = chats.find(chat => chat.driverId === driverData.driverId);
       
       let chatId: string;
       
@@ -81,22 +48,22 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
         chatId = existingChat.id;
       } else {
         // Если чата нет, создаем новый
-        const newChat = await chatService.createChat(
-          driverId,
+        const newChat = await ChatService.createChat(
+          driverData.driverId,
           route.params.driverName || 'Водитель'
         );
         chatId = newChat.id;
       }
       
       // Загружаем сообщения
-      const chatMessages = await chatService.getMessages(chatId);
+      const chatMessages = await ChatService.getMessages(chatId);
       
       // Конвертируем сообщения в формат для отображения
       const displayMessages: DisplayMessage[] = chatMessages.map(msg => ({
         id: msg.id,
         text: msg.content,
         sender: msg.senderId === 'me' ? 'client' : 'driver',
-        timestamp: msg.timestamp.toLocaleTimeString('ru-RU', { 
+        timestamp: new Date(msg.timestamp).toLocaleTimeString('ru-RU', { 
           hour: '2-digit', 
           minute: '2-digit' 
         }),
@@ -106,7 +73,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       setMessages(displayMessages);
       
       // Отмечаем сообщения как прочитанные
-      await chatService.markMessagesAsRead(chatId);
+      await ChatService.markMessagesAsRead(chatId);
       
       // Автопрокрутка вниз после загрузки сообщений
       setTimeout(() => {
@@ -122,15 +89,9 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     if (!message.trim()) return;
     
     try {
-      const driverId = route.params.driverId;
-      if (!driverId) {
-        Alert.alert('Ошибка', 'Не найден идентификатор водителя');
-        return;
-      }
-
       // Находим чат с водителем
-      const chats = await chatService.getChats('me');
-      const chat = chats.find(chat => chat.participantId === driverId);
+      const chats = await ChatService.getChats('me');
+      const chat = chats.find(chat => chat.driverId === driverData.driverId);
       
       if (!chat) {
         Alert.alert('Ошибка', 'Чат не найден');
@@ -138,7 +99,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
       }
 
       // Отправляем сообщение
-      await chatService.sendMessage(chat.id, message.trim(), 'me');
+      await ChatService.sendMessage(chat.id, message.trim(), 'me');
       
       // Обновляем локальное состояние
       const newMessage: DisplayMessage = {
@@ -190,23 +151,19 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     );
   };
 
-
-
   const formatTime = (timestamp: string) => {
     return timestamp;
   };
 
-
-
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
+    <SafeAreaView style={[ChatScreenStyles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
+      <View style={ChatScreenStyles.header}>
+        <View style={ChatScreenStyles.headerContent}>
           <TouchableOpacity 
-            style={styles.backButton} 
+            style={ChatScreenStyles.backButton} 
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
@@ -216,20 +173,20 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
               color={isDark ? '#F9FAFB' : '#1F2937'} 
             />
           </TouchableOpacity>
-          <View style={styles.driverInfo}>
-            <View style={styles.driverAvatar}>
+          <View style={ChatScreenStyles.driverInfo}>
+            <View style={ChatScreenStyles.driverAvatar}>
               <Text style={{ fontSize: 20 }}>👨‍💼</Text>
             </View>
-            <View style={styles.driverDetails}>
-              <Text style={styles.driverName}>{driverData.driverName}</Text>
-              <Text style={styles.carInfo}>{driverData.driverCar} • {driverData.driverNumber}</Text>
-              <View style={styles.statusContainer}>
-                <View style={[styles.statusDot, { backgroundColor: driverData.driverStatus === 'online' ? '#10B981' : '#6B7280' }]} />
-                <Text style={styles.statusText}>{driverData.driverStatus === 'online' ? 'В сети' : 'Не в сети'}</Text>
+            <View style={ChatScreenStyles.driverDetails}>
+              <Text style={ChatScreenStyles.driverName}>{driverData.driverName}</Text>
+              <Text style={ChatScreenStyles.carInfo}>{driverData.driverCar} • {driverData.driverNumber}</Text>
+              <View style={ChatScreenStyles.statusContainer}>
+                <View style={[ChatScreenStyles.statusDot, { backgroundColor: driverData.driverStatus === 'online' ? '#10B981' : '#6B7280' }]} />
+                <Text style={ChatScreenStyles.statusText}>{driverData.driverStatus === 'online' ? 'В сети' : 'Не в сети'}</Text>
               </View>
             </View>
           </View>
-          <TouchableOpacity style={styles.callButton} onPress={handleCallDriver}>
+          <TouchableOpacity style={ChatScreenStyles.callButton} onPress={handleCallDriver}>
             <Ionicons name="call" size={24} color="#1E3A8A" />
           </TouchableOpacity>
         </View>
@@ -237,19 +194,19 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
 
       {/* Messages */}
       <KeyboardAvoidingView 
-        style={styles.messagesContainer}
+        style={ChatScreenStyles.messagesContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
         <ScrollView 
           ref={scrollViewRef}
-          style={styles.messagesList}
+          style={ChatScreenStyles.messagesList}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.messagesContent}
+          contentContainerStyle={ChatScreenStyles.messagesContent}
         >
           {messages.length === 0 ? (
-            <View style={styles.emptyChat}>
-              <Text style={[styles.emptyChatText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+            <View style={ChatScreenStyles.emptyChat}>
+              <Text style={[ChatScreenStyles.emptyChatText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
                 Напишите первое сообщение
               </Text>
             </View>
@@ -258,25 +215,25 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
               <View 
                 key={msg.id} 
                 style={[
-                  styles.messageContainer,
-                  msg.sender === 'client' ? styles.clientMessage : styles.driverMessage
+                  ChatScreenStyles.messageContainer,
+                  msg.sender === 'client' ? ChatScreenStyles.clientMessage : ChatScreenStyles.driverMessage
                 ]}
               >
                 <View style={[
-                  styles.messageBubble,
+                  ChatScreenStyles.messageBubble,
                   msg.sender === 'client' 
                     ? { backgroundColor: '#1E3A8A' } 
                     : { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
                 ]}>
                   <Text style={[
-                    styles.messageText,
+                    ChatScreenStyles.messageText,
                     { color: msg.sender === 'client' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937') }
                   ]}>
                     {msg.text}
                   </Text>
-                  <View style={styles.messageFooter}>
+                  <View style={ChatScreenStyles.messageFooter}>
                     <Text style={[
-                      styles.messageTime,
+                      ChatScreenStyles.messageTime,
                       { color: msg.sender === 'client' ? '#E5E7EB' : '#6B7280' }
                     ]}>
                       {formatTime(msg.timestamp)}
@@ -296,10 +253,10 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
         </ScrollView>
 
         {/* Message Input */}
-        <View style={styles.inputContainer}>
-          <View style={styles.inputRow}>
+        <View style={ChatScreenStyles.inputContainer}>
+          <View style={ChatScreenStyles.inputRow}>
             <TextInput
-              style={styles.messageInput}
+              style={ChatScreenStyles.messageInput}
               placeholder="Введите сообщение..."
               value={message}
               onChangeText={setMessage}
@@ -308,7 +265,7 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
             />
             <TouchableOpacity 
               style={[
-                styles.sendButton,
+                ChatScreenStyles.sendButton,
                 { backgroundColor: message.trim() ? '#1E3A8A' : '#E5E7EB' }
               ]}
               onPress={handleSendMessage}
@@ -326,164 +283,5 @@ type ChatScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatC
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginBottom: 8,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  backButton: {
-    padding: 6,
-    marginRight: 12,
-  },
-  driverInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  driverAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#F3F4F6',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  driverDetails: {
-    flex: 1,
-  },
-  driverName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-  },
-  carInfo: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginTop: 2,
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
-  },
-  statusText: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  callButton: {
-    padding: 8,
-  },
-  messagesContainer: {
-    flex: 1,
-  },
-  messagesList: {
-    flex: 1,
-  },
-  messagesContent: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  messageContainer: {
-    marginVertical: 8,
-  },
-  clientMessage: {
-    alignItems: 'flex-end',
-  },
-  driverMessage: {
-    alignItems: 'flex-start',
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
-  messageText: {
-    fontSize: 16,
-    lineHeight: 20,
-  },
-  messageFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginTop: 4,
-    gap: 4,
-  },
-  messageTime: {
-    fontSize: 12,
-  },
-  inputContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 6,
-    backgroundColor: 'transparent',
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
-  },
-  messageInput: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: '#1F2937',
-    maxHeight: 100,
-    minHeight: 44,
-  },
-  sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emptyChat: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 50,
-  },
-  emptyChatText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 export default ChatScreen;

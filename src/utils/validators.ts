@@ -344,7 +344,7 @@ export class Validators {
   /**
    * Валидация формы регистрации водителя
    */
-  static validateDriverRegistration(data: any): ValidationResult {
+  static validateDriverRegistration(data: Record<string, unknown>): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 

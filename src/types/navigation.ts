@@ -3,6 +3,15 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
+// Типы для маршрутов
+export interface RoutePoint {
+  latitude: number;
+  longitude: number;
+  address?: string;
+  name?: string;
+  type?: 'start' | 'waypoint' | 'end';
+}
+
 // Параметры для экранов чата
 export type ChatStackParamList = {
   ChatList: undefined;

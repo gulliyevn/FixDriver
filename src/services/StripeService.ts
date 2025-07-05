@@ -36,38 +36,9 @@ export interface PaymentPackage {
 }
 
 export class StripeService {
-  static async createPaymentIntent(amount: number, currency: string = 'rub'): Promise<PaymentIntent> {
-    // TODO: заменить на реальный Stripe API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: `pi_${Date.now()}`,
-          amount,
-          currency,
-          status: 'requires_payment_method',
-          clientSecret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`,
-        });
-      }, 1000);
-    });
-  }
-
-  static async confirmPayment(paymentIntentId: string, paymentMethodId: string): Promise<PaymentIntent> {
-    // TODO: заменить на реальный Stripe API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: paymentIntentId,
-          amount: 750,
-          currency: 'rub',
-          status: 'succeeded',
-          clientSecret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`,
-        });
-      }, 1500);
-    });
-  }
-
+  // Получить методы оплаты клиента
+  // TODO: Заменить на реальный Stripe API запрос к /payment_methods
   static async getPaymentMethods(customerId: string): Promise<PaymentMethod[]> {
-    // TODO: заменить на реальный Stripe API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -92,24 +63,9 @@ export class StripeService {
     });
   }
 
-  static async addPaymentMethod(customerId: string, paymentMethodId: string): Promise<PaymentMethod> {
-    // TODO: заменить на реальный Stripe API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: paymentMethodId,
-          type: 'card',
-          last4: '1234',
-          brand: 'visa',
-          expMonth: 12,
-          expYear: 2025,
-        });
-      }, 800);
-    });
-  }
-
-  static async removePaymentMethod(paymentMethodId: string): Promise<void> {
-    // TODO: заменить на реальный Stripe API запрос
+  // Добавить новый метод оплаты
+  // TODO: Заменить на реальный Stripe API запрос к /payment_methods/create
+  static async addPaymentMethod(paymentMethodId: string, customerId: string): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -117,42 +73,51 @@ export class StripeService {
     });
   }
 
-  static async createSubscription(customerId: string, priceId: string): Promise<Subscription> {
-    // TODO: заменить на реальный Stripe API запрос
+  // Удалить метод оплаты
+  // TODO: Заменить на реальный Stripe API запрос к /payment_methods/{id}/delete
+  static async removePaymentMethod(paymentMethodId: string): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    });
+  }
+
+  // Создать платежное намерение
+  // TODO: Заменить на реальный Stripe API запрос к /payment_intents/create
+  static async createPaymentIntent(amount: number, currency: string = 'azn'): Promise<PaymentIntent> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          id: `sub_${Date.now()}`,
-          status: 'active',
-          currentPeriodStart: new Date(),
-          currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 дней
-          planId: priceId,
-          planName: 'Премиум подписка',
-          amount: 2990,
+          id: `pi_${Date.now()}`,
+          amount,
+          currency,
+          status: 'requires_payment_method',
+          clientSecret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`,
+        });
+      }, 500);
+    });
+  }
+
+  // Подтвердить платеж
+  // TODO: Заменить на реальный Stripe API запрос к /payment_intents/{id}/confirm
+  static async confirmPayment(paymentIntentId: string, paymentMethodId: string): Promise<PaymentIntent> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          id: paymentIntentId,
+          amount: 5000,
+          currency: 'azn',
+          status: 'succeeded',
+          clientSecret: `pi_${Date.now()}_secret_${Math.random().toString(36).substr(2, 9)}`,
         });
       }, 1000);
     });
   }
 
-  static async cancelSubscription(subscriptionId: string): Promise<Subscription> {
-    // TODO: заменить на реальный Stripe API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: subscriptionId,
-          status: 'canceled',
-          currentPeriodStart: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
-          currentPeriodEnd: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
-          planId: 'price_premium',
-          planName: 'Премиум подписка',
-          amount: 2990,
-        });
-      }, 800);
-    });
-  }
-
+  // Получить подписки клиента
+  // TODO: Заменить на реальный Stripe API запрос к /subscriptions
   static async getSubscriptions(customerId: string): Promise<Subscription[]> {
-    // TODO: заменить на реальный Stripe API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -170,8 +135,9 @@ export class StripeService {
     });
   }
 
+  // Получить пакеты оплаты
+  // TODO: Заменить на реальный API запрос к /payment_packages
   static async getPaymentPackages(): Promise<PaymentPackage[]> {
-    // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -207,8 +173,9 @@ export class StripeService {
     });
   }
 
+  // Создать клиента
+  // TODO: Заменить на реальный Stripe API запрос к /customers/create
   static async createCustomer(email: string, name: string): Promise<string> {
-    // TODO: заменить на реальный Stripe API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(`cus_${Date.now()}`);

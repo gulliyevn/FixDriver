@@ -1,70 +1,29 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useTheme } from '../context/ThemeContext';
-import TabBar from './TabBar';
+import { ClientStackParamList } from '../types/navigation';
 import MapScreen from '../screens/client/MapScreen';
+import ChatListScreen from '../screens/client/ChatListScreen';
+import ChatScreen from '../screens/client/ChatScreen';
 import DriversScreen from '../screens/client/DriversScreen';
 import PlusScreen from '../screens/client/PlusScreen';
-import ChatNavigator from './ChatNavigator';
-import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
+import ScheduleScreen from '../screens/client/ScheduleScreen';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<ClientStackParamList>();
 
 const ClientNavigator: React.FC = () => {
-  const { isDark } = useTheme();
   return (
     <Tab.Navigator
-      id={undefined}
-      tabBar={props => <TabBar {...props} />}
+      id="ClientTab"
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: isDark ? '#181A20' : '#fff',
-          borderTopColor: isDark ? '#333' : '#e0e0e0',
-        },
       }}
     >
-      <Tab.Screen 
-        name="Map" 
-        component={MapScreen}
-        options={{
-          tabBarLabel: 'Карта',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🗺️</Text>,
-        }}
-      />
-      <Tab.Screen 
-        name="Drivers" 
-        component={DriversScreen}
-        options={{
-          tabBarLabel: 'Водители',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>🚗</Text>,
-        }}
-      />
-      <Tab.Screen 
-        name="Plus" 
-        component={PlusScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>➕</Text>,
-        }}
-      />
-      <Tab.Screen 
-        name="Chat" 
-        component={ChatNavigator}
-        options={{
-          tabBarLabel: 'Чат',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>💬</Text>,
-        }}
-      />
-      <Tab.Screen 
-        name="Profile" 
-        component={ClientProfileScreen}
-        options={{
-          tabBarLabel: 'Профиль',
-          tabBarIcon: ({ focused, color, size }) => <Text style={{ fontSize: size }}>👤</Text>,
-        }}
-      />
+      <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="ChatList" component={ChatListScreen} />
+      <Tab.Screen name="ChatConversation" component={ChatScreen} />
+      <Tab.Screen name="Drivers" component={DriversScreen} />
+      <Tab.Screen name="Plus" component={PlusScreen} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
     </Tab.Navigator>
   );
 };

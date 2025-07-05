@@ -1,6 +1,15 @@
 import { Platform } from 'react-native';
 import { ErrorHandler } from '../utils/errorHandler';
 
+// Отключено для production - только для разработки
+const ENABLE_SOCIAL_LOGS = false;
+
+const log = (message: string, data?: unknown) => {
+  if (ENABLE_SOCIAL_LOGS) {
+    console.log(`🔍 ${message}`, data || '');
+  }
+};
+
 export interface SocialUser {
   id: string;
   email: string;
@@ -18,15 +27,21 @@ export interface SocialAuthResult {
 }
 
 export class SocialAuthService {
+  private static instance: SocialAuthService;
+
+  static getInstance(): SocialAuthService {
+    if (!SocialAuthService.instance) {
+      SocialAuthService.instance = new SocialAuthService();
+    }
+    return SocialAuthService.instance;
+  }
+
   /**
    * Вход через Google
    */
   static async signInWithGoogle(): Promise<SocialAuthResult> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockGoogleSignIn();
-    }
-
+    log('Попытка входа через Google');
+    
     try {
       // TODO: Реальная интеграция с Google Sign-In
       // const { GoogleSignin } = require('@react-native-google-signin/google-signin');
@@ -60,11 +75,8 @@ export class SocialAuthService {
    * Вход через Facebook
    */
   static async signInWithFacebook(): Promise<SocialAuthResult> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockFacebookSignIn();
-    }
-
+    log('Попытка входа через Facebook');
+    
     try {
       // TODO: Реальная интеграция с Facebook Login
       // const { LoginManager, AccessToken } = require('react-native-fbsdk-next');
@@ -103,11 +115,8 @@ export class SocialAuthService {
    * Вход через Apple
    */
   static async signInWithApple(): Promise<SocialAuthResult> {
-    if (__DEV__) {
-      // Мок для разработки
-      return this.mockAppleSignIn();
-    }
-
+    log('Попытка входа через Apple');
+    
     try {
       // TODO: Реальная интеграция с Apple Sign-In
       // const { AppleAuthentication } = require('expo-apple-authentication');
@@ -145,6 +154,8 @@ export class SocialAuthService {
    * Выход из всех социальных аккаунтов
    */
   static async signOut(): Promise<void> {
+    log('Выход из социальных сетей');
+    
     try {
       // TODO: Выход из всех социальных аккаунтов
       // if (Platform.OS === 'ios') {
@@ -180,7 +191,7 @@ export class SocialAuthService {
   /**
    * Получение информации о пользователе Facebook
    */
-  private static async getFacebookUserInfo(accessToken: string): Promise<any> {
+  private static async getFacebookUserInfo(accessToken: string): Promise<Record<string, unknown>> {
     // TODO: Реальная интеграция с Facebook Graph API
     const response = await fetch(
       `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${accessToken}`
@@ -261,7 +272,7 @@ export class SocialAuthService {
   /**
    * Создание пользователя из социальных данных
    */
-  static createUserFromSocial(user: SocialUser): any {
+  static createUserFromSocial(user: SocialUser): Record<string, unknown> {
     return {
       email: user.email,
       name: user.name,
@@ -273,6 +284,20 @@ export class SocialAuthService {
       isEmailVerified: true, // Социальные аккаунты уже верифицированы
     };
   }
+
+  // Проверка доступности социальных сетей
+  static checkAvailability(): { apple: boolean; facebook: boolean; google: boolean; platform: string } {
+    const platform = Platform.OS;
+    const availability = {
+      apple: platform === 'ios',
+      facebook: true,
+      google: true,
+      platform,
+    };
+    
+    log('Social Auth Availability:', availability);
+    return availability;
+  }
 }
 
-export default SocialAuthService; 
+export default SocialAuthService.getInstance(); 

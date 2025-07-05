@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { 
   View, 
-  TextInput, 
   Text, 
-  StyleSheet, 
-  ViewStyle, 
-  TextStyle,
-  TouchableOpacity,
-  TextInputProps 
+  TextInput, 
+  TouchableOpacity, 
+  TextInputProps,
+  ViewStyle,
+  TextStyle 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
+import { InputFieldStyles } from '../styles/components/InputField.styles';
 
 interface InputFieldProps extends TextInputProps {
   label?: string;
@@ -20,13 +19,10 @@ interface InputFieldProps extends TextInputProps {
   onRightIconPress?: () => void;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
-  labelStyle?: TextStyle;
   required?: boolean;
-  showCharacterCount?: boolean;
-  maxLength?: number;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+export default function InputField({
   label,
   error,
   leftIcon,
@@ -34,175 +30,117 @@ const InputField: React.FC<InputFieldProps> = ({
   onRightIconPress,
   containerStyle,
   inputStyle,
-  labelStyle,
-  required = false,
-  showCharacterCount = false,
-  maxLength,
-  value,
-  secureTextEntry,
-  ...props
-}) => {
-  const { isDark } = useTheme();
+  required,
+  ...textInputProps
+}: InputFieldProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [isSecure, setIsSecure] = useState(secureTextEntry);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const handleRightIconPress = () => {
-    if (secureTextEntry) {
-      setIsSecure(!isSecure);
-    } else if (onRightIconPress) {
-      onRightIconPress();
-    }
+  const handleFocus = () => {
+    setIsFocused(true);
+    textInputProps.onFocus?.(null);
   };
 
-  const getRightIcon = () => {
-    if (secureTextEntry) {
-      return isSecure ? 'eye-off' : 'eye';
-    }
-    return rightIcon;
+  const handleBlur = () => {
+    setIsFocused(false);
+    textInputProps.onBlur?.(null);
   };
 
-  const getContainerStyle = (): ViewStyle => ({
-    ...styles.container,
-    borderColor: error 
-      ? '#DC2626' 
-      : isFocused 
-        ? '#1E3A8A' 
-        : isDark 
-          ? '#374151' 
-          : '#D1D5DB',
-    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-  });
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
-  const getInputStyle = (): TextStyle => ({
-    ...styles.input,
-    color: isDark ? '#F9FAFB' : '#1F2937',
-    paddingLeft: leftIcon ? 40 : 16,
-    paddingRight: (rightIcon || secureTextEntry) ? 40 : 16,
-  });
+  const getContainerStyle = () => {
+    const baseStyle = InputFieldStyles.container;
+    
+    if (error) {
+      return [baseStyle, InputFieldStyles.containerError];
+    }
+    
+    if (isFocused) {
+      return [baseStyle, InputFieldStyles.containerFocused];
+    }
+    
+    return baseStyle;
+  };
 
-  const getLabelStyle = (): TextStyle => ({
-    ...styles.label,
-    color: error 
-      ? '#DC2626' 
-      : isDark 
-        ? '#F9FAFB' 
-        : '#374151',
-  });
+  const getInputStyle = () => {
+    const baseStyle = InputFieldStyles.input;
+    
+    if (error) {
+      return [baseStyle, InputFieldStyles.inputError];
+    }
+    
+    if (isFocused) {
+      return [baseStyle, InputFieldStyles.inputFocused];
+    }
+    
+    return baseStyle;
+  };
 
   return (
-    <View style={containerStyle}>
+    <View style={[getContainerStyle(), containerStyle]}>
       {label && (
-        <Text style={[getLabelStyle(), labelStyle]}>
-          {label}
-          {required && <Text style={styles.required}> *</Text>}
-        </Text>
+        <View style={InputFieldStyles.labelContainer}>
+          <Text style={InputFieldStyles.label}>
+            {label}
+            {required && <Text style={InputFieldStyles.required}> *</Text>}
+          </Text>
+        </View>
       )}
       
-      <View style={getContainerStyle()}>
+      <View style={InputFieldStyles.inputContainer}>
         {leftIcon && (
-          <Ionicons
-            name={leftIcon}
-            size={20}
-            color={isDark ? '#9CA3AF' : '#6B7280'}
-            style={styles.leftIcon}
-          />
+          <View style={InputFieldStyles.leftIcon}>
+            <Ionicons 
+              name={leftIcon} 
+              size={20} 
+              color={error ? '#EF4444' : (isFocused ? '#3B82F6' : '#6B7280')} 
+            />
+          </View>
         )}
         
         <TextInput
+          {...textInputProps}
           style={[getInputStyle(), inputStyle]}
-          value={value}
-          secureTextEntry={isSecure}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
-          maxLength={maxLength}
-          {...props}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          secureTextEntry={textInputProps.secureTextEntry && !isPasswordVisible}
         />
         
-        {(rightIcon || secureTextEntry) && (
+        {textInputProps.secureTextEntry && (
           <TouchableOpacity
-            onPress={handleRightIconPress}
-            style={styles.rightIcon}
+            style={InputFieldStyles.rightIcon}
+            onPress={togglePasswordVisibility}
           >
-            <Ionicons
-              name={getRightIcon() as any}
-              size={20}
-              color={isDark ? '#9CA3AF' : '#6B7280'}
+            <Ionicons 
+              name={isPasswordVisible ? 'eye-off' : 'eye'} 
+              size={20} 
+              color="#6B7280" 
+            />
+          </TouchableOpacity>
+        )}
+        
+        {rightIcon && !textInputProps.secureTextEntry && (
+          <TouchableOpacity
+            style={InputFieldStyles.rightIcon}
+            onPress={onRightIconPress}
+          >
+            <Ionicons 
+              name={rightIcon} 
+              size={20} 
+              color="#6B7280" 
             />
           </TouchableOpacity>
         )}
       </View>
       
-      <View style={styles.footer}>
-        {error && (
-          <Text style={styles.error}>{error}</Text>
-        )}
-        
-        {showCharacterCount && maxLength && (
-          <Text style={[styles.characterCount, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-            {value?.length || 0} / {maxLength}
-          </Text>
-        )}
-      </View>
+      {error && (
+        <View style={InputFieldStyles.errorContainer}>
+          <Ionicons name="alert-circle" size={16} color="#EF4444" />
+          <Text style={InputFieldStyles.errorText}>{error}</Text>
+        </View>
+      )}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 2.84,
-    elevation: 2,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    paddingVertical: 12,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-  },
-  required: {
-    color: '#DC2626',
-  },
-  leftIcon: {
-    position: 'absolute',
-    left: 12,
-    zIndex: 1,
-  },
-  rightIcon: {
-    position: 'absolute',
-    right: 12,
-    zIndex: 1,
-    padding: 4,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  error: {
-    fontSize: 12,
-    color: '#DC2626',
-    marginTop: 2,
-  },
-  characterCount: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-});
-
-export default InputField;
+}

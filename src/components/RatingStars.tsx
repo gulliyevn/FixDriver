@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import { RatingStarsStyles } from '../styles/components/RatingStars.styles';
 
 interface RatingStarsProps {
   rating: number;
@@ -22,7 +23,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({
     // Полные звезды
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        <Text key={`full-${i}`} style={[styles.star, { fontSize: size }]}>
+        <Text key={`full-${i}`} style={[RatingStarsStyles.star, { fontSize: size }]}>
           ⭐
         </Text>
       );
@@ -31,7 +32,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({
     // Половина звезды
     if (hasHalfStar) {
       stars.push(
-        <Text key="half" style={[styles.star, { fontSize: size }]}>
+        <Text key="half" style={[RatingStarsStyles.star, { fontSize: size }]}>
           ⭐
         </Text>
       );
@@ -40,7 +41,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({
     // Пустые звезды
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <Text key={`empty-${i}`} style={[styles.star, styles.emptyStar, { fontSize: size }]}>
+        <Text key={`empty-${i}`} style={[RatingStarsStyles.star, RatingStarsStyles.emptyStar, { fontSize: size }]}>
           ⭐
         </Text>
       );
@@ -50,38 +51,17 @@ const RatingStars: React.FC<RatingStarsProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.starsContainer}>
+    <View style={RatingStarsStyles.container}>
+      <View style={RatingStarsStyles.starsContainer}>
         {renderStars()}
       </View>
       {showNumber && (
-        <Text style={styles.ratingText}>
+        <Text style={RatingStarsStyles.ratingText}>
           {rating.toFixed(1)}
         </Text>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  starsContainer: {
-    flexDirection: 'row',
-  },
-  star: {
-    marginRight: 2,
-  },
-  emptyStar: {
-    opacity: 0.3,
-  },
-  ratingText: {
-    marginLeft: 5,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-});
 
 export default RatingStars;

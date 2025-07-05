@@ -2,10 +2,10 @@ export interface Message {
   id: string;
   chatId: string;
   senderId: string;
-  senderName: string;
+  senderType: 'client' | 'driver';
   content: string;
-  timestamp: Date;
   type: 'text' | 'image' | 'file' | 'location';
+  timestamp: string;
   isRead: boolean;
   metadata?: {
     imageUrl?: string;
@@ -22,16 +22,12 @@ export interface Message {
 
 export interface Chat {
   id: string;
-  participantId: string;
-  participantName: string;
-  participantAvatar: string | null;
-  participantRole: 'driver' | 'client' | 'support';
-  lastMessage: string;
-  lastMessageTime: Date;
+  clientId: string;
+  driverId: string;
+  lastMessage?: Message;
   unreadCount: number;
-  isOnline: boolean;
-  tripId: string | null;
-  status?: 'active' | 'archived' | 'blocked';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ChatPreview {

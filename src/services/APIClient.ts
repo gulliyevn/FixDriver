@@ -9,7 +9,7 @@ const API_CONFIG = {
   RETRY_ATTEMPTS: 3,
 };
 
-export interface APIResponse<T = any> {
+export interface APIResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -27,8 +27,8 @@ class APIClient {
   private static instance: APIClient;
   private isRefreshing = false;
   private failedQueue: Array<{
-    resolve: (value: any) => void;
-    reject: (error: any) => void;
+    resolve: (value: unknown) => void;
+    reject: (error: unknown) => void;
   }> = [];
 
   private constructor() {}
@@ -43,7 +43,7 @@ class APIClient {
   /**
    * Выполняет HTTP запрос с автоматической обработкой токенов
    */
-  async request<T = any>(
+  async request<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<APIResponse<T>> {
@@ -71,7 +71,7 @@ class APIClient {
   /**
    * GET запрос
    */
-  async get<T = any>(endpoint: string, params?: Record<string, any>): Promise<APIResponse<T>> {
+  async get<T = unknown>(endpoint: string, params?: Record<string, unknown>): Promise<APIResponse<T>> {
     const queryString = params ? this.buildQueryString(params) : '';
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
     
@@ -83,7 +83,7 @@ class APIClient {
   /**
    * POST запрос
    */
-  async post<T = any>(endpoint: string, data?: any): Promise<APIResponse<T>> {
+  async post<T = unknown>(endpoint: string, data?: unknown): Promise<APIResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'POST',
       headers: {
@@ -96,7 +96,7 @@ class APIClient {
   /**
    * PUT запрос
    */
-  async put<T = any>(endpoint: string, data?: any): Promise<APIResponse<T>> {
+  async put<T = unknown>(endpoint: string, data?: unknown): Promise<APIResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       headers: {
@@ -109,7 +109,7 @@ class APIClient {
   /**
    * DELETE запрос
    */
-  async delete<T = any>(endpoint: string): Promise<APIResponse<T>> {
+  async delete<T = unknown>(endpoint: string): Promise<APIResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'DELETE',
     });
@@ -118,7 +118,7 @@ class APIClient {
   /**
    * PATCH запрос
    */
-  async patch<T = any>(endpoint: string, data?: any): Promise<APIResponse<T>> {
+  async patch<T = unknown>(endpoint: string, data?: unknown): Promise<APIResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       headers: {
@@ -251,7 +251,25 @@ class APIClient {
   }
 
   /**
+   * Проверка здоровья API
+   * TODO: Заменить на реальную проверку здоровья API
+   */
+  static async healthCheck(): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/health`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(5000), // 5 секунд таймаут
+      });
+      return response.ok;
+    } catch (error) {
+      console.warn('API health check failed:', error);
+      return false;
+    }
+  }
+
+  /**
    * Обрабатывает сетевые ошибки
+   * TODO: Добавить более детальную обработку ошибок для production
    */
   private handleError(error: any): APIResponse {
     console.error('API request error:', error);
@@ -333,18 +351,6 @@ class APIClient {
       headers,
       body: formData,
     });
-  }
-
-  /**
-   * Проверяет здоровье API
-   */
-  async healthCheck(): Promise<boolean> {
-    try {
-      const response = await this.get('/health');
-      return response.success;
-    } catch (error) {
-      return false;
-    }
   }
 }
 

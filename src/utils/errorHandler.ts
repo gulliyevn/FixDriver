@@ -68,10 +68,10 @@ export class ErrorHandler {
   /**
    * Обрабатывает ошибки API
    */
-  static handleAPIError(error: any): AppError {
+  static handleAPIError(error: unknown): AppError {
     // Если это уже наша ошибка
     if (error.code && error.message) {
-      return error;
+      return error as AppError;
     }
 
     // Обработка HTTP ошибок
@@ -81,14 +81,14 @@ export class ErrorHandler {
           return this.createError(
             this.NETWORK_ERRORS.BAD_REQUEST,
             'Некорректный запрос',
-            error.message,
+            error.message as string,
             false
           );
         case 401:
           return this.createError(
             this.AUTH_ERRORS.TOKEN_INVALID,
             'Необходима повторная авторизация',
-            error.message,
+            error.message as string,
             true,
             'Попробуйте войти снова'
           );
@@ -96,14 +96,14 @@ export class ErrorHandler {
           return this.createError(
             this.NETWORK_ERRORS.FORBIDDEN,
             'Доступ запрещен',
-            error.message,
+            error.message as string,
             false
           );
         case 404:
           return this.createError(
             this.NETWORK_ERRORS.NOT_FOUND,
             'Ресурс не найден',
-            error.message,
+            error.message as string,
             false
           );
         case 429:
@@ -126,7 +126,7 @@ export class ErrorHandler {
           return this.createError(
             'UNKNOWN_ERROR',
             'Неизвестная ошибка',
-            error.message,
+            error.message as string,
             true
           );
       }
@@ -158,7 +158,7 @@ export class ErrorHandler {
     return this.createError(
       'UNKNOWN_ERROR',
       'Произошла ошибка',
-      error.message || 'Неизвестная ошибка',
+      error.message as string || 'Неизвестная ошибка',
       true
     );
   }
@@ -166,9 +166,9 @@ export class ErrorHandler {
   /**
    * Обрабатывает ошибки аутентификации
    */
-  static handleAuthError(error: any): AppError {
+  static handleAuthError(error: unknown): AppError {
     if (error.code && error.message) {
-      return error;
+      return error as AppError;
     }
 
     const message = error.message || '';

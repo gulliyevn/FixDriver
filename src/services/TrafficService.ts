@@ -9,7 +9,26 @@ interface Coordinate {
   longitude: number;
 }
 
+// Отключено для production - только для разработки
+const ENABLE_TRAFFIC_LOGS = false;
+
+const log = (message: string, data?: unknown) => {
+  if (ENABLE_TRAFFIC_LOGS) {
+    console.log(`🚦 ${message}`, data || '');
+  }
+};
+
 class TrafficService {
+  private static instance: TrafficService;
+  private trafficData: Map<string, Record<string, unknown>> = new Map();
+
+  static getInstance(): TrafficService {
+    if (!TrafficService.instance) {
+      TrafficService.instance = new TrafficService();
+    }
+    return TrafficService.instance;
+  }
+
   // Бесплатные API ключи (нужно получить)
   private static readonly HERE_API_KEY = 'YOUR_HERE_API_KEY'; // Бесплатно до 250k запросов/месяц
   private static readonly OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_KEY'; // Бесплатно до 1000 запросов/день
@@ -179,23 +198,76 @@ class TrafficService {
   }
 
   // Получение уровня пробок для одной точки
-  static getTrafficLevel(coordinate: Coordinate, time: Date = new Date(), routePosition: number = 0.5): 'free' | 'low' | 'medium' | 'high' | 'heavy' {
-    const trafficData = this.simulateRealisticTraffic([coordinate]);
-    return trafficData[0]?.level || 'medium';
+  static getTrafficLevel(coordinate: { latitude: number; longitude: number }, time: Date, routePosition: number = 0.5): 'free' | 'low' | 'medium' | 'high' | 'heavy' {
+    const hour = time.getHours();
+    const dayOfWeek = time.getDay();
+    
+    // Базовый уровень пробок в зависимости от времени
+    let baseLevel: 'free' | 'low' | 'medium' | 'high' | 'heavy' = 'medium';
+    
+    // Утренние часы пик (7-9)
+    if (hour >= 7 && hour <= 9) {
+      baseLevel = 'high';
+    }
+    // Вечерние часы пик (17-19)
+    else if (hour >= 17 && hour <= 19) {
+      baseLevel = 'heavy';
+    }
+    // Ночные часы (22-6)
+    else if (hour >= 22 || hour <= 6) {
+      baseLevel = 'free';
+    }
+    // Выходные дни
+    else if (dayOfWeek === 0 || dayOfWeek === 6) {
+      baseLevel = 'low';
+    }
+    
+    // Добавляем случайность для реалистичности
+    const random = Math.random();
+    if (random < 0.1) {
+      baseLevel = 'free';
+    } else if (random < 0.2) {
+      baseLevel = 'low';
+    } else if (random < 0.6) {
+      baseLevel = 'medium';
+    } else if (random < 0.8) {
+      baseLevel = 'high';
+    } else {
+      baseLevel = 'heavy';
+    }
+    
+    return baseLevel;
   }
 
-  // Получение текстового описания пробок
+  // Получение описания уровня пробок
   static getTrafficDescription(level: 'free' | 'low' | 'medium' | 'high' | 'heavy'): string {
-    switch (level) {
-      case 'free': return 'Свободно';
-      case 'low': return 'Легкие пробки';
-      case 'medium': return 'Средние пробки';
-      case 'high': return 'Сильные пробки';
-      case 'heavy': return 'Очень сильные пробки';
-      default: return 'Неизвестно';
-    }
+    const descriptions = {
+      free: 'Свободно',
+      low: 'Небольшие пробки',
+      medium: 'Умеренные пробки',
+      high: 'Сильные пробки',
+      heavy: 'Очень сильные пробки'
+    };
+    return descriptions[level];
+  }
+
+  // Обновление данных о пробках
+  updateTrafficData(): void {
+    log('Данные о пробках обновлены');
+    // Здесь будет логика обновления данных
+  }
+
+  // Получение прогноза пробок
+  getTrafficForecast(coordinate: { latitude: number; longitude: number }, time: Date): Record<string, unknown> {
+    const currentLevel = TrafficService.getTrafficLevel(coordinate, time);
+    
+    return {
+      current: currentLevel,
+      forecast: currentLevel, // Упрощенный прогноз
+      confidence: 0.8,
+    };
   }
 }
 
-export default TrafficService;
+export default TrafficService.getInstance();
 export type { TrafficData, Coordinate }; 

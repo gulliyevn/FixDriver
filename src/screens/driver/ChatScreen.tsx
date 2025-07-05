@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
-  StyleSheet, 
   FlatList, 
   TouchableOpacity, 
   TextInput, 
@@ -13,6 +12,8 @@ import {
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import mockData from '../../utils/mockData';
+import { ChatScreenStyles } from '../../styles/screens/ChatScreen.styles';
 
 interface Message {
   id: string;
@@ -42,78 +43,36 @@ const DriverChatScreen: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
 
-  // Mock данные чатов
+  // Используем централизованные мок-данные
   useEffect(() => {
-    const mockChats: Chat[] = [
-      {
-        id: '1',
-        clientId: '1',
-        clientName: 'Анна Иванова',
-        clientAvatar: 'https://randomuser.me/api/portraits/women/1.jpg',
-        lastMessage: 'Я уже выхожу, подождите немного',
-        lastMessageTime: new Date(Date.now() - 3 * 60 * 1000), // 3 минуты назад
-        unreadCount: 1,
-        isActive: true,
-      },
-      {
-        id: '2',
-        clientId: '2',
-        clientName: 'Петр Сидоров',
-        clientAvatar: 'https://randomuser.me/api/portraits/men/1.jpg',
-        lastMessage: 'Спасибо за поездку!',
-        lastMessageTime: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 час назад
-        unreadCount: 0,
-        isActive: false,
-      },
-      {
-        id: '3',
-        clientId: '3',
-        clientName: 'Мария Козлова',
-        clientAvatar: 'https://randomuser.me/api/portraits/women/2.jpg',
-        lastMessage: 'Буду ждать у подъезда',
-        lastMessageTime: new Date(Date.now() - 15 * 60 * 1000), // 15 минут назад
-        unreadCount: 2,
-        isActive: true,
-      },
-    ];
+    const mockChats: Chat[] = mockData.chats.map(chat => {
+      const client = mockData.users.find(user => user.id === chat.clientId);
+      return {
+        id: chat.id,
+        clientId: chat.clientId,
+        clientName: client ? `${client.name} ${client.surname}` : 'Неизвестный клиент',
+        clientAvatar: client?.avatar || undefined,
+        lastMessage: chat.lastMessage.content,
+        lastMessageTime: new Date(chat.lastMessage.timestamp),
+        unreadCount: chat.unreadCount,
+        isActive: chat.unreadCount > 0,
+      };
+    });
     setChats(mockChats);
   }, []);
 
-  // Mock сообщения для выбранного чата
+  // Используем централизованные мок-данные для сообщений
   useEffect(() => {
     if (selectedChat) {
-      const mockMessages: Message[] = [
-        {
-          id: '1',
-          text: 'Здравствуйте! Я ваш водитель',
-          timestamp: new Date(Date.now() - 20 * 60 * 1000),
-          isFromUser: true,
-          senderName: 'Вы',
-        },
-        {
-          id: '2',
-          text: 'Здравствуйте! Я уже выхожу',
-          timestamp: new Date(Date.now() - 19 * 60 * 1000),
-          isFromUser: false,
-          senderName: selectedChat.clientName,
-          senderAvatar: selectedChat.clientAvatar,
-        },
-        {
-          id: '3',
-          text: 'Отлично! Я подъеду к подъезду',
-          timestamp: new Date(Date.now() - 18 * 60 * 1000),
-          isFromUser: true,
-          senderName: 'Вы',
-        },
-        {
-          id: '4',
-          text: 'Я уже выхожу, подождите немного',
-          timestamp: new Date(Date.now() - 3 * 60 * 1000),
-          isFromUser: false,
-          senderName: selectedChat.clientName,
-          senderAvatar: selectedChat.clientAvatar,
-        },
-      ];
+      const chatMessages = mockData.messages.filter(msg => msg.chatId === selectedChat.id);
+      const mockMessages: Message[] = chatMessages.map(msg => ({
+        id: msg.id,
+        text: msg.content,
+        timestamp: new Date(msg.timestamp),
+        isFromUser: msg.senderType === 'driver',
+        senderName: msg.senderType === 'driver' ? 'Вы' : selectedChat.clientName,
+        senderAvatar: msg.senderType === 'driver' ? undefined : selectedChat.clientAvatar,
+      }));
       setMessages(mockMessages);
     }
   }, [selectedChat]);
@@ -167,33 +126,33 @@ const DriverChatScreen: React.FC = () => {
 
   const renderChatItem = ({ item }: { item: Chat }) => (
     <TouchableOpacity 
-      style={[styles.chatItem, { backgroundColor: isDark ? '#333' : '#fff' }]}
+      style={[ChatScreenStyles.chatItem, { backgroundColor: isDark ? '#333' : '#fff' }]}
       onPress={() => setSelectedChat(item)}
     >
       <Image 
         source={{ uri: item.clientAvatar }} 
-        style={styles.avatar}
+        style={ChatScreenStyles.avatar}
         defaultSource={{ uri: 'https://randomuser.me/api/portraits/women/1.jpg' }}
       />
-      <View style={styles.chatInfo}>
-        <View style={styles.chatHeader}>
-          <Text style={[styles.clientName, { color: isDark ? '#fff' : '#000' }]}>
+      <View style={ChatScreenStyles.chatInfo}>
+        <View style={ChatScreenStyles.chatHeader}>
+          <Text style={[ChatScreenStyles.clientName, { color: isDark ? '#fff' : '#000' }]}>
             {item.clientName}
           </Text>
-          <Text style={[styles.timeText, { color: isDark ? '#ccc' : '#666' }]}>
+          <Text style={[ChatScreenStyles.timeText, { color: isDark ? '#ccc' : '#666' }]}>
             {formatTime(item.lastMessageTime)}
           </Text>
         </View>
-        <View style={styles.chatFooter}>
+        <View style={ChatScreenStyles.chatFooter}>
           <Text 
-            style={[styles.lastMessage, { color: isDark ? '#ccc' : '#666' }]}
+            style={[ChatScreenStyles.lastMessage, { color: isDark ? '#ccc' : '#666' }]}
             numberOfLines={1}
           >
             {item.lastMessage}
           </Text>
           {item.unreadCount > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadText}>{item.unreadCount}</Text>
+            <View style={ChatScreenStyles.unreadBadge}>
+              <Text style={ChatScreenStyles.unreadText}>{item.unreadCount}</Text>
             </View>
           )}
         </View>
@@ -203,28 +162,28 @@ const DriverChatScreen: React.FC = () => {
 
   const renderMessage = ({ item }: { item: Message }) => (
     <View style={[
-      styles.messageContainer,
-      item.isFromUser ? styles.userMessage : styles.clientMessage
+      ChatScreenStyles.messageContainer,
+      item.isFromUser ? ChatScreenStyles.userMessage : ChatScreenStyles.clientMessage
     ]}>
       {!item.isFromUser && (
         <Image 
           source={{ uri: item.senderAvatar }} 
-          style={styles.messageAvatar}
+          style={ChatScreenStyles.messageAvatar}
           defaultSource={{ uri: 'https://randomuser.me/api/portraits/women/1.jpg' }}
         />
       )}
       <View style={[
-        styles.messageBubble,
+        ChatScreenStyles.messageBubble,
         { backgroundColor: item.isFromUser ? '#007AFF' : (isDark ? '#555' : '#f0f0f0') }
       ]}>
         <Text style={[
-          styles.messageText,
+          ChatScreenStyles.messageText,
           { color: item.isFromUser ? '#fff' : (isDark ? '#fff' : '#000') }
         ]}>
           {item.text}
         </Text>
         <Text style={[
-          styles.messageTime,
+          ChatScreenStyles.messageTime,
           { color: item.isFromUser ? '#rgba(255,255,255,0.7)' : (isDark ? '#ccc' : '#666') }
         ]}>
           {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -236,57 +195,47 @@ const DriverChatScreen: React.FC = () => {
   if (selectedChat) {
     return (
       <KeyboardAvoidingView 
-        style={[styles.container, { backgroundColor: isDark ? '#000' : '#f5f5f5' }]}
+        style={[ChatScreenStyles.container, { backgroundColor: isDark ? '#333' : '#fff' }]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* Заголовок чата */}
-        <View style={[styles.chatHeaderContainer, { backgroundColor: isDark ? '#333' : '#fff' }]}>
-          <TouchableOpacity onPress={() => setSelectedChat(null)} style={styles.backButton}>
-            <Text style={[styles.backButtonText, { color: '#007AFF' }]}>← Назад</Text>
+        <View style={ChatScreenStyles.header}>
+          <TouchableOpacity 
+            style={ChatScreenStyles.backButton}
+            onPress={() => setSelectedChat(null)}
+          >
+            <Text style={ChatScreenStyles.backButtonText}>← Назад</Text>
           </TouchableOpacity>
-          <View style={styles.chatTitleContainer}>
-            <Image 
-              source={{ uri: selectedChat.clientAvatar }} 
-              style={styles.chatTitleAvatar}
-              defaultSource={{ uri: 'https://randomuser.me/api/portraits/women/1.jpg' }}
-            />
-            <Text style={[styles.chatTitle, { color: isDark ? '#fff' : '#000' }]}>
-              {selectedChat.clientName}
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Выйти</Text>
+          <Text style={ChatScreenStyles.headerTitle}>{selectedChat.clientName}</Text>
+          <TouchableOpacity 
+            style={ChatScreenStyles.logoutButton}
+            onPress={handleLogout}
+          >
+            <Text style={ChatScreenStyles.logoutButtonText}>Выйти</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Сообщения */}
         <FlatList
           data={messages}
           renderItem={renderMessage}
-          keyExtractor={(item) => item.id}
-          style={styles.messagesList}
+          keyExtractor={item => item.id}
+          style={{ flex: 1 }}
           inverted
         />
 
-        {/* Поле ввода */}
-        <View style={[styles.inputContainer, { backgroundColor: isDark ? '#333' : '#fff' }]}>
+        <View style={ChatScreenStyles.inputContainer}>
           <TextInput
-            style={[styles.input, { 
-              backgroundColor: isDark ? '#555' : '#f0f0f0',
-              color: isDark ? '#fff' : '#000'
-            }]}
-            placeholder="Введите сообщение..."
-            placeholderTextColor={isDark ? '#ccc' : '#666'}
+            style={ChatScreenStyles.textInput}
             value={newMessage}
             onChangeText={setNewMessage}
+            placeholder="Введите сообщение..."
+            placeholderTextColor="#999"
             multiline
           />
           <TouchableOpacity 
-            style={[styles.sendButton, { backgroundColor: newMessage.trim() ? '#007AFF' : '#ccc' }]}
+            style={ChatScreenStyles.sendButton}
             onPress={handleSendMessage}
-            disabled={!newMessage.trim()}
           >
-            <Text style={styles.sendButtonText}>→</Text>
+            <Text style={ChatScreenStyles.sendButtonText}>→</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -294,213 +243,33 @@ const DriverChatScreen: React.FC = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : '#f5f5f5' }]}>
-      {/* Заголовок */}
-      <View style={[styles.header, { backgroundColor: isDark ? '#333' : '#fff' }]}>
-        <Text style={[styles.headerTitle, { color: isDark ? '#fff' : '#000' }]}>
-          Чаты с клиентами
-        </Text>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Выйти</Text>
+    <View style={[ChatScreenStyles.container, { backgroundColor: isDark ? '#333' : '#fff' }]}>
+      <View style={ChatScreenStyles.header}>
+        <Text style={ChatScreenStyles.headerTitle}>Чаты</Text>
+        <TouchableOpacity 
+          style={ChatScreenStyles.logoutButton}
+          onPress={handleLogout}
+        >
+          <Text style={ChatScreenStyles.logoutButtonText}>Выйти</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Список чатов */}
-      <FlatList
-        data={chats}
-        renderItem={renderChatItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.chatsList}
-        showsVerticalScrollIndicator={false}
-      />
+      {chats.length === 0 ? (
+        <View style={ChatScreenStyles.emptyState}>
+          <Text style={ChatScreenStyles.emptyStateText}>
+            У вас пока нет активных чатов
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={chats}
+          renderItem={renderChatItem}
+          keyExtractor={item => item.id}
+          style={{ flex: 1 }}
+        />
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  logoutButton: {
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 6,
-  },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  chatsList: {
-    padding: 15,
-  },
-  chatItem: {
-    flexDirection: 'row',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
-  },
-  chatInfo: {
-    flex: 1,
-  },
-  chatHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  clientName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  timeText: {
-    fontSize: 12,
-  },
-  chatFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  lastMessage: {
-    flex: 1,
-    fontSize: 14,
-    marginRight: 10,
-  },
-  unreadBadge: {
-    backgroundColor: '#FF3B30',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  unreadText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  chatHeaderContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    paddingHorizontal: 10,
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  chatTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  chatTitleAvatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 8,
-  },
-  chatTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  messagesList: {
-    flex: 1,
-    paddingHorizontal: 15,
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    marginVertical: 5,
-    alignItems: 'flex-end',
-  },
-  userMessage: {
-    justifyContent: 'flex-end',
-  },
-  clientMessage: {
-    justifyContent: 'flex-start',
-  },
-  messageAvatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 8,
-  },
-  messageBubble: {
-    maxWidth: '80%',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 18,
-  },
-  messageText: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  messageTime: {
-    fontSize: 12,
-    alignSelf: 'flex-end',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    padding: 15,
-    alignItems: 'flex-end',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-  },
-  input: {
-    flex: 1,
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    maxHeight: 100,
-    marginRight: 10,
-  },
-  sendButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sendButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
 
 export default DriverChatScreen;

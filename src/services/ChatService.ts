@@ -1,435 +1,195 @@
-import { Chat, Message } from '../types/chat';
+import { Chat, Message, ChatPreview } from '../types/chat';
+import mockData from '../utils/mockData';
 
-class ChatService {
+// Отключено для production - только для разработки
+const ENABLE_CHAT_LOGS = false;
+
+const log = (message: string, data?: unknown) => {
+  if (ENABLE_CHAT_LOGS) {
+    console.log(`📋 ChatService: ${message}`, data || '');
+  }
+};
+
+export class ChatService {
+  private static instance: ChatService;
   private chats: Chat[] = [];
-  private messages: { [chatId: string]: Message[] } = {};
+  private messages: Message[] = [];
+  private chatPreviews: ChatPreview[] = [];
+  private subscribers: ((chats: ChatPreview[]) => void)[] = [];
+
+  static getInstance(): ChatService {
+    if (!ChatService.instance) {
+      ChatService.instance = new ChatService();
+    }
+    return ChatService.instance;
+  }
 
   constructor() {
     this.initializeMockData();
   }
 
-  private initializeMockData() {
-    const now = new Date();
-    
-    // Моковые чаты
-    this.chats = [
-      {
-        id: '1',
-        participantId: 'driver_1',
-        participantName: 'Рашад Мамедов',
-        participantAvatar: 'https://i.pravatar.cc/150?img=1',
-        participantRole: 'driver',
-        lastMessage: 'Уже еду к вам, буду через 3 минуты',
-        lastMessageTime: new Date(now.getTime() - 2 * 60 * 1000),
-        unreadCount: 1,
-        isOnline: true,
-        tripId: 'trip_1',
-      },
-      {
-        id: '2',
-        participantId: 'driver_2',
-        participantName: 'Эльнур Джафаров',
-        participantAvatar: 'https://i.pravatar.cc/150?img=2',
-        participantRole: 'driver',
-        lastMessage: 'Спасибо за поездку! Хорошего дня',
-        lastMessageTime: new Date(now.getTime() - 30 * 60 * 1000),
-        unreadCount: 0,
-        isOnline: false,
-        tripId: 'trip_2',
-      },
-      {
-        id: '3',
-        participantId: 'driver_3',
-        participantName: 'Орхан Алиев',
-        participantAvatar: 'https://i.pravatar.cc/150?img=3',
-        participantRole: 'driver',
-        lastMessage: 'Задерживаюсь на 5 минут из-за пробки',
-        lastMessageTime: new Date(now.getTime() - 2 * 60 * 60 * 1000),
-        unreadCount: 2,
-        isOnline: true,
-        tripId: 'trip_3',
-      },
-      {
-        id: '4',
-        participantId: 'support',
-        participantName: 'Поддержка FixDrive',
-        participantAvatar: null,
-        participantRole: 'support',
-        lastMessage: 'Ваш вопрос был передан специалисту',
-        lastMessageTime: new Date(now.getTime() - 24 * 60 * 60 * 1000),
-        unreadCount: 0,
-        isOnline: true,
-        tripId: null,
-      },
-    ];
-
-    // Моковые сообщения для каждого чата
-    this.messages = {
-      '1': [
-        {
-          id: 'msg_1_1',
-          chatId: '1',
-          senderId: 'driver_1',
-          senderName: 'Рашад Мамедов',
-          content: 'Добрый день! Я ваш водитель на сегодня',
-          timestamp: new Date(now.getTime() - 15 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_1_2',
-          chatId: '1',
-          senderId: 'me',
-          senderName: 'Я',
-          content: 'Здравствуйте! Когда будете?',
-          timestamp: new Date(now.getTime() - 12 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_1_3',
-          chatId: '1',
-          senderId: 'driver_1',
-          senderName: 'Рашад Мамедов',
-          content: 'Уже еду к вам, буду через 3 минуты',
-          timestamp: new Date(now.getTime() - 2 * 60 * 1000),
-          type: 'text',
-          isRead: false,
-        },
-      ],
-      '2': [
-        {
-          id: 'msg_2_1',
-          chatId: '2',
-          senderId: 'driver_2',
-          senderName: 'Эльнур Джафаров',
-          content: 'Приехал, жду у подъезда',
-          timestamp: new Date(now.getTime() - 45 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_2_2',
-          chatId: '2',
-          senderId: 'me',
-          senderName: 'Я',
-          content: 'Выхожу',
-          timestamp: new Date(now.getTime() - 40 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_2_3',
-          chatId: '2',
-          senderId: 'driver_2',
-          senderName: 'Эльнур Джафаров',
-          content: 'Спасибо за поездку! Хорошего дня',
-          timestamp: new Date(now.getTime() - 30 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-      ],
-      '3': [
-        {
-          id: 'msg_3_1',
-          chatId: '3',
-          senderId: 'driver_3',
-          senderName: 'Орхан Алиев',
-          content: 'Добрый вечер! Выезжаю к вам',
-          timestamp: new Date(now.getTime() - 3 * 60 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_3_2',
-          chatId: '3',
-          senderId: 'driver_3',
-          senderName: 'Орхан Алиев',
-          content: 'Задерживаюсь на 5 минут из-за пробки',
-          timestamp: new Date(now.getTime() - 2 * 60 * 60 * 1000),
-          type: 'text',
-          isRead: false,
-        },
-        {
-          id: 'msg_3_3',
-          chatId: '3',
-          senderId: 'driver_3',
-          senderName: 'Орхан Алиев',
-          content: 'Уже близко, еще 2 минуты',
-          timestamp: new Date(now.getTime() - 90 * 60 * 1000),
-          type: 'text',
-          isRead: false,
-        },
-      ],
-      '4': [
-        {
-          id: 'msg_4_1',
-          chatId: '4',
-          senderId: 'me',
-          senderName: 'Я',
-          content: 'Здравствуйте, у меня вопрос по тарифам',
-          timestamp: new Date(now.getTime() - 25 * 60 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_4_2',
-          chatId: '4',
-          senderId: 'support',
-          senderName: 'Поддержка FixDrive',
-          content: 'Здравствуйте! Опишите, пожалуйста, ваш вопрос подробнее',
-          timestamp: new Date(now.getTime() - 24.5 * 60 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-        {
-          id: 'msg_4_3',
-          chatId: '4',
-          senderId: 'support',
-          senderName: 'Поддержка FixDrive',
-          content: 'Ваш вопрос был передан специалисту',
-          timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000),
-          type: 'text',
-          isRead: true,
-        },
-      ],
-    };
+  private initializeMockData(): void {
+    this.chats = mockData.chats;
+    this.messages = mockData.messages;
+    // Если есть chatPreviews, можно оставить или убрать, если не используется.
   }
 
-  // Получение списка чатов
-  async getChats(userId: string): Promise<Chat[]> {
-    console.log('📋 ChatService: получение списка чатов для пользователя', userId);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...this.chats].sort((a, b) => 
-          b.lastMessageTime.getTime() - a.lastMessageTime.getTime()
-        ));
-      }, 300);
-    });
+  getChats(userId: string): ChatPreview[] {
+    log(`получение списка чатов для пользователя ${userId}`);
+    return this.chatPreviews;
   }
 
-  // Получение сообщений чата
-  async getMessages(chatId: string): Promise<Message[]> {
-    console.log('💌 ChatService: получение сообщений для чата', chatId);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.messages[chatId] || []);
-      }, 200);
-    });
+  getMessages(chatId: string): Message[] {
+    log(`получение сообщений для чата ${chatId}`);
+    return this.messages.filter(message => message.chatId === chatId);
   }
 
-  // Отправка сообщения
-  async sendMessage(chatId: string, content: string, senderId: string): Promise<Message> {
-    console.log('📤 ChatService: отправка сообщения в чат', chatId, 'от', senderId);
-    return new Promise((resolve) => {
-      const message: Message = {
-        id: `msg_${chatId}_${Date.now()}`,
-        chatId,
-        senderId,
-        senderName: senderId === 'me' ? 'Я' : 'Водитель',
-        content,
-        timestamp: new Date(),
-        type: 'text',
-        isRead: false,
-      };
-
-      // Добавляем сообщение в чат
-      if (!this.messages[chatId]) {
-        this.messages[chatId] = [];
-      }
-      this.messages[chatId].push(message);
-
-      // Обновляем последнее сообщение в чате
-      const chat = this.chats.find(c => c.id === chatId);
-      if (chat) {
-        chat.lastMessage = content;
-        chat.lastMessageTime = message.timestamp;
-        if (senderId !== 'me') {
-          chat.unreadCount += 1;
-        }
-      }
-
-      setTimeout(() => resolve(message), 100);
-    });
-  }
-
-  // Отметить сообщения как прочитанные
-  async markMessagesAsRead(chatId: string): Promise<void> {
-    return new Promise((resolve) => {
-      const messages = this.messages[chatId];
-      if (messages) {
-        messages.forEach(msg => {
-          if (msg.senderId !== 'me') {
-            msg.isRead = true;
-          }
-        });
-      }
-
-      // Обнуляем счетчик непрочитанных в чате
-      const chat = this.chats.find(c => c.id === chatId);
-      if (chat) {
-        chat.unreadCount = 0;
-      }
-
-      setTimeout(() => resolve(), 100);
-    });
-  }
-
-  // Создание нового чата
-  async createChat(participantId: string, participantName: string, tripId?: string): Promise<Chat> {
-    return new Promise((resolve) => {
-      const chat: Chat = {
-        id: `chat_${Date.now()}`,
-        participantId,
-        participantName,
-        participantAvatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
-        participantRole: 'driver',
-        lastMessage: '',
-        lastMessageTime: new Date(),
-        unreadCount: 0,
-        isOnline: Math.random() > 0.3, // 70% шанс быть онлайн
-        tripId: tripId || null,
-      };
-
-      this.chats.unshift(chat);
-      this.messages[chat.id] = [];
-
-      setTimeout(() => resolve(chat), 200);
-    });
-  }
-
-  // Создание или получение чата с водителем по ID
-  async createChatByDriverId(driverId: string, driverName: string, driverCar?: string, driverNumber?: string, driverRating?: string, driverStatus?: string): Promise<Chat> {
-    console.log('📋 ChatService: поиск или создание чата с водителем', driverId);
-    
-    return new Promise((resolve) => {
-      // Сначала ищем существующий чат с этим водителем
-      const existingChat = this.chats.find(chat => chat.participantId === driverId);
-      
-      if (existingChat) {
-        console.log('✅ Найден существующий чат:', existingChat.id);
-        setTimeout(() => resolve(existingChat), 100);
-        return;
-      }
-
-      // Если чат не найден, создаем новый
-      console.log('🆕 Создаем новый чат с водителем:', driverId);
-      const chat: Chat = {
-        id: `chat_${Date.now()}`,
-        participantId: driverId,
-        participantName: driverName,
-        participantAvatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
-        participantRole: 'driver',
-        lastMessage: '',
-        lastMessageTime: new Date(),
-        unreadCount: 0,
-        isOnline: driverStatus === 'online',
-        tripId: null,
-      };
-
-      // Добавляем чат в начало списка
-      this.chats.unshift(chat);
-      this.messages[chat.id] = [];
-
-      console.log('✅ Создан новый чат:', chat.id);
-      setTimeout(() => resolve(chat), 200);
-    });
-  }
-
-  // Удаление чата
-  async deleteChat(chatId: string): Promise<void> {
-    console.log('🗑️ ChatService: удаление чата', chatId);
-    
-    return new Promise((resolve) => {
-      // Удаляем чат из списка
-      this.chats = this.chats.filter(chat => chat.id !== chatId);
-      
-      // Удаляем сообщения чата
-      delete this.messages[chatId];
-      
-      console.log('✅ Чат удален:', chatId);
-      setTimeout(() => resolve(), 100);
-    });
-  }
-
-  // Получение общего количества непрочитанных сообщений
-  getTotalUnreadCount(): number {
-    return this.chats.reduce((total, chat) => total + chat.unreadCount, 0);
-  }
-
-  // Симуляция получения нового сообщения
-  simulateIncomingMessage(chatId: string) {
-    const randomMessages = [
-      'Уже в пути к вам',
-      'Буду через 5 минут',
-      'Жду у подъезда',
-      'Задерживаюсь на 2 минуты',
-      'Приехал, где вас встретить?',
-      'Спасибо за поездку!',
-      'Хорошего дня!',
-    ];
-
-    const chat = this.chats.find(c => c.id === chatId);
-    if (!chat) return;
-
+  sendMessage(chatId: string, senderId: string, text: string): Message {
     const message: Message = {
-      id: `msg_${chatId}_${Date.now()}`,
+      id: `msg_${Date.now()}`,
       chatId,
-      senderId: chat.participantId,
-      senderName: chat.participantName,
-      content: randomMessages[Math.floor(Math.random() * randomMessages.length)],
-      timestamp: new Date(),
+      senderId,
+      senderType: senderId === 'me' ? 'client' : 'driver',
+      content: text,
+      timestamp: new Date().toISOString(),
       type: 'text',
       isRead: false,
     };
 
-    if (!this.messages[chatId]) {
-      this.messages[chatId] = [];
-    }
-    this.messages[chatId].push(message);
-
+    this.messages.push(message);
+    
     // Обновляем чат
-    chat.lastMessage = message.content;
-    chat.lastMessageTime = message.timestamp;
-    chat.unreadCount += 1;
+    const chat = this.chats.find(c => c.id === chatId);
+    if (chat) {
+      chat.lastMessage = message;
+      chat.updatedAt = message.timestamp;
+      if (senderId !== 'me') {
+        chat.unreadCount = (chat.unreadCount || 0) + 1;
+      }
+    }
 
+    // Обновляем превью чата
+    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
+    if (chatPreview) {
+      chatPreview.lastMessage = text;
+      chatPreview.lastMessageTime = new Date();
+      if (senderId !== 'me') {
+        chatPreview.unreadCount = (chatPreview.unreadCount || 0) + 1;
+      }
+    }
+
+    this.notifySubscribers();
+    
     return message;
   }
 
-  // Форматирование времени для отображения
-  formatMessageTime(date: Date): string {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
+  markAsRead(chatId: string, userId: string): void {
+    this.messages.forEach(message => {
+      if (message.chatId === chatId && message.senderId !== userId) {
+        message.isRead = true;
+      }
+    });
 
-    if (diffMinutes < 1) {
-      return 'только что';
-    } else if (diffMinutes < 60) {
-      return `${diffMinutes} мин`;
-    } else if (diffHours < 24) {
-      return date.toLocaleTimeString('ru-RU', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } else if (diffDays === 1) {
-      return 'вчера';
-    } else {
-      return date.toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-      });
+    // Обновляем счетчик непрочитанных
+    const chat = this.chats.find(c => c.id === chatId);
+    if (chat) {
+      chat.unreadCount = 0;
     }
+
+    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
+    if (chatPreview) {
+      chatPreview.unreadCount = 0;
+    }
+
+    this.notifySubscribers();
   }
 
-  // Восстановление мок-данных
-  resetToMockData(): void {
-    console.log('🔄 ChatService: восстановление мок-данных');
-    this.initializeMockData();
+  deleteChat(chatId: string): boolean {
+    log(`удаление чата ${chatId}`);
+    const initialLength = this.chats.length;
+    this.chats = this.chats.filter(chat => chat.id !== chatId);
+    this.messages = this.messages.filter(message => message.chatId !== chatId);
+    this.chatPreviews = this.chatPreviews.filter(chat => chat.id !== chatId);
+    
+    const deleted = initialLength > this.chats.length;
+    if (deleted) {
+      log(`✅ Чат удален: ${chatId}`);
+      this.notifySubscribers();
+    }
+    
+    return deleted;
+  }
+
+  subscribe(callback: (chats: ChatPreview[]) => void): () => void {
+    this.subscribers.push(callback);
+    return () => {
+      this.subscribers = this.subscribers.filter(sub => sub !== callback);
+    };
+  }
+
+  private notifySubscribers(): void {
+    this.subscribers.forEach(callback => callback(this.chatPreviews));
+  }
+
+  // Статические методы для совместимости
+  static async getChats(userId: string): Promise<Chat[]> {
+    const instance = ChatService.getInstance();
+    return instance.chats;
+  }
+
+  static async getMessages(chatId: string): Promise<Message[]> {
+    const instance = ChatService.getInstance();
+    return instance.getMessages(chatId);
+  }
+
+  static async sendMessage(chatId: string, text: string, senderId: string): Promise<Message> {
+    const instance = ChatService.getInstance();
+    return instance.sendMessage(chatId, senderId, text);
+  }
+
+  static async markMessagesAsRead(chatId: string): Promise<void> {
+    const instance = ChatService.getInstance();
+    instance.markAsRead(chatId, 'me');
+  }
+
+  static async createChat(clientId: string, driverId: string): Promise<Chat> {
+    const instance = ChatService.getInstance();
+    const newChat: Chat = {
+      id: `chat_${Date.now()}`,
+      clientId,
+      driverId,
+      unreadCount: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    instance.chats.push(newChat);
+    return newChat;
+  }
+
+  static formatMessageTime(timestamp: string | Date): string {
+    const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) return 'сейчас';
+    if (minutes < 60) return `${minutes}м`;
+    if (hours < 24) return `${hours}ч`;
+    if (days < 7) return `${days}д`;
+    return date.toLocaleDateString('ru-RU');
+  }
+
+  static resetToMockData(): void {
+    const instance = ChatService.getInstance();
+    instance.initializeMockData();
+  }
+
+  static async deleteChat(chatId: string): Promise<boolean> {
+    const instance = ChatService.getInstance();
+    return instance.deleteChat(chatId);
   }
 }
 
-// Синглтон для использования во всем приложении
-export const chatService = new ChatService();
-export default ChatService;
+export default ChatService.getInstance();

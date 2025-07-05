@@ -2,8 +2,8 @@ import { TravelPackage, ActivePackage, BookingRequest, RoutePoint, Passenger } f
 
 export class PackageService {
   // Получить все доступные пакеты
+  // TODO: Заменить на реальный API запрос к /packages/available
   static async getAvailablePackages(): Promise<TravelPackage[]> {
-    // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -58,8 +58,8 @@ export class PackageService {
   }
 
   // Получить активный пакет пользователя
+  // TODO: Заменить на реальный API запрос к /packages/active/{userId}
   static async getActivePackage(userId: string): Promise<ActivePackage | null> {
-    // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         // Mock активного пакета
@@ -85,82 +85,32 @@ export class PackageService {
     });
   }
 
-  // Купить новый пакет
+  // Покупка пакета
+  // TODO: Заменить на реальный API запрос к /packages/purchase
   static async purchasePackage(packageId: string, userId: string): Promise<ActivePackage> {
-    // TODO: интеграция со Stripe
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const packages = {
-          single: {
-            id: 'single',
-            name: 'Разовая поездка',
-            type: 'single' as const,
-            price: 25,
-            duration: 0,
-            description: 'Оплата за одну поездку',
-            isActive: true,
-            purchasedAt: new Date(),
-            tripsUsed: 0,
-            kmUsed: 0,
-            timeUsed: 0,
-          },
-          weekly: {
-            id: 'weekly',
-            name: 'Недельный пакет',
-            type: 'weekly' as const,
-            price: 150,
-            tripsIncluded: 10,
-            kmLimit: 200,
-            timeLimit: 600,
-            duration: 7,
-            description: '10 поездок на неделю, до 200 км',
-            isActive: true,
-            tripsRemaining: 10,
-            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-            purchasedAt: new Date(),
-            tripsUsed: 0,
-            kmUsed: 0,
-            timeUsed: 0,
-          },
-          monthly: {
-            id: 'monthly',
-            name: 'Месячный пакет',
-            type: 'monthly' as const,
-            price: 500,
-            tripsIncluded: 40,
-            kmLimit: 800,
-            timeLimit: 2400,
-            duration: 30,
-            description: '40 поездок на месяц, до 800 км',
-            isActive: true,
-            tripsRemaining: 40,
-            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            purchasedAt: new Date(),
-            tripsUsed: 0,
-            kmUsed: 0,
-            timeUsed: 0,
-          },
-          yearly: {
-            id: 'yearly',
-            name: 'Годовой пакет',
-            type: 'yearly' as const,
-            price: 5000,
-            tripsIncluded: 500,
-            kmLimit: 10000,
-            timeLimit: 30000,
-            duration: 365,
-            description: '500 поездок на год, до 10000 км',
-            isActive: true,
-            tripsRemaining: 500,
-            expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-            purchasedAt: new Date(),
-            tripsUsed: 0,
-            kmUsed: 0,
-            timeUsed: 0,
-          },
+        // Симуляция успешной покупки
+        const packageData = {
+          id: packageId,
+          name: 'Купленный пакет',
+          type: 'monthly' as const,
+          price: 500,
+          tripsIncluded: 40,
+          kmLimit: 800,
+          timeLimit: 2400,
+          duration: 30,
+          description: '40 поездок на месяц, до 800 км',
+          isActive: true,
+          tripsRemaining: 40,
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // через 30 дней
+          purchasedAt: new Date(),
+          tripsUsed: 0,
+          kmUsed: 0,
+          timeUsed: 0,
         };
 
-        resolve(packages[packageId as keyof typeof packages]);
+        resolve(packageData);
       }, 1000);
     });
   }
@@ -224,8 +174,8 @@ export class PackageService {
   }
 
   // Создать бронирование
+  // TODO: Заменить на реальный API запрос к /bookings/create
   static async createBooking(bookingData: Partial<BookingRequest>): Promise<BookingRequest> {
-    // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -248,8 +198,8 @@ export class PackageService {
   }
 
   // Получить сохраненные шаблоны пассажиров
+  // TODO: Заменить на реальный API запрос к /passengers/templates/{userId}
   static async getPassengerTemplates(userId: string): Promise<Passenger[]> {
-    // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([

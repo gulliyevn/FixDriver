@@ -9,9 +9,9 @@ import { UserRole } from '../types/user';
 const Stack = createStackNavigator();
 
 const RootNavigator: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     // Можно добавить экран загрузки
     return null;
   }

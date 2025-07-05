@@ -1,33 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import { DriverProfileScreenStyles } from '../../styles/screens/DriverProfileScreen.styles';
 
-const DriverProfileScreen = () => {
+const DriverProfileScreen: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Профиль водителя</Text>
-      <Text style={styles.subtitle}>
-        Информация о вашем аккаунте
+    <View style={DriverProfileScreenStyles.container}>
+      <Text style={DriverProfileScreenStyles.title}>Профиль водителя</Text>
+      <Text style={DriverProfileScreenStyles.subtitle}>
+        Здесь будет интерфейс профиля водителя
       </Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 export default DriverProfileScreen;

@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, UserRole } from '../types/user';
-import JWTService, { JWTPayload } from '../services/JWTService';
+import JWTService from '../services/JWTService';
+import mockData from '../utils/mockData';
 
 interface AuthContextType {
   user: User | null;
@@ -92,43 +93,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        // Определяем имя пользователя в зависимости от метода аутентификации
-        let userName = 'Иван';
-        let userSurname = 'Иванов';
-        let userAvatar = null;
-        
-        if (authMethod) {
-          switch (authMethod) {
-            case 'google_auth':
-              userName = 'Google';
-              userSurname = 'User';
-              userAvatar = 'https://via.placeholder.com/150';
-              break;
-            case 'facebook_auth':
-              userName = 'Facebook';
-              userSurname = 'User';
-              userAvatar = 'https://via.placeholder.com/150';
-              break;
-            case 'apple_auth':
-              userName = 'Apple';
-              userSurname = 'User';
-              userAvatar = null;
-              break;
-          }
-        }
-        
-        const mockUser: User = {
-          id: authMethod ? `social_${Date.now()}` : '1',
+        // Используем централизованные мок-данные
+        const mockUser = mockData.createMockUser({
           email,
-          name: userName,
-          surname: userSurname,
-          address: 'Москва, ул. Примерная, 1',
-          role: UserRole.CLIENT,
-          phone: '+1234567890',
-          avatar: userAvatar,
-          rating: 4.5,
-          createdAt: new Date().toISOString(),
-        };
+          authMethod,
+          role: UserRole.CLIENT
+        });
 
         // Генерируем JWT токены
         const tokens = JWTService.generateTokens({
@@ -196,18 +166,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const newUser: User = {
-          id: Date.now().toString(),
-          email: userData.email!,
-          name: userData.name!,
-          surname: userData.surname || '',
-          address: userData.address || '',
-          role: userData.role || UserRole.CLIENT,
-          phone: userData.phone || '',
-          avatar: null,
-          rating: 0,
-          createdAt: new Date().toISOString(),
-        };
+        const newUser = mockData.createMockUser({
+          ...userData,
+          email: userData.email || 'user@example.com',
+          role: userData.role || UserRole.CLIENT
+        });
 
         // Генерируем JWT токены
         const tokens = JWTService.generateTokens({

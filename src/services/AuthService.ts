@@ -20,7 +20,7 @@ export type LoginPayload = {
 export type VerifyOTPPayload = {
   phoneNumber: string;
   otpCode: string;
-  userData: any;
+  userData: Record<string, unknown>;
 };
 
 export interface AuthResponse {
@@ -403,7 +403,7 @@ export class AuthService {
   /**
    * Регистрация пользователя через социальную сеть
    */
-  static async registerWithSocial(socialUser: any): Promise<AuthResponse> {
+  static async registerWithSocial(socialUser: Record<string, unknown>): Promise<AuthResponse> {
     if (__DEV__) {
       // Мок для разработки
       return this.mockSocialRegister(socialUser);
@@ -445,7 +445,7 @@ export class AuthService {
   /**
    * Мок социальной регистрации для разработки
    */
-  private static async mockSocialRegister(socialUser: any): Promise<AuthResponse> {
+  private static async mockSocialRegister(socialUser: Record<string, unknown>): Promise<AuthResponse> {
     return new Promise((resolve) => {
       setTimeout(() => {
         console.log('🧪 Мок социальная регистрация:', {

@@ -3,7 +3,6 @@ import {
   View, 
   Text, 
   TouchableOpacity, 
-  StyleSheet, 
   Modal, 
   FlatList, 
   TextInput,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { SelectStyles } from '../styles/components/Select.styles';
 
 export interface SelectOption {
   label: string;
@@ -100,7 +100,7 @@ const Select: React.FC<SelectProps> = ({
   };
 
   const getSelectStyle = (): ViewStyle => ({
-    ...styles.select,
+    ...SelectStyles.select,
     borderColor: error 
       ? '#DC2626' 
       : isOpen 
@@ -115,7 +115,7 @@ const Select: React.FC<SelectProps> = ({
   });
 
   const getTextStyle = (): TextStyle => ({
-    ...styles.selectText,
+    ...SelectStyles.selectText,
     color: selectedOption || selectedValues.length > 0
       ? isDark ? '#F9FAFB' : '#1F2937'
       : isDark ? '#9CA3AF' : '#6B7280',
@@ -129,8 +129,8 @@ const Select: React.FC<SelectProps> = ({
     return (
       <TouchableOpacity
         style={[
-          styles.option,
-          compact && styles.optionCompact,
+          SelectStyles.option,
+          compact && SelectStyles.optionCompact,
           optionStyle,
           { 
             backgroundColor: isSelected 
@@ -144,17 +144,17 @@ const Select: React.FC<SelectProps> = ({
         onPress={() => handleSelect(item)}
         disabled={item.disabled}
       >
-        <View style={styles.optionContent}>
+        <View style={SelectStyles.optionContent}>
           {item.icon && (
             <Ionicons
               name={item.icon}
               size={compact ? 24 : 20}
               color={isSelected ? '#FFFFFF' : isDark ? '#F9FAFB' : '#1F2937'}
-              style={[styles.optionIcon, compact && styles.optionIconCompact]}
+              style={[SelectStyles.optionIcon, compact && SelectStyles.optionIconCompact]}
             />
           )}
           <Text style={[
-            styles.optionText,
+            SelectStyles.optionText,
             { 
               color: isSelected 
                 ? '#FFFFFF' 
@@ -176,11 +176,11 @@ const Select: React.FC<SelectProps> = ({
     <View style={containerStyle}>
       {label && (
         <Text style={[
-          styles.label,
+          SelectStyles.label,
           { color: error ? '#DC2626' : isDark ? '#F9FAFB' : '#374151' }
         ]}>
           {label}
-          {required && <Text style={styles.required}> *</Text>}
+          {required && <Text style={SelectStyles.required}> *</Text>}
         </Text>
       )}
       
@@ -200,7 +200,7 @@ const Select: React.FC<SelectProps> = ({
       </TouchableOpacity>
 
       {error && (
-        <Text style={styles.error}>{error}</Text>
+        <Text style={SelectStyles.error}>{error}</Text>
       )}
 
       <Modal
@@ -211,19 +211,19 @@ const Select: React.FC<SelectProps> = ({
         onRequestClose={() => setIsOpen(false)}
       >
         <TouchableOpacity
-          style={styles.overlay}
+          style={SelectStyles.overlay}
           onPress={() => setIsOpen(false)}
         >
           <View style={[
-            styles.dropdown,
-            compact || options.length <= 5 ? styles.dropdownCompact : {},
+            SelectStyles.dropdown,
+            compact || options.length <= 5 ? SelectStyles.dropdownCompact : {},
             { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }
           ]}>
             {searchable && (
-              <View style={styles.searchContainer}>
+              <View style={SelectStyles.searchContainer}>
                 <TextInput
                   style={[
-                    styles.searchInput,
+                    SelectStyles.searchInput,
                     { 
                       backgroundColor: isDark ? '#111827' : '#F9FAFB',
                       color: isDark ? '#F9FAFB' : '#1F2937',
@@ -242,8 +242,8 @@ const Select: React.FC<SelectProps> = ({
               renderItem={renderOption}
               keyExtractor={(item) => item.value.toString()}
               style={[
-                styles.optionsList,
-                compact || options.length <= 5 ? styles.optionsListCompact : {}
+                SelectStyles.optionsList,
+                compact || options.length <= 5 ? SelectStyles.optionsListCompact : {}
               ]}
               showsVerticalScrollIndicator={false}
             />
@@ -253,122 +253,5 @@ const Select: React.FC<SelectProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  select: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 2.84,
-    elevation: 2,
-  },
-  selectText: {
-    fontSize: 16,
-    flex: 1,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 6,
-  },
-  required: {
-    color: '#DC2626',
-  },
-  error: {
-    fontSize: 12,
-    color: '#DC2626',
-    marginTop: 4,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 80,
-    zIndex: 3000,
-    elevation: 3000,
-  },
-  dropdown: {
-    width: '100%',
-    height: '90%',
-    borderRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 20,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 25,
-    elevation: 3005,
-    zIndex: 3001,
-  },
-  dropdownCompact: {
-    height: 'auto',
-    maxHeight: 300,
-    borderRadius: 16,
-  },
-  searchContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(229, 231, 235, 0.3)',
-  },
-  searchInput: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 12,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(229, 231, 235, 0.5)',
-  },
-  optionsList: {
-    flex: 1,
-    paddingHorizontal: 8,
-  },
-  optionsListCompact: {
-    flex: 0,
-    paddingVertical: 8,
-  },
-  option: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginHorizontal: 8,
-    marginVertical: 2,
-    borderRadius: 12,
-    borderBottomWidth: 0,
-  },
-  optionCompact: {
-    paddingVertical: 18,
-    marginVertical: 4,
-    marginHorizontal: 12,
-    borderRadius: 16,
-  },
-  optionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  optionIcon: {
-    marginRight: 12,
-  },
-  optionIconCompact: {
-    marginRight: 16,
-  },
-  optionText: {
-    fontSize: 16,
-    flex: 1,
-  },
-});
 
 export default Select;

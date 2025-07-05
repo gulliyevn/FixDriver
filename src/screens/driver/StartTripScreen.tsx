@@ -1,0 +1,175 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert, SafeAreaView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
+
+const StartTripScreenStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#333',
+  },
+  tripInfo: {
+    flex: 1,
+  },
+  tripTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 15,
+    color: '#333',
+  },
+  infoCard: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    padding: 20,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  infoText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#333',
+  },
+  actions: {
+    marginTop: 30,
+  },
+  startButton: {
+    backgroundColor: '#27ae60',
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  startButtonDisabled: {
+    opacity: 0.6,
+  },
+  startButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#ff6b6b',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
+
+export default function StartTripScreen() {
+  const navigation = useNavigation();
+  const { isDark } = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleStartTrip = () => {
+    setIsLoading(true);
+    // TODO: Реальная логика начала поездки
+    setTimeout(() => {
+      setIsLoading(false);
+      Alert.alert('Поездка начата', 'Удачной поездки!');
+      navigation.goBack();
+    }, 1000);
+  };
+
+  const handleCancelTrip = () => {
+    Alert.alert(
+      'Отменить поездку',
+      'Вы уверены, что хотите отменить поездку?',
+      [
+        { text: 'Нет', style: 'cancel' },
+        { text: 'Да', onPress: () => navigation.goBack(), style: 'destructive' }
+      ]
+    );
+  };
+
+  return (
+    <SafeAreaView style={StartTripScreenStyles.container}>
+      <View style={StartTripScreenStyles.content}>
+        <View style={StartTripScreenStyles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#007AFF" />
+          </TouchableOpacity>
+          <Text style={StartTripScreenStyles.title}>Начать поездку</Text>
+          <View style={{ width: 24 }} />
+        </View>
+
+        <View style={StartTripScreenStyles.tripInfo}>
+          <Text style={StartTripScreenStyles.tripTitle}>Детали поездки</Text>
+          
+          <View style={StartTripScreenStyles.infoCard}>
+            <View style={StartTripScreenStyles.infoRow}>
+              <Ionicons name="person" size={20} color="#666" />
+              <Text style={StartTripScreenStyles.infoText}>Анна Иванова</Text>
+            </View>
+            
+            <View style={StartTripScreenStyles.infoRow}>
+              <Ionicons name="call" size={20} color="#666" />
+              <Text style={StartTripScreenStyles.infoText}>+7 (999) 123-45-67</Text>
+            </View>
+            
+            <View style={StartTripScreenStyles.infoRow}>
+              <Ionicons name="location" size={20} color="#666" />
+              <Text style={StartTripScreenStyles.infoText}>ул. Ленина, 15</Text>
+            </View>
+            
+            <View style={StartTripScreenStyles.infoRow}>
+              <Ionicons name="navigate" size={20} color="#666" />
+              <Text style={StartTripScreenStyles.infoText}>ул. Пушкина, 8</Text>
+            </View>
+            
+            <View style={StartTripScreenStyles.infoRow}>
+              <Ionicons name="cash" size={20} color="#666" />
+              <Text style={StartTripScreenStyles.infoText}>450 ₽</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={StartTripScreenStyles.actions}>
+          <TouchableOpacity
+            style={[StartTripScreenStyles.startButton, isLoading && StartTripScreenStyles.startButtonDisabled]}
+            onPress={handleStartTrip}
+            disabled={isLoading}
+          >
+            <Ionicons name="play" size={24} color="#fff" />
+            <Text style={StartTripScreenStyles.startButtonText}>
+              {isLoading ? 'Запуск...' : 'Начать поездку'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={StartTripScreenStyles.cancelButton}
+            onPress={handleCancelTrip}
+          >
+            <Text style={StartTripScreenStyles.cancelButtonText}>Отменить</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}

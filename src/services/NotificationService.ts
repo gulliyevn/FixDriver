@@ -1,180 +1,86 @@
+import mockData from '../utils/mockData';
+
 export interface Notification {
   id: string;
+  userId: string;
   title: string;
   message: string;
-  time: Date;
-  type: 'trip' | 'payment' | 'driver' | 'system';
+  type: 'trip' | 'payment' | 'driver' | 'system' | 'order';
   isRead: boolean;
-  priority: 'low' | 'medium' | 'high';
+  createdAt: string;
+  data?: Record<string, unknown>;
 }
 
 export interface PushNotificationPayload {
   title: string;
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 class NotificationService {
+  private static instance: NotificationService;
   private notifications: Notification[] = [];
   private listeners: ((notifications: Notification[]) => void)[] = [];
 
-  constructor() {
+  private constructor() {
+    this.notifications = mockData.notifications;
     this.initializeMockNotifications();
     this.startTimeBasedNotifications();
   }
 
+  static getInstance(): NotificationService {
+    if (!NotificationService.instance) {
+      NotificationService.instance = new NotificationService();
+    }
+    return NotificationService.instance;
+  }
+
   // Инициализация с моковыми уведомлениями
   private initializeMockNotifications() {
-    const now = new Date();
-    
-    this.notifications = [
-      {
-        id: '1',
-        title: 'Новое сообщение',
-        message: 'Водитель Рашад: "Уже еду к вам, буду через 3 минуты"',
-        time: new Date(now.getTime() - 2 * 60 * 1000), // 2 минуты назад
-        type: 'driver',
-        isRead: false,
-        priority: 'high'
-      },
-      {
-        id: '2',
-        title: 'Оплата прошла успешно',
-        message: 'Списано 8.50 ₼ за поездку до Port Baku',
-        time: new Date(now.getTime() - 15 * 60 * 1000), // 15 минут назад
-        type: 'payment',
-        isRead: false,
-        priority: 'medium'
-      },
-      {
-        id: '3',
-        title: 'Поездка завершена',
-        message: 'Дочь успешно доставлена в школу №132',
-        time: new Date(now.getTime() - 30 * 60 * 1000), // 30 минут назад
-        type: 'trip',
-        isRead: true,
-        priority: 'medium'
-      },
-      {
-        id: '4',
-        title: 'Обновление приложения',
-        message: 'Доступна новая версия FixDrive с улучшениями',
-        time: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 часа назад
-        type: 'system',
-        isRead: true,
-        priority: 'low'
-      },
-      {
-        id: '5',
-        title: 'Новый водитель в сети',
-        message: 'Эльнур Мамедов теперь доступен в вашем районе',
-        time: new Date(now.getTime() - 45 * 60 * 1000), // 45 минут назад
-        type: 'driver',
-        isRead: true,
-        priority: 'low'
-      }
-    ];
-
-    this.sortNotifications();
+    this.notifications = [...this.notifications, ...mockData.notifications];
   }
 
-  // Запуск системы уведомлений на основе времени
+  // Запуск уведомлений по времени
   private startTimeBasedNotifications() {
-    // Проверяем каждую минуту на предстоящие поездки
+    // Симуляция уведомлений в реальном времени
     setInterval(() => {
-      this.checkUpcomingTrips();
-      this.generateRandomNotifications();
-    }, 60000); // каждую минуту
-  }
-
-  // Проверка предстоящих поездок (за 15 минут до выезда)
-  private checkUpcomingTrips() {
-    const now = new Date();
-    const in15Minutes = new Date(now.getTime() + 15 * 60 * 1000);
-    
-    // Моковые предстоящие поездки
-    const upcomingTrips = [
-      {
-        memberId: 'daughter',
-        memberName: 'Дочь',
-        destination: 'Школа №132',
-        scheduledTime: new Date(now.getTime() + 14 * 60 * 1000), // через 14 минут
-        driverName: 'Эльнур Мамедов'
-      },
-      {
-        memberId: 'wife',
-        memberName: 'Жена',
-        destination: 'Салон красоты',
-        scheduledTime: new Date(now.getTime() + 16 * 60 * 1000), // через 16 минут
-        driverName: 'Фарид Джафаров'
-      }
-    ];
-
-    upcomingTrips.forEach(trip => {
-      const timeDiff = trip.scheduledTime.getTime() - now.getTime();
-      const minutesUntilTrip = Math.floor(timeDiff / (1000 * 60));
-
-      // Если до поездки 15 минут или меньше, создаем уведомление
-      if (minutesUntilTrip <= 15 && minutesUntilTrip > 0) {
-        const existingNotification = this.notifications.find(
-          n => n.message.includes(trip.memberName) && n.message.includes('готовится к выезду')
-        );
-
-        if (!existingNotification) {
-          this.addNotification({
-            title: 'Предстоящая поездка',
-            message: `${trip.memberName} готовится к выезду в ${trip.destination} через ${minutesUntilTrip} мин`,
-            type: 'trip',
-            priority: 'high'
-          });
-        }
-      }
-    });
-  }
-
-  // Генерация случайных уведомлений для демонстрации
-  private generateRandomNotifications() {
-    const random = Math.random();
-    
-    // 5% шанс каждую минуту получить новое уведомление
-    if (random < 0.05) {
       const randomNotifications = [
         {
-          title: 'Новое сообщение',
-          message: 'Водитель Орхан: "Задерживаюсь на 2 минуты из-за пробки"',
-          type: 'driver' as const,
-          priority: 'medium' as const
-        },
-        {
-          title: 'Скидка на поездки',
-          message: 'Получите 20% скидку на следующие 3 поездки!',
-          type: 'system' as const,
-          priority: 'low' as const
-        },
-        {
-          title: 'Водитель прибыл',
-          message: 'Самир Исмаилов ждет вас у подъезда',
+          userId: 'user1',
+          title: 'Напоминание о поездке',
+          message: 'Не забудьте о запланированной поездке завтра',
           type: 'trip' as const,
-          priority: 'high' as const
+          isRead: false,
         },
         {
-          title: 'Возврат средств',
-          message: 'Возвращено 3.20 ₼ за отмененную поездку',
-          type: 'payment' as const,
-          priority: 'medium' as const
-        }
+          userId: 'user1',
+          title: 'Новый водитель поблизости',
+          message: 'В вашем районе появился новый водитель',
+          type: 'driver' as const,
+          isRead: false,
+        },
+        {
+          userId: 'user1',
+          title: 'Системное обновление',
+          message: 'Доступны новые функции в приложении',
+          type: 'system' as const,
+          isRead: false,
+        },
       ];
 
       const randomNotification = randomNotifications[Math.floor(Math.random() * randomNotifications.length)];
-      this.addNotification(randomNotification);
-    }
+      
+      if (Math.random() > 0.7) { // 30% шанс появления уведомления
+        this.createNotificationAsync(randomNotification);
+      }
+    }, 30000); // Каждые 30 секунд
   }
 
   // Добавление нового уведомления
-  addNotification(notificationData: Omit<Notification, 'id' | 'time' | 'isRead'>) {
+  addNotification(notificationData: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) {
     const notification: Notification = {
       id: Date.now().toString(),
-      time: new Date(),
+      createdAt: new Date().toISOString(),
       isRead: false,
       ...notificationData
     };
@@ -190,7 +96,7 @@ class NotificationService {
       if (a.isRead !== b.isRead) {
         return a.isRead ? 1 : -1; // Непрочитанные сверху
       }
-      return b.time.getTime() - a.time.getTime(); // Новые сверху
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // Новые сверху
     });
   }
 
@@ -240,7 +146,8 @@ class NotificationService {
   }
 
   // Форматирование времени для отображения
-  formatTime(date: Date): string {
+  formatTime(dateString: string): string {
+    const date = new Date(dateString);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
@@ -265,8 +172,70 @@ class NotificationService {
     }
   }
 
+  // Асинхронные методы для API
+  async getNotificationsAsync(userId: string): Promise<Notification[]> {
+    return this.notifications.filter(n => n.userId === userId);
+  }
+
+  async markAsReadAsync(notificationId: string): Promise<void> {
+    const notification = this.notifications.find(n => n.id === notificationId);
+    if (notification) {
+      notification.isRead = true;
+    }
+  }
+
+  async markAllAsReadAsync(userId: string): Promise<void> {
+    this.notifications
+      .filter(n => n.userId === userId && !n.isRead)
+      .forEach(n => n.isRead = true);
+  }
+
+  async deleteNotificationAsync(notificationId: string): Promise<void> {
+    this.notifications = this.notifications.filter(n => n.id !== notificationId);
+  }
+
+  async deleteMultipleNotificationsAsync(notificationIds: string[]): Promise<void> {
+    this.notifications = this.notifications.filter(n => !notificationIds.includes(n.id));
+  }
+
+  async createNotificationAsync(notification: Omit<Notification, 'id' | 'createdAt'>): Promise<Notification> {
+    const newNotification: Notification = {
+      ...notification,
+      id: `notification_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    this.notifications.push(newNotification);
+    this.notifyListeners();
+    return newNotification;
+  }
+
+  getUnreadCountByUser(userId: string): number {
+    return this.notifications.filter(n => n.userId === userId && !n.isRead).length;
+  }
+
+  // Получение уведомлений с сортировкой
+  getNotificationsSorted(userId: string): Notification[] {
+    return this.notifications
+      .filter(n => n.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  // Фильтрация по типу
+  getNotificationsByType(userId: string, type: Notification['type']): Notification[] {
+    return this.notifications.filter(n => n.userId === userId && n.type === type);
+  }
+
+  // Поиск уведомлений
+  searchNotifications(userId: string, query: string): Notification[] {
+    const lowerQuery = query.toLowerCase();
+    return this.notifications.filter(n => 
+      n.userId === userId && 
+      (n.title.toLowerCase().includes(lowerQuery) || 
+       n.message.toLowerCase().includes(lowerQuery))
+    );
+  }
 }
 
 // Синглтон для использования во всем приложении
-export const notificationService = new NotificationService();
+export const notificationService = NotificationService.getInstance();
 export default NotificationService;

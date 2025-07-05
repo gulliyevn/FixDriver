@@ -4,8 +4,9 @@
     "slug": "fixdrive",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "splash": {
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -25,12 +26,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow FixDrive to use your location to find nearby drivers and provide accurate pickup/dropoff locations."
-        }
-      ]
+      "expo-router"
     ],
     "entryPoint": "./app/App.tsx",
     "jsEngine": "jsc"

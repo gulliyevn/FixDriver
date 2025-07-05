@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { AppError, ErrorHandler } from '../utils/errorHandler';
+import { ErrorDisplayStyles } from '../styles/components/ErrorDisplay.styles';
 
 interface ErrorDisplayProps {
   error: AppError | null;
   onRetry?: () => void;
   onAction?: (action: string) => void;
   showDetails?: boolean;
-  containerStyle?: any;
+  containerStyle?: ViewStyle;
 }
 
 const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
@@ -62,24 +63,24 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
 
   return (
     <View style={[
-      styles.container,
+      ErrorDisplayStyles.container,
       {
         backgroundColor: isDark ? '#1F2937' : '#FEF2F2',
         borderColor: getErrorColor(error.code),
       },
       containerStyle
     ]}>
-      <View style={styles.header}>
-        <View style={styles.iconContainer}>
+      <View style={ErrorDisplayStyles.header}>
+        <View style={ErrorDisplayStyles.iconContainer}>
           <Ionicons
-            name={getErrorIcon(error.code) as any}
-            size={20}
+            name={getErrorIcon(error.code) as keyof typeof Ionicons.glyphMap}
+            size={24}
             color={getErrorColor(error.code)}
           />
         </View>
-        <View style={styles.content}>
+        <View style={ErrorDisplayStyles.content}>
           <Text style={[
-            styles.title,
+            ErrorDisplayStyles.title,
             { color: isDark ? '#F9FAFB' : '#991B1B' }
           ]}>
             {ErrorHandler.getUserFriendlyMessage(error)}
@@ -87,7 +88,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
           {error.details && showDetails && (
             <TouchableOpacity onPress={showErrorDetails}>
               <Text style={[
-                styles.detailsLink,
+                ErrorDisplayStyles.detailsLink,
                 { color: getErrorColor(error.code) }
               ]}>
                 Подробнее
@@ -97,11 +98,11 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
         </View>
       </View>
 
-      <View style={styles.actions}>
+      <View style={ErrorDisplayStyles.actions}>
         {ErrorHandler.isRetryable(error) && onRetry && (
           <TouchableOpacity
             style={[
-              styles.actionButton,
+              ErrorDisplayStyles.actionButton,
               {
                 backgroundColor: getErrorColor(error.code),
                 marginRight: 8,
@@ -110,14 +111,14 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
             onPress={handleRetry}
           >
             <Ionicons name="refresh" size={16} color="#FFFFFF" />
-            <Text style={styles.actionButtonText}>Повторить</Text>
+            <Text style={ErrorDisplayStyles.actionButtonText}>Повторить</Text>
           </TouchableOpacity>
         )}
 
         {ErrorHandler.getRecommendedAction(error) && onAction && (
           <TouchableOpacity
             style={[
-              styles.actionButton,
+              ErrorDisplayStyles.actionButton,
               {
                 backgroundColor: 'transparent',
                 borderWidth: 1,
@@ -127,7 +128,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
             onPress={handleAction}
           >
             <Text style={[
-              styles.actionButtonText,
+              ErrorDisplayStyles.actionButtonText,
               { color: getErrorColor(error.code) }
             ]}>
               {ErrorHandler.getRecommendedAction(error)}
@@ -138,59 +139,5 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  iconContainer: {
-    marginRight: 12,
-    marginTop: 2,
-  },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 20,
-  },
-  detailsLink: {
-    fontSize: 12,
-    marginTop: 4,
-    textDecorationLine: 'underline',
-  },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    minHeight: 36,
-  },
-  actionButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginLeft: 6,
-  },
-});
 
 export default ErrorDisplay; 
