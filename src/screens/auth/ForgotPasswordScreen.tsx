@@ -16,7 +16,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { ForgotPasswordScreenStyles } from '../../styles/screens/ForgotPasswordScreen.styles';
 
 interface ForgotPasswordScreenProps {
-  navigation: any;
+  navigation: {
+    goBack: () => void;
+  };
 }
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation }) => {

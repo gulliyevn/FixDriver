@@ -22,6 +22,7 @@ import SocialAuthButtons from '../../components/SocialAuthButtons';
 import { Validators } from '../../utils/validators';
 import { COUNTRIES } from '../../utils/countries';
 import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
+import { mockRegistrationData } from '../../mocks';
 
 type ClientRegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ClientRegister'>;
 
@@ -52,12 +53,7 @@ const ClientRegisterScreen: React.FC = () => {
     value: country.code,
   }));
 
-  const relationshipOptions = [
-    { label: 'Father', value: 'father' },
-    { label: 'Mother', value: 'mother' },
-    { label: 'Guardian', value: 'guardian' },
-    { label: 'Grandparent', value: 'grandparent' },
-  ];
+  const { relationshipOptions } = mockRegistrationData;
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -236,7 +232,7 @@ const ClientRegisterScreen: React.FC = () => {
             <Select
               label="Country"
               value={formData.country}
-              onSelect={(value) => handleInputChange('country', value)}
+              onSelect={(option) => handleInputChange('country', String(option.value))}
               options={countryOptions}
               error={errors.country}
             />
@@ -308,7 +304,7 @@ const ClientRegisterScreen: React.FC = () => {
                 <Select
                   label="Relationship"
                   value={child.relationship}
-                  onSelect={(value) => updateChild(index, 'relationship', value)}
+                  onSelect={(option) => updateChild(index, 'relationship', String(option.value))}
                   options={relationshipOptions}
                 />
               </View>

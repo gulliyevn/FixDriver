@@ -28,7 +28,10 @@
     "plugins": [
       "expo-router"
     ],
-    "entryPoint": "./app/App.tsx",
-    "jsEngine": "jsc"
+    "entryPoint": "./app/SuperSimpleApp.js",
+    "jsEngine": "jsc",
+    "experiments": {
+      "tsconfigPaths": false
+    }
   }
 }

@@ -7,56 +7,15 @@ import {
   ScrollView,
   Alert
 } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { EarningsScreenStyles } from '../../styles/screens/EarningsScreen.styles';
+import { mockEarningsData } from '../../mocks';
 
 const EarningsScreen: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('today');
 
-  const periods = [
-    { key: 'today', label: 'Сегодня', icon: 'today' },
-    { key: 'week', label: 'Неделя', icon: 'calendar' },
-    { key: 'month', label: 'Месяц', icon: 'calendar-outline' },
-  ];
-
-  const earningsData = {
-    today: {
-      total: '3,200 ₽',
-      rides: 8,
-      hours: '6ч 30м',
-      average: '400 ₽',
-      chart: [1200, 800, 600, 400, 200]
-    },
-    week: {
-      total: '18,500 ₽',
-      rides: 45,
-      hours: '42ч 15м',
-      average: '411 ₽',
-      chart: [2800, 3200, 2400, 3600, 2800, 2200, 2000]
-    },
-    month: {
-      total: '72,800 ₽',
-      rides: 180,
-      hours: '168ч 45м',
-      average: '404 ₽',
-      chart: [8500, 9200, 7800, 9600, 8200, 7500, 6800]
-    }
-  };
-
+  const { periods, earningsData, quickStats, recentRides } = mockEarningsData;
   const currentData = earningsData[selectedPeriod as keyof typeof earningsData];
-
-  const quickStats = [
-    { label: 'Всего поездок', value: currentData.rides.toString(), icon: 'car-sport', color: '#27ae60' },
-    { label: 'Время работы', value: currentData.hours, icon: 'time', color: '#007AFF' },
-    { label: 'Средний чек', value: currentData.average, icon: 'wallet', color: '#FF9500' },
-  ];
-
-  const recentRides = [
-    { id: '1', client: 'Анна Иванова', amount: '450 ₽', time: '14:30', rating: 5 },
-    { id: '2', client: 'Петр Сидоров', amount: '320 ₽', time: '14:15', rating: 4 },
-    { id: '3', client: 'Мария Козлова', amount: '580 ₽', time: '13:45', rating: 5 },
-    { id: '4', client: 'Иван Петров', amount: '850 ₽', time: '13:20', rating: 4 },
-  ];
 
   const handlePeriodSelect = (period: string) => {
     setSelectedPeriod(period);
@@ -85,21 +44,16 @@ const EarningsScreen: React.FC = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {periods.map((period) => (
             <TouchableOpacity
-              key={period.key}
+              key={period.value}
               style={[
                 EarningsScreenStyles.periodButton,
-                selectedPeriod === period.key && EarningsScreenStyles.periodButtonActive
+                selectedPeriod === period.value && EarningsScreenStyles.periodButtonActive
               ]}
-              onPress={() => handlePeriodSelect(period.key)}
+              onPress={() => handlePeriodSelect(period.value)}
             >
-              <Ionicons 
-                name={period.icon as any} 
-                size={16} 
-                color={selectedPeriod === period.key ? '#fff' : '#666'} 
-              />
               <Text style={[
                 EarningsScreenStyles.periodText,
-                selectedPeriod === period.key && EarningsScreenStyles.periodTextActive
+                selectedPeriod === period.value && EarningsScreenStyles.periodTextActive
               ]}>
                 {period.label}
               </Text>
@@ -122,15 +76,34 @@ const EarningsScreen: React.FC = () => {
       <View style={EarningsScreenStyles.statsSection}>
         <Text style={EarningsScreenStyles.sectionTitle}>Статистика</Text>
         <View style={EarningsScreenStyles.statsGrid}>
-          {quickStats.map((stat, index) => (
-            <View key={index} style={EarningsScreenStyles.statCard}>
-              <View style={[EarningsScreenStyles.statIcon, { backgroundColor: stat.color }]}>
-                <Ionicons name={stat.icon as any} size={20} color="#fff" />
-              </View>
-              <Text style={EarningsScreenStyles.statValue}>{stat.value}</Text>
-              <Text style={EarningsScreenStyles.statLabel}>{stat.label}</Text>
+          <View style={EarningsScreenStyles.statCard}>
+            <View style={[EarningsScreenStyles.statIcon, { backgroundColor: '#007AFF' }]}> 
+              <Ionicons name="car" size={20} color="#fff" />
             </View>
-          ))}
+            <Text style={EarningsScreenStyles.statValue}>{quickStats.totalTrips}</Text>
+            <Text style={EarningsScreenStyles.statLabel}>Всего поездок</Text>
+          </View>
+          <View style={EarningsScreenStyles.statCard}>
+            <View style={[EarningsScreenStyles.statIcon, { backgroundColor: '#27ae60' }]}> 
+              <Ionicons name="cash" size={20} color="#fff" />
+            </View>
+            <Text style={EarningsScreenStyles.statValue}>{quickStats.totalEarnings}</Text>
+            <Text style={EarningsScreenStyles.statLabel}>Всего заработано</Text>
+          </View>
+          <View style={EarningsScreenStyles.statCard}>
+            <View style={[EarningsScreenStyles.statIcon, { backgroundColor: '#f39c12' }]}> 
+              <Ionicons name="star" size={20} color="#fff" />
+            </View>
+            <Text style={EarningsScreenStyles.statValue}>{quickStats.averageRating}</Text>
+            <Text style={EarningsScreenStyles.statLabel}>Средний рейтинг</Text>
+          </View>
+          <View style={EarningsScreenStyles.statCard}>
+            <View style={[EarningsScreenStyles.statIcon, { backgroundColor: '#6c5ce7' }]}> 
+              <Ionicons name="time" size={20} color="#fff" />
+            </View>
+            <Text style={EarningsScreenStyles.statValue}>{quickStats.onlineHours}</Text>
+            <Text style={EarningsScreenStyles.statLabel}>Часы онлайн</Text>
+          </View>
         </View>
       </View>
 
@@ -139,7 +112,7 @@ const EarningsScreen: React.FC = () => {
         <Text style={EarningsScreenStyles.sectionTitle}>График заработка</Text>
         <View style={EarningsScreenStyles.chartContainer}>
           <View style={EarningsScreenStyles.chartPlaceholder}>
-            <MaterialIcons name="show-chart" size={60} color="#ddd" />
+            <Ionicons name="stats-chart" size={60} color="#ddd" />
             <Text style={EarningsScreenStyles.chartText}>График</Text>
             <Text style={EarningsScreenStyles.chartSubtext}>Интерактивный график заработка</Text>
           </View>
@@ -154,11 +127,11 @@ const EarningsScreen: React.FC = () => {
             <View key={ride.id} style={EarningsScreenStyles.rideCard}>
               <View style={EarningsScreenStyles.rideHeader}>
                 <View style={EarningsScreenStyles.rideInfo}>
-                  <Text style={EarningsScreenStyles.rideClient}>{ride.client}</Text>
+                  <Text style={EarningsScreenStyles.rideClient}>{ride.from} → {ride.to}</Text>
                   <Text style={EarningsScreenStyles.rideTime}>{ride.time}</Text>
                 </View>
                 <View style={EarningsScreenStyles.rideAmount}>
-                  <Text style={EarningsScreenStyles.amountText}>{ride.amount}</Text>
+                  <Text style={EarningsScreenStyles.amountText}>{ride.earnings}</Text>
                   <View style={EarningsScreenStyles.ratingContainer}>
                     <Ionicons name="star" size={12} color="#FFD700" />
                     <Text style={EarningsScreenStyles.ratingText}>{ride.rating}</Text>

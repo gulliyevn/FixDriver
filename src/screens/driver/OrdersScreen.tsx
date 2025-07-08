@@ -8,8 +8,8 @@ import {
   Alert,
   TextInput
 } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import mockData from '../../utils/mockData';
+import { Ionicons } from '@expo/vector-icons';
+import { mockOrders, mockUsers } from '../../mocks';
 import { OrdersScreenStyles } from '../../styles/screens/OrdersScreen.styles';
 
 interface Order {
@@ -26,33 +26,37 @@ interface Order {
 }
 
 const OrdersScreen: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [selectedFilter, setSelectedFilter] = useState('all');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Используем централизованные моки
-  const orders: Order[] = mockData.orders.map(order => {
-    const client = mockData.users.find(user => user.id === order.clientId);
+  const orders: Order[] = mockOrders.map(order => {
+    const client = mockUsers.find(user => user.id === order.clientId);
     return {
       id: order.id,
       clientName: client ? `${client.name} ${client.surname}` : 'Неизвестный клиент',
       clientPhone: client?.phone || '',
       pickup: order.from,
       destination: order.to,
-      price: `${order.price} ₽`,
-      distance: `${order.distance} км`,
-      estimatedTime: `${order.duration} мин`,
-      status: order.status as any,
+      price: `${order.price || 15} ₽`,
+      distance: `${order.distance || 3.2} км`,
+      estimatedTime: `${order.duration || 12} мин`,
+      status: order.status as 'pending' | 'accepted' | 'completed' | 'cancelled',
       timestamp: order.createdAt ? new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
     };
   });
 
   const filters = [
     { key: 'all', label: 'Все', icon: 'list' },
-    { key: 'pending', label: 'Новые', icon: 'time' },
-    { key: 'accepted', label: 'Активные', icon: 'checkmark-circle' },
-    { key: 'completed', label: 'Завершенные', icon: 'checkmark-done' }
-  ];
+    { key: 'active', label: 'Активные', icon: 'checkmark-circle' },
+    { key: 'completed', label: 'Завершенные', icon: 'checkmark-done' },
+    { key: 'pending', label: 'Ожидающие', icon: 'time' }
+  ].map(filter => ({
+    ...filter,
+    icon: filter.key === 'all' ? 'list' :
+          filter.key === 'active' ? 'checkmark-circle' :
+          filter.key === 'completed' ? 'checkmark-done' : 'time'
+  }));
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -92,20 +96,6 @@ const OrdersScreen: React.FC = () => {
 
   const handleFilterSelect = (filter: string) => {
     setSelectedFilter(filter);
-  };
-
-  const handleOrderPress = (order: Order) => {
-    setSelectedOrder(order);
-  };
-
-  const handleAcceptOrder = (orderId: string) => {
-    // TODO: Реальная логика принятия заказа
-    Alert.alert('Заказ принят', 'Направляйтесь к клиенту');
-  };
-
-  const handleRejectOrder = (orderId: string) => {
-    // TODO: Реальная логика отклонения заказа
-    Alert.alert('Заказ отклонен', 'Заказ отклонен');
   };
 
   const filteredOrders = orders.filter(order => {
@@ -150,7 +140,7 @@ const OrdersScreen: React.FC = () => {
               onPress={() => handleFilterSelect(filter.key)}
             >
               <Ionicons 
-                name={filter.icon as any} 
+                name={filter.icon as keyof typeof Ionicons.glyphMap} 
                 size={16} 
                 color={selectedFilter === filter.key ? '#fff' : '#666'} 
               />

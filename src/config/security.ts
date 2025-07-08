@@ -4,9 +4,7 @@ export const SECURITY_CONFIG = {
   // JWT настройки
   JWT: {
     // Секретный ключ для подписи JWT (в продакшене должен быть в переменных окружения)
-    SECRET: __DEV__ 
-      ? 'fixdrive-dev-secret-key-2024' 
-      : process.env.JWT_SECRET || 'fixdrive-prod-secret-key-2024',
+    SECRET: process.env.JWT_SECRET || 'your-super-secure-secret-key-change-in-production',
     
     // Время жизни access token (24 часа)
     ACCESS_TOKEN_EXPIRY: 24 * 60 * 60,

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import mockData from '../../utils/mockData';
+import { mockChats, mockMessages, mockUsers } from '../../mocks';
 import { ChatScreenStyles } from '../../styles/screens/ChatScreen.styles';
 
 interface Message {
@@ -45,8 +45,8 @@ const DriverChatScreen: React.FC = () => {
 
   // Используем централизованные мок-данные
   useEffect(() => {
-    const mockChats: Chat[] = mockData.chats.map(chat => {
-      const client = mockData.users.find(user => user.id === chat.clientId);
+    const mockChatsData: Chat[] = mockChats.map(chat => {
+      const client = mockUsers.find(user => user.id === chat.clientId);
       return {
         id: chat.id,
         clientId: chat.clientId,
@@ -58,14 +58,14 @@ const DriverChatScreen: React.FC = () => {
         isActive: chat.unreadCount > 0,
       };
     });
-    setChats(mockChats);
+    setChats(mockChatsData);
   }, []);
 
   // Используем централизованные мок-данные для сообщений
   useEffect(() => {
     if (selectedChat) {
-      const chatMessages = mockData.messages.filter(msg => msg.chatId === selectedChat.id);
-      const mockMessages: Message[] = chatMessages.map(msg => ({
+      const chatMessages = mockMessages.filter(msg => msg.chatId === selectedChat.id);
+      const mockMessagesData: Message[] = chatMessages.map(msg => ({
         id: msg.id,
         text: msg.content,
         timestamp: new Date(msg.timestamp),
@@ -73,7 +73,7 @@ const DriverChatScreen: React.FC = () => {
         senderName: msg.senderType === 'driver' ? 'Вы' : selectedChat.clientName,
         senderAvatar: msg.senderType === 'driver' ? undefined : selectedChat.clientAvatar,
       }));
-      setMessages(mockMessages);
+      setMessages(mockMessagesData);
     }
   }, [selectedChat]);
 

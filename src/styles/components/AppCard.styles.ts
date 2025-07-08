@@ -138,4 +138,19 @@ export const AppCardStyles = StyleSheet.create({
   cardInteractivePressed: {
     ...SHADOWS.light.small,
   },
+  containerPrimary: {
+    backgroundColor: colors.light.primary,
+  },
+  containerSecondary: {
+    backgroundColor: colors.light.secondary,
+  },
+  containerDisabled: {
+    opacity: 0.5,
+  },
+  iconPrimary: {
+    color: colors.light.surface,
+  },
+  textContainer: {
+    flex: 1,
+  },
 }); 

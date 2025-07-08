@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, UserRole } from '../types/user';
 import JWTService from '../services/JWTService';
-import mockData from '../utils/mockData';
+import { createAuthMockUser } from '../mocks/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -94,9 +94,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Используем централизованные мок-данные
-        const mockUser = mockData.createMockUser({
+        const mockUser = createAuthMockUser({
           email,
-          authMethod,
           role: UserRole.CLIENT
         });
 
@@ -166,7 +165,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const newUser = mockData.createMockUser({
+        const newUser = createAuthMockUser({
           ...userData,
           email: userData.email || 'user@example.com',
           role: userData.role || UserRole.CLIENT
@@ -222,6 +221,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   /**
+   * Обновление аутентификации
+   */
+  const refreshAuth = async (): Promise<boolean> => {
+    if (isRefreshing) {
+      return false;
+    }
+
+    try {
+      setIsRefreshing(true);
+      
+      const newToken = await JWTService.refreshAccessToken();
+      if (newToken) {
+        // Проверяем, что пользователь все еще существует
+        const userData = await AsyncStorage.getItem('user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          setUser(user);
+          return true;
+        }
+      }
+      
+      // Если обновление не удалось - НЕ выходим автоматически
+      console.warn('Token refresh failed, but keeping user in app');
+      return false;
+    } catch (error) {
+      console.error('Auth refresh error:', error);
+      // Не выходим автоматически при ошибках обновления
+      return false;
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  /**
    * Выход из системы
    */
   const logout = useCallback(async () => {
@@ -259,40 +292,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   }, [refreshAuth]);
-
-  /**
-   * Обновление аутентификации
-   */
-  const refreshAuth = async (): Promise<boolean> => {
-    if (isRefreshing) {
-      return false;
-    }
-
-    try {
-      setIsRefreshing(true);
-      
-      const newToken = await JWTService.refreshAccessToken();
-      if (newToken) {
-        // Проверяем, что пользователь все еще существует
-        const userData = await AsyncStorage.getItem('user');
-        if (userData) {
-          const user = JSON.parse(userData);
-          setUser(user);
-          return true;
-        }
-      }
-      
-      // Если обновление не удалось - НЕ выходим автоматически
-      console.warn('Token refresh failed, but keeping user in app');
-      return false;
-    } catch (error) {
-      console.error('Auth refresh error:', error);
-      // Не выходим автоматически при ошибках обновления
-      return false;
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   /**
    * Получение заголовка авторизации для API запросов

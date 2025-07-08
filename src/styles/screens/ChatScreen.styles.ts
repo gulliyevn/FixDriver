@@ -23,6 +23,22 @@ export const ChatScreenStyles = StyleSheet.create({
     padding: 6,
     marginRight: 12,
   },
+  backButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
+  },
+  logoutButton: {
+    padding: 6,
+  },
+  logoutButtonText: {
+    fontSize: 16,
+    color: '#EF4444',
+  },
   driverInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -68,6 +84,72 @@ export const ChatScreenStyles = StyleSheet.create({
   callButton: {
     padding: 8,
   },
+  // Chat list styles
+  chatItem: {
+    flexDirection: 'row',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
+  },
+  chatInfo: {
+    flex: 1,
+  },
+  chatHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  clientName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+  },
+  timeText: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  chatFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  lastMessage: {
+    fontSize: 14,
+    color: '#6B7280',
+    flex: 1,
+    marginRight: 8,
+  },
+  unreadBadge: {
+    backgroundColor: '#EF4444',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unreadText: {
+    fontSize: 12,
+    color: 'white',
+    fontWeight: '600',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 50,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
   messagesContainer: {
     flex: 1,
   },
@@ -80,12 +162,20 @@ export const ChatScreenStyles = StyleSheet.create({
   },
   messageContainer: {
     marginVertical: 8,
-  },
-  clientMessage: {
+    flexDirection: 'row',
     alignItems: 'flex-end',
   },
-  driverMessage: {
-    alignItems: 'flex-start',
+  userMessage: {
+    justifyContent: 'flex-end',
+  },
+  clientMessage: {
+    justifyContent: 'flex-start',
+  },
+  messageAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 8,
   },
   messageBubble: {
     maxWidth: '80%',
@@ -108,6 +198,31 @@ export const ChatScreenStyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
   },
+  driverMessage: {
+    backgroundColor: '#F3F4F6',
+  },
+  driverMessageText: {
+    color: '#1F2937',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  messageInput: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    fontSize: 16,
+    marginRight: 8,
+    maxHeight: 100,
+  },
   messageFooter: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -123,13 +238,11 @@ export const ChatScreenStyles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 6,
     backgroundColor: 'transparent',
-  },
-  inputRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 8,
   },
-  messageInput: {
+  textInput: {
     flex: 1,
     backgroundColor: '#F3F4F6',
     borderRadius: 20,
@@ -144,8 +257,14 @@ export const ChatScreenStyles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: '#007AFF',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sendButtonText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: '600',
   },
   emptyChat: {
     flex: 1,

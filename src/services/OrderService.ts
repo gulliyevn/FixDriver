@@ -1,12 +1,10 @@
-import { Driver, Client, UserRole } from '../types/user';
-import { MapLocation } from './MapService';
-import mockData from '../utils/mockData';
+import { mockOrders, mockUsers, mockDrivers } from '../mocks';
 import { Order, OrderStatus } from '../types/order';
 
 // Отключено для production - только для разработки
 const ENABLE_ORDER_LOGS = false;
 
-const log = (message: string, data?: any) => {
+const log = (message: string, data?: unknown) => {
   if (ENABLE_ORDER_LOGS) {
     console.log(`[СЛЕЖЕНИЕ] ${message}`, data || '');
   }
@@ -15,10 +13,10 @@ const log = (message: string, data?: any) => {
 export class OrderService {
   private static instance: OrderService;
   private orders: Order[] = [];
-  private trackingInterval: NodeJS.Timeout | null = null;
+  private trackingInterval: ReturnType<typeof setInterval> | null = null;
 
   private constructor() {
-    this.orders = mockData.orders;
+    this.orders = mockOrders;
   }
 
   static getInstance(): OrderService {
@@ -96,7 +94,7 @@ export class OrderService {
   }
 
   // Симуляция отслеживания водителя
-  startDriverTracking(driverId: string, destination: any): void {
+  startDriverTracking(driverId: string, destination: { latitude: number; longitude: number }): void {
     log('Начинается слежение за водителем');
     
     const startPosition = {
@@ -141,10 +139,10 @@ export class OrderService {
       setTimeout(() => {
         resolve([
           {
-            ...mockData.orders[0],
+            ...mockOrders[0],
             id: '1',
             clientId: clientId,
-            driverId: mockData.drivers[0].id,
+            driverId: mockDrivers[0].id,
             from: 'Москва, Красная площадь',
             to: 'Москва, ул. Тверская',
             status: 'completed',
@@ -162,9 +160,9 @@ export class OrderService {
       setTimeout(() => {
         resolve([
           {
-            ...mockData.orders[0],
+            ...mockOrders[0],
             id: '1',
-            clientId: mockData.users[0].id,
+            clientId: mockUsers[0].id,
             driverId: driverId,
             from: 'Москва, Красная площадь',
             to: 'Москва, ул. Тверская',
@@ -182,9 +180,9 @@ export class OrderService {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          ...mockData.orders[0],
+          ...mockOrders[0],
           id: orderId,
-          clientId: mockData.users[0].id,
+          clientId: mockUsers[0].id,
           driverId: driverId,
           from: 'Москва, Красная площадь',
           to: 'Москва, ул. Тверская',
@@ -196,22 +194,42 @@ export class OrderService {
     });
   }
 
-  static async updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order> {
+  static async updateOrderStatus(orderId: string): Promise<Order> {
     // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          ...mockData.orders[0],
           id: orderId,
-          clientId: mockData.users[0].id,
-          driverId: mockData.drivers[0].id,
-          from: 'Москва, Красная площадь',
-          to: 'Москва, ул. Тверская',
+          clientId: 'client_1',
+          driverId: 'driver_1',
+          from: 'ул. Низами, 23, Баку',
+          to: 'пр. Нефтяников, 45, Баку',
+          departureTime: '2024-01-15T10:30:00Z',
+          passenger: {
+            name: 'Алиса Петрова',
+            relationship: 'daughter',
+            phone: '+994501234567',
+          },
+          route: [
+            {
+              id: 'route_1_1',
+              address: 'ул. Низами, 23, Баку',
+              coordinates: { latitude: 40.3777, longitude: 49.8920 },
+            },
+            {
+              id: 'route_1_2',
+              address: 'пр. Нефтяников, 45, Баку',
+              coordinates: { latitude: 40.4093, longitude: 49.8671 },
+            },
+          ],
           status: 'completed',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          price: 15,
+          distance: 3.2,
+          duration: 12,
+          createdAt: '2024-01-15T10:00:00Z',
+          updatedAt: '2024-01-15T10:45:00Z',
         });
-      }, 500);
+      }, 1000);
     });
   }
 

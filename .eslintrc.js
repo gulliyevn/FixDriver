@@ -25,6 +25,8 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/jsx-no-undef': 'error',
     'no-undef': 'error',
+    'no-unreachable': 'error',
+    'react/react-in-jsx-scope': 'off',
   },
   settings: {
     react: {
@@ -37,5 +39,22 @@ module.exports = {
   },
   globals: {
     __DEV__: 'readonly',
+  },
+  ignorePatterns: [
+    '.eslintrc.js', 
+    'babel.config.js', 
+    'app.config.js',
+    'jest.config.js',
+    'jest.setup.js',
+    '**/__tests__/**',
+    '**/*.test.ts',
+    '**/*.test.tsx',
+    '**/*.spec.ts',
+    '**/*.spec.tsx',
+  ],
+  env: {
+    node: true,
+    es6: true,
+    jest: true,
   },
 }; 

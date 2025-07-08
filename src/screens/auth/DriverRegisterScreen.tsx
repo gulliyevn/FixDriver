@@ -22,6 +22,7 @@ import SocialAuthButtons from '../../components/SocialAuthButtons';
 import { Validators } from '../../utils/validators';
 import { COUNTRIES } from '../../utils/countries';
 import { DriverRegisterScreenStyles } from '../../styles/screens/DriverRegisterScreen.styles';
+import { mockRegistrationData } from '../../mocks';
 
 type DriverRegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'DriverRegister'>;
 
@@ -55,13 +56,7 @@ const DriverRegisterScreen: React.FC = () => {
     value: country.code,
   }));
 
-  const experienceOptions = [
-    { label: 'Less than 1 year', value: '0-1' },
-    { label: '1-3 years', value: '1-3' },
-    { label: '3-5 years', value: '3-5' },
-    { label: '5-10 years', value: '5-10' },
-    { label: 'More than 10 years', value: '10+' },
-  ];
+  const { experienceOptions } = mockRegistrationData;
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -236,7 +231,7 @@ const DriverRegisterScreen: React.FC = () => {
             <Select
               label="Country"
               value={formData.country}
-              onSelect={(value) => handleInputChange('country', value)}
+              onSelect={(option) => handleInputChange('country', String(option.value))}
               options={countryOptions}
               error={errors.country}
             />
@@ -271,7 +266,7 @@ const DriverRegisterScreen: React.FC = () => {
             <Select
               label="Driving Experience"
               value={formData.experience}
-              onSelect={(value) => handleInputChange('experience', value)}
+              onSelect={(option) => handleInputChange('experience', String(option.value))}
               options={experienceOptions}
               error={errors.experience}
             />

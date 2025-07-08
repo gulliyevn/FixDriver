@@ -1,6 +1,6 @@
 import { User, UserRole } from '../types/user';
 import JWTService from './JWTService';
-import mockData from '../utils/mockData';
+import { createAuthMockUser, findAuthUserByCredentials } from '../mocks/auth';
 
 export interface AuthResponse {
   success: boolean;
@@ -24,9 +24,8 @@ export class AuthService {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Используем централизованные мок-данные
-        const mockUser = mockData.createMockUser({
+        const mockUser = createAuthMockUser({
           email,
-          authMethod,
           role: UserRole.CLIENT
         });
 
@@ -88,7 +87,7 @@ export class AuthService {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const newUser = mockData.createMockUser({
+        const newUser = createAuthMockUser({
           ...userData,
           email: userData.email || 'user@example.com',
           role: userData.role || UserRole.CLIENT
@@ -163,7 +162,7 @@ export class AuthService {
    */
   static async refreshToken(): Promise<AuthResponse> {
     try {
-      const refreshed = await JWTService.refreshToken();
+      const refreshed = await JWTService.getRefreshToken();
       
       if (refreshed) {
         return {

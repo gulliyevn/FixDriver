@@ -198,6 +198,48 @@ export const MapScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  menuButton: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    zIndex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    flex: 1,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  chatButton: {
+    backgroundColor: colors.light.primary,
+    borderRadius: 20,
+    padding: 8,
+  },
+  plusButton: {
+    backgroundColor: colors.light.primary,
+    borderRadius: 20,
+    padding: 8,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: colors.light.textSecondary,
+  },
   completeButton: {
     backgroundColor: colors.light.success,
     paddingVertical: 10,

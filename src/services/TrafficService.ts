@@ -97,7 +97,7 @@ class TrafficService {
     const isNightTime = currentHour >= 22 || currentHour <= 6;
     const isLunchTime = currentHour >= 12 && currentHour <= 14;
 
-    coordinates.forEach((coord, index) => {
+    coordinates.forEach((coord) => {
       // Базовый уровень пробок
       let baseTrafficLevel = 0.3; // 30% базовая загруженность
       
@@ -198,7 +198,7 @@ class TrafficService {
   }
 
   // Получение уровня пробок для одной точки
-  static getTrafficLevel(coordinate: { latitude: number; longitude: number }, time: Date, routePosition: number = 0.5): 'free' | 'low' | 'medium' | 'high' | 'heavy' {
+  static getTrafficLevel(coordinate: { latitude: number; longitude: number }, time: Date): 'free' | 'low' | 'medium' | 'high' | 'heavy' {
     const hour = time.getHours();
     const dayOfWeek = time.getDay();
     

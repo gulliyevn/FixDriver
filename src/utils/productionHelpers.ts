@@ -45,14 +45,9 @@ export const contactSupport = () => {
 /**
  * Validate production data
  */
-export const validateProductionData = (data: unknown, schema: unknown) => {
-  try {
-    // TODO: Add proper validation library (Joi, Yup, etc.)
-    return true;
-  } catch (error) {
-    logError(error, 'DataValidation');
-    return false;
-  }
+export const validateProductionData = () => {
+  // TODO: Add proper validation library (Joi, Yup, etc.)
+  return true;
 };
 
 /**
@@ -133,7 +128,7 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): ((...args: Parameters<T>) => void) => {
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout>;
   
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
@@ -157,4 +152,9 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
       setTimeout(() => inThrottle = false, limit);
     }
   };
+};
+
+export const validateData = (): boolean => {
+  // TODO: Добавить валидацию данных
+  return true;
 }; 

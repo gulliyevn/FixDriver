@@ -7,12 +7,12 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
+import { mockSupportData } from '../../mocks';
 
 interface Message {
   id: string;
@@ -22,7 +22,7 @@ interface Message {
 }
 
 interface SupportChatScreenProps {
-  navigation: any;
+  navigation: { goBack: () => void };
   route?: {
     params?: {
       initialMessage?: string;
@@ -35,17 +35,9 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   const { isDark } = useTheme();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
-  const quickQuestions = [
-    'Как отменить поездку?',
-    'Проблемы с оплатой',
-    'Водитель не приехал',
-    'Как изменить маршрут?',
-    'Проблемы с приложением',
-  ];
+  const { quickQuestions } = mockSupportData.supportData;
 
   useEffect(() => {
     // Добавляем приветственное сообщение
@@ -88,7 +80,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
     setInputText('');
 
     // Имитация ответа поддержки
-    setIsTyping(true);
     setTimeout(() => {
       const supportMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -97,7 +88,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, supportMessage]);
-      setIsTyping(false);
     }, 2000);
   };
 
@@ -112,7 +102,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
     setMessages(prev => [...prev, userMessage]);
 
     // Имитация ответа поддержки
-    setIsTyping(true);
     setTimeout(() => {
       const supportMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -121,7 +110,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, supportMessage]);
-      setIsTyping(false);
     }, 2000);
   };
 
@@ -213,23 +201,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
     </View>
   );
 
-  if (isLoading) {
-    return (
-      <View style={[
-        SupportChatScreenStyles.loadingContainer,
-        isDark && SupportChatScreenStyles.containerDark
-      ]}>
-        <ActivityIndicator size="large" color="#1E3A8A" />
-        <Text style={[
-          SupportChatScreenStyles.loadingText,
-          isDark && SupportChatScreenStyles.loadingTextDark
-        ]}>
-          Загрузка чата...
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <KeyboardAvoidingView
       style={[
@@ -285,19 +256,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
           ListFooterComponent={() => (
             <>
-              {isTyping && (
-                <View style={SupportChatScreenStyles.typingIndicator}>
-                  <View style={SupportChatScreenStyles.typingDot} />
-                  <View style={SupportChatScreenStyles.typingDot} />
-                  <View style={SupportChatScreenStyles.typingDot} />
-                  <Text style={[
-                    SupportChatScreenStyles.typingText,
-                    isDark && SupportChatScreenStyles.typingTextDark
-                  ]}>
-                    Поддержка печатает...
-                  </Text>
-                </View>
-              )}
               {messages.length === 1 && renderQuickQuestions()}
             </>
           )}

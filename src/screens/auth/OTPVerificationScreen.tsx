@@ -7,15 +7,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useAuth } from '../../context/AuthContext';
-import { colors } from '../../constants/colors';
 import { AuthStackParamList } from '../../navigation/AuthNavigator';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { OTPService } from '../../services/OTPService';
-import { OTPVerificationScreenStyles } from '../../styles/screens/OTPVerificationScreen.styles';
+import { OTPVerificationScreenStyles as styles } from '../../styles/screens/OTPVerificationScreen.styles';
 
 type OTPVerificationScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'OTPVerification'>;
 type OTPVerificationScreenRouteProp = RouteProp<AuthStackParamList, 'OTPVerification'>;
@@ -27,7 +25,6 @@ interface OTPVerificationScreenProps {
 
 const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigation, route }) => {
   const { email, purpose } = route.params;
-  const { login } = useAuth();
 
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +47,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
   const sendInitialOTP = useCallback(async () => {
     try {
       setIsLoading(true);
-      await OTPService.sendOTP(email, purpose);
+      await OTPService.sendOTP(email);
       setTimeLeft(60);
       setCanResend(false);
     } catch (err) {
@@ -59,14 +56,14 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
     } finally {
       setIsLoading(false);
     }
-  }, [email, purpose]);
+  }, [email]);
 
   const handleResendOTP = async () => {
     if (!canResend) return;
 
     try {
       setIsLoading(true);
-      await OTPService.sendOTP(email, purpose);
+      await OTPService.resendOTP(email);
       setTimeLeft(60);
       setCanResend(false);
       Alert.alert('Success', 'OTP has been resent to your email');
@@ -120,7 +117,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={styles.content}>
+      <View style={styles.scrollContent}>
         <View style={styles.header}>
           <Text style={styles.title}>Verify Your Email</Text>
           <Text style={styles.subtitle}>
@@ -128,7 +125,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
           </Text>
         </View>
 
-        <View style={styles.form}>
+        <View style={styles.otpContainer}>
           <InputField
             label="Enter OTP"
             value={otp}
@@ -150,7 +147,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
             <Text style={styles.resendText}>Didn&apos;t receive the code? </Text>
             {canResend ? (
               <TouchableOpacity onPress={handleResendOTP} disabled={isLoading}>
-                <Text style={styles.resendLink}>Resend</Text>
+                <Text style={styles.resendButtonText}>Resend</Text>
               </TouchableOpacity>
             ) : (
               <Text style={styles.timerText}>
@@ -164,7 +161,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.backButtonText}>Back to Login</Text>
+          <Text style={styles.changeNumberText}>Back to Login</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

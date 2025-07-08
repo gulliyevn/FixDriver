@@ -35,17 +35,7 @@ class SimpleJWT {
   }
 
   private static hmacSha256(message: string, secret: string): string {
-    // Простая реализация HMAC-SHA256 (в продакшене используйте нативную криптографию)
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secret);
-    const messageData = encoder.encode(message);
-    
-    // Используем Web Crypto API если доступен
-    if (typeof crypto !== 'undefined' && crypto.subtle) {
-      // В реальном приложении здесь будет правильная реализация HMAC
-      return this.simpleHash(message + secret);
-    }
-    
+    // Простая реализация для разработки
     return this.simpleHash(message + secret);
   }
 
@@ -64,14 +54,14 @@ class SimpleJWT {
     const header = {
       alg: 'HS256',
       typ: 'JWT',
-      ...options.header
+      ...(options.header as Record<string, unknown> || {})
     };
 
     const now = Math.floor(Date.now() / 1000);
     const finalPayload = {
       ...payload,
       iat: payload.iat || now,
-      exp: payload.exp || (now + (options.expiresIn || 3600)),
+      exp: payload.exp || (now + (Number(options.expiresIn) || 3600)),
     };
 
     const encodedHeader = this.base64UrlEncode(JSON.stringify(header));
@@ -160,10 +150,13 @@ export class JWTService {
 
     const refreshTokenPayload = {
       userId: userData.userId,
+      email: userData.email,
+      role: userData.role,
+      phone: userData.phone,
       type: 'refresh',
       iat: now,
       exp: now + SECURITY_CONFIG.JWT.REFRESH_TOKEN_EXPIRY,
-    };
+    } as JWTPayload & { type: string };
 
     const accessToken = SimpleJWT.sign(accessTokenPayload, SECURITY_CONFIG.JWT.SECRET, {
       expiresIn: SECURITY_CONFIG.JWT.ACCESS_TOKEN_EXPIRY,
@@ -209,7 +202,7 @@ export class JWTService {
         return null;
       }
 
-      const decoded = SimpleJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as Record<string, unknown>;
+      const decoded = SimpleJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as unknown as Record<string, unknown>;
 
       if (decoded.type !== 'refresh') {
         throw new Error('Invalid refresh token type');
@@ -223,7 +216,7 @@ export class JWTService {
 
       // Генерируем новый access token
       const tokens = this.generateTokens({
-        userId: decoded.userId,
+        userId: decoded.userId as string,
         email: userData.email,
         role: userData.role,
         phone: userData.phone,

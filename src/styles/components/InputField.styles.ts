@@ -137,4 +137,10 @@ export const InputFieldStyles = StyleSheet.create({
   inputContainerAnimated: {
     transform: [{ scale: 1.02 }],
   },
+  containerError: {
+    borderColor: colors.light.error,
+  },
+  containerFocused: {
+    borderColor: colors.light.primary,
+  },
 }); 

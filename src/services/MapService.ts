@@ -56,7 +56,7 @@ export class MapService {
     }
   }
 
-  static async getNearbyDrivers(location: MapLocation, radius: number = 5000): Promise<DriverLocation[]> {
+  static async getNearbyDrivers(location: MapLocation): Promise<DriverLocation[]> {
     // TODO: заменить на реальный API запрос
     return new Promise((resolve) => {
       setTimeout(() => {

@@ -1,5 +1,5 @@
 import { Chat, Message, ChatPreview } from '../types/chat';
-import mockData from '../utils/mockData';
+import { mockChats, mockMessages } from '../mocks';
 
 // Отключено для production - только для разработки
 const ENABLE_CHAT_LOGS = false;
@@ -29,8 +29,8 @@ export class ChatService {
   }
 
   private initializeMockData(): void {
-    this.chats = mockData.chats;
-    this.messages = mockData.messages;
+    this.chats = mockChats;
+    this.messages = mockMessages;
     // Если есть chatPreviews, можно оставить или убрать, если не используется.
   }
 
@@ -44,48 +44,48 @@ export class ChatService {
     return this.messages.filter(message => message.chatId === chatId);
   }
 
-  sendMessage(chatId: string, senderId: string, text: string): Message {
-    const message: Message = {
+  async sendMessage(
+    chatId: string,
+    content: string,
+    messageType: 'text' | 'image' | 'file' | 'location' = 'text'
+  ): Promise<Message> {
+    const newMessage: Message = {
       id: `msg_${Date.now()}`,
       chatId,
-      senderId,
-      senderType: senderId === 'me' ? 'client' : 'driver',
-      content: text,
+      senderId: 'me',
+      senderType: 'client',
+      content,
       timestamp: new Date().toISOString(),
-      type: 'text',
+      type: messageType,
       isRead: false,
     };
 
-    this.messages.push(message);
+    this.messages.push(newMessage);
     
     // Обновляем чат
     const chat = this.chats.find(c => c.id === chatId);
     if (chat) {
-      chat.lastMessage = message;
-      chat.updatedAt = message.timestamp;
-      if (senderId !== 'me') {
-        chat.unreadCount = (chat.unreadCount || 0) + 1;
-      }
+      chat.lastMessage = newMessage;
+      chat.updatedAt = newMessage.timestamp;
+      chat.unreadCount = (chat.unreadCount || 0) + 1;
     }
 
     // Обновляем превью чата
     const chatPreview = this.chatPreviews.find(c => c.id === chatId);
     if (chatPreview) {
-      chatPreview.lastMessage = text;
+      chatPreview.lastMessage = newMessage.content;
       chatPreview.lastMessageTime = new Date();
-      if (senderId !== 'me') {
-        chatPreview.unreadCount = (chatPreview.unreadCount || 0) + 1;
-      }
+      chatPreview.unreadCount = (chatPreview.unreadCount || 0) + 1;
     }
 
     this.notifySubscribers();
     
-    return message;
+    return newMessage;
   }
 
-  markAsRead(chatId: string, userId: string): void {
+  markAsRead(chatId: string): void {
     this.messages.forEach(message => {
-      if (message.chatId === chatId && message.senderId !== userId) {
+      if (message.chatId === chatId && message.senderId !== 'me') {
         message.isRead = true;
       }
     });
@@ -132,7 +132,7 @@ export class ChatService {
   }
 
   // Статические методы для совместимости
-  static async getChats(userId: string): Promise<Chat[]> {
+  static async getChats(): Promise<Chat[]> {
     const instance = ChatService.getInstance();
     return instance.chats;
   }
@@ -142,14 +142,14 @@ export class ChatService {
     return instance.getMessages(chatId);
   }
 
-  static async sendMessage(chatId: string, text: string, senderId: string): Promise<Message> {
+  static async sendMessage(chatId: string, text: string): Promise<Message> {
     const instance = ChatService.getInstance();
-    return instance.sendMessage(chatId, senderId, text);
+    return instance.sendMessage(chatId, text, 'text');
   }
 
   static async markMessagesAsRead(chatId: string): Promise<void> {
     const instance = ChatService.getInstance();
-    instance.markAsRead(chatId, 'me');
+    instance.markAsRead(chatId);
   }
 
   static async createChat(clientId: string, driverId: string): Promise<Chat> {

@@ -160,4 +160,55 @@ export const ScheduleScreenStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
   },
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    zIndex: 1,
+  },
+  placeholder: {
+    height: 60,
+  },
+  scrollContent: {
+    paddingBottom: 20,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyDescription: {
+    fontSize: 14,
+    color: colors.light.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  scheduleButton: {
+    backgroundColor: colors.light.primary,
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  scheduleButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: colors.light.textSecondary,
+  },
 }); 

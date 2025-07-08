@@ -393,4 +393,10 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     padding: 8,
     marginLeft: 8,
   },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
 }); 

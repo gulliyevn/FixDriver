@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
 import { StartTripScreenStyles } from '../../styles/screens/StartTripScreen.styles';
 
 export default function StartTripScreen() {
   const navigation = useNavigation();
-  const { isDark } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleStartTrip = () => {

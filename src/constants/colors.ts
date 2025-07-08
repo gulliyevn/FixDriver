@@ -1,41 +1,73 @@
 export const lightColors = {
+  // Основные цвета
   primary: '#1E3A8A',
   secondary: '#3B82F6',
+  accent: '#06B6D4',
+  
+  // Фоновые цвета
   background: '#FFFFFF',
   surface: '#F8FAFC',
+  card: '#FFFFFF',
+  tabBar: '#FFFFFF',
+  
+  // Текстовые цвета
   text: '#1F2937',
   textSecondary: '#6B7280',
+  textTertiary: '#9CA3AF',
+  
+  // Границы и разделители
   border: '#E5E7EB',
+  borderLight: '#F3F4F6',
+  
+  // Статусные цвета
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
   info: '#3B82F6',
-  // FixDrive premium colors
-  card: '#FFFFFF',
-  tabBar: '#FFFFFF',
+  
+  // Дополнительные цвета
   cardShadow: '#000000',
-  accent: '#1E3A8A',
   gradient: ['#1E3A8A', '#3B82F6'],
+  
+  // Специальные цвета
+  overlay: 'rgba(0, 0, 0, 0.5)',
+  backdrop: 'rgba(0, 0, 0, 0.3)',
 };
 
 export const darkColors = {
+  // Основные цвета
   primary: '#3B82F6',
   secondary: '#60A5FA',
+  accent: '#22D3EE',
+  
+  // Фоновые цвета
   background: '#111827',
   surface: '#1F2937',
+  card: '#1F2937',
+  tabBar: '#111827',
+  
+  // Текстовые цвета
   text: '#F9FAFB',
   textSecondary: '#9CA3AF',
+  textTertiary: '#6B7280',
+  
+  // Границы и разделители
   border: '#374151',
+  borderLight: '#4B5563',
+  
+  // Статусные цвета
   success: '#34D399',
   warning: '#FBBF24',
   error: '#F87171',
   info: '#60A5FA',
-  // FixDrive premium colors
-  card: '#1F2937',
-  tabBar: '#111827',
+  
+  // Дополнительные цвета
   cardShadow: '#000000',
-  accent: '#3B82F6',
   gradient: ['#3B82F6', '#60A5FA'],
+  
+  // Специальные цвета
+  overlay: 'rgba(0, 0, 0, 0.7)',
+  backdrop: 'rgba(0, 0, 0, 0.5)',
 };
 
 export const colors = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -15,6 +15,8 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { ChatScreenStyles } from '../../styles/screens/ChatScreen.styles';
+import { ChatService } from '../../services/ChatService';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 interface DisplayMessage {
   id: string;
@@ -24,18 +26,33 @@ interface DisplayMessage {
   isRead: boolean;
 }
 
+interface ChatScreenParams {
+  driverId?: string;
+  driverName?: string;
+  driverCar?: string;
+  driverNumber?: string;
+  driverStatus?: 'online' | 'offline';
+}
+
 const ChatScreen: React.FC = () => {
   const { isDark } = useTheme();
+  const navigation = useNavigation();
+  const route = useRoute();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  // Загрузка сообщений чата при монтировании компонента
-  useEffect(() => {
-    loadChatMessages();
-  }, []);
+  // Mock данные для водителя (в реальном приложении будут приходить из route.params)
+  const params = route.params as ChatScreenParams;
+  const driverData = {
+    driverId: params?.driverId || 'driver_1',
+    driverName: params?.driverName || 'Алексей Петров',
+    driverCar: params?.driverCar || 'Toyota Camry',
+    driverNumber: params?.driverNumber || '10-AA-123',
+    driverStatus: params?.driverStatus || 'online'
+  };
 
-  const loadChatMessages = async () => {
+  const loadChatMessages = useCallback(async () => {
     try {
       // Ищем существующий чат с водителем
       const chats = await ChatService.getChats('me');
@@ -50,7 +67,7 @@ const ChatScreen: React.FC = () => {
         // Если чата нет, создаем новый
         const newChat = await ChatService.createChat(
           driverData.driverId,
-          route.params.driverName || 'Водитель'
+          params?.driverName || 'Водитель'
         );
         chatId = newChat.id;
       }
@@ -83,7 +100,12 @@ const ChatScreen: React.FC = () => {
     } catch (error) {
       console.error('❌ Ошибка загрузки чата:', error);
     }
-  };
+  }, []);
+
+  // Загрузка сообщений чата при монтировании компонента
+  useEffect(() => {
+    loadChatMessages();
+  }, [loadChatMessages]);
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
@@ -139,7 +161,7 @@ const ChatScreen: React.FC = () => {
           onPress: () => {
             try {
               const url = `tel:${phoneNumber}`;
-              Linking.openURL(url).catch((err) => {
+              Linking.openURL(url).catch(() => {
                 Alert.alert('Ошибка', 'Не удалось совершить звонок');
               });
             } catch (error) {

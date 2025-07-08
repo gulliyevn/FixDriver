@@ -38,7 +38,7 @@ export interface PaymentPackage {
 export class StripeService {
   // Получить методы оплаты клиента
   // TODO: Заменить на реальный Stripe API запрос к /payment_methods
-  static async getPaymentMethods(customerId: string): Promise<PaymentMethod[]> {
+  static async getPaymentMethods(): Promise<PaymentMethod[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -65,7 +65,7 @@ export class StripeService {
 
   // Добавить новый метод оплаты
   // TODO: Заменить на реальный Stripe API запрос к /payment_methods/create
-  static async addPaymentMethod(paymentMethodId: string, customerId: string): Promise<void> {
+  static async addPaymentMethod(): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -75,7 +75,7 @@ export class StripeService {
 
   // Удалить метод оплаты
   // TODO: Заменить на реальный Stripe API запрос к /payment_methods/{id}/delete
-  static async removePaymentMethod(paymentMethodId: string): Promise<void> {
+  static async removePaymentMethod(): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -101,7 +101,7 @@ export class StripeService {
 
   // Подтвердить платеж
   // TODO: Заменить на реальный Stripe API запрос к /payment_intents/{id}/confirm
-  static async confirmPayment(paymentIntentId: string, paymentMethodId: string): Promise<PaymentIntent> {
+  static async confirmPayment(paymentIntentId: string): Promise<PaymentIntent> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -117,7 +117,7 @@ export class StripeService {
 
   // Получить подписки клиента
   // TODO: Заменить на реальный Stripe API запрос к /subscriptions
-  static async getSubscriptions(customerId: string): Promise<Subscription[]> {
+  static async getSubscriptions(): Promise<Subscription[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -175,7 +175,7 @@ export class StripeService {
 
   // Создать клиента
   // TODO: Заменить на реальный Stripe API запрос к /customers/create
-  static async createCustomer(email: string, name: string): Promise<string> {
+  static async createCustomer(): Promise<string> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(`cus_${Date.now()}`);

@@ -14,7 +14,7 @@ export default function AuthStatusIndicator({
   showDetails = false,
   onRefresh,
 }: AuthStatusIndicatorProps) {
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [tokenStatus, setTokenStatus] = useState<'valid' | 'expired' | 'unknown'>('unknown');
   const [tokenDetails, setTokenDetails] = useState<Record<string, unknown> | null>(null);
 

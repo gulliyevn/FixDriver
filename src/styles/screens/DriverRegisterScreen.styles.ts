@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
 
 export const DriverRegisterScreenStyles = StyleSheet.create({
   container: {
@@ -155,5 +154,31 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
   modalText: {
     fontSize: 14,
     lineHeight: 22,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  halfWidth: {
+    flex: 1,
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginText: {
+    color: '#6B7280',
+    fontSize: 14,
+  },
+  loginLink: {
+    color: '#1E3A8A',
+    fontSize: 14,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
 }); 

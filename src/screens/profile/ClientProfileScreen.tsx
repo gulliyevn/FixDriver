@@ -16,7 +16,7 @@ import ProfileOption from '../../components/ProfileOption';
 import { Ionicons } from '@expo/vector-icons';
 import AppCard from '../../components/AppCard';
 import { notificationService, Notification } from '../../services/NotificationService';
-import mockData from '../../utils/mockData';
+import { mockChildren } from '../../mocks';
 import { ClientProfileScreenStyles } from '../../styles/screens/ClientProfileScreen.styles';
 
 interface Child {
@@ -35,7 +35,7 @@ const ClientProfileScreen: React.FC = () => {
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const [children] = useState<Child[]>(mockData.children);
+  const [children] = useState<Child[]>(mockChildren);
 
   const handleLogout = () => {
     Alert.alert(

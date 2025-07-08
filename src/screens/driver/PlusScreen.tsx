@@ -9,7 +9,7 @@ import {
   StatusBar
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { PlusScreenStyles } from '../../styles/screens/PlusScreen.styles';
 
 const PlusScreen: React.FC = () => {

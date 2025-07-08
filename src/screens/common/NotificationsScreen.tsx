@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import mockData from '../../utils/mockData';
+import { mockNotifications } from '../../mocks';
 import { NotificationsScreenStyles } from '../../styles/screens/NotificationsScreen.styles';
 
 interface Notification {
@@ -25,7 +25,7 @@ interface Notification {
 
 const NotificationsScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const [notifications, setNotifications] = useState<Notification[]>(mockData.notifications);
+  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {

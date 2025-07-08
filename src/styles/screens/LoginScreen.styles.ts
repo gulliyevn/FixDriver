@@ -180,4 +180,58 @@ export const LoginScreenStyles = StyleSheet.create({
     fontSize: SIZES.fontSize.xxxl,
     marginBottom: SIZES.xs,
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  socialAuth: {
+    marginBottom: SIZES.xxxl,
+  },
+  registerLinkText: {
+    color: colors.light.textSecondary,
+    fontSize: SIZES.fontSize.md,
+    lineHeight: SIZES.lineHeight.md,
+  },
+  // Стили для кнопок автозаполнения (только для разработки)
+  autoFillContainer: {
+    marginTop: SIZES.lg,
+    padding: SIZES.md,
+    backgroundColor: colors.light.surface,
+    borderRadius: SIZES.radius.md,
+    borderWidth: 1,
+    borderColor: colors.light.border,
+    ...SHADOWS.light.small,
+  },
+  autoFillTitle: {
+    fontSize: SIZES.fontSize.sm,
+    color: colors.light.textSecondary,
+    textAlign: 'center',
+    marginBottom: SIZES.sm,
+    fontWeight: '500',
+  },
+  autoFillButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    gap: SIZES.sm,
+  },
+  autoFillButton: {
+    flex: 1,
+    backgroundColor: colors.light.primary,
+    paddingVertical: SIZES.sm,
+    paddingHorizontal: SIZES.md,
+    borderRadius: SIZES.radius.sm,
+    alignItems: 'center',
+    ...SHADOWS.light.small,
+  },
+  autoFillButtonText: {
+    color: colors.light.surface,
+    fontSize: SIZES.fontSize.sm,
+    fontWeight: '600',
+  },
 }); 

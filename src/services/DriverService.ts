@@ -303,42 +303,6 @@ class DriverService {
     }
   }
 
-  // Валидация номера водительских прав
-  static validateLicenseNumber(licenseNumber: string): { isValid: boolean; message?: string } {
-    // Базовая валидация для азербайджанских прав (пример)
-    const azLicenseRegex = /^[A-Z]{2}\d{8}$/; // AZ12345678
-    
-    if (!licenseNumber) {
-      return { isValid: false, message: 'Номер водительских прав обязателен' };
-    }
-
-    if (licenseNumber.length < 6) {
-      return { isValid: false, message: 'Номер слишком короткий' };
-    }
-
-    if (licenseNumber.length > 20) {
-      return { isValid: false, message: 'Номер слишком длинный' };
-    }
-
-    return { isValid: true };
-  }
-
-  // Валидация номера автомобиля
-  static validateVehicleNumber(vehicleNumber: string): { isValid: boolean; message?: string } {
-    // Базовая валидация для азербайджанских номеров
-    const azPlateRegex = /^\d{2}-[A-Z]{2}-\d{3}$/; // 12-AB-123
-    
-    if (!vehicleNumber) {
-      return { isValid: false, message: 'Номер автомобиля обязателен' };
-    }
-
-    if (vehicleNumber.length < 6) {
-      return { isValid: false, message: 'Номер слишком короткий' };
-    }
-
-    return { isValid: true };
-  }
-
   // Утилиты
   private static getToken(): string | null {
     // Здесь должна быть логика получения токена из AsyncStorage

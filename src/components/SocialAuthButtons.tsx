@@ -5,12 +5,18 @@ import { SocialAuthService } from '../services/SocialAuthService';
 import { SocialAuthButtonsStyles } from '../styles/components/SocialAuthButtons.styles';
 
 interface SocialAuthButtonsProps {
+  onPress?: (provider: 'google' | 'facebook' | 'apple') => Promise<void>;
   onSuccess?: (user: Record<string, unknown>) => void;
   onError?: (error: string) => void;
 }
 
-export default function SocialAuthButtons({ onSuccess, onError }: SocialAuthButtonsProps) {
+export default function SocialAuthButtons({ onPress, onSuccess, onError }: SocialAuthButtonsProps) {
   const handleGoogleSignIn = async () => {
+    if (onPress) {
+      await onPress('google');
+      return;
+    }
+    
     try {
       const result = await SocialAuthService.signInWithGoogle();
       if (result.success) {
@@ -24,6 +30,11 @@ export default function SocialAuthButtons({ onSuccess, onError }: SocialAuthButt
   };
 
   const handleFacebookSignIn = async () => {
+    if (onPress) {
+      await onPress('facebook');
+      return;
+    }
+    
     try {
       const result = await SocialAuthService.signInWithFacebook();
       if (result.success) {
@@ -37,6 +48,11 @@ export default function SocialAuthButtons({ onSuccess, onError }: SocialAuthButt
   };
 
   const handleAppleSignIn = async () => {
+    if (onPress) {
+      await onPress('apple');
+      return;
+    }
+    
     try {
       const result = await SocialAuthService.signInWithApple();
       if (result.success) {

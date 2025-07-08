@@ -1,10 +1,15 @@
 import JWTService from './JWTService';
 
+// Типы для fetch API
+declare global {
+  interface RequestInit {
+    signal?: AbortSignal;
+  }
+}
+
 // Конфигурация API
 const API_CONFIG = {
-  BASE_URL: __DEV__ 
-    ? 'http://localhost:3000/api' 
-    : 'https://api.fixdrive.com/api',
+  BASE_URL: 'https://api.fixdrive.com/api',
   TIMEOUT: 30000, // 30 секунд
   RETRY_ATTEMPTS: 3,
 };
@@ -45,15 +50,15 @@ class APIClient {
    */
   async request<T = unknown>(
     endpoint: string,
-    options: RequestInit = {}
+    options: Record<string, unknown> = {}
   ): Promise<APIResponse<T>> {
     const url = `${API_CONFIG.BASE_URL}${endpoint}`;
     
     try {
       // Добавляем заголовки авторизации
-      const headers = await this.getHeaders(options.headers);
+      const headers = await this.getHeaders(options.headers as Record<string, string>);
       
-      const config: RequestInit = {
+      const config: Record<string, unknown> = {
         ...options,
         headers,
         signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
@@ -64,7 +69,7 @@ class APIClient {
       // Обрабатываем ответ
       return await this.handleResponse<T>(response);
     } catch (error) {
-      return this.handleError(error);
+      return this.handleError(error) as APIResponse<T>;
     }
   }
 
@@ -83,7 +88,7 @@ class APIClient {
   /**
    * POST запрос
    */
-  async post<T = unknown>(endpoint: string, data?: unknown): Promise<APIResponse<T>> {
+  async post<T = unknown>(endpoint: string, data: Record<string, unknown>): Promise<APIResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'POST',
       headers: {
@@ -131,8 +136,8 @@ class APIClient {
   /**
    * Получает заголовки для запроса
    */
-  private async getHeaders(customHeaders?: HeadersInit): Promise<HeadersInit> {
-    const headers: HeadersInit = {
+  private async getHeaders(customHeaders?: Record<string, string>): Promise<Record<string, string>> {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'User-Agent': 'FixDrive-Mobile/1.0',
@@ -155,7 +160,7 @@ class APIClient {
     const contentType = response.headers.get('content-type');
     const isJson = contentType && contentType.includes('application/json');
     
-    let data: any;
+    let data: unknown;
     
     try {
       data = isJson ? await response.json() : await response.text();
@@ -168,21 +173,22 @@ class APIClient {
     if (response.ok) {
       return {
         success: true,
-        data,
+        data: data as T,
         statusCode: response.status,
       };
     }
 
     // Обрабатываем ошибки авторизации
     if (response.status === 401) {
-      return await this.handleAuthError();
+      return await this.handleAuthError() as APIResponse<T>;
     }
 
     // Обрабатываем другие ошибки
+    const errorData = data as { message?: string };
     return {
       success: false,
-      error: data?.message || `HTTP ${response.status}`,
-      message: data?.message || 'Request failed',
+      error: errorData?.message || `HTTP ${response.status}`,
+      message: errorData?.message || 'Request failed',
       statusCode: response.status,
     };
   }
@@ -190,7 +196,7 @@ class APIClient {
   /**
    * Обрабатывает ошибки авторизации
    */
-  private async handleAuthError(): Promise<APIResponse> {
+  private async handleAuthError(): Promise<APIResponse<unknown>> {
     // Если уже обновляем токен, добавляем в очередь
     if (this.isRefreshing) {
       return new Promise((resolve, reject) => {
@@ -271,7 +277,7 @@ class APIClient {
    * Обрабатывает сетевые ошибки
    * TODO: Добавить более детальную обработку ошибок для production
    */
-  private handleError(error: any): APIResponse {
+  private handleError(error: Error): APIResponse {
     console.error('API request error:', error);
     
     if (error.name === 'AbortError') {
@@ -303,7 +309,7 @@ class APIClient {
   /**
    * Строит query string из параметров
    */
-  private buildQueryString(params: Record<string, any>): string {
+  private buildQueryString(params: Record<string, unknown>): string {
     const searchParams = new URLSearchParams();
     
     Object.entries(params).forEach(([key, value]) => {
@@ -322,10 +328,10 @@ class APIClient {
   /**
    * Загружает файл
    */
-  async uploadFile<T = any>(
+  async uploadFile<T = unknown>(
     endpoint: string, 
     file: { uri: string; type: string; name: string },
-    additionalData?: Record<string, any>
+    additionalData?: Record<string, unknown>
   ): Promise<APIResponse<T>> {
     const formData = new FormData();
     
@@ -334,7 +340,7 @@ class APIClient {
       uri: file.uri,
       type: file.type,
       name: file.name,
-    } as any);
+    } as never);
     
     // Добавляем дополнительные данные
     if (additionalData) {

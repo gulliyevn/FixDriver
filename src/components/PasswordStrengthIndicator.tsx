@@ -2,20 +2,26 @@ import React from 'react';
 import { View, Text, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { PasswordStrength } from '../utils/validators';
+import { PasswordStrength, Validators } from '../utils/validators';
 import { PasswordStrengthIndicatorStyles } from '../styles/components/PasswordStrengthIndicator.styles';
 
 interface PasswordStrengthIndicatorProps {
-  strength: PasswordStrength;
+  value?: string;
+  strength?: PasswordStrength;
   showFeedback?: boolean;
   containerStyle?: ViewStyle;
 }
 
 const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
+  value,
   strength,
   showFeedback = true,
   containerStyle
 }) => {
+  // If no strength is provided, calculate it from the value
+  const defaultStrength = { level: 'weak', score: 0, feedback: [] };
+  const calculatedStrength = strength || (value ? Validators.getPasswordStrength(value) : defaultStrength);
+  const finalStrength = calculatedStrength || defaultStrength;
   const { isDark } = useTheme();
 
   const getStrengthColor = (level: string) => {
@@ -51,7 +57,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
   const getProgressBars = () => {
     const bars = [];
     const maxBars = 4;
-    const filledBars = Math.ceil((strength.score / 10) * maxBars);
+    const filledBars = Math.ceil((finalStrength.score / 10) * maxBars);
 
     for (let i = 0; i < maxBars; i++) {
       const isFilled = i < filledBars;
@@ -61,7 +67,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
           style={[
             PasswordStrengthIndicatorStyles.progressBar,
             {
-              backgroundColor: isFilled ? getStrengthColor(strength.level) : isDark ? '#374151' : '#E5E7EB',
+              backgroundColor: isFilled ? getStrengthColor(finalStrength.level) : isDark ? '#374151' : '#E5E7EB',
             }
           ]}
         />
@@ -78,22 +84,22 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
         </View>
         <View style={PasswordStrengthIndicatorStyles.strengthInfo}>
           <Ionicons
-            name={getStrengthIcon(strength.level) as keyof typeof Ionicons.glyphMap}
+            name={getStrengthIcon(finalStrength.level) as keyof typeof Ionicons.glyphMap}
             size={16}
-            color={getStrengthColor(strength.level)}
+            color={getStrengthColor(finalStrength.level)}
           />
           <Text style={[
             PasswordStrengthIndicatorStyles.strengthText,
-            { color: getStrengthColor(strength.level) }
+            { color: getStrengthColor(finalStrength.level) }
           ]}>
-            {getStrengthText(strength.level)}
+            {getStrengthText(finalStrength.level)}
           </Text>
         </View>
       </View>
 
-      {showFeedback && strength.feedback.length > 0 && (
+      {showFeedback && finalStrength.feedback.length > 0 && (
         <View style={PasswordStrengthIndicatorStyles.feedbackContainer}>
-          {strength.feedback.slice(0, 3).map((feedback, index) => (
+          {finalStrength.feedback.slice(0, 3).map((feedback, index) => (
             <View key={index} style={PasswordStrengthIndicatorStyles.feedbackItem}>
               <Ionicons
                 name="information-circle-outline"

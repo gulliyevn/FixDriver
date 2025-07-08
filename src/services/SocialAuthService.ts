@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { ErrorHandler } from '../utils/errorHandler';
 
 // Отключено для production - только для разработки
 const ENABLE_SOCIAL_LOGS = false;
@@ -61,6 +60,27 @@ export class SocialAuthService {
       //   }
       // };
 
+      // Мок для разработки
+      if (__DEV__) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const mockUser: SocialUser = {
+          id: 'google_user_1',
+          email: 'user@gmail.com',
+          name: 'Google User',
+          photo: 'https://via.placeholder.com/150',
+          provider: 'google',
+          accessToken: 'mock_google_token',
+        };
+
+        console.log('🧪 Мок вход через Google:', mockUser);
+        
+        return {
+          success: true,
+          user: mockUser
+        };
+      }
+      
       throw new Error('Google Sign-In не настроен');
     } catch (error) {
       console.error('Google Sign-In error:', error);
@@ -101,6 +121,27 @@ export class SocialAuthService {
       //   }
       // };
 
+      // Мок для разработки
+      if (__DEV__) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const mockUser: SocialUser = {
+          id: 'facebook_user_1',
+          email: 'user@facebook.com',
+          name: 'Facebook User',
+          photo: 'https://via.placeholder.com/150',
+          provider: 'facebook',
+          accessToken: 'mock_facebook_token',
+        };
+
+        console.log('🧪 Мок вход через Facebook:', mockUser);
+        
+        return {
+          success: true,
+          user: mockUser
+        };
+      }
+      
       throw new Error('Facebook Login не настроен');
     } catch (error) {
       console.error('Facebook Login error:', error);
@@ -140,6 +181,27 @@ export class SocialAuthService {
       //   }
       // };
 
+      // Мок для разработки
+      if (__DEV__) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const mockUser: SocialUser = {
+          id: 'apple_user_1',
+          email: 'user@icloud.com',
+          name: 'Apple User',
+          photo: null,
+          provider: 'apple',
+          accessToken: 'mock_apple_token',
+        };
+
+        console.log('🧪 Мок вход через Apple:', mockUser);
+        
+        return {
+          success: true,
+          user: mockUser
+        };
+      }
+      
       throw new Error('Apple Sign-In не настроен');
     } catch (error) {
       console.error('Apple Sign-In error:', error);

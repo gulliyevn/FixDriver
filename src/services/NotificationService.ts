@@ -1,4 +1,4 @@
-import mockData from '../utils/mockData';
+import { mockNotifications } from '../mocks';
 
 export interface Notification {
   id: string;
@@ -23,7 +23,7 @@ class NotificationService {
   private listeners: ((notifications: Notification[]) => void)[] = [];
 
   private constructor() {
-    this.notifications = mockData.notifications;
+    this.notifications = mockNotifications;
     this.initializeMockNotifications();
     this.startTimeBasedNotifications();
   }
@@ -37,7 +37,7 @@ class NotificationService {
 
   // Инициализация с моковыми уведомлениями
   private initializeMockNotifications() {
-    this.notifications = [...this.notifications, ...mockData.notifications];
+    this.notifications = [...this.notifications, ...mockNotifications];
   }
 
   // Запуск уведомлений по времени

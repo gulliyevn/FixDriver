@@ -1,592 +1,332 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { lightColors } from '../../constants/colors';
 
 export const DriversScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.light.background,
+    backgroundColor: lightColors.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: colors.light.background,
+    backgroundColor: lightColors.surface,
+    paddingTop: 60,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
+    borderBottomColor: lightColors.border,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
-    color: colors.light.text,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: colors.light.textSecondary,
-    marginBottom: 16,
+    fontWeight: 'bold',
+    color: lightColors.text,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.light.surface,
+    marginTop: 16,
+  },
+  searchInput: {
+    backgroundColor: lightColors.background,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginBottom: 16,
-  },
-  searchInput: {
-    flex: 1,
     fontSize: 16,
-    color: colors.light.text,
-    marginLeft: 8,
+    color: lightColors.text,
+    borderWidth: 1,
+    borderColor: lightColors.border,
   },
-  filterContainer: {
+  filtersContainer: {
     flexDirection: 'row',
-    marginBottom: 16,
+    marginTop: 12,
+    gap: 8,
   },
   filterButton: {
-    flex: 1,
-    backgroundColor: colors.light.surface,
-    paddingVertical: 8,
+    backgroundColor: lightColors.background,
+    borderRadius: 20,
     paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-    alignItems: 'center',
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: lightColors.border,
+  },
+  filterButtonActive: {
+    backgroundColor: lightColors.primary,
+    borderColor: lightColors.primary,
   },
   filterButtonText: {
     fontSize: 14,
-    color: colors.light.textSecondary,
-  },
-  filterButtonActive: {
-    backgroundColor: colors.light.primary,
+    color: lightColors.textSecondary,
   },
   filterButtonTextActive: {
     color: '#FFFFFF',
+    fontWeight: '600',
   },
   driversList: {
     flex: 1,
-    paddingHorizontal: 16,
   },
   driverCard: {
-    backgroundColor: colors.light.surface,
+    backgroundColor: lightColors.surface,
     borderRadius: 12,
+    marginHorizontal: 20,
+    marginVertical: 8,
     padding: 16,
-    marginBottom: 12,
-    shadowColor: colors.light.cardShadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: lightColors.border,
   },
   driverHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  driverInfo: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  driverName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 4,
-  },
-  driverDetails: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  driverDetailText: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    marginLeft: 4,
-  },
-  driverStatus: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statusIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
-  },
-  statusOnline: {
-    backgroundColor: colors.light.success,
-  },
-  statusOffline: {
-    backgroundColor: colors.light.textSecondary,
-  },
-  statusText: {
-    fontSize: 12,
-    color: colors.light.textSecondary,
-  },
-  driverActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    marginHorizontal: 4,
-  },
-  callButton: {
-    backgroundColor: colors.light.success,
-  },
-  chatButton: {
-    backgroundColor: colors.light.primary,
-  },
-  chatButtonDisabled: {
-    backgroundColor: colors.light.border,
-  },
-  actionButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#FFFFFF',
-    marginLeft: 4,
-  },
-  chatButtonText: {
-    color: '#FFFFFF',
-  },
-  chatButtonTextDisabled: {
-    color: colors.light.textSecondary,
-  },
-  expandedContent: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.light.border,
-  },
-  scheduleContainer: {
-    marginBottom: 12,
-  },
-  scheduleTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 8,
-  },
-  scheduleGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  scheduleItem: {
-    backgroundColor: colors.light.surface,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  scheduleItemActive: {
-    backgroundColor: colors.light.primary,
-  },
-  scheduleText: {
-    fontSize: 12,
-    color: colors.light.textSecondary,
-  },
-  scheduleTextActive: {
-    color: '#FFFFFF',
-  },
-  tripDetails: {
-    marginBottom: 12,
-  },
-  tripDetailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  tripDetailText: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    marginLeft: 8,
-  },
-  expandedActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  callButtonExpanded: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.light.success,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  callButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#FFFFFF',
-    marginLeft: 6,
-  },
-  chatButtonExpanded: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.light.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: colors.light.background,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.light.text,
-  },
-  modalHeaderActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalSelectButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginRight: 12,
-  },
-  modalSelectButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.primary,
-  },
-  closeButton: {
-    padding: 8,
-  },
-  cancelButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.text,
-  },
-  markAllButton: {
-    padding: 16,
-    backgroundColor: colors.light.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  markAllButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.primary,
-    textAlign: 'center',
-  },
-  notificationsList: {
-    flex: 1,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 64,
-  },
-  emptyStateText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptyStateSubtext: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    textAlign: 'center',
-  },
-  notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  unreadNotification: {
-    backgroundColor: colors.light.primary + '10',
-  },
-  selectedNotification: {
-    backgroundColor: colors.light.primary + '20',
-  },
-  notificationContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    marginRight: 12,
-  },
-  notificationIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  notificationTextContainer: {
-    flex: 1,
-  },
-  notificationTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 4,
-  },
-  unreadTitle: {
-    fontWeight: '700',
-  },
-  notificationMessage: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    marginBottom: 4,
-  },
-  notificationTime: {
-    fontSize: 12,
-    color: colors.light.textSecondary,
-  },
-  deleteButton: {
-    padding: 8,
-  },
-  bottomActions: {
-    flexDirection: 'row',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.light.border,
-  },
-  bottomButton: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-    alignItems: 'center',
-  },
-  selectAllButton: {
-    backgroundColor: colors.light.surface,
-  },
-  bottomButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  deleteAllButton: {
-    backgroundColor: colors.light.error,
-  },
-  modalHeaderEmpty: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-  },
-  closeButtonCustom: {
-    padding: 8,
-  },
-  filterModalContent: {
-    flex: 1,
-    padding: 16,
-  },
-  filterSection: {
-    marginBottom: 24,
-  },
-  filterGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  filterGridItem: {
-    backgroundColor: colors.light.surface,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  filterGridItemActive: {
-    backgroundColor: colors.light.primary,
-  },
-  filterGridText: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-  },
-  filterGridTextActive: {
-    color: '#FFFFFF',
-  },
-  filterModalActions: {
-    flexDirection: 'row',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.light.border,
-  },
-  filterResetButton: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginRight: 8,
-    alignItems: 'center',
-  },
-  filterResetButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.textSecondary,
-  },
-  filterApplyButton: {
-    flex: 1,
-    backgroundColor: colors.light.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  filterApplyButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#FFFFFF',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  driverContent: {
-    backgroundColor: colors.light.card,
-    borderRadius: 12,
-    marginBottom: 15,
-    shadowColor: colors.light.cardShadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  driverCompactHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-  },
   driverAvatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 12,
-    backgroundColor: colors.light.surface,
+    backgroundColor: lightColors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 12,
   },
-  nameRatingRow: {
+  driverAvatarText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  driverInfo: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  },
+  driverName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: lightColors.text,
+    marginBottom: 2,
   },
   driverRating: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   ratingText: {
-    marginLeft: 5,
     fontSize: 14,
-    color: colors.light.textSecondary,
+    color: lightColors.textSecondary,
+    marginLeft: 4,
   },
-  carInfoRow: {
+  driverStatus: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: lightColors.success,
+  },
+  driverStatusText: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  driverDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 5,
-  },
-  carInfoText: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-  },
-  statusInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
-  },
-  memberTagRowSpaced: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 4,
-  },
-  memberTagCompact: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginRight: 8,
-  },
-  memberIcon: {
-    marginRight: 4,
-  },
-  memberName: {
-    fontSize: 13,
-    color: colors.light.textSecondary,
-  },
-  expandArrow: {
-    marginLeft: 8,
-  },
-  driverExpanded: {
-    backgroundColor: colors.light.surface,
-    borderRadius: 12,
-    marginTop: 8,
-    padding: 12,
-  },
-  routeSection: {
     marginBottom: 12,
   },
-  routePointWithTime: {
-    flexDirection: 'row',
+  detailItem: {
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 8,
   },
-  routeLeftSide: {
+  detailLabel: {
+    fontSize: 12,
+    color: lightColors.textSecondary,
+    marginBottom: 2,
+  },
+  detailValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: lightColors.text,
+  },
+  driverActions: {
     flexDirection: 'row',
-    alignItems: 'center',
+    gap: 8,
+  },
+  actionButton: {
     flex: 1,
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: 'center',
   },
-  routePinContainer: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+  primaryButton: {
+    backgroundColor: lightColors.primary,
+  },
+  secondaryButton: {
+    backgroundColor: lightColors.background,
+    borderWidth: 1,
+    borderColor: lightColors.border,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  primaryButtonText: {
+    color: '#FFFFFF',
+  },
+  secondaryButtonText: {
+    color: lightColors.text,
+  },
+  emptyContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    paddingHorizontal: 40,
   },
-  routeText: {
+  emptyIcon: {
+    fontSize: 64,
+    color: lightColors.textSecondary,
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: lightColors.text,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyDescription: {
     fontSize: 14,
-    fontWeight: '500',
-    flex: 1,
+    color: lightColors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
   },
-  routeTime: {
-    fontSize: 12,
-    color: colors.light.textSecondary,
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: lightColors.textSecondary,
+    marginTop: 16,
+  },
+  // Filter modal styles
+  filterModal: {
+    backgroundColor: lightColors.surface,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+  filterHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  filterTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: lightColors.text,
+  },
+  filterCloseButton: {
+    padding: 4,
+  },
+  filterSection: {
+    marginBottom: 24,
+  },
+  filterSectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: lightColors.text,
+    marginBottom: 12,
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: lightColors.border,
+  },
+  filterOptionText: {
+    flex: 1,
+    fontSize: 16,
+    color: lightColors.text,
+  },
+  filterCheckbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: lightColors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  filterCheckboxChecked: {
+    backgroundColor: lightColors.primary,
+    borderColor: lightColors.primary,
+  },
+  filterApplyButton: {
+    backgroundColor: lightColors.primary,
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  filterApplyButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  // Notification modal styles
+  notificationModal: {
+    backgroundColor: lightColors.surface,
+    borderRadius: 12,
+    margin: 20,
+    padding: 20,
+  },
+  notificationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  notificationTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: lightColors.text,
+  },
+  notificationCloseButton: {
+    padding: 4,
+  },
+  notificationContent: {
+    marginBottom: 20,
+  },
+  notificationText: {
+    fontSize: 16,
+    color: lightColors.text,
+    lineHeight: 24,
+  },
+  notificationActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  notificationButton: {
+    flex: 1,
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  notificationPrimaryButton: {
+    backgroundColor: lightColors.primary,
+  },
+  notificationSecondaryButton: {
+    backgroundColor: lightColors.background,
+    borderWidth: 1,
+    borderColor: lightColors.border,
+  },
+  notificationButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  notificationPrimaryButtonText: {
+    color: '#FFFFFF',
+  },
+  notificationSecondaryButtonText: {
+    color: lightColors.text,
   },
 }); 

@@ -9,11 +9,8 @@ import {
   StatusBar
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import AppCard from '../../components/AppCard';
-import Button from '../../components/Button';
-import { colors } from '../../constants/colors';
-import mockData from '../../utils/mockData';
+import { Ionicons } from '@expo/vector-icons';
+import { mockOrders } from '../../mocks';
 import { ScheduleScreenStyles } from '../../styles/screens/ScheduleScreen.styles';
 
 interface ScheduleItem {
@@ -30,24 +27,16 @@ interface ScheduleItem {
 const ScheduleScreen: React.FC = () => {
   const { isDark } = useTheme();
   
-  const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>(mockData.scheduleItems.map(item => ({
-    id: item.id,
-    date: item.date,
-    time: item.time,
-    client: item.driver, // Используем driver как client для водительского экрана
-    from: item.from,
-    to: item.to,
-    status: item.status as 'upcoming' | 'completed' | 'cancelled',
-    earnings: Math.floor(Math.random() * 500) + 200, // Генерируем случайный заработок
+  const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>(mockOrders.map(order => ({
+    id: order.id,
+    date: new Date(order.departureTime).toLocaleDateString('ru-RU', { weekday: 'long' }),
+    time: `${new Date(order.departureTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} - ${new Date(order.departureTime).getTime() + 8 * 60 * 60 * 1000}`,
+    client: order.passenger?.name || 'Клиент',
+    from: order.from,
+    to: order.to,
+    status: 'upcoming' as const,
+    earnings: 400
   })));
-
-  const handleAcceptSchedule = () => {
-    Alert.alert(
-      'Подтверждение',
-      'Функция подтверждения поездок будет доступна в следующем обновлении',
-      [{ text: 'Понятно', style: 'default' }]
-    );
-  };
 
   const handleCancelSchedule = (item: ScheduleItem) => {
     Alert.alert(

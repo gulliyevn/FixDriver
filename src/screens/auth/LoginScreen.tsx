@@ -83,6 +83,41 @@ const LoginScreen: React.FC = () => {
     }));
   };
 
+  const handleAutoFill = (type: 'client' | 'driver') => {
+    if (type === 'client') {
+      setFormData({
+        email: 'client@example.com',
+        password: 'password123',
+      });
+    } else {
+      setFormData({
+        email: 'driver@example.com',
+        password: 'password123',
+      });
+    }
+    setErrors({});
+  };
+
+  const handleAutoLogin = async (type: 'client' | 'driver') => {
+    setLoading(true);
+    try {
+      const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
+      const password = 'password123';
+      
+      const result = await AuthService.login(email, password);
+      
+      if (result.success) {
+        console.log(`🧪 Автоматический вход как ${type}:`, email);
+      } else {
+        Alert.alert('Ошибка', result.message || 'Неверный email или пароль');
+      }
+    } catch (error) {
+      Alert.alert('Ошибка', 'Произошла ошибка при входе');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={LoginScreenStyles.container}>
       <StatusBar barStyle="dark-content" />
@@ -152,6 +187,48 @@ const LoginScreen: React.FC = () => {
               disabled={loading}
               style={LoginScreenStyles.loginButton}
             />
+
+            {/* Кнопки автозаполнения для разработки */}
+            {__DEV__ && (
+              <View style={LoginScreenStyles.autoFillContainer}>
+                <Text style={LoginScreenStyles.autoFillTitle}>🧪 Быстрый вход (только для разработки):</Text>
+                <View style={LoginScreenStyles.autoFillButtons}>
+                  <TouchableOpacity
+                    style={LoginScreenStyles.autoFillButton}
+                    onPress={() => handleAutoFill('client')}
+                  >
+                    <Text style={LoginScreenStyles.autoFillButtonText}>👤 Заполнить клиент</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={LoginScreenStyles.autoFillButton}
+                    onPress={() => handleAutoFill('driver')}
+                  >
+                    <Text style={LoginScreenStyles.autoFillButtonText}>🚗 Заполнить водитель</Text>
+                  </TouchableOpacity>
+                </View>
+                
+                <View style={LoginScreenStyles.autoFillButtons}>
+                  <TouchableOpacity
+                    style={[LoginScreenStyles.autoFillButton, { backgroundColor: '#10B981' }]}
+                    onPress={() => handleAutoLogin('client')}
+                    disabled={loading}
+                  >
+                    <Text style={LoginScreenStyles.autoFillButtonText}>
+                      {loading ? '⏳ Вход...' : '👤 Войти как клиент'}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[LoginScreenStyles.autoFillButton, { backgroundColor: '#3B82F6' }]}
+                    onPress={() => handleAutoLogin('driver')}
+                    disabled={loading}
+                  >
+                    <Text style={LoginScreenStyles.autoFillButtonText}>
+                      {loading ? '⏳ Вход...' : '🚗 Войти как водитель'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
 
           {/* Divider */}

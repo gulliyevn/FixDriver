@@ -59,7 +59,7 @@ export class PackageService {
 
   // Получить активный пакет пользователя
   // TODO: Заменить на реальный API запрос к /packages/active/{userId}
-  static async getActivePackage(userId: string): Promise<ActivePackage | null> {
+  static async getActivePackage(): Promise<ActivePackage | null> {
     return new Promise((resolve) => {
       setTimeout(() => {
         // Mock активного пакета
@@ -87,30 +87,10 @@ export class PackageService {
 
   // Покупка пакета
   // TODO: Заменить на реальный API запрос к /packages/purchase
-  static async purchasePackage(packageId: string, userId: string): Promise<ActivePackage> {
-    return new Promise((resolve, reject) => {
+  static async purchasePackage(): Promise<{ success: boolean; message: string }> {
+    return new Promise((resolve) => {
       setTimeout(() => {
-        // Симуляция успешной покупки
-        const packageData = {
-          id: packageId,
-          name: 'Купленный пакет',
-          type: 'monthly' as const,
-          price: 500,
-          tripsIncluded: 40,
-          kmLimit: 800,
-          timeLimit: 2400,
-          duration: 30,
-          description: '40 поездок на месяц, до 800 км',
-          isActive: true,
-          tripsRemaining: 40,
-          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // через 30 дней
-          purchasedAt: new Date(),
-          tripsUsed: 0,
-          kmUsed: 0,
-          timeUsed: 0,
-        };
-
-        resolve(packageData);
+        resolve({ success: true, message: 'Пакет успешно приобретен' });
       }, 1000);
     });
   }
@@ -199,7 +179,7 @@ export class PackageService {
 
   // Получить сохраненные шаблоны пассажиров
   // TODO: Заменить на реальный API запрос к /passengers/templates/{userId}
-  static async getPassengerTemplates(userId: string): Promise<Passenger[]> {
+  static async getPassengerTemplates(): Promise<Passenger[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -220,7 +200,38 @@ export class PackageService {
             isTemplate: true,
           },
         ]);
-      }, 300);
+      }, 500);
+    });
+  }
+
+  async getUserPackages(): Promise<TravelPackage[]> {
+    // TODO: заменить на реальный API запрос
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([
+          {
+            id: 'monthly',
+            name: 'Месячный пакет',
+            type: 'monthly',
+            price: 500,
+            tripsIncluded: 40,
+            kmLimit: 800,
+            timeLimit: 2400,
+            duration: 30,
+            description: '40 поездок на месяц, до 800 км',
+            isActive: true,
+          },
+        ]);
+      }, 500);
+    });
+  }
+
+  async cancelPackage(): Promise<{ success: boolean; message: string }> {
+    // TODO: заменить на реальный API запрос
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ success: true, message: 'Пакет успешно отменен' });
+      }, 1000);
     });
   }
 }

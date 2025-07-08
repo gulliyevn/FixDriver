@@ -4,6 +4,7 @@ export { RoleSelectScreenStyles } from './screens/RoleSelectScreen.styles';
 export { ClientRegisterScreenStyles } from './screens/ClientRegisterScreen.styles';
 export { DriverRegisterScreenStyles } from './screens/DriverRegisterScreen.styles';
 export { ChatListScreenStyles } from './screens/ChatListScreen.styles';
+export { DriversScreenStyles } from './screens/DriversScreen.styles';
 export { ChatScreenStyles } from './screens/ChatScreen.styles';
 export { ClientProfileScreenStyles } from './screens/ClientProfileScreen.styles';
 export { MapScreenStyles } from './screens/MapScreen.styles';
