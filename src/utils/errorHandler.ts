@@ -334,6 +334,153 @@ export class ErrorHandler {
       console.groupEnd();
     }
   }
+
+  static createAppError(error: unknown): AppError {
+    // Проверяем, является ли ошибка объектом с кодом и сообщением
+    if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
+      const errorObj = error as { code: string; message: string };
+      return {
+        code: errorObj.code,
+        message: errorObj.message,
+        timestamp: new Date().toISOString(),
+        type: 'API_ERROR',
+      };
+    }
+
+    // Проверяем, является ли ошибка объектом со статусом
+    if (error && typeof error === 'object' && 'status' in error) {
+      const errorObj = error as { status: number; message?: string };
+      switch (errorObj.status) {
+        case 400:
+          return {
+            code: 'VALIDATION_ERROR',
+            message: errorObj.message as string || 'Некорректные данные',
+            timestamp: new Date().toISOString(),
+            type: 'VALIDATION_ERROR',
+          };
+        case 401:
+          return {
+            code: 'UNAUTHORIZED',
+            message: errorObj.message as string || 'Необходима авторизация',
+            timestamp: new Date().toISOString(),
+            type: 'AUTH_ERROR',
+          };
+        case 403:
+          return {
+            code: 'FORBIDDEN',
+            message: errorObj.message as string || 'Доступ запрещен',
+            timestamp: new Date().toISOString(),
+            type: 'AUTH_ERROR',
+          };
+        case 404:
+          return {
+            code: 'NOT_FOUND',
+            message: errorObj.message as string || 'Ресурс не найден',
+            timestamp: new Date().toISOString(),
+            type: 'API_ERROR',
+          };
+        case 500:
+          return {
+            code: 'SERVER_ERROR',
+            message: errorObj.message as string || 'Ошибка сервера',
+            timestamp: new Date().toISOString(),
+            type: 'SERVER_ERROR',
+          };
+        default:
+          return {
+            code: 'UNKNOWN_ERROR',
+            message: errorObj.message as string || 'Неизвестная ошибка',
+            timestamp: new Date().toISOString(),
+            type: 'UNKNOWN_ERROR',
+          };
+      }
+    }
+
+    // Проверяем, является ли ошибка строкой или объектом с сообщением
+    if (error && typeof error === 'object' && 'message' in error) {
+      const errorObj = error as { message: string };
+      if (errorObj.message.includes('Network request failed')) {
+        return {
+          code: 'NETWORK_ERROR',
+          message: 'Ошибка сети. Проверьте подключение к интернету.',
+          timestamp: new Date().toISOString(),
+          type: 'NETWORK_ERROR',
+        };
+      }
+      if (errorObj.message.includes('timeout')) {
+        return {
+          code: 'TIMEOUT_ERROR',
+          message: 'Превышено время ожидания ответа от сервера.',
+          timestamp: new Date().toISOString(),
+          type: 'NETWORK_ERROR',
+        };
+      }
+    }
+
+    // Обрабатываем строковые ошибки
+    if (typeof error === 'string') {
+      return {
+        code: 'GENERAL_ERROR',
+        message: error,
+        timestamp: new Date().toISOString(),
+        type: 'GENERAL_ERROR',
+      };
+    }
+
+    // Обрабатываем объекты с сообщением
+    if (error && typeof error === 'object' && 'message' in error) {
+      const errorObj = error as { message: string };
+      return {
+        code: 'GENERAL_ERROR',
+        message: errorObj.message || 'Неизвестная ошибка',
+        timestamp: new Date().toISOString(),
+        type: 'GENERAL_ERROR',
+      };
+    }
+
+    // Обрабатываем объекты с кодом и сообщением
+    if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
+      const errorObj = error as { code: string; message: string };
+      return {
+        code: errorObj.code,
+        message: errorObj.message || '',
+        timestamp: new Date().toISOString(),
+        type: 'API_ERROR',
+      };
+    }
+
+    // Обрабатываем объекты с сообщением
+    if (error && typeof error === 'object' && 'message' in error) {
+      const errorObj = error as { message: string };
+      const message = errorObj.message || '';
+      return {
+        code: 'GENERAL_ERROR',
+        message,
+        timestamp: new Date().toISOString(),
+        type: 'GENERAL_ERROR',
+      };
+    }
+
+    // Обрабатываем объекты с кодом и сообщением
+    if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
+      const errorObj = error as { code: string; message: string };
+      const message = errorObj.message || '';
+      return {
+        code: errorObj.code,
+        message,
+        timestamp: new Date().toISOString(),
+        type: 'API_ERROR',
+      };
+    }
+
+    // Fallback для неизвестных ошибок
+    return {
+      code: 'UNKNOWN_ERROR',
+      message: 'Произошла неизвестная ошибка',
+      timestamp: new Date().toISOString(),
+      type: 'UNKNOWN_ERROR',
+    };
+  }
 }
 
 export default ErrorHandler; 

@@ -14,6 +14,12 @@ export const ChatListScreenStyles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: lightColors.border,
   },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: lightColors.text,
+    marginBottom: 16,
+  },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -26,16 +32,27 @@ export const ChatListScreenStyles = StyleSheet.create({
   },
   searchContainer: {
     marginTop: 16,
-  },
-  searchInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: lightColors.background,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    fontSize: 16,
-    color: lightColors.text,
     borderWidth: 1,
     borderColor: lightColors.border,
+  },
+  searchIcon: {
+    fontSize: 16,
+    color: lightColors.textSecondary,
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: lightColors.text,
+  },
+  listContainer: {
+    flexGrow: 1,
   },
   chatList: {
     flex: 1,
@@ -49,6 +66,10 @@ export const ChatListScreenStyles = StyleSheet.create({
     borderBottomColor: lightColors.border,
     backgroundColor: lightColors.surface,
   },
+  avatarContainer: {
+    position: 'relative',
+    marginRight: 12,
+  },
   avatar: {
     width: 50,
     height: 50,
@@ -56,12 +77,41 @@ export const ChatListScreenStyles = StyleSheet.create({
     backgroundColor: lightColors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
   },
   avatarText: {
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  badge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: lightColors.primary,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  chatInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  participantName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: lightColors.text,
+    marginBottom: 4,
+  },
+  messageTime: {
+    fontSize: 12,
+    color: lightColors.textSecondary,
   },
   chatContent: {
     flex: 1,
@@ -81,10 +131,25 @@ export const ChatListScreenStyles = StyleSheet.create({
     fontSize: 12,
     color: lightColors.textSecondary,
   },
+  messagePreview: {
+    flex: 1,
+  },
+  messageText: {
+    fontSize: 14,
+    color: lightColors.textSecondary,
+    lineHeight: 18,
+  },
   lastMessage: {
     fontSize: 14,
     color: lightColors.textSecondary,
     lineHeight: 18,
+  },
+  unreadIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: lightColors.primary,
+    marginTop: 4,
   },
   unreadBadge: {
     backgroundColor: lightColors.primary,
@@ -99,6 +164,25 @@ export const ChatListScreenStyles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyStateTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: lightColors.text,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyStateSubtitle: {
+    fontSize: 14,
+    color: lightColors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
   },
   emptyContainer: {
     flex: 1,

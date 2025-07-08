@@ -1,169 +1,157 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../../constants/colors';
+import { lightColors, darkColors } from '../../../constants/colors';
 
 export const NotificationsModalStyles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: colors.light.background,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: lightColors.surface,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
+    maxHeight: '80%',
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
+    borderBottomColor: lightColors.border,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
-    color: colors.light.text,
-  },
-  modalHeaderActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalSelectButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginRight: 12,
-  },
-  modalSelectButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.primary,
+    color: lightColors.text,
   },
   closeButton: {
     padding: 8,
   },
-  cancelButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.text,
-  },
-  markAllButton: {
-    padding: 16,
-    backgroundColor: colors.light.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  markAllButtonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.light.primary,
-    textAlign: 'center',
+  closeButtonText: {
+    fontSize: 24,
+    color: lightColors.textSecondary,
   },
   notificationsList: {
     flex: 1,
+    paddingHorizontal: 20,
   },
   emptyState: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 64,
+    justifyContent: 'center',
+    paddingVertical: 40,
   },
   emptyStateText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptyStateSubtext: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
+    fontSize: 16,
+    color: lightColors.textSecondary,
     textAlign: 'center',
+    marginTop: 16,
   },
   notificationItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
+    alignItems: 'flex-start',
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
+    borderBottomColor: lightColors.border,
   },
   unreadNotification: {
-    backgroundColor: colors.light.primary + '10',
-  },
-  selectedNotification: {
-    backgroundColor: colors.light.primary + '20',
-  },
-  notificationContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    marginRight: 12,
+    backgroundColor: lightColors.primary + '10',
   },
   notificationIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
+    backgroundColor: lightColors.primary,
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
+  },
+  notificationIconText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   notificationTextContainer: {
     flex: 1,
+    marginRight: 12,
+  },
+  notificationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
   },
   notificationTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 4,
-  },
-  unreadTitle: {
-    fontWeight: '700',
-  },
-  notificationMessage: {
     fontSize: 14,
-    color: colors.light.textSecondary,
-    marginBottom: 4,
+    fontWeight: '600',
+    color: lightColors.text,
+    flex: 1,
   },
   notificationTime: {
     fontSize: 12,
-    color: colors.light.textSecondary,
+    color: lightColors.textSecondary,
   },
-  deleteButton: {
-    padding: 8,
+  notificationMessage: {
+    fontSize: 14,
+    color: lightColors.textSecondary,
+    lineHeight: 20,
   },
-  bottomActions: {
+  notificationActions: {
     flexDirection: 'row',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.light.border,
+    gap: 8,
+    marginTop: 8,
   },
-  bottomButton: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginHorizontal: 4,
-    alignItems: 'center',
+  actionButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: lightColors.primary,
   },
-  selectAllButton: {
-    backgroundColor: colors.light.surface,
-  },
-  bottomButtonText: {
-    fontSize: 16,
+  actionButtonText: {
+    fontSize: 12,
+    color: '#FFFFFF',
     fontWeight: '500',
   },
-  deleteAllButton: {
-    backgroundColor: colors.light.error,
+  deleteButton: {
+    backgroundColor: lightColors.error,
   },
-  modalHeaderEmpty: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
+  markReadButton: {
+    backgroundColor: lightColors.secondary,
   },
-  closeButtonCustom: {
-    padding: 8,
+});
+
+// Темные стили
+export const NotificationsModalDarkStyles = StyleSheet.create({
+  modalContent: {
+    backgroundColor: darkColors.surface,
+  },
+  modalHeader: {
+    borderBottomColor: darkColors.border,
+  },
+  modalTitle: {
+    color: darkColors.text,
+  },
+  closeButtonText: {
+    color: darkColors.textSecondary,
+  },
+  emptyStateText: {
+    color: darkColors.textSecondary,
+  },
+  notificationItem: {
+    borderBottomColor: darkColors.border,
+  },
+  notificationTitle: {
+    color: darkColors.text,
+  },
+  notificationTime: {
+    color: darkColors.textSecondary,
+  },
+  notificationMessage: {
+    color: darkColors.textSecondary,
   },
 }); 

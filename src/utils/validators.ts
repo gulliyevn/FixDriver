@@ -345,55 +345,40 @@ export class Validators {
    * Валидация формы регистрации водителя
    */
   static validateDriverRegistration(data: Record<string, unknown>): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-
-    // Базовая валидация клиента
-    const clientValidation = this.validateClientRegistration({
-      name: data.first_name || '',
-      surname: data.last_name || '',
-      email: data.email || '',
-      phone: data.phone_number || '',
-      password: data.password || '',
-      confirmPassword: data.confirmPassword || ''
-    });
-
-    errors.push(...clientValidation.errors);
-    warnings.push(...(clientValidation.warnings || []));
-
-    // Дополнительная валидация для водителей
-    const licenseValidation = this.validateLicenseNumber(data.license_number || '');
-    errors.push(...licenseValidation.errors);
-
-    const vehicleValidation = this.validateVehicleNumber(data.vehicle_number || '');
-    errors.push(...vehicleValidation.errors);
-
-    const expiryValidation = this.validateLicenseExpiry(data.license_expiry_date || '');
-    errors.push(...expiryValidation.errors);
-    warnings.push(...(expiryValidation.warnings || []));
-
-    // Проверка обязательных полей
-    if (!data.vehicle_category) {
-      errors.push('Категория автомобиля обязательна');
-    }
-
-    if (!data.vehicle_brand) {
-      errors.push('Марка автомобиля обязательна');
-    }
-
-    if (!data.vehicle_model) {
-      errors.push('Модель автомобиля обязательна');
-    }
-
-    if (!data.vehicle_year) {
-      errors.push('Год выпуска автомобиля обязателен');
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors,
-      warnings
+    const formData = {
+      name: String(data.first_name || ''),
+      surname: String(data.last_name || ''),
+      email: String(data.email || ''),
+      phone: String(data.phone_number || ''),
+      password: String(data.password || ''),
+      confirmPassword: String(data.confirmPassword || '')
     };
+
+    // Валидация основных полей
+    const basicValidation = this.validateClientRegistration(formData);
+    if (!basicValidation.isValid) {
+      return basicValidation;
+    }
+
+    // Валидация водительских прав
+    const licenseValidation = this.validateLicenseNumber(String(data.license_number || ''));
+    if (!licenseValidation.isValid) {
+      return licenseValidation;
+    }
+
+    // Валидация номера автомобиля
+    const vehicleValidation = this.validateVehicleNumber(String(data.vehicle_number || ''));
+    if (!vehicleValidation.isValid) {
+      return vehicleValidation;
+    }
+
+    // Валидация срока действия прав
+    const expiryValidation = this.validateLicenseExpiry(String(data.license_expiry_date || ''));
+    if (!expiryValidation.isValid) {
+      return expiryValidation;
+    }
+
+    return { isValid: true, errors: [] };
   }
 
   /**

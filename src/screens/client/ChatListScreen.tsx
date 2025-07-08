@@ -1,131 +1,103 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  TextInput,
   Alert,
-  RefreshControl,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { colors } from '../../constants/colors';
-import { ClientStackParamList } from '../../navigation/ClientNavigator';
+import { ClientStackParamList } from '../../types/navigation';
 import ChatService from '../../services/ChatService';
 import { Chat } from '../../types/chat';
-import { formatTime } from '../../utils/formatters';
 import { ChatListScreenStyles } from '../../styles/screens/ChatListScreen.styles';
+import { useTheme } from '../../context/ThemeContext';
 
-type ChatListScreenNavigationProp = StackNavigationProp<ClientStackParamList, 'ChatList'>;
+type NavigationProp = StackNavigationProp<ClientStackParamList, 'ChatList'>;
 
 const ChatListScreen: React.FC = () => {
-  const navigation = useNavigation<ChatListScreenNavigationProp>();
-
+  const navigation = useNavigation<NavigationProp>();
+  const { isDark } = useTheme();
   const [chats, setChats] = useState<Chat[]>([]);
-  const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
-  const [searchQuery, setSearchQuery] = useState(''); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const [isLoading, setIsLoading] = useState(false); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadChats();
   }, []);
 
-  const filterChats = useCallback(() => {
-    if (!searchQuery.trim()) {
-      setFilteredChats(chats);
-      return;
-    }
-
-    const filtered = chats.filter(chat => 
-      chat.participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      chat.lastMessage?.content.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredChats(filtered);
-  }, [chats, searchQuery]);
-
-  useEffect(() => {
-    filterChats();
-  }, [filterChats]);
-
   const loadChats = async () => {
     try {
-      setIsLoading(true);
-      const chatList = await ChatService.getChatList();
+      setLoading(true);
+      const chatList = await ChatService.getChats('me');
       setChats(chatList);
-    } catch (err) {
-      console.error('Failed to load chats:', err);
-      Alert.alert('Error', 'Failed to load chats');
+    } catch (error) {
+      console.error('Error loading chats:', error);
+      Alert.alert('Ошибка', 'Не удалось загрузить чаты');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await loadChats();
-    setRefreshing(false);
-  };
+  const filteredChats = chats.filter(chat =>
+    chat.participant?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    chat.lastMessage?.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleChatPress = (chat: Chat) => {
-    navigation.navigate('Chat', { chatId: chat.id, participant: chat.participant });
+    if (chat.participant) {
+      navigation.navigate('Chat', { 
+        chatId: chat.id, 
+        participant: chat.participant 
+      });
+    }
   };
 
-  const renderChatItem = ({ item }: { item: Chat }) => {
-    const lastMessage = item.lastMessage;
-    const unreadCount = item.unreadCount || 0;
-
-    return (
-      <TouchableOpacity
-        style={ChatListScreenStyles.chatItem}
-        onPress={() => handleChatPress(item)}
-        activeOpacity={0.7}
-      >
-        <View style={ChatListScreenStyles.avatarContainer}>
-          <View style={ChatListScreenStyles.avatar}>
-            <Text style={ChatListScreenStyles.avatarText}>
-              {item.participant.name.charAt(0).toUpperCase()}
+  const renderChatItem = ({ item }: { item: Chat }) => (
+    <TouchableOpacity
+      style={ChatListScreenStyles.chatItem}
+      onPress={() => handleChatPress(item)}
+    >
+      <View style={ChatListScreenStyles.avatarContainer}>
+        <View style={ChatListScreenStyles.avatar}>
+          <Text style={ChatListScreenStyles.avatarText}>
+            {item.participant?.name.charAt(0).toUpperCase()}
+          </Text>
+        </View>
+        {item.unreadCount > 0 && (
+          <View style={ChatListScreenStyles.badge}>
+            <Text style={ChatListScreenStyles.badgeText}>
+              {item.unreadCount > 99 ? '99+' : item.unreadCount}
             </Text>
           </View>
-          {unreadCount > 0 && (
-            <View style={ChatListScreenStyles.badge}>
-              <Text style={ChatListScreenStyles.badgeText}>
-                {unreadCount > 99 ? '99+' : unreadCount}
-              </Text>
-            </View>
-          )}
-        </View>
+        )}
+      </View>
 
-        <View style={ChatListScreenStyles.chatInfo}>
-          <View style={ChatListScreenStyles.chatHeader}>
-            <Text style={ChatListScreenStyles.participantName} numberOfLines={1}>
-              {item.participant.name}
-            </Text>
-            {lastMessage && (
-              <Text style={ChatListScreenStyles.messageTime}>
-                {formatTime(lastMessage.timestamp)}
-              </Text>
-            )}
-          </View>
+      <View style={ChatListScreenStyles.chatInfo}>
+        <Text style={ChatListScreenStyles.participantName} numberOfLines={1}>
+          {item.participant?.name}
+        </Text>
+        <Text style={ChatListScreenStyles.messageTime}>
+          {ChatService.formatMessageTime(item.updatedAt)}
+        </Text>
+      </View>
 
-          <View style={ChatListScreenStyles.messagePreview}>
-            {lastMessage ? (
-              <>
-                <Text style={ChatListScreenStyles.lastMessage} numberOfLines={1}>
-                  {lastMessage.content}
-                </Text>
-                {unreadCount > 0 && (
-                  <View style={ChatListScreenStyles.unreadIndicator} />
-                )}
-              </>
-            ) : (
-              <Text style={ChatListScreenStyles.noMessages}>No messages yet</Text>
-            )}
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+      <View style={ChatListScreenStyles.messagePreview}>
+        <Text style={ChatListScreenStyles.messageText} numberOfLines={2}>
+          {item.lastMessage?.content || 'Нет сообщений'}
+        </Text>
+        {item.unreadCount > 0 && (
+          <View style={ChatListScreenStyles.unreadIndicator} />
+        )}
+      </View>
+    </TouchableOpacity>
+  );
 
   const renderEmptyState = () => (
     <View style={ChatListScreenStyles.emptyState}>
@@ -136,35 +108,44 @@ const ChatListScreen: React.FC = () => {
     </View>
   );
 
+  if (loading) {
+    return (
+      <SafeAreaView style={ChatListScreenStyles.container}>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+        <View style={ChatListScreenStyles.loadingContainer}>
+          <Text style={ChatListScreenStyles.loadingText}>Loading chats...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <View style={ChatListScreenStyles.container}>
-      {/* Search Bar */}
-      <View style={ChatListScreenStyles.searchContainer}>
-        <View style={ChatListScreenStyles.searchInput}>
+    <SafeAreaView style={ChatListScreenStyles.container}>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+      
+      <View style={ChatListScreenStyles.header}>
+        <Text style={ChatListScreenStyles.headerTitle}>Чаты</Text>
+        <View style={ChatListScreenStyles.searchContainer}>
           <Text style={ChatListScreenStyles.searchIcon}>🔍</Text>
-          <Text style={ChatListScreenStyles.searchPlaceholder}>
-            {searchQuery || 'Search chats...'}
-          </Text>
+          <TextInput
+            style={ChatListScreenStyles.searchInput}
+            placeholder="Поиск чатов..."
+            placeholderTextColor="#9CA3AF"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
         </View>
       </View>
 
-      {/* Chat List */}
       <FlatList
         data={filteredChats}
         renderItem={renderChatItem}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={ChatListScreenStyles.chatList}
+        contentContainerStyle={ChatListScreenStyles.listContainer}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            colors={[colors.primary]}
-          />
-        }
         ListEmptyComponent={renderEmptyState}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

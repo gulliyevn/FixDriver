@@ -7,5 +7,9 @@ export * from './orders';
 // Остальные моки (уведомления, пакеты, дети и т.д.)
 export * from './other';
 
-// Моки аутентификации
-export * from './auth'; 
+// Моки аутентификации (экспортируем только функции, не mockUsers)
+export { 
+  findAuthUserByCredentials, 
+  findAuthUserByEmail, 
+  createAuthMockUser 
+} from './auth'; 

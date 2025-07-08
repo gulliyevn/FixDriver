@@ -6,21 +6,14 @@ import ClientRegisterScreen from '../screens/auth/ClientRegisterScreen';
 import DriverRegisterScreen from '../screens/auth/DriverRegisterScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
-
-export type AuthStackParamList = {
-  RoleSelect: undefined;
-  Login: undefined;
-  ClientRegister: undefined;
-  DriverRegister: undefined;
-  ForgotPassword: undefined;
-  OTPVerification: { email: string; purpose: 'login' | 'register' };
-};
+import { AuthStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator
+      id="AuthStack"
       initialRouteName="RoleSelect"
       screenOptions={{
         headerShown: false,

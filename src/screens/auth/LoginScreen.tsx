@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../types/navigation';
-import { AuthService } from '../../services/AuthService';
+import { useAuth } from '../../context/AuthContext';
 import { LoginScreenStyles } from '../../styles/screens/LoginScreen.styles';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
@@ -29,6 +29,7 @@ interface FormData {
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const { login } = useAuth();
   
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -61,15 +62,14 @@ const LoginScreen: React.FC = () => {
 
     setLoading(true);
     try {
-      const result = await AuthService.login(formData.email, formData.password);
+      const success = await login(formData.email, formData.password);
       
-      if (result.success) {
-        // Успешный вход - навигация будет обработана в AuthContext
+      if (success) {
         console.log('Успешный вход');
       } else {
-        Alert.alert('Ошибка', result.message || 'Неверный email или пароль');
+        Alert.alert('Ошибка', 'Неверный email или пароль');
       }
-    } catch {
+    } catch (error) {
       Alert.alert('Ошибка', 'Произошла ошибка при входе');
     } finally {
       setLoading(false);
@@ -104,12 +104,12 @@ const LoginScreen: React.FC = () => {
       const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
       const password = 'password123';
       
-      const result = await AuthService.login(email, password);
+      const success = await login(email, password);
       
-      if (result.success) {
+      if (success) {
         console.log(`🧪 Автоматический вход как ${type}:`, email);
       } else {
-        Alert.alert('Ошибка', result.message || 'Неверный email или пароль');
+        Alert.alert('Ошибка', 'Неверный email или пароль');
       }
     } catch (error) {
       Alert.alert('Ошибка', 'Произошла ошибка при входе');
@@ -160,15 +160,7 @@ const LoginScreen: React.FC = () => {
               error={errors.password}
               placeholder="Введите пароль"
               secureTextEntry={!showPassword}
-              rightIcon={
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                  <Ionicons 
-                    name={showPassword ? 'eye-off' : 'eye'} 
-                    size={20} 
-                    color="#6B7280" 
-                  />
-                </TouchableOpacity>
-              }
+              rightIcon={showPassword ? 'eye-off' : 'eye'}
             />
 
             <TouchableOpacity 

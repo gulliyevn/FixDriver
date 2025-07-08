@@ -132,9 +132,60 @@ export class ChatService {
   }
 
   // Статические методы для совместимости
-  static async getChats(): Promise<Chat[]> {
+  static async getChats(userId?: string): Promise<Chat[]> {
     const instance = ChatService.getInstance();
-    return instance.chats;
+    // Создаем мок данные для чатов
+    const mockChats: Chat[] = [
+      {
+        id: 'chat_1',
+        clientId: 'client_1',
+        driverId: 'driver_1',
+        lastMessage: {
+          id: 'msg_1',
+          chatId: 'chat_1',
+          senderId: 'driver_1',
+          senderType: 'driver',
+          content: 'Привет! Готов к поездке.',
+          type: 'text',
+          timestamp: new Date().toISOString(),
+          isRead: false,
+        },
+        unreadCount: 2,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        participant: {
+          id: 'driver_1',
+          name: 'Дмитрий Петров',
+          avatar: 'https://via.placeholder.com/150',
+          isOnline: true,
+        },
+      },
+      {
+        id: 'chat_2',
+        clientId: 'client_1',
+        driverId: 'driver_2',
+        lastMessage: {
+          id: 'msg_2',
+          chatId: 'chat_2',
+          senderId: 'client_1',
+          senderType: 'client',
+          content: 'Спасибо за поездку!',
+          type: 'text',
+          timestamp: new Date(Date.now() - 3600000).toISOString(),
+          isRead: true,
+        },
+        unreadCount: 0,
+        createdAt: new Date(Date.now() - 7200000).toISOString(),
+        updatedAt: new Date(Date.now() - 3600000).toISOString(),
+        participant: {
+          id: 'driver_2',
+          name: 'Алексей Сидоров',
+          avatar: 'https://via.placeholder.com/150',
+          isOnline: false,
+        },
+      },
+    ];
+    return mockChats;
   }
 
   static async getMessages(chatId: string): Promise<Message[]> {
@@ -142,7 +193,7 @@ export class ChatService {
     return instance.getMessages(chatId);
   }
 
-  static async sendMessage(chatId: string, text: string): Promise<Message> {
+  static async sendMessage(chatId: string, text: string, senderId?: string): Promise<Message> {
     const instance = ChatService.getInstance();
     return instance.sendMessage(chatId, text, 'text');
   }

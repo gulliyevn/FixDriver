@@ -45,8 +45,13 @@ export type ClientStackParamList = {
   Drivers: undefined;
   Plus: undefined;
   Chat: {
-    screen?: keyof ChatStackParamList;
-    params?: ChatStackParamList[keyof ChatStackParamList];
+    chatId: string;
+    participant: {
+      id: string;
+      name: string;
+      avatar?: string;
+      isOnline?: boolean;
+    };
   };
   Profile: undefined;
   // Чат экраны (добавляем прямо в ClientStack для упрощения)

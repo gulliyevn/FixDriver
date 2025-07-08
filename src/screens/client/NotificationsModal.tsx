@@ -1,155 +1,187 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  Modal, 
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
   ScrollView,
-  Alert 
+  Modal,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DriversScreenStyles as styles } from '../../styles/screens/DriversScreen.styles';
+import { NotificationsModalStyles, NotificationsModalDarkStyles } from '../../styles/screens/drivers/NotificationsModal.styles';
+import { useTheme } from '../../context/ThemeContext';
 
-export interface Notification {
+interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
   timestamp: string;
   isRead: boolean;
+  type: 'info' | 'success' | 'warning' | 'error';
 }
 
 interface NotificationsModalProps {
   visible: boolean;
-  notifications: Notification[];
-  isDark: boolean;
   onClose: () => void;
-  onMarkAsRead: (notificationId: string) => void;
-  onDeleteNotification: (notificationId: string) => void;
+  notifications?: Notification[];
 }
 
 const NotificationsModal: React.FC<NotificationsModalProps> = ({
   visible,
-  notifications,
-  isDark,
   onClose,
-  onMarkAsRead,
-  onDeleteNotification,
+  notifications = [],
 }) => {
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'success': return 'checkmark-circle';
-      case 'warning': return 'warning';
-      case 'error': return 'close-circle';
-      default: return 'information-circle';
-    }
+  const { isDark } = useTheme();
+  const styles = isDark ? { ...NotificationsModalStyles, ...NotificationsModalDarkStyles } : NotificationsModalStyles;
+
+  const handleMarkAsRead = (notificationId: string) => {
+    Alert.alert('Уведомление', 'Отметить как прочитанное');
   };
 
-  const getNotificationColor = (type: string) => {
-    switch (type) {
-      case 'success': return '#10B981';
-      case 'warning': return '#F59E0B';
-      case 'error': return '#EF4444';
-      default: return '#3B82F6';
-    }
-  };
-
-  const handleDeleteNotification = (notification: Notification) => {
+  const handleDelete = (notificationId: string) => {
     Alert.alert(
       'Удалить уведомление',
       'Вы уверены, что хотите удалить это уведомление?',
       [
         { text: 'Отмена', style: 'cancel' },
-        { 
-          text: 'Удалить', 
-          style: 'destructive',
-          onPress: () => onDeleteNotification(notification.id)
-        }
+        { text: 'Удалить', style: 'destructive', onPress: () => console.log('Delete notification:', notificationId) },
       ]
     );
   };
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'success':
+        return 'checkmark-circle';
+      case 'warning':
+        return 'warning';
+      case 'error':
+        return 'close-circle';
+      default:
+        return 'information-circle';
+    }
+  };
+
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) return 'сейчас';
+    if (minutes < 60) return `${minutes}м`;
+    if (hours < 24) return `${hours}ч`;
+    if (days < 7) return `${days}д`;
+    return date.toLocaleDateString('ru-RU');
+  };
+
+  const mockNotifications: Notification[] = [
+    {
+      id: '1',
+      title: 'Новый водитель',
+      message: 'Дмитрий Петров присоединился к вашему маршруту',
+      timestamp: new Date().toISOString(),
+      isRead: false,
+      type: 'info',
+    },
+    {
+      id: '2',
+      title: 'Поездка завершена',
+      message: 'Ваша поездка с Алексеем Сидоровым успешно завершена',
+      timestamp: new Date(Date.now() - 3600000).toISOString(),
+      isRead: true,
+      type: 'success',
+    },
+    {
+      id: '3',
+      title: 'Изменение маршрута',
+      message: 'В маршруте произошли изменения. Проверьте детали.',
+      timestamp: new Date(Date.now() - 7200000).toISOString(),
+      isRead: false,
+      type: 'warning',
+    },
+  ];
+
+  const displayNotifications = notifications.length > 0 ? notifications : mockNotifications;
 
   return (
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      transparent={true}
       onRequestClose={onClose}
     >
-      <View style={[styles.modalContainer, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}>
-        {/* Header */}
-        <View style={styles.modalHeader}>
-          <Text style={[styles.modalTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-            Уведомления
-          </Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color={isDark ? '#9CA3AF' : '#6B7280'} />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Уведомления</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>×</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Notifications List */}
-        <ScrollView style={styles.notificationsList}>
-          {notifications.length === 0 ? (
-            <View style={styles.emptyState}>
-              <Ionicons name="notifications-off" size={48} color={isDark ? '#6B7280' : '#9CA3AF'} />
-              <Text style={[styles.emptyStateText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                Нет новых уведомлений
-              </Text>
-            </View>
-          ) : (
-            notifications.map((notification) => (
-              <View
-                key={notification.id}
-                style={[
-                  styles.notificationItem,
-                  { backgroundColor: isDark ? '#374151' : '#F9FAFB' },
-                  !notification.isRead && styles.unreadNotification
-                ]}
-              >
-                <View style={styles.notificationIcon}>
-                  <Ionicons 
-                    name={getNotificationIcon(notification.type) as keyof typeof Ionicons.glyphMap} 
-                    size={24} 
-                    color={getNotificationColor(notification.type)} 
-                  />
-                </View>
-                
-                <View style={styles.notificationTextContainer}>
-                  <View style={styles.notificationContent}>
-                    <Text style={[styles.notificationTitle, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
-                      {notification.title}
-                    </Text>
-                    <Text style={[styles.notificationTime, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-                      {notification.timestamp}
+          <ScrollView style={styles.notificationsList}>
+            {displayNotifications.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Ionicons name="notifications-off" size={48} color={isDark ? '#6B7280' : '#9CA3AF'} />
+                <Text style={styles.emptyStateText}>
+                  У вас пока нет уведомлений
+                </Text>
+              </View>
+            ) : (
+              displayNotifications.map((notification) => (
+                <View
+                  key={notification.id}
+                  style={[
+                    styles.notificationItem,
+                    !notification.isRead && styles.unreadNotification
+                  ]}
+                >
+                  <View style={styles.notificationIcon}>
+                    <Ionicons
+                      name={getNotificationIcon(notification.type) as keyof typeof Ionicons.glyphMap}
+                      size={20}
+                      color="#FFFFFF"
+                    />
+                  </View>
+
+                  <View style={styles.notificationTextContainer}>
+                    <View style={styles.notificationHeader}>
+                      <Text style={styles.notificationTitle} numberOfLines={1}>
+                        {notification.title}
+                      </Text>
+                      <Text style={styles.notificationTime}>
+                        {formatTime(notification.timestamp)}
+                      </Text>
+                    </View>
+                    <Text style={styles.notificationMessage} numberOfLines={2}>
+                      {notification.message}
                     </Text>
                   </View>
-                  
-                  <Text style={[styles.notificationMessage, { color: isDark ? '#D1D5DB' : '#4B5563' }]}>
-                    {notification.message}
-                  </Text>
-                  
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+
+                  <View style={styles.notificationActions}>
                     {!notification.isRead && (
                       <TouchableOpacity
-                        style={{ paddingVertical: 4, paddingHorizontal: 8, backgroundColor: '#3B82F6', borderRadius: 4 }}
-                        onPress={() => onMarkAsRead(notification.id)}
+                        style={[styles.actionButton, styles.markReadButton]}
+                        onPress={() => handleMarkAsRead(notification.id)}
                       >
-                        <Text style={{ color: '#FFFFFF', fontSize: 12 }}>Отметить как прочитанное</Text>
+                        <Text style={styles.actionButtonText}>Прочитано</Text>
                       </TouchableOpacity>
                     )}
-                    
                     <TouchableOpacity
-                      style={styles.deleteButton}
-                      onPress={() => handleDeleteNotification(notification)}
+                      style={[styles.actionButton, styles.deleteButton]}
+                      onPress={() => handleDelete(notification.id)}
                     >
-                      <Ionicons name="trash-outline" size={16} color="#EF4444" />
+                      <Text style={styles.actionButtonText}>Удалить</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-              </View>
-            ))
-          )}
-        </ScrollView>
+              ))
+            )}
+          </ScrollView>
+        </View>
       </View>
     </Modal>
   );

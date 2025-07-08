@@ -22,6 +22,17 @@ export interface Driver {
     latitude: number;
     longitude: number;
   };
+  
+  // Дополнительные поля для UI
+  name?: string; // Полное имя для отображения
+  carModel?: string; // Модель автомобиля для отображения
+  carNumber?: string; // Номер автомобиля для отображения
+  isOnline?: boolean; // Статус онлайн/офлайн
+  clientsPerDay?: number; // Количество клиентов в день
+  addresses?: string[]; // Адреса маршрута
+  times?: string[]; // Времена для каждого адреса
+  tripDays?: string; // Дни поездок
+  package?: 'base' | 'plus' | 'premium'; // Тип пакета
 }
 
 export enum DriverStatus {

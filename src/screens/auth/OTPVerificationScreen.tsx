@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { AuthStackParamList } from '../../types/navigation';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { OTPService } from '../../services/OTPService';
@@ -24,7 +24,7 @@ interface OTPVerificationScreenProps {
 }
 
 const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigation, route }) => {
-  const { email, purpose } = route.params;
+  const { phone, type } = route.params;
 
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +47,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
   const sendInitialOTP = useCallback(async () => {
     try {
       setIsLoading(true);
-      await OTPService.sendOTP(email);
+      await OTPService.sendOTP(phone);
       setTimeLeft(60);
       setCanResend(false);
     } catch (err) {
@@ -56,17 +56,17 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
     } finally {
       setIsLoading(false);
     }
-  }, [email]);
+  }, [phone]);
 
   const handleResendOTP = async () => {
     if (!canResend) return;
 
     try {
       setIsLoading(true);
-      await OTPService.resendOTP(email);
+      await OTPService.resendOTP(phone);
       setTimeLeft(60);
       setCanResend(false);
-      Alert.alert('Success', 'OTP has been resent to your email');
+      Alert.alert('Success', 'OTP has been resent to your phone');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to resend OTP';
       Alert.alert('Error', errorMessage);
@@ -83,17 +83,17 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
 
     try {
       setIsLoading(true);
-      const isValid = await OTPService.verifyOTP(email, otp);
+      const isValid = await OTPService.verifyOTP(phone, otp);
 
       if (isValid) {
-        if (purpose === 'login') {
-          // Handle login flow
-          Alert.alert('Success', 'OTP verified successfully');
-          // Navigate to main app
-        } else {
+        if (type === 'register') {
           // Handle registration flow
-          Alert.alert('Success', 'Email verified successfully');
+          Alert.alert('Success', 'Phone verified successfully');
           // Navigate to complete registration
+        } else {
+          // Handle forgot password flow
+          Alert.alert('Success', 'OTP verified successfully');
+          // Navigate to reset password
         }
       } else {
         Alert.alert('Error', 'Invalid OTP. Please try again.');
@@ -119,9 +119,9 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
     >
       <View style={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>Verify Your Email</Text>
+          <Text style={styles.title}>Verify Your Phone</Text>
           <Text style={styles.subtitle}>
-            We&apos;ve sent a verification code to {email}
+            We&apos;ve sent a verification code to {phone}
           </Text>
         </View>
 

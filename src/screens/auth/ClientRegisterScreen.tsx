@@ -7,12 +7,16 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../../types/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
+import { useTheme } from '../../context/ThemeContext';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import PhoneInput from '../../components/PhoneInput';
@@ -21,7 +25,6 @@ import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicato
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 import { Validators } from '../../utils/validators';
 import { COUNTRIES } from '../../utils/countries';
-import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
 import { mockRegistrationData } from '../../mocks';
 
 type ClientRegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ClientRegister'>;
@@ -114,15 +117,17 @@ const ClientRegisterScreen: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const success = await register({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      const userData = {
+        name: formData.firstName,
+        surname: formData.lastName,
         email: formData.email,
         phone: formData.phone,
         country: formData.country,
         role: UserRole.CLIENT,
         children: formData.children,
-      }, formData.password);
+      };
+
+      const success = await register(userData, formData.password);
 
       if (success) {
         Alert.alert(

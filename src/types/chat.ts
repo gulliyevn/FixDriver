@@ -28,6 +28,12 @@ export interface Chat {
   unreadCount: number;
   createdAt: string;
   updatedAt: string;
+  participant?: {
+    id: string;
+    name: string;
+    avatar?: string;
+    isOnline?: boolean;
+  };
 }
 
 export interface ChatPreview {

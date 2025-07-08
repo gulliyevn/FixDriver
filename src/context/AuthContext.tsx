@@ -93,10 +93,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Mock для разработки
         await new Promise(resolve => setTimeout(resolve, 1000));
         
+        // Определяем роль на основе email
+        let role = UserRole.CLIENT;
+        if (email.includes('driver')) {
+          role = UserRole.DRIVER;
+        }
+        
         // Используем централизованные мок-данные
         const mockUser = createAuthMockUser({
           email,
-          role: UserRole.CLIENT
+          role
         });
 
         // Генерируем JWT токены
@@ -115,7 +121,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         console.log(`🧪 Мок вход ${authMethod ? `через ${authMethod}` : 'с email'}:`, {
           email,
-          method: authMethod || 'email'
+          method: authMethod || 'email',
+          role: mockUser.role
         });
 
         setUser(mockUser);

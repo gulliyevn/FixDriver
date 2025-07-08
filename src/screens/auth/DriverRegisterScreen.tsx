@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { AuthStackParamList } from '../../types/navigation';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import PhoneInput from '../../components/PhoneInput';
@@ -133,9 +133,9 @@ const DriverRegisterScreen: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const success = await register({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      const userData = {
+        name: formData.firstName,
+        surname: formData.lastName,
         email: formData.email,
         phone: formData.phone,
         country: formData.country,
@@ -144,7 +144,9 @@ const DriverRegisterScreen: React.FC = () => {
         licenseExpiry: formData.licenseExpiry,
         vehicleNumber: formData.vehicleNumber,
         experience: formData.experience,
-      }, formData.password);
+      };
+
+      const success = await register(userData, formData.password);
 
       if (success) {
         Alert.alert(
