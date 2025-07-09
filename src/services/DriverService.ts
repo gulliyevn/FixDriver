@@ -10,9 +10,10 @@ import {
   DriverSort,
   DriverStatus 
 } from '../types/driver';
+import { ENV } from '../config/environment';
 
 class DriverService {
-  private static BASE_URL = 'http://localhost:3000/api'; // Замените на ваш API URL
+  private static BASE_URL = ENV.API_BASE_URL;
 
   // Регистрация водителя
   static async registerDriver(data: DriverRegistrationData): Promise<DriverRegistrationResponse> {

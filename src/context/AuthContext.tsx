@@ -106,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
 
         // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
+        const tokens = await JWTService.generateTokens({
           userId: mockUser.id,
           email: mockUser.email,
           role: mockUser.role,
@@ -163,7 +163,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Регистрация пользователя
    */
-  const register = async (userData: Partial<User>, password: string): Promise<boolean> => {
+  const register = async (userData: {
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;
+    country: string;
+    role: UserRole;
+    children?: Array<{ name: string; age: number; relationship: string }>;
+  }, password: string): Promise<boolean> => {
     try {
       setIsLoading(true);
       
@@ -173,13 +181,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         const newUser = createAuthMockUser({
-          ...userData,
-          email: userData.email || 'user@example.com',
-          role: userData.role || UserRole.CLIENT
+          email: userData.email,
+          role: userData.role,
+          name: userData.name,
+          surname: userData.surname,
+          phone: userData.phone,
         });
 
         // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
+        const tokens = await JWTService.generateTokens({
           userId: newUser.id,
           email: newUser.email,
           role: newUser.role,
@@ -191,6 +201,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           JWTService.saveTokens(tokens),
           AsyncStorage.setItem('user', JSON.stringify(newUser)),
         ]);
+
+        console.log('🧪 Мок регистрация:', {
+          email: userData.email,
+          role: userData.role,
+          name: userData.name
+        });
 
         setUser(newUser);
         return true;

@@ -6,6 +6,12 @@ export interface AppError {
   action?: string;
 }
 
+// Интерфейс для ошибок с дополнительными свойствами
+interface ExtendedError extends Error {
+  code?: string;
+  status?: number;
+}
+
 export class ErrorHandler {
   // Коды ошибок аутентификации
   static readonly AUTH_ERRORS = {
@@ -66,29 +72,31 @@ export class ErrorHandler {
   }
 
   /**
-   * Обрабатывает ошибки API
+   * Обрабатывает API ошибки
    */
   static handleAPIError(error: unknown): AppError {
     // Если это уже наша ошибка
-    if (error.code && error.message) {
-      return error as AppError;
+    if (this.isAppError(error)) {
+      return error;
     }
 
+    const extendedError = error as ExtendedError;
+
     // Обработка HTTP ошибок
-    if (error.status) {
-      switch (error.status) {
+    if (extendedError.status) {
+      switch (extendedError.status) {
         case 400:
           return this.createError(
             this.NETWORK_ERRORS.BAD_REQUEST,
             'Некорректный запрос',
-            error.message as string,
+            extendedError.message,
             false
           );
         case 401:
           return this.createError(
             this.AUTH_ERRORS.TOKEN_INVALID,
             'Необходима повторная авторизация',
-            error.message as string,
+            extendedError.message,
             true,
             'Попробуйте войти снова'
           );
@@ -96,14 +104,14 @@ export class ErrorHandler {
           return this.createError(
             this.NETWORK_ERRORS.FORBIDDEN,
             'Доступ запрещен',
-            error.message as string,
+            extendedError.message,
             false
           );
         case 404:
           return this.createError(
             this.NETWORK_ERRORS.NOT_FOUND,
             'Ресурс не найден',
-            error.message as string,
+            extendedError.message,
             false
           );
         case 429:
@@ -126,15 +134,15 @@ export class ErrorHandler {
           return this.createError(
             'UNKNOWN_ERROR',
             'Неизвестная ошибка',
-            error.message as string,
+            extendedError.message,
             true
           );
       }
     }
 
     // Обработка сетевых ошибок
-    if (error.message) {
-      if (error.message.includes('Network request failed')) {
+    if (extendedError.message) {
+      if (extendedError.message.includes('Network request failed')) {
         return this.createError(
           this.NETWORK_ERRORS.NO_INTERNET,
           'Нет подключения к интернету',
@@ -143,7 +151,7 @@ export class ErrorHandler {
           'Повторить'
         );
       }
-      if (error.message.includes('timeout')) {
+      if (extendedError.message.includes('timeout')) {
         return this.createError(
           this.NETWORK_ERRORS.TIMEOUT,
           'Превышено время ожидания',
@@ -158,7 +166,7 @@ export class ErrorHandler {
     return this.createError(
       'UNKNOWN_ERROR',
       'Произошла ошибка',
-      error.message as string || 'Неизвестная ошибка',
+      extendedError.message || 'Неизвестная ошибка',
       true
     );
   }
@@ -167,11 +175,12 @@ export class ErrorHandler {
    * Обрабатывает ошибки аутентификации
    */
   static handleAuthError(error: unknown): AppError {
-    if (error.code && error.message) {
-      return error as AppError;
+    if (this.isAppError(error)) {
+      return error;
     }
 
-    const message = error.message || '';
+    const extendedError = error as ExtendedError;
+    const message = extendedError.message || '';
 
     // Обработка специфичных ошибок аутентификации
     if (message.includes('Invalid credentials') || message.includes('Wrong password')) {
@@ -342,8 +351,6 @@ export class ErrorHandler {
       return {
         code: errorObj.code,
         message: errorObj.message,
-        timestamp: new Date().toISOString(),
-        type: 'API_ERROR',
       };
     }
 
@@ -354,44 +361,32 @@ export class ErrorHandler {
         case 400:
           return {
             code: 'VALIDATION_ERROR',
-            message: errorObj.message as string || 'Некорректные данные',
-            timestamp: new Date().toISOString(),
-            type: 'VALIDATION_ERROR',
+            message: errorObj.message || 'Некорректные данные',
           };
         case 401:
           return {
             code: 'UNAUTHORIZED',
-            message: errorObj.message as string || 'Необходима авторизация',
-            timestamp: new Date().toISOString(),
-            type: 'AUTH_ERROR',
+            message: errorObj.message || 'Необходима авторизация',
           };
         case 403:
           return {
             code: 'FORBIDDEN',
-            message: errorObj.message as string || 'Доступ запрещен',
-            timestamp: new Date().toISOString(),
-            type: 'AUTH_ERROR',
+            message: errorObj.message || 'Доступ запрещен',
           };
         case 404:
           return {
             code: 'NOT_FOUND',
-            message: errorObj.message as string || 'Ресурс не найден',
-            timestamp: new Date().toISOString(),
-            type: 'API_ERROR',
+            message: errorObj.message || 'Ресурс не найден',
           };
         case 500:
           return {
             code: 'SERVER_ERROR',
-            message: errorObj.message as string || 'Ошибка сервера',
-            timestamp: new Date().toISOString(),
-            type: 'SERVER_ERROR',
+            message: errorObj.message || 'Ошибка сервера',
           };
         default:
           return {
             code: 'UNKNOWN_ERROR',
-            message: errorObj.message as string || 'Неизвестная ошибка',
-            timestamp: new Date().toISOString(),
-            type: 'UNKNOWN_ERROR',
+            message: errorObj.message || 'Неизвестная ошибка',
           };
       }
     }
@@ -403,16 +398,12 @@ export class ErrorHandler {
         return {
           code: 'NETWORK_ERROR',
           message: 'Ошибка сети. Проверьте подключение к интернету.',
-          timestamp: new Date().toISOString(),
-          type: 'NETWORK_ERROR',
         };
       }
       if (errorObj.message.includes('timeout')) {
         return {
           code: 'TIMEOUT_ERROR',
           message: 'Превышено время ожидания ответа от сервера.',
-          timestamp: new Date().toISOString(),
-          type: 'NETWORK_ERROR',
         };
       }
     }
@@ -422,8 +413,6 @@ export class ErrorHandler {
       return {
         code: 'GENERAL_ERROR',
         message: error,
-        timestamp: new Date().toISOString(),
-        type: 'GENERAL_ERROR',
       };
     }
 
@@ -433,8 +422,6 @@ export class ErrorHandler {
       return {
         code: 'GENERAL_ERROR',
         message: errorObj.message || 'Неизвестная ошибка',
-        timestamp: new Date().toISOString(),
-        type: 'GENERAL_ERROR',
       };
     }
 
@@ -444,32 +431,6 @@ export class ErrorHandler {
       return {
         code: errorObj.code,
         message: errorObj.message || '',
-        timestamp: new Date().toISOString(),
-        type: 'API_ERROR',
-      };
-    }
-
-    // Обрабатываем объекты с сообщением
-    if (error && typeof error === 'object' && 'message' in error) {
-      const errorObj = error as { message: string };
-      const message = errorObj.message || '';
-      return {
-        code: 'GENERAL_ERROR',
-        message,
-        timestamp: new Date().toISOString(),
-        type: 'GENERAL_ERROR',
-      };
-    }
-
-    // Обрабатываем объекты с кодом и сообщением
-    if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
-      const errorObj = error as { code: string; message: string };
-      const message = errorObj.message || '';
-      return {
-        code: errorObj.code,
-        message,
-        timestamp: new Date().toISOString(),
-        type: 'API_ERROR',
       };
     }
 
@@ -477,9 +438,19 @@ export class ErrorHandler {
     return {
       code: 'UNKNOWN_ERROR',
       message: 'Произошла неизвестная ошибка',
-      timestamp: new Date().toISOString(),
-      type: 'UNKNOWN_ERROR',
     };
+  }
+
+  /**
+   * Проверяет, является ли ошибка AppError
+   */
+  private static isAppError(error: unknown): error is AppError {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      'message' in error
+    );
   }
 }
 

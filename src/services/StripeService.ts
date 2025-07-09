@@ -1,3 +1,5 @@
+import { ENV } from '../config/environment';
+
 export interface PaymentMethod {
   id: string;
   type: 'card' | 'bank_account';
@@ -36,6 +38,7 @@ export interface PaymentPackage {
 }
 
 export class StripeService {
+  private static readonly PUBLISHABLE_KEY = ENV.STRIPE_PUBLISHABLE_KEY;
   // Получить методы оплаты клиента
   // TODO: Заменить на реальный Stripe API запрос к /payment_methods
   static async getPaymentMethods(): Promise<PaymentMethod[]> {

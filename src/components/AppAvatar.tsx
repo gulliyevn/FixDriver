@@ -58,8 +58,9 @@ export default function AppAvatar({
 
   if (source?.uri) {
     return (
-      <View style={getContainerStyle()}>
+      <View testID="avatar-container" style={getContainerStyle()}>
         <Image
+          testID="avatar-image"
           source={source}
           defaultSource={defaultSource}
           style={AppAvatarStyles.image}
@@ -70,7 +71,7 @@ export default function AppAvatar({
   }
 
   return (
-    <View style={getContainerStyle()}>
+    <View testID="avatar-container" style={getContainerStyle()}>
       <Text style={getTextStyle()}>
         {name ? getInitials(name) : '?'}
       </Text>

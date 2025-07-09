@@ -2,42 +2,40 @@
 export const DATABASE_CONFIG = {
   // Development (локальная БД)
   development: {
-    host: 'localhost',
-    port: 5432,
-    database: 'fixdrive_dev',
-    username: 'postgres',
-    password: 'password',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    database: process.env.DB_NAME || 'fixdrive_dev',
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'password',
     ssl: false,
   },
   
   // Production (ваша БД - заполните когда получите ключи)
   production: {
-    host: 'YOUR_DB_HOST', // например: 'db.example.com'
-    port: 5432,
-    database: 'YOUR_DB_NAME', // например: 'fixdrive_prod'
-    username: 'YOUR_DB_USER',
-    password: 'YOUR_DB_PASSWORD',
+    host: process.env.DB_HOST || 'your-db-host',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    database: process.env.DB_NAME || 'fixdrive_prod',
+    username: process.env.DB_USER || 'your-db-user',
+    password: process.env.DB_PASSWORD || 'your-db-password',
     ssl: true, // обычно в production требуется SSL
-    connectionString: 'YOUR_CONNECTION_STRING', // полная строка подключения
+    connectionString: process.env.DB_CONNECTION_STRING || 'your-connection-string',
   },
   
   // Настройки API
   api: {
-    baseUrl: __DEV__ 
-      ? 'http://localhost:3000/api' 
-      : 'https://your-api-domain.com/api',
-    timeout: 15000, // 15 секунд для БД запросов
+    baseUrl: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://api.fixdrive.com/api',
+    timeout: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '15000'),
     retries: 3,
   },
   
   // Настройки OTP
   otp: {
     // SMS провайдер настройки
-    smsProvider: 'twilio', // 'twilio' | 'aws-sns' | 'local'
+    smsProvider: process.env.SMS_PROVIDER || 'twilio',
     twilio: {
-      accountSid: 'YOUR_TWILIO_SID',
-      authToken: 'YOUR_TWILIO_TOKEN',
-      fromNumber: 'YOUR_TWILIO_PHONE',
+      accountSid: process.env.TWILIO_ACCOUNT_SID || 'your-twilio-sid',
+      authToken: process.env.TWILIO_AUTH_TOKEN || 'your-twilio-token',
+      fromNumber: process.env.TWILIO_PHONE_NUMBER || 'your-twilio-phone',
     },
     // Настройки кода
     codeLength: 6,
@@ -48,13 +46,18 @@ export const DATABASE_CONFIG = {
   // Другие сервисы
   services: {
     maps: {
-      googleMapsApiKey: 'YOUR_GOOGLE_MAPS_KEY',
+      googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || 'your-google-maps-key',
+      maptilerApiKey: process.env.EXPO_PUBLIC_MAPTILER_API_KEY || 'your-maptiler-key',
     },
     payment: {
-      stripePublishableKey: 'YOUR_STRIPE_PUBLIC_KEY',
+      stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'your-stripe-public-key',
     },
     notifications: {
-      firebaseServerKey: 'YOUR_FIREBASE_KEY',
+      firebaseServerKey: process.env.FIREBASE_SERVER_KEY || 'your-firebase-key',
+    },
+    traffic: {
+      hereApiKey: process.env.HERE_API_KEY || 'your-here-api-key',
+      openweatherApiKey: process.env.OPENWEATHER_API_KEY || 'your-openweather-key',
     },
   },
 };

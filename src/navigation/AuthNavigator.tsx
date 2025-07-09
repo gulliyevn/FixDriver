@@ -13,7 +13,7 @@ const Stack = createStackNavigator<AuthStackParamList>();
 const AuthNavigator: React.FC = () => {
   return (
     <Stack.Navigator
-      id="AuthStack"
+      id={undefined}
       initialRouteName="RoleSelect"
       screenOptions={{
         headerShown: false,

@@ -1,15 +1,17 @@
-import { User, UserRole } from '../types/user';
-import JWTService from './JWTService';
 import { createAuthMockUser, findAuthUserByCredentials } from '../mocks/auth';
+import JWTService from './JWTService';
+import { User, UserRole } from '../types/user';
 
 export interface AuthResponse {
   success: boolean;
-  message?: string;
   user?: User;
   tokens?: {
     accessToken: string;
     refreshToken: string;
+    expiresIn: number;
+    tokenType: string;
   };
+  message?: string;
 }
 
 export class AuthService {
@@ -36,7 +38,7 @@ export class AuthService {
         });
 
         // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
+        const tokens = await JWTService.generateTokens({
           userId: mockUser.id,
           email: mockUser.email,
           role: mockUser.role,
@@ -87,7 +89,15 @@ export class AuthService {
   /**
    * Регистрация пользователя
    */
-  static async register(userData: Partial<User>, password: string): Promise<AuthResponse> {
+  static async register(userData: {
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;
+    country: string;
+    role: UserRole;
+    children?: Array<{ name: string; age: number; relationship: string }>;
+  }, password: string): Promise<AuthResponse> {
     try {
       // В реальном приложении здесь будет API запрос
       if (__DEV__) {
@@ -95,17 +105,25 @@ export class AuthService {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         const newUser = createAuthMockUser({
-          ...userData,
-          email: userData.email || 'user@example.com',
-          role: userData.role || UserRole.CLIENT
+          email: userData.email,
+          role: userData.role,
+          name: userData.name,
+          surname: userData.surname,
+          phone: userData.phone,
         });
 
         // Генерируем JWT токены
-        const tokens = JWTService.generateTokens({
+        const tokens = await JWTService.generateTokens({
           userId: newUser.id,
           email: newUser.email,
           role: newUser.role,
           phone: newUser.phone,
+        });
+
+        console.log('🧪 Мок регистрация:', {
+          email: userData.email,
+          role: userData.role,
+          name: userData.name
         });
 
         return {

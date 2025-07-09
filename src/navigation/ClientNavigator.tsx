@@ -7,6 +7,7 @@ import ChatListScreen from '../screens/client/ChatListScreen';
 import ChatScreen from '../screens/client/ChatScreen';
 import PlusScreen from '../screens/client/PlusScreen';
 import ScheduleScreen from '../screens/client/ScheduleScreen';
+import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
 import { TabBarStyles } from '../styles/navigation/TabBar.styles';
 import { ClientStackParamList } from '../types/navigation';
 
@@ -15,62 +16,37 @@ const Tab = createBottomTabNavigator<ClientStackParamList>();
 const ClientNavigator: React.FC = () => {
   return (
     <Tab.Navigator
-      id="ClientTab"
-      screenOptions={{
+      id={undefined}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName: keyof typeof Ionicons.glyphMap;
+
+          if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
+          } else if (route.name === 'Drivers') {
+            iconName = focused ? 'people' : 'people-outline';
+          } else if (route.name === 'Schedule') {
+            iconName = focused ? 'calendar' : 'calendar-outline';
+          } else if (route.name === 'Chat') {
+            iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          } else {
+            iconName = 'help-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#007AFF',
+        tabBarInactiveTintColor: 'gray',
         headerShown: false,
-        tabBarStyle: TabBarStyles.tabBar,
-      }}
+      })}
     >
-      <Tab.Screen
-        name="Map"
-        component={MapScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map" size={size} color={color} />
-          ),
-          tabBarLabel: 'Карта',
-        }}
-      />
-      <Tab.Screen
-        name="Drivers"
-        component={DriversScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="car" size={size} color={color} />
-          ),
-          tabBarLabel: 'Водители',
-        }}
-      />
-      <Tab.Screen
-        name="ChatList"
-        component={ChatListScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubbles" size={size} color={color} />
-          ),
-          tabBarLabel: 'Чаты',
-        }}
-      />
-      <Tab.Screen
-        name="Plus"
-        component={PlusScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle" size={size} color={color} />
-          ),
-          tabBarLabel: 'Плюс',
-        }}
-      />
-      <Tab.Screen
-        name="Schedule"
-        component={ScheduleScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
-          ),
-          tabBarLabel: 'Расписание',
-        }}
-      />
+      <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="Drivers" component={DriversScreen} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
+      <Tab.Screen name="Chat" component={ChatListScreen} />
+      <Tab.Screen name="Profile" component={ClientProfileScreen} />
     </Tab.Navigator>
   );
 };

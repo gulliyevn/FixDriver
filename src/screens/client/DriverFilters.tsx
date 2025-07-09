@@ -41,7 +41,7 @@ const DriverFilters: React.FC<DriverFiltersProps> = ({
       </View>
 
       {/* Filters */}
-      <View style={styles.filterContainer}>
+      <View style={styles.filtersContainer}>
         {filters.map((filter) => (
           <TouchableOpacity
             key={filter.id}

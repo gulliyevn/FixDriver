@@ -17,8 +17,8 @@ export interface TokenResponse {
   tokenType: 'Bearer';
 }
 
-// Простая реализация JWT для React Native
-class SimpleJWT {
+// Улучшенная JWT реализация с использованием Web Crypto API
+class SecureJWT {
   private static base64UrlEncode(str: string): string {
     return btoa(str)
       .replace(/\+/g, '-')
@@ -34,13 +34,42 @@ class SimpleJWT {
     return atob(str);
   }
 
-  private static hmacSha256(message: string, secret: string): string {
-    // Простая реализация для разработки
-    return this.simpleHash(message + secret);
+  private static async hmacSha256(message: string, secret: string): Promise<string> {
+    try {
+      const encoder = new TextEncoder();
+      const keyData = encoder.encode(secret);
+      const messageData = encoder.encode(message);
+      
+      // Используем Web Crypto API для HMAC-SHA256
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw',
+        keyData,
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+      );
+      
+      const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+      const signatureArray = new Uint8Array(signature);
+      
+      // Конвертируем в base64url
+      let binary = '';
+      for (let i = 0; i < signatureArray.length; i++) {
+        binary += String.fromCharCode(signatureArray[i]);
+      }
+      return btoa(binary)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+    } catch (error) {
+      console.error('HMAC-SHA256 error:', error);
+      // Fallback к простой хеш-функции только в случае ошибки
+      return this.simpleHash(message + secret);
+    }
   }
 
   private static simpleHash(str: string): string {
-    // Простая хеш-функция для демонстрации
+    // Простая хеш-функция как fallback
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
@@ -50,7 +79,7 @@ class SimpleJWT {
     return Math.abs(hash).toString(16);
   }
 
-  static sign(payload: JWTPayload, secret: string, options: Record<string, unknown> = {}): string {
+  static async sign(payload: JWTPayload, secret: string, options: Record<string, unknown> = {}): Promise<string> {
     const header = {
       alg: 'HS256',
       typ: 'JWT',
@@ -67,7 +96,7 @@ class SimpleJWT {
     const encodedHeader = this.base64UrlEncode(JSON.stringify(header));
     const encodedPayload = this.base64UrlEncode(JSON.stringify(finalPayload));
     
-    const signature = this.hmacSha256(
+    const signature = await this.hmacSha256(
       `${encodedHeader}.${encodedPayload}`,
       secret
     );
@@ -75,7 +104,7 @@ class SimpleJWT {
     return `${encodedHeader}.${encodedPayload}.${signature}`;
   }
 
-  static verify(token: string, secret: string): JWTPayload | null {
+  static async verify(token: string, secret: string): Promise<JWTPayload | null> {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) {
@@ -85,7 +114,7 @@ class SimpleJWT {
       const [encodedHeader, encodedPayload, signature] = parts;
       
       // Проверяем подпись
-      const expectedSignature = this.hmacSha256(
+      const expectedSignature = await this.hmacSha256(
         `${encodedHeader}.${encodedPayload}`,
         secret
       );
@@ -131,12 +160,12 @@ export class JWTService {
   /**
    * Генерирует JWT токены для пользователя
    */
-  static generateTokens(userData: {
+  static async generateTokens(userData: {
     userId: string;
     email: string;
     role: 'client' | 'driver';
     phone: string;
-  }): TokenResponse {
+  }): Promise<TokenResponse> {
     const now = Math.floor(Date.now() / 1000);
     
     const accessTokenPayload: JWTPayload = {
@@ -158,11 +187,11 @@ export class JWTService {
       exp: now + SECURITY_CONFIG.JWT.REFRESH_TOKEN_EXPIRY,
     } as JWTPayload & { type: string };
 
-    const accessToken = SimpleJWT.sign(accessTokenPayload, SECURITY_CONFIG.JWT.SECRET, {
+    const accessToken = await SecureJWT.sign(accessTokenPayload, SECURITY_CONFIG.JWT.SECRET, {
       expiresIn: SECURITY_CONFIG.JWT.ACCESS_TOKEN_EXPIRY,
     });
 
-    const refreshToken = SimpleJWT.sign(refreshTokenPayload, SECURITY_CONFIG.JWT.SECRET, {
+    const refreshToken = await SecureJWT.sign(refreshTokenPayload, SECURITY_CONFIG.JWT.SECRET, {
       expiresIn: SECURITY_CONFIG.JWT.REFRESH_TOKEN_EXPIRY,
     });
 
@@ -177,9 +206,9 @@ export class JWTService {
   /**
    * Проверяет валидность JWT токена
    */
-  static verifyToken(token: string): JWTPayload | null {
+  static async verifyToken(token: string): Promise<JWTPayload | null> {
     try {
-      const decoded = SimpleJWT.verify(token, SECURITY_CONFIG.JWT.SECRET) as JWTPayload;
+      const decoded = await SecureJWT.verify(token, SECURITY_CONFIG.JWT.SECRET) as JWTPayload;
       return decoded;
     } catch (error) {
       // Log expired tokens as warnings instead of errors since this is expected behavior
@@ -202,7 +231,7 @@ export class JWTService {
         return null;
       }
 
-      const decoded = SimpleJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as unknown as Record<string, unknown>;
+      const decoded = await SecureJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as unknown as Record<string, unknown>;
 
       if (decoded.type !== 'refresh') {
         throw new Error('Invalid refresh token type');
@@ -215,7 +244,7 @@ export class JWTService {
       }
 
       // Генерируем новый access token
-      const tokens = this.generateTokens({
+      const tokens = await this.generateTokens({
         userId: decoded.userId as string,
         email: userData.email,
         role: userData.role,
@@ -260,7 +289,7 @@ export class JWTService {
       }
 
       // Проверяем валидность токена
-      const decoded = this.verifyToken(token);
+      const decoded = await this.verifyToken(token);
       if (!decoded) {
         // Токен невалиден, пытаемся обновить
         const newToken = await this.refreshAccessToken();
@@ -346,7 +375,7 @@ export class JWTService {
    */
   static isTokenExpired(token: string): boolean {
     try {
-      const decoded = SimpleJWT.decode(token) as JWTPayload;
+      const decoded = SecureJWT.decode(token) as JWTPayload;
       if (!decoded || !decoded.exp) {
         return true;
       }
@@ -363,7 +392,7 @@ export class JWTService {
    */
   static getTokenExpiration(token: string): Date | null {
     try {
-      const decoded = SimpleJWT.decode(token) as JWTPayload;
+      const decoded = SecureJWT.decode(token) as JWTPayload;
       return decoded?.exp ? new Date(decoded.exp * 1000) : null;
     } catch (error) {
       return null;

@@ -1,10 +1,13 @@
 export const ENV = {
   // API Configuration
   API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://api.fixdrive.com',
-  API_TIMEOUT: 30000,
+  API_TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '30000'),
   
   // Google Maps
   GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+  
+  // MapTiler
+  MAPTILER_API_KEY: process.env.EXPO_PUBLIC_MAPTILER_API_KEY || '',
   
   // Stripe
   STRIPE_PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
@@ -23,11 +26,11 @@ export const ENV = {
   ENABLE_SOCIAL_AUTH: true,
   
   // Development
-  IS_DEVELOPMENT: __DEV__,
+  IS_DEVELOPMENT: process.env.EXPO_PUBLIC_IS_DEVELOPMENT === 'true' || __DEV__,
   ENABLE_LOGGING: __DEV__,
   
   // Security
-  JWT_SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'your-secret-key',
+  JWT_SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'dev-jwt-secret-change-in-production',
   
   // Support
   SUPPORT_EMAIL: 'support@fixdrive.com',
@@ -41,6 +44,22 @@ export const ENV = {
 };
 
 export const getApiUrl = (endpoint: string) => `${ENV.API_BASE_URL}${endpoint}`;
+
+// Проверка обязательных переменных окружения
+export const validateEnvironment = () => {
+  const requiredVars = [
+    'EXPO_PUBLIC_API_BASE_URL',
+    'EXPO_PUBLIC_JWT_SECRET',
+  ];
+
+  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  
+  if (missingVars.length > 0 && !__DEV__) {
+    console.warn('⚠️ Missing required environment variables:', missingVars);
+  }
+  
+  return missingVars.length === 0;
+};
 
 export const isProduction = () => !ENV.IS_DEVELOPMENT;
 

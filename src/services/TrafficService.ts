@@ -1,3 +1,5 @@
+import { DATABASE_CONFIG } from '../config/database';
+
 interface TrafficData {
   level: 'free' | 'low' | 'medium' | 'high' | 'heavy';
   speed: number; // км/ч
@@ -30,8 +32,8 @@ class TrafficService {
   }
 
   // Бесплатные API ключи (нужно получить)
-  private static readonly HERE_API_KEY = 'YOUR_HERE_API_KEY'; // Бесплатно до 250k запросов/месяц
-  private static readonly OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_KEY'; // Бесплатно до 1000 запросов/день
+  private static readonly HERE_API_KEY = DATABASE_CONFIG.services.traffic.hereApiKey;
+  private static readonly OPENWEATHER_API_KEY = DATABASE_CONFIG.services.traffic.openweatherApiKey;
 
   // Получение данных о пробках для маршрута
   static async getTrafficForRoute(coordinates: Coordinate[]): Promise<TrafficData[]> {

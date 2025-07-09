@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
-import ChatService from '../../services/ChatService';
+import { ChatService } from '../../services/ChatService';
 import { Chat } from '../../types/chat';
 import { ChatListScreenStyles } from '../../styles/screens/ChatListScreen.styles';
 import { useTheme } from '../../context/ThemeContext';
@@ -35,7 +35,7 @@ const ChatListScreen: React.FC = () => {
   const loadChats = async () => {
     try {
       setLoading(true);
-      const chatList = await ChatService.getChats('me');
+      const chatList: Chat[] = await ChatService.getChats('me');
       setChats(chatList);
     } catch (error) {
       console.error('Error loading chats:', error);

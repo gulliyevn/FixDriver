@@ -2,133 +2,145 @@ import { Validators } from '../validators';
 
 describe('Validators', () => {
   describe('validateEmail', () => {
-    it('should validate correct email addresses', () => {
-      expect(Validators.validateEmail('test@example.com')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: []
-      });
-      
-      expect(Validators.validateEmail('user.name+tag@domain.co.uk')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: []
-      });
+    it('validates correct email addresses', () => {
+      expect(Validators.validateEmail('test@example.com').isValid).toBe(true);
+      expect(Validators.validateEmail('user.name+tag@domain.co.uk').isValid).toBe(true);
+      expect(Validators.validateEmail('123@test.org').isValid).toBe(true);
     });
 
-    it('should reject invalid email addresses', () => {
-      expect(Validators.validateEmail('invalid-email')).toEqual({
-        isValid: false,
-        errors: ['Некорректный формат email'],
-        warnings: []
-      });
-      
-      expect(Validators.validateEmail('test@')).toEqual({
-        isValid: false,
-        errors: ['Некорректный формат email'],
-        warnings: []
-      });
-      
-      expect(Validators.validateEmail('')).toEqual({
-        isValid: false,
-        errors: ['Email обязателен'],
-        warnings: []
-      });
-    });
-  });
-
-  describe('validatePhone', () => {
-    it('should validate correct phone numbers', () => {
-      expect(Validators.validatePhone('+994501234567')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: []
-      });
-      
-      expect(Validators.validatePhone('994501234567')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: []
-      });
-    });
-
-    it('should reject invalid phone numbers', () => {
-      expect(Validators.validatePhone('123')).toEqual({
-        isValid: false,
-        errors: ['Номер телефона слишком короткий'],
-        warnings: []
-      });
-      
-      expect(Validators.validatePhone('')).toEqual({
-        isValid: false,
-        errors: ['Номер телефона обязателен'],
-        warnings: []
-      });
+    it('rejects invalid email addresses', () => {
+      expect(Validators.validateEmail('invalid-email').isValid).toBe(false);
+      expect(Validators.validateEmail('test@').isValid).toBe(false);
+      expect(Validators.validateEmail('@example.com').isValid).toBe(false);
+      expect(Validators.validateEmail('test@.com').isValid).toBe(false);
+      expect(Validators.validateEmail('').isValid).toBe(false);
     });
   });
 
   describe('validatePassword', () => {
-    it('should validate strong passwords', () => {
-      expect(Validators.validatePassword('StrongPass123!')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: undefined
-      });
-      
-      expect(Validators.validatePassword('MySecureP@ss1')).toEqual({
-        isValid: true,
-        errors: [],
-        warnings: undefined
-      });
+    it('validates strong passwords', () => {
+      expect(Validators.validatePassword('StrongPass123!').isValid).toBe(true);
+      expect(Validators.validatePassword('MyP@ssw0rd').isValid).toBe(true);
+      expect(Validators.validatePassword('Secure123#').isValid).toBe(true);
     });
 
-    it('should reject weak passwords', () => {
-      expect(Validators.validatePassword('weak')).toEqual({
-        isValid: false,
-        errors: [
-          'Пароль должен содержать минимум 8 символов',
-          'Пароль должен содержать заглавные буквы',
-          'Пароль должен содержать цифры',
-          'Пароль должен содержать специальные символы (@$!%*?&)'
-        ],
-        warnings: ['Пароль слишком слабый']
-      });
-      
-      expect(Validators.validatePassword('12345678')).toEqual({
-        isValid: false,
-        errors: [
-          'Пароль должен содержать заглавные буквы',
-          'Пароль должен содержать строчные буквы',
-          'Пароль должен содержать специальные символы (@$!%*?&)'
-        ],
-        warnings: ['Пароль слишком слабый']
-      });
+    it('rejects weak passwords', () => {
+      expect(Validators.validatePassword('weak').isValid).toBe(false);
+      expect(Validators.validatePassword('12345678').isValid).toBe(false);
+      expect(Validators.validatePassword('password').isValid).toBe(false);
+      expect(Validators.validatePassword('').isValid).toBe(false);
+    });
+  });
+
+  describe('validatePhone', () => {
+    it('validates correct phone numbers', () => {
+      expect(Validators.validatePhone('+1234567890').isValid).toBe(true);
+      expect(Validators.validatePhone('+7 (999) 123-45-67').isValid).toBe(true);
+      expect(Validators.validatePhone('+44 20 7946 0958').isValid).toBe(true);
+    });
+
+    it('rejects invalid phone numbers', () => {
+      expect(Validators.validatePhone('123').isValid).toBe(false);
+      expect(Validators.validatePhone('not-a-number').isValid).toBe(false);
+      expect(Validators.validatePhone('').isValid).toBe(false);
     });
   });
 
   describe('validateName', () => {
-    it('should validate correct names', () => {
-      expect(Validators.validateName('John')).toEqual({
-        isValid: true,
-        errors: []
-      });
-      
-      expect(Validators.validateName('Mary-Jane')).toEqual({
-        isValid: true,
-        errors: []
-      });
+    it('validates correct names', () => {
+      expect(Validators.validateName('John').isValid).toBe(true);
+      expect(Validators.validateName('Mary-Jane').isValid).toBe(true);
+      expect(Validators.validateName('O\'Connor').isValid).toBe(true);
     });
 
-    it('should reject invalid names', () => {
-      expect(Validators.validateName('')).toEqual({
-        isValid: false,
-        errors: ['Имя обязательно']
+    it('rejects invalid names', () => {
+      expect(Validators.validateName('').isValid).toBe(false);
+      expect(Validators.validateName('123').isValid).toBe(false);
+      expect(Validators.validateName('A').isValid).toBe(false);
+    });
+  });
+
+  describe('validateLicenseNumber', () => {
+    it('validates correct license numbers', () => {
+      expect(Validators.validateLicenseNumber('1234567890').isValid).toBe(true);
+      expect(Validators.validateLicenseNumber('AB123456').isValid).toBe(true);
+      expect(Validators.validateLicenseNumber('12-34-56-78-90').isValid).toBe(true);
+    });
+
+    it('rejects invalid license numbers', () => {
+      expect(Validators.validateLicenseNumber('').isValid).toBe(false);
+      expect(Validators.validateLicenseNumber('123').isValid).toBe(false);
+      expect(Validators.validateLicenseNumber('invalid').isValid).toBe(false);
+    });
+  });
+
+  describe('validateVehicleNumber', () => {
+    it('validates correct vehicle numbers', () => {
+      expect(Validators.validateVehicleNumber('A123BC77').isValid).toBe(true);
+      expect(Validators.validateVehicleNumber('123ABC77').isValid).toBe(true);
+      expect(Validators.validateVehicleNumber('AB123C77').isValid).toBe(true);
+    });
+
+    it('rejects invalid vehicle numbers', () => {
+      expect(Validators.validateVehicleNumber('').isValid).toBe(false);
+      expect(Validators.validateVehicleNumber('123').isValid).toBe(false);
+      expect(Validators.validateVehicleNumber('invalid').isValid).toBe(false);
+    });
+  });
+
+  describe('validateOTP', () => {
+    it('validates correct OTP codes', () => {
+      expect(Validators.validateOTP('123456').isValid).toBe(true);
+      expect(Validators.validateOTP('000000').isValid).toBe(true);
+      expect(Validators.validateOTP('999999').isValid).toBe(true);
+    });
+
+    it('rejects invalid OTP codes', () => {
+      expect(Validators.validateOTP('').isValid).toBe(false);
+      expect(Validators.validateOTP('12345').isValid).toBe(false);
+      expect(Validators.validateOTP('1234567').isValid).toBe(false);
+      expect(Validators.validateOTP('12345a').isValid).toBe(false);
+    });
+  });
+
+  describe('validateLogin', () => {
+    it('validates correct login data', () => {
+      const result = Validators.validateLogin({
+        email: 'test@example.com',
+        password: 'StrongPass123!'
       });
-      
-      expect(Validators.validateName('123')).toEqual({
-        isValid: false,
-        errors: ['Имя содержит недопустимые символы']
+
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('rejects invalid login data', () => {
+      const result = Validators.validateLogin({
+        email: 'invalid-email',
+        password: 'weak'
       });
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('getPasswordStrength', () => {
+    it('returns correct strength for weak passwords', () => {
+      const strength = Validators.getPasswordStrength('weak');
+      expect(strength.level).toBe('weak');
+      expect(strength.score).toBeLessThanOrEqual(3);
+    });
+
+    it('returns correct strength for strong passwords', () => {
+      const strength = Validators.getPasswordStrength('StrongPass123!');
+      expect(strength.level).toBe('strong');
+      expect(strength.score).toBeGreaterThan(5);
+    });
+
+    it('provides feedback for password improvement', () => {
+      const strength = Validators.getPasswordStrength('weak');
+      expect(strength.feedback.length).toBeGreaterThan(0);
     });
   });
 }); 

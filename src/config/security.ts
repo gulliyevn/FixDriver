@@ -4,7 +4,7 @@ export const SECURITY_CONFIG = {
   // JWT настройки
   JWT: {
     // Секретный ключ для подписи JWT (в продакшене должен быть в переменных окружения)
-    SECRET: process.env.JWT_SECRET || 'your-super-secure-secret-key-change-in-production',
+    SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'dev-jwt-secret-change-in-production',
     
     // Время жизни access token (24 часа)
     ACCESS_TOKEN_EXPIRY: 24 * 60 * 60,
@@ -63,7 +63,7 @@ export const SECURITY_CONFIG = {
   // Настройки API
   API: {
     // Таймаут запросов (30 секунд)
-    TIMEOUT: 30000,
+    TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '30000'),
     
     // Максимальное количество повторных попыток
     MAX_RETRIES: 3,
@@ -125,22 +125,23 @@ export const SECURITY_CONFIG = {
 
   // Настройки валидации
   VALIDATION: {
-    // Максимальная длина полей
+    // Максимальные длины полей
     MAX_LENGTHS: {
       NAME: 50,
-      SURNAME: 50,
       EMAIL: 255,
       PHONE: 20,
+      PASSWORD: 128,
       ADDRESS: 500,
       DESCRIPTION: 1000,
     },
     
-    // Паттерны валидации
+    // Регулярные выражения для валидации
     PATTERNS: {
-      EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       PHONE: /^\+?[1-9]\d{1,14}$/,
-      NAME: /^[a-zA-Zа-яА-ЯёЁ\s'-]+$/,
-      LICENSE_PLATE: /^[A-ZА-Я]{1,3}\d{3}[A-ZА-Я]{2}\d{2,3}$/,
+      NAME: /^[a-zA-Zа-яА-ЯёЁ\s\-']{2,50}$/,
+      LICENSE_NUMBER: /^[A-Z0-9]{5,20}$/,
+      VEHICLE_NUMBER: /^[A-Z0-9]{5,15}$/,
     },
   },
 
@@ -152,8 +153,8 @@ export const SECURITY_CONFIG = {
     // Максимальное количество попыток входа в час
     LOGIN_ATTEMPTS_PER_HOUR: 5,
     
-    // Максимальное количество OTP запросов в час
-    OTP_REQUESTS_PER_HOUR: 10,
+    // Время блокировки после превышения лимита (30 минут)
+    BLOCK_DURATION_MINUTES: 30,
   },
 };
 

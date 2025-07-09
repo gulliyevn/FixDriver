@@ -37,7 +37,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef<FlatList>(null);
 
-  const { quickQuestions } = mockSupportData.supportData;
+  const { quickQuestions } = mockSupportData;
 
   useEffect(() => {
     // Добавляем приветственное сообщение
@@ -183,13 +183,13 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
             SupportChatScreenStyles.quickQuestionButton,
             isDark && SupportChatScreenStyles.quickQuestionButtonDark
           ]}
-          onPress={() => selectQuickQuestion(question)}
+          onPress={() => selectQuickQuestion(question.question)}
         >
           <Text style={[
             SupportChatScreenStyles.quickQuestionText,
             isDark && SupportChatScreenStyles.quickQuestionTextDark
           ]}>
-            {question}
+            {question.question}
           </Text>
           <Ionicons 
             name="chevron-forward" 

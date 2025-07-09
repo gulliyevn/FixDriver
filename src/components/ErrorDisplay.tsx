@@ -62,7 +62,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   };
 
   return (
-    <View style={[
+    <View testID="error-display" style={[
       ErrorDisplayStyles.container,
       {
         backgroundColor: isDark ? '#1F2937' : '#FEF2F2',
@@ -73,6 +73,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       <View style={ErrorDisplayStyles.header}>
         <View style={ErrorDisplayStyles.iconContainer}>
           <Ionicons
+            testID="error-icon"
             name={getErrorIcon(error.code) as keyof typeof Ionicons.glyphMap}
             size={24}
             color={getErrorColor(error.code)}

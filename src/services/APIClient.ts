@@ -1,4 +1,5 @@
 import JWTService from './JWTService';
+import { ENV } from '../config/environment';
 
 // Типы для fetch API
 declare global {
@@ -9,8 +10,8 @@ declare global {
 
 // Конфигурация API
 const API_CONFIG = {
-  BASE_URL: 'https://api.fixdrive.com/api',
-  TIMEOUT: 30000, // 30 секунд
+  BASE_URL: ENV.API_BASE_URL,
+  TIMEOUT: ENV.API_TIMEOUT,
   RETRY_ATTEMPTS: 3,
 };
 
