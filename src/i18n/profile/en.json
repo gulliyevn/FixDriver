@@ -1,0 +1,21 @@
+{
+  "title": "Profile",
+  "logout": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?",
+  "logoutCancel": "Cancel",
+  "logoutConfirmButton": "Logout",
+  "notifications": "Notifications",
+  "notificationsCenter": "Notifications Center",
+  "deleteNotification": "Delete notification",
+  "deleteNotificationConfirm": "Are you sure you want to delete this notification?",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "markAllAsRead": "Mark all as read",
+  "addChild": "Add child",
+  "option": "Option",
+  "optionNotAvailable": "{option} will be available in the next update",
+  "locationEnabled": "Location enabled",
+  "locationDisabled": "Location disabled",
+  "notificationsEnabled": "Notifications enabled",
+  "notificationsDisabled": "Notifications disabled"
+} 

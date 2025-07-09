@@ -1,0 +1,21 @@
+{
+  "title": "Perfil",
+  "logout": "Cerrar sesión",
+  "logoutConfirm": "¿Estás seguro de que deseas cerrar sesión?",
+  "logoutCancel": "Cancelar",
+  "logoutConfirmButton": "Cerrar sesión",
+  "notifications": "Notificaciones",
+  "notificationsCenter": "Centro de notificaciones",
+  "deleteNotification": "Eliminar notificación",
+  "deleteNotificationConfirm": "¿Estás seguro de que deseas eliminar esta notificación?",
+  "delete": "Eliminar",
+  "cancel": "Cancelar",
+  "markAllAsRead": "Marcar todo como leído",
+  "addChild": "Agregar hijo",
+  "option": "Opción",
+  "optionNotAvailable": "{option} estará disponible en la próxima actualización",
+  "locationEnabled": "Ubicación activada",
+  "locationDisabled": "Ubicación desactivada",
+  "notificationsEnabled": "Notificaciones activadas",
+  "notificationsDisabled": "Notificaciones desactivadas"
+} 

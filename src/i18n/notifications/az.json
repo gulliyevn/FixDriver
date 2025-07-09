@@ -1,0 +1,76 @@
+{
+  "title": "Bildirişlər",
+  "noNotifications": "Hələ bildirişiniz yoxdur",
+  "noNotificationsSubtitle": "Yeni bildirişlər burada görünəcək",
+  "markAllAsRead": "Hamısını oxunmuş kimi işarələ",
+  "clearAll": "Hamısını təmizlə",
+  "delete": "Sil",
+  "markAsRead": "Oxunmuş kimi işarələ",
+  "markAsUnread": "Oxunmamış kimi işarələ",
+  "filter": "Filtr",
+  "all": "Hamısı",
+  "unread": "Oxunmamış",
+  "read": "Oxunmuş",
+  "today": "Bu gün",
+  "yesterday": "Dünən",
+  "thisWeek": "Bu həftə",
+  "earlier": "Əvvəllər",
+  "notificationTypes": {
+    "order": "Sifariş",
+    "payment": "Ödəniş",
+    "system": "Sistem",
+    "promo": "Promo",
+    "support": "Dəstək"
+  },
+  "messages": {
+    "newOrder": "Yeni sifariş #{orderId}",
+    "orderAccepted": "Sifariş #{orderId} sürücü tərəfindən qəbul edildi",
+    "orderStarted": "Sifariş #{orderId} başladı",
+    "orderCompleted": "Sifariş #{orderId} tamamlandı",
+    "orderCancelled": "Sifariş #{orderId} ləğv edildi",
+    "paymentReceived": "{amount} məbləğində ödəniş alındı",
+    "paymentFailed": "{amount} məbləğində ödəniş uğursuz",
+    "driverNearby": "Sürücü {driverName} yaxınlaşır",
+    "tripStarted": "Səyahət başladı",
+    "tripEnded": "Səyahət bitdi",
+    "promoCode": "Yeni promo kod: {code}",
+    "supportResponse": "Dəstəkdən cavab",
+    "systemUpdate": "Sistem yeniləməsi",
+    "maintenance": "Texniki xidmət"
+  },
+  "actions": {
+    "viewOrder": "Sifarişi görüntülə",
+    "viewPayment": "Ödənişi görüntülə",
+    "contactSupport": "Dəstəklə əlaqə saxla",
+    "dismiss": "Bağla",
+    "reply": "Cavab ver"
+  },
+  "settings": {
+    "title": "Bildiriş parametrləri",
+    "pushNotifications": "Push bildirişləri",
+    "emailNotifications": "E-poçt bildirişləri",
+    "smsNotifications": "SMS bildirişləri",
+    "orderUpdates": "Sifariş yeniləmələri",
+    "paymentUpdates": "Ödəniş yeniləmələri",
+    "promotional": "Təşviq bildirişləri",
+    "systemUpdates": "Sistem yeniləmələri",
+    "sound": "Səs",
+    "vibration": "Vibrasiya",
+    "quietHours": "Sakit saatlar",
+    "quietHoursStart": "Sakit saatlar başlanğıcı",
+    "quietHoursEnd": "Sakit saatlar bitişi"
+  },
+  "alerts": {
+    "markAllReadTitle": "Hamısını oxunmuş kimi işarələ?",
+    "markAllReadMessage": "Bütün bildirişlər oxunmuş kimi işarələnəcək",
+    "clearAllTitle": "Bütün bildirişləri təmizlə?",
+    "clearAllMessage": "Bütün bildirişlər daimi olaraq silinəcək",
+    "deleteTitle": "Bildirişi sil?",
+    "deleteMessage": "Bu bildiriş daimi olaraq silinəcək"
+  },
+  "buttons": {
+    "cancel": "Ləğv et",
+    "confirm": "Təsdiqlə",
+    "ok": "Tamam"
+  }
+} 

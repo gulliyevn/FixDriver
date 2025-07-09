@@ -1,0 +1,21 @@
+{
+  "title": "Profil",
+  "logout": "Çıxış",
+  "logoutConfirm": "Çıxış etmək istədiyinizə əminsiniz?",
+  "logoutCancel": "Ləğv et",
+  "logoutConfirmButton": "Çıxış",
+  "notifications": "Bildirişlər",
+  "notificationsCenter": "Bildiriş Mərkəzi",
+  "deleteNotification": "Bildirişi sil",
+  "deleteNotificationConfirm": "Bu bildirişi silmək istədiyinizə əminsiniz?",
+  "delete": "Sil",
+  "cancel": "Ləğv et",
+  "markAllAsRead": "Hamısını oxunmuş kimi işarələ",
+  "addChild": "Uşaq əlavə et",
+  "option": "Seçim",
+  "optionNotAvailable": "{option} növbəti yeniləmədə əlçatan olacaq",
+  "locationEnabled": "Geolokasiya aktivdir",
+  "locationDisabled": "Geolokasiya deaktivdir",
+  "notificationsEnabled": "Bildirişlər aktivdir",
+  "notificationsDisabled": "Bildirişlər deaktivdir"
+} 

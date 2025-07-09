@@ -1,0 +1,22 @@
+{
+  "ok": "Tamam",
+  "cancel": "İptal",
+  "yes": "Evet",
+  "no": "Hayır",
+  "close": "Kapat",
+  "save": "Kaydet",
+  "edit": "Düzenle",
+  "delete": "Sil",
+  "confirm": "Onayla",
+  "back": "Geri",
+  "next": "İleri",
+  "done": "Bitti",
+  "selectLanguage": "Dil seçin",
+  "loading": "Yükleniyor...",
+  "error": "Hata",
+  "success": "Başarılı",
+  "attention": "Dikkat",
+  "tryAgain": "Tekrar dene",
+  "notAvailable": "Kullanılamıyor",
+  "featureSoon": "Özellik yakında kullanılabilir olacak"
+} 

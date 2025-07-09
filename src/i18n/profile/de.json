@@ -1,0 +1,21 @@
+{
+  "title": "Profil",
+  "logout": "Abmelden",
+  "logoutConfirm": "Sind Sie sicher, dass Sie sich abmelden möchten?",
+  "logoutCancel": "Abbrechen",
+  "logoutConfirmButton": "Abmelden",
+  "notifications": "Benachrichtigungen",
+  "notificationsCenter": "Benachrichtigungszentrum",
+  "deleteNotification": "Benachrichtigung löschen",
+  "deleteNotificationConfirm": "Sind Sie sicher, dass Sie diese Benachrichtigung löschen möchten?",
+  "delete": "Löschen",
+  "cancel": "Abbrechen",
+  "markAllAsRead": "Alle als gelesen markieren",
+  "addChild": "Kind hinzufügen",
+  "option": "Option",
+  "optionNotAvailable": "{option} wird im nächsten Update verfügbar sein",
+  "locationEnabled": "Standort aktiviert",
+  "locationDisabled": "Standort deaktiviert",
+  "notificationsEnabled": "Benachrichtigungen aktiviert",
+  "notificationsDisabled": "Benachrichtigungen deaktiviert"
+} 

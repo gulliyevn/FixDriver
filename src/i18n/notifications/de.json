@@ -1,0 +1,76 @@
+{
+  "title": "Benachrichtigungen",
+  "noNotifications": "Sie haben noch keine Benachrichtigungen",
+  "noNotificationsSubtitle": "Neue Benachrichtigungen werden hier angezeigt",
+  "markAllAsRead": "Alle als gelesen markieren",
+  "clearAll": "Alle löschen",
+  "delete": "Löschen",
+  "markAsRead": "Als gelesen markieren",
+  "markAsUnread": "Als ungelesen markieren",
+  "filter": "Filter",
+  "all": "Alle",
+  "unread": "Ungelesen",
+  "read": "Gelesen",
+  "today": "Heute",
+  "yesterday": "Gestern",
+  "thisWeek": "Diese Woche",
+  "earlier": "Früher",
+  "notificationTypes": {
+    "order": "Bestellung",
+    "payment": "Zahlung",
+    "system": "System",
+    "promo": "Promo",
+    "support": "Support"
+  },
+  "messages": {
+    "newOrder": "Neue Bestellung #{orderId}",
+    "orderAccepted": "Bestellung #{orderId} vom Fahrer akzeptiert",
+    "orderStarted": "Bestellung #{orderId} gestartet",
+    "orderCompleted": "Bestellung #{orderId} abgeschlossen",
+    "orderCancelled": "Bestellung #{orderId} storniert",
+    "paymentReceived": "Zahlung in Höhe von {amount} erhalten",
+    "paymentFailed": "Zahlung in Höhe von {amount} fehlgeschlagen",
+    "driverNearby": "Fahrer {driverName} nähert sich",
+    "tripStarted": "Fahrt gestartet",
+    "tripEnded": "Fahrt beendet",
+    "promoCode": "Neuer Promo-Code: {code}",
+    "supportResponse": "Antwort vom Support",
+    "systemUpdate": "System-Update",
+    "maintenance": "Wartung"
+  },
+  "actions": {
+    "viewOrder": "Bestellung anzeigen",
+    "viewPayment": "Zahlung anzeigen",
+    "contactSupport": "Support kontaktieren",
+    "dismiss": "Verwerfen",
+    "reply": "Antworten"
+  },
+  "settings": {
+    "title": "Benachrichtigungseinstellungen",
+    "pushNotifications": "Push-Benachrichtigungen",
+    "emailNotifications": "E-Mail-Benachrichtigungen",
+    "smsNotifications": "SMS-Benachrichtigungen",
+    "orderUpdates": "Bestellaktualisierungen",
+    "paymentUpdates": "Zahlungsaktualisierungen",
+    "promotional": "Werbe-Benachrichtigungen",
+    "systemUpdates": "System-Updates",
+    "sound": "Ton",
+    "vibration": "Vibration",
+    "quietHours": "Ruhezeiten",
+    "quietHoursStart": "Ruhezeiten Beginn",
+    "quietHoursEnd": "Ruhezeiten Ende"
+  },
+  "alerts": {
+    "markAllReadTitle": "Alle als gelesen markieren?",
+    "markAllReadMessage": "Alle Benachrichtigungen werden als gelesen markiert",
+    "clearAllTitle": "Alle Benachrichtigungen löschen?",
+    "clearAllMessage": "Alle Benachrichtigungen werden dauerhaft gelöscht",
+    "deleteTitle": "Benachrichtigung löschen?",
+    "deleteMessage": "Diese Benachrichtigung wird dauerhaft gelöscht"
+  },
+  "buttons": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "ok": "OK"
+  }
+} 

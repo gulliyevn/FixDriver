@@ -1,0 +1,22 @@
+{
+  "ok": "OK",
+  "cancel": "Ləğv et",
+  "yes": "Bəli",
+  "no": "Xeyr",
+  "close": "Bağla",
+  "save": "Yadda saxla",
+  "edit": "Redaktə et",
+  "delete": "Sil",
+  "confirm": "Təsdiqlə",
+  "back": "Geri",
+  "next": "İrəli",
+  "done": "Hazırdır",
+  "selectLanguage": "Dili seçin",
+  "loading": "Yüklənir...",
+  "error": "Xəta",
+  "success": "Uğurla",
+  "attention": "Diqqət",
+  "tryAgain": "Yenidən cəhd et",
+  "notAvailable": "Əlçatan deyil",
+  "featureSoon": "Funksiya tezliklə əlçatan olacaq"
+} 

@@ -1,0 +1,22 @@
+{
+  "ok": "OK",
+  "cancel": "Abbrechen",
+  "yes": "Ja",
+  "no": "Nein",
+  "close": "Schließen",
+  "save": "Speichern",
+  "edit": "Bearbeiten",
+  "delete": "Löschen",
+  "confirm": "Bestätigen",
+  "back": "Zurück",
+  "next": "Weiter",
+  "done": "Fertig",
+  "selectLanguage": "Sprache wählen",
+  "loading": "Lädt...",
+  "error": "Fehler",
+  "success": "Erfolg",
+  "attention": "Achtung",
+  "tryAgain": "Erneut versuchen",
+  "notAvailable": "Nicht verfügbar",
+  "featureSoon": "Funktion bald verfügbar"
+} 

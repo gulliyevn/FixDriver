@@ -1,0 +1,76 @@
+{
+  "title": "Notifications",
+  "noNotifications": "You don't have any notifications yet",
+  "noNotificationsSubtitle": "New notifications will appear here",
+  "markAllAsRead": "Mark all as read",
+  "clearAll": "Clear all",
+  "delete": "Delete",
+  "markAsRead": "Mark as read",
+  "markAsUnread": "Mark as unread",
+  "filter": "Filter",
+  "all": "All",
+  "unread": "Unread",
+  "read": "Read",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "thisWeek": "This week",
+  "earlier": "Earlier",
+  "notificationTypes": {
+    "order": "Order",
+    "payment": "Payment",
+    "system": "System",
+    "promo": "Promo",
+    "support": "Support"
+  },
+  "messages": {
+    "newOrder": "New order #{orderId}",
+    "orderAccepted": "Order #{orderId} accepted by driver",
+    "orderStarted": "Order #{orderId} started",
+    "orderCompleted": "Order #{orderId} completed",
+    "orderCancelled": "Order #{orderId} cancelled",
+    "paymentReceived": "Payment received for {amount}",
+    "paymentFailed": "Payment failed for {amount}",
+    "driverNearby": "Driver {driverName} is approaching",
+    "tripStarted": "Trip started",
+    "tripEnded": "Trip ended",
+    "promoCode": "New promo code: {code}",
+    "supportResponse": "Response from support",
+    "systemUpdate": "System update",
+    "maintenance": "Maintenance"
+  },
+  "actions": {
+    "viewOrder": "View order",
+    "viewPayment": "View payment",
+    "contactSupport": "Contact support",
+    "dismiss": "Dismiss",
+    "reply": "Reply"
+  },
+  "settings": {
+    "title": "Notification settings",
+    "pushNotifications": "Push notifications",
+    "emailNotifications": "Email notifications",
+    "smsNotifications": "SMS notifications",
+    "orderUpdates": "Order updates",
+    "paymentUpdates": "Payment updates",
+    "promotional": "Promotional notifications",
+    "systemUpdates": "System updates",
+    "sound": "Sound",
+    "vibration": "Vibration",
+    "quietHours": "Quiet hours",
+    "quietHoursStart": "Quiet hours start",
+    "quietHoursEnd": "Quiet hours end"
+  },
+  "alerts": {
+    "markAllReadTitle": "Mark all as read?",
+    "markAllReadMessage": "All notifications will be marked as read",
+    "clearAllTitle": "Clear all notifications?",
+    "clearAllMessage": "All notifications will be permanently deleted",
+    "deleteTitle": "Delete notification?",
+    "deleteMessage": "This notification will be permanently deleted"
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "ok": "OK"
+  }
+} 

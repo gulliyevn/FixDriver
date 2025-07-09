@@ -1,0 +1,21 @@
+{
+  "title": "Profil",
+  "logout": "Déconnexion",
+  "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
+  "logoutCancel": "Annuler",
+  "logoutConfirmButton": "Déconnexion",
+  "notifications": "Notifications",
+  "notificationsCenter": "Centre de notifications",
+  "deleteNotification": "Supprimer la notification",
+  "deleteNotificationConfirm": "Êtes-vous sûr de vouloir supprimer cette notification ?",
+  "delete": "Supprimer",
+  "cancel": "Annuler",
+  "markAllAsRead": "Tout marquer comme lu",
+  "addChild": "Ajouter un enfant",
+  "option": "Option",
+  "optionNotAvailable": "{option} sera disponible dans la prochaine mise à jour",
+  "locationEnabled": "Localisation activée",
+  "locationDisabled": "Localisation désactivée",
+  "notificationsEnabled": "Notifications activées",
+  "notificationsDisabled": "Notifications désactivées"
+} 

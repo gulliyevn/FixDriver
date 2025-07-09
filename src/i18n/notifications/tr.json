@@ -1,0 +1,76 @@
+{
+  "title": "Bildirimler",
+  "noNotifications": "Henüz bildiriminiz yok",
+  "noNotificationsSubtitle": "Yeni bildirimler burada görünecek",
+  "markAllAsRead": "Tümünü okundu olarak işaretle",
+  "clearAll": "Tümünü temizle",
+  "delete": "Sil",
+  "markAsRead": "Okundu olarak işaretle",
+  "markAsUnread": "Okunmadı olarak işaretle",
+  "filter": "Filtre",
+  "all": "Tümü",
+  "unread": "Okunmamış",
+  "read": "Okunmuş",
+  "today": "Bugün",
+  "yesterday": "Dün",
+  "thisWeek": "Bu hafta",
+  "earlier": "Daha önce",
+  "notificationTypes": {
+    "order": "Sipariş",
+    "payment": "Ödeme",
+    "system": "Sistem",
+    "promo": "Promosyon",
+    "support": "Destek"
+  },
+  "messages": {
+    "newOrder": "Yeni sipariş #{orderId}",
+    "orderAccepted": "Sipariş #{orderId} sürücü tarafından kabul edildi",
+    "orderStarted": "Sipariş #{orderId} başladı",
+    "orderCompleted": "Sipariş #{orderId} tamamlandı",
+    "orderCancelled": "Sipariş #{orderId} iptal edildi",
+    "paymentReceived": "{amount} tutarında ödeme alındı",
+    "paymentFailed": "{amount} tutarında ödeme başarısız",
+    "driverNearby": "Sürücü {driverName} yaklaşıyor",
+    "tripStarted": "Yolculuk başladı",
+    "tripEnded": "Yolculuk bitti",
+    "promoCode": "Yeni promosyon kodu: {code}",
+    "supportResponse": "Destekten yanıt",
+    "systemUpdate": "Sistem güncellemesi",
+    "maintenance": "Bakım"
+  },
+  "actions": {
+    "viewOrder": "Siparişi görüntüle",
+    "viewPayment": "Ödemeyi görüntüle",
+    "contactSupport": "Destekle iletişime geç",
+    "dismiss": "Kapat",
+    "reply": "Yanıtla"
+  },
+  "settings": {
+    "title": "Bildirim ayarları",
+    "pushNotifications": "Push bildirimleri",
+    "emailNotifications": "E-posta bildirimleri",
+    "smsNotifications": "SMS bildirimleri",
+    "orderUpdates": "Sipariş güncellemeleri",
+    "paymentUpdates": "Ödeme güncellemeleri",
+    "promotional": "Promosyon bildirimleri",
+    "systemUpdates": "Sistem güncellemeleri",
+    "sound": "Ses",
+    "vibration": "Titreşim",
+    "quietHours": "Sessiz saatler",
+    "quietHoursStart": "Sessiz saatler başlangıcı",
+    "quietHoursEnd": "Sessiz saatler bitişi"
+  },
+  "alerts": {
+    "markAllReadTitle": "Tümünü okundu olarak işaretle?",
+    "markAllReadMessage": "Tüm bildirimler okundu olarak işaretlenecek",
+    "clearAllTitle": "Tüm bildirimleri temizle?",
+    "clearAllMessage": "Tüm bildirimler kalıcı olarak silinecek",
+    "deleteTitle": "Bildirimi sil?",
+    "deleteMessage": "Bu bildirim kalıcı olarak silinecek"
+  },
+  "buttons": {
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "ok": "Tamam"
+  }
+} 

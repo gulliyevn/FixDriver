@@ -1,0 +1,21 @@
+{
+  "title": "Профиль",
+  "logout": "Выйти",
+  "logoutConfirm": "Вы уверены, что хотите выйти?",
+  "logoutCancel": "Отмена",
+  "logoutConfirmButton": "Выйти",
+  "notifications": "Уведомления",
+  "notificationsCenter": "Центр уведомлений",
+  "deleteNotification": "Удалить уведомление",
+  "deleteNotificationConfirm": "Вы уверены, что хотите удалить это уведомление?",
+  "delete": "Удалить",
+  "cancel": "Отмена",
+  "markAllAsRead": "Отметить все как прочитанные",
+  "addChild": "Добавить ребенка",
+  "option": "Опция",
+  "optionNotAvailable": "{option} будет доступна в следующем обновлении",
+  "locationEnabled": "Геолокация включена",
+  "locationDisabled": "Геолокация отключена",
+  "notificationsEnabled": "Уведомления включены",
+  "notificationsDisabled": "Уведомления отключены"
+} 

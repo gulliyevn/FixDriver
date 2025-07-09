@@ -1,0 +1,57 @@
+{
+  "auth": {
+    "invalidCredentials": "بريد إلكتروني أو كلمة مرور غير صحيحة",
+    "userNotFound": "المستخدم غير موجود",
+    "accountLocked": "الحساب مقفل",
+    "tooManyAttempts": "محاولات تسجيل دخول كثيرة جداً",
+    "tokenExpired": "انتهت صلاحية الجلسة",
+    "tokenInvalid": "مطلوب إعادة المصادقة",
+    "emailNotVerified": "البريد الإلكتروني غير مُتحقق منه",
+    "phoneNotVerified": "الهاتف غير مُتحقق منه",
+    "weakPassword": "كلمة المرور ضعيفة جداً",
+    "emailAlreadyExists": "البريد الإلكتروني مستخدم بالفعل",
+    "phoneAlreadyExists": "رقم الهاتف مستخدم بالفعل",
+    "generic": "خطأ في المصادقة"
+  },
+  "network": {
+    "noInternet": "لا يوجد اتصال بالإنترنت",
+    "timeout": "انتهت مهلة الطلب",
+    "serverError": "خطأ في الخادم",
+    "badRequest": "طلب غير صحيح",
+    "unauthorized": "مطلوب تفويض",
+    "forbidden": "الوصول ممنوع",
+    "notFound": "المورد غير موجود",
+    "rateLimited": "طلبات كثيرة جداً",
+    "generic": "خطأ في الشبكة. تحقق من اتصال الإنترنت."
+  },
+  "validation": {
+    "invalidEmail": "بريد إلكتروني غير صحيح",
+    "invalidPhone": "رقم هاتف غير صحيح",
+    "invalidPassword": "كلمة مرور غير صحيحة",
+    "invalidName": "اسم غير صحيح",
+    "invalidLicense": "رقم رخصة قيادة غير صحيح",
+    "invalidVehicle": "رقم مركبة غير صحيح",
+    "invalidOTP": "رمز تحقق غير صحيح",
+    "missingFields": "املأ جميع الحقول المطلوبة",
+    "fieldRequired": "الحقل مطلوب",
+    "licenseExpired": "انتهت صلاحية رخصة القيادة",
+    "invalidVehicleYear": "سنة مركبة غير صحيحة"
+  },
+  "general": {
+    "unknown": "حدث خطأ غير معروف",
+    "generic": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "details": "تفاصيل الخطأ",
+    "understand": "فهمت",
+    "checkConnection": "تحقق من الاتصال",
+    "contactSupport": "تواصل مع الدعم"
+  },
+  "actions": {
+    "checkCredentials": "تحقق من بيانات الاعتماد",
+    "register": "تسجيل",
+    "login": "تسجيل الدخول",
+    "restorePassword": "استعادة كلمة المرور",
+    "retryRequest": "إعادة محاولة الطلب",
+    "refreshToken": "تحديث الرمز المميز"
+  }
+} 

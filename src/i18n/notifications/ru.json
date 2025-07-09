@@ -1,0 +1,76 @@
+{
+  "title": "Уведомления",
+  "noNotifications": "У вас пока нет уведомлений",
+  "noNotificationsSubtitle": "Новые уведомления появятся здесь",
+  "markAllAsRead": "Отметить все как прочитанные",
+  "clearAll": "Очистить все",
+  "delete": "Удалить",
+  "markAsRead": "Отметить как прочитанное",
+  "markAsUnread": "Отметить как непрочитанное",
+  "filter": "Фильтр",
+  "all": "Все",
+  "unread": "Непрочитанные",
+  "read": "Прочитанные",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "thisWeek": "На этой неделе",
+  "earlier": "Ранее",
+  "notificationTypes": {
+    "order": "Заказ",
+    "payment": "Платеж",
+    "system": "Система",
+    "promo": "Акция",
+    "support": "Поддержка"
+  },
+  "messages": {
+    "newOrder": "Новый заказ #{orderId}",
+    "orderAccepted": "Заказ #{orderId} принят водителем",
+    "orderStarted": "Заказ #{orderId} начат",
+    "orderCompleted": "Заказ #{orderId} завершен",
+    "orderCancelled": "Заказ #{orderId} отменен",
+    "paymentReceived": "Получен платеж на сумму {amount}",
+    "paymentFailed": "Ошибка платежа на сумму {amount}",
+    "driverNearby": "Водитель {driverName} приближается",
+    "tripStarted": "Поездка началась",
+    "tripEnded": "Поездка завершена",
+    "promoCode": "Новый промокод: {code}",
+    "supportResponse": "Ответ от службы поддержки",
+    "systemUpdate": "Обновление системы",
+    "maintenance": "Техническое обслуживание"
+  },
+  "actions": {
+    "viewOrder": "Посмотреть заказ",
+    "viewPayment": "Посмотреть платеж",
+    "contactSupport": "Связаться с поддержкой",
+    "dismiss": "Отклонить",
+    "reply": "Ответить"
+  },
+  "settings": {
+    "title": "Настройки уведомлений",
+    "pushNotifications": "Push-уведомления",
+    "emailNotifications": "Email-уведомления",
+    "smsNotifications": "SMS-уведомления",
+    "orderUpdates": "Обновления заказов",
+    "paymentUpdates": "Обновления платежей",
+    "promotional": "Рекламные уведомления",
+    "systemUpdates": "Системные обновления",
+    "sound": "Звук",
+    "vibration": "Вибрация",
+    "quietHours": "Тихие часы",
+    "quietHoursStart": "Начало тихих часов",
+    "quietHoursEnd": "Конец тихих часов"
+  },
+  "alerts": {
+    "markAllReadTitle": "Отметить все как прочитанные?",
+    "markAllReadMessage": "Все уведомления будут отмечены как прочитанные",
+    "clearAllTitle": "Очистить все уведомления?",
+    "clearAllMessage": "Все уведомления будут удалены безвозвратно",
+    "deleteTitle": "Удалить уведомление?",
+    "deleteMessage": "Это уведомление будет удалено безвозвратно"
+  },
+  "buttons": {
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "ok": "ОК"
+  }
+} 

@@ -1,0 +1,76 @@
+{
+  "title": "Notificaciones",
+  "noNotifications": "Aún no tienes notificaciones",
+  "noNotificationsSubtitle": "Las nuevas notificaciones aparecerán aquí",
+  "markAllAsRead": "Marcar todo como leído",
+  "clearAll": "Limpiar todo",
+  "delete": "Eliminar",
+  "markAsRead": "Marcar como leído",
+  "markAsUnread": "Marcar como no leído",
+  "filter": "Filtro",
+  "all": "Todo",
+  "unread": "No leído",
+  "read": "Leído",
+  "today": "Hoy",
+  "yesterday": "Ayer",
+  "thisWeek": "Esta semana",
+  "earlier": "Anteriormente",
+  "notificationTypes": {
+    "order": "Pedido",
+    "payment": "Pago",
+    "system": "Sistema",
+    "promo": "Promoción",
+    "support": "Soporte"
+  },
+  "messages": {
+    "newOrder": "Nuevo pedido #{orderId}",
+    "orderAccepted": "Pedido #{orderId} aceptado por el conductor",
+    "orderStarted": "Pedido #{orderId} iniciado",
+    "orderCompleted": "Pedido #{orderId} completado",
+    "orderCancelled": "Pedido #{orderId} cancelado",
+    "paymentReceived": "Pago recibido por {amount}",
+    "paymentFailed": "Pago fallido por {amount}",
+    "driverNearby": "El conductor {driverName} se acerca",
+    "tripStarted": "Viaje iniciado",
+    "tripEnded": "Viaje terminado",
+    "promoCode": "Nuevo código promocional: {code}",
+    "supportResponse": "Respuesta del soporte",
+    "systemUpdate": "Actualización del sistema",
+    "maintenance": "Mantenimiento"
+  },
+  "actions": {
+    "viewOrder": "Ver pedido",
+    "viewPayment": "Ver pago",
+    "contactSupport": "Contactar soporte",
+    "dismiss": "Descartar",
+    "reply": "Responder"
+  },
+  "settings": {
+    "title": "Configuración de notificaciones",
+    "pushNotifications": "Notificaciones push",
+    "emailNotifications": "Notificaciones por email",
+    "smsNotifications": "Notificaciones SMS",
+    "orderUpdates": "Actualizaciones de pedidos",
+    "paymentUpdates": "Actualizaciones de pagos",
+    "promotional": "Notificaciones promocionales",
+    "systemUpdates": "Actualizaciones del sistema",
+    "sound": "Sonido",
+    "vibration": "Vibración",
+    "quietHours": "Horas silenciosas",
+    "quietHoursStart": "Inicio de horas silenciosas",
+    "quietHoursEnd": "Fin de horas silenciosas"
+  },
+  "alerts": {
+    "markAllReadTitle": "¿Marcar todo como leído?",
+    "markAllReadMessage": "Todas las notificaciones serán marcadas como leídas",
+    "clearAllTitle": "¿Limpiar todas las notificaciones?",
+    "clearAllMessage": "Todas las notificaciones serán eliminadas permanentemente",
+    "deleteTitle": "¿Eliminar notificación?",
+    "deleteMessage": "Esta notificación será eliminada permanentemente"
+  },
+  "buttons": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "ok": "OK"
+  }
+} 

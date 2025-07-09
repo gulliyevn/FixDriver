@@ -1,0 +1,22 @@
+{
+  "ok": "موافق",
+  "cancel": "إلغاء",
+  "yes": "نعم",
+  "no": "لا",
+  "close": "إغلاق",
+  "save": "حفظ",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "confirm": "تأكيد",
+  "back": "رجوع",
+  "next": "التالي",
+  "done": "تم",
+  "selectLanguage": "اختر اللغة",
+  "loading": "جارٍ التحميل...",
+  "error": "خطأ",
+  "success": "نجاح",
+  "attention": "تنبيه",
+  "tryAgain": "حاول مرة أخرى",
+  "notAvailable": "غير متوفر",
+  "featureSoon": "الميزة ستكون متاحة قريبًا"
+} 

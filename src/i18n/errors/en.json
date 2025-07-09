@@ -1,0 +1,57 @@
+{
+  "auth": {
+    "invalidCredentials": "Invalid email or password",
+    "userNotFound": "User not found",
+    "accountLocked": "Account locked",
+    "tooManyAttempts": "Too many login attempts",
+    "tokenExpired": "Session expired",
+    "tokenInvalid": "Re-authentication required",
+    "emailNotVerified": "Email not verified",
+    "phoneNotVerified": "Phone not verified",
+    "weakPassword": "Password is too weak",
+    "emailAlreadyExists": "Email already in use",
+    "phoneAlreadyExists": "Phone number already in use",
+    "generic": "Authentication error"
+  },
+  "network": {
+    "noInternet": "No internet connection",
+    "timeout": "Request timeout",
+    "serverError": "Server error",
+    "badRequest": "Bad request",
+    "unauthorized": "Authorization required",
+    "forbidden": "Access forbidden",
+    "notFound": "Resource not found",
+    "rateLimited": "Too many requests",
+    "generic": "Network error. Check your internet connection."
+  },
+  "validation": {
+    "invalidEmail": "Invalid email",
+    "invalidPhone": "Invalid phone number",
+    "invalidPassword": "Invalid password",
+    "invalidName": "Invalid name",
+    "invalidLicense": "Invalid license number",
+    "invalidVehicle": "Invalid vehicle number",
+    "invalidOTP": "Invalid verification code",
+    "missingFields": "Fill in all required fields",
+    "fieldRequired": "Field is required",
+    "licenseExpired": "Driver's license has expired",
+    "invalidVehicleYear": "Invalid vehicle year"
+  },
+  "general": {
+    "unknown": "An unknown error occurred",
+    "generic": "An error occurred",
+    "retry": "Retry",
+    "details": "Error details",
+    "understand": "Understand",
+    "checkConnection": "Check connection",
+    "contactSupport": "Contact support"
+  },
+  "actions": {
+    "checkCredentials": "Check credentials",
+    "register": "Register",
+    "login": "Login",
+    "restorePassword": "Restore password",
+    "retryRequest": "Retry request",
+    "refreshToken": "Refresh token"
+  }
+} 

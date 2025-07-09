@@ -1,0 +1,57 @@
+{
+  "auth": {
+    "invalidCredentials": "Yanlış e-poçt və ya şifrə",
+    "userNotFound": "İstifadəçi tapılmadı",
+    "accountLocked": "Hesab bloklanıb",
+    "tooManyAttempts": "Çoxlu giriş cəhdi",
+    "tokenExpired": "Sessiya bitdi",
+    "tokenInvalid": "Yenidən autentifikasiya tələb olunur",
+    "emailNotVerified": "E-poçt təsdiqlənməyib",
+    "phoneNotVerified": "Telefon təsdiqlənməyib",
+    "weakPassword": "Şifrə çox zəifdir",
+    "emailAlreadyExists": "E-poçt artıq istifadə olunur",
+    "phoneAlreadyExists": "Telefon nömrəsi artıq istifadə olunur",
+    "generic": "Autentifikasiya xətası"
+  },
+  "network": {
+    "noInternet": "İnternet bağlantısı yoxdur",
+    "timeout": "Sorğu vaxtı keçdi",
+    "serverError": "Server xətası",
+    "badRequest": "Yanlış sorğu",
+    "unauthorized": "Avtorizasiya tələb olunur",
+    "forbidden": "Giriş qadağandır",
+    "notFound": "Resurs tapılmadı",
+    "rateLimited": "Çoxlu sorğu",
+    "generic": "Şəbəkə xətası. İnternet bağlantınızı yoxlayın."
+  },
+  "validation": {
+    "invalidEmail": "Yanlış e-poçt",
+    "invalidPhone": "Yanlış telefon nömrəsi",
+    "invalidPassword": "Yanlış şifrə",
+    "invalidName": "Yanlış ad",
+    "invalidLicense": "Yanlış sürücülük vəsiqəsi nömrəsi",
+    "invalidVehicle": "Yanlış avtomobil nömrəsi",
+    "invalidOTP": "Yanlış təsdiq kodu",
+    "missingFields": "Bütün məcburi sahələri doldurun",
+    "fieldRequired": "Sahə məcburidir",
+    "licenseExpired": "Sürücülük vəsiqəsinin müddəti bitib",
+    "invalidVehicleYear": "Yanlış avtomobil ili"
+  },
+  "general": {
+    "unknown": "Naməlum xəta baş verdi",
+    "generic": "Xəta baş verdi",
+    "retry": "Yenidən cəhd et",
+    "details": "Xəta detalları",
+    "understand": "Başa düşdüm",
+    "checkConnection": "Bağlantını yoxla",
+    "contactSupport": "Dəstəklə əlaqə saxla"
+  },
+  "actions": {
+    "checkCredentials": "Kimlik məlumatlarını yoxla",
+    "register": "Qeydiyyatdan keç",
+    "login": "Daxil ol",
+    "restorePassword": "Şifrəni bərpa et",
+    "retryRequest": "Sorğunu yenidən cəhd et",
+    "refreshToken": "Token'ı yenilə"
+  }
+} 

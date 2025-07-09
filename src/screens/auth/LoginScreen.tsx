@@ -19,6 +19,7 @@ import { LoginScreenStyles } from '../../styles/screens/LoginScreen.styles';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
+import { t } from '../../i18n';
 
 type NavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -44,13 +45,13 @@ const LoginScreen: React.FC = () => {
     const newErrors: Partial<FormData> = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Введите email';
+      newErrors.email = t('login.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Введите корректный email';
+      newErrors.email = t('login.emailInvalid');
     }
 
     if (!formData.password) {
-      newErrors.password = 'Введите пароль';
+      newErrors.password = t('login.passwordRequired');
     }
 
     setErrors(newErrors);
@@ -65,12 +66,12 @@ const LoginScreen: React.FC = () => {
       const success = await login(formData.email, formData.password);
       
       if (success) {
-        console.log('Успешный вход');
+        console.log(t('login.loginSuccess'));
       } else {
-        Alert.alert('Ошибка', 'Неверный email или пароль');
+        Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Произошла ошибка при входе');
+      Alert.alert(t('login.loginError'), t('login.loginErrorGeneric'));
     } finally {
       setLoading(false);
     }
@@ -109,10 +110,10 @@ const LoginScreen: React.FC = () => {
       if (success) {
         console.log(`🧪 Автоматический вход как ${type}:`, email);
       } else {
-        Alert.alert('Ошибка', 'Неверный email или пароль');
+        Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Произошла ошибка при входе');
+      Alert.alert(t('login.loginError'), t('login.loginErrorGeneric'));
     } finally {
       setLoading(false);
     }
@@ -134,31 +135,31 @@ const LoginScreen: React.FC = () => {
           {/* Header */}
           <View style={LoginScreenStyles.header}>
             <Text style={LoginScreenStyles.title}>
-              Добро пожаловать
+              {t('login.title')}
             </Text>
             <Text style={LoginScreenStyles.subtitle}>
-              Войдите в свой аккаунт
+              {t('login.subtitle')}
             </Text>
           </View>
 
           {/* Form */}
           <View style={LoginScreenStyles.form}>
             <InputField
-              label="Email"
+              label={t('login.email')}
               value={formData.email}
               onChangeText={(text) => updateFormData('email', text)}
               error={errors.email}
-              placeholder="Введите ваш email"
+              placeholder={t('login.emailPlaceholder')}
               keyboardType="email-address"
               autoCapitalize="none"
             />
             
             <InputField
-              label="Пароль"
+              label={t('login.password')}
               value={formData.password}
               onChangeText={(text) => updateFormData('password', text)}
               error={errors.password}
-              placeholder="Введите пароль"
+              placeholder={t('login.passwordPlaceholder')}
               secureTextEntry={!showPassword}
               rightIcon={showPassword ? 'eye-off' : 'eye'}
             />
@@ -168,12 +169,12 @@ const LoginScreen: React.FC = () => {
               onPress={() => navigation.navigate('ForgotPassword')}
             >
               <Text style={LoginScreenStyles.forgotPasswordText}>
-                Забыли пароль?
+                {t('login.forgotPassword')}
               </Text>
             </TouchableOpacity>
 
             <Button
-              title="Войти"
+              title={t('login.loginButton')}
               onPress={handleLogin}
               loading={loading}
               disabled={loading}
@@ -183,19 +184,19 @@ const LoginScreen: React.FC = () => {
             {/* Кнопки автозаполнения для разработки */}
             {__DEV__ && (
               <View style={LoginScreenStyles.autoFillContainer}>
-                <Text style={LoginScreenStyles.autoFillTitle}>🧪 Быстрый вход (только для разработки):</Text>
+                <Text style={LoginScreenStyles.autoFillTitle}>{t('login.autoFillTitle')}</Text>
                 <View style={LoginScreenStyles.autoFillButtons}>
                   <TouchableOpacity
                     style={LoginScreenStyles.autoFillButton}
                     onPress={() => handleAutoFill('client')}
                   >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>👤 Заполнить клиент</Text>
+                    <Text style={LoginScreenStyles.autoFillButtonText}>{t('login.autoFillClient')}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={LoginScreenStyles.autoFillButton}
                     onPress={() => handleAutoFill('driver')}
                   >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>🚗 Заполнить водитель</Text>
+                    <Text style={LoginScreenStyles.autoFillButtonText}>{t('login.autoFillDriver')}</Text>
                   </TouchableOpacity>
                 </View>
                 
@@ -238,11 +239,11 @@ const LoginScreen: React.FC = () => {
           {/* Register Link */}
           <View style={LoginScreenStyles.registerLink}>
             <Text style={LoginScreenStyles.registerText}>
-              Нет аккаунта?{' '}
+              {t('login.noAccount')}
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('RoleSelect')}>
               <Text style={LoginScreenStyles.registerLinkText}>
-                Зарегистрироваться
+                {t('login.registerLink')}
               </Text>
             </TouchableOpacity>
           </View>

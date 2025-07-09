@@ -1,0 +1,57 @@
+{
+  "auth": {
+    "invalidCredentials": "Geçersiz e-posta veya şifre",
+    "userNotFound": "Kullanıcı bulunamadı",
+    "accountLocked": "Hesap kilitlendi",
+    "tooManyAttempts": "Çok fazla giriş denemesi",
+    "tokenExpired": "Oturum süresi doldu",
+    "tokenInvalid": "Yeniden kimlik doğrulama gerekli",
+    "emailNotVerified": "E-posta doğrulanmadı",
+    "phoneNotVerified": "Telefon doğrulanmadı",
+    "weakPassword": "Şifre çok zayıf",
+    "emailAlreadyExists": "E-posta zaten kullanımda",
+    "phoneAlreadyExists": "Telefon numarası zaten kullanımda",
+    "generic": "Kimlik doğrulama hatası"
+  },
+  "network": {
+    "noInternet": "İnternet bağlantısı yok",
+    "timeout": "İstek zaman aşımı",
+    "serverError": "Sunucu hatası",
+    "badRequest": "Geçersiz istek",
+    "unauthorized": "Yetkilendirme gerekli",
+    "forbidden": "Erişim yasak",
+    "notFound": "Kaynak bulunamadı",
+    "rateLimited": "Çok fazla istek",
+    "generic": "Ağ hatası. İnternet bağlantınızı kontrol edin."
+  },
+  "validation": {
+    "invalidEmail": "Geçersiz e-posta",
+    "invalidPhone": "Geçersiz telefon numarası",
+    "invalidPassword": "Geçersiz şifre",
+    "invalidName": "Geçersiz isim",
+    "invalidLicense": "Geçersiz ehliyet numarası",
+    "invalidVehicle": "Geçersiz araç numarası",
+    "invalidOTP": "Geçersiz doğrulama kodu",
+    "missingFields": "Tüm gerekli alanları doldurun",
+    "fieldRequired": "Alan zorunludur",
+    "licenseExpired": "Sürücü belgesi süresi dolmuş",
+    "invalidVehicleYear": "Geçersiz araç yılı"
+  },
+  "general": {
+    "unknown": "Bilinmeyen bir hata oluştu",
+    "generic": "Bir hata oluştu",
+    "retry": "Tekrar dene",
+    "details": "Hata detayları",
+    "understand": "Anladım",
+    "checkConnection": "Bağlantıyı kontrol et",
+    "contactSupport": "Destek ile iletişime geç"
+  },
+  "actions": {
+    "checkCredentials": "Kimlik bilgilerini kontrol et",
+    "register": "Kayıt ol",
+    "login": "Giriş yap",
+    "restorePassword": "Şifreyi geri yükle",
+    "retryRequest": "İsteği tekrar dene",
+    "refreshToken": "Token'ı yenile"
+  }
+} 

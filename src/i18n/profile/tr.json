@@ -1,0 +1,21 @@
+{
+  "title": "Profil",
+  "logout": "Çıkış yap",
+  "logoutConfirm": "Çıkış yapmak istediğinizden emin misiniz?",
+  "logoutCancel": "İptal",
+  "logoutConfirmButton": "Çıkış yap",
+  "notifications": "Bildirimler",
+  "notificationsCenter": "Bildirim Merkezi",
+  "deleteNotification": "Bildirim sil",
+  "deleteNotificationConfirm": "Bu bildirimi silmek istediğinizden emin misiniz?",
+  "delete": "Sil",
+  "cancel": "İptal",
+  "markAllAsRead": "Tümünü okundu olarak işaretle",
+  "addChild": "Çocuk ekle",
+  "option": "Seçenek",
+  "optionNotAvailable": "{option} bir sonraki güncellemede kullanılabilir olacak",
+  "locationEnabled": "Konum etkin",
+  "locationDisabled": "Konum devre dışı",
+  "notificationsEnabled": "Bildirimler etkin",
+  "notificationsDisabled": "Bildirimler devre dışı"
+} 

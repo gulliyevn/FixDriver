@@ -1,0 +1,21 @@
+{
+  "title": "الملف الشخصي",
+  "logout": "تسجيل الخروج",
+  "logoutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "logoutCancel": "إلغاء",
+  "logoutConfirmButton": "تسجيل الخروج",
+  "notifications": "الإشعارات",
+  "notificationsCenter": "مركز الإشعارات",
+  "deleteNotification": "حذف الإشعار",
+  "deleteNotificationConfirm": "هل أنت متأكد أنك تريد حذف هذا الإشعار؟",
+  "delete": "حذف",
+  "cancel": "إلغاء",
+  "markAllAsRead": "وضع علامة مقروء للجميع",
+  "addChild": "إضافة طفل",
+  "option": "خيار",
+  "optionNotAvailable": "{option} ستكون متاحة في التحديث القادم",
+  "locationEnabled": "الموقع مفعل",
+  "locationDisabled": "الموقع غير مفعل",
+  "notificationsEnabled": "الإشعارات مفعلة",
+  "notificationsDisabled": "الإشعارات غير مفعلة"
+} 
