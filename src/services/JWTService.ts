@@ -36,11 +36,11 @@ class SecureJWT {
 
   private static async hmacSha256(message: string, secret: string): Promise<string> {
     try {
-      // Используем простой и надежный алгоритм хеширования
+      // Используем более стабильный алгоритм хеширования
       const encoder = new TextEncoder();
       const data = encoder.encode(message + secret);
       
-      // Простой хеш-алгоритм на основе SHA-1 принципов
+      // Простой и стабильный хеш-алгоритм
       let hash = 0;
       for (let i = 0; i < data.length; i++) {
         const char = data[i];
@@ -48,14 +48,15 @@ class SecureJWT {
         hash = hash & hash; // Convert to 32bit integer
       }
       
-      // Дополнительное перемешивание
+      // Дополнительное перемешивание для стабильности
       hash = hash ^ (hash >>> 16);
       hash = Math.imul(hash, 0x85ebca6b);
       hash = hash ^ (hash >>> 13);
       hash = Math.imul(hash, 0xc2b2ae35);
       hash = hash ^ (hash >>> 16);
       
-      return Math.abs(hash).toString(36);
+      // Используем более стабильное представление
+      return Math.abs(hash).toString(16).padStart(8, '0');
     } catch (error) {
       console.error('HMAC-SHA256 error:', error);
       // Fallback к простой хеш-функции
@@ -64,14 +65,14 @@ class SecureJWT {
   }
 
   private static simpleHash(str: string): string {
-    // Простая хеш-функция как fallback
+    // Простая и стабильная хеш-функция как fallback
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32bit integer
     }
-    return Math.abs(hash).toString(36);
+    return Math.abs(hash).toString(16).padStart(8, '0');
   }
 
   static async sign(payload: JWTPayload, secret: string, options: Record<string, unknown> = {}): Promise<string> {

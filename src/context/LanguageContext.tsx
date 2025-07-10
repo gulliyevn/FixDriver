@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { t as i18nT, setLanguage as i18nSetLanguage, getLanguage as i18nGetLanguage, SUPPORTED_LANGUAGES, type SupportedLanguage } from '../i18n';
 
 interface LanguageContextType {
@@ -31,17 +30,28 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   }, []);
 
   const loadLanguage = async () => {
-    const lang = await i18nGetLanguage();
-    setLanguageState(lang);
-    await i18nSetLanguage(lang);
+    try {
+      const lang = await i18nGetLanguage();
+      setLanguageState(lang);
+      await i18nSetLanguage(lang);
+    } catch (error) {
+      console.error('Error loading language:', error);
+    }
   };
 
   const setLanguage = useCallback(async (lang: SupportedLanguage) => {
-    setLanguageState(lang);
-    await i18nSetLanguage(lang);
+    try {
+      setLanguageState(lang);
+      await i18nSetLanguage(lang);
+      console.log('Language changed to:', lang);
+    } catch (error) {
+      console.error('Error setting language:', error);
+    }
   }, []);
 
-  const t = useCallback(i18nT, [language]);
+  const t = useCallback((key: string, params?: Record<string, string | number>): string => {
+    return i18nT(key, params);
+  }, [language]);
 
   const value: LanguageContextType = {
     language,

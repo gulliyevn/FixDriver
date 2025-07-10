@@ -11,19 +11,25 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }));
 
 // Mock JWTService
-jest.mock('./JWTService', () => ({
+jest.mock('../JWTService', () => ({
   generateTokens: jest.fn().mockResolvedValue({
     accessToken: 'mock-access-token',
     refreshToken: 'mock-refresh-token',
     expiresIn: 3600,
     tokenType: 'Bearer',
   }),
-  saveTokens: jest.fn(),
-  getAccessToken: jest.fn(),
-  getRefreshToken: jest.fn(),
-  clearTokens: jest.fn(),
-  hasValidToken: jest.fn(),
-  getCurrentUser: jest.fn(),
+  verifyToken: jest.fn().mockResolvedValue({
+    userId: 'mock-user-id',
+    email: 'test@example.com',
+    role: 'client',
+    phone: '+1234567890',
+  }),
+  getCurrentUser: jest.fn().mockResolvedValue({
+    userId: 'mock-user-id',
+    email: 'test@example.com',
+    role: 'client',
+    phone: '+1234567890',
+  }),
 }));
 
 describe('AuthService', () => {

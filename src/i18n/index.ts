@@ -1,18 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { I18n } from 'i18n-js';
 
-// Import all translation files
-import login from './login';
-import register from './register';
-import profile from './profile';
-import common from './common';
-import errors from './errors';
-import notifications from './notifications';
-import support from './support';
-import navigation from './navigation';
-import components from './components';
-import driver from './driver';
-import client from './client';
+// Import all translation files using require for better JSON compatibility
+const login = require('./login');
+const register = require('./register');
+const profile = require('./profile');
+const common = require('./common');
+const errors = require('./errors');
+const notifications = require('./notifications');
+const support = require('./support');
+const navigation = require('./navigation');
+const components = require('./components');
+const driver = require('./driver');
+const client = require('./client');
 
 // Supported languages
 export const SUPPORTED_LANGUAGES = {
@@ -31,112 +31,63 @@ export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
 // Default language
 const DEFAULT_LANGUAGE: SupportedLanguage = 'ru';
 
-// Create i18n instance
+// Helper function to flatten nested objects
+const flattenObject = (obj: any, prefix = ''): Record<string, string> => {
+  const flattened: Record<string, string> = {};
+  
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      
+      if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+        Object.assign(flattened, flattenObject(obj[key], newKey));
+      } else {
+        flattened[newKey] = obj[key];
+      }
+    }
+  }
+  
+  return flattened;
+};
+
+// Create flattened translations for each language
+const createFlattenedTranslations = (lang: string) => {
+  const translations = {
+    ...login[lang],
+    ...register[lang],
+    ...profile[lang],
+    ...common[lang],
+    ...errors[lang],
+    ...notifications[lang],
+    ...support[lang],
+    ...navigation[lang],
+    ...components[lang],
+    ...driver[lang],
+    ...client[lang],
+  };
+  
+  const flattened = flattenObject(translations);
+  
+  // Debug: log some keys for the current language
+  if (lang === 'ru') {
+    console.log('Debug - Available keys for ru:', Object.keys(flattened).slice(0, 10));
+    console.log('Debug - common.selectLanguage:', flattened['common.selectLanguage']);
+    console.log('Debug - title:', flattened['title']);
+  }
+  
+  return flattened;
+};
+
+// Create i18n instance with flattened translations
 const i18n = new I18n({
-  ru: {
-    ...login.ru,
-    ...register.ru,
-    ...profile.ru,
-    ...common.ru,
-    ...errors.ru,
-    ...notifications.ru,
-    ...support.ru,
-    ...navigation.ru,
-    ...components.ru,
-    ...driver.ru,
-    ...client.ru,
-  },
-  en: {
-    ...login.en,
-    ...register.en,
-    ...profile.en,
-    ...common.en,
-    ...errors.en,
-    ...notifications.en,
-    ...support.en,
-    ...navigation.en,
-    ...components.en,
-    ...driver.en,
-    ...client.en,
-  },
-  tr: {
-    ...login.tr,
-    ...register.tr,
-    ...profile.tr,
-    ...common.tr,
-    ...errors.tr,
-    ...notifications.tr,
-    ...support.tr,
-    ...navigation.tr,
-    ...components.tr,
-    ...driver.tr,
-    ...client.tr,
-  },
-  az: {
-    ...login.az,
-    ...register.az,
-    ...profile.az,
-    ...common.az,
-    ...errors.az,
-    ...notifications.az,
-    ...support.az,
-    ...navigation.az,
-    ...components.az,
-    ...driver.az,
-    ...client.az,
-  },
-  fr: {
-    ...login.fr,
-    ...register.fr,
-    ...profile.fr,
-    ...common.fr,
-    ...errors.fr,
-    ...notifications.fr,
-    ...support.fr,
-    ...navigation.fr,
-    ...components.fr,
-    ...driver.fr,
-    ...client.fr,
-  },
-  ar: {
-    ...login.ar,
-    ...register.ar,
-    ...profile.ar,
-    ...common.ar,
-    ...errors.ar,
-    ...notifications.ar,
-    ...support.ar,
-    ...navigation.ar,
-    ...components.ar,
-    ...driver.ar,
-    ...client.ar,
-  },
-  es: {
-    ...login.es,
-    ...register.es,
-    ...profile.es,
-    ...common.es,
-    ...errors.es,
-    ...notifications.es,
-    ...support.es,
-    ...navigation.es,
-    ...components.es,
-    ...driver.es,
-    ...client.es,
-  },
-  de: {
-    ...login.de,
-    ...register.de,
-    ...profile.de,
-    ...common.de,
-    ...errors.de,
-    ...notifications.de,
-    ...support.de,
-    ...navigation.de,
-    ...components.de,
-    ...driver.de,
-    ...client.de,
-  },
+  ru: createFlattenedTranslations('ru'),
+  en: createFlattenedTranslations('en'),
+  tr: createFlattenedTranslations('tr'),
+  az: createFlattenedTranslations('az'),
+  fr: createFlattenedTranslations('fr'),
+  ar: createFlattenedTranslations('ar'),
+  es: createFlattenedTranslations('es'),
+  de: createFlattenedTranslations('de'),
 });
 
 // Configure i18n
