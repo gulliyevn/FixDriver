@@ -30,6 +30,9 @@ export const ChatListScreenStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: lightColors.text,
   },
+  selectButton: {
+    padding: 8,
+  },
   searchContainer: {
     marginTop: 16,
     flexDirection: 'row',
@@ -50,6 +53,7 @@ export const ChatListScreenStyles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: lightColors.text,
+    marginLeft: 8,
   },
   listContainer: {
     flexGrow: 1,
@@ -65,6 +69,25 @@ export const ChatListScreenStyles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: lightColors.border,
     backgroundColor: lightColors.surface,
+  },
+  selectedChatItem: {
+    backgroundColor: lightColors.primary + '10',
+    borderLeftWidth: 4,
+    borderLeftColor: lightColors.primary,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: lightColors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  checkboxSelected: {
+    backgroundColor: lightColors.primary,
+    borderColor: lightColors.primary,
   },
   avatarContainer: {
     position: 'relative',
@@ -184,30 +207,6 @@ export const ChatListScreenStyles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40,
-  },
-  emptyIcon: {
-    fontSize: 64,
-    color: lightColors.textSecondary,
-    marginBottom: 16,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: lightColors.text,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptyDescription: {
-    fontSize: 14,
-    color: lightColors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
@@ -217,5 +216,59 @@ export const ChatListScreenStyles = StyleSheet.create({
     fontSize: 16,
     color: lightColors.textSecondary,
     marginTop: 16,
+  },
+  // Стили для режима выбора
+  selectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  cancelButton: {
+    fontSize: 16,
+    color: lightColors.primary,
+    fontWeight: '500',
+  },
+  selectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: lightColors.text,
+  },
+  selectAllButton: {
+    fontSize: 16,
+    color: lightColors.primary,
+    fontWeight: '500',
+  },
+  selectionActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: lightColors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: lightColors.border,
+    gap: 12,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: lightColors.background,
+    borderWidth: 1,
+    borderColor: lightColors.border,
+    gap: 8,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: lightColors.text,
+  },
+  deleteButton: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FECACA',
+  },
+  deleteButtonText: {
+    color: '#EF4444',
   },
 }); 

@@ -35,6 +35,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   /**
+   * Обновление аутентификации
+   */
+  const refreshAuth = useCallback(async (): Promise<boolean> => {
+    if (isRefreshing) {
+      return false;
+    }
+
+    try {
+      setIsRefreshing(true);
+      
+      const newToken = await JWTService.refreshAccessToken();
+      if (newToken) {
+        // Проверяем, что пользователь все еще существует
+        const userData = await AsyncStorage.getItem('user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          setUser(user);
+          return true;
+        }
+      }
+      
+      // Если обновление не удалось - НЕ выходим автоматически
+      console.warn('Token refresh failed, but keeping user in app');
+      return false;
+    } catch (error) {
+      console.error('Auth refresh error:', error);
+      // Не выходим автоматически при ошибках обновления
+      return false;
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [isRefreshing]);
+
+  /**
    * Инициализация аутентификации при запуске приложения
    */
   const initializeAuth = useCallback(async () => {
@@ -75,7 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [refreshAuth]);
 
   useEffect(() => {
     initializeAuth();
@@ -244,40 +278,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   /**
-   * Обновление аутентификации
-   */
-  const refreshAuth = async (): Promise<boolean> => {
-    if (isRefreshing) {
-      return false;
-    }
-
-    try {
-      setIsRefreshing(true);
-      
-      const newToken = await JWTService.refreshAccessToken();
-      if (newToken) {
-        // Проверяем, что пользователь все еще существует
-        const userData = await AsyncStorage.getItem('user');
-        if (userData) {
-          const user = JSON.parse(userData);
-          setUser(user);
-          return true;
-        }
-      }
-      
-      // Если обновление не удалось - НЕ выходим автоматически
-      console.warn('Token refresh failed, but keeping user in app');
-      return false;
-    } catch (error) {
-      console.error('Auth refresh error:', error);
-      // Не выходим автоматически при ошибках обновления
-      return false;
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
-  /**
    * Выход из системы
    */
   const logout = useCallback(async () => {
@@ -314,7 +314,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [refreshAuth]);
+  }, []);
 
   /**
    * Получение заголовка авторизации для API запросов

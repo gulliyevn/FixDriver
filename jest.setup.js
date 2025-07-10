@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler/jestSetup';
+import React from 'react';
 
 // Mock Expo modules
 jest.mock('expo', () => ({
@@ -13,6 +14,11 @@ jest.mock('expo', () => ({
     addNotificationReceivedListener: jest.fn(),
     addNotificationResponseReceivedListener: jest.fn(),
   },
+}));
+
+// Mock expo-crypto
+jest.mock('expo-crypto', () => ({
+  digestStringAsync: jest.fn(() => Promise.resolve('mock-hash')),
 }));
 
 // Mock React Navigation
@@ -34,39 +40,20 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
-// Mock Expo Vector Icons
-jest.mock('@expo/vector-icons', () => ({
-  Ionicons: 'Ionicons',
-  MaterialIcons: 'MaterialIcons',
-}));
-
-// Mock React Native with StyleSheet
-jest.mock('react-native', () => ({
-  Alert: {
-    alert: jest.fn(),
-  },
-  Linking: {
-    openURL: jest.fn(),
-  },
-  View: 'View',
-  Text: 'Text',
-  TouchableOpacity: 'TouchableOpacity',
-  TextInput: 'TextInput',
-  FlatList: 'FlatList',
-  ScrollView: 'ScrollView',
-  KeyboardAvoidingView: 'KeyboardAvoidingView',
-  ActivityIndicator: 'ActivityIndicator',
-  Image: 'Image',
-  StatusBar: 'StatusBar',
-  SafeAreaView: 'SafeAreaView',
-  Platform: {
-    OS: 'ios',
-  },
-  StyleSheet: {
-    create: jest.fn((styles) => styles),
-    flatten: jest.fn((style) => style),
-  },
-}));
+// Mock Expo Vector Icons as React components
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const createIcon = (name) => (props) => React.createElement('Icon', { ...props, name });
+  return {
+    Ionicons: createIcon('Ionicons'),
+    MaterialIcons: createIcon('MaterialIcons'),
+    AntDesign: createIcon('AntDesign'),
+    Feather: createIcon('Feather'),
+    FontAwesome: createIcon('FontAwesome'),
+    FontAwesome5: createIcon('FontAwesome5'),
+    MaterialCommunityIcons: createIcon('MaterialCommunityIcons'),
+  };
+});
 
 // Global test setup
 global.console = {

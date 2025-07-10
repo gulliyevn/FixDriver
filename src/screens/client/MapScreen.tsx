@@ -7,7 +7,6 @@ import {
   StatusBar,
   Alert,
   TextInput,
-  ScrollView,
   Animated,
   StyleSheet
 } from 'react-native';
@@ -20,6 +19,7 @@ import { MapService } from '../../services/MapService';
 import { colors, SIZES, SHADOWS } from '../../constants/colors';
 import MapViewComponent from '../../components/MapView';
 import { mockDrivers } from '../../mocks';
+import { Driver } from '../../types/driver';
 
 interface MapLocation {
   latitude: number;
@@ -36,24 +36,15 @@ const MapScreen: React.FC = () => {
   const [currentLocation, setCurrentLocation] = useState<MapLocation | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDriver, setSelectedDriver] = useState<any>(null);
+  const [selectedDriver] = useState<Driver | null>(null);
   const [fadeAnim] = useState(new Animated.Value(0));
-
-  useEffect(() => {
-    getCurrentLocation();
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
   const getCurrentLocation = async () => {
     setLoading(true);
     try {
-      const location = await MapService.getCurrentLocation();
-      if (location) {
-        setCurrentLocation(location);
+      const currentLocationData = await MapService.getCurrentLocation();
+      if (currentLocationData) {
+        setCurrentLocation(currentLocationData);
       }
     } catch (error) {
       Alert.alert('Ошибка', 'Не удалось получить ваше местоположение');
@@ -62,12 +53,17 @@ const MapScreen: React.FC = () => {
     }
   };
 
-  const handleLocationSelect = (location: MapLocation) => {
-    // Логика выбора точки назначения
-  };
+  useEffect(() => {
+    getCurrentLocation();
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
-  const handleDriverSelect = (driver: any) => {
-    setSelectedDriver(driver);
+  const handleLocationSelect = () => {
+    // Логика выбора точки назначения
   };
 
   const handleMenuPress = () => {

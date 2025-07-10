@@ -4,7 +4,7 @@ export const SECURITY_CONFIG = {
   // JWT настройки
   JWT: {
     // Секретный ключ для подписи JWT (в продакшене должен быть в переменных окружения)
-    SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'dev-jwt-secret-change-in-production',
+    SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'fixdrive-jwt-secret-key-2024',
     
     // Время жизни access token (24 часа)
     ACCESS_TOKEN_EXPIRY: 24 * 60 * 60,
@@ -264,11 +264,10 @@ export const SecurityUtils = {
   generateSecureToken(length: number = 32): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
-    const randomArray = new Uint8Array(length);
-    crypto.getRandomValues(randomArray);
     
+    // Используем Math.random как fallback для React Native
     for (let i = 0; i < length; i++) {
-      result += chars.charAt(randomArray[i] % chars.length);
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     
     return result;

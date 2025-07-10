@@ -15,52 +15,50 @@ export const ButtonStyles = StyleSheet.create({
   },
   
   // ===== ВАРИАНТЫ КНОПОК =====
-  buttonPrimary: {
+  primary: {
     backgroundColor: colors.light.primary,
   },
-  buttonSecondary: {
+  secondary: {
     backgroundColor: colors.light.secondary,
   },
-  buttonSuccess: {
-    backgroundColor: colors.light.success,
-  },
-  buttonWarning: {
-    backgroundColor: colors.light.warning,
-  },
-  buttonError: {
-    backgroundColor: colors.light.error,
-  },
-  buttonOutline: {
+  outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: colors.light.primary,
   },
-  buttonGhost: {
+  ghost: {
     backgroundColor: 'transparent',
+  },
+  danger: {
+    backgroundColor: colors.light.error,
   },
   
   // ===== РАЗМЕРЫ КНОПОК =====
-  buttonSmall: {
+  small: {
     paddingVertical: SIZES.sm,
     paddingHorizontal: SIZES.lg,
     minHeight: SIZES.buttonHeight.sm,
   },
-  buttonLarge: {
+  medium: {
+    paddingVertical: SIZES.md,
+    paddingHorizontal: SIZES.xl,
+    minHeight: SIZES.buttonHeight.md,
+  },
+  large: {
     paddingVertical: SIZES.xl,
     paddingHorizontal: SIZES.xxxl,
     minHeight: SIZES.buttonHeight.lg,
   },
   
   // ===== СОСТОЯНИЯ КНОПКИ =====
-  buttonDisabled: {
+  disabled: {
     opacity: 0.5,
   },
-  buttonLoading: {
+  loading: {
     opacity: 0.7,
   },
-  buttonPressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.98 }],
+  fullWidth: {
+    width: '100%',
   },
   
   // ===== СТИЛИ ТЕКСТА =====
@@ -69,32 +67,32 @@ export const ButtonStyles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  textPrimary: {
+  primaryText: {
     color: colors.light.surface,
   },
-  textSecondary: {
+  secondaryText: {
     color: colors.light.text,
   },
-  textSuccess: {
-    color: colors.light.surface,
-  },
-  textWarning: {
-    color: colors.light.surface,
-  },
-  textError: {
-    color: colors.light.surface,
-  },
-  textOutline: {
+  outlineText: {
     color: colors.light.primary,
   },
-  textGhost: {
+  ghostText: {
     color: colors.light.primary,
   },
-  textSmall: {
+  dangerText: {
+    color: colors.light.surface,
+  },
+  smallText: {
     fontSize: SIZES.fontSize.md,
   },
-  textLarge: {
+  mediumText: {
+    fontSize: SIZES.fontSize.lg,
+  },
+  largeText: {
     fontSize: SIZES.fontSize.xl,
+  },
+  disabledText: {
+    color: colors.light.textTertiary,
   },
   
   // ===== СТИЛИ ИКОНОК =====
@@ -105,31 +103,13 @@ export const ButtonStyles = StyleSheet.create({
     marginRight: 0,
     marginLeft: SIZES.sm,
   },
-  iconSmall: {
-    width: SIZES.icon.sm,
-    height: SIZES.icon.sm,
-  },
-  iconMedium: {
-    width: SIZES.icon.md,
-    height: SIZES.icon.md,
-  },
-  iconLarge: {
-    width: SIZES.icon.lg,
-    height: SIZES.icon.lg,
-  },
   
   // ===== СТИЛИ ЗАГРУЗКИ =====
-  loadingContainer: {
+  loader: {
     marginRight: SIZES.sm,
-  },
-  loadingText: {
-    marginLeft: SIZES.sm,
   },
   
   // ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ =====
-  buttonFullWidth: {
-    width: '100%',
-  },
   buttonRounded: {
     borderRadius: SIZES.radius.round,
   },

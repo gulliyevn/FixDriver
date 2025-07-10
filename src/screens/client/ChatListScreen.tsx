@@ -4,11 +4,11 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   SafeAreaView,
   StatusBar,
   TextInput,
   Alert,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -27,10 +27,9 @@ const ChatListScreen: React.FC = () => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    loadChats();
-  }, []);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedChats, setSelectedChats] = useState<Set<string>>(new Set());
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   const loadChats = async () => {
     try {
@@ -45,65 +44,159 @@ const ChatListScreen: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    loadChats();
+    // Анимация появления
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
   const filteredChats = chats.filter(chat =>
     chat.participant?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     chat.lastMessage?.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleChatPress = (chat: Chat) => {
-    if (chat.participant) {
-      navigation.navigate('Chat', { 
-        chatId: chat.id, 
-        participant: chat.participant 
-      });
+    if (isSelectionMode) {
+      // В режиме выбора - переключаем выбор
+      const newSelected = new Set(selectedChats);
+      if (newSelected.has(chat.id)) {
+        newSelected.delete(chat.id);
+      } else {
+        newSelected.add(chat.id);
+      }
+      setSelectedChats(newSelected);
+    } else {
+      // Обычный режим - переходим в чат
+      if (chat.participant) {
+        navigation.navigate('Chat', { 
+          chatId: chat.id, 
+          participant: chat.participant 
+        });
+      }
     }
   };
 
-  const renderChatItem = ({ item }: { item: Chat }) => (
-    <TouchableOpacity
-      style={ChatListScreenStyles.chatItem}
-      onPress={() => handleChatPress(item)}
-    >
-      <View style={ChatListScreenStyles.avatarContainer}>
-        <View style={ChatListScreenStyles.avatar}>
-          <Text style={ChatListScreenStyles.avatarText}>
-            {item.participant?.name.charAt(0).toUpperCase()}
-          </Text>
-        </View>
-        {item.unreadCount > 0 && (
-          <View style={ChatListScreenStyles.badge}>
-            <Text style={ChatListScreenStyles.badgeText}>
-              {item.unreadCount > 99 ? '99+' : item.unreadCount}
+  const handleLongPress = (chat: Chat) => {
+    if (!isSelectionMode) {
+      setIsSelectionMode(true);
+      setSelectedChats(new Set([chat.id]));
+    }
+  };
+
+  const handleCancelSelection = () => {
+    setIsSelectionMode(false);
+    setSelectedChats(new Set());
+  };
+
+  const handleSelectAll = () => {
+    if (selectedChats.size === filteredChats.length) {
+      setSelectedChats(new Set());
+    } else {
+      setSelectedChats(new Set(filteredChats.map(chat => chat.id)));
+    }
+  };
+
+  const handleMarkAsRead = () => {
+    // Логика отметки как прочитанное
+    Alert.alert('Успешно', 'Выбранные чаты отмечены как прочитанные');
+    setIsSelectionMode(false);
+    setSelectedChats(new Set());
+  };
+
+  const handleDeleteSelected = () => {
+    Alert.alert(
+      'Удалить чаты',
+      `Удалить ${selectedChats.size} выбранных чатов?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            setChats(prev => prev.filter(chat => !selectedChats.has(chat.id)));
+            setIsSelectionMode(false);
+            setSelectedChats(new Set());
+          },
+        },
+      ]
+    );
+  };
+
+  const renderChatItem = ({ item }: { item: Chat }) => {
+    const isSelected = selectedChats.has(item.id);
+    
+    return (
+      <Animated.View style={{ opacity: fadeAnim }}>
+        <TouchableOpacity
+          style={[
+            ChatListScreenStyles.chatItem,
+            isSelected && ChatListScreenStyles.selectedChatItem
+          ]}
+          onPress={() => handleChatPress(item)}
+          onLongPress={() => handleLongPress(item)}
+          activeOpacity={0.7}
+        >
+          {/* Checkbox для режима выбора */}
+          {isSelectionMode && (
+            <TouchableOpacity
+              style={[
+                ChatListScreenStyles.checkbox,
+                isSelected && ChatListScreenStyles.checkboxSelected
+              ]}
+              onPress={() => handleChatPress(item)}
+            >
+              {isSelected && (
+                <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+              )}
+            </TouchableOpacity>
+          )}
+
+          <View style={ChatListScreenStyles.avatarContainer}>
+            <View style={ChatListScreenStyles.avatar}>
+              <Text style={ChatListScreenStyles.avatarText}>
+                {item.participant?.name.charAt(0).toUpperCase()}
+              </Text>
+            </View>
+            {item.unreadCount > 0 && (
+              <View style={ChatListScreenStyles.badge}>
+                <Text style={ChatListScreenStyles.badgeText}>
+                  {item.unreadCount > 99 ? '99+' : item.unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View style={ChatListScreenStyles.chatInfo}>
+            <Text style={ChatListScreenStyles.participantName} numberOfLines={1}>
+              {item.participant?.name}
+            </Text>
+            <Text style={ChatListScreenStyles.messageTime}>
+              {ChatService.formatMessageTime(item.updatedAt)}
             </Text>
           </View>
-        )}
-      </View>
 
-      <View style={ChatListScreenStyles.chatInfo}>
-        <Text style={ChatListScreenStyles.participantName} numberOfLines={1}>
-          {item.participant?.name}
-        </Text>
-        <Text style={ChatListScreenStyles.messageTime}>
-          {ChatService.formatMessageTime(item.updatedAt)}
-        </Text>
-      </View>
-
-      <View style={ChatListScreenStyles.messagePreview}>
-        <Text style={ChatListScreenStyles.messageText} numberOfLines={2}>
-          {item.lastMessage?.content || 'Нет сообщений'}
-        </Text>
-        {item.unreadCount > 0 && (
-          <View style={ChatListScreenStyles.unreadIndicator} />
-        )}
-      </View>
-    </TouchableOpacity>
-  );
+          <View style={ChatListScreenStyles.messagePreview}>
+            <Text style={ChatListScreenStyles.messageText} numberOfLines={2}>
+              {item.lastMessage?.content || 'Нет сообщений'}
+            </Text>
+            {item.unreadCount > 0 && (
+              <View style={ChatListScreenStyles.unreadIndicator} />
+            )}
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
 
   const renderEmptyState = () => (
     <View style={ChatListScreenStyles.emptyState}>
-      <Text style={ChatListScreenStyles.emptyStateTitle}>No Chats Yet</Text>
+      <Text style={ChatListScreenStyles.emptyStateTitle}>Нет чатов</Text>
       <Text style={ChatListScreenStyles.emptyStateSubtitle}>
-        Start a conversation with a driver to see your chats here
+        Начните разговор с водителем, чтобы увидеть чаты здесь
       </Text>
     </View>
   );
@@ -113,7 +206,7 @@ const ChatListScreen: React.FC = () => {
       <SafeAreaView style={ChatListScreenStyles.container}>
         <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
         <View style={ChatListScreenStyles.loadingContainer}>
-          <Text style={ChatListScreenStyles.loadingText}>Loading chats...</Text>
+          <Text style={ChatListScreenStyles.loadingText}>Загрузка чатов...</Text>
         </View>
       </SafeAreaView>
     );
@@ -123,10 +216,39 @@ const ChatListScreen: React.FC = () => {
     <SafeAreaView style={ChatListScreenStyles.container}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
+      {/* Header */}
       <View style={ChatListScreenStyles.header}>
-        <Text style={ChatListScreenStyles.headerTitle}>Чаты</Text>
+        {isSelectionMode ? (
+          // Режим выбора
+          <View style={ChatListScreenStyles.selectionHeader} testID="selection-header">
+            <TouchableOpacity onPress={handleCancelSelection}>
+              <Text style={ChatListScreenStyles.cancelButton}>Отмена</Text>
+            </TouchableOpacity>
+            <Text style={ChatListScreenStyles.selectionTitle}>
+              Выбрано: {selectedChats.size}
+            </Text>
+            <TouchableOpacity onPress={handleSelectAll}>
+              <Text style={ChatListScreenStyles.selectAllButton}>
+                {selectedChats.size === filteredChats.length ? 'Снять выбор' : 'Выбрать все'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          // Обычный режим
+          <View style={ChatListScreenStyles.headerContent}>
+            <Text style={ChatListScreenStyles.title}>Чаты</Text>
+            <TouchableOpacity 
+              style={ChatListScreenStyles.selectButton}
+              onPress={() => setIsSelectionMode(true)}
+              testID="select-button"
+            >
+              <Ionicons name="checkmark-circle-outline" size={24} color="#007AFF" />
+            </TouchableOpacity>
+          </View>
+        )}
+        
         <View style={ChatListScreenStyles.searchContainer}>
-          <Text style={ChatListScreenStyles.searchIcon}>🔍</Text>
+          <Ionicons name="search" size={20} color="#9CA3AF" />
           <TextInput
             style={ChatListScreenStyles.searchInput}
             placeholder="Поиск чатов..."
@@ -136,6 +258,29 @@ const ChatListScreen: React.FC = () => {
           />
         </View>
       </View>
+
+      {/* Actions для выбранных элементов */}
+      {isSelectionMode && selectedChats.size > 0 && (
+        <View style={ChatListScreenStyles.selectionActions}>
+          <TouchableOpacity 
+            style={ChatListScreenStyles.actionButton}
+            onPress={handleMarkAsRead}
+          >
+            <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+            <Text style={ChatListScreenStyles.actionButtonText}>Прочитано</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[ChatListScreenStyles.actionButton, ChatListScreenStyles.deleteButton]}
+            onPress={handleDeleteSelected}
+          >
+            <Ionicons name="trash" size={20} color="#EF4444" />
+            <Text style={[ChatListScreenStyles.actionButtonText, ChatListScreenStyles.deleteButtonText]}>
+              Удалить
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <FlatList
         data={filteredChats}

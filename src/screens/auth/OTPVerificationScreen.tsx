@@ -31,19 +31,6 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
-  useEffect(() => {
-    sendInitialOTP();
-  }, []);
-
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setCanResend(true);
-    }
-  }, [timeLeft]);
-
   const sendInitialOTP = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -57,6 +44,19 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       setIsLoading(false);
     }
   }, [phone]);
+
+  useEffect(() => {
+    sendInitialOTP();
+  }, [sendInitialOTP]);
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [timeLeft]);
 
   const handleResendOTP = async () => {
     if (!canResend) return;

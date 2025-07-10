@@ -132,8 +132,8 @@ export class ChatService {
   }
 
   // Статические методы для совместимости
-  static async getChats(userId?: string): Promise<Chat[]> {
-    const instance = ChatService.getInstance();
+  static async getChats(): Promise<Chat[]> {
+    ChatService.getInstance();
     // Создаем мок данные для чатов
     const mockChats: Chat[] = [
       {
@@ -193,7 +193,7 @@ export class ChatService {
     return instance.getMessages(chatId);
   }
 
-  static async sendMessage(chatId: string, text: string, senderId?: string): Promise<Message> {
+  static async sendMessage(chatId: string, text: string): Promise<Message> {
     const instance = ChatService.getInstance();
     return instance.sendMessage(chatId, text, 'text');
   }

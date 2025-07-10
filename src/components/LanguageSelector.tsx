@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useI18n } from '../hooks/useI18n';
+import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { colors } from '../constants/colors';
 
@@ -11,19 +11,12 @@ interface LanguageSelectorProps {
 }
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose }) => {
-  const { t, setLanguage, getCurrentLanguage, SUPPORTED_LANGUAGES } = useI18n();
+  const { t, setLanguage, language, SUPPORTED_LANGUAGES } = useLanguage();
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
   
-  const [currentLanguage, setCurrentLanguage] = useState<string>('ru');
-
-  useEffect(() => {
-    setCurrentLanguage(getCurrentLanguage());
-  }, [getCurrentLanguage]);
-
   const handleLanguageSelect = async (language: string) => {
-    await setLanguage(language as any);
-    setCurrentLanguage(language);
+    await setLanguage(language as keyof typeof SUPPORTED_LANGUAGES);
     onClose();
   };
 
@@ -36,51 +29,68 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
     },
     modalContent: {
       backgroundColor: currentColors.background,
-      borderRadius: 12,
-      padding: 20,
-      width: '80%',
-      maxHeight: '70%',
+      borderRadius: 28,
+      padding: 28,
+      width: '88%',
+      maxHeight: '75%',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.18,
+      shadowRadius: 24,
+      elevation: 12,
     },
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 20,
-      paddingBottom: 15,
+      marginBottom: 24,
+      paddingBottom: 18,
       borderBottomWidth: 1,
       borderBottomColor: currentColors.border,
     },
     title: {
-      fontSize: 18,
-      fontWeight: '600',
-      color: currentColors.text,
+      fontSize: 22,
+      fontWeight: '700',
+      color: currentColors.primary,
+      letterSpacing: 0.2,
     },
     closeButton: {
-      padding: 5,
+      padding: 8,
+      borderRadius: 16,
+      backgroundColor: currentColors.surface,
     },
     languageList: {
-      maxHeight: 400,
+      maxHeight: 420,
     },
     languageItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingVertical: 15,
-      paddingHorizontal: 10,
-      borderRadius: 8,
-      marginBottom: 8,
+      paddingVertical: 16,
+      paddingHorizontal: 16,
+      borderRadius: 16,
+      marginBottom: 10,
+      backgroundColor: currentColors.surface,
+      borderWidth: 1,
+      borderColor: 'transparent',
     },
     languageItemSelected: {
-      backgroundColor: currentColors.primary + '20',
+      backgroundColor: currentColors.primary + '22',
+      borderColor: currentColors.primary,
     },
     languageText: {
-      fontSize: 16,
+      fontSize: 18,
       color: currentColors.text,
       marginLeft: 12,
       flex: 1,
+      fontWeight: '500',
+      letterSpacing: 0.1,
     },
     languageTextSelected: {
-      fontWeight: '600',
+      fontWeight: '700',
       color: currentColors.primary,
+      textShadowColor: currentColors.primary + '55',
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 2,
     },
     checkIcon: {
       marginLeft: 'auto',
@@ -113,17 +123,17 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
                 key={code}
                 style={[
                   styles.languageItem,
-                  currentLanguage === code && styles.languageItemSelected
+                  language === code && styles.languageItemSelected
                 ]}
                 onPress={() => handleLanguageSelect(code)}
               >
                 <Text style={[
                   styles.languageText,
-                  currentLanguage === code && styles.languageTextSelected
+                  language === code && styles.languageTextSelected
                 ]}>
                   {name}
                 </Text>
-                {currentLanguage === code && (
+                {language === code && (
                   <Ionicons 
                     name="checkmark" 
                     size={20} 

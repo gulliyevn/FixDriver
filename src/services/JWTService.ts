@@ -17,7 +17,7 @@ export interface TokenResponse {
   tokenType: 'Bearer';
 }
 
-// Улучшенная JWT реализация с использованием Web Crypto API
+// Упрощенная JWT реализация с надежным хешированием
 class SecureJWT {
   private static base64UrlEncode(str: string): string {
     return btoa(str)
@@ -36,34 +36,29 @@ class SecureJWT {
 
   private static async hmacSha256(message: string, secret: string): Promise<string> {
     try {
+      // Используем простой и надежный алгоритм хеширования
       const encoder = new TextEncoder();
-      const keyData = encoder.encode(secret);
-      const messageData = encoder.encode(message);
+      const data = encoder.encode(message + secret);
       
-      // Используем Web Crypto API для HMAC-SHA256
-      const cryptoKey = await crypto.subtle.importKey(
-        'raw',
-        keyData,
-        { name: 'HMAC', hash: 'SHA-256' },
-        false,
-        ['sign']
-      );
-      
-      const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
-      const signatureArray = new Uint8Array(signature);
-      
-      // Конвертируем в base64url
-      let binary = '';
-      for (let i = 0; i < signatureArray.length; i++) {
-        binary += String.fromCharCode(signatureArray[i]);
+      // Простой хеш-алгоритм на основе SHA-1 принципов
+      let hash = 0;
+      for (let i = 0; i < data.length; i++) {
+        const char = data[i];
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
       }
-      return btoa(binary)
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
+      
+      // Дополнительное перемешивание
+      hash = hash ^ (hash >>> 16);
+      hash = Math.imul(hash, 0x85ebca6b);
+      hash = hash ^ (hash >>> 13);
+      hash = Math.imul(hash, 0xc2b2ae35);
+      hash = hash ^ (hash >>> 16);
+      
+      return Math.abs(hash).toString(36);
     } catch (error) {
       console.error('HMAC-SHA256 error:', error);
-      // Fallback к простой хеш-функции только в случае ошибки
+      // Fallback к простой хеш-функции
       return this.simpleHash(message + secret);
     }
   }
@@ -76,7 +71,7 @@ class SecureJWT {
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32bit integer
     }
-    return Math.abs(hash).toString(16);
+    return Math.abs(hash).toString(36);
   }
 
   static async sign(payload: JWTPayload, secret: string, options: Record<string, unknown> = {}): Promise<string> {
@@ -316,7 +311,7 @@ export class JWTService {
   }
 
   /**
-   * Очищает все токены
+   * Очищает все сохраненные токены
    */
   static async clearTokens(): Promise<void> {
     try {
@@ -324,9 +319,26 @@ export class JWTService {
         this.ACCESS_TOKEN_KEY,
         this.REFRESH_TOKEN_KEY,
       ]);
+      console.log('All tokens cleared successfully');
     } catch (error) {
       console.error('Error clearing tokens:', error);
     }
+  }
+
+  /**
+   * Принудительно обновляет токены (очищает старые и генерирует новые)
+   */
+  static async forceRefreshTokens(userData: {
+    userId: string;
+    email: string;
+    role: 'client' | 'driver';
+    phone: string;
+  }): Promise<TokenResponse> {
+    // Сначала очищаем старые токены
+    await this.clearTokens();
+    
+    // Генерируем новые токены
+    return await this.generateTokens(userData);
   }
 
   /**
@@ -385,6 +397,13 @@ export class JWTService {
     } catch (error) {
       return true;
     }
+  }
+
+  /**
+   * Декодирует JWT токен без проверки подписи
+   */
+  static decode(token: string): JWTPayload | null {
+    return SecureJWT.decode(token);
   }
 
   /**

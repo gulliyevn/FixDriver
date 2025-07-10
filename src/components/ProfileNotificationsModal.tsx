@@ -5,7 +5,6 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
-  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Notification } from '../services/NotificationService';
@@ -76,7 +75,7 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
         justifyContent: 'center',
         marginRight: 12,
       }}>
-        <Ionicons name={getNotificationIcon(item.type) as any} size={20} color="#FFFFFF" />
+        <Ionicons name={getNotificationIcon(item.type) as keyof typeof Ionicons.glyphMap} size={20} color="#FFFFFF" />
       </View>
       
       <View style={{ flex: 1 }}>

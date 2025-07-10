@@ -1,22 +1,32 @@
-import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, TextStyle, ViewStyle, View } from 'react-native';
+import React, { useRef } from 'react';
+import {
+  TouchableOpacity,
+  Text,
+  Animated,
+  ActivityIndicator,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
 import { ButtonStyles } from '../styles/components/Button.styles';
 
-interface ButtonProps {
+export interface ButtonProps {
   title: string;
-  onPress?: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  onPress: () => void;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   loading?: boolean;
   icon?: keyof typeof Ionicons.glyphMap;
   iconPosition?: 'left' | 'right';
+  fullWidth?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  children?: React.ReactNode;
 }
 
-export default function Button({
+const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
@@ -25,72 +35,159 @@ export default function Button({
   loading = false,
   icon,
   iconPosition = 'left',
+  fullWidth = false,
   style,
   textStyle,
-}: ButtonProps) {
-  const getButtonStyle = () => {
-    const styleArr: ViewStyle[] = [ButtonStyles.button];
-    if (variant === 'primary') styleArr.push(ButtonStyles.buttonPrimary);
-    if (variant === 'secondary') styleArr.push(ButtonStyles.buttonSecondary);
-    if (variant === 'outline') styleArr.push(ButtonStyles.buttonOutline);
-    if (variant === 'ghost') styleArr.push(ButtonStyles.buttonGhost);
-    if (size === 'small') styleArr.push(ButtonStyles.buttonSmall);
-    if (size === 'large') styleArr.push(ButtonStyles.buttonLarge);
-    if (disabled) styleArr.push(ButtonStyles.buttonDisabled);
-    if (loading) styleArr.push(ButtonStyles.buttonLoading);
-    if (style) styleArr.push(style);
-    return styleArr;
+  children,
+}) => {
+  const { isDark } = useTheme();
+
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    if (disabled || loading) return;
+    
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 0.8,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
-  const getTextStyle = () => {
-    const styleArr: TextStyle[] = [ButtonStyles.text];
-    if (variant === 'primary') styleArr.push(ButtonStyles.textPrimary);
-    if (variant === 'secondary') styleArr.push(ButtonStyles.textSecondary);
-    if (variant === 'outline') styleArr.push(ButtonStyles.textOutline);
-    if (variant === 'ghost') styleArr.push(ButtonStyles.textGhost);
-    if (size === 'small') styleArr.push(ButtonStyles.textSmall);
-    if (size === 'large') styleArr.push(ButtonStyles.textLarge);
-    if (textStyle) styleArr.push(textStyle);
-    return styleArr;
+  const handlePressOut = () => {
+    if (disabled || loading) return;
+    
+    Animated.parallel([
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
-  const getIconStyle = () => {
-    return iconPosition === 'right' ? ButtonStyles.iconRight : ButtonStyles.icon;
+  const handlePress = () => {
+    if (disabled || loading) return;
+    onPress();
+  };
+
+  const getButtonStyle = (): ViewStyle => {
+    const baseStyle = [
+      ButtonStyles.button,
+      ButtonStyles[size],
+      ButtonStyles[variant],
+      fullWidth && ButtonStyles.fullWidth,
+      disabled && ButtonStyles.disabled,
+      loading && ButtonStyles.loading,
+      style,
+    ];
+
+    return baseStyle as unknown as ViewStyle;
+  };
+
+  const getTextStyle = (): TextStyle => {
+    const baseTextStyle = [
+      ButtonStyles.text,
+      ButtonStyles[`${size}Text`],
+      ButtonStyles[`${variant}Text`],
+      disabled && ButtonStyles.disabledText,
+      textStyle,
+    ];
+
+    return baseTextStyle as unknown as TextStyle;
   };
 
   const getIconColor = (): string => {
-    if (variant === 'outline' || variant === 'ghost') return '#007AFF'; // colors.light.primary
-    if (variant === 'secondary') return '#222'; // colors.light.text
-    return '#FFF'; // colors.light.surface
+    if (disabled) return isDark ? '#6B7280' : '#9CA3AF';
+    
+    switch (variant) {
+      case 'primary':
+        return '#FFFFFF';
+      case 'secondary':
+        return isDark ? '#F9FAFB' : '#1F2937';
+      case 'outline':
+        return isDark ? '#F9FAFB' : '#1F2937';
+      case 'ghost':
+        return isDark ? '#F9FAFB' : '#1F2937';
+      case 'danger':
+        return '#FFFFFF';
+      default:
+        return '#FFFFFF';
+    }
   };
 
-  const getTextColor = () => {
-    if (variant === 'outline' || variant === 'ghost') return '#007AFF';
-    if (variant === 'secondary') return '#222';
-    return '#FFF';
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    return (
+      <Ionicons
+        name={icon}
+        size={size === 'small' ? 16 : size === 'large' ? 24 : 20}
+        color={getIconColor()}
+        style={[
+          ButtonStyles.icon,
+          iconPosition === 'right' && ButtonStyles.iconRight,
+        ]}
+      />
+    );
+  };
+
+  const renderContent = () => {
+    if (children) {
+      return children;
+    }
+
+    return (
+      <>
+        {icon && iconPosition === 'left' && renderIcon()}
+        {loading ? (
+          <ActivityIndicator
+            size={size === 'small' ? 'small' : 'small'}
+            color={getIconColor()}
+            style={ButtonStyles.loader}
+          />
+        ) : (
+          <Text style={getTextStyle()}>{title}</Text>
+        )}
+        {icon && iconPosition === 'right' && renderIcon()}
+      </>
+    );
   };
 
   return (
-    <TouchableOpacity
-      style={getButtonStyle()}
-      onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
+    <Animated.View
+      style={[
+        {
+          transform: [{ scale: scaleAnim }],
+          opacity: opacityAnim,
+        },
+      ]}
     >
-      {loading && (
-        <View style={ButtonStyles.loadingContainer}>
-          <ActivityIndicator size="small" color={getTextColor()} />
-        </View>
-      )}
-      {icon && iconPosition === 'left' && !loading && (
-        <Ionicons name={icon} size={20} color={getIconColor()} style={getIconStyle()} />
-      )}
-      <Text style={getTextStyle()}>
-        {title}
-      </Text>
-      {icon && iconPosition === 'right' && !loading && (
-        <Ionicons name={icon} size={20} color={getIconColor()} style={getIconStyle()} />
-      )}
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={getButtonStyle()}
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        activeOpacity={1}
+      >
+        {renderContent()}
+      </TouchableOpacity>
+    </Animated.View>
   );
-}
+};
+
+export default Button;

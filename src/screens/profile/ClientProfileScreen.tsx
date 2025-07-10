@@ -148,10 +148,11 @@ const ClientProfileScreen: React.FC = () => {
 
         {/* Children Section */}
         <ProfileChildrenSection
-          children={children}
           onAddChild={handleAddChild}
           onEditChild={handleEditChild}
-        />
+        >
+          {children}
+        </ProfileChildrenSection>
 
         {/* Settings Section */}
         <AppCard style={ClientProfileScreenStyles.settingsCard} margin={16}>

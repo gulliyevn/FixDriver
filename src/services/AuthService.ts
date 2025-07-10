@@ -1,4 +1,4 @@
-import { createAuthMockUser, findAuthUserByCredentials } from '../mocks/auth';
+import { createAuthMockUser } from '../mocks/auth';
 import JWTService from './JWTService';
 import { User, UserRole } from '../types/user';
 
@@ -37,8 +37,8 @@ export class AuthService {
           role
         });
 
-        // Генерируем JWT токены
-        const tokens = await JWTService.generateTokens({
+        // Генерируем JWT токены с принудительным обновлением
+        const tokens = await JWTService.forceRefreshTokens({
           userId: mockUser.id,
           email: mockUser.email,
           role: mockUser.role,
@@ -112,8 +112,8 @@ export class AuthService {
           phone: userData.phone,
         });
 
-        // Генерируем JWT токены
-        const tokens = await JWTService.generateTokens({
+        // Генерируем JWT токены с принудительным обновлением
+        const tokens = await JWTService.forceRefreshTokens({
           userId: newUser.id,
           email: newUser.email,
           role: newUser.role,
@@ -187,17 +187,26 @@ export class AuthService {
    */
   static async refreshToken(): Promise<AuthResponse> {
     try {
-      const refreshed = await JWTService.getRefreshToken();
+      const currentUser = await JWTService.getCurrentUser();
       
-      if (refreshed) {
+      if (currentUser) {
+        // Принудительно обновляем токены для текущего пользователя
+        const tokens = await JWTService.forceRefreshTokens({
+          userId: currentUser.userId,
+          email: currentUser.email,
+          role: currentUser.role,
+          phone: currentUser.phone,
+        });
+        
         return {
           success: true,
-          message: 'Token refreshed successfully'
+          message: 'Token refreshed successfully',
+          tokens
         };
       } else {
         return {
           success: false,
-          message: 'Token refresh failed'
+          message: 'No current user found'
         };
       }
     } catch (error) {

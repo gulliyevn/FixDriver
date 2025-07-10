@@ -5,9 +5,9 @@ import { useTheme } from '../context/ThemeContext';
 import { colors, SIZES, SHADOWS } from '../constants/colors';
 
 interface TabBarProps {
-  state: any;
-  descriptors: any;
-  navigation: any;
+  state: { routes: Array<{ key: string; name: string }>; index: number };
+  descriptors: Record<string, { options: { tabBarAccessibilityLabel?: string; tabBarTestID?: string } }>;
+  navigation: { emit: (event: { type: string; target: string; canPreventDefault?: boolean }) => { defaultPrevented?: boolean }; navigate: (name: string) => void };
 }
 
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
@@ -49,7 +49,7 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.tabBar }]}>
-      {state.routes.map((route: any, index: number) => {
+      {state.routes.map((route: { key: string; name: string }, index: number) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
         const tab = tabConfig.find(t => t.name === route.name);
@@ -89,7 +89,7 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
               isFocused && { backgroundColor: currentColors.primary + '20' }
             ]}>
                              <Ionicons
-                 name={(isFocused ? tab?.activeIcon : tab?.icon) as any}
+                 name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
                  size={24}
                  color={isFocused ? currentColors.primary : currentColors.textSecondary}
                />

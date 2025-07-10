@@ -4,11 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import MapScreen from '../screens/client/MapScreen';
 import DriversScreen from '../screens/client/DriversScreen';
 import ChatListScreen from '../screens/client/ChatListScreen';
-import ChatScreen from '../screens/client/ChatScreen';
-import PlusScreen from '../screens/client/PlusScreen';
 import ScheduleScreen from '../screens/client/ScheduleScreen';
 import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
-import { TabBarStyles } from '../styles/navigation/TabBar.styles';
 import { ClientStackParamList } from '../types/navigation';
 
 const Tab = createBottomTabNavigator<ClientStackParamList>();

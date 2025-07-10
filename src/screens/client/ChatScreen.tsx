@@ -100,7 +100,7 @@ const ChatScreen: React.FC = () => {
     } catch (error) {
       console.error('❌ Ошибка загрузки чата:', error);
     }
-  }, []);
+  }, [driverData.driverId, params?.driverName]);
 
   // Загрузка сообщений чата при монтировании компонента
   useEffect(() => {

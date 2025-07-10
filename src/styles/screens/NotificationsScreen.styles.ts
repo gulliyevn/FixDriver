@@ -23,13 +23,33 @@ export const NotificationsScreenStyles = StyleSheet.create({
     backgroundColor: colors.dark.background,
     borderBottomColor: colors.dark.border,
   },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: colors.light.text,
+    marginLeft: 8,
   },
   headerTitleDark: {
     color: colors.dark.text,
+  },
+  selectButton: {
+    padding: 8,
   },
   markAllButton: {
     padding: 8,
@@ -86,7 +106,26 @@ export const NotificationsScreenStyles = StyleSheet.create({
     shadowColor: colors.dark.cardShadow,
   },
   unreadNotification: {
+    borderLeftWidth: 4,
+    borderLeftColor: colors.light.primary,
+  },
+  selectedNotification: {
+    backgroundColor: colors.light.primary + '10',
+    borderLeftWidth: 4,
+    borderLeftColor: colors.light.primary,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     borderWidth: 2,
+    borderColor: colors.light.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  checkboxSelected: {
+    backgroundColor: colors.light.primary,
     borderColor: colors.light.primary,
   },
   notificationContent: {
@@ -98,15 +137,16 @@ export const NotificationsScreenStyles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    justifyContent: 'center',
+    marginRight: 12,
   },
   notificationTextContainer: {
     flex: 1,
   },
   notificationHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 4,
   },
@@ -114,24 +154,80 @@ export const NotificationsScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: colors.light.text,
+    flex: 1,
   },
   notificationTitleDark: {
     color: colors.dark.text,
   },
   unreadTitle: {
-    color: colors.light.primary,
+    fontWeight: '700',
   },
   notificationMessage: {
     fontSize: 14,
     color: colors.light.textSecondary,
     marginBottom: 4,
+    lineHeight: 18,
   },
   notificationTime: {
     fontSize: 12,
-    color: colors.light.textSecondary,
+    color: colors.light.textTertiary,
   },
   deleteButton: {
-    marginLeft: 12,
-    padding: 4,
+    padding: 8,
+    marginLeft: 8,
+  },
+  // Стили для режима выбора
+  selectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  cancelButton: {
+    fontSize: 16,
+    color: colors.light.primary,
+    fontWeight: '500',
+  },
+  selectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.light.text,
+  },
+  selectAllButton: {
+    fontSize: 16,
+    color: colors.light.primary,
+    fontWeight: '500',
+  },
+  selectionActions: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: colors.light.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.light.border,
+    gap: 12,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: colors.light.background,
+    borderWidth: 1,
+    borderColor: colors.light.border,
+    gap: 8,
+  },
+  actionButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.light.text,
+  },
+  deleteActionButton: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FECACA',
+  },
+  deleteButtonText: {
+    color: '#EF4444',
   },
 }); 

@@ -7,8 +7,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
-  StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -16,7 +14,7 @@ import { AuthStackParamList } from '../../types/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
 import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
-import { useTheme } from '../../context/ThemeContext';
+
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import PhoneInput from '../../components/PhoneInput';

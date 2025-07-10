@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   RefreshControl,
   Alert,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -27,10 +28,18 @@ const NotificationsScreen: React.FC = () => {
   const { isDark } = useTheme();
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [refreshing, setRefreshing] = useState(false);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    // В реальном приложении здесь будет подписка на обновления
-  }, []);
+    // Анимация появления
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -38,11 +47,70 @@ const NotificationsScreen: React.FC = () => {
   };
 
   const handleNotificationPress = (notification: Notification) => {
-    if (!notification.isRead) {
-      setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n));
+    if (isSelectionMode) {
+      // В режиме выбора - переключаем выбор
+      const newSelected = new Set(selectedNotifications);
+      if (newSelected.has(notification.id)) {
+        newSelected.delete(notification.id);
+      } else {
+        newSelected.add(notification.id);
+      }
+      setSelectedNotifications(newSelected);
+    } else {
+      // Обычный режим - отмечаем как прочитанное
+      if (!notification.isRead) {
+        setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n));
+      }
+      // Здесь можно добавить навигацию в зависимости от типа уведомления
+      console.log('Notification pressed:', notification);
     }
-    // Здесь можно добавить навигацию в зависимости от типа уведомления
-    console.log('Notification pressed:', notification);
+  };
+
+  const handleLongPress = (notification: Notification) => {
+    if (!isSelectionMode) {
+      setIsSelectionMode(true);
+      setSelectedNotifications(new Set([notification.id]));
+    }
+  };
+
+  const handleCancelSelection = () => {
+    setIsSelectionMode(false);
+    setSelectedNotifications(new Set());
+  };
+
+  const handleSelectAll = () => {
+    if (selectedNotifications.size === notifications.length) {
+      setSelectedNotifications(new Set());
+    } else {
+      setSelectedNotifications(new Set(notifications.map(n => n.id)));
+    }
+  };
+
+  const handleMarkSelectedAsRead = () => {
+    setNotifications(prev => prev.map(n => 
+      selectedNotifications.has(n.id) ? { ...n, isRead: true } : n
+    ));
+    setIsSelectionMode(false);
+    setSelectedNotifications(new Set());
+  };
+
+  const handleDeleteSelected = () => {
+    Alert.alert(
+      'Удалить уведомления',
+      `Удалить ${selectedNotifications.size} выбранных уведомлений?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            setNotifications(prev => prev.filter(n => !selectedNotifications.has(n.id)));
+            setIsSelectionMode(false);
+            setSelectedNotifications(new Set());
+          },
+        },
+      ]
+    );
   };
 
   const handleDeleteNotification = (notificationId: string) => {
@@ -54,7 +122,9 @@ const NotificationsScreen: React.FC = () => {
         {
           text: 'Удалить',
           style: 'destructive',
-          onPress: () => setNotifications(prev => prev.filter(n => n.id !== notificationId)),
+          onPress: () => {
+            setNotifications(prev => prev.filter(n => n.id !== notificationId));
+          },
         },
       ]
     );
@@ -96,32 +166,164 @@ const NotificationsScreen: React.FC = () => {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
+  const renderNotificationItem = (notification: Notification) => {
+    const isSelected = selectedNotifications.has(notification.id);
+    
+    return (
+      <Animated.View key={notification.id} style={{ opacity: fadeAnim }}>
+        <TouchableOpacity
+          style={[
+            NotificationsScreenStyles.notificationItem,
+            isDark && NotificationsScreenStyles.notificationItemDark,
+            !notification.isRead && NotificationsScreenStyles.unreadNotification,
+            isSelected && NotificationsScreenStyles.selectedNotification,
+          ]}
+          onPress={() => handleNotificationPress(notification)}
+          onLongPress={() => handleLongPress(notification)}
+          activeOpacity={0.7}
+        >
+          {/* Checkbox для режима выбора */}
+          {isSelectionMode && (
+            <TouchableOpacity
+              style={[
+                NotificationsScreenStyles.checkbox,
+                isSelected && NotificationsScreenStyles.checkboxSelected
+              ]}
+              onPress={() => handleNotificationPress(notification)}
+            >
+              {isSelected && (
+                <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+              )}
+            </TouchableOpacity>
+          )}
+
+          <View style={NotificationsScreenStyles.notificationContent}>
+            {/* Icon */}
+            <View
+              style={[
+                NotificationsScreenStyles.notificationIcon,
+                { backgroundColor: getNotificationColor(notification.type) + '20' },
+              ]}
+            >
+              <Ionicons
+                name={getNotificationIcon(notification.type)}
+                size={20}
+                color={getNotificationColor(notification.type)}
+              />
+            </View>
+
+            {/* Content */}
+            <View style={NotificationsScreenStyles.notificationTextContainer}>
+              <View style={NotificationsScreenStyles.notificationHeader}>
+                <Text
+                  style={[
+                    NotificationsScreenStyles.notificationTitle,
+                    isDark && NotificationsScreenStyles.notificationTitleDark,
+                    !notification.isRead && NotificationsScreenStyles.unreadTitle,
+                  ]}
+                >
+                  {notification.title}
+                </Text>
+              </View>
+              <Text style={NotificationsScreenStyles.notificationMessage}>{notification.message}</Text>
+              <Text style={NotificationsScreenStyles.notificationTime}>{notification.createdAt}</Text>
+            </View>
+            
+            {!isSelectionMode && (
+              <TouchableOpacity
+                style={NotificationsScreenStyles.deleteButton}
+                onPress={() => handleDeleteNotification(notification.id)}
+              >
+                <Ionicons name="trash" size={20} color="#FF3B30" />
+              </TouchableOpacity>
+            )}
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
+
   return (
     <SafeAreaView style={[NotificationsScreenStyles.container, isDark && NotificationsScreenStyles.containerDark]}>
       {/* Header */}
       <View style={[NotificationsScreenStyles.header, isDark && NotificationsScreenStyles.headerDark]}>
-        <Text style={[NotificationsScreenStyles.headerTitle, isDark && NotificationsScreenStyles.headerTitleDark]}>
-          Уведомления
-        </Text>
-        {unreadCount > 0 && (
-          <TouchableOpacity
-            style={NotificationsScreenStyles.markAllButton}
-            onPress={handleMarkAllAsRead}
-          >
-            <Text style={NotificationsScreenStyles.markAllButtonText}>
-              Прочитать все ({unreadCount})
+        {isSelectionMode ? (
+          // Режим выбора
+          <View style={NotificationsScreenStyles.selectionHeader} testID="selection-header">
+            <TouchableOpacity onPress={handleCancelSelection}>
+              <Text style={NotificationsScreenStyles.cancelButton}>Отмена</Text>
+            </TouchableOpacity>
+            <Text style={NotificationsScreenStyles.selectionTitle}>
+              Выбрано: {selectedNotifications.size}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={handleSelectAll}>
+              <Text style={NotificationsScreenStyles.selectAllButton}>
+                {selectedNotifications.size === notifications.length ? 'Снять выбор' : 'Выбрать все'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          // Обычный режим
+          <View style={NotificationsScreenStyles.headerContent}>
+            <View style={NotificationsScreenStyles.headerLeft}>
+              <Ionicons name="notifications" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+              <Text style={[NotificationsScreenStyles.headerTitle, isDark && NotificationsScreenStyles.headerTitleDark]}>
+                Уведомления
+              </Text>
+            </View>
+            <View style={NotificationsScreenStyles.headerRight}>
+              {unreadCount > 0 && (
+                <TouchableOpacity
+                  style={NotificationsScreenStyles.markAllButton}
+                  onPress={handleMarkAllAsRead}
+                >
+                  <Text style={NotificationsScreenStyles.markAllButtonText}>
+                    Прочитать все ({unreadCount})
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity 
+                style={NotificationsScreenStyles.selectButton}
+                onPress={() => setIsSelectionMode(true)}
+                testID="select-button"
+              >
+                <Ionicons name="checkmark-circle-outline" size={24} color="#007AFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
         )}
       </View>
 
-      {/* Notifications List */}
+      {/* Actions для выбранных элементов */}
+      {isSelectionMode && selectedNotifications.size > 0 && (
+        <View style={NotificationsScreenStyles.selectionActions}>
+          <TouchableOpacity 
+            style={NotificationsScreenStyles.actionButton}
+            onPress={handleMarkSelectedAsRead}
+          >
+            <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+            <Text style={NotificationsScreenStyles.actionButtonText}>Прочитано</Text>
+          </TouchableOpacity>
+          
+                      <TouchableOpacity 
+              style={[NotificationsScreenStyles.actionButton, NotificationsScreenStyles.deleteActionButton]}
+              onPress={handleDeleteSelected}
+            >
+              <Ionicons name="trash" size={20} color="#EF4444" />
+              <Text style={[NotificationsScreenStyles.actionButtonText, NotificationsScreenStyles.deleteButtonText]}>
+                Удалить
+              </Text>
+            </TouchableOpacity>
+        </View>
+      )}
+
       <ScrollView
         style={NotificationsScreenStyles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         showsVerticalScrollIndicator={false}
+        testID="notifications-scroll"
       >
         {notifications.length === 0 ? (
           <View style={NotificationsScreenStyles.emptyState}>
@@ -138,56 +340,7 @@ const NotificationsScreen: React.FC = () => {
             </Text>
           </View>
         ) : (
-          notifications.map((notification) => (
-            <TouchableOpacity
-              key={notification.id}
-              style={[
-                NotificationsScreenStyles.notificationItem,
-                isDark && NotificationsScreenStyles.notificationItemDark,
-                !notification.isRead && NotificationsScreenStyles.unreadNotification,
-              ]}
-              onPress={() => handleNotificationPress(notification)}
-            >
-              <View style={NotificationsScreenStyles.notificationContent}>
-                {/* Icon */}
-                <View
-                  style={[
-                    NotificationsScreenStyles.notificationIcon,
-                    { backgroundColor: getNotificationColor(notification.type) + '20' },
-                  ]}
-                >
-                  <Ionicons
-                    name={getNotificationIcon(notification.type)}
-                    size={20}
-                    color={getNotificationColor(notification.type)}
-                  />
-                </View>
-
-                {/* Content */}
-                <View style={NotificationsScreenStyles.notificationTextContainer}>
-                  <View style={NotificationsScreenStyles.notificationHeader}>
-                    <Text
-                      style={[
-                        NotificationsScreenStyles.notificationTitle,
-                        isDark && NotificationsScreenStyles.notificationTitleDark,
-                        !notification.isRead && NotificationsScreenStyles.unreadTitle,
-                      ]}
-                    >
-                      {notification.title}
-                    </Text>
-                  </View>
-                  <Text style={NotificationsScreenStyles.notificationMessage}>{notification.message}</Text>
-                  <Text style={NotificationsScreenStyles.notificationTime}>{notification.createdAt}</Text>
-                </View>
-                <TouchableOpacity
-                  style={NotificationsScreenStyles.deleteButton}
-                  onPress={() => handleDeleteNotification(notification.id)}
-                >
-                  <Ionicons name="trash" size={20} color="#FF3B30" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          ))
+          notifications.map(renderNotificationItem)
         )}
       </ScrollView>
     </SafeAreaView>

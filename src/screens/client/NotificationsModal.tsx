@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
   const { isDark } = useTheme();
   const styles = isDark ? { ...NotificationsModalStyles, ...NotificationsModalDarkStyles } : NotificationsModalStyles;
 
-  const handleMarkAsRead = (notificationId: string) => {
+  const handleMarkAsRead = () => {
     Alert.alert('Уведомление', 'Отметить как прочитанное');
   };
 
@@ -165,7 +165,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                     {!notification.isRead && (
                       <TouchableOpacity
                         style={[styles.actionButton, styles.markReadButton]}
-                        onPress={() => handleMarkAsRead(notification.id)}
+                        onPress={handleMarkAsRead}
                       >
                         <Text style={styles.actionButtonText}>Прочитано</Text>
                       </TouchableOpacity>
