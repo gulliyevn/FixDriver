@@ -29,5 +29,10 @@
   "errorText": "فشل التسجيل. حاول مرة أخرى.",
   "loginLink": "تسجيل الدخول",
   "alreadyRegistered": "هل سجلت من قبل؟",
-  "agreeTermsRich": "أوافق على <terms>الشروط</terms> و <privacy>سياسة الخصوصية</privacy>"
+  "agreeTermsRich": "أوافق على <terms>الشروط</terms> و <privacy>سياسة الخصوصية</privacy>",
+  "tariffBasic": "أساسي",
+  "tariffPlus": "بلس",
+  "tariffPremium": "بريميوم",
+  "countryOfIssue": "بلد الإصدار",
+  "countryOfIssuePlaceholder": "أدخل بلد الإصدار"
 } 

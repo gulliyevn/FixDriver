@@ -122,6 +122,7 @@ const Select: React.FC<SelectProps> = ({
   });
 
   const renderOption = ({ item }: { item: SelectOption }) => {
+    console.log('renderOption', item);
     const isSelected = multiSelect 
       ? selectedValues.includes(item.value)
       : item.value === value;
@@ -130,11 +131,12 @@ const Select: React.FC<SelectProps> = ({
       <TouchableOpacity
         style={[
           SelectStyles.option,
+          isSelected && SelectStyles.optionSelected,
           compact && SelectStyles.optionCompact,
           optionStyle,
           { 
             backgroundColor: isSelected 
-              ? '#1E3A8A' 
+              ? '#23408E' 
               : (compact && item.icon) 
                 ? isDark ? 'rgba(55, 65, 81, 0.5)' : 'rgba(249, 250, 251, 0.8)'
                 : isDark ? '#1F2937' : '#FFFFFF',
@@ -155,6 +157,7 @@ const Select: React.FC<SelectProps> = ({
           )}
           <Text style={[
             SelectStyles.optionText,
+            isSelected && SelectStyles.optionTextSelected,
             { 
               color: isSelected 
                 ? '#FFFFFF' 
@@ -241,10 +244,7 @@ const Select: React.FC<SelectProps> = ({
               data={filteredOptions}
               renderItem={renderOption}
               keyExtractor={(item) => item.value.toString()}
-              style={[
-                SelectStyles.optionsList,
-                compact || options.length <= 5 ? SelectStyles.optionsListCompact : {}
-              ]}
+              style={{ height: 200 }}
               showsVerticalScrollIndicator={false}
             />
           </View>

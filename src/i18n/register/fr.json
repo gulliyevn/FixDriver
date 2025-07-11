@@ -29,5 +29,10 @@
   "errorText": "Échec de l'inscription. Veuillez réessayer.",
   "loginLink": "Se connecter",
   "alreadyRegistered": "Déjà inscrit ?",
-  "agreeTermsRich": "J'accepte les <terms>Conditions</terms> et la <privacy>Politique de confidentialité</privacy>"
+  "agreeTermsRich": "J'accepte les <terms>Conditions</terms> et la <privacy>Politique de confidentialité</privacy>",
+  "tariffBasic": "Basique",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "Pays de délivrance",
+  "countryOfIssuePlaceholder": "Entrez le pays de délivrance"
 } 

@@ -29,5 +29,10 @@
   "errorText": "Kayıt başarısız. Lütfen tekrar deneyin.",
   "loginLink": "Giriş yap",
   "alreadyRegistered": "Zaten kayıtlı mısınız?",
-  "agreeTermsRich": "<terms>Şartlar</terms> ve <privacy>Gizlilik Politikası</privacy>'nı kabul ediyorum"
+  "agreeTermsRich": "<terms>Şartlar</terms> ve <privacy>Gizlilik Politikası</privacy>'nı kabul ediyorum",
+  "tariffBasic": "Temel",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "Belge veren ülke",
+  "countryOfIssuePlaceholder": "Belge veren ülkeyi girin"
 } 

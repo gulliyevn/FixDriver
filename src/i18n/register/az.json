@@ -29,5 +29,10 @@
   "errorText": "Qeydiyyat uğursuz oldu. Yenidən cəhd edin.",
   "loginLink": "Daxil ol",
   "alreadyRegistered": "Artıq qeydiyyatdan keçmisiniz?",
-  "agreeTermsRich": "<terms>Şərtlərlə</terms> və <privacy>Gizlilik Siyasəti</privacy> ilə razıyam"
+  "agreeTermsRich": "<terms>Şərtlərlə</terms> və <privacy>Gizlilik Siyasəti</privacy> ilə razıyam",
+  "tariffBasic": "Əsas",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "Sənədi verən ölkə",
+  "countryOfIssuePlaceholder": "Sənədi verən ölkəni daxil edin"
 } 

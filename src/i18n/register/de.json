@@ -29,5 +29,10 @@
   "errorText": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
   "loginLink": "Anmelden",
   "alreadyRegistered": "Bereits registriert?",
-  "agreeTermsRich": "Ich akzeptiere die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzrichtlinie</privacy>"
+  "agreeTermsRich": "Ich akzeptiere die <terms>Nutzungsbedingungen</terms> und die <privacy>Datenschutzrichtlinie</privacy>",
+  "tariffBasic": "Basis",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "Ausstellungsland",
+  "countryOfIssuePlaceholder": "Geben Sie das Ausstellungsland ein"
 } 

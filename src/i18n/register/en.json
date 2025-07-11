@@ -31,5 +31,10 @@
   "alreadyRegistered": "Already registered?",
   "agreeTermsRich": "I agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>",
   "termsText": "Here will be the full text of the user agreement...",
-  "privacyText": "Here will be the full text of the privacy policy..."
+  "privacyText": "Here will be the full text of the privacy policy...",
+  "tariffBasic": "Basic",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "Country of issue",
+  "countryOfIssuePlaceholder": "Enter the country of issue"
 } 

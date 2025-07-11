@@ -29,5 +29,10 @@
   "errorText": "No se pudo registrar. Inténtelo de nuevo.",
   "loginLink": "Iniciar sesión",
   "alreadyRegistered": "¿Ya estás registrado?",
-  "agreeTermsRich": "Acepto los <terms>Términos</terms> y la <privacy>Política de Privacidad</privacy>"
+  "agreeTermsRich": "Acepto los <terms>Términos</terms> y la <privacy>Política de Privacidad</privacy>",
+  "tariffBasic": "Básico",
+  "tariffPlus": "Plus",
+  "tariffPremium": "Premium",
+  "countryOfIssue": "País de emisión",
+  "countryOfIssuePlaceholder": "Ingrese el país de emisión"
 } 
