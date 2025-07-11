@@ -3,9 +3,19 @@
   "subtitle": "Hesabınıza daxil olun",
   "email": "E-poçt",
   "password": "Şifrə",
-  "emailPlaceholder": "E-poçt ünvanınızı daxil edin",
+  "emailPlaceholder": "E-poçt daxil edin",
   "passwordPlaceholder": "Şifrənizi daxil edin",
-  "forgotPassword": "Şifrəni unutmusunuz?",
+  "forgotPassword": {
+    "sendButton": "Göndər",
+    "sending": "Göndərilir...",
+    "title": "Şifrəni unutmusunuz?",
+    "emailPlaceholder": "E-poçt daxil edin",
+    "errorTitle": "Xəta",
+    "errorEmpty": "Zəhmət olmasa e-poçt daxil edin",
+    "errorInvalid": "Zəhmət olmasa düzgün e-poçt daxil edin",
+    "successTitle": "E-poçt göndərildi",
+    "successText": "Şifrəni sıfırlamaq üçün e-poçtunuzu yoxlayın"
+  },
   "loginButton": "Daxil ol",
   "loginSuccess": "Giriş uğurlu",
   "loginError": "Xəta",
@@ -55,5 +65,8 @@
     "genericError": "Giriş zamanı xəta baş verdi",
     "networkError": "Şəbəkə xətası. İnternet bağlantınızı yoxlayın.",
     "timeoutError": "Sorğu vaxtı keçdi."
-  }
+  },
+  "noAccount": "Hesabınız yoxdur?",
+  "registerLink": "Qeydiyyatdan keçin",
+  "or": "və ya"
 } 

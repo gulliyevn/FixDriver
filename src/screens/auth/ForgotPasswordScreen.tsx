@@ -38,7 +38,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
+      setTimeout(() => {
       setIsLoading(false);
       Alert.alert(t('login.forgotPassword.successTitle'), t('login.forgotPassword.successText'));
     }, 2000);

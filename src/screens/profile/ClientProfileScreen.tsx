@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useI18n } from '../../hooks/useI18n';
 import AppAvatar from '../../components/AppAvatar';
 import ProfileOption from '../../components/ProfileOption';
 import ProfileNotificationsModal from '../../components/ProfileNotificationsModal';
@@ -31,6 +32,7 @@ interface Child {
 const ClientProfileScreen: React.FC = () => {
   const { logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { t, setLanguage, getCurrentLanguage, languageOptions, language } = useI18n();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [locationEnabled, setLocationEnabled] = useState(true);
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
@@ -38,19 +40,57 @@ const ClientProfileScreen: React.FC = () => {
 
   const [children] = useState<Child[]>(mockChildren);
 
+  // Отладочная информация
+  React.useEffect(() => {
+    console.log('🌍 Текущий язык в профиле:', language);
+    console.log('📝 Доступные языки:', languageOptions.map(lang => `${lang.flag} ${lang.native}`));
+  }, [language, languageOptions]);
+
   const handleLogout = () => {
     Alert.alert(
-      'Выход',
-      'Вы уверены, что хотите выйти?',
+      t('profile.logout'),
+      t('profile.logoutConfirm'),
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Выйти', onPress: logout, style: 'destructive' }
+        { text: t('profile.logoutCancel'), style: 'cancel' },
+        { text: t('profile.logoutConfirmButton'), onPress: logout, style: 'destructive' }
       ]
     );
   };
 
   const handleOptionPress = (option: string) => {
-    Alert.alert('Опция', `${option} будет доступна в следующем обновлении`);
+    Alert.alert(t('profile.option'), t('profile.optionNotAvailable', { option }));
+  };
+
+  const handleLanguageSelect = async () => {
+    const currentLang = getCurrentLanguage();
+    
+    const languageNames = languageOptions.map(lang => ({
+      text: `${lang.flag} ${lang.native}`,
+      onPress: async () => {
+        if (lang.code !== currentLang) {
+          try {
+            console.log('🔄 Меняем язык с', currentLang, 'на', lang.code);
+            await setLanguage(lang.code);
+            console.log('✅ Язык успешно изменен на', lang.code);
+            Alert.alert(
+              t('profile.languageChanged'),
+              t('profile.languageChangeSuccess')
+            );
+          } catch (error) {
+            console.error('❌ Ошибка при смене языка:', error);
+            Alert.alert(t('common.error'), 'Failed to change language');
+          }
+        } else {
+          console.log('ℹ️ Язык уже установлен:', lang.code);
+        }
+      }
+    }));
+
+    Alert.alert(
+      t('profile.selectLanguage'),
+      `Текущий язык: ${currentLang}`,
+      languageNames
+    );
   };
 
   const handleNotificationsCenter = () => {
@@ -60,12 +100,12 @@ const ClientProfileScreen: React.FC = () => {
 
   const handleDeleteNotification = (notificationId: string) => {
     Alert.alert(
-      'Удалить уведомление',
-      'Вы уверены, что хотите удалить это уведомление?',
+      t('profile.deleteNotification'),
+      t('profile.deleteNotificationConfirm'),
       [
-        { text: 'Отмена', style: 'cancel' },
+        { text: t('profile.cancel'), style: 'cancel' },
         {
-          text: 'Удалить',
+          text: t('profile.delete'),
           style: 'destructive',
           onPress: () => {
             notificationService.removeNotification(notificationId);
@@ -82,11 +122,11 @@ const ClientProfileScreen: React.FC = () => {
   };
 
   const handleAddChild = () => {
-    handleOptionPress('Добавить ребенка');
+    handleOptionPress(t('profile.addChild'));
   };
 
   const handleEditChild = (child: Child) => {
-    handleOptionPress(`Редактировать ${child.name}`);
+    handleOptionPress(`${t('profile.editProfile')} ${child.name}`);
   };
 
   return (
@@ -131,17 +171,17 @@ const ClientProfileScreen: React.FC = () => {
           <View style={ClientProfileScreenStyles.statsGrid}>
             <View style={ClientProfileScreenStyles.statItem}>
               <Text style={ClientProfileScreenStyles.statValue}>127</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>Поездок</Text>
+              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.trips')}</Text>
             </View>
             <View style={ClientProfileScreenStyles.statDivider} />
             <View style={ClientProfileScreenStyles.statItem}>
               <Text style={ClientProfileScreenStyles.statValue}>₽12,450</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>Потрачено</Text>
+              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.spent')}</Text>
             </View>
             <View style={ClientProfileScreenStyles.statDivider} />
             <View style={ClientProfileScreenStyles.statItem}>
               <Text style={ClientProfileScreenStyles.statValue}>4.8</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>Рейтинг</Text>
+              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.rating')}</Text>
             </View>
           </View>
         </AppCard>
@@ -156,12 +196,12 @@ const ClientProfileScreen: React.FC = () => {
 
         {/* Settings Section */}
         <AppCard style={ClientProfileScreenStyles.settingsCard} margin={16}>
-          <Text style={ClientProfileScreenStyles.sectionTitle}>Настройки</Text>
+          <Text style={ClientProfileScreenStyles.sectionTitle}>{t('profile.settings')}</Text>
           
           <View style={ClientProfileScreenStyles.settingItem}>
             <View style={ClientProfileScreenStyles.settingInfo}>
               <Ionicons name="notifications" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>Уведомления</Text>
+              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.notifications')}</Text>
             </View>
             <Switch
               value={notificationsEnabled}
@@ -174,7 +214,7 @@ const ClientProfileScreen: React.FC = () => {
           <View style={ClientProfileScreenStyles.settingItem}>
             <View style={ClientProfileScreenStyles.settingInfo}>
               <Ionicons name="location" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>Геолокация</Text>
+              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.locationEnabled')}</Text>
             </View>
             <Switch
               value={locationEnabled}
@@ -187,7 +227,7 @@ const ClientProfileScreen: React.FC = () => {
           <View style={ClientProfileScreenStyles.settingItem}>
             <View style={ClientProfileScreenStyles.settingInfo}>
               <Ionicons name="moon" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>Темная тема</Text>
+              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.darkTheme')}</Text>
             </View>
             <Switch
               value={isDark}
@@ -196,43 +236,59 @@ const ClientProfileScreen: React.FC = () => {
               thumbColor={isDark ? '#FFFFFF' : '#F9FAFB'}
             />
           </View>
+
+          <TouchableOpacity 
+            style={ClientProfileScreenStyles.settingItem}
+            onPress={handleLanguageSelect}
+          >
+            <View style={ClientProfileScreenStyles.settingInfo}>
+              <Ionicons name="language" size={20} color="#007AFF" />
+              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.language')}</Text>
+            </View>
+            <View style={ClientProfileScreenStyles.settingValue}>
+              <Text style={ClientProfileScreenStyles.settingValueText}>
+                {languageOptions.find(lang => lang.code === getCurrentLanguage())?.native}
+              </Text>
+              <Ionicons name="chevron-forward" size={16} color="#8E8E93" />
+            </View>
+          </TouchableOpacity>
         </AppCard>
 
         {/* Profile Options */}
         <AppCard style={ClientProfileScreenStyles.optionsCard} margin={16}>
           <ProfileOption
             icon={<Ionicons name="person" size={22} color="#007AFF" />}
-            label="Редактировать профиль"
-            value="Изменить личные данные"
-            onPress={() => handleOptionPress('Редактировать профиль')}
+            label={t('profile.editProfile')}
+            value={t('profile.editProfileDesc')}
+            onPress={() => handleOptionPress(t('profile.editProfile'))}
           />
           
           <ProfileOption
             icon={<Ionicons name="card" size={22} color="#007AFF" />}
-            label="Способы оплаты"
-            value="Управление картами"
-            onPress={() => handleOptionPress('Способы оплаты')}
+            label={t('profile.paymentMethods')}
+            value={t('profile.paymentMethodsDesc')}
+            onPress={() => handleOptionPress(t('profile.paymentMethods'))}
           />
           
           <ProfileOption
             icon={<Ionicons name="shield-checkmark" size={22} color="#007AFF" />}
-            label="Безопасность"
-            value="Настройки безопасности"
-            onPress={() => handleOptionPress('Безопасность')}
+            label={t('profile.security')}
+            value={t('profile.securityDesc')}
+            onPress={() => handleOptionPress(t('profile.security'))}
           />
           
           <ProfileOption
             icon={<Ionicons name="help-circle" size={22} color="#007AFF" />}
-            label="Поддержка"
-            value="Связаться с поддержкой"
-            onPress={() => handleOptionPress('Поддержка')}
+            label={t('profile.support')}
+            value={t('profile.supportDesc')}
+            onPress={() => handleOptionPress(t('profile.support'))}
           />
           
           <ProfileOption
             icon={<Ionicons name="information-circle" size={22} color="#007AFF" />}
-            label="О приложении"
-            value="Версия 1.0.0"
-            onPress={() => handleOptionPress('О приложении')}
+            label={t('profile.about')}
+            value={t('profile.aboutDesc')}
+            onPress={() => handleOptionPress(t('profile.about'))}
           />
         </AppCard>
 
@@ -241,7 +297,7 @@ const ClientProfileScreen: React.FC = () => {
           style={ClientProfileScreenStyles.logoutButton}
           onPress={handleLogout}
         >
-          <Text style={ClientProfileScreenStyles.logoutText}>Выйти</Text>
+          <Text style={ClientProfileScreenStyles.logoutText}>{t('profile.logout')}</Text>
         </TouchableOpacity>
       </ScrollView>
 

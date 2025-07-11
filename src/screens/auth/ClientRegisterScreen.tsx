@@ -2,342 +2,244 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  ScrollView,
+  TextInput,
   TouchableOpacity,
-  Alert,
+  ScrollView,
+  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  StatusBar,
+  Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/user';
-import { ClientRegisterScreenStyles } from '../../styles/screens/ClientRegisterScreen.styles';
-
-import InputField from '../../components/InputField';
-import Button from '../../components/Button';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useLanguage } from '../../context/LanguageContext';
+import { ClientRegisterScreenStyles as styles, PLACEHOLDER_COLOR } from '../../styles/screens/ClientRegisterScreen.styles';
 import PhoneInput from '../../components/PhoneInput';
-import Select from '../../components/Select';
-import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
-import { Validators } from '../../utils/validators';
-import { COUNTRIES } from '../../utils/countries';
-import { mockRegistrationData } from '../../mocks';
-
-type ClientRegisterScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ClientRegister'>;
 
 const ClientRegisterScreen: React.FC = () => {
-  const navigation = useNavigation<ClientRegisterScreenNavigationProp>();
-  const { register } = useAuth();
+  const navigation = useNavigation();
+  const { t } = useLanguage();
 
-  // Form state
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     password: '',
     confirmPassword: '',
-    country: '',
-    children: [] as Array<{ name: string; age: number; relationship: string }>,
   });
+  const [errors, setErrors] = useState<any>({});
+  const [loading, setLoading] = useState(false);
+  const [agree, setAgree] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Options for selects
-  const countryOptions = COUNTRIES.map(country => ({
-    label: country.name,
-    value: country.code,
-  }));
-
-  const { relationshipOptions } = mockRegistrationData;
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
+  const handleChange = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev: any) => ({ ...prev, [field]: undefined }));
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!Validators.validateEmail(formData.email).isValid) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!Validators.validatePhone(formData.phone).isValid) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (!Validators.validatePassword(formData.password).isValid) {
-      newErrors.password = 'Password must be at least 8 characters with uppercase, lowercase, number, and special character';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    if (!formData.country) {
-      newErrors.country = 'Please select your country';
-    }
-
+  const validate = () => {
+    const newErrors: any = {};
+    if (!form.firstName.trim()) newErrors.firstName = t('register.firstNameRequired');
+    if (!form.lastName.trim()) newErrors.lastName = t('register.lastNameRequired');
+    if (!form.email.trim()) newErrors.email = t('register.emailRequired');
+    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = t('register.emailInvalid');
+    if (!form.phone.trim()) newErrors.phone = t('register.phoneRequired');
+    if (!form.password) newErrors.password = t('register.passwordRequired');
+    else if (form.password.length < 6) newErrors.password = t('register.passwordShort');
+    if (form.confirmPassword !== form.password) newErrors.confirmPassword = t('register.passwordsDontMatch');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleRegister = async () => {
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-
+    if (!validate()) return;
+    setLoading(true);
     try {
-      const userData = {
-        name: formData.firstName,
-        surname: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        country: formData.country,
-        role: UserRole.CLIENT,
-        children: formData.children,
-      };
-
-      const success = await register(userData, formData.password);
-
-      if (success) {
-        Alert.alert(
-          'Registration Successful',
-          'Your account has been created successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
-        );
-      } else {
-        Alert.alert('Registration Failed', 'Please try again.');
-      }
-    } catch (err) {
-      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+      // Здесь должна быть логика регистрации через API
+      Alert.alert(t('register.successTitle'), t('register.successText'));
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+    } catch (e) {
+      Alert.alert(t('register.errorTitle'), t('register.errorText'));
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleSocialAuth = async (provider: 'google' | 'facebook' | 'apple') => {
-    try {
-      setIsLoading(true);
-      // Handle social authentication
-      console.log(`Social auth with ${provider}`);
-      // Navigate to OTP verification or main app
-    } catch (err) {
-      Alert.alert('Error', `Failed to authenticate with ${provider}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const addChild = () => {
-    setFormData(prev => ({
-      ...prev,
-      children: [...prev.children, { name: '', age: 0, relationship: '' }],
-    }));
-  };
-
-  const removeChild = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      children: prev.children.filter((_, i) => i !== index),
-    }));
-  };
-
-  const updateChild = (index: number, field: string, value: string | number) => {
-    setFormData(prev => ({
-      ...prev,
-      children: prev.children.map((child, i) =>
-        i === index ? { ...child, [field]: value } : child
-      ),
-    }));
-  };
+  const agreeTermsRich = t('register.agreeTermsRich');
+  const termsMatch = agreeTermsRich.match(/<terms>(.*?)<\/terms>/);
+  const privacyMatch = agreeTermsRich.match(/<privacy>(.*?)<\/privacy>/);
+  const beforeTerms = agreeTermsRich.split('<terms>')[0];
+  const afterTerms = agreeTermsRich.split('<terms>')[1]?.split('</terms>')[1]?.split('<privacy>')[0] || '';
+  const afterPrivacy = agreeTermsRich.split('</privacy>')[1] || '';
 
   return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
     <KeyboardAvoidingView
-      style={ClientRegisterScreenStyles.container}
+        style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView
-        style={ClientRegisterScreenStyles.scrollView}
-        contentContainerStyle={ClientRegisterScreenStyles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={ClientRegisterScreenStyles.header}>
-          <Text style={ClientRegisterScreenStyles.title}>Create Account</Text>
-          <Text style={ClientRegisterScreenStyles.subtitle}>Join FixDrive as a client</Text>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="#23408E" />
+            </TouchableOpacity>
+            <Text style={styles.title}>{t('register.title')}</Text>
+            <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
         </View>
 
-        <View style={ClientRegisterScreenStyles.form}>
-          {/* Personal Information */}
-          <View style={ClientRegisterScreenStyles.section}>
-            <Text style={ClientRegisterScreenStyles.sectionTitle}>Personal Information</Text>
-            
-            <View style={ClientRegisterScreenStyles.row}>
-              <InputField
-                label="First Name"
-                value={formData.firstName}
-                onChangeText={(value) => handleInputChange('firstName', value)}
-                error={errors.firstName}
-                style={ClientRegisterScreenStyles.halfWidth}
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.firstName')}</Text>
+              <TextInput
+                style={styles.input}
+                value={form.firstName}
+                onChangeText={(v) => handleChange('firstName', v)}
+                placeholder={t('register.firstNamePlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
+                autoCapitalize="words"
               />
-              <InputField
-                label="Last Name"
-                value={formData.lastName}
-                onChangeText={(value) => handleInputChange('lastName', value)}
-                error={errors.lastName}
-                style={ClientRegisterScreenStyles.halfWidth}
-              />
+              {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
             </View>
-
-            <InputField
-              label="Email"
-              value={formData.email}
-              onChangeText={(value) => handleInputChange('email', value)}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.lastName')}</Text>
+              <TextInput
+                style={styles.input}
+                value={form.lastName}
+                onChangeText={(v) => handleChange('lastName', v)}
+                placeholder={t('register.lastNamePlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
+                autoCapitalize="words"
+              />
+              {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.email')}</Text>
+              <TextInput
+                style={styles.input}
+                value={form.email}
+                onChangeText={(v) => handleChange('email', v)}
+                placeholder={t('register.emailPlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
               keyboardType="email-address"
               autoCapitalize="none"
-              error={errors.email}
             />
-
-            <PhoneInput
-              label="Phone Number"
-              value={formData.phone}
-              onChangeText={(value) => handleInputChange('phone', value)}
-              error={errors.phone}
-            />
-
-            <Select
-              label="Country"
-              value={formData.country}
-              onSelect={(option) => handleInputChange('country', String(option.value))}
-              options={countryOptions}
-              error={errors.country}
-            />
-          </View>
-
-          {/* Security */}
-          <View style={ClientRegisterScreenStyles.section}>
-            <Text style={ClientRegisterScreenStyles.sectionTitle}>Security</Text>
-            
-            <InputField
-              label="Password"
-              value={formData.password}
-              onChangeText={(value) => handleInputChange('password', value)}
-              secureTextEntry={!showPassword}
-              error={errors.password}
-              rightIcon={showPassword ? 'eye-off' : 'eye'}
-              onRightIconPress={() => setShowPassword(!showPassword)}
-            />
-
-            <PasswordStrengthIndicator value={formData.password} />
-
-            <InputField
-              label="Confirm Password"
-              value={formData.confirmPassword}
-              onChangeText={(value) => handleInputChange('confirmPassword', value)}
-              secureTextEntry={!showConfirmPassword}
-              error={errors.confirmPassword}
-              rightIcon={showConfirmPassword ? 'eye-off' : 'eye'}
-              onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
-            />
-          </View>
-
-          {/* Children Information */}
-          <View style={ClientRegisterScreenStyles.section}>
-            <View style={ClientRegisterScreenStyles.sectionHeader}>
-              <Text style={ClientRegisterScreenStyles.sectionTitle}>Children (Optional)</Text>
-              <TouchableOpacity onPress={addChild} style={ClientRegisterScreenStyles.addButton}>
-                <Text style={ClientRegisterScreenStyles.addButtonText}>+ Add Child</Text>
-              </TouchableOpacity>
+              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             </View>
-
-            {formData.children.map((child, index) => (
-              <View key={index} style={ClientRegisterScreenStyles.childCard}>
-                <View style={ClientRegisterScreenStyles.childHeader}>
-                  <Text style={ClientRegisterScreenStyles.childTitle}>Child {index + 1}</Text>
-                  <TouchableOpacity
-                    onPress={() => removeChild(index)}
-                    style={ClientRegisterScreenStyles.removeButton}
-                  >
-                    <Text style={ClientRegisterScreenStyles.removeButtonText}>Remove</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.phone')}</Text>
+            <PhoneInput
+                value={form.phone}
+                onChangeText={(v: string) => handleChange('phone', v)}
+              error={errors.phone}
+                placeholder={t('register.phonePlaceholder')}
+              />
+              {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.password')}</Text>
+              <TextInput
+                style={styles.input}
+                value={form.password}
+                onChangeText={(v) => handleChange('password', v)}
+                placeholder={t('register.passwordPlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
+                secureTextEntry
+              />
+              {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+          </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>{t('register.confirmPassword')}</Text>
+              <TextInput
+                style={styles.input}
+                value={form.confirmPassword}
+                onChangeText={(v) => handleChange('confirmPassword', v)}
+                placeholder={t('register.confirmPasswordPlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
+                secureTextEntry
+              />
+              {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+          </View>
+            {/* Чекбокс согласия */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => setAgree(!agree)}
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 6,
+                  borderWidth: 2,
+                  borderColor: agree ? '#23408E' : '#E5E7EB',
+                  backgroundColor: agree ? '#23408E' : '#fff',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 8,
+                }}
+              >
+                {agree && <Ionicons name="checkmark" size={18} color="#fff" />}
+              </TouchableOpacity>
+              <Text style={styles.agreeText}>
+                {beforeTerms as React.ReactNode}
+                <Text style={styles.link} onPress={() => setShowTerms(true)}>{termsMatch ? termsMatch[1] : ''}</Text>
+                {afterTerms as React.ReactNode}
+                <Text style={styles.link} onPress={() => setShowPrivacy(true)}>{privacyMatch ? privacyMatch[1] : ''}</Text>
+                {afterPrivacy as React.ReactNode}
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.registerButton} onPress={handleRegister} disabled={loading || !agree}>
+              <Text style={styles.registerButtonText}>{loading ? t('register.loading') : t('register.button')}</Text>
+            </TouchableOpacity>
+            <View style={styles.loginRow}>
+              <Text style={styles.alreadyRegisteredText}>{t('register.alreadyRegistered')}</Text>
+              <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Login' }] })}>
+                <Text style={styles.loginLinkSmall}>{t('register.loginLink')}</Text>
                   </TouchableOpacity>
                 </View>
-
-                <InputField
-                  label="Name"
-                  value={child.name}
-                  onChangeText={(value) => updateChild(index, 'name', value)}
-                  style={ClientRegisterScreenStyles.halfWidth}
-                />
-
-                <InputField
-                  label="Age"
-                  value={child.age.toString()}
-                  onChangeText={(value) => updateChild(index, 'age', parseInt(value) || 0)}
-                  keyboardType="numeric"
-                  style={ClientRegisterScreenStyles.halfWidth}
-                />
-
-                <Select
-                  label="Relationship"
-                  value={child.relationship}
-                  onSelect={(option) => updateChild(index, 'relationship', String(option.value))}
-                  options={relationshipOptions}
-                />
-              </View>
-            ))}
           </View>
 
-          {/* Social Authentication */}
-          <View style={ClientRegisterScreenStyles.section}>
-            <Text style={ClientRegisterScreenStyles.sectionTitle}>Or continue with</Text>
-            <SocialAuthButtons onPress={handleSocialAuth} />
+          {/* Divider */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 24 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: '#E5E7EB' }} />
+            <Text style={{ marginHorizontal: 12, color: '#6B7280', fontSize: 16 }}>{t('login.or')}</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: '#E5E7EB' }} />
           </View>
-
-          {/* Register Button */}
-          <Button
-            title="Create Account"
-            onPress={handleRegister}
-            loading={isLoading}
-            style={ClientRegisterScreenStyles.registerButton}
-          />
-
-          {/* Login Link */}
-          <View style={ClientRegisterScreenStyles.loginContainer}>
-            <Text style={ClientRegisterScreenStyles.loginText}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={ClientRegisterScreenStyles.loginLink}>Sign In</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+          <SocialAuthButtons />
       </ScrollView>
     </KeyboardAvoidingView>
+    {/* Модалка для условий */}
+    <Modal visible={showTerms} transparent animationType="fade" onRequestClose={() => setShowTerms(false)}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<terms>(.*?)<\/terms>/)?.[1] || 'Условия'}</Text>
+          <ScrollView style={{ maxHeight: 300 }}>
+            <Text style={styles.modalText}>{t('register.termsText')}</Text>
+          </ScrollView>
+          <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowTerms(false)}>
+            <Text style={styles.modalCloseText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+    {/* Модалка для политики */}
+    <Modal visible={showPrivacy} transparent animationType="fade" onRequestClose={() => setShowPrivacy(false)}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<privacy>(.*?)<\/privacy>/)?.[1] || 'Политика'}</Text>
+          <ScrollView style={{ maxHeight: 300 }}>
+            <Text style={styles.modalText}>{t('register.privacyText')}</Text>
+          </ScrollView>
+          <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowPrivacy(false)}>
+            <Text style={styles.modalCloseText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+    </SafeAreaView>
   );
 };
 

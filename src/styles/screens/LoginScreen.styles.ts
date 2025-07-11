@@ -6,6 +6,19 @@ export const LoginScreenStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.light.background,
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
   content: {
     flex: 1,
     padding: SIZES.xl,
@@ -123,17 +136,27 @@ export const LoginScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: SIZES.xl,
+    marginTop: 0, // убираю отступ сверху
+    marginBottom: 0,
   },
   registerText: {
     color: colors.light.textSecondary,
     fontSize: SIZES.fontSize.md,
     lineHeight: SIZES.lineHeight.md,
+    textAlign: 'center',
   },
   registerLink: {
     color: colors.light.primary,
     fontWeight: '600',
     marginLeft: SIZES.xs,
+  },
+  registerLinkUnderlineDark: {
+    color: '#23408E',
+    textDecorationLine: 'underline',
+    fontWeight: '600',
+    fontSize: SIZES.fontSize.md,
+    textAlign: 'center',
+    marginLeft: 0,
   },
   forgotPassword: {
     alignItems: 'center',
@@ -180,16 +203,6 @@ export const LoginScreenStyles = StyleSheet.create({
     fontSize: SIZES.fontSize.xxxl,
     marginBottom: SIZES.xs,
   },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
   socialAuth: {
     marginBottom: SIZES.xxxl,
   },
@@ -197,6 +210,53 @@ export const LoginScreenStyles = StyleSheet.create({
     color: colors.light.textSecondary,
     fontSize: SIZES.fontSize.md,
     lineHeight: SIZES.lineHeight.md,
+  },
+  quickLoginRow: {
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  quickLoginButtonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  quickLoginCardsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+    gap: 12,
+  },
+  quickLoginCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    paddingVertical: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.04)',
+  },
+  quickLoginCardClient: {
+    marginRight: 6,
+    borderLeftWidth: 4,
+    borderLeftColor: '#10B981',
+  },
+  quickLoginCardDriver: {
+    marginLeft: 6,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3B82F6',
+  },
+  quickLoginCardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1F2937',
   },
   // Стили для кнопок автозаполнения (только для разработки)
   autoFillContainer: {
@@ -233,5 +293,15 @@ export const LoginScreenStyles = StyleSheet.create({
     color: colors.light.surface,
     fontSize: SIZES.fontSize.sm,
     fontWeight: '600',
+  },
+  headerSpacer: {
+    height: 32,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    padding: 10,
+    zIndex: 2,
   },
 }); 

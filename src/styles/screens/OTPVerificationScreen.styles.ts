@@ -211,4 +211,10 @@ export const OTPVerificationScreenStyles = StyleSheet.create({
   helpLinkDark: {
     color: colors.dark.primary,
   },
+  otpLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 8,
+  },
 }); 

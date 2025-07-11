@@ -5,7 +5,17 @@
   "password": "Passwort",
   "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
   "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
-  "forgotPassword": "Passwort vergessen?",
+  "forgotPassword": {
+    "sendButton": "Senden",
+    "sending": "Wird gesendet...",
+    "title": "Passwort vergessen?",
+    "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+    "errorTitle": "Fehler",
+    "errorEmpty": "Bitte geben Sie Ihre E-Mail ein",
+    "errorInvalid": "Bitte geben Sie eine gültige E-Mail ein",
+    "successTitle": "E-Mail gesendet",
+    "successText": "Überprüfen Sie Ihre E-Mail, um das Passwort zurückzusetzen"
+  },
   "loginButton": "Anmelden",
   "loginSuccess": "Anmeldung erfolgreich",
   "loginError": "Fehler",
@@ -55,5 +65,8 @@
     "genericError": "Bei der Anmeldung ist ein Fehler aufgetreten",
     "networkError": "Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.",
     "timeoutError": "Anfrage-Timeout überschritten."
-  }
+  },
+  "noAccount": "Haben Sie kein Konto?",
+  "registerLink": "Registrieren",
+  "or": "oder"
 } 

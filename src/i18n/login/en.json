@@ -1,11 +1,21 @@
 {
   "title": "Welcome",
   "subtitle": "Sign in to your account",
-  "email": "Email",
+  "email": "E-mail",
   "password": "Password",
-  "emailPlaceholder": "Enter your email",
+  "emailPlaceholder": "Enter your e-mail",
   "passwordPlaceholder": "Enter password",
-  "forgotPassword": "Forgot password?",
+  "forgotPassword": {
+    "sendButton": "Send",
+    "sending": "Sending...",
+    "title": "Forgot password?",
+    "emailPlaceholder": "Enter your e-mail",
+    "errorTitle": "Error",
+    "errorEmpty": "Please enter your e-mail",
+    "errorInvalid": "Please enter a valid e-mail",
+    "successTitle": "Email sent",
+    "successText": "Check your e-mail for password reset instructions"
+  },
   "loginButton": "Sign In",
   "loginSuccess": "Login successful",
   "loginError": "Error",
@@ -55,5 +65,8 @@
     "genericError": "An error occurred during login",
     "networkError": "Network error. Check your internet connection.",
     "timeoutError": "Request timeout exceeded."
-  }
+  },
+  "noAccount": "Don't have an account?",
+  "registerLink": "Sign up",
+  "or": "or"
 } 

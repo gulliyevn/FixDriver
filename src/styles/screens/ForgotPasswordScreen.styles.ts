@@ -183,4 +183,26 @@ export const ForgotPasswordScreenStyles = StyleSheet.create({
     color: colors.light.text,
     marginLeft: 8,
   },
+  loginButton: {
+    marginBottom: 24,
+    backgroundColor: '#23408E',
+    borderRadius: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
+    minHeight: 48,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    lineHeight: 22,
+  },
+  loginLinkUnderline: {
+    color: '#23408E',
+    textDecorationLine: 'underline',
+    fontWeight: '600',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 24,
+  },
 }); 

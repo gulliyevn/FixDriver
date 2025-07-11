@@ -1,11 +1,21 @@
 {
   "title": "Bienvenue",
   "subtitle": "Connectez-vous à votre compte",
-  "email": "Email",
+  "email": "E-mail",
   "password": "Mot de passe",
-  "emailPlaceholder": "Entrez votre email",
+  "emailPlaceholder": "Entrez votre e-mail",
   "passwordPlaceholder": "Entrez votre mot de passe",
-  "forgotPassword": "Mot de passe oublié ?",
+  "forgotPassword": {
+    "sendButton": "Envoyer",
+    "sending": "Envoi...",
+    "title": "Mot de passe oublié ?",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "errorTitle": "Erreur",
+    "errorEmpty": "Veuillez entrer votre e-mail",
+    "errorInvalid": "Veuillez entrer un e-mail valide",
+    "successTitle": "E-mail envoyé",
+    "successText": "Vérifiez votre e-mail pour réinitialiser le mot de passe"
+  },
   "loginButton": "Se connecter",
   "loginSuccess": "Connexion réussie",
   "loginError": "Erreur",
@@ -55,5 +65,8 @@
     "genericError": "Une erreur s'est produite lors de la connexion",
     "networkError": "Erreur réseau. Vérifiez votre connexion internet.",
     "timeoutError": "Délai d'attente de la requête dépassé."
-  }
+  },
+  "noAccount": "Vous n'avez pas de compte ?",
+  "registerLink": "S'inscrire",
+  "or": "ou"
 } 

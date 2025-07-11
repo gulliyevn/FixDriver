@@ -281,6 +281,15 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     color: '#000000',
     marginLeft: 12,
   },
+  settingValue: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  settingValueText: {
+    fontSize: 16,
+    color: '#8E8E93',
+    marginRight: 8,
+  },
   optionsCard: {
     marginBottom: 8,
   },

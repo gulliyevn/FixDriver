@@ -1,33 +1,37 @@
 import { useCallback } from 'react';
-import { t, setLanguage, getLanguage, getCurrentLanguage, isRTL, SUPPORTED_LANGUAGES, type SupportedLanguage } from '../i18n';
+import { useLanguage } from '../context/LanguageContext';
+import { getLanguageOptions, getLanguageInfo, type SupportedLanguage } from '../i18n';
 
 export const useI18n = () => {
-  const translate = useCallback((key: string, params?: Record<string, string | number>) => {
-    return t(key, params);
-  }, []);
+  const { t, setLanguage, language, languageOptions, isLoading, error } = useLanguage();
 
-  const changeLanguage = useCallback(async (language: SupportedLanguage) => {
-    await setLanguage(language);
-  }, []);
+  const changeLanguage = useCallback(async (newLanguage: SupportedLanguage) => {
+    await setLanguage(newLanguage);
+  }, [setLanguage]);
 
   const getCurrentLang = useCallback(() => {
-    return getCurrentLanguage();
-  }, []);
+    return language;
+  }, [language]);
 
   const getStoredLanguage = useCallback(async () => {
-    return await getLanguage();
-  }, []);
+    return language;
+  }, [language]);
 
   const checkRTL = useCallback(() => {
-    return isRTL();
-  }, []);
+    return language === 'ar';
+  }, [language]);
 
   return {
-    t: translate,
+    t,
     setLanguage: changeLanguage,
     getCurrentLanguage: getCurrentLang,
     getStoredLanguage,
     isRTL: checkRTL,
-    SUPPORTED_LANGUAGES,
+    language,
+    languageOptions,
+    isLoading,
+    error,
+    getLanguageInfo,
+    SUPPORTED_LANGUAGES: languageOptions,
   };
 }; 

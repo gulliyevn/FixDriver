@@ -8,7 +8,8 @@ import {
   StatusBar,
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -16,10 +17,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../types/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { LoginScreenStyles } from '../../styles/screens/LoginScreen.styles';
-import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 import { useLanguage } from '../../context/LanguageContext';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type NavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -134,6 +135,7 @@ const LoginScreen: React.FC = () => {
           contentContainerStyle={LoginScreenStyles.scrollContent}
         >
           {/* Header */}
+          <View style={LoginScreenStyles.headerSpacer} />
           <View style={LoginScreenStyles.header}>
             <Text style={LoginScreenStyles.title}>
               {t('login.title')}
@@ -145,32 +147,42 @@ const LoginScreen: React.FC = () => {
 
           {/* Form */}
           <View style={LoginScreenStyles.form}>
-            <InputField
-              label={t('login.email')}
+            <View style={LoginScreenStyles.inputContainer}>
+              <Text style={LoginScreenStyles.label}>{t('login.email')}</Text>
+              <TextInput
+                style={LoginScreenStyles.input}
               value={formData.email}
               onChangeText={(text) => updateFormData('email', text)}
-              error={errors.email}
               placeholder={t('login.emailPlaceholder')}
               keyboardType="email-address"
               autoCapitalize="none"
             />
+              {errors.email && (
+                <Text style={LoginScreenStyles.errorText}>{errors.email}</Text>
+              )}
+            </View>
             
-            <InputField
-              label={t('login.password')}
+            <View style={LoginScreenStyles.inputContainer}>
+              <Text style={LoginScreenStyles.label}>{t('login.password')}</Text>
+              <TextInput
+                style={LoginScreenStyles.input}
               value={formData.password}
               onChangeText={(text) => updateFormData('password', text)}
-              error={errors.password}
               placeholder={t('login.passwordPlaceholder')}
               secureTextEntry={!showPassword}
-              rightIcon={showPassword ? 'eye-off' : 'eye'}
             />
+              {errors.password && (
+                <Text style={LoginScreenStyles.errorText}>{errors.password}</Text>
+              )}
+            </View>
 
+            {/* Кнопка Забыли пароль? */}
             <TouchableOpacity 
               style={LoginScreenStyles.forgotPassword}
               onPress={() => navigation.navigate('ForgotPassword')}
             >
-              <Text style={LoginScreenStyles.forgotPasswordText}>
-                {t('login.forgotPassword')}
+              <Text style={LoginScreenStyles.registerLinkUnderlineDark}>
+                {t('login.forgotPassword.title')}
               </Text>
             </TouchableOpacity>
 
@@ -182,53 +194,21 @@ const LoginScreen: React.FC = () => {
               style={LoginScreenStyles.loginButton}
             />
 
-            {/* Кнопки автозаполнения для разработки */}
-            {__DEV__ && (
-              <View style={LoginScreenStyles.autoFillContainer}>
-                <Text style={LoginScreenStyles.autoFillTitle}>{t('login.autoFillTitle')}</Text>
-                <View style={LoginScreenStyles.autoFillButtons}>
-                  <TouchableOpacity
-                    style={LoginScreenStyles.autoFillButton}
-                    onPress={() => handleAutoFill('client')}
-                  >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>{t('login.autoFillClient')}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+              <TouchableOpacity onPress={() => handleAutoLogin('client')}>
+                <Text style={LoginScreenStyles.registerLinkUnderlineDark}>Клиент</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    style={LoginScreenStyles.autoFillButton}
-                    onPress={() => handleAutoFill('driver')}
-                  >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>{t('login.autoFillDriver')}</Text>
+              <Text style={{ marginHorizontal: 12 }}>|</Text>
+              <TouchableOpacity onPress={() => handleAutoLogin('driver')}>
+                <Text style={LoginScreenStyles.registerLinkUnderlineDark}>Водитель</Text>
                   </TouchableOpacity>
                 </View>
-                
-                <View style={LoginScreenStyles.autoFillButtons}>
-                  <TouchableOpacity
-                    style={[LoginScreenStyles.autoFillButton, { backgroundColor: '#10B981' }]}
-                    onPress={() => handleAutoLogin('client')}
-                    disabled={loading}
-                  >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>
-                      {loading ? '⏳ Вход...' : '👤 Войти как клиент'}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[LoginScreenStyles.autoFillButton, { backgroundColor: '#3B82F6' }]}
-                    onPress={() => handleAutoLogin('driver')}
-                    disabled={loading}
-                  >
-                    <Text style={LoginScreenStyles.autoFillButtonText}>
-                      {loading ? '⏳ Вход...' : '🚗 Войти как водитель'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
           </View>
 
           {/* Divider */}
           <View style={LoginScreenStyles.divider}>
             <View style={LoginScreenStyles.dividerLine} />
-            <Text style={LoginScreenStyles.dividerText}>или</Text>
+            <Text style={LoginScreenStyles.dividerText}>{t('login.or')}</Text>
             <View style={LoginScreenStyles.dividerLine} />
           </View>
 
@@ -238,14 +218,10 @@ const LoginScreen: React.FC = () => {
           </View>
 
           {/* Register Link */}
-          <View style={LoginScreenStyles.registerLink}>
-            <Text style={LoginScreenStyles.registerText}>
-              {t('login.noAccount')}
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('RoleSelect')}>
-              <Text style={LoginScreenStyles.registerLinkText}>
-                {t('login.registerLink')}
-              </Text>
+          <View style={LoginScreenStyles.registerSection}>
+            <Text style={LoginScreenStyles.registerText}>{t('login.noAccount')} </Text>
+            <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'RoleSelect' }] })}>
+              <Text style={LoginScreenStyles.registerLinkUnderlineDark}>{t('login.registerLink')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

@@ -5,7 +5,17 @@
   "password": "Contraseña",
   "emailPlaceholder": "Ingresa tu correo electrónico",
   "passwordPlaceholder": "Ingresa tu contraseña",
-  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "forgotPassword": {
+    "sendButton": "Enviar",
+    "sending": "Enviando...",
+    "title": "¿Olvidaste tu contraseña?",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "errorTitle": "Error",
+    "errorEmpty": "Por favor ingresa tu correo electrónico",
+    "errorInvalid": "Por favor ingresa un correo electrónico válido",
+    "successTitle": "Correo enviado",
+    "successText": "Revisa tu correo electrónico para restablecer la contraseña"
+  },
   "loginButton": "Iniciar sesión",
   "loginSuccess": "Inicio de sesión exitoso",
   "loginError": "Error",
@@ -55,5 +65,8 @@
     "genericError": "Ocurrió un error durante el inicio de sesión",
     "networkError": "Error de red. Verifica tu conexión a internet.",
     "timeoutError": "Tiempo de espera de la solicitud agotado."
-  }
+  },
+  "noAccount": "¿No tienes una cuenta?",
+  "registerLink": "Registrarse",
+  "or": "o"
 } 

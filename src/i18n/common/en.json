@@ -1,5 +1,4 @@
 {
-  "common": {
     "ok": "OK",
     "cancel": "Cancel",
     "yes": "Yes",
@@ -36,6 +35,5 @@
       "alreadyAccount": "Already have an account?",
       "login": "Login",
       "language": "Language"
-    }
   }
 }

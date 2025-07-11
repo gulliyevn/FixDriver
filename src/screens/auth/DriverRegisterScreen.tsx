@@ -7,13 +7,13 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types/user';
 import { AuthStackParamList } from '../../types/navigation';
-import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import PhoneInput from '../../components/PhoneInput';
 import Select from '../../components/Select';
@@ -198,30 +198,43 @@ const DriverRegisterScreen: React.FC = () => {
             <Text style={DriverRegisterScreenStyles.sectionTitle}>Personal Information</Text>
             
             <View style={DriverRegisterScreenStyles.row}>
-              <InputField
-                label="First Name"
+              <View style={[DriverRegisterScreenStyles.halfWidth, DriverRegisterScreenStyles.inputContainer]}>
+                <Text style={DriverRegisterScreenStyles.label}>First Name</Text>
+                <TextInput
+                  style={DriverRegisterScreenStyles.input}
                 value={formData.firstName}
                 onChangeText={(value) => handleInputChange('firstName', value)}
-                error={errors.firstName}
-                style={DriverRegisterScreenStyles.halfWidth}
-              />
-              <InputField
-                label="Last Name"
+                />
+                {errors.firstName && (
+                  <Text style={DriverRegisterScreenStyles.errorText}>{errors.firstName}</Text>
+                )}
+              </View>
+              <View style={[DriverRegisterScreenStyles.halfWidth, DriverRegisterScreenStyles.inputContainer]}>
+                <Text style={DriverRegisterScreenStyles.label}>Last Name</Text>
+                <TextInput
+                  style={DriverRegisterScreenStyles.input}
                 value={formData.lastName}
                 onChangeText={(value) => handleInputChange('lastName', value)}
-                error={errors.lastName}
-                style={DriverRegisterScreenStyles.halfWidth}
               />
+                {errors.lastName && (
+                  <Text style={DriverRegisterScreenStyles.errorText}>{errors.lastName}</Text>
+                )}
+              </View>
             </View>
 
-            <InputField
-              label="Email"
+            <View style={DriverRegisterScreenStyles.inputContainer}>
+              <Text style={DriverRegisterScreenStyles.label}>Email</Text>
+              <TextInput
+                style={DriverRegisterScreenStyles.input}
               value={formData.email}
               onChangeText={(value) => handleInputChange('email', value)}
               keyboardType="email-address"
               autoCapitalize="none"
-              error={errors.email}
             />
+              {errors.email && (
+                <Text style={DriverRegisterScreenStyles.errorText}>{errors.email}</Text>
+              )}
+            </View>
 
             <PhoneInput
               label="Phone Number"

@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SocialAuthService } from '../services/SocialAuthService';
 import { SocialAuthButtonsStyles } from '../styles/components/SocialAuthButtons.styles';
+import { useI18n } from '../hooks/useI18n';
+import GoogleIcon from './GoogleIcon';
 
 interface SocialAuthButtonsProps {
   onPress?: (provider: 'google' | 'facebook' | 'apple') => Promise<void>;
@@ -11,6 +14,7 @@ interface SocialAuthButtonsProps {
 }
 
 export default function SocialAuthButtons({ onPress, onSuccess, onError }: SocialAuthButtonsProps) {
+  const { t } = useI18n();
   const handleGoogleSignIn = async () => {
     if (onPress) {
       await onPress('google');
@@ -66,35 +70,26 @@ export default function SocialAuthButtons({ onPress, onSuccess, onError }: Socia
   };
 
   return (
-    <View style={SocialAuthButtonsStyles.container}>
+    <View style={[SocialAuthButtonsStyles.container, { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16 }]}> 
       <TouchableOpacity
         style={SocialAuthButtonsStyles.googleButton}
         onPress={handleGoogleSignIn}
       >
-        <Ionicons name="logo-google" size={20} color="#DB4437" />
-        <Text style={SocialAuthButtonsStyles.googleText}>
-          Продолжить с Google
-        </Text>
+        <GoogleIcon size={28} />
       </TouchableOpacity>
 
       <TouchableOpacity
         style={SocialAuthButtonsStyles.facebookButton}
         onPress={handleFacebookSignIn}
       >
-        <Ionicons name="logo-facebook" size={20} color="#FFFFFF" />
-        <Text style={SocialAuthButtonsStyles.facebookText}>
-          Продолжить с Facebook
-        </Text>
+        <Ionicons name="logo-facebook" size={28} color="#fff" />
       </TouchableOpacity>
 
       <TouchableOpacity
         style={SocialAuthButtonsStyles.appleButton}
         onPress={handleAppleSignIn}
       >
-        <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
-        <Text style={SocialAuthButtonsStyles.appleText}>
-          Продолжить с Apple
-        </Text>
+        <Ionicons name="logo-apple" size={28} color="#fff" />
       </TouchableOpacity>
     </View>
   );

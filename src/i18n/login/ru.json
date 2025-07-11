@@ -1,11 +1,21 @@
 {
   "title": "Добро пожаловать",
   "subtitle": "Войдите в свой аккаунт",
-  "email": "Email",
+  "email": "Почта",
   "password": "Пароль",
-  "emailPlaceholder": "Введите ваш email",
+  "emailPlaceholder": "Введите почту",
   "passwordPlaceholder": "Введите пароль",
-  "forgotPassword": "Забыли пароль?",
+  "forgotPassword": {
+    "sendButton": "Отправить",
+    "sending": "Отправка...",
+    "title": "Забыли пароль?",
+    "emailPlaceholder": "Введите почту",
+    "errorTitle": "Ошибка",
+    "errorEmpty": "Пожалуйста, введите почту",
+    "errorInvalid": "Пожалуйста, введите корректную почту",
+    "successTitle": "Письмо отправлено",
+    "successText": "Проверьте вашу почту для восстановления пароля"
+  },
   "loginButton": "Войти",
   "loginSuccess": "Успешный вход",
   "loginError": "Ошибка",
@@ -55,5 +65,8 @@
     "genericError": "Произошла ошибка при входе",
     "networkError": "Ошибка сети. Проверьте подключение к интернету.",
     "timeoutError": "Превышено время ожидания ответа от сервера."
-  }
+  },
+  "noAccount": "Нет аккаунта?",
+  "registerLink": "Зарегистрироваться",
+  "or": "или"
 } 

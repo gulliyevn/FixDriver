@@ -5,7 +5,17 @@
   "password": "كلمة المرور",
   "emailPlaceholder": "أدخل بريدك الإلكتروني",
   "passwordPlaceholder": "أدخل كلمة المرور",
-  "forgotPassword": "نسيت كلمة المرور؟",
+  "forgotPassword": {
+    "sendButton": "إرسال",
+    "sending": "جارٍ الإرسال...",
+    "title": "هل نسيت كلمة المرور؟",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "errorTitle": "خطأ",
+    "errorEmpty": "يرجى إدخال البريد الإلكتروني",
+    "errorInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+    "successTitle": "تم إرسال البريد الإلكتروني",
+    "successText": "تحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور"
+  },
   "loginButton": "تسجيل الدخول",
   "loginSuccess": "تم تسجيل الدخول بنجاح",
   "loginError": "خطأ",
@@ -55,5 +65,8 @@
     "genericError": "حدث خطأ أثناء تسجيل الدخول",
     "networkError": "خطأ في الشبكة. تحقق من اتصال الإنترنت.",
     "timeoutError": "انتهت مهلة الطلب."
-  }
+  },
+  "noAccount": "ليس لديك حساب؟",
+  "registerLink": "إنشاء حساب",
+  "or": "أو"
 } 

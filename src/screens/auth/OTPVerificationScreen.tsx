@@ -6,11 +6,11 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../types/navigation';
-import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { OTPService } from '../../services/OTPService';
 import { OTPVerificationScreenStyles as styles } from '../../styles/screens/OTPVerificationScreen.styles';
@@ -126,13 +126,13 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
         </View>
 
         <View style={styles.otpContainer}>
-          <InputField
-            label="Enter OTP"
+          <Text style={styles.otpLabel}>Enter OTP</Text>
+          <TextInput
             value={otp}
             onChangeText={setOtp}
             keyboardType="numeric"
             maxLength={6}
-            placeholder="000000"
+            placeholder="------"
             style={styles.otpInput}
           />
 
