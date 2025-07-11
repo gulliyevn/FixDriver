@@ -15,18 +15,7 @@ const RoleSelectScreen: React.FC = () => {
   const [langModal, setLangModal] = React.useState(false);
   const { t, language } = useI18n();
 
-  React.useEffect(() => {
-    console.log('🔧 TokenUtils доступен в консоли как global.TokenUtils');
-    console.log('📝 Доступные методы:');
-    console.log('   TokenUtils.clearAllTokens() - очистить все токены');
-    console.log('   TokenUtils.debugTokens() - показать информацию о токенах');
-    console.log('   TokenUtils.forceRefreshTokens() - принудительно обновить токены');
-    console.log('   TokenUtils.resetTokens() - полный сброс токенов');
-    console.log(' Текущий язык:', language);
-    console.log(' common.roleSelect.chooseAccountType:', t('common.roleSelect.chooseAccountType'));
-    console.log(' roleSelect в ru:', t('common.roleSelect'));
-    console.log(' Ключи, начинающиеся с roleSelect:', Object.keys(t).filter(key => key.startsWith('roleSelect')));
-  }, [t, language]);
+
 
   const handleRoleSelect = (role: 'client' | 'driver') => {
     if (role === 'client') {

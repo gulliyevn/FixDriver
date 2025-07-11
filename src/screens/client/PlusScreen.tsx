@@ -31,7 +31,7 @@ const PlusScreen: React.FC = () => {
     setLoading(true);
     try {
       // Загрузка данных
-      console.log('Загрузка данных...');
+  
     } catch (error) {
       Alert.alert('Ошибка', 'Не удалось загрузить данные');
     } finally {

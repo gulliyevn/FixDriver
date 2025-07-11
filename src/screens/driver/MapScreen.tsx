@@ -49,7 +49,7 @@ const DriverMapScreen: React.FC = () => {
   };
 
   const handleLocationSelect = (location: MapLocation) => {
-    console.log('Выбрана локация:', location);
+
     // Здесь можно добавить логику для выбора точки назначения
   };
 

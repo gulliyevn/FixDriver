@@ -122,7 +122,7 @@ const Select: React.FC<SelectProps> = ({
   });
 
   const renderOption = ({ item }: { item: SelectOption }) => {
-    console.log('renderOption', item);
+
     const isSelected = multiSelect 
       ? selectedValues.includes(item.value)
       : item.value === value;

@@ -31,7 +31,7 @@ const ScheduleScreen: React.FC = () => {
     setLoading(true);
     try {
       // Загрузка данных
-      console.log('Загрузка данных расписания...');
+  
     } catch (error) {
       Alert.alert('Ошибка', 'Не удалось загрузить данные');
     } finally {

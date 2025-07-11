@@ -6,7 +6,7 @@ const ENABLE_ORDER_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_ORDER_LOGS) {
-    console.log(`[СЛЕЖЕНИЕ] ${message}`, data || '');
+
   }
 };
 

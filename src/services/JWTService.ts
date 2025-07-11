@@ -320,7 +320,7 @@ export class JWTService {
         this.ACCESS_TOKEN_KEY,
         this.REFRESH_TOKEN_KEY,
       ]);
-      console.log('All tokens cleared successfully');
+  
     } catch (error) {
       console.error('Error clearing tokens:', error);
     }

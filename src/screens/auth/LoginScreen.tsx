@@ -68,7 +68,7 @@ const LoginScreen: React.FC = () => {
       const success = await login(formData.email, formData.password);
       
       if (success) {
-        console.log(t('login.loginSuccess'));
+  
       } else {
         Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }
@@ -110,7 +110,7 @@ const LoginScreen: React.FC = () => {
       const success = await login(email, password);
       
       if (success) {
-        console.log(`🧪 Автоматический вход как ${type}:`, email);
+  
       } else {
         Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }

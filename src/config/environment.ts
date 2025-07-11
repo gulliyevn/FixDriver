@@ -72,6 +72,6 @@ export const logError = (error: unknown, context?: string) => {
 
 export const logInfo = (message: string, data?: unknown) => {
   if (ENV.ENABLE_LOGGING) {
-    console.log(`[APP] ${message}`, data || '');
+
   }
 }; 

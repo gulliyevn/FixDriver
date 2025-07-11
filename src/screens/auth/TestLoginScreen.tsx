@@ -18,7 +18,7 @@ const TestLoginScreen: React.FC = () => {
       const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
       const password = 'password123';
       
-      console.log(`🧪 Тестируем вход как ${type}:`, email);
+  
       
       const result = await AuthService.login(email, password);
       
@@ -27,7 +27,7 @@ const TestLoginScreen: React.FC = () => {
           '✅ Успешный вход!', 
           `Вошли как ${type}\nEmail: ${email}\nПользователь: ${result.user?.name}`
         );
-        console.log('✅ Результат входа:', result);
+    
       } else {
         Alert.alert('❌ Ошибка входа', result.message || 'Неизвестная ошибка');
         console.error('❌ Ошибка входа:', result);

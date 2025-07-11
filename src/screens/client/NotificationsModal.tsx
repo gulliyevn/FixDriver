@@ -44,7 +44,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       'Вы уверены, что хотите удалить это уведомление?',
       [
         { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', style: 'destructive', onPress: () => console.log('Delete notification:', notificationId) },
+        { text: 'Удалить', style: 'destructive', onPress: () => {} },
       ]
     );
   };

@@ -79,19 +79,7 @@ class DriverService {
     // Симулируем задержку сети
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log('📊 Отправляем данные в БД PostgreSQL:', {
-          email: data.email,
-          phone_number: data.phone_number,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          license_number: data.license_number,
-          license_expiry_date: data.license_expiry_date,
-          vehicle_brand: data.vehicle_brand, // VARCHAR(100) - отдельное поле
-          vehicle_model: data.vehicle_model, // VARCHAR(100) - отдельное поле  
-          vehicle_number: data.vehicle_number,
-          vehicle_year: data.vehicle_year,
-          status: 'pending', // VARCHAR(20) DEFAULT 'pending'
-        });
+
 
         const mockDriver: Driver = {
           id: `driver_${Date.now()}`,
@@ -236,7 +224,7 @@ class DriverService {
       }
     } catch (error) {
       if (__DEV__) {
-        console.log('Mock: location updated', location);
+
         return;
       }
       throw error;
@@ -297,7 +285,7 @@ class DriverService {
       }
     } catch (error) {
       if (__DEV__) {
-        console.log('Mock: availability toggled to', isAvailable);
+
         return;
       }
       throw error;

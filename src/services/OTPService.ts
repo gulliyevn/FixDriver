@@ -25,7 +25,7 @@ export class OTPService {
       const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
       
       // В реальном приложении код будет отправлен через SMS API
-      console.log(`📱 OTP код для ${phoneNumber}: ${otpCode}`);
+  
       
       // Сохраняем в AsyncStorage для mock проверки (в реальном приложении будет на сервере)
       await AsyncStorage.setItem(`otp_${phoneNumber}`, JSON.stringify({
@@ -58,7 +58,7 @@ export class OTPService {
     try {
       // В режиме разработки - спеиальный мок-код
       if (__DEV__ && code === '123456') {
-        console.log('🧪 Использован DEV мок-код: 123456');
+
         return {
           success: true,
           message: 'Телефон успешно подтвержден (DEV мок)',

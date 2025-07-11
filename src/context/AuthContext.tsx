@@ -153,11 +153,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           AsyncStorage.setItem('user', JSON.stringify(mockUser)),
         ]);
 
-        console.log(`🧪 Мок вход ${authMethod ? `через ${authMethod}` : 'с email'}:`, {
-          email,
-          method: authMethod || 'email',
-          role: mockUser.role
-        });
+
 
         setUser(mockUser);
         return true;
@@ -236,11 +232,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           AsyncStorage.setItem('user', JSON.stringify(newUser)),
         ]);
 
-        console.log('🧪 Мок регистрация:', {
-          email: userData.email,
-          role: userData.role,
-          name: userData.name
-        });
+
 
         setUser(newUser);
         return true;

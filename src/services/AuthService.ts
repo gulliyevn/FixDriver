@@ -45,11 +45,7 @@ export class AuthService {
           phone: mockUser.phone,
         });
 
-        console.log(`🧪 Мок вход ${authMethod ? `через ${authMethod}` : 'с email'}:`, {
-          email,
-          method: authMethod || 'email',
-          role: mockUser.role
-        });
+
 
         return {
           success: true,
@@ -120,11 +116,7 @@ export class AuthService {
           phone: newUser.phone,
         });
 
-        console.log('🧪 Мок регистрация:', {
-          email: userData.email,
-          role: userData.role,
-          name: userData.name
-        });
+
 
         return {
           success: true,

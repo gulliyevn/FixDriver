@@ -15,7 +15,7 @@ const ENABLE_ROUTE_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_ROUTE_LOGS) {
-    console.log(`🗺️ RouteService: ${message}`, data || '');
+
   }
 };
 

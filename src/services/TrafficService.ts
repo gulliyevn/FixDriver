@@ -16,7 +16,7 @@ const ENABLE_TRAFFIC_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_TRAFFIC_LOGS) {
-    console.log(`🚦 ${message}`, data || '');
+
   }
 };
 

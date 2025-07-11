@@ -6,7 +6,7 @@ const ENABLE_CHAT_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_CHAT_LOGS) {
-    console.log(`📋 ChatService: ${message}`, data || '');
+
   }
 };
 

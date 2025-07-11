@@ -5,7 +5,7 @@ const ENABLE_SOCIAL_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_SOCIAL_LOGS) {
-    console.log(`🔍 ${message}`, data || '');
+
   }
 };
 
@@ -73,7 +73,7 @@ export class SocialAuthService {
           accessToken: 'mock_google_token',
         };
 
-        console.log('🧪 Мок вход через Google:', mockUser);
+  
         
         return {
           success: true,
@@ -134,7 +134,7 @@ export class SocialAuthService {
           accessToken: 'mock_facebook_token',
         };
 
-        console.log('🧪 Мок вход через Facebook:', mockUser);
+
         
         return {
           success: true,
@@ -194,7 +194,7 @@ export class SocialAuthService {
           accessToken: 'mock_apple_token',
         };
 
-        console.log('🧪 Мок вход через Apple:', mockUser);
+
         
         return {
           success: true,
@@ -228,7 +228,7 @@ export class SocialAuthService {
       // const { LoginManager } = require('react-native-fbsdk-next');
       // await LoginManager.logOut();
       
-      console.log('🚪 Выход из социальных аккаунтов');
+  
     } catch (error) {
       console.error('Social sign out error:', error);
     }

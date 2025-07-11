@@ -62,7 +62,7 @@ const NotificationsScreen: React.FC = () => {
         setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n));
       }
       // Здесь можно добавить навигацию в зависимости от типа уведомления
-      console.log('Notification pressed:', notification);
+  
     }
   };
 

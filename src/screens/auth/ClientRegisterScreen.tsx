@@ -71,7 +71,7 @@ const ClientRegisterScreen: React.FC = () => {
     try {
       // Здесь должна быть логика регистрации через API
       Alert.alert(t('register.successTitle'), t('register.successText'));
-      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } catch (e) {
       Alert.alert(t('register.errorTitle'), t('register.errorText'));
     } finally {
@@ -178,20 +178,10 @@ const ClientRegisterScreen: React.FC = () => {
               {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
           </View>
             {/* Чекбокс согласия */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', flex: 1 }}>
+            <View style={styles.checkboxContainer}>
               <TouchableOpacity
                 onPress={() => setAgree(!agree)}
-                style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: 6,
-                  borderWidth: 2,
-                  borderColor: agree ? '#23408E' : '#E5E7EB',
-                  backgroundColor: agree ? '#23408E' : '#fff',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 8,
-                }}
+                style={[styles.checkbox, agree && styles.checkboxChecked]}
               >
                 {agree && <Ionicons name="checkmark" size={18} color="#fff" />}
               </TouchableOpacity>
@@ -208,7 +198,7 @@ const ClientRegisterScreen: React.FC = () => {
             </TouchableOpacity>
             <View style={styles.loginRow}>
               <Text style={styles.alreadyRegisteredText}>{t('register.alreadyRegistered')}</Text>
-              <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Login' }] })}>
+              <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] })}>
                 <Text style={styles.loginLinkSmall}>{t('register.loginLink')}</Text>
                   </TouchableOpacity>
                 </View>

@@ -10,11 +10,7 @@ import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
 import 'formdata-polyfill';
 
-// Импортируем TokenUtils для отладки в режиме разработки
-if (__DEV__) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  require('../src/utils/tokenUtils');
-}
+
 
 function App() {
   return (

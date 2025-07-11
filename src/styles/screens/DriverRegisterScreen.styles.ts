@@ -237,6 +237,28 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
     flex: 1,
     fontWeight: '400',
   },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    flexWrap: 'wrap',
+    flex: 1,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  checkboxChecked: {
+    borderColor: '#23408E',
+    backgroundColor: '#23408E',
+  },
 }); 
 
 export const PLACEHOLDER_COLOR = '#374151'; 
