@@ -11,6 +11,9 @@ import {
   Alert,
   StatusBar,
   Modal,
+  Image,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -55,6 +58,7 @@ const DriverRegisterScreen: React.FC = () => {
   const [modelOptions, setModelOptions] = useState<{ label: string; value: string; tariff?: string }[]>([]);
   const [licensePhoto, setLicensePhoto] = useState<string | null>(null);
   const [passportPhoto, setPassportPhoto] = useState<string | null>(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState<'license' | 'passport' | null>(null);
 
 
   useEffect(() => {
@@ -94,42 +98,43 @@ const DriverRegisterScreen: React.FC = () => {
     // ... другие бренды
   };
   const tariffOptions = [
-    { label: t('register.tariffBasic') || 'Базовый', value: 'Basic' },
-    { label: t('register.tariffPlus') || 'Плюс', value: 'Plus' },
-    { label: t('register.tariffPremium') || 'Премиум', value: 'Premium' },
+    { label: t('register.tariffBasic'), value: 'Basic' },
+    { label: t('register.tariffPlus'), value: 'Plus' },
+    { label: t('register.tariffPremium'), value: 'Premium' },
   ];
 
   const experienceOptions = [
-    { label: '0-1 лет', value: '0-1' },
-    { label: '1-2 года', value: '1-2' },
-    { label: '2-3 года', value: '2-3' },
-    { label: '3-4 года', value: '3-4' },
-    { label: '4-5 лет', value: '4-5' },
-    { label: '5-6 лет', value: '5-6' },
-    { label: '6-7 лет', value: '6-7' },
-    { label: '7-8 лет', value: '7-8' },
-    { label: '8-9 лет', value: '8-9' },
-    { label: '9-10 лет', value: '9-10' },
-    { label: '10-11 лет', value: '10-11' },
-    { label: '11-12 лет', value: '11-12' },
-    { label: '12-13 лет', value: '12-13' },
-    { label: '13-14 лет', value: '13-14' },
-    { label: '14-15 лет', value: '14-15' },
-    { label: '15-16 лет', value: '15-16' },
-    { label: '16-17 лет', value: '16-17' },
-    { label: '17-18 лет', value: '17-18' },
-    { label: '18-19 лет', value: '18-19' },
-    { label: '19-20 лет', value: '19-20' },
-    { label: '20-21 год', value: '20-21' },
-    { label: '21-22 года', value: '21-22' },
-    { label: '22-23 года', value: '22-23' },
-    { label: '23-24 года', value: '23-24' },
-    { label: '24-25 лет', value: '24-25' },
-    { label: '25-26 лет', value: '25-26' },
-    { label: '26-27 лет', value: '26-27' },
-    { label: '27-28 лет', value: '27-28' },
-    { label: '28-29 лет', value: '28-29' },
-    { label: '29-30 лет', value: '29-30' },
+    { label: 'До 1 года', value: '0-1' },
+    { label: '1 год', value: '1' },
+    { label: '2 года', value: '2' },
+    { label: '3 года', value: '3' },
+    { label: '4 года', value: '4' },
+    { label: '5 лет', value: '5' },
+    { label: '6 лет', value: '6' },
+    { label: '7 лет', value: '7' },
+    { label: '8 лет', value: '8' },
+    { label: '9 лет', value: '9' },
+    { label: '10 лет', value: '10' },
+    { label: '11 лет', value: '11' },
+    { label: '12 лет', value: '12' },
+    { label: '13 лет', value: '13' },
+    { label: '14 лет', value: '14' },
+    { label: '15 лет', value: '15' },
+    { label: '16 лет', value: '16' },
+    { label: '17 лет', value: '17' },
+    { label: '18 лет', value: '18' },
+    { label: '19 лет', value: '19' },
+    { label: '20 лет', value: '20' },
+    { label: '21 год', value: '21' },
+    { label: '22 года', value: '22' },
+    { label: '23 года', value: '23' },
+    { label: '24 года', value: '24' },
+    { label: '25 лет', value: '25' },
+    { label: '26 лет', value: '26' },
+    { label: '27 лет', value: '27' },
+    { label: '28 лет', value: '28' },
+    { label: '29 лет', value: '29' },
+    { label: '30 лет', value: '30' },
     { label: '30+ лет', value: '30+' },
   ];
 
@@ -139,8 +144,6 @@ const DriverRegisterScreen: React.FC = () => {
   for (let year = currentYear + 1; year >= 1990; year--) {
     yearOptions.push({ label: year.toString(), value: year.toString() });
   }
-
-  console.log('tariffOptions перед Select:', tariffOptions);
 
   const handleChange = (field: string, value: string) => {
     if (field === 'licenseExpiry') {
@@ -205,13 +208,13 @@ const DriverRegisterScreen: React.FC = () => {
         let error = null;
         
         if (day > 31) {
-          error = 'День не может быть больше 31';
-        } else if (month > 12) {
-          error = 'Месяц не может быть больше 12';
-        } else if (year < 2025 || year > 2040) {
-          error = 'Год должен быть от 2025 до 2040';
-        } else if (inputDate < today) {
-          error = 'Дата не может быть меньше сегодняшнего дня';
+                  error = t('register.dayTooBig');
+      } else if (month > 12) {
+        error = t('register.monthTooBig');
+      } else if (year < 2025 || year > 2040) {
+        error = t('register.yearRange');
+      } else if (inputDate < today) {
+        error = t('register.dateTooEarly');
         }
         
         setErrors((prev: any) => ({ ...prev, [field]: error }));
@@ -261,7 +264,14 @@ const DriverRegisterScreen: React.FC = () => {
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Ошибка', 'Необходим доступ к галерее для выбора фото');
+      Alert.alert(
+        t('register.galleryAccess'),
+        t('register.galleryAccessRequired'),
+        [
+          { text: t('register.cancel'), style: 'cancel' },
+          { text: t('register.settings'), onPress: () => Linking.openSettings() }
+        ]
+      );
       return false;
     }
     return true;
@@ -270,7 +280,14 @@ const DriverRegisterScreen: React.FC = () => {
   const requestCameraPermissions = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Ошибка', 'Необходим доступ к камере для съемки фото');
+      Alert.alert(
+        t('register.cameraAccess'),
+        t('register.cameraAccessRequired'),
+        [
+          { text: t('register.cancel'), style: 'cancel' },
+          { text: t('register.settings'), onPress: () => Linking.openSettings() }
+        ]
+      );
       return false;
     }
     return true;
@@ -278,19 +295,19 @@ const DriverRegisterScreen: React.FC = () => {
 
   const showImagePickerOptions = (type: 'license' | 'passport') => {
     Alert.alert(
-      'Выберите способ',
-      'Как вы хотите добавить фото?',
+      t('register.selectMethod'),
+      t('register.howToAddPhoto'),
       [
         {
-          text: 'Камера',
+          text: t('register.camera'),
           onPress: () => handleTakePhoto(type),
         },
         {
-          text: 'Галерея',
+          text: t('register.gallery'),
           onPress: () => handlePickImage(type),
         },
         {
-          text: 'Отмена',
+          text: t('register.cancel'),
           style: 'cancel',
         },
       ]
@@ -301,25 +318,30 @@ const DriverRegisterScreen: React.FC = () => {
     const hasPermission = await requestCameraPermissions();
     if (!hasPermission) return;
 
+    setUploadingPhoto(type);
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 0.8,
+        base64: false,
       });
 
       if (!result.canceled && result.assets[0]) {
+        const photoUri = result.assets[0].uri;
         if (type === 'license') {
-          setLicensePhoto(result.assets[0].uri);
+          setLicensePhoto(photoUri);
           setErrors((prev: any) => ({ ...prev, licensePhoto: undefined }));
         } else {
-          setPassportPhoto(result.assets[0].uri);
+          setPassportPhoto(photoUri);
           setErrors((prev: any) => ({ ...prev, passportPhoto: undefined }));
         }
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Не удалось сделать фото');
+      Alert.alert(t('register.photoError'), t('register.photoTakeError'));
+    } finally {
+      setUploadingPhoto(null);
     }
   };
 
@@ -327,26 +349,54 @@ const DriverRegisterScreen: React.FC = () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) return;
 
+    setUploadingPhoto(type);
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 0.8,
+        base64: false,
       });
 
       if (!result.canceled && result.assets[0]) {
+        const photoUri = result.assets[0].uri;
         if (type === 'license') {
-          setLicensePhoto(result.assets[0].uri);
+          setLicensePhoto(photoUri);
           setErrors((prev: any) => ({ ...prev, licensePhoto: undefined }));
         } else {
-          setPassportPhoto(result.assets[0].uri);
+          setPassportPhoto(photoUri);
           setErrors((prev: any) => ({ ...prev, passportPhoto: undefined }));
         }
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Не удалось выбрать фото');
+      Alert.alert(t('register.photoError'), t('register.photoPickError'));
+    } finally {
+      setUploadingPhoto(null);
     }
+  };
+
+  const handleRemovePhoto = (type: 'license' | 'passport') => {
+    Alert.alert(
+      t('register.deletePhoto'),
+      t('register.deletePhotoConfirm'),
+      [
+        { text: t('register.cancel'), style: 'cancel' },
+        {
+          text: t('register.delete'),
+          style: 'destructive',
+          onPress: () => {
+            if (type === 'license') {
+              setLicensePhoto(null);
+              setErrors((prev: any) => ({ ...prev, licensePhoto: t('register.licensePhotoRequired') }));
+            } else {
+              setPassportPhoto(null);
+              setErrors((prev: any) => ({ ...prev, passportPhoto: t('register.passportPhotoRequired') }));
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleSelectLicensePhoto = () => {
@@ -361,22 +411,40 @@ const DriverRegisterScreen: React.FC = () => {
 
   const validate = () => {
     const newErrors: any = {};
+    
+    // Основная информация
     if (!form.firstName.trim()) newErrors.firstName = t('register.firstNameRequired');
     if (!form.lastName.trim()) newErrors.lastName = t('register.lastNameRequired');
     if (!form.email.trim()) newErrors.email = t('register.emailRequired');
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = t('register.emailInvalid');
     if (!form.phone.trim()) newErrors.phone = t('register.phoneRequired');
+    
+    // Пароль
     if (!form.password) newErrors.password = t('register.passwordRequired');
-    else if (form.password.length < 8) newErrors.password = 'Пароль должен содержать минимум 8 символов';
-    else if (!/(?=.*[a-z])/.test(form.password)) newErrors.password = 'Пароль должен содержать строчные буквы';
-    else if (!/(?=.*[A-Z])/.test(form.password)) newErrors.password = 'Пароль должен содержать заглавные буквы';
-    else if (!/(?=.*\d)/.test(form.password)) newErrors.password = 'Пароль должен содержать цифры';
-    else if (!/(?=.*[!@#$%^&*])/.test(form.password)) newErrors.password = 'Пароль должен содержать специальные символы (!@#$%^&*)';
+    else if (form.password.length < 8) newErrors.password = t('register.passwordShort');
+    else if (!/(?=.*[a-z])/.test(form.password)) newErrors.password = t('register.passwordLowercase');
+    else if (!/(?=.*[A-Z])/.test(form.password)) newErrors.password = t('register.passwordUppercase');
+    else if (!/(?=.*\d)/.test(form.password)) newErrors.password = t('register.passwordNumbers');
+    else if (!/(?=.*[!@#$%^&*])/.test(form.password)) newErrors.password = t('register.passwordSpecial');
     if (form.confirmPassword !== form.password) newErrors.confirmPassword = t('register.passwordsDontMatch');
-    if (!form.licenseExpiry) newErrors.licenseExpiry = 'Введите срок действия прав';
-    else if (form.licenseExpiry.length !== 10) newErrors.licenseExpiry = 'Введите дату в формате ДД.ММ.ГГГГ';
-    if (!licensePhoto) newErrors.licensePhoto = 'Необходимо загрузить фото водительских прав';
-    if (!passportPhoto) newErrors.passportPhoto = 'Необходимо загрузить фото техпаспорта';
+    
+    // Документы
+    if (!form.country) newErrors.country = t('register.countryRequired');
+    if (!form.licenseNumber.trim()) newErrors.licenseNumber = t('register.licenseNumberRequired');
+    if (!form.licenseExpiry) newErrors.licenseExpiry = t('register.licenseExpiryRequired');
+    else if (form.licenseExpiry.length !== 10) newErrors.licenseExpiry = t('register.licenseExpiryInvalid');
+    if (!licensePhoto) newErrors.licensePhoto = t('register.licensePhotoRequired');
+    if (!passportPhoto) newErrors.passportPhoto = t('register.passportPhotoRequired');
+    
+    // Информация об автомобиле
+    if (!form.vehicleNumber.trim()) newErrors.vehicleNumber = t('register.vehicleNumberRequired');
+    if (!form.experience) newErrors.experience = t('register.experienceRequired');
+    if (!form.tariff) newErrors.tariff = t('register.tariffRequired');
+    if (!form.carBrand) newErrors.carBrand = t('register.carBrandRequired');
+    if (!form.carModel) newErrors.carModel = t('register.carModelRequired');
+    if (!form.carYear) newErrors.carYear = t('register.carYearRequired');
+    if (!form.carMileage.trim()) newErrors.carMileage = t('register.carMileageRequired');
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -418,13 +486,13 @@ const DriverRegisterScreen: React.FC = () => {
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="#23408E" />
             </TouchableOpacity>
-            <Text style={styles.title}>Регистрация водителя</Text>
-            <Text style={styles.subtitle}>Создайте новый аккаунт Водителя</Text>
+            <Text style={styles.title}>{t('register.titleDriver')}</Text>
+            <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
         </View>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.firstName')}</Text>
+              <Text style={styles.label}>{t('register.firstName')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.firstName}
@@ -436,7 +504,7 @@ const DriverRegisterScreen: React.FC = () => {
               {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.lastName')}</Text>
+              <Text style={styles.label}>{t('register.lastName')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.lastName}
@@ -448,7 +516,7 @@ const DriverRegisterScreen: React.FC = () => {
               {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.email')}</Text>
+              <Text style={styles.label}>{t('register.email')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.email}
@@ -461,7 +529,7 @@ const DriverRegisterScreen: React.FC = () => {
               {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.phone')}</Text>
+              <Text style={styles.label}>{t('register.phone')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.phone}
@@ -473,129 +541,150 @@ const DriverRegisterScreen: React.FC = () => {
               {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Страна выдачи документа</Text>
+              <Text style={styles.label}>{t('register.countryOfIssue')} <Text style={styles.requiredStar}>*</Text></Text>
             <Select
                 value={form.country}
                 onSelect={(option) => handleCountryChange(option)}
                 options={COUNTRIES.map(country => ({ label: country.name, value: country.code }))}
-                placeholder="Выберите страну"
+                placeholder={t('register.countryOfIssuePlaceholder')}
                 searchable={true}
               />
               {errors.country && <Text style={styles.errorText}>{errors.country}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Номер водительских прав</Text>
+              <Text style={styles.label}>{t('register.licenseNumber')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.licenseNumber}
                 onChangeText={(v) => handleChange('licenseNumber', v)}
-                placeholder="Введите номер прав"
+                placeholder={t('register.licenseNumberPlaceholder')}
                 placeholderTextColor={PLACEHOLDER_COLOR}
                 autoCapitalize="characters"
+                textContentType="none"
+                autoComplete="off"
               />
               {errors.licenseNumber && <Text style={styles.errorText}>{errors.licenseNumber}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Срок действия прав</Text>
+              <Text style={styles.label}>{t('register.licenseExpiry')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.licenseExpiry}
                 onChangeText={(v) => handleChange('licenseExpiry', v)}
-                placeholder="ДД.ММ.ГГГГ"
+                placeholder={t('register.licenseExpiryPlaceholder')}
                 placeholderTextColor={PLACEHOLDER_COLOR}
-                keyboardType="numeric"
+                keyboardType="numbers-and-punctuation"
                 maxLength={10}
+                textContentType="none"
+                autoComplete="off"
               />
               {errors.licenseExpiry && <Text style={styles.errorText}>{errors.licenseExpiry}</Text>}
             </View>
 
             {/* Загрузка фото водительских прав */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Фото водительских прав</Text>
-              <TouchableOpacity style={styles.uploadButton} onPress={handleSelectLicensePhoto}>
-                <Ionicons name="camera-outline" size={24} color="#23408E" />
+              <Text style={styles.label}>{t('register.licensePhoto')} <Text style={styles.requiredStar}>*</Text></Text>
+              <TouchableOpacity 
+                style={[styles.uploadButton, uploadingPhoto === 'license' && styles.uploadButtonDisabled]} 
+                onPress={handleSelectLicensePhoto}
+                disabled={uploadingPhoto === 'license'}
+              >
+                {uploadingPhoto === 'license' ? (
+                  <ActivityIndicator size="small" color="#23408E" />
+                ) : (
+                  <Ionicons name="camera-outline" size={24} color="#23408E" />
+                )}
                 <Text style={styles.uploadButtonText}>
-                  {licensePhoto ? 'Изменить фото' : 'Выбрать фото'}
+                  {uploadingPhoto === 'license' 
+                    ? t('register.uploading')
+                    : licensePhoto 
+                      ? t('register.changePhoto')
+                      : t('register.uploadPhoto')
+                  }
                 </Text>
               </TouchableOpacity>
               {licensePhoto && (
                 <View style={styles.photoPreview}>
-                  <Text style={styles.photoPreviewText}>✓ Фото загружено</Text>
+                  <Image source={{ uri: licensePhoto }} style={styles.photoPreviewImage} />
+                  <TouchableOpacity style={styles.removePhotoButton} onPress={() => handleRemovePhoto('license')}>
+                    <Ionicons name="close-circle" size={24} color="#FF0000" />
+                  </TouchableOpacity>
+                  <Text style={styles.photoPreviewText}>{t('register.photoUploaded')}</Text>
                 </View>
               )}
               {errors.licensePhoto && <Text style={styles.errorText}>{errors.licensePhoto}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Номер автомобиля</Text>
+              <Text style={styles.label}>{t('register.vehicleNumber')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.vehicleNumber}
                 onChangeText={(v) => handleChange('vehicleNumber', v)}
-                placeholder="Введите номер авто"
+                placeholder={t('register.vehicleNumberPlaceholder')}
                 placeholderTextColor={PLACEHOLDER_COLOR}
                 autoCapitalize="characters"
               />
               {errors.vehicleNumber && <Text style={styles.errorText}>{errors.vehicleNumber}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Стаж вождения (лет)</Text>
+              <Text style={styles.label}>{t('register.experience')} <Text style={styles.requiredStar}>*</Text></Text>
               <Select
                 value={form.experience}
                 onSelect={(option) => handleExperienceChange(option)}
                 options={experienceOptions}
-                placeholder="Выберите стаж вождения"
+                placeholder={t('register.experienceRequired')}
               />
               {errors.experience && <Text style={styles.errorText}>{errors.experience}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Тариф</Text>
+              <Text style={styles.label}>{t('register.tariff')} <Text style={styles.requiredStar}>*</Text></Text>
               <Select
                 value={form.tariff}
                 onSelect={(option) => handleTariffChange(option.value)}
                 options={tariffOptions}
-                placeholder="Выберите тариф"
+                placeholder={t('register.tariffRequired')}
               />
               {errors.tariff && <Text style={styles.errorText}>{errors.tariff}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Марка автомобиля</Text>
+              <Text style={styles.label}>{t('register.carBrand')} <Text style={styles.requiredStar}>*</Text></Text>
               <Select
                 value={form.carBrand}
                 onSelect={(option) => handleBrandChange(option.value)}
                 options={brandOptions}
-                placeholder="Выберите марку авто"
+                placeholder={t('register.carBrandRequired')}
                 disabled={!form.tariff}
               />
               {errors.carBrand && <Text style={styles.errorText}>{errors.carBrand}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Модель автомобиля</Text>
+              <Text style={styles.label}>{t('register.carModel')} <Text style={styles.requiredStar}>*</Text></Text>
               <Select
                 value={form.carModel}
                 onSelect={(option) => handleModelChange(option.value)}
                 options={modelOptions}
-                placeholder="Выберите модель авто"
+                placeholder={t('register.carModelRequired')}
                 disabled={!form.carBrand}
               />
               {errors.carModel && <Text style={styles.errorText}>{errors.carModel}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Год выпуска</Text>
+              <Text style={styles.label}>{t('register.carYear')} <Text style={styles.requiredStar}>*</Text></Text>
             <Select
                 value={form.carYear}
                 onSelect={handleYearChange}
                 options={yearOptions}
-                placeholder="Выберите год выпуска"
+                placeholder={t('register.carYearRequired')}
               />
               {errors.carYear && <Text style={styles.errorText}>{errors.carYear}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Пробег (км)</Text>
+              <Text style={styles.label}>{t('register.carMileage')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.carMileage}
                 onChangeText={(v) => handleChange('carMileage', v)}
-                placeholder="Введите пробег авто"
+                placeholder={t('register.carMileagePlaceholder')}
                 placeholderTextColor={PLACEHOLDER_COLOR}
                 keyboardType="numeric"
               />
@@ -604,22 +693,39 @@ const DriverRegisterScreen: React.FC = () => {
 
             {/* Загрузка фото техпаспорта */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Фото техпаспорта</Text>
-              <TouchableOpacity style={styles.uploadButton} onPress={handleSelectPassportPhoto}>
-                <Ionicons name="document-outline" size={24} color="#23408E" />
+              <Text style={styles.label}>{t('register.passportPhoto')} <Text style={styles.requiredStar}>*</Text></Text>
+              <TouchableOpacity 
+                style={[styles.uploadButton, uploadingPhoto === 'passport' && styles.uploadButtonDisabled]} 
+                onPress={handleSelectPassportPhoto}
+                disabled={uploadingPhoto === 'passport'}
+              >
+                {uploadingPhoto === 'passport' ? (
+                  <ActivityIndicator size="small" color="#23408E" />
+                ) : (
+                  <Ionicons name="document-outline" size={24} color="#23408E" />
+                )}
                 <Text style={styles.uploadButtonText}>
-                  {passportPhoto ? 'Изменить фото' : 'Выбрать фото'}
+                  {uploadingPhoto === 'passport' 
+                    ? t('register.uploading')
+                    : passportPhoto 
+                      ? t('register.changePhoto')
+                      : t('register.uploadPhoto')
+                  }
                 </Text>
               </TouchableOpacity>
               {passportPhoto && (
                 <View style={styles.photoPreview}>
-                  <Text style={styles.photoPreviewText}>✓ Фото загружено</Text>
+                  <Image source={{ uri: passportPhoto }} style={styles.photoPreviewImage} />
+                  <TouchableOpacity style={styles.removePhotoButton} onPress={() => handleRemovePhoto('passport')}>
+                    <Ionicons name="close-circle" size={24} color="#FF0000" />
+                  </TouchableOpacity>
+                  <Text style={styles.photoPreviewText}>{t('register.photoUploaded')}</Text>
                 </View>
               )}
               {errors.passportPhoto && <Text style={styles.errorText}>{errors.passportPhoto}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.password')}</Text>
+              <Text style={styles.label}>{t('register.password')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.password}
@@ -632,7 +738,7 @@ const DriverRegisterScreen: React.FC = () => {
               {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.confirmPassword')}</Text>
+              <Text style={styles.label}>{t('register.confirmPassword')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.confirmPassword}
@@ -685,12 +791,12 @@ const DriverRegisterScreen: React.FC = () => {
       <Modal visible={showTerms} transparent animationType="fade" onRequestClose={() => setShowTerms(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{termsMatch ? termsMatch[1] : 'Условия'}</Text>
+            <Text style={styles.modalTitle}>{termsMatch ? termsMatch[1] : t('register.terms')}</Text>
             <ScrollView style={{ maxHeight: 300 }}>
               <Text style={styles.modalText}>{t('register.termsText')}</Text>
             </ScrollView>
             <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowTerms(false)}>
-              <Text style={styles.modalCloseText}>OK</Text>
+              <Text style={styles.modalCloseText}>{t('register.ok')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -699,12 +805,12 @@ const DriverRegisterScreen: React.FC = () => {
       <Modal visible={showPrivacy} transparent animationType="fade" onRequestClose={() => setShowPrivacy(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{privacyMatch ? privacyMatch[1] : 'Политика'}</Text>
+            <Text style={styles.modalTitle}>{privacyMatch ? privacyMatch[1] : t('register.privacy')}</Text>
             <ScrollView style={{ maxHeight: 300 }}>
               <Text style={styles.modalText}>{t('register.privacyText')}</Text>
             </ScrollView>
             <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setShowPrivacy(false)}>
-              <Text style={styles.modalCloseText}>OK</Text>
+              <Text style={styles.modalCloseText}>{t('register.ok')}</Text>
             </TouchableOpacity>
           </View>
         </View>

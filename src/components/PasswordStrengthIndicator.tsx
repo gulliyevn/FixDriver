@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { PasswordStrength, Validators } from '../utils/validators';
 import { PasswordStrengthIndicatorStyles } from '../styles/components/PasswordStrengthIndicator.styles';
 
@@ -23,6 +24,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
   const calculatedStrength = strength || (value ? Validators.getPasswordStrength(value) : defaultStrength);
   const finalStrength = calculatedStrength || defaultStrength;
   const { isDark } = useTheme();
+  const { t } = useLanguage();
 
   const getStrengthColor = (level: string) => {
     switch (level) {
@@ -36,11 +38,11 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
 
   const getStrengthText = (level: string) => {
     switch (level) {
-      case 'weak': return 'Слабый';
-      case 'medium': return 'Средний';
-      case 'strong': return 'Сильный';
-      case 'very-strong': return 'Очень сильный';
-      default: return 'Неизвестно';
+      case 'weak': return t('register.passwordRequirements.weak') || 'Слабый';
+      case 'medium': return t('register.passwordRequirements.medium') || 'Средний';
+      case 'strong': return t('register.passwordRequirements.strong') || 'Сильный';
+      case 'very-strong': return t('register.passwordRequirements.veryStrong') || 'Очень сильный';
+      default: return t('register.passwordRequirements.unknown') || 'Неизвестно';
     }
   };
 
@@ -99,7 +101,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
 
       {showFeedback && finalStrength.feedback.length > 0 && (
         <View style={PasswordStrengthIndicatorStyles.feedbackContainer}>
-          {finalStrength.feedback.slice(0, 3).map((feedback, index) => (
+          {finalStrength.feedback.slice(0, 3).map((feedbackKey, index) => (
             <View key={index} style={PasswordStrengthIndicatorStyles.feedbackItem}>
               <Ionicons
                 name="information-circle-outline"
@@ -110,7 +112,7 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
                 PasswordStrengthIndicatorStyles.feedbackText,
                 { color: isDark ? '#9CA3AF' : '#6B7280' }
               ]}>
-                {String(feedback)}
+                {t(`register.passwordRequirements.${feedbackKey}`)}
               </Text>
             </View>
           ))}

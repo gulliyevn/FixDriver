@@ -87,13 +87,13 @@ export class Validators {
     // Проверка на повторяющиеся символы
     if (/(.)\1{2,}/.test(password)) {
       score -= 1;
-      feedback.push('Избегайте повторяющихся символов');
+      feedback.push('repeat');
     }
 
     // Проверка на последовательности
     if (/123|abc|qwe/i.test(password)) {
       score -= 1;
-      feedback.push('Избегайте простых последовательностей');
+      feedback.push('sequence');
     }
 
     // Определение уровня
@@ -103,12 +103,12 @@ export class Validators {
     else if (score <= 7) level = 'strong';
     else level = 'very-strong';
 
-    // Добавляем рекомендации
-    if (password.length < 8) feedback.push('Добавьте больше символов');
-    if (!/[A-Z]/.test(password)) feedback.push('Добавьте заглавные буквы');
-    if (!/[a-z]/.test(password)) feedback.push('Добавьте строчные буквы');
-    if (!/\d/.test(password)) feedback.push('Добавьте цифры');
-    if (!/[@$!%*?&]/.test(password)) feedback.push('Добавьте специальные символы');
+    // Добавляем рекомендации (ключи)
+    if (password.length < 8) feedback.push('minLength');
+    if (!/[A-Z]/.test(password)) feedback.push('uppercase');
+    if (!/[a-z]/.test(password)) feedback.push('lowercase');
+    if (!/\d/.test(password)) feedback.push('numbers');
+    if (!/[@$!%*?&]/.test(password)) feedback.push('specialChars');
 
     return { score, level, feedback };
   }

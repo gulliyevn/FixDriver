@@ -36,7 +36,7 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
     marginBottom: 16,
   },
   form: {
-    marginTop: 8,
+    marginTop: 0,
   },
   inputContainer: {
     marginBottom: 18,
@@ -46,6 +46,30 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#111827',
     marginBottom: 8,
+  },
+  requiredLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 8,
+  },
+  requiredStar: {
+    color: '#DC2626',
+    fontWeight: 'bold',
+  },
+  infoContainer: {
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#92400E',
+    textAlign: 'center',
   },
   input: {
     backgroundColor: '#fff',
@@ -168,6 +192,10 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
     paddingVertical: 14,
     marginTop: 4,
   },
+  uploadButtonDisabled: {
+    opacity: 0.6,
+    backgroundColor: '#F9FAFB',
+  },
   uploadButtonText: {
     color: '#23408E',
     fontSize: 16,
@@ -182,11 +210,26 @@ export const DriverRegisterScreenStyles = StyleSheet.create({
     marginTop: 8,
     borderWidth: 1,
     borderColor: '#0EA5E9',
+    position: 'relative',
   },
   photoPreviewText: {
     color: '#0EA5E9',
     fontSize: 14,
     fontWeight: '500',
+  },
+  photoPreviewImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    marginTop: 4,
+  },
+  removePhotoButton: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 2,
   },
   dateInputText: {
     fontSize: 16,

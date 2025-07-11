@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLanguage } from '../../context/LanguageContext';
 import { ClientRegisterScreenStyles as styles, PLACEHOLDER_COLOR } from '../../styles/screens/ClientRegisterScreen.styles';
-import PhoneInput from '../../components/PhoneInput';
+import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 
 const ClientRegisterScreen: React.FC = () => {
@@ -44,14 +44,23 @@ const ClientRegisterScreen: React.FC = () => {
 
   const validate = () => {
     const newErrors: any = {};
+    
+    // Основная информация
     if (!form.firstName.trim()) newErrors.firstName = t('register.firstNameRequired');
     if (!form.lastName.trim()) newErrors.lastName = t('register.lastNameRequired');
     if (!form.email.trim()) newErrors.email = t('register.emailRequired');
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = t('register.emailInvalid');
     if (!form.phone.trim()) newErrors.phone = t('register.phoneRequired');
+    
+    // Пароль
     if (!form.password) newErrors.password = t('register.passwordRequired');
-    else if (form.password.length < 6) newErrors.password = t('register.passwordShort');
+    else if (form.password.length < 8) newErrors.password = t('register.passwordShort');
+    else if (!/(?=.*[a-z])/.test(form.password)) newErrors.password = t('register.passwordLowercase');
+    else if (!/(?=.*[A-Z])/.test(form.password)) newErrors.password = t('register.passwordUppercase');
+    else if (!/(?=.*\d)/.test(form.password)) newErrors.password = t('register.passwordNumbers');
+    else if (!/(?=.*[!@#$%^&*])/.test(form.password)) newErrors.password = t('register.passwordSpecial');
     if (form.confirmPassword !== form.password) newErrors.confirmPassword = t('register.passwordsDontMatch');
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,7 +104,7 @@ const ClientRegisterScreen: React.FC = () => {
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.firstName')}</Text>
+              <Text style={styles.label}>{t('register.firstName')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.firstName}
@@ -107,7 +116,7 @@ const ClientRegisterScreen: React.FC = () => {
               {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.lastName')}</Text>
+              <Text style={styles.label}>{t('register.lastName')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.lastName}
@@ -119,7 +128,7 @@ const ClientRegisterScreen: React.FC = () => {
               {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.email')}</Text>
+              <Text style={styles.label}>{t('register.email')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.email}
@@ -132,17 +141,19 @@ const ClientRegisterScreen: React.FC = () => {
               {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.phone')}</Text>
-            <PhoneInput
+              <Text style={styles.label}>{t('register.phone')} <Text style={styles.requiredStar}>*</Text></Text>
+              <TextInput
+                style={styles.input}
                 value={form.phone}
-                onChangeText={(v: string) => handleChange('phone', v)}
-              error={errors.phone}
+                onChangeText={(v) => handleChange('phone', v)}
                 placeholder={t('register.phonePlaceholder')}
+                placeholderTextColor={PLACEHOLDER_COLOR}
+                keyboardType="phone-pad"
               />
               {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.password')}</Text>
+              <Text style={styles.label}>{t('register.password')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.password}
@@ -151,10 +162,11 @@ const ClientRegisterScreen: React.FC = () => {
                 placeholderTextColor={PLACEHOLDER_COLOR}
                 secureTextEntry
               />
+              {form.password && <PasswordStrengthIndicator value={form.password} showFeedback={true} />}
               {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
           </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('register.confirmPassword')}</Text>
+              <Text style={styles.label}>{t('register.confirmPassword')} <Text style={styles.requiredStar}>*</Text></Text>
               <TextInput
                 style={styles.input}
                 value={form.confirmPassword}
@@ -215,7 +227,7 @@ const ClientRegisterScreen: React.FC = () => {
     <Modal visible={showTerms} transparent animationType="fade" onRequestClose={() => setShowTerms(false)}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<terms>(.*?)<\/terms>/)?.[1] || 'Условия'}</Text>
+          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<terms>(.*?)<\/terms>/)?.[1] || t('register.terms')}</Text>
           <ScrollView style={{ maxHeight: 300 }}>
             <Text style={styles.modalText}>{t('register.termsText')}</Text>
           </ScrollView>
@@ -229,7 +241,7 @@ const ClientRegisterScreen: React.FC = () => {
     <Modal visible={showPrivacy} transparent animationType="fade" onRequestClose={() => setShowPrivacy(false)}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<privacy>(.*?)<\/privacy>/)?.[1] || 'Политика'}</Text>
+          <Text style={styles.modalTitle}>{t('register.agreeTermsRich').match(/<privacy>(.*?)<\/privacy>/)?.[1] || t('register.privacy')}</Text>
           <ScrollView style={{ maxHeight: 300 }}>
             <Text style={styles.modalText}>{t('register.privacyText')}</Text>
           </ScrollView>

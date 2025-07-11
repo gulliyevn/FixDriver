@@ -17,7 +17,7 @@ export const ClientRegisterScreenStyles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    left: 0,
+    left: -16,
     top: 0,
     padding: 8,
     zIndex: 2,
@@ -46,6 +46,10 @@ export const ClientRegisterScreenStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#111827',
     marginBottom: 8,
+  },
+  requiredStar: {
+    color: '#DC2626',
+    fontWeight: 'bold',
   },
   input: {
     backgroundColor: '#fff',

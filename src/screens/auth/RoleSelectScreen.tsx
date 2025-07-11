@@ -139,13 +139,13 @@ const RoleSelectScreen: React.FC = () => {
               </Text>
             </View>
             <View style={RoleSelectScreenStyles.featureItem}>
-              <Ionicons name="trending-up" size={20} color="#3B82F6" />
+              <Ionicons name="cash" size={20} color="#3B82F6" />
               <Text style={RoleSelectScreenStyles.featureText}>
                 {t('common.roleSelect.driverIncome')}
               </Text>
             </View>
             <View style={RoleSelectScreenStyles.featureItem}>
-              <Ionicons name="headset" size={20} color="#3B82F6" />
+              <Ionicons name="call" size={20} color="#3B82F6" />
               <Text style={RoleSelectScreenStyles.featureText}>
                 {t('common.roleSelect.driverSupport')}
               </Text>
