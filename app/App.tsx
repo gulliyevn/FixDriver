@@ -8,6 +8,7 @@ import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
+import 'formdata-polyfill';
 
 // Импортируем TokenUtils для отладки в режиме разработки
 if (__DEV__) {

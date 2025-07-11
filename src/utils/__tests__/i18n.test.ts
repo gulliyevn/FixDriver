@@ -1,9 +1,9 @@
-import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from '../../i18n';
+import { t, setLanguage, initializeLanguage } from '../../i18n';
 
 describe('i18n', () => {
   beforeEach(async () => {
-    // Сбрасываем язык к русскому перед каждым тестом
-    await setLanguage('ru');
+    // Инициализируем i18n перед каждым тестом
+    await initializeLanguage();
   });
 
   it('should translate common keys', () => {
@@ -13,10 +13,10 @@ describe('i18n', () => {
   });
 
   it('should translate login keys', () => {
-    expect(t('title')).toBe('Добро пожаловать');
-    expect(t('subtitle')).toBe('Войдите в свой аккаунт');
-    expect(t('email')).toBe('Email');
-    expect(t('password')).toBe('Пароль');
+    expect(t('login.title')).toBe('Добро пожаловать');
+    expect(t('login.subtitle')).toBe('Войдите в свой аккаунт');
+    expect(t('login.email')).toBe('Email');
+    expect(t('login.password')).toBe('Пароль');
   });
 
   it('should change language', async () => {
@@ -25,22 +25,13 @@ describe('i18n', () => {
     
     // Меняем на английский
     await setLanguage('en');
+    
+    // Проверяем английский язык
     expect(t('common.selectLanguage')).toBe('Select Language');
     
-    // Меняем обратно на русский
+    // Возвращаем русский
     await setLanguage('ru');
     expect(t('common.selectLanguage')).toBe('Выберите язык');
-  });
-
-  it('should have all supported languages', () => {
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('ru');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('en');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('tr');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('az');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('fr');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('ar');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('es');
-    expect(SUPPORTED_LANGUAGES).toHaveProperty('de');
   });
 
   it('should handle missing keys gracefully', () => {

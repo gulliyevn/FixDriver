@@ -19,7 +19,7 @@ import { LoginScreenStyles } from '../../styles/screens/LoginScreen.styles';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
-import { t } from '../../i18n';
+import { useLanguage } from '../../context/LanguageContext';
 
 type NavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -31,6 +31,7 @@ interface FormData {
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { login } = useAuth();
+  const { t } = useLanguage();
   
   const [formData, setFormData] = useState<FormData>({
     email: '',

@@ -14,16 +14,16 @@ const components = require('./components');
 const driver = require('./driver');
 const client = require('./client');
 
-// Supported languages
+// Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
-  ru: 'Русский',
-  en: 'English',
-  tr: 'Türkçe',
-  az: 'Azərbaycan',
-  fr: 'Français',
-  ar: 'العربية',
-  es: 'Español',
-  de: 'Deutsch',
+  ru: { name: 'Русский', native: 'Русский', flag: '🇷🇺' },
+  en: { name: 'English', native: 'English', flag: '🇺🇸' },
+  tr: { name: 'Türkçe', native: 'Türkçe', flag: '🇹🇷' },
+  az: { name: 'Azərbaycan', native: 'Azərbaycan', flag: '🇦🇿' },
+  fr: { name: 'Français', native: 'Français', flag: '🇫🇷' },
+  ar: { name: 'العربية', native: 'العربية', flag: '🇸🇦' },
+  es: { name: 'Español', native: 'Español', flag: '🇪🇸' },
+  de: { name: 'Deutsch', native: 'Deutsch', flag: '🇩🇪' },
 } as const;
 
 export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
@@ -31,80 +31,73 @@ export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
 // Default language
 const DEFAULT_LANGUAGE: SupportedLanguage = 'ru';
 
-// Helper function to flatten nested objects
-const flattenObject = (obj: any, prefix = ''): Record<string, string> => {
-  const flattened: Record<string, string> = {};
-  
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const newKey = prefix ? `${prefix}.${key}` : key;
-      
-      if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-        Object.assign(flattened, flattenObject(obj[key], newKey));
-      } else {
-        flattened[newKey] = obj[key];
-      }
-    }
-  }
-  
-  return flattened;
-};
-
-// Create flattened translations for each language
-const createFlattenedTranslations = (lang: string) => {
-  const translations = {
-    ...login[lang],
-    ...register[lang],
-    ...profile[lang],
-    ...common[lang],
-    ...errors[lang],
-    ...notifications[lang],
-    ...support[lang],
-    ...navigation[lang],
-    ...components[lang],
-    ...driver[lang],
-    ...client[lang],
-  };
-  
-  const flattened = flattenObject(translations);
-  
-  // Debug: log some keys for the current language
-  if (lang === 'ru') {
-    console.log('Debug - Available keys for ru:', Object.keys(flattened).slice(0, 10));
-    console.log('Debug - common.selectLanguage:', flattened['common.selectLanguage']);
-    console.log('Debug - title:', flattened['title']);
-  }
-  
-  return flattened;
-};
-
-// Create i18n instance with flattened translations
-const i18n = new I18n({
-  ru: createFlattenedTranslations('ru'),
-  en: createFlattenedTranslations('en'),
-  tr: createFlattenedTranslations('tr'),
-  az: createFlattenedTranslations('az'),
-  fr: createFlattenedTranslations('fr'),
-  ar: createFlattenedTranslations('ar'),
-  es: createFlattenedTranslations('es'),
-  de: createFlattenedTranslations('de'),
+// Create translations for each language (сохраняем namespace)
+const createTranslations = (lang: string) => ({
+  common: common[lang],
+  login: login[lang],
+  register: register[lang],
+  profile: profile[lang],
+  errors: errors[lang],
+  notifications: notifications[lang],
+  support: support[lang],
+  navigation: navigation[lang],
+  components: components[lang],
+  driver: driver[lang],
+  client: client[lang],
 });
 
-// Configure i18n
+// Create i18n instance with translations
+const i18n = new I18n({
+  ru: createTranslations('ru'),
+  en: createTranslations('en'),
+  tr: createTranslations('tr'),
+  az: createTranslations('az'),
+  fr: createTranslations('fr'),
+  ar: createTranslations('ar'),
+  es: createTranslations('es'),
+  de: createTranslations('de'),
+});
+
 i18n.defaultLocale = DEFAULT_LANGUAGE;
 i18n.locale = DEFAULT_LANGUAGE;
 i18n.enableFallback = true;
+i18n.defaultSeparator = '.';
 
 // Storage keys
 const LANGUAGE_STORAGE_KEY = '@FixDrive:language';
 
+// Event listeners for language changes
+type LanguageChangeListener = (language: SupportedLanguage) => void;
+const languageChangeListeners: LanguageChangeListener[] = [];
+
+export const addLanguageChangeListener = (listener: LanguageChangeListener) => {
+  languageChangeListeners.push(listener);
+};
+
+export const removeLanguageChangeListener = (listener: LanguageChangeListener) => {
+  const index = languageChangeListeners.indexOf(listener);
+  if (index > -1) {
+    languageChangeListeners.splice(index, 1);
+  }
+};
+
+const notifyLanguageChange = (language: SupportedLanguage) => {
+  languageChangeListeners.forEach(listener => listener(language));
+};
+
 // Language management
 export const setLanguage = async (language: SupportedLanguage): Promise<void> => {
   try {
+    if (!SUPPORTED_LANGUAGES[language]) {
+      throw new Error(`Unsupported language: ${language}`);
+    }
+    
     i18n.locale = language;
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    notifyLanguageChange(language);
   } catch (error) {
     console.error('Error setting language:', error);
+    throw error;
   }
 };
 
@@ -121,13 +114,32 @@ export const getLanguage = async (): Promise<SupportedLanguage> => {
 };
 
 export const initializeLanguage = async (): Promise<void> => {
-  const language = await getLanguage();
-  i18n.locale = language;
+  try {
+    const language = await getLanguage();
+    i18n.locale = language;
+    notifyLanguageChange(language);
+  } catch (error) {
+    console.error('Error initializing language:', error);
+    i18n.locale = DEFAULT_LANGUAGE;
+  }
 };
 
-// Main translation function
+// Main translation function with better error handling
 export const t = (key: string, params?: Record<string, string | number>): string => {
-  return i18n.t(key, params);
+  try {
+    const translation = i18n.t(key, params);
+    
+    // If translation is the same as key, it means translation is missing
+    if (translation === key) {
+      console.warn(`Missing translation for key: ${key}`);
+      return key;
+    }
+    
+    return translation;
+  } catch (error) {
+    console.error(`Translation error for key "${key}":`, error);
+    return key;
+  }
 };
 
 // Get current language
@@ -138,6 +150,19 @@ export const getCurrentLanguage = (): SupportedLanguage => {
 // Check if RTL language
 export const isRTL = (): boolean => {
   return i18n.locale === 'ar';
+};
+
+// Get language info
+export const getLanguageInfo = (language: SupportedLanguage) => {
+  return SUPPORTED_LANGUAGES[language];
+};
+
+// Get all language options for selector
+export const getLanguageOptions = () => {
+  return Object.entries(SUPPORTED_LANGUAGES).map(([code, info]) => ({
+    code: code as SupportedLanguage,
+    ...info,
+  }));
 };
 
 export default i18n; 

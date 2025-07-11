@@ -1,16 +1,25 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from '../../components/Button';
-import { useTheme } from '../../context/ThemeContext';
 import { RoleSelectScreenStyles } from '../../styles/screens/RoleSelectScreen.styles';
 import LanguageSelector from '../../components/LanguageSelector';
+import LanguageButton from '../../components/LanguageButton';
+import { useLanguage } from '../../context/LanguageContext';
+import i18n from '../../i18n';
 
 export default function RoleSelectScreen() {
   const navigation = useNavigation();
-  const { isDark } = useTheme();
   const [langModal, setLangModal] = React.useState(false);
+  const { t } = useLanguage();
+
+  React.useEffect(() => {
+    console.log('Текущий язык:', i18n.locale);
+    console.log('roleSelect.chooseAccountType:', t('roleSelect.chooseAccountType'));
+    console.log('roleSelect в ru:', i18n.translations['ru']?.['roleSelect']);
+    console.log('Ключи, начинающиеся с roleSelect:', Object.keys(i18n.translations['ru'] || {}).filter(k => k.startsWith('roleSelect')));
+  }, [i18n.locale]);
 
   const handleRoleSelect = (role: 'client' | 'driver') => {
     if (role === 'client') {
@@ -25,83 +34,159 @@ export default function RoleSelectScreen() {
   };
 
   return (
-    <View style={[RoleSelectScreenStyles.container, isDark && RoleSelectScreenStyles.containerDark, {flex: 1}]}> 
-      <ScrollView
-        contentContainerStyle={[RoleSelectScreenStyles.content, { flexGrow: 1, justifyContent: 'flex-end' }]}
+    <View style={RoleSelectScreenStyles.container}>
+      <ScrollView 
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={RoleSelectScreenStyles.contentContainer}
       >
-        {/* Заголовок */}
-        <View style={RoleSelectScreenStyles.header}>
-          <Text style={RoleSelectScreenStyles.title}>Выберите роль</Text>
-          <Text style={RoleSelectScreenStyles.subtitle}>Как вы хотите использовать приложение?</Text>
+        {/* Отступ сверху над иконкой */}
+        <View style={RoleSelectScreenStyles.spacerTop} />
+
+        {/* Логотип и иконка автомобиля по центру */}
+        <View style={RoleSelectScreenStyles.headerLogo}>
+          <View style={RoleSelectScreenStyles.logoIconWrap}>
+            <MaterialCommunityIcons 
+              name="car-multiple" 
+              size={56} 
+              color="#10B981" 
+            />
+          </View>
+          <Text style={RoleSelectScreenStyles.logoText}>FixDrive</Text>
         </View>
-        {/* Клиент */}
-        <View style={[RoleSelectScreenStyles.card, RoleSelectScreenStyles.cardClient, isDark && RoleSelectScreenStyles.cardDark]}>  
-          <Text style={[RoleSelectScreenStyles.cardTitle, isDark && RoleSelectScreenStyles.cardTitleDark]}>Клиент</Text>
-          <Text style={RoleSelectScreenStyles.cardSubtitle}>Заказывайте поездки для себя и своих детей</Text>
-          <View style={RoleSelectScreenStyles.benefitsList}>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#22C55E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Безопасные поездки</Text>
+
+        {/* Отступ под иконкой/логотипом */}
+        <View style={RoleSelectScreenStyles.spacerLogoBottom} />
+
+        {/* Title (no icon) */}
+        <Text style={RoleSelectScreenStyles.title}>
+          {t('roleSelect.chooseAccountType')}
+        </Text>
+
+        {/* Main Content (карточки) */}
+        
+
+        {/* Client Card */}
+        <View style={RoleSelectScreenStyles.card}>
+          <View style={RoleSelectScreenStyles.cardHeader}>
+            <View style={RoleSelectScreenStyles.cardIconWrap}>
+              <Ionicons name="person" size={32} color="#10B981" />
             </View>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#22C55E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Отслеживание в реальном времени</Text>
+            <Text style={RoleSelectScreenStyles.cardTitle}>
+              {t('roleSelect.clientTitle')}
+            </Text>
+            <Text style={RoleSelectScreenStyles.cardSubtitle}>
+              {t('roleSelect.clientSubtitle')}
+            </Text>
+          </View>
+          
+          <View style={RoleSelectScreenStyles.cardContent}>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="shield-checkmark" size={20} color="#10B981" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.clientSafe')}
+              </Text>
             </View>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#22C55E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Удобная оплата</Text>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="location" size={20} color="#10B981" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.clientTracking')}
+              </Text>
+            </View>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="card" size={20} color="#10B981" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.clientPayment')}
+              </Text>
             </View>
           </View>
+
           <Button
-            title="Выбрать"
+            title={t('roleSelect.choose') || 'Выбрать'}
             onPress={() => handleRoleSelect('client')}
-            style={RoleSelectScreenStyles.chooseBtnClient}
+            style={StyleSheet.flatten([RoleSelectScreenStyles.chooseBtn, RoleSelectScreenStyles.chooseBtnClient])}
             textStyle={RoleSelectScreenStyles.chooseBtnText}
             icon="arrow-forward"
             iconPosition="right"
           />
         </View>
-        {/* Водитель */}
-        <View style={[RoleSelectScreenStyles.card, RoleSelectScreenStyles.cardDriver, isDark && RoleSelectScreenStyles.cardDark]}>  
-          <Text style={[RoleSelectScreenStyles.cardTitle, isDark && RoleSelectScreenStyles.cardTitleDark]}>Водитель</Text>
-          <Text style={RoleSelectScreenStyles.cardSubtitle}>Зарабатывайте, предоставляя услуги перевозки</Text>
-          <View style={RoleSelectScreenStyles.benefitsList}>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#23408E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Гибкий график работы</Text>
+
+        {/* Driver Card */}
+        <View style={RoleSelectScreenStyles.card}>
+          <View style={RoleSelectScreenStyles.cardHeader}>
+            <View style={RoleSelectScreenStyles.cardIconWrap}>
+              <Ionicons name="car" size={32} color="#3B82F6" />
             </View>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#23408E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Высокий доход</Text>
+            <Text style={RoleSelectScreenStyles.cardTitle}>
+              {t('roleSelect.driverTitle')}
+            </Text>
+            <Text style={RoleSelectScreenStyles.cardSubtitle}>
+              {t('roleSelect.driverSubtitle')}
+            </Text>
+          </View>
+          
+          <View style={RoleSelectScreenStyles.cardContent}>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="time" size={20} color="#3B82F6" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.driverFlexible')}
+              </Text>
             </View>
-            <View style={RoleSelectScreenStyles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={22} color="#23408E" />
-              <Text style={RoleSelectScreenStyles.benefitText}>Поддержка 24/7</Text>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="trending-up" size={20} color="#3B82F6" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.driverIncome')}
+              </Text>
+            </View>
+            <View style={RoleSelectScreenStyles.featureItem}>
+              <Ionicons name="headset" size={20} color="#3B82F6" />
+              <Text style={RoleSelectScreenStyles.featureText}>
+                {t('roleSelect.driverSupport')}
+              </Text>
             </View>
           </View>
+
           <Button
-            title="Выбрать"
+            title={t('roleSelect.choose') || 'Выбрать'}
             onPress={() => handleRoleSelect('driver')}
-            style={RoleSelectScreenStyles.chooseBtnDriver}
+            style={StyleSheet.flatten([RoleSelectScreenStyles.chooseBtn, RoleSelectScreenStyles.chooseBtnDriver])}
             textStyle={RoleSelectScreenStyles.chooseBtnText}
             icon="arrow-forward"
             iconPosition="right"
           />
         </View>
-        {/* Войти */}
-        <TouchableOpacity style={RoleSelectScreenStyles.loginWrap} onPress={handleLogin}>
-          <Text style={RoleSelectScreenStyles.loginText}>Уже есть аккаунт? <Text style={RoleSelectScreenStyles.loginLink}>Войти</Text></Text>
-        </TouchableOpacity>
-        {/* Кнопка выбора языка */}
-        <View style={RoleSelectScreenStyles.langWrap}>
-          <TouchableOpacity style={RoleSelectScreenStyles.langBtn} onPress={() => setLangModal(true)}>
-            <Ionicons name="language" size={20} color={isDark ? '#fff' : '#23408E'} />
-            <Text style={RoleSelectScreenStyles.langBtnText}>Язык</Text>
+
+        {/* Login Link (inline, одна строка) */}
+        <View style={[RoleSelectScreenStyles.loginRow, { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 24, marginBottom: 8 }]}> 
+          <Text style={RoleSelectScreenStyles.loginText}>
+            {t('roleSelect.alreadyAccount')}
+          </Text>
+          <TouchableOpacity onPress={handleLogin}>
+            <Text style={RoleSelectScreenStyles.loginLink}>
+              {t('roleSelect.login')}
+            </Text>
           </TouchableOpacity>
         </View>
+
+        {/* Отступ между Войти и LanguageButton */}
+        <View style={RoleSelectScreenStyles.spacerLoginLang} />
+
+        {/* Language Button (теперь под Войти) */}
+        <View style={RoleSelectScreenStyles.langWrap}>
+          <LanguageButton 
+            onPress={() => setLangModal(true)}
+            size="small"
+          />
+        </View>
+
+        {/* Пустое пространство снизу */}
+        <View style={RoleSelectScreenStyles.spacerBottom} />
       </ScrollView>
-      <LanguageSelector visible={langModal} onClose={() => setLangModal(false)} />
+
+      {/* Language Selector Modal */}
+      <LanguageSelector 
+        visible={langModal} 
+        onClose={() => setLangModal(false)} 
+      />
     </View>
   );
 }
