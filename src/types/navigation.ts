@@ -79,6 +79,16 @@ export type ClientStackParamList = {
   ChildrenList: undefined;
   BecomeDriver: undefined;
   ThemeToggle: undefined;
+  // Новые экраны профиля
+  Cards: undefined;
+  Debts: undefined;
+  Cars: undefined;
+  PaymentHistory: undefined;
+  Settings: undefined;
+  Residence: undefined;
+  Help: undefined;
+  About: undefined;
+  Balance: undefined;
 };
 
 // Параметры для водительских экранов

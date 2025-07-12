@@ -5,7 +5,7 @@ import MapScreen from '../screens/client/MapScreen';
 import DriversScreen from '../screens/client/DriversScreen';
 import ChatListScreen from '../screens/client/ChatListScreen';
 import ScheduleScreen from '../screens/client/ScheduleScreen';
-import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
+import ClientProfileStack from './ClientProfileStack';
 import { ClientStackParamList } from '../types/navigation';
 
 const Tab = createBottomTabNavigator<ClientStackParamList>();
@@ -43,7 +43,7 @@ const ClientNavigator: React.FC = () => {
       <Tab.Screen name="Drivers" component={DriversScreen} />
       <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Chat" component={ChatListScreen} />
-      <Tab.Screen name="Profile" component={ClientProfileScreen} />
+      <Tab.Screen name="Profile" component={ClientProfileStack} />
     </Tab.Navigator>
   );
 };

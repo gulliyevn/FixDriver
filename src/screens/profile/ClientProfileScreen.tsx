@@ -1,315 +1,145 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  TouchableOpacity, 
-  Alert, 
-  Switch,
-  StatusBar
-} from 'react-native';
-import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
-import AppAvatar from '../../components/AppAvatar';
-import ProfileOption from '../../components/ProfileOption';
-import ProfileNotificationsModal from '../../components/ProfileNotificationsModal';
-import ProfileChildrenSection from '../../components/ProfileChildrenSection';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AppCard from '../../components/AppCard';
-import { notificationService, Notification } from '../../services/NotificationService';
-import { mockChildren } from '../../mocks';
-import { ClientProfileScreenStyles } from '../../styles/screens/ClientProfileScreen.styles';
+import { useAuth } from '../../context/AuthContext';
+import { ClientProfileScreenStyles as styles } from '../../styles/screens/ClientProfileScreen.styles';
+import { mockUsers } from '../../mocks/users';
+import { ClientScreenProps } from '../../types/navigation';
 
-interface Child {
-  id: string;
-  name: string;
-  age: number;
-  school?: string;
-  avatar?: string;
-}
+// TODO: Для подключения бэкенда заменить на:
+// import { useProfile } from '../../hooks/useProfile';
+// import { useNotifications } from '../../hooks/useNotifications';
+// import { useUserStats } from '../../hooks/useUserStats';
 
-const ClientProfileScreen: React.FC = () => {
+const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigation }) => {
   const { logout } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
-  const { t, setLanguage, getCurrentLanguage, languageOptions, language } = useI18n();
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [locationEnabled, setLocationEnabled] = useState(true);
-  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
+  
+  // TODO: Для бэкенда заменить на:
+  // const { user, loading: userLoading } = useProfile();
+  // const { notificationsCount, loading: notificationsLoading } = useNotifications();
+  // const { userStats, loading: statsLoading } = useUserStats();
+  
+  const user = mockUsers[0]; // Используем первого клиента из моков
 
-  const [children] = useState<Child[]>(mockChildren);
-
-  // Отладочная информация
-  React.useEffect(() => {
-    console.log('🌍 Текущий язык в профиле:', language);
-    console.log('📝 Доступные языки:', languageOptions.map(lang => `${lang.flag} ${lang.native}`));
-  }, [language, languageOptions]);
-
-  const handleLogout = () => {
-    Alert.alert(
-      t('profile.logout'),
-      t('profile.logoutConfirm'),
-      [
-        { text: t('profile.logoutCancel'), style: 'cancel' },
-        { text: t('profile.logoutConfirmButton'), onPress: logout, style: 'destructive' }
-      ]
-    );
+  // Данные из мокдата
+  const getUserStats = (userId: string) => {
+    return {
+      trips: 127,
+      spent: '12 450 AZN',
+      rating: user.rating,
+      balance: '0 AZN',
+      address: user.address,
+      email: user.email,
+      memberSince: new Date(user.createdAt).getFullYear(),
+      id: user.id,
+      role: user.role,
+      avatar: user.avatar,
+    };
   };
 
-  const handleOptionPress = (option: string) => {
-    Alert.alert(t('profile.option'), t('profile.optionNotAvailable', { option }));
-  };
+  const userStats = getUserStats(user.id);
 
-  const handleLanguageSelect = async () => {
-    const currentLang = getCurrentLanguage();
-    
-    const languageNames = languageOptions.map(lang => ({
-      text: `${lang.flag} ${lang.native}`,
-      onPress: async () => {
-        if (lang.code !== currentLang) {
-          try {
-            console.log('🔄 Меняем язык с', currentLang, 'на', lang.code);
-            await setLanguage(lang.code);
-            console.log('✅ Язык успешно изменен на', lang.code);
-            Alert.alert(
-              t('profile.languageChanged'),
-              t('profile.languageChangeSuccess')
-            );
-          } catch (error) {
-            console.error('❌ Ошибка при смене языка:', error);
-            Alert.alert(t('common.error'), 'Failed to change language');
-          }
-        } else {
-          console.log('ℹ️ Язык уже установлен:', lang.code);
-        }
-      }
-    }));
+  // TODO: Для бэкенда добавить обработку загрузки
+  // if (userLoading || notificationsLoading || statsLoading) {
+  //   return <LoadingSpinner />;
+  // }
 
-    Alert.alert(
-      t('profile.selectLanguage'),
-      `Текущий язык: ${currentLang}`,
-      languageNames
-    );
-  };
-
-  const handleNotificationsCenter = () => {
-    setNotifications(notificationService.getNotifications());
-    setShowNotificationsModal(true);
-  };
-
-  const handleDeleteNotification = (notificationId: string) => {
-    Alert.alert(
-      t('profile.deleteNotification'),
-      t('profile.deleteNotificationConfirm'),
-      [
-        { text: t('profile.cancel'), style: 'cancel' },
-        {
-          text: t('profile.delete'),
-          style: 'destructive',
-          onPress: () => {
-            notificationService.removeNotification(notificationId);
-            setNotifications(notificationService.getNotifications());
-          },
-        },
-      ]
-    );
-  };
-
-  const handleMarkAllAsRead = () => {
-    notificationService.markAllAsRead();
-    setNotifications(notificationService.getNotifications());
-  };
-
-  const handleAddChild = () => {
-    handleOptionPress(t('profile.addChild'));
-  };
-
-  const handleEditChild = (child: Child) => {
-    handleOptionPress(`${t('profile.editProfile')} ${child.name}`);
-  };
+  // TODO: Для бэкенда добавить обработку ошибок
+  // if (!user) {
+  //   return <ErrorDisplay message="Не удалось загрузить профиль" />;
+  // }
 
   return (
-    <View style={[ClientProfileScreenStyles.container, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      
-      {/* Notifications Button */}
-      <TouchableOpacity 
-        style={ClientProfileScreenStyles.notificationButton} 
-        onPress={handleNotificationsCenter}
-      >
-        <Ionicons name="notifications-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-        <View style={ClientProfileScreenStyles.notificationBadge}>
-          <Text style={ClientProfileScreenStyles.notificationBadgeText}>3</Text>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      {/* Аватар, имя, телефон, колокол */}
+      <View style={styles.profileRow}>
+        <View style={styles.avatar}>
+          <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
         </View>
-      </TouchableOpacity>
-      
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Profile Header */}
-        <AppCard style={ClientProfileScreenStyles.profileCard} margin={16}>
-          <View style={ClientProfileScreenStyles.profileHeader}>
-            <AppAvatar
-              source={{ uri: "https://via.placeholder.com/80" }}
-              name="Иван Петров"
-              size={80}
-            />
-            <View style={ClientProfileScreenStyles.profileInfo}>
-              <Text style={ClientProfileScreenStyles.profileName}>Иван Петров</Text>
-              <Text style={ClientProfileScreenStyles.profileEmail}>ivan@example.com</Text>
-              <Text style={ClientProfileScreenStyles.profilePhone}>+7 (999) 123-45-67</Text>
-              <View style={ClientProfileScreenStyles.ratingContainer}>
-                <Text style={ClientProfileScreenStyles.ratingText}>4.8</Text>
-                <Text style={ClientProfileScreenStyles.ratingStar}>★</Text>
-                <Text style={ClientProfileScreenStyles.ratingLabel}>(127 поездок)</Text>
-              </View>
+        <View style={styles.profileText}>
+          <Text style={styles.profileName}>{user.name} {user.surname}</Text>
+          <Text style={styles.profilePhone}>{user.phone}</Text>
+          <Text style={styles.profileEmail}>{user.email}</Text>
+        </View>
+        <TouchableOpacity style={styles.bell} onPress={() => console.log('Открыть уведомления')}>
+          <Ionicons name="notifications-outline" size={24} color={styles.bellIcon.color} />
+          {notificationsCount > 0 && (
+            <View style={styles.bellBadge}>
+              <Text style={styles.bellBadgeText}>{notificationsCount}</Text>
             </View>
-          </View>
-        </AppCard>
-
-        {/* Quick Stats */}
-        <AppCard style={ClientProfileScreenStyles.statsCard} margin={16}>
-          <View style={ClientProfileScreenStyles.statsGrid}>
-            <View style={ClientProfileScreenStyles.statItem}>
-              <Text style={ClientProfileScreenStyles.statValue}>127</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.trips')}</Text>
-            </View>
-            <View style={ClientProfileScreenStyles.statDivider} />
-            <View style={ClientProfileScreenStyles.statItem}>
-              <Text style={ClientProfileScreenStyles.statValue}>₽12,450</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.spent')}</Text>
-            </View>
-            <View style={ClientProfileScreenStyles.statDivider} />
-            <View style={ClientProfileScreenStyles.statItem}>
-              <Text style={ClientProfileScreenStyles.statValue}>4.8</Text>
-              <Text style={ClientProfileScreenStyles.statLabel}>{t('profile.rating')}</Text>
-            </View>
-          </View>
-        </AppCard>
-
-        {/* Children Section */}
-        <ProfileChildrenSection
-          onAddChild={handleAddChild}
-          onEditChild={handleEditChild}
-        >
-          {children}
-        </ProfileChildrenSection>
-
-        {/* Settings Section */}
-        <AppCard style={ClientProfileScreenStyles.settingsCard} margin={16}>
-          <Text style={ClientProfileScreenStyles.sectionTitle}>{t('profile.settings')}</Text>
-          
-          <View style={ClientProfileScreenStyles.settingItem}>
-            <View style={ClientProfileScreenStyles.settingInfo}>
-              <Ionicons name="notifications" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.notifications')}</Text>
-            </View>
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={setNotificationsEnabled}
-              trackColor={{ false: '#E5E7EB', true: '#007AFF' }}
-              thumbColor={notificationsEnabled ? '#FFFFFF' : '#F9FAFB'}
-            />
-          </View>
-
-          <View style={ClientProfileScreenStyles.settingItem}>
-            <View style={ClientProfileScreenStyles.settingInfo}>
-              <Ionicons name="location" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.locationEnabled')}</Text>
-            </View>
-            <Switch
-              value={locationEnabled}
-              onValueChange={setLocationEnabled}
-              trackColor={{ false: '#E5E7EB', true: '#007AFF' }}
-              thumbColor={locationEnabled ? '#FFFFFF' : '#F9FAFB'}
-            />
-          </View>
-
-          <View style={ClientProfileScreenStyles.settingItem}>
-            <View style={ClientProfileScreenStyles.settingInfo}>
-              <Ionicons name="moon" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.darkTheme')}</Text>
-            </View>
-            <Switch
-              value={isDark}
-              onValueChange={toggleTheme}
-              trackColor={{ false: '#E5E7EB', true: '#007AFF' }}
-              thumbColor={isDark ? '#FFFFFF' : '#F9FAFB'}
-            />
-          </View>
-
-          <TouchableOpacity 
-            style={ClientProfileScreenStyles.settingItem}
-            onPress={handleLanguageSelect}
-          >
-            <View style={ClientProfileScreenStyles.settingInfo}>
-              <Ionicons name="language" size={20} color="#007AFF" />
-              <Text style={ClientProfileScreenStyles.settingText}>{t('profile.language')}</Text>
-            </View>
-            <View style={ClientProfileScreenStyles.settingValue}>
-              <Text style={ClientProfileScreenStyles.settingValueText}>
-                {languageOptions.find(lang => lang.code === getCurrentLanguage())?.native}
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color="#8E8E93" />
-            </View>
-          </TouchableOpacity>
-        </AppCard>
-
-        {/* Profile Options */}
-        <AppCard style={ClientProfileScreenStyles.optionsCard} margin={16}>
-          <ProfileOption
-            icon={<Ionicons name="person" size={22} color="#007AFF" />}
-            label={t('profile.editProfile')}
-            value={t('profile.editProfileDesc')}
-            onPress={() => handleOptionPress(t('profile.editProfile'))}
-          />
-          
-          <ProfileOption
-            icon={<Ionicons name="card" size={22} color="#007AFF" />}
-            label={t('profile.paymentMethods')}
-            value={t('profile.paymentMethodsDesc')}
-            onPress={() => handleOptionPress(t('profile.paymentMethods'))}
-          />
-          
-          <ProfileOption
-            icon={<Ionicons name="shield-checkmark" size={22} color="#007AFF" />}
-            label={t('profile.security')}
-            value={t('profile.securityDesc')}
-            onPress={() => handleOptionPress(t('profile.security'))}
-          />
-          
-          <ProfileOption
-            icon={<Ionicons name="help-circle" size={22} color="#007AFF" />}
-            label={t('profile.support')}
-            value={t('profile.supportDesc')}
-            onPress={() => handleOptionPress(t('profile.support'))}
-          />
-          
-          <ProfileOption
-            icon={<Ionicons name="information-circle" size={22} color="#007AFF" />}
-            label={t('profile.about')}
-            value={t('profile.aboutDesc')}
-            onPress={() => handleOptionPress(t('profile.about'))}
-          />
-        </AppCard>
-
-        {/* Logout Button */}
-        <TouchableOpacity
-          style={ClientProfileScreenStyles.logoutButton}
-          onPress={handleLogout}
-        >
-          <Text style={ClientProfileScreenStyles.logoutText}>{t('profile.logout')}</Text>
+          )}
         </TouchableOpacity>
-      </ScrollView>
-
-      {/* Notifications Modal */}
-      <ProfileNotificationsModal
-        visible={showNotificationsModal}
-        onClose={() => setShowNotificationsModal(false)}
-        notifications={notifications}
-        onDeleteNotification={handleDeleteNotification}
-        onMarkAllAsRead={handleMarkAllAsRead}
-      />
-    </View>
+      </View>
+      {/* Блок статистики */}
+      <View style={styles.statsBox}>
+        <View style={styles.statCol}>
+          <Text style={styles.statValue}>{userStats.trips}</Text>
+          <Text style={styles.statLabel}>Поездки</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statCol}>
+          <Text style={styles.statValue}>{userStats.spent}</Text>
+          <Text style={styles.statLabel}>Затраты</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statCol}>
+          <Text style={styles.statValue}>{userStats.rating}</Text>
+          <Text style={styles.statLabel}>Рейтинг</Text>
+        </View>
+      </View>
+      {/* Пункты меню */}
+      <TouchableOpacity style={[styles.menuItem, styles.menuItemFirst]} onPress={() => navigation.navigate('Balance')}>
+        <Ionicons name="refresh" size={28} color={styles.balanceIcon.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Мой баланс</Text>
+        <Text style={styles.menuValue}>{userStats.balance}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Cards')}>
+        <Ionicons name="card" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Карты</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Debts')}>
+        <Ionicons name="wallet" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Мои долги</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Cars')}>
+        <Ionicons name="car" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Автомобили</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PaymentHistory')}>
+        <Ionicons name="document-text" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>История платежей</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings')}>
+        <Ionicons name="settings" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Настройки</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Residence')}>
+        <Ionicons name="home" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Резиденция</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Help')}>
+        <Ionicons name="help-circle" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabel}>Помощь и правила</Text>
+        <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
+      </TouchableOpacity>
+      {/* О приложении */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('About')}>
+        <Ionicons name="information-circle" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
+        <Text style={styles.menuLabelAbout}>О приложении</Text>
+        <Text style={styles.menuVersion}>1.0.0</Text>
+      </TouchableOpacity>
+      {/* Выйти */}
+      <TouchableOpacity style={styles.logout} onPress={logout}>
+        <Text style={styles.logoutText}>Выйти</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
