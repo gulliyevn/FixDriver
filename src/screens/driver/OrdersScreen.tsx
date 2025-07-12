@@ -11,6 +11,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { mockOrders, mockUsers } from '../../mocks';
 import { OrdersScreenStyles } from '../../styles/screens/OrdersScreen.styles';
+import { colors } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Order {
   id: string;
@@ -26,6 +28,9 @@ interface Order {
 }
 
 const OrdersScreen: React.FC = () => {
+  const { isDark } = useTheme();
+  const currentColors = isDark ? colors.dark : colors.light;
+  
   const [searchQuery, setSearchQuery] = useState(''); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [selectedFilter, setSelectedFilter] = useState('all');
 
@@ -60,11 +65,11 @@ const OrdersScreen: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return '#FF9500';
-      case 'accepted': return '#007AFF';
-      case 'completed': return '#27ae60';
-      case 'cancelled': return '#FF3B30';
-      default: return '#666';
+      case 'pending': return colors.light.warning; // #F59E0B
+      case 'accepted': return colors.light.primary; // #083198
+      case 'completed': return colors.light.success; // #10B981
+      case 'cancelled': return colors.light.error; // #EF4444
+      default: return colors.light.textSecondary;
     }
   };
 
@@ -104,25 +109,25 @@ const OrdersScreen: React.FC = () => {
   });
 
   return (
-    <SafeAreaView style={OrdersScreenStyles.container}>
+    <SafeAreaView style={[OrdersScreenStyles.container, { backgroundColor: currentColors.background }]}>
       {/* Header */}
-      <View style={OrdersScreenStyles.header}>
-        <Text style={OrdersScreenStyles.headerTitle}>Заказы</Text>
+      <View style={[OrdersScreenStyles.header, { backgroundColor: currentColors.card }]}>
+        <Text style={[OrdersScreenStyles.headerTitle, { color: currentColors.text }]}>Заказы</Text>
         <TouchableOpacity style={OrdersScreenStyles.refreshButton}>
-          <Ionicons name="refresh" size={24} color="#007AFF" />
+          <Ionicons name="refresh" size={24} color={currentColors.primary} />
         </TouchableOpacity>
       </View>
 
       {/* Search */}
       <View style={OrdersScreenStyles.searchContainer}>
-        <View style={OrdersScreenStyles.searchInput}>
-          <Ionicons name="search" size={20} color="#666" style={OrdersScreenStyles.searchIcon} />
+        <View style={[OrdersScreenStyles.searchInput, { backgroundColor: currentColors.surface }]}>
+          <Ionicons name="search" size={20} color={currentColors.textSecondary} style={OrdersScreenStyles.searchIcon} />
           <TextInput
-            style={OrdersScreenStyles.input}
+            style={[OrdersScreenStyles.input, { color: currentColors.text }]}
             placeholder="Поиск заказов..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholderTextColor="#999"
+            placeholderTextColor={currentColors.textSecondary}
           />
         </View>
       </View>
@@ -135,18 +140,20 @@ const OrdersScreen: React.FC = () => {
               key={filter.key}
               style={[
                 OrdersScreenStyles.filterButton,
-                selectedFilter === filter.key && OrdersScreenStyles.filterButtonActive
+                { backgroundColor: currentColors.surface },
+                selectedFilter === filter.key && { backgroundColor: currentColors.primary }
               ]}
               onPress={() => handleFilterSelect(filter.key)}
             >
               <Ionicons 
                 name={filter.icon as keyof typeof Ionicons.glyphMap} 
                 size={16} 
-                color={selectedFilter === filter.key ? '#fff' : '#666'} 
+                color={selectedFilter === filter.key ? currentColors.card : currentColors.textSecondary} 
               />
               <Text style={[
                 OrdersScreenStyles.filterText,
-                selectedFilter === filter.key && OrdersScreenStyles.filterTextActive
+                { color: currentColors.textSecondary },
+                selectedFilter === filter.key && { color: currentColors.card }
               ]}>
                 {filter.label}
               </Text>
@@ -158,11 +165,11 @@ const OrdersScreen: React.FC = () => {
       {/* Orders List */}
       <ScrollView style={OrdersScreenStyles.ordersList} showsVerticalScrollIndicator={false}>
         {filteredOrders.map((order) => (
-          <View key={order.id} style={OrdersScreenStyles.orderCard}>
+          <View key={order.id} style={[OrdersScreenStyles.orderCard, { backgroundColor: currentColors.card }]}>
             <View style={OrdersScreenStyles.orderHeader}>
               <View style={OrdersScreenStyles.orderInfo}>
-                <Text style={OrdersScreenStyles.orderId}>Заказ #{order.id}</Text>
-                <Text style={OrdersScreenStyles.orderTime}>{order.timestamp}</Text>
+                <Text style={[OrdersScreenStyles.orderId, { color: currentColors.text }]}>Заказ #{order.id}</Text>
+                <Text style={[OrdersScreenStyles.orderTime, { color: currentColors.textSecondary }]}>{order.timestamp}</Text>
               </View>
               <View style={[
                 OrdersScreenStyles.statusBadge,
@@ -173,34 +180,34 @@ const OrdersScreen: React.FC = () => {
             </View>
             <View style={OrdersScreenStyles.orderDetails}>
               <View style={OrdersScreenStyles.detailRow}>
-                <Ionicons name="person" size={16} color="#007AFF" />
-                <Text style={OrdersScreenStyles.detailText}>{order.clientName}</Text>
-                <Text style={OrdersScreenStyles.detailText}>{order.clientPhone}</Text>
+                <Ionicons name="person" size={16} color={currentColors.primary} />
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.text }]}>{order.clientName}</Text>
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.textSecondary }]}>{order.clientPhone}</Text>
               </View>
               <View style={OrdersScreenStyles.detailRow}>
-                <Ionicons name="location" size={16} color="#34C759" />
-                <Text style={OrdersScreenStyles.detailText}>{order.pickup}</Text>
+                <Ionicons name="location" size={16} color={currentColors.success} />
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.text }]}>{order.pickup}</Text>
               </View>
               <View style={OrdersScreenStyles.detailRow}>
-                <Ionicons name="navigate" size={16} color="#FF9500" />
-                <Text style={OrdersScreenStyles.detailText}>{order.destination}</Text>
+                <Ionicons name="navigate" size={16} color={currentColors.warning} />
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.text }]}>{order.destination}</Text>
               </View>
               <View style={OrdersScreenStyles.detailRow}>
-                <Ionicons name="pricetag" size={16} color="#007AFF" />
-                <Text style={OrdersScreenStyles.detailText}>{order.price}</Text>
-                <Text style={OrdersScreenStyles.detailText}>{order.distance}</Text>
-                <Text style={OrdersScreenStyles.detailText}>{order.estimatedTime}</Text>
+                <Ionicons name="pricetag" size={16} color={currentColors.primary} />
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.text }]}>{order.price}</Text>
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.textSecondary }]}>{order.distance}</Text>
+                <Text style={[OrdersScreenStyles.detailText, { color: currentColors.textSecondary }]}>{order.estimatedTime}</Text>
               </View>
             </View>
             <View style={OrdersScreenStyles.actionsRow}>
               {order.status === 'pending' && (
-                <TouchableOpacity style={OrdersScreenStyles.actionButton} onPress={() => handleOrderAction(order, 'accept')}>
-                  <Text style={OrdersScreenStyles.actionButtonText}>Принять</Text>
+                <TouchableOpacity style={[OrdersScreenStyles.actionButton, { backgroundColor: currentColors.primary }]} onPress={() => handleOrderAction(order, 'accept')}>
+                  <Text style={[OrdersScreenStyles.actionButtonText, { color: currentColors.card }]}>Принять</Text>
                 </TouchableOpacity>
               )}
               {order.status === 'accepted' && (
-                <TouchableOpacity style={OrdersScreenStyles.actionButton} onPress={() => handleOrderAction(order, 'complete')}>
-                  <Text style={OrdersScreenStyles.actionButtonText}>Завершить</Text>
+                <TouchableOpacity style={[OrdersScreenStyles.actionButton, { backgroundColor: currentColors.success }]} onPress={() => handleOrderAction(order, 'complete')}>
+                  <Text style={[OrdersScreenStyles.actionButtonText, { color: currentColors.card }]}>Завершить</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -210,5 +217,7 @@ const OrdersScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+
 
 export default OrdersScreen;

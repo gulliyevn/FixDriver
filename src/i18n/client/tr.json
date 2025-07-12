@@ -1,1 +1,144 @@
-{"title":"Müşteri","dashboard":"Gösterge Paneli","bookings":"Rezervasyonlar","drivers":"Sürücüler","map":"Harita","chat":"Sohbet","notifications":"Bildirimler","settings":"Ayarlar","profile":"Profil","schedule":"Program","support":"Destek"}
+{
+  "title": "Müşteri",
+  "dashboard": "Gösterge Paneli",
+  "bookings": "Rezervasyonlar",
+  "drivers": "Sürücüler",
+  "map": {
+    "title": "Harita",
+    "searchPlaceholder": "Nereye gitmek istiyorsunuz?",
+    "orderButton": "Sipariş ver",
+    "loadingLocation": "Konumunuz belirleniyor...",
+    "locationError": "Konumunuz alınamadı"
+  },
+  "chat": {
+    "title": "Sohbet",
+    "noChats": "Sohbet yok",
+    "loadingChats": "Sohbetler yükleniyor...",
+    "cancel": "İptal",
+    "read": "Okundu",
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "readAll": "Tümünü oku",
+    "filter": "Filtre",
+    "read": "Okundu",
+    "delete": "Sil",
+    "showAll": "Tüm bildirimleri göster"
+  },
+  "settings": "Ayarlar",
+  "profile": {
+    "title": "Profil",
+    "trips": "Yolculuklar",
+    "spent": "Harcanan",
+    "rating": "Değerlendirme",
+    "balance": "Bakiyem",
+    "cards": "Kartlar",
+    "debts": "Borçlarım",
+    "cars": "Arabalar",
+    "paymentHistory": "Ödeme geçmişi",
+    "residence": "İkamet",
+    "help": "Yardım ve kurallar",
+    "about": "Uygulama hakkında",
+    "logout": "Çıkış"
+  },
+  "schedule": {
+    "title": "Program",
+    "loading": "Yükleniyor...",
+    "noBookings": "Rezerve yolculuk yok",
+    "addBooking": "Rezervasyon ekle"
+  },
+  "support": "Destek",
+  "balance": {
+    "title": "Bakiyem",
+    "currentBalance": "Mevcut bakiye",
+    "topUp": "Yükle",
+    "withdraw": "Çek",
+    "quickTopUp": "Hızlı yükleme",
+    "transactionHistory": "İşlem geçmişi",
+    "showAll": "Tümünü göster",
+    "pay": "Öde"
+  },
+  "debts": {
+    "title": "Borçlarım",
+    "noDebts": "Aktif borç yok",
+    "debtAmount": "Borç miktarı",
+    "dueDate": "Vade tarihi",
+    "payDebt": "Borcu öde"
+  },
+  "cards": {
+    "title": "Kartlarım",
+    "noCards": "Eklenmiş kart yok",
+    "addCard": "Kart ekle",
+    "scanCard": "Kartı tara",
+    "enterManually": "Manuel giriş",
+    "delete": "Sil",
+    "expires": "Geçerlilik",
+    "addNewCard": "Yeni kart ekle"
+  },
+  "cars": {
+    "title": "Arabalarım",
+    "noCars": "Eklenmiş araba yok",
+    "addCar": "Araba ekle",
+    "scanDocuments": "Belgeleri tara",
+    "enterManually": "Manuel giriş",
+    "delete": "Sil",
+    "year": "Yıl",
+    "color": "Renk",
+    "type": "Tür",
+    "edit": "Düzenle",
+    "addNewCar": "Yeni araba ekle"
+  },
+  "plus": {
+    "title": "Rezervasyon",
+    "step1": {
+      "title": "Abonelik paketini seçin",
+      "description": "Yolculuklarınız için uygun tarifeyi seçin",
+      "popular": "Popüler"
+    },
+    "step2": {
+      "title": "Yolculuk detayları",
+      "passengers": "Yolcu sayısı",
+      "pickupAddress": "Alış adresi",
+      "destinationAddress": "Varış adresi",
+      "notes": "Ek notlar",
+      "notesPlaceholder": "Özel gereksinimler veya istekler"
+    },
+    "step3": {
+      "title": "Rezervasyon detayları",
+      "summary": "Yolculuk özeti"
+    },
+    "loading": "Yükleniyor..."
+  },
+  "driverCard": {
+    "route": "Rota",
+    "stops": "duraklar",
+    "call": "Ara"
+  },
+  "about": {
+    "title": "Uygulama hakkında",
+    "version": "Sürüm",
+    "information": "Bilgi",
+    "build": "Derleme",
+    "developer": "Geliştirici",
+    "links": "Bağlantılar",
+    "website": "Web sitesi",
+    "support": "Destekle iletişim",
+    "privacy": "Gizlilik politikası",
+    "terms": "Kullanım şartları"
+  },
+  "help": {
+    "title": "Yardım ve kurallar",
+    "needHelp": "Yardıma mı ihtiyacınız var?",
+    "contactSupport": "Destekle iletişim"
+  },
+  "residence": {
+    "title": "İkamet",
+    "default": "Varsayılan"
+  },
+  "paymentHistory": {
+    "title": "Ödeme geçmişi",
+    "noPayments": "Ödeme yok"
+  }
+}

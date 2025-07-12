@@ -1,188 +1,182 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { SIZES, SHADOWS } from '../../constants/colors';
 
 export const PlusScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.light.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: colors.light.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: SIZES.lg,
+    paddingVertical: SIZES.md,
+    ...SHADOWS.light.medium,
+  },
+  backButton: {
+    padding: SIZES.sm,
+    marginRight: SIZES.sm,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.light.text,
-    marginBottom: 8,
+    flex: 1,
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '600',
+    textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 16,
-    color: colors.light.textSecondary,
+  placeholder: {
+    width: 40,
+  },
+  stepIndicator: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: SIZES.md,
+    gap: SIZES.sm,
+  },
+  step: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#E5E7EB',
   },
   content: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: SIZES.lg,
   },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
+  stepTitle: {
+    fontSize: SIZES.fontSize.xl,
     fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 16,
+    marginBottom: SIZES.sm,
+    marginTop: SIZES.lg,
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+  stepDescription: {
+    fontSize: SIZES.fontSize.md,
+    marginBottom: SIZES.xl,
   },
-  gridItem: {
-    width: '48%',
-    backgroundColor: colors.light.surface,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  packageCard: {
+    padding: SIZES.lg,
+    borderRadius: SIZES.radius.lg,
+    marginBottom: SIZES.md,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    position: 'relative',
+    ...SHADOWS.light.medium,
   },
-  gridItemIcon: {
-    marginBottom: 12,
-  },
-  gridItemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.light.text,
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  gridItemSubtitle: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    textAlign: 'center',
-  },
-  quickActions: {
-    gap: 12,
-  },
-  quickAction: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.light.surface,
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  quickActionIcon: {
-    marginRight: 16,
-  },
-  quickActionContent: {
-    flex: 1,
-  },
-  quickActionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.light.text,
-    marginBottom: 4,
-  },
-  quickActionSubtitle: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-  },
-  quickActionArrow: {
-    marginLeft: 8,
-  },
-  premiumCard: {
-    backgroundColor: colors.light.primary,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-  },
-  premiumTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  premiumSubtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.9,
-    marginBottom: 16,
-  },
-  premiumButton: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-  },
-  premiumButtonText: {
-    color: colors.light.primary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 16,
-  },
-  backButton: {
+  popularBadge: {
     position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 1,
+    top: SIZES.md,
+    right: SIZES.md,
+    paddingHorizontal: SIZES.sm,
+    paddingVertical: SIZES.xs,
+    borderRadius: SIZES.radius.sm,
   },
-  placeholder: {
-    height: 60,
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
-  optionCard: {
-    backgroundColor: colors.light.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  optionIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.light.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  optionContent: {
-    flex: 1,
-  },
-  optionTitle: {
-    fontSize: 16,
+  popularText: {
+    fontSize: SIZES.fontSize.xs,
     fontWeight: '600',
-    marginBottom: 4,
   },
-  optionDescription: {
-    fontSize: 14,
-    color: colors.light.textSecondary,
-    lineHeight: 20,
+  packageHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SIZES.sm,
+  },
+  packageName: {
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '600',
+  },
+  packagePrice: {
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '700',
+  },
+  packageDescription: {
+    fontSize: SIZES.fontSize.md,
+    marginBottom: SIZES.md,
+  },
+  packageDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  packageDetail: {
+    fontSize: SIZES.fontSize.sm,
+  },
+  inputGroup: {
+    marginBottom: SIZES.lg,
+    padding: SIZES.md,
+    borderRadius: SIZES.radius.md,
+    ...SHADOWS.light.small,
+  },
+  inputLabel: {
+    fontSize: SIZES.fontSize.md,
+    fontWeight: '500',
+    marginBottom: SIZES.sm,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: SIZES.radius.sm,
+    paddingHorizontal: SIZES.md,
+    paddingVertical: SIZES.sm,
+    fontSize: SIZES.fontSize.md,
+  },
+  textArea: {
+    borderWidth: 1,
+    borderRadius: SIZES.radius.sm,
+    paddingHorizontal: SIZES.md,
+    paddingVertical: SIZES.sm,
+    fontSize: SIZES.fontSize.md,
+    textAlignVertical: 'top',
+    minHeight: 80,
+  },
+  routeCard: {
+    padding: SIZES.lg,
+    borderRadius: SIZES.radius.lg,
+    marginBottom: SIZES.lg,
+    ...SHADOWS.light.medium,
+  },
+  routePoint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SIZES.md,
+  },
+  routeDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: SIZES.md,
+  },
+  routeAddress: {
+    flex: 1,
+    fontSize: SIZES.fontSize.md,
+  },
+  routeLine: {
+    width: 2,
+    height: 20,
+    marginLeft: 5,
+    marginBottom: SIZES.md,
+  },
+  summaryCard: {
+    padding: SIZES.lg,
+    borderRadius: SIZES.radius.lg,
+    ...SHADOWS.light.medium,
+  },
+  summaryTitle: {
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '600',
+    marginBottom: SIZES.md,
+  },
+  summaryText: {
+    fontSize: SIZES.fontSize.md,
+    marginBottom: SIZES.xs,
+  },
+  buttonContainer: {
+    paddingHorizontal: SIZES.lg,
+    paddingVertical: SIZES.md,
+  },
+  nextButton: {
+    paddingVertical: SIZES.md,
+    borderRadius: SIZES.radius.md,
+    alignItems: 'center',
+  },
+  nextButtonText: {
+    fontSize: SIZES.fontSize.md,
+    fontWeight: '600',
   },
   loadingOverlay: {
     position: 'absolute',
@@ -191,8 +185,10 @@ export const PlusScreenStyles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000,
+    justifyContent: 'center',
+  },
+  loadingText: {
+    fontSize: SIZES.fontSize.md,
   },
 }); 

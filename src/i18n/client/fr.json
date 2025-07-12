@@ -1,1 +1,144 @@
-{"title":"Client","dashboard":"Tableau de bord","bookings":"Réservations","drivers":"Chauffeurs","map":"Carte","chat":"Chat","notifications":"Notifications","settings":"Paramètres","profile":"Profil","schedule":"Planning","support":"Support"}
+{
+  "title": "Client",
+  "dashboard": "Tableau de bord",
+  "bookings": "Réservations",
+  "drivers": "Chauffeurs",
+  "map": {
+    "title": "Carte",
+    "searchPlaceholder": "Où voulez-vous aller ?",
+    "orderButton": "Commander",
+    "loadingLocation": "Détermination de votre position...",
+    "locationError": "Impossible d'obtenir votre position"
+  },
+  "chat": {
+    "title": "Chat",
+    "noChats": "Aucun chat",
+    "loadingChats": "Chargement des chats...",
+    "cancel": "Annuler",
+    "read": "Lu",
+    "online": "En ligne",
+    "offline": "Hors ligne"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "readAll": "Tout lire",
+    "filter": "Filtre",
+    "read": "Lu",
+    "delete": "Supprimer",
+    "showAll": "Afficher toutes les notifications"
+  },
+  "settings": "Paramètres",
+  "profile": {
+    "title": "Profil",
+    "trips": "Trajets",
+    "spent": "Dépensé",
+    "rating": "Évaluation",
+    "balance": "Mon solde",
+    "cards": "Cartes",
+    "debts": "Mes dettes",
+    "cars": "Voitures",
+    "paymentHistory": "Historique des paiements",
+    "residence": "Résidence",
+    "help": "Aide et règles",
+    "about": "À propos de l'app",
+    "logout": "Déconnexion"
+  },
+  "schedule": {
+    "title": "Planning",
+    "loading": "Chargement...",
+    "noBookings": "Aucun trajet réservé",
+    "addBooking": "Ajouter une réservation"
+  },
+  "support": "Support",
+  "balance": {
+    "title": "Mon solde",
+    "currentBalance": "Solde actuel",
+    "topUp": "Recharger",
+    "withdraw": "Retirer",
+    "quickTopUp": "Recharge rapide",
+    "transactionHistory": "Historique des transactions",
+    "showAll": "Afficher tout",
+    "pay": "Payer"
+  },
+  "debts": {
+    "title": "Mes dettes",
+    "noDebts": "Aucune dette active",
+    "debtAmount": "Montant de la dette",
+    "dueDate": "Date d'échéance",
+    "payDebt": "Payer la dette"
+  },
+  "cards": {
+    "title": "Mes cartes",
+    "noCards": "Aucune carte ajoutée",
+    "addCard": "Ajouter une carte",
+    "scanCard": "Scanner la carte",
+    "enterManually": "Saisir manuellement",
+    "delete": "Supprimer",
+    "expires": "Expire le",
+    "addNewCard": "Ajouter une nouvelle carte"
+  },
+  "cars": {
+    "title": "Mes voitures",
+    "noCars": "Aucune voiture ajoutée",
+    "addCar": "Ajouter une voiture",
+    "scanDocuments": "Scanner les documents",
+    "enterManually": "Saisir manuellement",
+    "delete": "Supprimer",
+    "year": "Année",
+    "color": "Couleur",
+    "type": "Type",
+    "edit": "Modifier",
+    "addNewCar": "Ajouter une nouvelle voiture"
+  },
+  "plus": {
+    "title": "Réservation",
+    "step1": {
+      "title": "Sélectionner le forfait d'abonnement",
+      "description": "Choisissez le tarif adapté à vos trajets",
+      "popular": "Populaire"
+    },
+    "step2": {
+      "title": "Détails du trajet",
+      "passengers": "Nombre de passagers",
+      "pickupAddress": "Adresse de prise en charge",
+      "destinationAddress": "Adresse de destination",
+      "notes": "Notes supplémentaires",
+      "notesPlaceholder": "Exigences ou souhaits particuliers"
+    },
+    "step3": {
+      "title": "Détails de la réservation",
+      "summary": "Résumé du trajet"
+    },
+    "loading": "Chargement..."
+  },
+  "driverCard": {
+    "route": "Itinéraire",
+    "stops": "arrêts",
+    "call": "Appeler"
+  },
+  "about": {
+    "title": "À propos de l'app",
+    "version": "Version",
+    "information": "Information",
+    "build": "Build",
+    "developer": "Développeur",
+    "links": "Liens",
+    "website": "Site web",
+    "support": "Contacter le support",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "help": {
+    "title": "Aide et règles",
+    "needHelp": "Besoin d'aide ?",
+    "contactSupport": "Contacter le support"
+  },
+  "residence": {
+    "title": "Résidence",
+    "default": "Par défaut"
+  },
+  "paymentHistory": {
+    "title": "Historique des paiements",
+    "noPayments": "Aucun paiement"
+  }
+}

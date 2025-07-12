@@ -77,7 +77,12 @@
     "start": "Start",
     "stop": "Stop",
     "pause": "Pause",
-    "resume": "Resume"
+    "resume": "Resume",
+    "map": "Map",
+    "drivers": "Drivers",
+    "plus": "Plus",
+    "chats": "Chats",
+    "profile": "Profile"
   },
   "breadcrumbs": {
     "home": "Home",

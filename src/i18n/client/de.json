@@ -1,1 +1,144 @@
-{"title":"Kunde","dashboard":"Dashboard","bookings":"Buchungen","drivers":"Fahrer","map":"Karte","chat":"Chat","notifications":"Benachrichtigungen","settings":"Einstellungen","profile":"Profil","schedule":"Zeitplan","support":"Support"}
+{
+  "title": "Kunde",
+  "dashboard": "Dashboard",
+  "bookings": "Buchungen",
+  "drivers": "Fahrer",
+  "map": {
+    "title": "Karte",
+    "searchPlaceholder": "Wohin möchten Sie fahren?",
+    "orderButton": "Bestellen",
+    "loadingLocation": "Bestimme Ihren Standort...",
+    "locationError": "Standort konnte nicht ermittelt werden"
+  },
+  "chat": {
+    "title": "Chat",
+    "noChats": "Keine Chats",
+    "loadingChats": "Chats werden geladen...",
+    "cancel": "Abbrechen",
+    "read": "Gelesen",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "readAll": "Alle lesen",
+    "filter": "Filter",
+    "read": "Gelesen",
+    "delete": "Löschen",
+    "showAll": "Alle Benachrichtigungen anzeigen"
+  },
+  "settings": "Einstellungen",
+  "profile": {
+    "title": "Profil",
+    "trips": "Fahrten",
+    "spent": "Ausgegeben",
+    "rating": "Bewertung",
+    "balance": "Mein Guthaben",
+    "cards": "Karten",
+    "debts": "Meine Schulden",
+    "cars": "Autos",
+    "paymentHistory": "Zahlungshistorie",
+    "residence": "Wohnsitz",
+    "help": "Hilfe & Regeln",
+    "about": "Über die App",
+    "logout": "Abmelden"
+  },
+  "schedule": {
+    "title": "Zeitplan",
+    "loading": "Lädt...",
+    "noBookings": "Keine gebuchten Fahrten",
+    "addBooking": "Buchung hinzufügen"
+  },
+  "support": "Support",
+  "balance": {
+    "title": "Mein Guthaben",
+    "currentBalance": "Aktuelles Guthaben",
+    "topUp": "Aufladen",
+    "withdraw": "Auszahlen",
+    "quickTopUp": "Schnell aufladen",
+    "transactionHistory": "Transaktionshistorie",
+    "showAll": "Alle anzeigen",
+    "pay": "Zahlen"
+  },
+  "debts": {
+    "title": "Meine Schulden",
+    "noDebts": "Keine aktiven Schulden",
+    "debtAmount": "Schuldenbetrag",
+    "dueDate": "Fälligkeitsdatum",
+    "payDebt": "Schuld bezahlen"
+  },
+  "cards": {
+    "title": "Meine Karten",
+    "noCards": "Keine hinzugefügten Karten",
+    "addCard": "Karte hinzufügen",
+    "scanCard": "Karte scannen",
+    "enterManually": "Manuell eingeben",
+    "delete": "Löschen",
+    "expires": "Gültig bis",
+    "addNewCard": "Neue Karte hinzufügen"
+  },
+  "cars": {
+    "title": "Meine Autos",
+    "noCars": "Keine hinzugefügten Autos",
+    "addCar": "Auto hinzufügen",
+    "scanDocuments": "Dokumente scannen",
+    "enterManually": "Manuell eingeben",
+    "delete": "Löschen",
+    "year": "Jahr",
+    "color": "Farbe",
+    "type": "Typ",
+    "edit": "Bearbeiten",
+    "addNewCar": "Neues Auto hinzufügen"
+  },
+  "plus": {
+    "title": "Buchung",
+    "step1": {
+      "title": "Abonnement-Paket auswählen",
+      "description": "Wählen Sie den passenden Tarif für Ihre Fahrten",
+      "popular": "Beliebt"
+    },
+    "step2": {
+      "title": "Fahrtdetails",
+      "passengers": "Anzahl der Passagiere",
+      "pickupAddress": "Abholadresse",
+      "destinationAddress": "Zieladresse",
+      "notes": "Zusätzliche Notizen",
+      "notesPlaceholder": "Besondere Anforderungen oder Wünsche"
+    },
+    "step3": {
+      "title": "Buchungsdetails",
+      "summary": "Fahrtzusammenfassung"
+    },
+    "loading": "Lädt..."
+  },
+  "driverCard": {
+    "route": "Route",
+    "stops": "Stopps",
+    "call": "Anrufen"
+  },
+  "about": {
+    "title": "Über die App",
+    "version": "Version",
+    "information": "Information",
+    "build": "Build",
+    "developer": "Entwickler",
+    "links": "Links",
+    "website": "Website",
+    "support": "Support kontaktieren",
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Nutzungsbedingungen"
+  },
+  "help": {
+    "title": "Hilfe & Regeln",
+    "needHelp": "Brauchen Sie Hilfe?",
+    "contactSupport": "Support kontaktieren"
+  },
+  "residence": {
+    "title": "Wohnsitz",
+    "default": "Standard"
+  },
+  "paymentHistory": {
+    "title": "Zahlungshistorie",
+    "noPayments": "Keine Zahlungen"
+  }
+}

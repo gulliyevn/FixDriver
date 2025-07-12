@@ -77,7 +77,11 @@
     "start": "Başlat",
     "stop": "Durdur",
     "pause": "Duraklat",
-    "resume": "Devam Et"
+    "resume": "Devam Et",
+    "map": "Harita",
+    "drivers": "Sürücüler",
+    "plus": "Yolculuk",
+    "chats": "Sohbetler"
   },
   "breadcrumbs": {
     "home": "Ana Sayfa",

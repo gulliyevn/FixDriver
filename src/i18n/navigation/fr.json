@@ -77,7 +77,11 @@
     "start": "Commencer",
     "stop": "Arrêter",
     "pause": "Pause",
-    "resume": "Reprendre"
+    "resume": "Reprendre",
+    "map": "Carte",
+    "drivers": "Chauffeurs",
+    "plus": "Course",
+    "chats": "Chats"
   },
   "breadcrumbs": {
     "home": "Accueil",

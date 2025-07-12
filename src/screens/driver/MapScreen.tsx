@@ -14,6 +14,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { DriverStackParamList } from '../../types/navigation';
 import { MapService } from '../../services/MapService';
 import { MapScreenStyles } from '../../styles/screens/MapScreen.styles';
+import { colors } from '../../constants/colors';
 import MapViewComponent from '../../components/MapView';
 
 interface MapLocation {
@@ -26,6 +27,7 @@ type NavigationProp = StackNavigationProp<DriverStackParamList, 'Map'>;
 const DriverMapScreen: React.FC = () => {
   const { isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
+  const currentColors = isDark ? colors.dark : colors.light;
   
   const [currentLocation, setCurrentLocation] = useState<MapLocation | null>(null);
   const [loading, setLoading] = useState(false);
@@ -66,19 +68,19 @@ const DriverMapScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={[MapScreenStyles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
+    <SafeAreaView style={[MapScreenStyles.container, { backgroundColor: currentColors.background }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
       {/* Header */}
-      <View style={[MapScreenStyles.header, { backgroundColor: isDark ? '#1F2937' : '#FFFFFF' }]}>
+      <View style={[MapScreenStyles.header, { backgroundColor: currentColors.card }]}>
         <TouchableOpacity
           style={MapScreenStyles.menuButton}
           onPress={handleMenuPress}
         >
-          <Ionicons name="menu" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+          <Ionicons name="menu" size={24} color={currentColors.text} />
         </TouchableOpacity>
         
-        <Text style={[MapScreenStyles.title, { color: isDark ? '#F9FAFB' : '#1F2937' }]}>
+        <Text style={[MapScreenStyles.title, { color: currentColors.text }]}>
           Карта
         </Text>
         
@@ -87,14 +89,14 @@ const DriverMapScreen: React.FC = () => {
             style={MapScreenStyles.chatButton}
             onPress={handleChatPress}
           >
-            <Ionicons name="chatbubbles-outline" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+            <Ionicons name="chatbubbles-outline" size={24} color={currentColors.text} />
           </TouchableOpacity>
           
           <TouchableOpacity
             style={MapScreenStyles.plusButton}
             onPress={handlePlusPress}
           >
-            <Ionicons name="add-circle" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
+            <Ionicons name="add-circle" size={24} color={currentColors.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -111,11 +113,13 @@ const DriverMapScreen: React.FC = () => {
       {/* Loading Overlay */}
       {loading && (
         <View style={MapScreenStyles.loadingOverlay}>
-          <Text style={MapScreenStyles.loadingText}>Загрузка карты...</Text>
+          <Text style={[MapScreenStyles.loadingText, { color: currentColors.text }]}>Загрузка карты...</Text>
         </View>
       )}
     </SafeAreaView>
   );
 };
+
+
 
 export default DriverMapScreen;

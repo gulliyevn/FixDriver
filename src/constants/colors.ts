@@ -1,19 +1,19 @@
 export const lightColors = {
-  // Основные цвета
-  primary: '#1E3A8A',
-  secondary: '#3B82F6',
-  accent: '#06B6D4',
+  // Основные цвета FixDrive
+  primary: '#083198', // Основные кнопки
+  secondary: '#0360bc', // Маршрутные линии
+  accent: '#006ac9', // Кнопка звонков
   
   // Фоновые цвета
-  background: '#FFFFFF',
-  surface: '#F8FAFC',
-  card: '#FFFFFF',
-  tabBar: '#FFFFFF',
+  background: '#fffeff', // Светлый фон приложения
+  surface: '#f1f1f0', // Фон карты
+  card: '#ffffff', // Дороги на карте
+  tabBar: '#ffffff',
   
   // Текстовые цвета
-  text: '#1F2937',
-  textSecondary: '#6B7280',
-  textTertiary: '#9CA3AF',
+  text: '#030304', // Тексты
+  textSecondary: '#6d6565', // Точка прибытия
+  textTertiary: '#1b1d1e', // Точка выезда
   
   // Границы и разделители
   border: '#E5E7EB',
@@ -23,11 +23,11 @@ export const lightColors = {
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  info: '#3B82F6',
+  info: '#0163c2', // Активная иконка таббара
   
   // Дополнительные цвета
   cardShadow: '#000000',
-  gradient: ['#1E3A8A', '#3B82F6'],
+  gradient: ['#083198', '#0360bc'],
   
   // Специальные цвета
   overlay: 'rgba(0, 0, 0, 0.5)',

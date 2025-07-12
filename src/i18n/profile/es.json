@@ -24,7 +24,47 @@
   "selectLanguage": "Seleccionar idioma",
   "languageChanged": "Idioma cambiado",
   "languageChangeSuccess": "Idioma cambiado exitosamente. Reinicia la aplicación para aplicar los cambios.",
-  "settings": "Configuración",
+  "settings": {
+    "title": "Configuración",
+    "notifications": {
+      "title": "Notificaciones",
+      "push": "Notificaciones push",
+      "sound": "Sonido",
+      "vibration": "Vibración"
+    },
+    "language": {
+      "section": "Idioma",
+      "current": "Idioma actual",
+      "title": "Seleccionar idioma",
+      "select": "Elige tu idioma preferido:",
+      "success": {
+        "title": "Idioma cambiado",
+        "message": "Idioma cambiado a {language}"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Error al cambiar el idioma"
+      }
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "darkMode": "Modo oscuro"
+    },
+    "location": {
+      "title": "Ubicación",
+      "autoLocation": "Ubicación automática"
+    },
+    "security": {
+      "title": "Seguridad",
+      "changePassword": "Cambiar contraseña",
+      "biometric": "Autenticación biométrica"
+    },
+    "data": {
+      "title": "Datos",
+      "export": "Exportar datos",
+      "deleteAccount": "Eliminar cuenta"
+    }
+  },
   "editProfile": "Editar perfil",
   "editProfileDesc": "Cambiar datos personales",
   "paymentMethods": "Métodos de pago",

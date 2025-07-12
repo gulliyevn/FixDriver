@@ -7,10 +7,18 @@ import ChatListScreen from '../screens/client/ChatListScreen';
 import ScheduleScreen from '../screens/client/ScheduleScreen';
 import ClientProfileStack from './ClientProfileStack';
 import { ClientStackParamList } from '../types/navigation';
+import { useLanguage } from '../context/LanguageContext';
 
 const Tab = createBottomTabNavigator<ClientStackParamList>();
 
+// Обёртка для TabBar, если потребуется кастомизация
+// function TabBarWithLanguage(props: any) {
+//   useLanguage();
+//   return <TabBar {...props} />;
+// }
+
 const ClientNavigator: React.FC = () => {
+  // useLanguage(); // если потребуется форсировать ререндер
   return (
     <Tab.Navigator
       id={undefined}

@@ -24,7 +24,47 @@
   "selectLanguage": "Select language",
   "languageChanged": "Language changed",
   "languageChangeSuccess": "Language changed successfully. Restart the app to apply changes.",
-  "settings": "Settings",
+  "settings": {
+    "title": "Settings",
+    "notifications": {
+      "title": "Notifications",
+      "push": "Push notifications",
+      "sound": "Sound",
+      "vibration": "Vibration"
+    },
+    "language": {
+      "section": "Language",
+      "current": "Current language",
+      "title": "Select Language",
+      "select": "Choose your preferred language:",
+      "success": {
+        "title": "Language Changed",
+        "message": "Language changed to {language}"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Failed to change language"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "darkMode": "Dark mode"
+    },
+    "location": {
+      "title": "Location",
+      "autoLocation": "Auto location"
+    },
+    "security": {
+      "title": "Security",
+      "changePassword": "Change password",
+      "biometric": "Biometric authentication"
+    },
+    "data": {
+      "title": "Data",
+      "export": "Export data",
+      "deleteAccount": "Delete account"
+    }
+  },
   "editProfile": "Edit profile",
   "editProfileDesc": "Change personal data",
   "paymentMethods": "Payment methods",

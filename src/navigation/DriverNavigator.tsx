@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import TabBar from './TabBar';
 
 // Импорт экранов
@@ -13,13 +14,19 @@ import DriverProfileScreen from '../screens/driver/DriverProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
+// Обёртка для TabBar, чтобы подписаться на смену языка
+function TabBarWithLanguage(props: any) {
+  useLanguage();
+  return <TabBar {...props} />;
+}
+
 const DriverNavigator: React.FC = () => {
   const { isDark } = useTheme();
 
   return (
     <Tab.Navigator
       id={undefined}
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={(props) => <TabBarWithLanguage {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -32,7 +39,7 @@ const DriverNavigator: React.FC = () => {
         name="Map" 
         component={MapScreen}
         options={{
-          tabBarLabel: 'Карта',
+          tabBarLabel: '',
           tabBarIcon: () => (
             <Ionicons name="map-outline" size={24} color="#666" />
           ),
@@ -42,7 +49,7 @@ const DriverNavigator: React.FC = () => {
         name="Orders" 
         component={OrdersScreen}
         options={{
-          tabBarLabel: 'Заказы',
+          tabBarLabel: '',
           tabBarIcon: () => (
             <Ionicons name="list-outline" size={24} color="#666" />
           ),
@@ -62,7 +69,7 @@ const DriverNavigator: React.FC = () => {
         name="Chat" 
         component={ChatScreen}
         options={{
-          tabBarLabel: 'Чат',
+          tabBarLabel: '',
           tabBarIcon: () => (
             <Ionicons name="chatbubbles-outline" size={24} color="#666" />
           ),
@@ -72,7 +79,7 @@ const DriverNavigator: React.FC = () => {
         name="Profile" 
         component={DriverProfileScreen}
         options={{
-          tabBarLabel: 'Профиль',
+          tabBarLabel: '',
           tabBarIcon: () => (
             <Ionicons name="person-outline" size={24} color="#666" />
           ),

@@ -24,7 +24,47 @@
   "selectLanguage": "اختر اللغة",
   "languageChanged": "تم تغيير اللغة",
   "languageChangeSuccess": "تم تغيير اللغة بنجاح. أعد تشغيل التطبيق لتطبيق التغييرات.",
-  "settings": "الإعدادات",
+  "settings": {
+    "title": "الإعدادات",
+    "notifications": {
+      "title": "الإشعارات",
+      "push": "الإشعارات الفورية",
+      "sound": "الصوت",
+      "vibration": "الاهتزاز"
+    },
+    "language": {
+      "section": "اللغة",
+      "current": "اللغة الحالية",
+      "title": "اختر اللغة",
+      "select": "اختر لغتك المفضلة:",
+      "success": {
+        "title": "تم تغيير اللغة",
+        "message": "تم تغيير اللغة إلى {language}"
+      },
+      "error": {
+        "title": "خطأ",
+        "message": "فشل في تغيير اللغة"
+      }
+    },
+    "appearance": {
+      "title": "المظهر",
+      "darkMode": "الوضع المظلم"
+    },
+    "location": {
+      "title": "الموقع",
+      "autoLocation": "الموقع التلقائي"
+    },
+    "security": {
+      "title": "الأمان",
+      "changePassword": "تغيير كلمة المرور",
+      "biometric": "المصادقة البيومترية"
+    },
+    "data": {
+      "title": "البيانات",
+      "export": "تصدير البيانات",
+      "deleteAccount": "حذف الحساب"
+    }
+  },
   "editProfile": "تعديل الملف الشخصي",
   "editProfileDesc": "تغيير البيانات الشخصية",
   "paymentMethods": "طرق الدفع",

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ClientProfileScreenStyles as styles } from '../../styles/screens/ClientProfileScreen.styles';
 import { mockUsers } from '../../mocks/users';
 import { ClientScreenProps } from '../../types/navigation';
@@ -13,6 +14,7 @@ import { ClientScreenProps } from '../../types/navigation';
 
 const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigation }) => {
   const { logout } = useAuth();
+  const { t } = useLanguage();
   const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
   
   // TODO: Для бэкенда заменить на:
@@ -75,69 +77,69 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigatio
       <View style={styles.statsBox}>
         <View style={styles.statCol}>
           <Text style={styles.statValue}>{userStats.trips}</Text>
-          <Text style={styles.statLabel}>Поездки</Text>
+          <Text style={styles.statLabel}>{t('client.profile.trips')}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statCol}>
           <Text style={styles.statValue}>{userStats.spent}</Text>
-          <Text style={styles.statLabel}>Затраты</Text>
+          <Text style={styles.statLabel}>{t('client.profile.spent')}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statCol}>
           <Text style={styles.statValue}>{userStats.rating}</Text>
-          <Text style={styles.statLabel}>Рейтинг</Text>
+          <Text style={styles.statLabel}>{t('client.profile.rating')}</Text>
         </View>
       </View>
       {/* Пункты меню */}
       <TouchableOpacity style={[styles.menuItem, styles.menuItemFirst]} onPress={() => navigation.navigate('Balance')}>
         <Ionicons name="refresh" size={28} color={styles.balanceIcon.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Мой баланс</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.balance')}</Text>
         <Text style={styles.menuValue}>{userStats.balance}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Cards')}>
         <Ionicons name="card" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Карты</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.cards')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Debts')}>
         <Ionicons name="wallet" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Мои долги</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.debts')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Cars')}>
         <Ionicons name="car" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Автомобили</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.cars')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('PaymentHistory')}>
         <Ionicons name="document-text" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>История платежей</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.paymentHistory')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings')}>
         <Ionicons name="settings" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Настройки</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.settings')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Residence')}>
         <Ionicons name="home" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Резиденция</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.residence')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Help')}>
         <Ionicons name="help-circle" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>Помощь и правила</Text>
+        <Text style={styles.menuLabel}>{t('client.profile.help')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       {/* О приложении */}
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('About')}>
         <Ionicons name="information-circle" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabelAbout}>О приложении</Text>
+        <Text style={styles.menuLabelAbout}>{t('client.profile.about')}</Text>
         <Text style={styles.menuVersion}>1.0.0</Text>
       </TouchableOpacity>
       {/* Выйти */}
       <TouchableOpacity style={styles.logout} onPress={logout}>
-        <Text style={styles.logoutText}>Выйти</Text>
+        <Text style={styles.logoutText}>{t('client.profile.logout')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

@@ -77,7 +77,11 @@
     "start": "Iniciar",
     "stop": "Detener",
     "pause": "Pausar",
-    "resume": "Reanudar"
+    "resume": "Reanudar",
+    "map": "Mapa",
+    "drivers": "Conductores",
+    "plus": "Viaje",
+    "chats": "Chats"
   },
   "breadcrumbs": {
     "home": "Inicio",

@@ -77,7 +77,11 @@
     "start": "Başlat",
     "stop": "Durdur",
     "pause": "Duraklat",
-    "resume": "Davam et"
+    "resume": "Davam et",
+    "map": "Xəritə",
+    "drivers": "Sürücülər",
+    "plus": "Səfər",
+    "chats": "Söhbətlər"
   },
   "breadcrumbs": {
     "home": "Ana Səhifə",

@@ -24,7 +24,47 @@
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil dəyişdirildi",
   "languageChangeSuccess": "Dil uğurla dəyişdirildi. Dəyişiklikləri tətbiq etmək üçün tətbiqi yenidən başladın.",
-  "settings": "Parametrlər",
+  "settings": {
+    "title": "Parametrlər",
+    "notifications": {
+      "title": "Bildirişlər",
+      "push": "Push bildirişlər",
+      "sound": "Səs",
+      "vibration": "Vibrasiya"
+    },
+    "language": {
+      "section": "Dil",
+      "current": "Cari dil",
+      "title": "Dil Seç",
+      "select": "Üstünlük verdiyiniz dili seçin:",
+      "success": {
+        "title": "Dil Dəyişdirildi",
+        "message": "Dil {language} dilinə dəyişdirildi"
+      },
+      "error": {
+        "title": "Xəta",
+        "message": "Dili dəyişdirmək mümkün olmadı"
+      }
+    },
+    "appearance": {
+      "title": "Görünüş",
+      "darkMode": "Qaranlıq rejim"
+    },
+    "location": {
+      "title": "Məkan",
+      "autoLocation": "Avtomatik məkan"
+    },
+    "security": {
+      "title": "Təhlükəsizlik",
+      "changePassword": "Şifrəni dəyişdir",
+      "biometric": "Biometrik autentifikasiya"
+    },
+    "data": {
+      "title": "Məlumatlar",
+      "export": "Məlumatları ixrac et",
+      "deleteAccount": "Hesabı sil"
+    }
+  },
   "editProfile": "Profili redaktə et",
   "editProfileDesc": "Şəxsi məlumatları dəyişdir",
   "paymentMethods": "Ödəniş üsulları",

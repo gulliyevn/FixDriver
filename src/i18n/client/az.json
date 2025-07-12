@@ -1,1 +1,144 @@
-{"title":"Müştəri","dashboard":"İdarəetmə Paneli","bookings":"Rezervasiyalar","drivers":"Sürücülər","map":"Xəritə","chat":"Söhbət","notifications":"Bildirişlər","settings":"Parametrlər","profile":"Profil","schedule":"Cədvəl","support":"Dəstək"}
+{
+  "title": "Müştəri",
+  "dashboard": "İdarəetmə Paneli",
+  "bookings": "Rezervasiyalar",
+  "drivers": "Sürücülər",
+  "map": {
+    "title": "Xəritə",
+    "searchPlaceholder": "Hara getmək istəyirsiniz?",
+    "orderButton": "Sifariş et",
+    "loadingLocation": "Məkanınızı müəyyən edirik...",
+    "locationError": "Məkanınızı əldə etmək mümkün olmadı"
+  },
+  "chat": {
+    "title": "Söhbət",
+    "noChats": "Söhbət yoxdur",
+    "loadingChats": "Söhbətlər yüklənir...",
+    "cancel": "Ləğv et",
+    "read": "Oxundu",
+    "online": "Onlayn",
+    "offline": "Oflayn"
+  },
+  "notifications": {
+    "title": "Bildirişlər",
+    "readAll": "Hamısını oxu",
+    "filter": "Filter",
+    "read": "Oxundu",
+    "delete": "Sil",
+    "showAll": "Bütün bildirişləri göstər"
+  },
+  "settings": "Parametrlər",
+  "profile": {
+    "title": "Profil",
+    "trips": "Səyahətlər",
+    "spent": "Xərclənən",
+    "rating": "Reytinq",
+    "balance": "Balansım",
+    "cards": "Kartlar",
+    "debts": "Borclarım",
+    "cars": "Avtomobillər",
+    "paymentHistory": "Ödəniş tarixçəsi",
+    "residence": "Yaşayış yeri",
+    "help": "Kömək və qaydalar",
+    "about": "Tətbiq haqqında",
+    "logout": "Çıxış"
+  },
+  "schedule": {
+    "title": "Cədvəl",
+    "loading": "Yüklənir...",
+    "noBookings": "Rezervasiya yoxdur",
+    "addBooking": "Rezervasiya əlavə et"
+  },
+  "support": "Dəstək",
+  "balance": {
+    "title": "Balansım",
+    "currentBalance": "Cari balans",
+    "topUp": "Yüklə",
+    "withdraw": "Çıxar",
+    "quickTopUp": "Tez yüklə",
+    "transactionHistory": "Əməliyyat tarixçəsi",
+    "showAll": "Hamısını göstər",
+    "pay": "Ödə"
+  },
+  "debts": {
+    "title": "Borclarım",
+    "noDebts": "Aktiv borc yoxdur",
+    "debtAmount": "Borc məbləği",
+    "dueDate": "Ödəniş tarixi",
+    "payDebt": "Borcu ödə"
+  },
+  "cards": {
+    "title": "Kartlarım",
+    "noCards": "Əlavə edilmiş kart yoxdur",
+    "addCard": "Kart əlavə et",
+    "scanCard": "Kartı skan et",
+    "enterManually": "Əl ilə daxil et",
+    "delete": "Sil",
+    "expires": "Etibarlıdır",
+    "addNewCard": "Yeni kart əlavə et"
+  },
+  "cars": {
+    "title": "Avtomobillərim",
+    "noCars": "Əlavə edilmiş avtomobil yoxdur",
+    "addCar": "Avtomobil əlavə et",
+    "scanDocuments": "Sənədləri skan et",
+    "enterManually": "Əl ilə daxil et",
+    "delete": "Sil",
+    "year": "İl",
+    "color": "Rəng",
+    "type": "Növ",
+    "edit": "Redaktə et",
+    "addNewCar": "Yeni avtomobil əlavə et"
+  },
+  "plus": {
+    "title": "Rezervasiya",
+    "step1": {
+      "title": "Abunəlik paketini seçin",
+      "description": "Səyahətləriniz üçün uyğun tarifi seçin",
+      "popular": "Populyar"
+    },
+    "step2": {
+      "title": "Səyahət detalları",
+      "passengers": "Sərnişin sayı",
+      "pickupAddress": "Götürülmə ünvanı",
+      "destinationAddress": "Təyinat ünvanı",
+      "notes": "Əlavə qeydlər",
+      "notesPlaceholder": "Xüsusi tələblər və ya arzular"
+    },
+    "step3": {
+      "title": "Rezervasiya detalları",
+      "summary": "Səyahət xülasəsi"
+    },
+    "loading": "Yüklənir..."
+  },
+  "driverCard": {
+    "route": "Marşrut",
+    "stops": "dayanacaq",
+    "call": "Zəng et"
+  },
+  "about": {
+    "title": "Tətbiq haqqında",
+    "version": "Versiya",
+    "information": "Məlumat",
+    "build": "Yığım",
+    "developer": "İnkişafçı",
+    "links": "Linklər",
+    "website": "Veb sayt",
+    "support": "Dəstəklə əlaqə",
+    "privacy": "Gizlilik siyasəti",
+    "terms": "İstifadə şərtləri"
+  },
+  "help": {
+    "title": "Kömək və qaydalar",
+    "needHelp": "Kömək lazımdır?",
+    "contactSupport": "Dəstəklə əlaqə"
+  },
+  "residence": {
+    "title": "Yaşayış yeri",
+    "default": "Varsayılan"
+  },
+  "paymentHistory": {
+    "title": "Ödəniş tarixçəsi",
+    "noPayments": "Ödəniş yoxdur"
+  }
+}

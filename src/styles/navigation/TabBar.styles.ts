@@ -59,4 +59,11 @@ export const TabBarStyles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
   },
+  tabIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    width: 20,
+    height: 3,
+    borderRadius: 1.5,
+  },
 }); 

@@ -24,7 +24,47 @@
   "selectLanguage": "Sprache auswählen",
   "languageChanged": "Sprache geändert",
   "languageChangeSuccess": "Sprache erfolgreich geändert. Starten Sie die App neu, um die Änderungen zu übernehmen.",
-  "settings": "Einstellungen",
+  "settings": {
+    "title": "Einstellungen",
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "push": "Push-Benachrichtigungen",
+      "sound": "Ton",
+      "vibration": "Vibration"
+    },
+    "language": {
+      "section": "Sprache",
+      "current": "Aktuelle Sprache",
+      "title": "Sprache auswählen",
+      "select": "Wählen Sie Ihre bevorzugte Sprache:",
+      "success": {
+        "title": "Sprache geändert",
+        "message": "Sprache zu {language} geändert"
+      },
+      "error": {
+        "title": "Fehler",
+        "message": "Sprache konnte nicht geändert werden"
+      }
+    },
+    "appearance": {
+      "title": "Erscheinungsbild",
+      "darkMode": "Dunkler Modus"
+    },
+    "location": {
+      "title": "Standort",
+      "autoLocation": "Automatischer Standort"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "changePassword": "Passwort ändern",
+      "biometric": "Biometrische Authentifizierung"
+    },
+    "data": {
+      "title": "Daten",
+      "export": "Daten exportieren",
+      "deleteAccount": "Konto löschen"
+    }
+  },
   "editProfile": "Profil bearbeiten",
   "editProfileDesc": "Persönliche Daten ändern",
   "paymentMethods": "Zahlungsmethoden",

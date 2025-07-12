@@ -1,1 +1,144 @@
-{"title":"عميل","dashboard":"لوحة التحكم","bookings":"الحجوزات","drivers":"السائقين","map":"الخريطة","chat":"الدردشة","notifications":"الإشعارات","settings":"الإعدادات","profile":"الملف الشخصي","schedule":"الجدول","support":"الدعم"}
+{
+  "title": "عميل",
+  "dashboard": "لوحة التحكم",
+  "bookings": "الحجوزات",
+  "drivers": "السائقين",
+  "map": {
+    "title": "الخريطة",
+    "searchPlaceholder": "إلى أين تريد الذهاب؟",
+    "orderButton": "اطلب",
+    "loadingLocation": "تحديد موقعك...",
+    "locationError": "فشل في الحصول على موقعك"
+  },
+  "chat": {
+    "title": "الدردشة",
+    "noChats": "لا توجد محادثات",
+    "loadingChats": "تحميل المحادثات...",
+    "cancel": "إلغاء",
+    "read": "مقروء",
+    "online": "متصل",
+    "offline": "غير متصل"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "readAll": "اقرأ الكل",
+    "filter": "تصفية",
+    "read": "مقروء",
+    "delete": "حذف",
+    "showAll": "عرض جميع الإشعارات"
+  },
+  "settings": "الإعدادات",
+  "profile": {
+    "title": "الملف الشخصي",
+    "trips": "الرحلات",
+    "spent": "المنفق",
+    "rating": "التقييم",
+    "balance": "رصيدي",
+    "cards": "البطاقات",
+    "debts": "ديوني",
+    "cars": "السيارات",
+    "paymentHistory": "تاريخ المدفوعات",
+    "residence": "الإقامة",
+    "help": "المساعدة والقواعد",
+    "about": "حول التطبيق",
+    "logout": "تسجيل الخروج"
+  },
+  "schedule": {
+    "title": "الجدول",
+    "loading": "جاري التحميل...",
+    "noBookings": "لا توجد حجوزات",
+    "addBooking": "إضافة حجز"
+  },
+  "support": "الدعم",
+  "balance": {
+    "title": "رصيدي",
+    "currentBalance": "الرصيد الحالي",
+    "topUp": "شحن",
+    "withdraw": "سحب",
+    "quickTopUp": "شحن سريع",
+    "transactionHistory": "تاريخ المعاملات",
+    "showAll": "عرض الكل",
+    "pay": "دفع"
+  },
+  "debts": {
+    "title": "ديوني",
+    "noDebts": "لا توجد ديون نشطة",
+    "debtAmount": "مبلغ الدين",
+    "dueDate": "تاريخ الاستحقاق",
+    "payDebt": "سداد الدين"
+  },
+  "cards": {
+    "title": "بطاقاتي",
+    "noCards": "لا توجد بطاقات مضافة",
+    "addCard": "إضافة بطاقة",
+    "scanCard": "مسح البطاقة",
+    "enterManually": "إدخال يدوي",
+    "delete": "حذف",
+    "expires": "ينتهي في",
+    "addNewCard": "إضافة بطاقة جديدة"
+  },
+  "cars": {
+    "title": "سياراتي",
+    "noCars": "لا توجد سيارات مضافة",
+    "addCar": "إضافة سيارة",
+    "scanDocuments": "مسح المستندات",
+    "enterManually": "إدخال يدوي",
+    "delete": "حذف",
+    "year": "السنة",
+    "color": "اللون",
+    "type": "النوع",
+    "edit": "تعديل",
+    "addNewCar": "إضافة سيارة جديدة"
+  },
+  "plus": {
+    "title": "الحجز",
+    "step1": {
+      "title": "اختر حزمة الاشتراك",
+      "description": "اختر التعريفة المناسبة لرحلاتك",
+      "popular": "شائع"
+    },
+    "step2": {
+      "title": "تفاصيل الرحلة",
+      "passengers": "عدد الركاب",
+      "pickupAddress": "عنوان الانطلاق",
+      "destinationAddress": "عنوان الوجهة",
+      "notes": "ملاحظات إضافية",
+      "notesPlaceholder": "متطلبات أو رغبات خاصة"
+    },
+    "step3": {
+      "title": "تفاصيل الحجز",
+      "summary": "ملخص الرحلة"
+    },
+    "loading": "جاري التحميل..."
+  },
+  "driverCard": {
+    "route": "المسار",
+    "stops": "محطات",
+    "call": "اتصال"
+  },
+  "about": {
+    "title": "حول التطبيق",
+    "version": "الإصدار",
+    "information": "المعلومات",
+    "build": "البناء",
+    "developer": "المطور",
+    "links": "الروابط",
+    "website": "الموقع الإلكتروني",
+    "support": "تواصل مع الدعم",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الاستخدام"
+  },
+  "help": {
+    "title": "المساعدة والقواعد",
+    "needHelp": "تحتاج مساعدة؟",
+    "contactSupport": "تواصل مع الدعم"
+  },
+  "residence": {
+    "title": "الإقامة",
+    "default": "افتراضي"
+  },
+  "paymentHistory": {
+    "title": "تاريخ المدفوعات",
+    "noPayments": "لا توجد مدفوعات"
+  }
+}

@@ -11,6 +11,9 @@ import {
   mockBalance, 
   mockQuickAmounts 
 } from '../../mocks/balanceMock';
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { colors } from '../../constants/colors';
 
 /**
  * Экран баланса пользователя
@@ -25,6 +28,10 @@ import {
  */
 
 const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const { t } = useLanguage();
+  const currentColors = isDark ? colors.dark : colors.light;
+  
   const [balance] = useState(mockBalance);
   const [transactions] = useState<Transaction[]>(mockTransactions);
   const [topUpMethods] = useState<TopUpMethod[]>(mockTopUpMethods);
@@ -101,32 +108,32 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#003366" />
+          <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={styles.title}>Мой баланс</Text>
+        <Text style={styles.title}>{t('client.balance.title')}</Text>
         <View style={styles.placeholder} />
       </View>
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Основной баланс */}
         <View style={styles.balanceCard}>
-          <Text style={styles.balanceLabel}>Текущий баланс</Text>
+          <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
           <Text style={styles.balanceAmount}>{balance}</Text>
           <View style={styles.balanceActions}>
             <TouchableOpacity style={styles.actionButton} onPress={handleTopUp}>
               <Ionicons name="add-circle" size={24} color="#fff" />
-              <Text style={styles.actionButtonText}>Пополнить</Text>
+              <Text style={styles.actionButtonText}>{t('client.balance.topUp')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.actionButton, styles.withdrawButton]} onPress={handleWithdraw}>
               <Ionicons name="remove-circle" size={24} color="#fff" />
-              <Text style={styles.actionButtonText}>Вывести</Text>
+              <Text style={styles.actionButtonText}>{t('client.balance.withdraw')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Быстрые суммы пополнения */}
         <View style={styles.quickTopUp}>
-          <Text style={styles.sectionTitle}>Быстрое пополнение</Text>
+          <Text style={styles.sectionTitle}>{t('client.balance.quickTopUp')}</Text>
           <View style={styles.quickAmounts}>
             {mockQuickAmounts.map((amount, index) => (
               <TouchableOpacity key={index} style={styles.quickAmountButton} onPress={() => handleQuickTopUp(amount)}>
@@ -139,9 +146,9 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         {/* История операций */}
         <View style={styles.transactionsSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>История операций</Text>
+            <Text style={styles.sectionTitle}>{t('client.balance.transactionHistory')}</Text>
             <TouchableOpacity onPress={() => console.log('Показать все')}>
-              <Text style={styles.showAllText}>Показать все</Text>
+              <Text style={styles.showAllText}>{t('client.balance.showAll')}</Text>
             </TouchableOpacity>
           </View>
           
@@ -151,7 +158,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 <Ionicons 
                   name={getTransactionIcon(transaction.type) as any} 
                   size={24} 
-                  color="#003366" 
+                  color={currentColors.primary} 
                 />
               </View>
               <View style={styles.transactionDetails}>

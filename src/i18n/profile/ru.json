@@ -24,7 +24,47 @@
   "selectLanguage": "Выбрать язык",
   "languageChanged": "Язык изменен",
   "languageChangeSuccess": "Язык успешно изменен. Перезапустите приложение для применения изменений.",
-  "settings": "Настройки",
+  "settings": {
+    "title": "Настройки",
+    "notifications": {
+      "title": "Уведомления",
+      "push": "Push-уведомления",
+      "sound": "Звук",
+      "vibration": "Вибрация"
+    },
+    "language": {
+      "section": "Язык",
+      "current": "Текущий язык",
+      "title": "Выбор языка",
+      "select": "Выберите предпочитаемый язык:",
+      "success": {
+        "title": "Язык изменен",
+        "message": "Язык изменен на {language}"
+      },
+      "error": {
+        "title": "Ошибка",
+        "message": "Не удалось изменить язык"
+      }
+    },
+    "appearance": {
+      "title": "Внешний вид",
+      "darkMode": "Темная тема"
+    },
+    "location": {
+      "title": "Местоположение",
+      "autoLocation": "Автоматическое определение"
+    },
+    "security": {
+      "title": "Безопасность",
+      "changePassword": "Изменить пароль",
+      "biometric": "Биометрическая аутентификация"
+    },
+    "data": {
+      "title": "Данные",
+      "export": "Экспорт данных",
+      "deleteAccount": "Удалить аккаунт"
+    }
+  },
   "editProfile": "Редактировать профиль",
   "editProfileDesc": "Изменить личные данные",
   "paymentMethods": "Способы оплаты",

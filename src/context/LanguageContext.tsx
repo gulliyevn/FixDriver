@@ -39,6 +39,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const [language, setLanguageState] = useState<SupportedLanguage>('ru');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [updateKey, setUpdateKey] = useState(0); // Force re-render
 
   // Memoize language options to prevent unnecessary re-renders
   const languageOptions = useMemo(() => getLanguageOptions(), []);
@@ -85,6 +86,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       
       await i18nSetLanguage(lang);
       setLanguageState(lang);
+      setUpdateKey(prev => prev + 1); // Force re-render
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to change language';
       setError(errorMessage);
@@ -98,7 +100,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   // Memoize translation function to prevent unnecessary re-renders
   const t = useCallback((key: string, params?: Record<string, string | number>): string => {
     return i18nT(key, params);
-  }, []);
+  }, [language]);
 
   // Memoize context value to prevent unnecessary re-renders
   const value = useMemo<LanguageContextType>(() => ({
@@ -109,7 +111,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     getLanguageInfo,
     isLoading,
     error,
-  }), [language, setLanguage, t, languageOptions, isLoading, error]);
+  }), [language, setLanguage, t, languageOptions, isLoading, error, updateKey]);
 
   return (
     <LanguageContext.Provider value={value}>

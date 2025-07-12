@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { colors, SIZES, SHADOWS } from '../constants/colors';
+import { useLanguage } from '../context/LanguageContext';
+import { colors } from '../constants/colors';
+import { TabBarStyles as styles } from '../styles/navigation/TabBar.styles';
 
 interface TabBarProps {
   state: { routes: Array<{ key: string; name: string }>; index: number };
@@ -12,6 +14,7 @@ interface TabBarProps {
 
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
 
   const tabConfig = [
@@ -19,36 +22,36 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
       name: 'Map',
       icon: 'map',
       activeIcon: 'map',
-      label: 'Карта',
+      label: t('navigation.map'),
     },
     {
       name: 'Drivers',
       icon: 'people-outline',
       activeIcon: 'people',
-      label: 'Водители',
+      label: t('navigation.drivers'),
     },
     {
       name: 'Plus',
       icon: 'add-circle-outline',
       activeIcon: 'add-circle',
-      label: 'Поездка',
+      label: t('navigation.plus'),
     },
     {
       name: 'ChatList',
       icon: 'chatbubbles-outline',
       activeIcon: 'chatbubbles',
-      label: 'Чаты',
+      label: t('navigation.chats'),
     },
     {
       name: 'Profile',
       icon: 'person-outline',
       activeIcon: 'person',
-      label: 'Профиль',
+      label: t('navigation.profile'),
     },
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: currentColors.tabBar }]}>
+    <View style={[styles.tabBar, { backgroundColor: currentColors.tabBar }]}> 
       {state.routes.map((route: { key: string; name: string }, index: number) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
@@ -82,26 +85,23 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.tab}
+            style={styles.tabItem}
           >
-            <View style={[
-              styles.iconContainer,
-              isFocused && { backgroundColor: currentColors.primary + '20' }
-            ]}>
-                             <Ionicons
-                 name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
-                 size={24}
-                 color={isFocused ? currentColors.primary : currentColors.textSecondary}
-               />
+            <View style={styles.tabIcon}>
+              <Ionicons
+                name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
+                size={24}
+                color={isFocused ? currentColors.primary : currentColors.textSecondary}
+              />
             </View>
             <Text style={[
-              styles.label,
+              styles.tabLabel,
               { color: isFocused ? currentColors.primary : currentColors.textSecondary }
             ]}>
               {tab?.label}
             </Text>
             {isFocused && (
-              <View style={[styles.indicator, { backgroundColor: currentColors.primary }]} />
+              <View style={[styles.tabIndicator, { backgroundColor: currentColors.primary }]} />
             )}
           </TouchableOpacity>
         );
@@ -109,42 +109,5 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    paddingBottom: SIZES.sm,
-    paddingTop: SIZES.sm,
-    paddingHorizontal: SIZES.sm,
-    ...SHADOWS.light.large,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: SIZES.xs,
-    position: 'relative',
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: SIZES.xs,
-  },
-  label: {
-    fontSize: SIZES.fontSize.xs,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  indicator: {
-    position: 'absolute',
-    bottom: 0,
-    width: 20,
-    height: 3,
-    borderRadius: 1.5,
-  },
-});
 
 export default TabBar;

@@ -11,6 +11,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -30,6 +31,7 @@ type NavigationProp = StackNavigationProp<ClientStackParamList, 'Map'>;
 
 const MapScreen: React.FC = () => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
   const navigation = useNavigation<NavigationProp>();
   const currentColors = isDark ? colors.dark : colors.light;
   
@@ -47,7 +49,7 @@ const MapScreen: React.FC = () => {
         setCurrentLocation(currentLocationData);
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Не удалось получить ваше местоположение');
+      Alert.alert(t('common.error'), t('client.map.locationError'));
     } finally {
       setLoading(false);
     }
@@ -107,7 +109,7 @@ const MapScreen: React.FC = () => {
           <Ionicons name="search" size={20} color={currentColors.textSecondary} />
           <TextInput
             style={[styles.searchInput, { color: currentColors.text }]}
-            placeholder="Куда поехать?"
+            placeholder={t('client.map.searchPlaceholder')}
             placeholderTextColor={currentColors.textSecondary}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -159,7 +161,7 @@ const MapScreen: React.FC = () => {
                 {selectedDriver.vehicle_brand} {selectedDriver.vehicle_model}
               </Text>
               <View style={styles.ratingContainer}>
-                <Ionicons name="star" size={16} color="#FFD700" />
+                <Ionicons name="star" size={16} color={currentColors.warning} />
                 <Text style={[styles.rating, { color: currentColors.textSecondary }]}>
                   {selectedDriver.rating}
                 </Text>
@@ -168,7 +170,7 @@ const MapScreen: React.FC = () => {
           </View>
           <TouchableOpacity style={[styles.orderButton, { backgroundColor: currentColors.primary }]}>
             <Text style={[styles.orderButtonText, { color: currentColors.card }]}>
-              Заказать
+              {t('client.map.orderButton')}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -180,7 +182,7 @@ const MapScreen: React.FC = () => {
           <View style={[styles.loadingCard, { backgroundColor: currentColors.card }]}>
             <Ionicons name="location" size={32} color={currentColors.primary} />
             <Text style={[styles.loadingText, { color: currentColors.text }]}>
-              Определяем ваше местоположение...
+              {t('client.map.loadingLocation')}
             </Text>
           </View>
         </View>

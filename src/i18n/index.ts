@@ -127,11 +127,24 @@ export const initializeLanguage = async (): Promise<void> => {
 // Main translation function with better error handling
 export const t = (key: string, params?: Record<string, string | number>): string => {
   try {
+    // Add debug info for missing translations
     const translation = i18n.t(key, params);
     
     // If translation is the same as key, it means translation is missing
     if (translation === key) {
-      console.warn(`Missing translation for key: ${key}`);
+      console.warn(`Missing translation for key: ${key} in locale: ${i18n.locale}`);
+      // Try to find the key in the current locale's translations
+      const currentTranslations = i18n.translations[i18n.locale];
+      if (currentTranslations) {
+        console.log(`Available namespaces in ${i18n.locale}:`, Object.keys(currentTranslations));
+        // Try to find the key in each namespace
+        Object.keys(currentTranslations).forEach(namespace => {
+          const namespaceTranslations = currentTranslations[namespace];
+          if (namespaceTranslations && typeof namespaceTranslations === 'object') {
+            console.log(`Keys in ${namespace}:`, Object.keys(namespaceTranslations));
+          }
+        });
+      }
       return key;
     }
     

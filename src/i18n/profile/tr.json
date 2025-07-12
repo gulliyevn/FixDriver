@@ -24,7 +24,47 @@
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil değiştirildi",
   "languageChangeSuccess": "Dil başarıyla değiştirildi. Değişiklikleri uygulamak için uygulamayı yeniden başlatın.",
-  "settings": "Ayarlar",
+  "settings": {
+    "title": "Ayarlar",
+    "notifications": {
+      "title": "Bildirimler",
+      "push": "Push bildirimleri",
+      "sound": "Ses",
+      "vibration": "Titreşim"
+    },
+    "language": {
+      "section": "Dil",
+      "current": "Mevcut dil",
+      "title": "Dil Seç",
+      "select": "Tercih ettiğiniz dili seçin:",
+      "success": {
+        "title": "Dil Değiştirildi",
+        "message": "Dil {language} diline değiştirildi"
+      },
+      "error": {
+        "title": "Hata",
+        "message": "Dil değiştirilemedi"
+      }
+    },
+    "appearance": {
+      "title": "Görünüm",
+      "darkMode": "Karanlık mod"
+    },
+    "location": {
+      "title": "Konum",
+      "autoLocation": "Otomatik konum"
+    },
+    "security": {
+      "title": "Güvenlik",
+      "changePassword": "Şifre değiştir",
+      "biometric": "Biyometrik kimlik doğrulama"
+    },
+    "data": {
+      "title": "Veriler",
+      "export": "Verileri dışa aktar",
+      "deleteAccount": "Hesabı sil"
+    }
+  },
   "editProfile": "Profili düzenle",
   "editProfileDesc": "Kişisel verileri değiştir",
   "paymentMethods": "Ödeme yöntemleri",

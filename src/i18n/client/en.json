@@ -1,1 +1,144 @@
-{"title":"Client","dashboard":"Dashboard","bookings":"Bookings","drivers":"Drivers","map":"Map","chat":"Chat","notifications":"Notifications","settings":"Settings","profile":"Profile","schedule":"Schedule","support":"Support"}
+{
+  "title": "Client",
+  "dashboard": "Dashboard",
+  "bookings": "Bookings",
+  "drivers": "Drivers",
+  "map": {
+    "title": "Map",
+    "searchPlaceholder": "Where to go?",
+    "orderButton": "Order",
+    "loadingLocation": "Determining your location...",
+    "locationError": "Failed to get your location"
+  },
+  "chat": {
+    "title": "Chat",
+    "noChats": "No chats",
+    "loadingChats": "Loading chats...",
+    "cancel": "Cancel",
+    "read": "Read",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "readAll": "Read all",
+    "filter": "Filter",
+    "read": "Read",
+    "delete": "Delete",
+    "showAll": "Show all notifications"
+  },
+  "settings": "Settings",
+  "profile": {
+    "title": "Profile",
+    "trips": "Trips",
+    "spent": "Spent",
+    "rating": "Rating",
+    "balance": "My balance",
+    "cards": "Cards",
+    "debts": "My debts",
+    "cars": "Cars",
+    "paymentHistory": "Payment history",
+    "residence": "Residence",
+    "help": "Help & rules",
+    "about": "About app",
+    "logout": "Logout"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "loading": "Loading...",
+    "noBookings": "No booked trips",
+    "addBooking": "Add booking"
+  },
+  "support": "Support",
+  "balance": {
+    "title": "My balance",
+    "currentBalance": "Current balance",
+    "topUp": "Top up",
+    "withdraw": "Withdraw",
+    "quickTopUp": "Quick top up",
+    "transactionHistory": "Transaction history",
+    "showAll": "Show all",
+    "pay": "Pay"
+  },
+  "debts": {
+    "title": "My debts",
+    "noDebts": "No active debts",
+    "debtAmount": "Debt amount",
+    "dueDate": "Due date",
+    "payDebt": "Pay debt"
+  },
+  "cards": {
+    "title": "My cards",
+    "noCards": "No added cards",
+    "addCard": "Add card",
+    "scanCard": "Scan card",
+    "enterManually": "Enter manually",
+    "delete": "Delete",
+    "expires": "Expires",
+    "addNewCard": "Add new card"
+  },
+  "cars": {
+    "title": "My cars",
+    "noCars": "No added cars",
+    "addCar": "Add car",
+    "scanDocuments": "Scan documents",
+    "enterManually": "Enter manually",
+    "delete": "Delete",
+    "year": "Year",
+    "color": "Color",
+    "type": "Type",
+    "edit": "Edit",
+    "addNewCar": "Add new car"
+  },
+  "plus": {
+    "title": "Booking",
+    "step1": {
+      "title": "Select subscription package",
+      "description": "Choose the right tariff for your trips",
+      "popular": "Popular"
+    },
+    "step2": {
+      "title": "Trip details",
+      "passengers": "Number of passengers",
+      "pickupAddress": "Pickup address",
+      "destinationAddress": "Destination address",
+      "notes": "Additional notes",
+      "notesPlaceholder": "Special requirements or wishes"
+    },
+    "step3": {
+      "title": "Booking details",
+      "summary": "Trip summary"
+    },
+    "loading": "Loading..."
+  },
+  "driverCard": {
+    "route": "Route",
+    "stops": "stops",
+    "call": "Call"
+  },
+  "about": {
+    "title": "About app",
+    "version": "Version",
+    "information": "Information",
+    "build": "Build",
+    "developer": "Developer",
+    "links": "Links",
+    "website": "Website",
+    "support": "Contact support",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use"
+  },
+  "help": {
+    "title": "Help & rules",
+    "needHelp": "Need help?",
+    "contactSupport": "Contact support"
+  },
+  "residence": {
+    "title": "Residence",
+    "default": "Default"
+  },
+  "paymentHistory": {
+    "title": "Payment history",
+    "noPayments": "No payments"
+  }
+}

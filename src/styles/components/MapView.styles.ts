@@ -27,7 +27,7 @@ export const MapViewStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   driverMarkerContainer: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#083198', // Основные кнопки FixDrive
     borderRadius: 20,
     width: 40,
     height: 40,
@@ -42,7 +42,7 @@ export const MapViewStyles = StyleSheet.create({
     elevation: 5,
   },
   durationMarkerContainer: {
-    backgroundColor: '#1F2937',
+    backgroundColor: '#030304', // Тексты FixDrive
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
