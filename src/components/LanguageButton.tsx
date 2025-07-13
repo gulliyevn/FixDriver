@@ -51,27 +51,24 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
     switch (size) {
       case 'small':
         return {
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-          borderRadius: 16,
+          buttonStyle: LanguageButtonStyles.small,
+          textStyle: LanguageButtonStyles.textSmall,
+          flagStyle: LanguageButtonStyles.flagSmall,
           fontSize: 14,
-          flagSize: 16,
         };
       case 'large':
         return {
-          paddingHorizontal: 20,
-          paddingVertical: 12,
-          borderRadius: 20,
+          buttonStyle: LanguageButtonStyles.large,
+          textStyle: LanguageButtonStyles.textLarge,
+          flagStyle: LanguageButtonStyles.flagLarge,
           fontSize: 18,
-          flagSize: 20,
         };
       default: // medium
         return {
-          paddingHorizontal: 16,
-          paddingVertical: 10,
-          borderRadius: 18,
+          buttonStyle: LanguageButtonStyles.medium,
+          textStyle: LanguageButtonStyles.textMedium,
+          flagStyle: LanguageButtonStyles.flagMedium,
           fontSize: 16,
-          flagSize: 18,
         };
     }
   };
@@ -84,15 +81,15 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
       backgroundColor: currentColors.surface,
       borderWidth: 1,
       borderColor: currentColors.border,
-      ...sizeStyles,
+      ...sizeStyles.buttonStyle,
     },
     flag: {
       ...LanguageButtonStyles.flag,
-      fontSize: sizeStyles.flagSize,
+      ...sizeStyles.flagStyle,
     },
     text: {
       ...LanguageButtonStyles.text,
-      fontSize: sizeStyles.fontSize,
+      ...sizeStyles.textStyle,
       color: currentColors.text,
     },
     icon: {
