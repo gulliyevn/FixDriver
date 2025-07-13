@@ -5,7 +5,6 @@ import {
   TouchableOpacity, 
   Modal, 
   ScrollView, 
-  StyleSheet, 
   Animated, 
   Dimensions,
   StatusBar 
@@ -15,13 +14,12 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { colors } from '../constants/colors';
 import { SupportedLanguage } from '../i18n';
+import { LanguageSelectorStyles } from '../styles/components/LanguageSelector.styles';
 
 interface LanguageSelectorProps {
   visible: boolean;
   onClose: () => void;
 }
-
-const { height: screenHeight } = Dimensions.get('window');
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose }) => {
   const { t, setLanguage, language, languageOptions, isLoading } = useLanguage();
@@ -89,132 +87,73 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
     onClose();
   };
 
-  const styles = StyleSheet.create({
+  const styles = {
     modalOverlay: {
-      flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 20,
+      ...LanguageSelectorStyles.modalOverlay,
     },
     modalContent: {
+      ...LanguageSelectorStyles.modalContent,
       backgroundColor: currentColors.background,
-      borderRadius: 24,
-      padding: 24,
-      width: '100%',
-      maxWidth: 400,
-      maxHeight: screenHeight * 0.8,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.25,
-      shadowRadius: 32,
-      elevation: 16,
     },
     header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 24,
-      paddingBottom: 16,
-      borderBottomWidth: 1,
+      ...LanguageSelectorStyles.header,
       borderBottomColor: currentColors.border + '40',
     },
     title: {
-      fontSize: 24,
-      fontWeight: '700',
+      ...LanguageSelectorStyles.title,
       color: currentColors.primary,
-      letterSpacing: 0.3,
     },
     closeButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      ...LanguageSelectorStyles.closeButton,
       backgroundColor: currentColors.surface,
-      alignItems: 'center',
-      justifyContent: 'center',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
     },
     languageList: {
-      maxHeight: 480,
+      ...LanguageSelectorStyles.languageList,
     },
     languageItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 16,
-      paddingHorizontal: 20,
-      borderRadius: 16,
-      marginBottom: 12,
+      ...LanguageSelectorStyles.languageItem,
       backgroundColor: currentColors.surface,
-      borderWidth: 2,
-      borderColor: 'transparent',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.05,
-      shadowRadius: 8,
-      elevation: 2,
     },
     languageItemSelected: {
+      ...LanguageSelectorStyles.languageItemSelected,
       backgroundColor: currentColors.primary + '15',
       borderColor: currentColors.primary,
       shadowColor: currentColors.primary,
-      shadowOpacity: 0.2,
-      shadowRadius: 12,
-      elevation: 4,
     },
     flagContainer: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: 16,
+      ...LanguageSelectorStyles.flagContainer,
       backgroundColor: currentColors.background,
     },
     flag: {
-      fontSize: 20,
+      ...LanguageSelectorStyles.flag,
     },
     languageInfo: {
-      flex: 1,
+      ...LanguageSelectorStyles.languageInfo,
     },
     languageName: {
-      fontSize: 18,
-      fontWeight: '600',
+      ...LanguageSelectorStyles.languageName,
       color: currentColors.text,
-      marginBottom: 2,
-      letterSpacing: 0.2,
     },
     languageNative: {
-      fontSize: 14,
+      ...LanguageSelectorStyles.languageNative,
       color: currentColors.textSecondary,
-      fontWeight: '400',
     },
     languageNameSelected: {
-      fontWeight: '700',
+      ...LanguageSelectorStyles.languageNameSelected,
       color: currentColors.primary,
     },
     checkIcon: {
-      marginLeft: 12,
-      width: 24,
-      height: 24,
-      borderRadius: 12,
+      ...LanguageSelectorStyles.checkIcon,
       backgroundColor: currentColors.primary,
-      alignItems: 'center',
-      justifyContent: 'center',
     },
     loadingContainer: {
-      padding: 40,
-      alignItems: 'center',
+      ...LanguageSelectorStyles.loadingContainer,
     },
     loadingText: {
-      fontSize: 16,
+      ...LanguageSelectorStyles.loadingText,
       color: currentColors.textSecondary,
-      marginTop: 12,
     },
-  });
+  };
 
   return (
     <Modal

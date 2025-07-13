@@ -9,6 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Notification } from '../services/NotificationService';
 import { useTheme } from '../context/ThemeContext';
+import { ProfileNotificationsModalStyles } from '../styles/components/ProfileNotificationsModal.styles';
 
 interface ProfileNotificationsModalProps {
   visible: boolean;
@@ -59,43 +60,32 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
 
   const renderNotification = ({ item }: { item: Notification }) => (
     <View style={{
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 16,
-      borderBottomWidth: 1,
+      ...ProfileNotificationsModalStyles.notificationItem,
       borderBottomColor: isDark ? '#374151' : '#E5E7EB',
       backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
     }}>
       <View style={{
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+        ...ProfileNotificationsModalStyles.iconContainer,
         backgroundColor: getNotificationColor(item.type),
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 12,
       }}>
         <Ionicons name={getNotificationIcon(item.type) as keyof typeof Ionicons.glyphMap} size={20} color="#FFFFFF" />
       </View>
       
-      <View style={{ flex: 1 }}>
+      <View style={ProfileNotificationsModalStyles.notificationContent}>
         <Text style={{
-          fontSize: 16,
-          fontWeight: '600',
+          ...ProfileNotificationsModalStyles.notificationTitle,
           color: isDark ? '#F9FAFB' : '#1F2937',
-          marginBottom: 4,
         }}>
           {item.title}
         </Text>
         <Text style={{
-          fontSize: 14,
+          ...ProfileNotificationsModalStyles.notificationMessage,
           color: isDark ? '#9CA3AF' : '#6B7280',
-          marginBottom: 4,
         }}>
           {item.message}
         </Text>
         <Text style={{
-          fontSize: 12,
+          ...ProfileNotificationsModalStyles.notificationTime,
           color: isDark ? '#6B7280' : '#9CA3AF',
         }}>
           {new Date(item.createdAt).toLocaleDateString('ru-RU', {
@@ -109,9 +99,7 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
       
       <TouchableOpacity
         onPress={() => onDeleteNotification(item.id)}
-        style={{
-          padding: 8,
-        }}
+        style={ProfileNotificationsModalStyles.deleteButton}
       >
         <Ionicons name="trash-outline" size={20} color="#EF4444" />
       </TouchableOpacity>
@@ -125,32 +113,27 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
       presentationStyle="pageSheet"
     >
       <View style={{
-        flex: 1,
+        ...ProfileNotificationsModalStyles.container,
         backgroundColor: isDark ? '#000000' : '#F2F2F7',
       }}>
         {/* Header */}
         <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 16,
-          borderBottomWidth: 1,
+          ...ProfileNotificationsModalStyles.header,
           borderBottomColor: isDark ? '#374151' : '#E5E7EB',
           backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
         }}>
           <Text style={{
-            fontSize: 20,
-            fontWeight: '600',
+            ...ProfileNotificationsModalStyles.headerTitle,
             color: isDark ? '#F9FAFB' : '#1F2937',
           }}>
             Уведомления
           </Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={ProfileNotificationsModalStyles.headerActions}>
             <TouchableOpacity
               onPress={onMarkAllAsRead}
-              style={{ marginRight: 16 }}
+              style={ProfileNotificationsModalStyles.markAllReadButton}
             >
-              <Text style={{ color: '#007AFF', fontSize: 16 }}>
+              <Text style={ProfileNotificationsModalStyles.markAllReadText}>
                 Прочитать все
               </Text>
             </TouchableOpacity>

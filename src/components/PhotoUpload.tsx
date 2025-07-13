@@ -11,6 +11,7 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { useLanguage } from '../context/LanguageContext';
+import { PhotoUploadStyles } from '../styles/components/PhotoUpload.styles';
 
 interface PhotoUploadProps {
   photo: string | null;
@@ -19,7 +20,6 @@ interface PhotoUploadProps {
   type: 'license' | 'passport';
   uploading: boolean;
   onUploadingChange: (uploading: boolean) => void;
-  styles: any;
 }
 
 const PhotoUpload: React.FC<PhotoUploadProps> = ({
@@ -29,7 +29,6 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
   type,
   uploading,
   onUploadingChange,
-  styles,
 }) => {
   const { t } = useLanguage();
 
@@ -167,13 +166,13 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
   };
 
   return (
-    <View style={styles.inputContainer}>
-      <Text style={styles.label}>
+    <View style={PhotoUploadStyles.inputContainer}>
+      <Text style={PhotoUploadStyles.label}>
         {type === 'license' ? t('register.licensePhoto') : t('register.passportPhoto')} 
-        <Text style={styles.requiredStar}>*</Text>
+        <Text style={PhotoUploadStyles.requiredStar}>*</Text>
       </Text>
       <TouchableOpacity 
-        style={[styles.uploadButton, uploading && styles.uploadButtonDisabled]} 
+        style={[PhotoUploadStyles.uploadButton, uploading && PhotoUploadStyles.uploadButtonDisabled]} 
         onPress={showImagePickerOptions}
         disabled={uploading}
       >
@@ -182,15 +181,15 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         ) : (
           <Ionicons name={getIconName()!} size={24} color="#23408E" />
         )}
-        <Text style={styles.uploadButtonText}>{getButtonText()}</Text>
+        <Text style={PhotoUploadStyles.uploadButtonText}>{getButtonText()}</Text>
       </TouchableOpacity>
       {photo && (
-        <View style={styles.photoPreview}>
-          <Image source={{ uri: photo }} style={styles.photoPreviewImage} />
-          <TouchableOpacity style={styles.removePhotoButton} onPress={handleRemovePhoto}>
+        <View style={PhotoUploadStyles.photoPreview}>
+          <Image source={{ uri: photo }} style={PhotoUploadStyles.photoPreviewImage} />
+          <TouchableOpacity style={PhotoUploadStyles.removePhotoButton} onPress={handleRemovePhoto}>
             <Ionicons name="close-circle" size={24} color="#FF0000" />
           </TouchableOpacity>
-          <Text style={styles.photoPreviewText}>{t('register.photoUploaded')}</Text>
+          <Text style={PhotoUploadStyles.photoPreviewText}>{t('register.photoUploaded')}</Text>
         </View>
       )}
     </View>

@@ -205,7 +205,6 @@ const DriverRegisterScreen: React.FC = () => {
               type="license"
               uploading={uploadingPhoto === 'license'}
               onUploadingChange={(flag) => setUploadingPhoto(flag ? 'license' : null)}
-              styles={styles}
             />
             {errors.licensePhoto && <Text style={styles.errorText}>{errors.licensePhoto}</Text>}
             <View style={styles.inputContainer}>
@@ -250,7 +249,6 @@ const DriverRegisterScreen: React.FC = () => {
               type="passport"
               uploading={uploadingPhoto === 'passport'}
               onUploadingChange={(flag) => setUploadingPhoto(flag ? 'passport' : null)}
-              styles={styles}
             />
             {errors.passportPhoto && <Text style={styles.errorText}>{errors.passportPhoto}</Text>}
             <View style={styles.inputContainer}>

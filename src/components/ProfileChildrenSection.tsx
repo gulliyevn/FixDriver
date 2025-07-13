@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AppAvatar from './AppAvatar';
 import AppCard from './AppCard';
 import { useTheme } from '../context/ThemeContext';
+import { ProfileChildrenSectionStyles } from '../styles/components/ProfileChildrenSection.styles';
 
 interface Child {
   id: string;
@@ -28,20 +29,12 @@ const ProfileChildrenSection: React.FC<ProfileChildrenSectionProps> = ({
 
   return (
     <AppCard style={{
+      ...ProfileChildrenSectionStyles.card,
       backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-      borderRadius: 12,
-      padding: 16,
-      margin: 16,
     }}>
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 16,
-      }}>
+      <View style={ProfileChildrenSectionStyles.header}>
         <Text style={{
-          fontSize: 18,
-          fontWeight: '600',
+          ...ProfileChildrenSectionStyles.title,
           color: isDark ? '#F9FAFB' : '#1F2937',
         }}>
           Дети под опекой
@@ -53,27 +46,19 @@ const ProfileChildrenSection: React.FC<ProfileChildrenSectionProps> = ({
       
       {children.map((child) => (
         <View key={child.id} style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 12,
-          borderBottomWidth: 1,
+          ...ProfileChildrenSectionStyles.childItem,
           borderBottomColor: isDark ? '#374151' : '#F3F4F6',
         }}>
           <AppAvatar name={child.name} size={40} />
-          <View style={{
-            flex: 1,
-            marginLeft: 12,
-          }}>
+          <View style={ProfileChildrenSectionStyles.childInfo}>
             <Text style={{
-              fontSize: 16,
-              fontWeight: '500',
+              ...ProfileChildrenSectionStyles.childName,
               color: isDark ? '#F9FAFB' : '#1F2937',
-              marginBottom: 2,
             }}>
               {child.name}
             </Text>
             <Text style={{
-              fontSize: 14,
+              ...ProfileChildrenSectionStyles.childDetails,
               color: isDark ? '#9CA3AF' : '#6B7280',
             }}>
               {child.age} лет • {child.school}

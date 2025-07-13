@@ -22,6 +22,10 @@ export const PlusScreenStyles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
+  subtitle: {
+    fontSize: SIZES.fontSize.md,
+    marginBottom: SIZES.lg,
+  },
   placeholder: {
     width: 40,
   },
@@ -50,6 +54,112 @@ export const PlusScreenStyles = StyleSheet.create({
   stepDescription: {
     fontSize: SIZES.fontSize.md,
     marginBottom: SIZES.xl,
+  },
+  premiumCard: {
+    padding: SIZES.lg,
+    borderRadius: SIZES.radius.lg,
+    marginBottom: SIZES.lg,
+    borderWidth: 2,
+    borderColor: '#F59E0B',
+    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+    ...SHADOWS.light.medium,
+  },
+  premiumTitle: {
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '700',
+    marginBottom: SIZES.sm,
+  },
+  premiumSubtitle: {
+    fontSize: SIZES.fontSize.md,
+    marginBottom: SIZES.md,
+  },
+  premiumButton: {
+    paddingVertical: SIZES.sm,
+    paddingHorizontal: SIZES.md,
+    borderRadius: SIZES.radius.sm,
+    backgroundColor: '#F59E0B',
+    alignItems: 'center',
+  },
+  premiumButtonText: {
+    fontSize: SIZES.fontSize.md,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  section: {
+    marginBottom: SIZES.xl,
+  },
+  sectionTitle: {
+    fontSize: SIZES.fontSize.lg,
+    fontWeight: '600',
+    marginBottom: SIZES.md,
+  },
+  quickActions: {
+    gap: SIZES.md,
+  },
+  quickAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: SIZES.md,
+    borderRadius: SIZES.radius.md,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    ...SHADOWS.light.small,
+  },
+  quickActionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: SIZES.md,
+  },
+  quickActionContent: {
+    flex: 1,
+  },
+  quickActionTitle: {
+    fontSize: SIZES.fontSize.md,
+    fontWeight: '600',
+    marginBottom: SIZES.xs,
+  },
+  quickActionSubtitle: {
+    fontSize: SIZES.fontSize.sm,
+  },
+  quickActionArrow: {
+    marginLeft: SIZES.sm,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SIZES.md,
+  },
+  gridItem: {
+    width: '48%',
+    padding: SIZES.md,
+    borderRadius: SIZES.radius.md,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    alignItems: 'center',
+    ...SHADOWS.light.small,
+  },
+  gridItemIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: SIZES.sm,
+  },
+  gridItemTitle: {
+    fontSize: SIZES.fontSize.sm,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: SIZES.xs,
+  },
+  gridItemSubtitle: {
+    fontSize: SIZES.fontSize.xs,
+    textAlign: 'center',
   },
   packageCard: {
     padding: SIZES.lg,

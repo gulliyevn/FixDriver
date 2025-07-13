@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView, TextInput } from 'react-native';
 import { RoutePoint } from '../types/package';
 import { useTheme } from '../context/ThemeContext';
-import InputField from './InputField';
 import Button from './Button';
 import { RouteBuilderStyles } from '../styles/components/RouteBuilder.styles';
 
@@ -205,12 +204,22 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
               </View>
             </View>
 
-            <InputField
+            <TextInput
               placeholder="Введите адрес или выберите на карте"
               value={point.address}
               onChangeText={(text) => updatePointAddress(point.id, text)}
-              leftIcon="location"
-              style={RouteBuilderStyles.addressInput}
+              style={[
+                RouteBuilderStyles.addressInput,
+                {
+                  borderWidth: 1,
+                  borderColor: isDark ? '#374151' : '#D1D5DB',
+                  borderRadius: 8,
+                  padding: 12,
+                  backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+                  color: isDark ? '#F9FAFB' : '#1F2937',
+                }
+              ]}
+              placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
             />
 
             {/* Линия связи между точками */}

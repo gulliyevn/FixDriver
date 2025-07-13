@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { 
   TouchableOpacity, 
   Text, 
-  StyleSheet, 
   Animated, 
   ViewStyle 
 } from 'react-native';
@@ -10,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { colors } from '../constants/colors';
+import { LanguageButtonStyles } from '../styles/components/LanguageButton.styles';
 
 interface LanguageButtonProps {
   onPress: () => void;
@@ -78,34 +78,27 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
 
   const sizeStyles = getSizeStyles();
 
-  const styles = StyleSheet.create({
+  const styles = {
     button: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      ...LanguageButtonStyles.button,
       backgroundColor: currentColors.surface,
       borderWidth: 1,
       borderColor: currentColors.border,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 2,
       ...sizeStyles,
     },
     flag: {
+      ...LanguageButtonStyles.flag,
       fontSize: sizeStyles.flagSize,
-      marginRight: 8,
     },
     text: {
+      ...LanguageButtonStyles.text,
       fontSize: sizeStyles.fontSize,
-      fontWeight: '600',
       color: currentColors.text,
-      letterSpacing: 0.2,
     },
     icon: {
-      marginLeft: 4,
+      ...LanguageButtonStyles.icon,
     },
-  });
+  };
 
   return (
     <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
