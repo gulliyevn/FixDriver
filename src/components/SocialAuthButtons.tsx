@@ -70,7 +70,7 @@ export default function SocialAuthButtons({ onPress, onSuccess, onError }: Socia
   };
 
   return (
-    <View style={[SocialAuthButtonsStyles.container, { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16 }]}> 
+    <View style={SocialAuthButtonsStyles.container}> 
       <TouchableOpacity
         style={SocialAuthButtonsStyles.googleButton}
         onPress={handleGoogleSignIn}

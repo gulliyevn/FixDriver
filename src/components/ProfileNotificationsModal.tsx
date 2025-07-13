@@ -61,8 +61,7 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
   const renderNotification = ({ item }: { item: Notification }) => (
     <View style={{
       ...ProfileNotificationsModalStyles.notificationItem,
-      borderBottomColor: isDark ? '#374151' : '#E5E7EB',
-      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+      ...(isDark ? ProfileNotificationsModalStyles.notificationItemDark : ProfileNotificationsModalStyles.notificationItemLight),
     }}>
       <View style={{
         ...ProfileNotificationsModalStyles.iconContainer,
@@ -74,19 +73,19 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
       <View style={ProfileNotificationsModalStyles.notificationContent}>
         <Text style={{
           ...ProfileNotificationsModalStyles.notificationTitle,
-          color: isDark ? '#F9FAFB' : '#1F2937',
+          ...(isDark ? ProfileNotificationsModalStyles.notificationTitleDark : ProfileNotificationsModalStyles.notificationTitleLight),
         }}>
           {item.title}
         </Text>
         <Text style={{
           ...ProfileNotificationsModalStyles.notificationMessage,
-          color: isDark ? '#9CA3AF' : '#6B7280',
+          ...(isDark ? ProfileNotificationsModalStyles.notificationMessageDark : ProfileNotificationsModalStyles.notificationMessageLight),
         }}>
           {item.message}
         </Text>
         <Text style={{
           ...ProfileNotificationsModalStyles.notificationTime,
-          color: isDark ? '#6B7280' : '#9CA3AF',
+          ...(isDark ? ProfileNotificationsModalStyles.notificationTimeDark : ProfileNotificationsModalStyles.notificationTimeLight),
         }}>
           {new Date(item.createdAt).toLocaleDateString('ru-RU', {
             day: '2-digit',
@@ -114,17 +113,16 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
     >
       <View style={{
         ...ProfileNotificationsModalStyles.container,
-        backgroundColor: isDark ? '#000000' : '#F2F2F7',
+        ...(isDark ? ProfileNotificationsModalStyles.containerDark : ProfileNotificationsModalStyles.containerLight),
       }}>
         {/* Header */}
         <View style={{
           ...ProfileNotificationsModalStyles.header,
-          borderBottomColor: isDark ? '#374151' : '#E5E7EB',
-          backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+          ...(isDark ? ProfileNotificationsModalStyles.headerDark : ProfileNotificationsModalStyles.headerLight),
         }}>
           <Text style={{
             ...ProfileNotificationsModalStyles.headerTitle,
-            color: isDark ? '#F9FAFB' : '#1F2937',
+            ...(isDark ? ProfileNotificationsModalStyles.headerTitleDark : ProfileNotificationsModalStyles.headerTitleLight),
           }}>
             Уведомления
           </Text>

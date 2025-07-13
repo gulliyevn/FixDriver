@@ -114,4 +114,13 @@ export const LanguageSelectorStyles = StyleSheet.create({
     fontSize: 16,
     marginTop: 12,
   },
+  animatedOverlay: {
+    // Стиль для Animated.View overlay
+  },
+  animatedContent: {
+    // Стиль для Animated.View content
+  },
+  scrollViewContent: {
+    paddingBottom: 8,
+  },
 }); 

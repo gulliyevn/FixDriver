@@ -87,4 +87,45 @@ export const RouteBuilderStyles = StyleSheet.create({
     lineHeight: 16,
     marginBottom: 4,
   },
+  // Стили для темной темы
+  titleDark: {
+    color: '#FFFFFF',
+  },
+  titleLight: {
+    color: '#1F2937',
+  },
+  pointDescriptionDark: {
+    color: '#9CA3AF',
+  },
+  pointDescriptionLight: {
+    color: '#6B7280',
+  },
+  addressInputDark: {
+    borderWidth: 1,
+    borderColor: '#374151',
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#1F2937',
+    color: '#F9FAFB',
+  },
+  addressInputLight: {
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#FFFFFF',
+    color: '#1F2937',
+  },
+  routeInfoDark: {
+    backgroundColor: '#374151',
+  },
+  routeInfoLight: {
+    backgroundColor: '#F3F4F6',
+  },
+  routeInfoTextDark: {
+    color: '#9CA3AF',
+  },
+  routeInfoTextLight: {
+    color: '#6B7280',
+  },
 }); 

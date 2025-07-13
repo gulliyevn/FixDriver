@@ -156,7 +156,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
     <View style={RouteBuilderStyles.container}>
       <Text style={[
         RouteBuilderStyles.title,
-        { color: isDark ? '#FFFFFF' : '#1F2937' }
+        isDark ? RouteBuilderStyles.titleDark : RouteBuilderStyles.titleLight
       ]}>
         Построение маршрута
       </Text>
@@ -168,7 +168,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
               <Text style={RouteBuilderStyles.pointIcon}>{getPointIcon(index)}</Text>
               <Text style={[
                 RouteBuilderStyles.pointDescription,
-                { color: isDark ? '#9CA3AF' : '#6B7280' }
+                isDark ? RouteBuilderStyles.pointDescriptionDark : RouteBuilderStyles.pointDescriptionLight
               ]}>
                 {point.description}
               </Text>
@@ -210,14 +210,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
               onChangeText={(text) => updatePointAddress(point.id, text)}
               style={[
                 RouteBuilderStyles.addressInput,
-                {
-                  borderWidth: 1,
-                  borderColor: isDark ? '#374151' : '#D1D5DB',
-                  borderRadius: 8,
-                  padding: 12,
-                  backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-                  color: isDark ? '#F9FAFB' : '#1F2937',
-                }
+                isDark ? RouteBuilderStyles.addressInputDark : RouteBuilderStyles.addressInputLight
               ]}
               placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
             />
@@ -255,17 +248,17 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
       {/* Инфо о маршруте */}
       <View style={[
         RouteBuilderStyles.routeInfo,
-        { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
+        isDark ? RouteBuilderStyles.routeInfoDark : RouteBuilderStyles.routeInfoLight
       ]}>
         <Text style={[
           RouteBuilderStyles.routeInfoText,
-          { color: isDark ? '#9CA3AF' : '#6B7280' }
+          isDark ? RouteBuilderStyles.routeInfoTextDark : RouteBuilderStyles.routeInfoTextLight
         ]}>
           💡 Вы можете добавить несколько адресов для создания сложного маршрута
         </Text>
         <Text style={[
           RouteBuilderStyles.routeInfoText,
-          { color: isDark ? '#9CA3AF' : '#6B7280' }
+          isDark ? RouteBuilderStyles.routeInfoTextDark : RouteBuilderStyles.routeInfoTextLight
         ]}>
           📍 Перетаскивайте точки для изменения порядка
         </Text>

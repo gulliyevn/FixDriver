@@ -30,12 +30,12 @@ const ProfileChildrenSection: React.FC<ProfileChildrenSectionProps> = ({
   return (
     <AppCard style={{
       ...ProfileChildrenSectionStyles.card,
-      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+      ...(isDark ? ProfileChildrenSectionStyles.cardDark : ProfileChildrenSectionStyles.cardLight),
     }}>
       <View style={ProfileChildrenSectionStyles.header}>
         <Text style={{
           ...ProfileChildrenSectionStyles.title,
-          color: isDark ? '#F9FAFB' : '#1F2937',
+          ...(isDark ? ProfileChildrenSectionStyles.titleDark : ProfileChildrenSectionStyles.titleLight),
         }}>
           Дети под опекой
         </Text>
@@ -47,19 +47,19 @@ const ProfileChildrenSection: React.FC<ProfileChildrenSectionProps> = ({
       {children.map((child) => (
         <View key={child.id} style={{
           ...ProfileChildrenSectionStyles.childItem,
-          borderBottomColor: isDark ? '#374151' : '#F3F4F6',
+          ...(isDark ? ProfileChildrenSectionStyles.childItemDark : ProfileChildrenSectionStyles.childItemLight),
         }}>
           <AppAvatar name={child.name} size={40} />
           <View style={ProfileChildrenSectionStyles.childInfo}>
             <Text style={{
               ...ProfileChildrenSectionStyles.childName,
-              color: isDark ? '#F9FAFB' : '#1F2937',
+              ...(isDark ? ProfileChildrenSectionStyles.childNameDark : ProfileChildrenSectionStyles.childNameLight),
             }}>
               {child.name}
             </Text>
             <Text style={{
               ...ProfileChildrenSectionStyles.childDetails,
-              color: isDark ? '#9CA3AF' : '#6B7280',
+              ...(isDark ? ProfileChildrenSectionStyles.childDetailsDark : ProfileChildrenSectionStyles.childDetailsLight),
             }}>
               {child.age} лет • {child.school}
             </Text>

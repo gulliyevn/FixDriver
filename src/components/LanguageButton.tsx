@@ -101,7 +101,7 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
   };
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+    <Animated.View style={[LanguageButtonStyles.animatedContainer, { transform: [{ scale: scaleAnim }] }]}>
       <TouchableOpacity
         style={[styles.button, style]}
         onPress={handlePress}

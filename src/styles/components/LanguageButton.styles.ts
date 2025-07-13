@@ -20,4 +20,7 @@ export const LanguageButtonStyles = StyleSheet.create({
   icon: {
     marginLeft: 4,
   },
+  animatedContainer: {
+    // Стиль для Animated.View
+  },
 }); 

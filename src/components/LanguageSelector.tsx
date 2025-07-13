@@ -168,12 +168,14 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
       <Animated.View 
         style={[
           styles.modalOverlay,
+          LanguageSelectorStyles.animatedOverlay,
           { opacity: fadeAnim }
         ]}
       >
         <Animated.View 
           style={[
             styles.modalContent,
+            LanguageSelectorStyles.animatedContent,
             {
               transform: [
                 { scale: scaleAnim },
@@ -206,7 +208,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
             <ScrollView 
               style={styles.languageList} 
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 8 }}
+              contentContainerStyle={LanguageSelectorStyles.scrollViewContent}
             >
               {languageOptions.map((lang) => (
                 <TouchableOpacity

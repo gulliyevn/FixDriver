@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
+import { LanguageTestStyles } from '../styles/components/LanguageTest.styles';
 
 const LanguageTest: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -24,27 +25,22 @@ const LanguageTest: React.FC = () => {
   };
 
   return (
-    <View style={{ padding: 20, backgroundColor: '#f0f0f0' }}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+    <View style={LanguageTestStyles.container}>
+      <Text style={LanguageTestStyles.title}>
         Language Test - Current: {language}
       </Text>
       
       {testKeys.map((key) => (
-        <Text key={key} style={{ marginBottom: 5 }}>
+        <Text key={key} style={LanguageTestStyles.testKey}>
           {key}: "{t(key)}"
         </Text>
       ))}
       
       <TouchableOpacity 
         onPress={handleLanguageChange}
-        style={{ 
-          backgroundColor: '#007AFF', 
-          padding: 10, 
-          borderRadius: 5, 
-          marginTop: 10 
-        }}
+        style={LanguageTestStyles.switchButton}
       >
-        <Text style={{ color: 'white', textAlign: 'center' }}>
+        <Text style={LanguageTestStyles.switchButtonText}>
           Switch to {language === 'ru' ? 'English' : 'Russian'}
         </Text>
       </TouchableOpacity>

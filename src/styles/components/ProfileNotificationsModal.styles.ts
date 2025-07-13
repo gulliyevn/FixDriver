@@ -57,4 +57,51 @@ export const ProfileNotificationsModalStyles = StyleSheet.create({
     color: '#007AFF',
     fontSize: 16,
   },
+  // Стили для темной темы
+  containerDark: {
+    backgroundColor: '#000000',
+  },
+  containerLight: {
+    backgroundColor: '#F2F2F7',
+  },
+  notificationItemDark: {
+    borderBottomColor: '#374151',
+    backgroundColor: '#1F2937',
+  },
+  notificationItemLight: {
+    borderBottomColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+  },
+  notificationTitleDark: {
+    color: '#F9FAFB',
+  },
+  notificationTitleLight: {
+    color: '#1F2937',
+  },
+  notificationMessageDark: {
+    color: '#9CA3AF',
+  },
+  notificationMessageLight: {
+    color: '#6B7280',
+  },
+  notificationTimeDark: {
+    color: '#6B7280',
+  },
+  notificationTimeLight: {
+    color: '#9CA3AF',
+  },
+  headerDark: {
+    borderBottomColor: '#374151',
+    backgroundColor: '#1F2937',
+  },
+  headerLight: {
+    borderBottomColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+  },
+  headerTitleDark: {
+    color: '#F9FAFB',
+  },
+  headerTitleLight: {
+    color: '#1F2937',
+  },
 }); 
