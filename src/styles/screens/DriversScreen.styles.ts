@@ -8,8 +8,8 @@ export const DriversScreenStyles = StyleSheet.create({
   },
   header: {
     backgroundColor: lightColors.surface,
-    paddingTop: 60,
-    paddingBottom: 16,
+    paddingTop: 40,
+    paddingBottom: 12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: lightColors.border,

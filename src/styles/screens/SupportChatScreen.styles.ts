@@ -11,25 +11,12 @@ export const SupportChatScreenStyles = StyleSheet.create({
   keyboardView: {
     flex: 1,
   },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  loadingText: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginTop: 16,
-  },
-  loadingTextDark: {
-    color: '#9CA3AF',
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
     backgroundColor: '#FAFAFA',
@@ -229,6 +216,20 @@ export const SupportChatScreenStyles = StyleSheet.create({
   inputContainerDark: {
     backgroundColor: '#1F2937',
     borderTopColor: '#374151',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  loadingTextDark: {
+    color: '#9CA3AF',
   },
   textInput: {
     flex: 1,

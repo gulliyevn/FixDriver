@@ -126,7 +126,9 @@
     "website": "Veb sayt",
     "support": "Dəstəklə əlaqə",
     "privacy": "Gizlilik siyasəti",
-    "terms": "İstifadə şərtləri"
+    "privacyText": "Məxfilik siyasətinin tam mətni burada olacaq...",
+    "terms": "İstifadə şərtləri",
+    "termsText": "İstifadə şərtlərinin tam mətni burada olacaq..."
   },
   "help": {
     "title": "Kömək və qaydalar",

@@ -126,7 +126,9 @@
     "website": "Site web",
     "support": "Contacter le support",
     "privacy": "Politique de confidentialité",
-    "terms": "Conditions d'utilisation"
+    "privacyText": "Le texte complet de la politique de confidentialité sera ici...",
+    "terms": "Conditions d'utilisation",
+    "termsText": "Le texte complet des conditions d'utilisation sera ici..."
   },
   "help": {
     "title": "Aide et règles",

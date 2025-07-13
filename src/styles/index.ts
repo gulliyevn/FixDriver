@@ -11,6 +11,7 @@ export { MapScreenStyles } from './screens/MapScreen.styles';
 // Component Styles
 export { ButtonStyles } from './components/Button.styles';
 export { AppCardStyles } from './components/AppCard.styles';
+export { RulesModalStyles } from './components/RulesModal.styles';
 
 // Navigation Styles
 export { TabBarStyles } from './navigation/TabBar.styles'; 

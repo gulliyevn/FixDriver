@@ -23,9 +23,9 @@ export const ForgotPasswordScreenStyles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 0,
+    top: -60,
     left: 0,
-    padding: 10,
+    padding: 5,
   },
   iconContainer: {
     width: 80,
@@ -204,5 +204,29 @@ export const ForgotPasswordScreenStyles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 24,
+  },
+  supportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#25D366',
+    borderRadius: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    marginHorizontal: 80,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  supportIcon: {
+    marginRight: 3,
+  },
+  supportButtonText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '600',
   },
 }); 

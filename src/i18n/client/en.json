@@ -126,7 +126,9 @@
     "website": "Website",
     "support": "Contact support",
     "privacy": "Privacy policy",
-    "terms": "Terms of use"
+    "privacyText": "Full privacy policy text will be here...",
+    "terms": "Terms of use",
+    "termsText": "Full terms of use text will be here..."
   },
   "help": {
     "title": "Help & rules",

@@ -126,7 +126,9 @@
     "website": "Sitio web",
     "support": "Contactar soporte",
     "privacy": "Política de privacidad",
-    "terms": "Términos de uso"
+    "privacyText": "El texto completo de la política de privacidad estará aquí...",
+    "terms": "Términos de uso",
+    "termsText": "El texto completo de los términos de uso estará aquí..."
   },
   "help": {
     "title": "Ayuda y reglas",

@@ -48,6 +48,23 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
     navigation.goBack();
   };
 
+  const handleContactSupport = () => {
+    const phoneNumber = '+994516995513';
+    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=Здравствуйте! Мне нужна помощь с восстановлением пароля.`;
+    
+    Linking.canOpenURL(whatsappUrl).then(supported => {
+      if (supported) {
+        Linking.openURL(whatsappUrl);
+      } else {
+        // Если WhatsApp не установлен, открываем в браузере
+        const webUrl = `https://wa.me/${phoneNumber}?text=Здравствуйте! Мне нужна помощь с восстановлением пароля.`;
+        Linking.openURL(webUrl);
+      }
+    }).catch(err => {
+      Alert.alert('Ошибка', 'Не удалось открыть WhatsApp');
+    });
+  };
+
   return (
     <SafeAreaView style={[ForgotPasswordScreenStyles.container, isDark && ForgotPasswordScreenStyles.containerDark]}>
       <KeyboardAvoidingView
@@ -102,12 +119,20 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <Text
-          style={ForgotPasswordScreenStyles.loginLinkUnderline}
-          onPress={handleBackToLogin}
+        <TouchableOpacity
+          style={ForgotPasswordScreenStyles.supportButton}
+          onPress={handleContactSupport}
         >
-          {t('login.loginButton')}
-        </Text>
+          <Ionicons 
+            name="logo-whatsapp" 
+            size={24} 
+            color="#FFFFFF" 
+            style={ForgotPasswordScreenStyles.supportIcon}
+          />
+          <Text style={ForgotPasswordScreenStyles.supportButtonText}>
+            Связаться с поддержкой
+          </Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

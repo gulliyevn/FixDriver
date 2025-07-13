@@ -126,7 +126,9 @@
     "website": "Web sitesi",
     "support": "Destekle iletişim",
     "privacy": "Gizlilik politikası",
-    "terms": "Kullanım şartları"
+    "privacyText": "Gizlilik politikasının tam metni burada olacak...",
+    "terms": "Kullanım şartları",
+    "termsText": "Kullanım şartlarının tam metni burada olacak..."
   },
   "help": {
     "title": "Yardım ve kurallar",

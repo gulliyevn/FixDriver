@@ -126,7 +126,9 @@
     "website": "Website",
     "support": "Support kontaktieren",
     "privacy": "Datenschutzrichtlinie",
-    "terms": "Nutzungsbedingungen"
+    "privacyText": "Der vollständige Text der Datenschutzrichtlinie wird hier stehen...",
+    "terms": "Nutzungsbedingungen",
+    "termsText": "Der vollständige Text der Nutzungsbedingungen wird hier stehen..."
   },
   "help": {
     "title": "Hilfe & Regeln",

@@ -1,8 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { HelpScreenStyles as styles } from '../../styles/screens/profile/HelpScreen.styles';
+import RulesModal from '../../components/RulesModal';
 
 /**
  * Экран помощи и правил
@@ -16,6 +17,24 @@ import { HelpScreenStyles as styles } from '../../styles/screens/profile/HelpScr
  */
 
 const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
+  const [showRulesModal, setShowRulesModal] = useState(false);
+  const handleSupportContact = async () => {
+    const phoneNumber = '+994516995513';
+    const message = 'Здравствуйте! Мне нужна помощь с приложением FixDrive.';
+    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    const webUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    try {
+      const canOpen = await Linking.canOpenURL(whatsappUrl);
+      if (canOpen) {
+        await Linking.openURL(whatsappUrl);
+      } else {
+        await Linking.openURL(webUrl);
+      }
+    } catch (error) {
+      Alert.alert('Ошибка', 'Не удалось открыть WhatsApp');
+    }
+  };
   const helpSections = [
     {
       id: '1',
@@ -69,7 +88,17 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         </Text>
         
         {helpSections.map((section) => (
-          <TouchableOpacity key={section.id} style={styles.helpItem}>
+          <TouchableOpacity 
+            key={section.id} 
+            style={styles.helpItem}
+            onPress={() => {
+              if (section.id === '4') {
+                setShowRulesModal(true);
+              } else if (section.id === '5') {
+                navigation.navigate('SupportChat');
+              }
+            }}
+          >
             <View style={styles.helpIcon}>
               <Ionicons name={section.icon as any} size={24} color="#003366" />
             </View>
@@ -86,11 +115,20 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
           <Text style={styles.contactDescription}>
             Свяжитесь с нашей службой поддержки
           </Text>
-          <TouchableOpacity style={styles.contactButton}>
-            <Text style={styles.contactButtonText}>Написать в поддержку</Text>
+          <TouchableOpacity 
+            style={styles.contactButton}
+            onPress={handleSupportContact}
+          >
+            <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" style={styles.supportIcon} />
+            <Text style={styles.contactButtonText}>Связаться с поддержкой</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      
+      <RulesModal 
+        visible={showRulesModal}
+        onClose={() => setShowRulesModal(false)}
+      />
     </View>
   );
 };

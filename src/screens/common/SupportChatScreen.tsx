@@ -8,11 +8,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
 import { mockSupportData } from '../../mocks';
+import { supportService, SupportMessage, SupportTicket } from '../../services/SupportService';
 
 interface Message {
   id: string;
@@ -35,82 +37,141 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   const { isDark } = useTheme();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
+  const [currentTicket, setCurrentTicket] = useState<SupportTicket | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
 
   const { quickQuestions } = mockSupportData;
 
   useEffect(() => {
-    // Добавляем приветственное сообщение
-    const welcomeMessage: Message = {
-      id: '1',
-      text: 'Здравствуйте! Чем могу помочь?',
-      isUser: false,
-      timestamp: new Date(),
-    };
-    setMessages([welcomeMessage]);
+    initializeSupportChat();
+  }, [route?.params]);
 
-    // Если есть начальное сообщение, добавляем его
-    if (route?.params?.initialMessage) {
+  const initializeSupportChat = () => {
+    setIsLoading(true);
+    
+    try {
+      // Создаем новый тикет поддержки
+      const initialMessage = route?.params?.initialMessage || 'Начало чата с поддержкой';
+      const ticket = supportService.createSupportTicket('Чат с поддержкой', initialMessage);
+      setCurrentTicket(ticket);
+      
+      // Конвертируем сообщения тикета в формат для отображения
+      const displayMessages: Message[] = ticket.messages.map(msg => ({
+        id: msg.id,
+        text: msg.text,
+        isUser: msg.sender === 'user',
+        timestamp: msg.timestamp,
+      }));
+      
+      setMessages(displayMessages);
+      
+      // Если есть быстрый вопрос, выбираем его
+      if (route?.params?.quickQuestion) {
+        selectQuickQuestion(route.params.quickQuestion);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка инициализации чата поддержки:', error);
+      Alert.alert('Ошибка', 'Не удалось инициализировать чат поддержки');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendMessage = () => {
+    if (!inputText.trim() || !currentTicket) return;
+
+    const messageText = inputText.trim();
+    setInputText('');
+
+    try {
+      // Добавляем сообщение пользователя в тикет
+      supportService.addUserMessage(currentTicket.id, messageText);
+      
+      // Обновляем локальное состояние
       const userMessage: Message = {
-        id: '2',
-        text: route.params.initialMessage,
+        id: Date.now().toString(),
+        text: messageText,
         isUser: true,
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, userMessage]);
+      
+      // Симулируем ответ поддержки
+      supportService.simulateSupportResponse(currentTicket.id, messageText);
+      
+      // Обновляем тикет
+      const updatedTicket = supportService.getCurrentTicket();
+      if (updatedTicket) {
+        setCurrentTicket(updatedTicket);
+        
+        // Добавляем ответ поддержки в UI
+        setTimeout(() => {
+          const lastSupportMessage = updatedTicket.messages[updatedTicket.messages.length - 1];
+          if (lastSupportMessage && lastSupportMessage.sender === 'support') {
+            const supportMessage: Message = {
+              id: lastSupportMessage.id,
+              text: lastSupportMessage.text,
+              isUser: false,
+              timestamp: lastSupportMessage.timestamp,
+            };
+            setMessages(prev => [...prev, supportMessage]);
+          }
+        }, 2000);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка отправки сообщения:', error);
+      Alert.alert('Ошибка', 'Не удалось отправить сообщение');
     }
-
-    // Если есть быстрый вопрос, выбираем его
-    if (route?.params?.quickQuestion) {
-      selectQuickQuestion(route.params.quickQuestion);
-    }
-  }, [route?.params]);
-
-  const sendMessage = () => {
-    if (!inputText.trim()) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: inputText.trim(),
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-
-    // Имитация ответа поддержки
-    setTimeout(() => {
-      const supportMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Спасибо за ваше сообщение. Наш специалист скоро свяжется с вами.',
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, supportMessage]);
-    }, 2000);
   };
 
   const selectQuickQuestion = (question: string) => {
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: question,
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-
-    // Имитация ответа поддержки
-    setTimeout(() => {
-      const supportMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: `По вопросу "${question}" - давайте разберем это подробнее. Можете описать ситуацию детальнее?`,
-        isUser: false,
+    if (!currentTicket) return;
+    
+    try {
+      // Добавляем быстрый вопрос как сообщение пользователя
+      supportService.addUserMessage(currentTicket.id, question);
+      
+      // Обновляем локальное состояние
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        text: question,
+        isUser: true,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, supportMessage]);
-    }, 2000);
+      
+      setMessages(prev => [...prev, userMessage]);
+      
+      // Симулируем ответ поддержки
+      supportService.simulateSupportResponse(currentTicket.id, question);
+      
+      // Обновляем тикет
+      const updatedTicket = supportService.getCurrentTicket();
+      if (updatedTicket) {
+        setCurrentTicket(updatedTicket);
+        
+        // Добавляем ответ поддержки в UI
+        setTimeout(() => {
+          const lastSupportMessage = updatedTicket.messages[updatedTicket.messages.length - 1];
+          if (lastSupportMessage && lastSupportMessage.sender === 'support') {
+            const supportMessage: Message = {
+              id: lastSupportMessage.id,
+              text: lastSupportMessage.text,
+              isUser: false,
+              timestamp: lastSupportMessage.timestamp,
+            };
+            setMessages(prev => [...prev, supportMessage]);
+          }
+        }, 2000);
+      }
+      
+    } catch (error) {
+      console.error('Ошибка выбора быстрого вопроса:', error);
+      Alert.alert('Ошибка', 'Не удалось отправить быстрый вопрос');
+    }
   };
 
   const formatTime = (date: Date) => {
@@ -202,13 +263,14 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   );
 
   return (
-    <KeyboardAvoidingView
-      style={[
-        SupportChatScreenStyles.container,
-        isDark && SupportChatScreenStyles.containerDark
-      ]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <SafeAreaView style={[
+      SupportChatScreenStyles.container,
+      isDark && SupportChatScreenStyles.containerDark
+    ]}>
+      <KeyboardAvoidingView
+        style={SupportChatScreenStyles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       {/* Header */}
       <View style={[
         SupportChatScreenStyles.header,
@@ -246,20 +308,31 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
 
       {/* Messages */}
       <View style={SupportChatScreenStyles.messagesContainer}>
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={SupportChatScreenStyles.messagesContent}
-          showsVerticalScrollIndicator={false}
-          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-          ListFooterComponent={() => (
-            <>
-              {messages.length === 1 && renderQuickQuestions()}
-            </>
-          )}
-        />
+        {isLoading ? (
+          <View style={SupportChatScreenStyles.loadingContainer}>
+            <Text style={[
+              SupportChatScreenStyles.loadingText,
+              isDark && SupportChatScreenStyles.loadingTextDark
+            ]}>
+              Подключение к поддержке...
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            renderItem={renderMessage}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={SupportChatScreenStyles.messagesContent}
+            showsVerticalScrollIndicator={false}
+            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+            ListFooterComponent={() => (
+              <>
+                {messages.length === 1 && renderQuickQuestions()}
+              </>
+            )}
+          />
+        )}
       </View>
 
       {/* Input */}
@@ -295,7 +368,8 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
           />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

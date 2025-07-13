@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Linking, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { AboutScreenStyles as styles } from '../../styles/screens/profile/AboutScreen.styles';
@@ -22,12 +22,13 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   
   const appInfo = {
     name: 'FixDrive',
     version: '1.0.0',
-    build: '2024.01.15',
-    description: 'Сервис заказа такси и поездок в Азербайджане'
+    build: '2025.07.01'
   };
 
   const handleOpenLink = (url: string) => {
@@ -55,7 +56,6 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           </View>
           <Text style={styles.appName}>{appInfo.name}</Text>
           <Text style={styles.appVersion}>{t('client.about.version')} {appInfo.version}</Text>
-          <Text style={styles.appDescription}>{appInfo.description}</Text>
         </View>
         
         <View style={styles.infoSection}>
@@ -78,7 +78,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           <Text style={styles.sectionTitle}>{t('client.about.links')}</Text>
           <TouchableOpacity 
             style={styles.linkItem}
-            onPress={() => handleOpenLink('https://fixdrive.az')}
+            onPress={() => handleOpenLink('https://junago.net')}
           >
             <Ionicons name="globe" size={24} color={currentColors.primary} />
             <Text style={styles.linkText}>{t('client.about.website')}</Text>
@@ -86,7 +86,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.linkItem}
-            onPress={() => handleOpenLink('mailto:support@fixdrive.az')}
+            onPress={() => handleOpenLink('mailto:junago@junago.net')}
           >
             <Ionicons name="mail" size={24} color={currentColors.primary} />
             <Text style={styles.linkText}>{t('client.about.support')}</Text>
@@ -94,7 +94,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.linkItem}
-            onPress={() => handleOpenLink('https://fixdrive.az/privacy')}
+            onPress={() => setShowPrivacyModal(true)}
           >
             <Ionicons name="shield-checkmark" size={24} color={currentColors.primary} />
             <Text style={styles.linkText}>{t('client.about.privacy')}</Text>
@@ -102,7 +102,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.linkItem}
-            onPress={() => handleOpenLink('https://fixdrive.az/terms')}
+            onPress={() => setShowTermsModal(true)}
           >
             <Ionicons name="document-text" size={24} color={currentColors.primary} />
             <Text style={styles.linkText}>{t('client.about.terms')}</Text>
@@ -110,6 +110,60 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      
+      {/* Модальное окно политики конфиденциальности */}
+      <Modal
+        visible={showPrivacyModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowPrivacyModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{t('client.about.privacy')}</Text>
+              <TouchableOpacity 
+                onPress={() => setShowPrivacyModal(false)}
+                style={styles.modalCloseButton}
+              >
+                <Ionicons name="close" size={24} color={currentColors.text} />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScrollView}>
+              <Text style={styles.modalText}>
+                {t('client.about.privacyText')}
+              </Text>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Модальное окно условий использования */}
+      <Modal
+        visible={showTermsModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowTermsModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{t('client.about.terms')}</Text>
+              <TouchableOpacity 
+                onPress={() => setShowTermsModal(false)}
+                style={styles.modalCloseButton}
+              >
+                <Ionicons name="close" size={24} color={currentColors.text} />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScrollView}>
+              <Text style={styles.modalText}>
+                {t('client.about.termsText')}
+              </Text>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
