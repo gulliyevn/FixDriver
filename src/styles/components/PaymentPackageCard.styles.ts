@@ -38,4 +38,38 @@ export const PaymentPackageCardStyles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  // Стили для темной темы
+  containerDark: {
+    backgroundColor: '#1F2937',
+  },
+  containerLight: {
+    backgroundColor: '#FFFFFF',
+  },
+  borderDark: {
+    borderColor: '#374151',
+  },
+  borderLight: {
+    borderColor: '#E5E7EB',
+  },
+  titleDark: {
+    color: '#F9FAFB',
+  },
+  titleLight: {
+    color: '#1F2937',
+  },
+  priceSelected: {
+    color: '#3B82F6',
+  },
+  priceDark: {
+    color: '#9CA3AF',
+  },
+  priceLight: {
+    color: '#6B7280',
+  },
+  descriptionDark: {
+    color: '#9CA3AF',
+  },
+  descriptionLight: {
+    color: '#6B7280',
+  },
 }); 

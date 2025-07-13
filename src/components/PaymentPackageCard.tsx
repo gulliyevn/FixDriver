@@ -26,10 +26,8 @@ const PaymentPackageCard: React.FC<PaymentPackageCardProps> = ({
     <TouchableOpacity
       style={[
         PaymentPackageCardStyles.container,
-        {
-          backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-          borderColor: selected ? '#3B82F6' : isDark ? '#374151' : '#E5E7EB',
-        },
+        isDark ? PaymentPackageCardStyles.containerDark : PaymentPackageCardStyles.containerLight,
+        selected ? PaymentPackageCardStyles.selected : (isDark ? PaymentPackageCardStyles.borderDark : PaymentPackageCardStyles.borderLight),
         selected && PaymentPackageCardStyles.selected,
         disabled && PaymentPackageCardStyles.disabled,
       ]}
@@ -39,13 +37,13 @@ const PaymentPackageCard: React.FC<PaymentPackageCardProps> = ({
       <View style={PaymentPackageCardStyles.header}>
         <Text style={[
           PaymentPackageCardStyles.title,
-          { color: isDark ? '#F9FAFB' : '#1F2937' }
+          isDark ? PaymentPackageCardStyles.titleDark : PaymentPackageCardStyles.titleLight
         ]}>
           {title}
         </Text>
         <Text style={[
           PaymentPackageCardStyles.price,
-          { color: selected ? '#3B82F6' : isDark ? '#9CA3AF' : '#6B7280' }
+          selected ? PaymentPackageCardStyles.priceSelected : (isDark ? PaymentPackageCardStyles.priceDark : PaymentPackageCardStyles.priceLight)
         ]}>
           {price}
         </Text>
@@ -54,7 +52,7 @@ const PaymentPackageCard: React.FC<PaymentPackageCardProps> = ({
       {description && (
         <Text style={[
           PaymentPackageCardStyles.description,
-          { color: isDark ? '#9CA3AF' : '#6B7280' }
+          isDark ? PaymentPackageCardStyles.descriptionDark : PaymentPackageCardStyles.descriptionLight
         ]}>
           {description}
         </Text>
