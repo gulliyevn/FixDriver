@@ -12,7 +12,7 @@ import { ClientScreenProps } from '../../types/navigation';
 // import { useNotifications } from '../../hooks/useNotifications';
 // import { useUserStats } from '../../hooks/useUserStats';
 
-const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigation }) => {
+const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ navigation }) => {
   const { logout } = useAuth();
   const { t } = useLanguage();
   const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10

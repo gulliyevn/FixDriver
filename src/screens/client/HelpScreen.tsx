@@ -100,30 +100,22 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
             key={section.id} 
             style={styles.helpItem}
             onPress={() => {
-              console.log('Pressed section:', section.id, section.title);
-              
               switch(section.id) {
                 case '1':
-                  Alert.alert('Debug', 'Opening booking modal');
                   setShowBookingModal(true);
                   break;
                 case '2':
-                  Alert.alert('Debug', 'Opening payment modal');
                   setShowPaymentModal(true);
                   break;
                 case '3':
-                  Alert.alert('Debug', 'Opening safety modal');
                   setShowSafetyModal(true);
                   break;
                 case '4':
-                  Alert.alert('Debug', 'Opening rules modal');
                   setShowRulesModal(true);
                   break;
                 case '5':
                   navigation.navigate('SupportChat');
                   break;
-                default:
-                  console.log('Unknown section id:', section.id);
               }
             }}
             activeOpacity={0.7}

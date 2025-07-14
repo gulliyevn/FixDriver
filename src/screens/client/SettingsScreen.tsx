@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Switch, Alert, ActivityIndicator, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { SettingsScreenStyles as styles } from '../../styles/screens/profile/SettingsScreen.styles';
+import { LanguageModalStyles as languageModalStyles } from '../../styles/components/LanguageModal.styles';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useNotifications } from '../../hooks/useNotifications';
 import { colors } from '../../constants/colors';
 
 /**
@@ -24,38 +26,34 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
   const { t, language, languageOptions, setLanguage } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
   
-  const [notifications, setNotifications] = useState(true);
-  const [sound, setSound] = useState(true);
-  const [vibration, setVibration] = useState(true);
+  // Хук для push-уведомлений
+  const {
+    settings: notificationSettings,
+    permissions,
+    isLoading: notificationsLoading,
+    togglePushNotifications,
+    requestPermissions,
+    openNotificationSettings,
+  } = useNotifications();
+  
   const [darkMode, setDarkMode] = useState(false);
   const [autoLocation, setAutoLocation] = useState(true);
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
   const handleLanguageChange = () => {
-    const currentLangInfo = languageOptions.find(lang => lang.code === language);
-    
-    const languageButtons = languageOptions.map(lang => ({
-      text: `${lang.flag} ${lang.name}`,
-      onPress: async () => {
-        try {
-          await setLanguage(lang.code);
-          Alert.alert(
-            t('profile.settings.language.success.title'),
-            t('profile.settings.language.success.message', { language: lang.name })
-          );
-        } catch (error) {
-          Alert.alert(
-            t('profile.settings.language.error.title'),
-            t('profile.settings.language.error.message')
-          );
-        }
-      }
-    }));
-    
-    Alert.alert(
-      t('profile.settings.language.title'),
-      t('profile.settings.language.select'),
-      [...languageButtons, { text: t('common.cancel'), style: 'cancel' as const }]
-    );
+    setLanguageModalVisible(true);
+  };
+
+  const selectLanguage = async (langCode: typeof language) => {
+    try {
+      await setLanguage(langCode);
+      setLanguageModalVisible(false);
+    } catch (error) {
+      Alert.alert(
+        t('profile.settings.language.error.title'),
+        t('profile.settings.language.error.message')
+      );
+    }
   };
 
   return (
@@ -76,27 +74,44 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
         {/* Уведомления */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('profile.settings.notifications.title')}</Text>
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="notifications" size={24} color={currentColors.primary} />
-              <Text style={styles.settingLabel}>{t('profile.settings.notifications.push')}</Text>
+          
+          {notificationsLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={currentColors.primary} />
+              <Text style={styles.loadingText}>Загрузка настроек уведомлений...</Text>
             </View>
-            <Switch value={notifications} onValueChange={setNotifications} />
-          </View>
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="volume-high" size={24} color={currentColors.primary} />
-              <Text style={styles.settingLabel}>{t('profile.settings.notifications.sound')}</Text>
-            </View>
-            <Switch value={sound} onValueChange={setSound} />
-          </View>
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="phone-portrait" size={24} color={currentColors.primary} />
-              <Text style={styles.settingLabel}>{t('profile.settings.notifications.vibration')}</Text>
-            </View>
-            <Switch value={vibration} onValueChange={setVibration} />
-          </View>
+          ) : (
+            <>
+              <View style={styles.settingItem}>
+                <View style={styles.settingInfo}>
+                  <Ionicons name="notifications" size={24} color={currentColors.primary} />
+                  <Text style={styles.settingLabel}>{t('profile.settings.notifications.push')}</Text>
+                </View>
+                <Switch 
+                  value={notificationSettings.pushEnabled} 
+                  onValueChange={togglePushNotifications}
+                  disabled={!permissions?.granted && !permissions?.canAskAgain}
+                />
+              </View>
+
+              {/* Кнопки управления */}
+              {!permissions?.granted && permissions?.canAskAgain && (
+                <TouchableOpacity style={styles.permissionButton} onPress={requestPermissions}>
+                  <Text style={styles.permissionButtonText}>Запросить разрешения</Text>
+                </TouchableOpacity>
+              )}
+
+              {!permissions?.granted && !permissions?.canAskAgain && (
+                <TouchableOpacity style={styles.settingsButton} onPress={openNotificationSettings}>
+                  <Text style={styles.settingsButtonText}>Открыть настройки</Text>
+                </TouchableOpacity>
+              )}
+
+
+
+
+            </>
+          )}
         </View>
 
         {/* Язык */}
@@ -107,7 +122,7 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
               <Ionicons name="language" size={24} color={currentColors.primary} />
               <Text style={styles.settingLabel}>{t('profile.settings.language.current')}</Text>
             </View>
-            <View style={styles.settingInfo}>
+            <View style={styles.languageValue}>
               <Text style={[styles.settingLabel, { color: currentColors.textSecondary }]}>
                 {languageOptions.find(lang => lang.code === language)?.flag} {languageOptions.find(lang => lang.code === language)?.name}
               </Text>
@@ -178,6 +193,57 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Модал выбора языка */}
+      <Modal
+        visible={languageModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <View style={languageModalStyles.modalOverlay}>
+          <View style={languageModalStyles.modalContent}>
+                        <View style={languageModalStyles.modalHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name="language" size={20} color="#003366" style={{ marginRight: 8 }} />
+                <Text style={languageModalStyles.modalTitle}>
+                  {t('profile.settings.language.title')}
+                </Text>
+              </View>
+                              <TouchableOpacity 
+                  onPress={() => setLanguageModalVisible(false)}
+                  style={languageModalStyles.closeButton}
+                >
+                  <Ionicons name="close" size={20} color={currentColors.textSecondary} />
+                </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={languageModalStyles.languageList} showsVerticalScrollIndicator={false}>
+              {languageOptions.map((lang) => (
+                <TouchableOpacity
+                  key={lang.code}
+                  style={[
+                    languageModalStyles.languageItem,
+                    lang.code === language && languageModalStyles.languageItemSelected
+                  ]}
+                  onPress={() => selectLanguage(lang.code)}
+                >
+                  <Text style={languageModalStyles.languageFlag}>{lang.flag}</Text>
+                  <Text style={[
+                    languageModalStyles.languageName,
+                    lang.code === language && languageModalStyles.languageNameSelected
+                  ]}>
+                    {lang.name}
+                  </Text>
+                  {lang.code === language && (
+                    <Ionicons name="checkmark-circle" size={24} color="#2196f3" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

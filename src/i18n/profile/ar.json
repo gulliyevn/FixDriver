@@ -20,7 +20,7 @@
   "notificationsDisabled": "الإشعارات معطلة",
   "language": "اللغة",
   "languageSettings": "إعدادات اللغة",
-  "currentLanguage": "اللغة الحالية",
+  "currentLanguage": "اختيار اللغة",
   "selectLanguage": "اختر اللغة",
   "languageChanged": "تم تغيير اللغة",
   "languageChangeSuccess": "تم تغيير اللغة بنجاح. أعد تشغيل التطبيق لتطبيق التغييرات.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "اللغة",
-      "current": "اللغة الحالية",
+      "current": "اختيار اللغة",
       "title": "اختر اللغة",
       "select": "اختر لغتك المفضلة:",
       "success": {

@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,11 +8,26 @@ import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
+import PushNotificationService from '../src/services/PushNotificationService';
 import 'formdata-polyfill';
 
 
 
 function App() {
+  useEffect(() => {
+    // Инициализация push-уведомлений при запуске приложения
+    const initNotifications = async () => {
+      try {
+        const notificationService = PushNotificationService.getInstance();
+        await notificationService.requestPermissions();
+      } catch (error) {
+        console.error('Error initializing notifications:', error);
+      }
+    };
+
+    initNotifications();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <LanguageProvider>

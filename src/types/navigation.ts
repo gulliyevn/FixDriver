@@ -53,7 +53,6 @@ export type ClientStackParamList = {
       isOnline?: boolean;
     };
   };
-  Profile: undefined;
   // Чат экраны (добавляем прямо в ClientStack для упрощения)
   ChatList: undefined;
   ChatConversation: {

@@ -20,7 +20,7 @@
   "notificationsDisabled": "Уведомления отключены",
   "language": "Язык",
   "languageSettings": "Настройки языка",
-  "currentLanguage": "Текущий язык",
+  "currentLanguage": "Выбор языка",
   "selectLanguage": "Выбрать язык",
   "languageChanged": "Язык изменен",
   "languageChangeSuccess": "Язык успешно изменен. Перезапустите приложение для применения изменений.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Язык",
-      "current": "Текущий язык",
+      "current": "Выбор языка",
       "title": "Выбор языка",
       "select": "Выберите предпочитаемый язык:",
       "success": {

@@ -20,7 +20,7 @@
   "notificationsDisabled": "Notifications disabled",
   "language": "Language",
   "languageSettings": "Language settings",
-  "currentLanguage": "Current language",
+  "currentLanguage": "Language selection",
   "selectLanguage": "Select language",
   "languageChanged": "Language changed",
   "languageChangeSuccess": "Language changed successfully. Restart the app to apply changes.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Language",
-      "current": "Current language",
+      "current": "Language selection",
       "title": "Select Language",
       "select": "Choose your preferred language:",
       "success": {

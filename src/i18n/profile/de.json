@@ -20,7 +20,7 @@
   "notificationsDisabled": "Benachrichtigungen deaktiviert",
   "language": "Sprache",
   "languageSettings": "Spracheinstellungen",
-  "currentLanguage": "Aktuelle Sprache",
+  "currentLanguage": "Sprachauswahl",
   "selectLanguage": "Sprache auswählen",
   "languageChanged": "Sprache geändert",
   "languageChangeSuccess": "Sprache erfolgreich geändert. Starten Sie die App neu, um die Änderungen zu übernehmen.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Sprache",
-      "current": "Aktuelle Sprache",
+      "current": "Sprachauswahl",
       "title": "Sprache auswählen",
       "select": "Wählen Sie Ihre bevorzugte Sprache:",
       "success": {

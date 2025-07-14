@@ -20,7 +20,7 @@
   "notificationsDisabled": "Bildirişlər deaktiv",
   "language": "Dil",
   "languageSettings": "Dil parametrləri",
-  "currentLanguage": "Cari dil",
+  "currentLanguage": "Dil seçimi",
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil dəyişdirildi",
   "languageChangeSuccess": "Dil uğurla dəyişdirildi. Dəyişiklikləri tətbiq etmək üçün tətbiqi yenidən başladın.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Dil",
-      "current": "Cari dil",
+      "current": "Dil seçimi",
       "title": "Dil Seç",
       "select": "Üstünlük verdiyiniz dili seçin:",
       "success": {

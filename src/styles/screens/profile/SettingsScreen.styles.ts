@@ -63,7 +63,75 @@ export const SettingsScreenStyles = StyleSheet.create({
     color: '#003366',
     marginLeft: 12,
   },
+  languageValue: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   dangerText: {
     color: '#e53935',
+  },
+  // Новые стили для push-уведомлений
+  notificationStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  statusText: {
+    fontSize: 12,
+    color: '#666',
+    marginLeft: 8,
+  },
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  statusGranted: {
+    backgroundColor: '#4CAF50',
+  },
+  statusDenied: {
+    backgroundColor: '#F44336',
+  },
+  statusPending: {
+    backgroundColor: '#FF9800',
+  },
+
+  permissionButton: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  permissionButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  settingsButton: {
+    backgroundColor: '#FF9800',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  settingsButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  disabledText: {
+    color: '#999',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 8,
   },
 }); 

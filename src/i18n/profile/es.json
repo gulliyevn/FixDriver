@@ -20,7 +20,7 @@
   "notificationsDisabled": "Notificaciones deshabilitadas",
   "language": "Idioma",
   "languageSettings": "Configuración de idioma",
-  "currentLanguage": "Idioma actual",
+  "currentLanguage": "Selección de idioma",
   "selectLanguage": "Seleccionar idioma",
   "languageChanged": "Idioma cambiado",
   "languageChangeSuccess": "Idioma cambiado exitosamente. Reinicia la aplicación para aplicar los cambios.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Idioma",
-      "current": "Idioma actual",
+      "current": "Selección de idioma",
       "title": "Seleccionar idioma",
       "select": "Elige tu idioma preferido:",
       "success": {

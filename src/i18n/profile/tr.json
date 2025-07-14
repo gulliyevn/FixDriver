@@ -20,7 +20,7 @@
   "notificationsDisabled": "Bildirimler devre dışı",
   "language": "Dil",
   "languageSettings": "Dil ayarları",
-  "currentLanguage": "Mevcut dil",
+  "currentLanguage": "Dil seçimi",
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil değiştirildi",
   "languageChangeSuccess": "Dil başarıyla değiştirildi. Değişiklikleri uygulamak için uygulamayı yeniden başlatın.",
@@ -34,7 +34,7 @@
     },
     "language": {
       "section": "Dil",
-      "current": "Mevcut dil",
+      "current": "Dil seçimi",
       "title": "Dil Seç",
       "select": "Tercih ettiğiniz dili seçin:",
       "success": {
