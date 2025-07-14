@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, Animated } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { RulesModalStyles as styles } from '../styles/components/RulesModal.styles';
 import { RulesSlidesStyles as slideStyles } from '../styles/components/RulesSlides.styles';
-import { getRulesSlides, RuleSlide } from '../mocks/rulesMock';
+import { getBookingHelpSlides, BookingHelpSlide } from '../mocks/bookingHelpMock';
 import { createSlideAnimation, slideAnimationConfig } from '../styles/animations';
 
-interface RulesModalProps {
+interface BookingHelpModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const RulesModal: React.FC<RulesModalProps> = ({ visible, onClose }) => {
+const BookingHelpModal: React.FC<BookingHelpModalProps> = ({ visible, onClose }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const slides: RuleSlide[] = getRulesSlides();
+  const slides: BookingHelpSlide[] = getBookingHelpSlides();
 
   // Мемоизируем функции анимации
   const openSlide = useCallback((slideIndex: number) => {
@@ -27,8 +27,6 @@ const RulesModal: React.FC<RulesModalProps> = ({ visible, onClose }) => {
       setActiveSlide(0);
     });
   }, [slideAnim]);
-
-
 
   return (
     <Modal
@@ -45,7 +43,7 @@ const RulesModal: React.FC<RulesModalProps> = ({ visible, onClose }) => {
           >
             <Ionicons name="close" size={24} color="#003366" />
           </TouchableOpacity>
-          <Text style={styles.modalTitle}>Правила пользования</Text>
+          <Text style={styles.modalTitle}>Как заказать поездку?</Text>
           <View style={styles.placeholder} />
         </View>
         
@@ -98,4 +96,4 @@ const RulesModal: React.FC<RulesModalProps> = ({ visible, onClose }) => {
   );
 };
 
-export default RulesModal;
+export default BookingHelpModal; 

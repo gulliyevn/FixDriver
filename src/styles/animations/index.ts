@@ -1,0 +1,1 @@
+export { createSlideAnimation, slideAnimationConfig } from './RulesAnimations'; 

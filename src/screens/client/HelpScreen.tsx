@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, ScrollView, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { HelpScreenStyles as styles } from '../../styles/screens/profile/HelpScreen.styles';
 import RulesModal from '../../components/RulesModal';
+import BookingHelpModal from '../../components/BookingHelpModal';
+import PaymentHelpModal from '../../components/PaymentHelpModal';
+import SafetyHelpModal from '../../components/SafetyHelpModal';
 
 /**
  * Экран помощи и правил
@@ -18,6 +21,11 @@ import RulesModal from '../../components/RulesModal';
 
 const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
   const [showRulesModal, setShowRulesModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showSafetyModal, setShowSafetyModal] = useState(false);
+
+
   const handleSupportContact = async () => {
     const phoneNumber = '+994516995513';
     const message = 'Здравствуйте! Мне нужна помощь с приложением FixDrive.';
@@ -92,12 +100,33 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
             key={section.id} 
             style={styles.helpItem}
             onPress={() => {
-              if (section.id === '4') {
-                setShowRulesModal(true);
-              } else if (section.id === '5') {
-                navigation.navigate('SupportChat');
+              console.log('Pressed section:', section.id, section.title);
+              
+              switch(section.id) {
+                case '1':
+                  Alert.alert('Debug', 'Opening booking modal');
+                  setShowBookingModal(true);
+                  break;
+                case '2':
+                  Alert.alert('Debug', 'Opening payment modal');
+                  setShowPaymentModal(true);
+                  break;
+                case '3':
+                  Alert.alert('Debug', 'Opening safety modal');
+                  setShowSafetyModal(true);
+                  break;
+                case '4':
+                  Alert.alert('Debug', 'Opening rules modal');
+                  setShowRulesModal(true);
+                  break;
+                case '5':
+                  navigation.navigate('SupportChat');
+                  break;
+                default:
+                  console.log('Unknown section id:', section.id);
               }
             }}
+            activeOpacity={0.7}
           >
             <View style={styles.helpIcon}>
               <Ionicons name={section.icon as any} size={24} color="#003366" />
@@ -128,6 +157,18 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
       <RulesModal 
         visible={showRulesModal}
         onClose={() => setShowRulesModal(false)}
+      />
+      <BookingHelpModal 
+        visible={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+      />
+      <PaymentHelpModal 
+        visible={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+      />
+      <SafetyHelpModal 
+        visible={showSafetyModal}
+        onClose={() => setShowSafetyModal(false)}
       />
     </View>
   );

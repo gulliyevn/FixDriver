@@ -17,10 +17,10 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigatio
   const { t } = useLanguage();
   const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
   
-  // TODO: Для бэкенда заменить на:
-  // const { user, loading: userLoading } = useProfile();
-  // const { notificationsCount, loading: notificationsLoading } = useNotifications();
-  // const { userStats, loading: statsLoading } = useUserStats();
+// TODO: Для бэкенда заменить на:
+// const { user, loading: userLoading } = useProfile();
+// const { notificationsCount, loading: notificationsLoading } = useNotifications();
+// const { userStats, loading: statsLoading } = useUserStats();
   
   const user = mockUsers[0]; // Используем первого клиента из моков
 
@@ -42,15 +42,15 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigatio
 
   const userStats = getUserStats(user.id);
 
-  // TODO: Для бэкенда добавить обработку загрузки
-  // if (userLoading || notificationsLoading || statsLoading) {
-  //   return <LoadingSpinner />;
-  // }
+// TODO: Для бэкенда добавить обработку загрузки
+// if (userLoading || notificationsLoading || statsLoading) {
+//   return <LoadingSpinner />;
+// }
 
-  // TODO: Для бэкенда добавить обработку ошибок
-  // if (!user) {
-  //   return <ErrorDisplay message="Не удалось загрузить профиль" />;
-  // }
+// TODO: Для бэкенда добавить обработку ошибок
+// if (!user) {
+//   return <ErrorDisplay message="Не удалось загрузить профиль" />;
+// }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -118,7 +118,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'Profile'>> = ({ navigatio
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings')}>
         <Ionicons name="settings" size={22} color={styles.menuIconDefault.color} style={styles.menuIcon} />
-        <Text style={styles.menuLabel}>{t('client.profile.settings')}</Text>
+        <Text style={styles.menuLabel}>{t('client.settings')}</Text>
         <Ionicons name="chevron-forward" size={20} color={styles.chevronIcon.color} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Residence')}>

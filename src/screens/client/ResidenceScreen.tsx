@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { ResidenceScreenStyles as styles } from '../../styles/screens/profile/ResidenceScreen.styles';
+import { Address } from '../../mocks/residenceMock';
+import AddressModal from '../../components/AddressModal';
+import { useAddresses } from '../../hooks/useAddresses';
 
 /**
  * Экран резиденции
@@ -16,20 +19,61 @@ import { ResidenceScreenStyles as styles } from '../../styles/screens/profile/Re
  */
 
 const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation }) => {
-  const [addresses] = useState([
-    {
-      id: '1',
-      title: 'Дом',
-      address: 'ул. Ленина, 123, кв. 45',
-      isDefault: true
-    },
-    {
-      id: '2',
-      title: 'Работа',
-      address: 'пр. Гейдара Алиева, 78, офис 15',
-      isDefault: false
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+
+  const {
+    addresses,
+    loading,
+    error,
+    refreshAddresses,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+    setDefaultAddress,
+  } = useAddresses();
+
+  const handleAddAddress = () => {
+    setModalMode('add');
+    setSelectedAddress(null);
+    setShowModal(true);
+  };
+
+  const handleEditAddress = (address: Address) => {
+    setModalMode('edit');
+    setSelectedAddress(address);
+    setShowModal(true);
+  };
+
+  const handleDeleteAddress = (address: Address) => {
+    Alert.alert(
+      'Удалить адрес',
+      `Вы уверены, что хотите удалить адрес "${address.title}"?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        { 
+          text: 'Удалить', 
+          style: 'destructive',
+          onPress: async () => {
+            await deleteAddress(address.id);
+          }
+        },
+      ]
+    );
+  };
+
+  const handleSetDefault = async (address: Address) => {
+    await setDefaultAddress(address.id);
+  };
+
+  const handleSaveAddress = async (addressData: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>) => {
+    if (modalMode === 'add') {
+      await addAddress(addressData);
+    } else if (modalMode === 'edit' && selectedAddress) {
+      await updateAddress(selectedAddress.id, addressData);
     }
-  ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -38,9 +82,7 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation 
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
         <Text style={styles.title}>Резиденция</Text>
-        <TouchableOpacity style={styles.addButton}>
-          <Ionicons name="add" size={24} color="#003366" />
-        </TouchableOpacity>
+        <View style={styles.headerSpacer} />
       </View>
       
       <ScrollView 
@@ -48,31 +90,75 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation 
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ alignItems: 'center', marginBottom: 24 }}>
-          <Text style={styles.description}>
-            Управляйте своими адресами для быстрого заказа поездок
-          </Text>
-        </View>
         
-        {addresses.map((address) => (
-          <View key={address.id} style={styles.addressItem}>
-            <View style={styles.addressInfo}>
-              <Text style={styles.addressTitle}>{address.title}</Text>
-              <Text style={styles.addressText}>{address.address}</Text>
-            </View>
-            <View style={styles.addressActions}>
+        {loading ? (
+          <View style={styles.emptyState}>
+            <ActivityIndicator size="large" color="#003366" />
+            <Text style={styles.emptyStateText}>Загрузка адресов...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.emptyState}>
+            <Ionicons name="alert-circle-outline" size={64} color="#f44336" />
+            <Text style={styles.emptyStateText}>{error}</Text>
+            <TouchableOpacity 
+              style={styles.retryButton}
+              onPress={refreshAddresses}
+            >
+              <Text style={styles.retryButtonText}>Повторить</Text>
+            </TouchableOpacity>
+          </View>
+        ) : addresses.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons name="location-outline" size={64} color="#ccc" />
+            <Text style={styles.emptyStateText}>
+              У вас пока нет сохраненных адресов{'\n'}
+              Добавьте первый адрес для быстрого заказа поездок
+            </Text>
+          </View>
+        ) : (
+          addresses.map((address) => (
+            <View key={address.id} style={styles.addressItem}>
+              <View style={styles.addressHeader}>
+                <View style={styles.addressInfo}>
+                  <Text style={styles.addressTitle}>{address.title}</Text>
+                  <Text style={styles.addressText}>{address.address}</Text>
+                </View>
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity 
+                    style={styles.editButton}
+                    onPress={() => handleEditAddress(address)}
+                  >
+                    <Ionicons name="pencil" size={20} color="#003366" />
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.deleteButton}
+                    onPress={() => handleDeleteAddress(address)}
+                  >
+                    <Ionicons name="trash" size={20} color="#f44336" />
+                  </TouchableOpacity>
+                </View>
+              </View>
               {address.isDefault && (
                 <View style={styles.defaultBadge}>
                   <Text style={styles.defaultText}>По умолчанию</Text>
                 </View>
               )}
-              <TouchableOpacity style={styles.editButton}>
-                <Ionicons name="pencil" size={20} color="#003366" />
-              </TouchableOpacity>
             </View>
-          </View>
-        ))}
+          ))
+        )}
       </ScrollView>
+
+      <TouchableOpacity style={styles.floatingAddButton} onPress={handleAddAddress}>
+        <Ionicons name="add" size={24} color="#fff" />
+      </TouchableOpacity>
+
+      <AddressModal
+        visible={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleSaveAddress}
+        address={selectedAddress}
+        mode={modalMode}
+      />
     </View>
   );
 };
