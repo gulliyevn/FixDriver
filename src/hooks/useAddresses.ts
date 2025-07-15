@@ -29,7 +29,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { getAddresses } = await import('../mocks/residenceMock');
-      const loadedAddresses = getAddresses();
+      const loadedAddresses = getAddresses() || [];
       
       setAddresses(loadedAddresses);
     } catch (err) {

@@ -55,7 +55,8 @@ export const AddressModalStyles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
+    color: '#333',
   },
   multilineInput: {
     borderWidth: 1,
@@ -63,9 +64,10 @@ export const AddressModalStyles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
     height: 100,
     textAlignVertical: 'top',
+    color: '#333',
   },
   checkboxContainer: {
     flexDirection: 'row',

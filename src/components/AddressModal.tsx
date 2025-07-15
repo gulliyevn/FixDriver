@@ -10,8 +10,9 @@ import {
   Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Address } from '../mocks/residenceMock';
+import { Address, addressCategoryOptions } from '../mocks/residenceMock';
 import { AddressModalStyles as styles } from '../styles/components/AddressModal.styles';
+import Select from './Select';
 
 interface AddressModalProps {
   visible: boolean;
@@ -22,24 +23,27 @@ interface AddressModalProps {
 }
 
 const AddressModal: React.FC<AddressModalProps> = ({ 
-  visible, 
+  visible = false, 
   onClose, 
   onSave, 
-  address, 
-  mode 
+  address = null, 
+  mode = 'add' 
 }) => {
   const [title, setTitle] = useState('');
   const [addressText, setAddressText] = useState('');
+  const [category, setCategory] = useState('');
   const [isDefault, setIsDefault] = useState(false);
 
   useEffect(() => {
     if (address && mode === 'edit') {
       setTitle(address.title);
       setAddressText(address.address);
+      setCategory(address.category || '');
       setIsDefault(address.isDefault);
     } else {
       setTitle('');
       setAddressText('');
+      setCategory('');
       setIsDefault(false);
     }
   }, [address, mode, visible]);
@@ -54,12 +58,18 @@ const AddressModal: React.FC<AddressModalProps> = ({
       return;
     }
 
-    onSave({
-      title: title.trim(),
-      address: addressText.trim(),
-      isDefault
-    });
-    onClose();
+    try {
+      onSave({
+        title: title.trim(),
+        address: addressText.trim(),
+        category: category.trim(),
+        isDefault
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error in handleSave:', error);
+      Alert.alert('Ошибка', 'Не удалось сохранить адрес');
+    }
   };
 
   return (
@@ -95,9 +105,24 @@ const AddressModal: React.FC<AddressModalProps> = ({
             <TextInput
               style={styles.textInput}
               placeholder="Например: Дом, Работа"
+              placeholderTextColor="#999"
               value={title}
               onChangeText={setTitle}
               maxLength={50}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>
+              Категория
+            </Text>
+            <Select
+              options={addressCategoryOptions}
+              value={category}
+              onSelect={(option) => setCategory(option.value as string)}
+              placeholder="Выберите категорию"
+              compact={true}
+              searchable={true}
             />
           </View>
 
@@ -108,6 +133,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             <TextInput
               style={styles.multilineInput}
               placeholder="Введите полный адрес"
+              placeholderTextColor="#999"
               value={addressText}
               onChangeText={setAddressText}
               multiline

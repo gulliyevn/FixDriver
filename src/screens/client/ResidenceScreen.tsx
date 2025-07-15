@@ -18,7 +18,7 @@ import { useAddresses } from '../../hooks/useAddresses';
  * 5. Подключить геолокацию
  */
 
-const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation }) => {
+const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation, route }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
@@ -68,10 +68,21 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation 
   };
 
   const handleSaveAddress = async (addressData: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>) => {
-    if (modalMode === 'add') {
-      await addAddress(addressData);
-    } else if (modalMode === 'edit' && selectedAddress) {
-      await updateAddress(selectedAddress.id, addressData);
+    try {
+      if (modalMode === 'add') {
+        const success = await addAddress(addressData);
+        if (success) {
+          setShowModal(false);
+        }
+      } else if (modalMode === 'edit' && selectedAddress) {
+        const success = await updateAddress(selectedAddress.id, addressData);
+        if (success) {
+          setShowModal(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving address:', error);
+      Alert.alert('Ошибка', 'Не удалось сохранить адрес');
     }
   };
 
@@ -122,6 +133,9 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation 
                 <View style={styles.addressInfo}>
                   <Text style={styles.addressTitle}>{address.title}</Text>
                   <Text style={styles.addressText}>{address.address}</Text>
+                  {address.category && (
+                    <Text style={styles.addressDescription}>{address.category}</Text>
+                  )}
                 </View>
                 <View style={styles.actionButtons}>
                   <TouchableOpacity 
@@ -154,7 +168,10 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation 
 
       <AddressModal
         visible={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={() => {
+          setShowModal(false);
+          setSelectedAddress(null);
+        }}
         onSave={handleSaveAddress}
         address={selectedAddress}
         mode={modalMode}

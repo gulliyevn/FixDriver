@@ -2,6 +2,7 @@ export interface Address {
   id: string;
   title: string;
   address: string;
+  category?: string; // Категория адреса
   isDefault: boolean;
   latitude?: number;
   longitude?: number;
@@ -9,11 +10,29 @@ export interface Address {
   updatedAt: string;
 }
 
+import { SelectOption } from '../components/Select';
+
+// Предустановленные варианты категорий для адресов
+export const addressCategoryOptions: SelectOption[] = [
+  { value: '', label: 'Выберите категорию' },
+  { value: 'Дом', label: 'Дом', icon: 'home' },
+  { value: 'Работа', label: 'Работа', icon: 'briefcase' },
+  { value: 'Университет', label: 'Университет', icon: 'school' },
+  { value: 'Торговый центр', label: 'Торговый центр', icon: 'cart' },
+  { value: 'Больница', label: 'Больница', icon: 'medical' },
+  { value: 'Спортзал', label: 'Спортзал', icon: 'fitness' },
+  { value: 'Ресторан', label: 'Ресторан', icon: 'restaurant' },
+  { value: 'Родители', label: 'Родители', icon: 'people' },
+  { value: 'Дача', label: 'Дача', icon: 'leaf' },
+  { value: 'Другой', label: 'Другой', icon: 'ellipsis-horizontal' },
+];
+
 export const mockAddresses: Address[] = [
   {
     id: '1',
     title: 'Дом',
     address: 'ул. Ленина, 123, кв. 45',
+    category: 'Дом',
     isDefault: true,
     latitude: 40.3777,
     longitude: 49.8920,
@@ -24,6 +43,7 @@ export const mockAddresses: Address[] = [
     id: '2',
     title: 'Работа',
     address: 'пр. Гейдара Алиева, 78, офис 15',
+    category: 'Работа',
     isDefault: false,
     latitude: 40.4093,
     longitude: 49.8671,
@@ -39,6 +59,7 @@ export const getAddresses = (): Address[] => {
 export const addAddress = (address: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>): Address => {
   const newAddress: Address = {
     ...address,
+    category: address.category || '', // Убеждаемся, что category всегда есть
     id: Date.now().toString(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()

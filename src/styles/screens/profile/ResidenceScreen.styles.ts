@@ -88,6 +88,12 @@ export const ResidenceScreenStyles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
+  addressDescription: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    marginTop: 4,
+  },
   defaultBadge: {
     backgroundColor: '#4caf50',
     paddingHorizontal: 12,
