@@ -136,12 +136,12 @@ export const t = (key: string, params?: Record<string, string | number>): string
       // Try to find the key in the current locale's translations
       const currentTranslations = i18n.translations[i18n.locale];
       if (currentTranslations) {
-        console.log(`Available namespaces in ${i18n.locale}:`, Object.keys(currentTranslations));
+
         // Try to find the key in each namespace
         Object.keys(currentTranslations).forEach(namespace => {
           const namespaceTranslations = currentTranslations[namespace];
           if (namespaceTranslations && typeof namespaceTranslations === 'object') {
-            console.log(`Keys in ${namespace}:`, Object.keys(namespaceTranslations));
+
           }
         });
       }

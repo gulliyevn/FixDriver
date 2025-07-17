@@ -175,6 +175,8 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
         onSave={handleSaveAddress}
         address={selectedAddress}
         mode={modalMode}
+        addresses={addresses}
+        setDefaultAddress={setDefaultAddress}
       />
     </View>
   );

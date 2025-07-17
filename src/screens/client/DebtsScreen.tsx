@@ -24,7 +24,7 @@ const DebtsScreen: React.FC<ClientScreenProps<'Debts'>> = ({ navigation }) => {
       'Погасить долг',
       `Погасить долг на сумму ${amount}?`,
       [
-        { text: 'Погасить', onPress: () => console.log(`Погасить долг ${debtId}`) },
+        { text: 'Погасить', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );

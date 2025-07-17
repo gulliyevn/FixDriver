@@ -88,6 +88,9 @@ export type ClientStackParamList = {
   Help: undefined;
   About: undefined;
   Balance: undefined;
+  AddressPicker: {
+    onAddressSelected: (address: string, latitude: number, longitude: number) => void;
+  };
 };
 
 // Параметры для водительских экранов

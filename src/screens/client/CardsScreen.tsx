@@ -25,8 +25,8 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
       'Добавить карту',
       'Выберите способ добавления',
       [
-        { text: 'Сканировать карту', onPress: () => console.log('Сканировать карту') },
-        { text: 'Ввести вручную', onPress: () => console.log('Ввести вручную') },
+        { text: 'Сканировать карту', onPress: () => {} },
+        { text: 'Ввести вручную', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );
@@ -37,7 +37,7 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
       'Удалить карту',
       'Вы уверены, что хотите удалить эту карту?',
       [
-        { text: 'Удалить', style: 'destructive', onPress: () => console.log(`Удалить карту ${cardId}`) },
+        { text: 'Удалить', style: 'destructive', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );

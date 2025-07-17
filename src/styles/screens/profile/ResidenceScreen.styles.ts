@@ -10,8 +10,7 @@ export const ResidenceScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 40,
-    paddingBottom: 16,
+    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
     backgroundColor: '#fff',

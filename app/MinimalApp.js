@@ -22,7 +22,7 @@ function MinimalTestScreen() {
       const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
       const password = 'password123';
       
-      console.log(`🧪 Тестируем вход как ${type}:`, email);
+  
       
       // Простая проверка моков
       const mockUsers = {
@@ -47,7 +47,7 @@ function MinimalTestScreen() {
           '✅ Успешный вход!', 
           `Вошли как ${type}\nEmail: ${email}\nПользователь: ${user.name}`
         );
-        console.log('✅ Результат входа:', user);
+
       } else {
         Alert.alert('❌ Ошибка входа', 'Неверный email или пароль');
         console.error('❌ Ошибка входа: неверные данные');

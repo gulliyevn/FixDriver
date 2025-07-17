@@ -52,7 +52,7 @@ export const useNotifications = () => {
 
       // Проверяем разрешения
       const currentPermissions = await notificationService.getCurrentPermissions();
-      console.log('Current permissions:', currentPermissions);
+  
       setPermissions(currentPermissions);
 
       // Если разрешения есть, получаем токен

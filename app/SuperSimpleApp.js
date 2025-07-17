@@ -17,7 +17,7 @@ function SuperSimpleApp() {
     setTimeout(() => {
       const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
       
-      console.log(`🧪 Тест входа как ${type}:`, email);
+  
       
       Alert.alert(
         '✅ Успех!', 

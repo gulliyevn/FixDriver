@@ -25,8 +25,8 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
       'Добавить автомобиль',
       'Выберите способ добавления',
       [
-        { text: 'Сканировать документы', onPress: () => console.log('Сканировать документы') },
-        { text: 'Ввести вручную', onPress: () => console.log('Ввести вручную') },
+        { text: 'Сканировать документы', onPress: () => {} },
+        { text: 'Ввести вручную', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );
@@ -37,7 +37,7 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
       'Удалить автомобиль',
       'Вы уверены, что хотите удалить этот автомобиль?',
       [
-        { text: 'Удалить', style: 'destructive', onPress: () => console.log(`Удалить автомобиль ${carId}`) },
+        { text: 'Удалить', style: 'destructive', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );

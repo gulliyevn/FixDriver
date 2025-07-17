@@ -10,8 +10,7 @@ export const BalanceScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 40,
-    paddingBottom: 12,
+    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },

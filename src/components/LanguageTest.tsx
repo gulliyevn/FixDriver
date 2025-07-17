@@ -15,10 +15,10 @@ const LanguageTest: React.FC = () => {
 
   const handleLanguageChange = async () => {
     const newLang = language === 'ru' ? 'en' : 'ru';
-    console.log(`Test: Changing language from ${language} to ${newLang}`);
+
     try {
       await setLanguage(newLang);
-      console.log(`Test: Language changed successfully to ${newLang}`);
+      
     } catch (error) {
       console.error('Test: Language change failed:', error);
     }

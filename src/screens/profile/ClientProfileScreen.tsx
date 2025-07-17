@@ -64,7 +64,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
           <Text style={styles.profilePhone}>{user.phone}</Text>
           <Text style={styles.profileEmail}>{user.email}</Text>
         </View>
-        <TouchableOpacity style={styles.bell} onPress={() => console.log('Открыть уведомления')}>
+        <TouchableOpacity style={styles.bell} onPress={() => {}}>
           <Ionicons name="notifications-outline" size={24} color={styles.bellIcon.color} />
           {notificationsCount > 0 && (
             <View style={styles.bellBadge}>

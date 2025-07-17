@@ -40,7 +40,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const handleTopUp = () => {
     const options = topUpMethods.map(method => ({
       text: method.name,
-      onPress: () => console.log(`Пополнение: ${method.name}`)
+              onPress: () => {}
     }));
     
     Alert.alert(
@@ -53,7 +53,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const handleWithdraw = () => {
     const options = withdrawalMethods.map(method => ({
       text: method.name,
-      onPress: () => console.log(`Вывод: ${method.name}`)
+              onPress: () => {}
     }));
     
     Alert.alert(
@@ -68,7 +68,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       'Быстрое пополнение',
       `Пополнить баланс на ${amount}?`,
       [
-        { text: 'Пополнить', onPress: () => console.log(`Пополнение на ${amount}`) },
+        { text: 'Пополнить', onPress: () => {} },
         { text: 'Отмена', style: 'cancel' }
       ]
     );
@@ -147,7 +147,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         <View style={styles.transactionsSection}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>{t('client.balance.transactionHistory')}</Text>
-            <TouchableOpacity onPress={() => console.log('Показать все')}>
+            <TouchableOpacity onPress={() => {}}>
               <Text style={styles.showAllText}>{t('client.balance.showAll')}</Text>
             </TouchableOpacity>
           </View>

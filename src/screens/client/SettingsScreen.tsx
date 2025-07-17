@@ -22,7 +22,7 @@ import { colors } from '../../constants/colors';
  */
 
 const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation }) => {
-  const { isDark } = useTheme();
+  const { isDark, theme, toggleTheme } = useTheme();
   const { t, language, languageOptions, setLanguage } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
   
@@ -36,7 +36,6 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
     openNotificationSettings,
   } = useNotifications();
   
-  const [darkMode, setDarkMode] = useState(false);
   const [autoLocation, setAutoLocation] = useState(true);
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
@@ -123,7 +122,7 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
               <Text style={styles.settingLabel}>{t('profile.settings.language.current')}</Text>
             </View>
             <View style={styles.languageValue}>
-              <Text style={[styles.settingLabel, { color: currentColors.textSecondary }]}>
+              <Text style={[styles.settingLabel, { color: currentColors.textSecondary, fontWeight: '600' }]}>
                 {languageOptions.find(lang => lang.code === language)?.flag} {languageOptions.find(lang => lang.code === language)?.name}
               </Text>
               <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
@@ -139,7 +138,7 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
               <Ionicons name="moon" size={24} color={currentColors.primary} />
               <Text style={styles.settingLabel}>{t('profile.settings.appearance.darkMode')}</Text>
             </View>
-            <Switch value={darkMode} onValueChange={setDarkMode} />
+            <Switch value={isDark} onValueChange={toggleTheme} />
           </View>
         </View>
 

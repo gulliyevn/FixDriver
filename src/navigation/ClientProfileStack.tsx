@@ -10,6 +10,7 @@ import ResidenceScreen from '../screens/client/ResidenceScreen';
 import HelpScreen from '../screens/client/HelpScreen';
 import AboutScreen from '../screens/client/AboutScreen';
 import BalanceScreen from '../screens/client/BalanceScreen';
+import AddressPickerScreen from '../screens/client/AddressPickerScreen';
 import SupportChatScreen from '../screens/common/SupportChatScreen';
 import { ClientStackParamList } from '../types/navigation';
 
@@ -33,6 +34,7 @@ const ClientProfileStack: React.FC = () => {
       <Stack.Screen name="Help" component={HelpScreen} />
       <Stack.Screen name="About" component={AboutScreen} />
       <Stack.Screen name="Balance" component={BalanceScreen} />
+      <Stack.Screen name="AddressPicker" component={AddressPickerScreen} />
       <Stack.Screen name="SupportChat" component={SupportChatScreen} />
     </Stack.Navigator>
   );

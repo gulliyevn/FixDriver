@@ -29,7 +29,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { getAddresses } = await import('../mocks/residenceMock');
-      const loadedAddresses = getAddresses() || [];
+      const loadedAddresses = await getAddresses() || [];
       
       setAddresses(loadedAddresses);
     } catch (err) {
@@ -52,7 +52,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { addAddress: mockAddAddress } = await import('../mocks/residenceMock');
-      const newAddress = mockAddAddress(addressData);
+      const newAddress = await mockAddAddress(addressData);
       
       setAddresses(prev => [...prev, newAddress]);
       Alert.alert('Успех', 'Адрес добавлен');
@@ -72,7 +72,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { updateAddress: mockUpdateAddress } = await import('../mocks/residenceMock');
-      const updatedAddress = mockUpdateAddress(id, updates);
+      const updatedAddress = await mockUpdateAddress(id, updates);
       
       if (updatedAddress) {
         setAddresses(prev => 
@@ -99,7 +99,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { deleteAddress: mockDeleteAddress } = await import('../mocks/residenceMock');
-      const success = mockDeleteAddress(id);
+      const success = await mockDeleteAddress(id);
       
       if (success) {
         setAddresses(prev => prev.filter(addr => addr.id !== id));
@@ -124,7 +124,7 @@ export const useAddresses = (): UseAddressesReturn => {
       
       // Временно используем моки
       const { setDefaultAddress: mockSetDefault } = await import('../mocks/residenceMock');
-      const success = mockSetDefault(id);
+      const success = await mockSetDefault(id);
       
       if (success) {
         // Обновляем состояние локально
