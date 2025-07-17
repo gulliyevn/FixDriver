@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../constants/colors';
 
 export const ClientProfileScreenStyles = StyleSheet.create({
   container: {
@@ -169,4 +170,75 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getClientProfileStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    profileName: {
+      color: currentColors.text,
+    },
+    profilePhone: {
+      color: currentColors.textSecondary,
+    },
+    profileEmail: {
+      color: currentColors.textSecondary,
+    },
+    bell: {
+      backgroundColor: currentColors.surface,
+    },
+    bellIcon: {
+      color: currentColors.primary,
+    },
+    statsBox: {
+      backgroundColor: currentColors.card,
+      borderColor: currentColors.border,
+    },
+    statValue: {
+      color: currentColors.text,
+    },
+    statLabel: {
+      color: currentColors.textSecondary,
+    },
+    statDivider: {
+      backgroundColor: currentColors.border,
+    },
+    menuItem: {
+      backgroundColor: currentColors.card,
+      borderBottomColor: currentColors.border,
+    },
+    menuItemFirst: {
+      borderTopColor: currentColors.border,
+    },
+    balanceIcon: {
+      color: currentColors.primary,
+    },
+    menuIconDefault: {
+      color: currentColors.primary,
+    },
+    chevronIcon: {
+      color: currentColors.textSecondary,
+    },
+    menuLabel: {
+      color: currentColors.text,
+    },
+    menuValue: {
+      color: currentColors.text,
+    },
+    menuLabelAbout: {
+      color: currentColors.text,
+    },
+    menuVersion: {
+      color: currentColors.textSecondary,
+    },
+    logout: {
+      backgroundColor: currentColors.card,
+      borderBottomColor: currentColors.border,
+    },
+  };
+}; 

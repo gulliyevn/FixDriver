@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-import { colors } from '../constants/colors';
+import { getCurrentColors } from '../constants/colors';
 import { TabBarStyles as styles } from '../styles/navigation/TabBar.styles';
 
 interface TabBarProps {
@@ -15,7 +15,7 @@ interface TabBarProps {
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
-  const currentColors = isDark ? colors.dark : colors.light;
+  const currentColors = getCurrentColors(isDark);
 
   const tabConfig = [
     {
@@ -51,7 +51,13 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   ];
 
   return (
-    <View style={[styles.tabBar, { backgroundColor: currentColors.tabBar }]}> 
+    <View style={[
+      styles.tabBar, 
+      { 
+        backgroundColor: currentColors.tabBar,
+        borderTopColor: currentColors.border 
+      }
+    ]}> 
       {state.routes.map((route: { key: string; name: string }, index: number) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;

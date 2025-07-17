@@ -89,4 +89,46 @@ export const LanguageModalStyles = StyleSheet.create({
   checkIcon: {
     marginLeft: 6,
   },
-}); 
+});
+
+// Функция для получения цветовых стилей в зависимости от темы
+export const getLanguageModalColors = (isDark: boolean) => {
+  const colors = isDark ? {
+    background: '#1F2937',
+    surface: '#374151',
+    text: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    primary: '#3B82F6',
+    border: '#4B5563',
+    selectedBg: '#1E3A8A',
+    selectedBorder: '#3B82F6',
+  } : {
+    background: '#ffffff',
+    surface: '#f5f5f5',
+    text: '#333333',
+    textSecondary: '#666666',
+    primary: '#2196f3',
+    border: '#e0e0e0',
+    selectedBg: '#e3f2fd',
+    selectedBorder: '#2196f3',
+  };
+
+  return {
+    modalContent: { backgroundColor: colors.background },
+    modalHeader: { 
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border 
+    },
+    modalTitle: { color: colors.text },
+    languageItem: { 
+      backgroundColor: colors.background,
+      shadowColor: isDark ? '#000' : '#000',
+    },
+    languageItemSelected: { 
+      backgroundColor: colors.selectedBg,
+      borderColor: colors.selectedBorder 
+    },
+    languageName: { color: colors.text },
+    languageNameSelected: { color: colors.primary },
+  };
+}; 

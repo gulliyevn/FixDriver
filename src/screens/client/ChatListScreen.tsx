@@ -16,14 +16,17 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
 import { ChatService } from '../../services/ChatService';
 import { Chat } from '../../types/chat';
-import { ChatListScreenStyles } from '../../styles/screens/ChatListScreen.styles';
+import { ChatListScreenStyles, getChatListColors } from '../../styles/screens/ChatListScreen.styles';
 import { useTheme } from '../../context/ThemeContext';
+import { colors } from '../../constants/colors';
 
 type NavigationProp = StackNavigationProp<ClientStackParamList, 'ChatList'>;
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { isDark } = useTheme();
+  const currentColors = isDark ? colors.dark : colors.light;
+  const colorStyles = getChatListColors(isDark);
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,7 +37,7 @@ const ChatListScreen: React.FC = () => {
   const loadChats = async () => {
     try {
       setLoading(true);
-      const chatList: Chat[] = await ChatService.getChats('me');
+      const chatList: Chat[] = await ChatService.getChats();
       setChats(chatList);
     } catch (error) {
       console.error('Error loading chats:', error);
@@ -203,32 +206,32 @@ const ChatListScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <SafeAreaView style={ChatListScreenStyles.container}>
+      <SafeAreaView style={[ChatListScreenStyles.container, colorStyles.container]}>
         <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
         <View style={ChatListScreenStyles.loadingContainer}>
-          <Text style={ChatListScreenStyles.loadingText}>Загрузка чатов...</Text>
+          <Text style={[ChatListScreenStyles.loadingText, colorStyles.loadingText]}>Загрузка чатов...</Text>
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={ChatListScreenStyles.container}>
+    <SafeAreaView style={[ChatListScreenStyles.container, colorStyles.container]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
       {/* Header */}
-      <View style={ChatListScreenStyles.header}>
+      <View style={[ChatListScreenStyles.header, colorStyles.header]}>
         {isSelectionMode ? (
           // Режим выбора
           <View style={ChatListScreenStyles.selectionHeader} testID="selection-header">
             <TouchableOpacity onPress={handleCancelSelection}>
-              <Text style={ChatListScreenStyles.cancelButton}>Отмена</Text>
+              <Text style={[ChatListScreenStyles.cancelButton, colorStyles.cancelButton]}>Отмена</Text>
             </TouchableOpacity>
-            <Text style={ChatListScreenStyles.selectionTitle}>
+            <Text style={[ChatListScreenStyles.selectionTitle, colorStyles.selectionTitle]}>
               Выбрано: {selectedChats.size}
             </Text>
             <TouchableOpacity onPress={handleSelectAll}>
-              <Text style={ChatListScreenStyles.selectAllButton}>
+              <Text style={[ChatListScreenStyles.selectAllButton, colorStyles.selectAllButton]}>
                 {selectedChats.size === filteredChats.length ? 'Снять выбор' : 'Выбрать все'}
               </Text>
             </TouchableOpacity>
@@ -236,23 +239,23 @@ const ChatListScreen: React.FC = () => {
         ) : (
           // Обычный режим
           <View style={ChatListScreenStyles.headerContent}>
-            <Text style={ChatListScreenStyles.title}>Чаты</Text>
+            <Text style={[ChatListScreenStyles.title, colorStyles.title]}>Чаты</Text>
             <TouchableOpacity 
               style={ChatListScreenStyles.selectButton}
               onPress={() => setIsSelectionMode(true)}
               testID="select-button"
             >
-              <Ionicons name="checkmark-circle-outline" size={24} color="#007AFF" />
+              <Ionicons name="checkmark-circle-outline" size={24} color={currentColors.primary} />
             </TouchableOpacity>
           </View>
         )}
         
-        <View style={ChatListScreenStyles.searchContainer}>
-          <Ionicons name="search" size={20} color="#9CA3AF" />
+        <View style={[ChatListScreenStyles.searchContainer, colorStyles.searchContainer]}>
+          <Ionicons name="search" size={20} color={currentColors.textSecondary} />
           <TextInput
-            style={ChatListScreenStyles.searchInput}
+            style={[ChatListScreenStyles.searchInput, colorStyles.searchInput]}
             placeholder="Поиск чатов..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={currentColors.textSecondary}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -261,13 +264,13 @@ const ChatListScreen: React.FC = () => {
 
       {/* Actions для выбранных элементов */}
       {isSelectionMode && selectedChats.size > 0 && (
-        <View style={ChatListScreenStyles.selectionActions}>
+        <View style={[ChatListScreenStyles.selectionActions, colorStyles.selectionActions]}>
           <TouchableOpacity 
-            style={ChatListScreenStyles.actionButton}
+            style={[ChatListScreenStyles.actionButton, colorStyles.actionButton]}
             onPress={handleMarkAsRead}
           >
             <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-            <Text style={ChatListScreenStyles.actionButtonText}>Прочитано</Text>
+            <Text style={[ChatListScreenStyles.actionButtonText, colorStyles.actionButtonText]}>Прочитано</Text>
           </TouchableOpacity>
           
           <TouchableOpacity 

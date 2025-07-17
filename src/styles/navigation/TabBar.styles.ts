@@ -1,11 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { lightColors } from '../../constants/colors';
+import { colors } from '../../constants/colors';
 
 export const TabBarStyles = StyleSheet.create({
   tabBar: {
-    backgroundColor: lightColors.tabBar,
     borderTopWidth: 1,
-    borderTopColor: lightColors.border,
     paddingBottom: 8,
     paddingTop: 8,
     height: 88,
@@ -27,27 +25,27 @@ export const TabBarStyles = StyleSheet.create({
     marginBottom: 4,
   },
   tabIconActive: {
-    tintColor: lightColors.primary,
+    tintColor: colors.light.primary,
   },
   tabIconInactive: {
-    tintColor: lightColors.textSecondary,
+    tintColor: colors.light.textSecondary,
   },
   tabLabel: {
     fontSize: 12,
     fontWeight: '500',
   },
   tabLabelActive: {
-    color: lightColors.primary,
+    color: colors.light.primary,
   },
   tabLabelInactive: {
-    color: lightColors.textSecondary,
+    color: colors.light.textSecondary,
   },
   tabBadge: {
     position: 'absolute',
     top: 4,
     right: '50%',
     marginRight: -8,
-    backgroundColor: lightColors.error,
+    backgroundColor: colors.light.error,
     borderRadius: 8,
     minWidth: 16,
     height: 16,

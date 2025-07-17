@@ -75,6 +75,11 @@ export const colors = {
   dark: darkColors,
 };
 
+// Функция для получения текущих цветов
+export const getCurrentColors = (isDark: boolean) => {
+  return isDark ? darkColors : lightColors;
+};
+
 // ===== ОБЩИЕ КОНСТАНТЫ ДЛЯ СТИЛЕЙ =====
 
 // Размеры

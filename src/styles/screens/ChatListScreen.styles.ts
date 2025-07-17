@@ -1,23 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { lightColors } from '../../constants/colors';
 
+// Базовые стили без цветов
 export const ChatListScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: lightColors.background,
   },
   header: {
-    backgroundColor: lightColors.surface,
     paddingTop: 60,
     paddingBottom: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border,
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: lightColors.text,
     marginBottom: 16,
   },
   headerContent: {
@@ -28,7 +24,6 @@ export const ChatListScreenStyles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: lightColors.text,
   },
   selectButton: {
     padding: 8,
@@ -37,22 +32,18 @@ export const ChatListScreenStyles = StyleSheet.create({
     marginTop: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: lightColors.background,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: lightColors.border,
   },
   searchIcon: {
     fontSize: 16,
-    color: lightColors.textSecondary,
     marginRight: 8,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: lightColors.text,
     marginLeft: 8,
   },
   listContainer: {
@@ -67,27 +58,21 @@ export const ChatListScreenStyles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border,
-    backgroundColor: lightColors.surface,
   },
   selectedChatItem: {
-    backgroundColor: lightColors.primary + '10',
     borderLeftWidth: 4,
-    borderLeftColor: lightColors.primary,
   },
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: lightColors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   checkboxSelected: {
-    backgroundColor: lightColors.primary,
-    borderColor: lightColors.primary,
+    // Цвета будут добавлены динамически
   },
   avatarContainer: {
     position: 'relative',
@@ -97,7 +82,6 @@ export const ChatListScreenStyles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: lightColors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -110,7 +94,6 @@ export const ChatListScreenStyles = StyleSheet.create({
     position: 'absolute',
     top: -5,
     right: -5,
-    backgroundColor: lightColors.primary,
     borderRadius: 10,
     minWidth: 20,
     height: 20,
@@ -129,12 +112,10 @@ export const ChatListScreenStyles = StyleSheet.create({
   participantName: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.text,
     marginBottom: 4,
   },
   messageTime: {
     fontSize: 12,
-    color: lightColors.textSecondary,
   },
   chatContent: {
     flex: 1,
@@ -148,34 +129,28 @@ export const ChatListScreenStyles = StyleSheet.create({
   chatName: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.text,
   },
   chatTime: {
     fontSize: 12,
-    color: lightColors.textSecondary,
   },
   messagePreview: {
     flex: 1,
   },
   messageText: {
     fontSize: 14,
-    color: lightColors.textSecondary,
     lineHeight: 18,
   },
   lastMessage: {
     fontSize: 14,
-    color: lightColors.textSecondary,
     lineHeight: 18,
   },
   unreadIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: lightColors.primary,
     marginTop: 4,
   },
   unreadBadge: {
-    backgroundColor: lightColors.primary,
     borderRadius: 10,
     minWidth: 20,
     height: 20,
@@ -197,13 +172,11 @@ export const ChatListScreenStyles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: lightColors.text,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyStateSubtitle: {
     fontSize: 14,
-    color: lightColors.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -214,7 +187,6 @@ export const ChatListScreenStyles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: lightColors.textSecondary,
     marginTop: 16,
   },
   // Стили для режима выбора
@@ -226,26 +198,21 @@ export const ChatListScreenStyles = StyleSheet.create({
   },
   cancelButton: {
     fontSize: 16,
-    color: lightColors.primary,
     fontWeight: '500',
   },
   selectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: lightColors.text,
   },
   selectAllButton: {
     fontSize: 16,
-    color: lightColors.primary,
     fontWeight: '500',
   },
   selectionActions: {
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: lightColors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border,
     gap: 12,
   },
   actionButton: {
@@ -254,15 +221,12 @@ export const ChatListScreenStyles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: lightColors.background,
     borderWidth: 1,
-    borderColor: lightColors.border,
     gap: 8,
   },
   actionButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: lightColors.text,
   },
   deleteButton: {
     backgroundColor: '#FEF2F2',
@@ -271,4 +235,83 @@ export const ChatListScreenStyles = StyleSheet.create({
   deleteButtonText: {
     color: '#EF4444',
   },
-}); 
+});
+
+// Функция для получения только цветовых стилей
+export const getChatListColors = (isDark: boolean) => {
+  const colors = isDark ? {
+    // Темная тема
+    background: '#111827',
+    surface: '#1F2937',
+    card: '#1F2937',
+    text: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    primary: '#3B82F6',
+    border: '#374151',
+    error: '#F87171',
+  } : {
+    // Светлая тема
+    background: '#fffeff',
+    surface: '#f1f1f0',
+    card: '#ffffff',
+    text: '#030304',
+    textSecondary: '#6d6565',
+    primary: '#083198',
+    border: '#E5E7EB',
+    error: '#EF4444',
+  };
+
+  return {
+    container: { backgroundColor: colors.background },
+    header: { 
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border 
+    },
+    headerTitle: { color: colors.text },
+    title: { color: colors.text },
+    searchContainer: { 
+      backgroundColor: colors.background,
+      borderColor: colors.border 
+    },
+    searchIcon: { color: colors.textSecondary },
+    searchInput: { color: colors.text },
+    chatItem: { 
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border 
+    },
+    selectedChatItem: { 
+      backgroundColor: colors.primary + '10',
+      borderLeftColor: colors.primary 
+    },
+    checkbox: { borderColor: colors.border },
+    checkboxSelected: { 
+      backgroundColor: colors.primary,
+      borderColor: colors.primary 
+    },
+    avatar: { backgroundColor: colors.primary },
+    badge: { backgroundColor: colors.primary },
+    participantName: { color: colors.text },
+    messageTime: { color: colors.textSecondary },
+    chatName: { color: colors.text },
+    chatTime: { color: colors.textSecondary },
+    messageText: { color: colors.textSecondary },
+    lastMessage: { color: colors.textSecondary },
+    unreadIndicator: { backgroundColor: colors.primary },
+    unreadBadge: { backgroundColor: colors.primary },
+    emptyStateTitle: { color: colors.text },
+    emptyStateSubtitle: { color: colors.textSecondary },
+    loadingText: { color: colors.textSecondary },
+    cancelButton: { color: colors.primary },
+    selectionTitle: { color: colors.text },
+    selectAllButton: { color: colors.primary },
+    selectionActions: { 
+      backgroundColor: colors.surface,
+      borderBottomColor: colors.border 
+    },
+    actionButton: { 
+      backgroundColor: colors.background,
+      borderColor: colors.border 
+    },
+    actionButtonText: { color: colors.text },
+  };
+}; 

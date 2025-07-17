@@ -133,4 +133,44 @@ export const SettingsScreenStyles = StyleSheet.create({
     color: '#666',
     marginTop: 8,
   },
-}); 
+});
+
+// Функция для получения цветовых стилей в зависимости от темы
+export const getSettingsScreenColors = (isDark: boolean) => {
+  const colors = isDark ? {
+    background: '#111827',
+    surface: '#1F2937',
+    text: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    primary: '#3B82F6',
+    border: '#374151',
+    card: '#1F2937',
+    danger: '#F87171',
+  } : {
+    background: '#ffffff',
+    surface: '#f9f9f9',
+    text: '#003366',
+    textSecondary: '#666666',
+    primary: '#083198',
+    border: '#f0f0f0',
+    card: '#ffffff',
+    danger: '#e53935',
+  };
+
+  return {
+    container: { backgroundColor: colors.background },
+    header: { 
+      backgroundColor: colors.background,
+      borderBottomColor: colors.border 
+    },
+    title: { color: colors.text },
+    sectionTitle: { color: colors.text },
+    settingItem: { 
+      backgroundColor: colors.surface,
+    },
+    settingLabel: { color: colors.text },
+    dangerText: { color: colors.danger },
+    statusText: { color: colors.textSecondary },
+    loadingText: { color: colors.textSecondary },
+  };
+}; 
