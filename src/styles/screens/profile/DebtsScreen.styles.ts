@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const DebtsScreenStyles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export const DebtsScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 60,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -29,7 +30,6 @@ export const DebtsScreenStyles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  // Пустое состояние
   emptyState: {
     flex: 1,
     alignItems: 'center',
@@ -49,7 +49,6 @@ export const DebtsScreenStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 32,
   },
-  // Долги
   debtItem: {
     backgroundColor: '#f9f9f9',
     borderRadius: 16,
@@ -64,9 +63,10 @@ export const DebtsScreenStyles = StyleSheet.create({
   },
   debtInfo: {
     flex: 1,
+    marginRight: 12,
   },
   debtTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#003366',
     marginBottom: 4,
@@ -76,15 +76,14 @@ export const DebtsScreenStyles = StyleSheet.create({
     color: '#888',
   },
   statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-    marginLeft: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '600',
     color: '#fff',
+    fontWeight: '600',
   },
   debtDetails: {
     flexDirection: 'row',
@@ -102,7 +101,7 @@ export const DebtsScreenStyles = StyleSheet.create({
   amountValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#e53935',
+    color: '#003366',
   },
   debtDate: {
     flex: 1,
@@ -129,4 +128,48 @@ export const DebtsScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getDebtsScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    emptyTitle: {
+      color: currentColors.text,
+    },
+    emptyDescription: {
+      color: currentColors.textSecondary,
+    },
+    debtItem: {
+      backgroundColor: currentColors.card,
+    },
+    debtTitle: {
+      color: currentColors.text,
+    },
+    debtDescription: {
+      color: currentColors.textSecondary,
+    },
+    amountValue: {
+      color: currentColors.text,
+    },
+    amountLabel: {
+      color: currentColors.textSecondary,
+    },
+    dateValue: {
+      color: currentColors.text,
+    },
+    dateLabel: {
+      color: currentColors.textSecondary,
+    },
+  };
+}; 

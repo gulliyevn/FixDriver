@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Linking, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
-import { AboutScreenStyles as styles } from '../../styles/screens/profile/AboutScreen.styles';
+import { AboutScreenStyles as styles, getAboutScreenStyles } from '../../styles/screens/profile/AboutScreen.styles';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { colors } from '../../constants/colors';
@@ -22,6 +22,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
+  const dynamicStyles = getAboutScreenStyles(isDark);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   
@@ -36,12 +37,12 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={styles.title}>{t('client.about.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{t('client.about.title')}</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -51,61 +52,61 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.appInfo}>
-          <View style={styles.appIcon}>
+          <View style={[styles.appIcon, dynamicStyles.appIcon]}>
             <Ionicons name="car" size={64} color={currentColors.primary} />
           </View>
-          <Text style={styles.appName}>{appInfo.name}</Text>
-          <Text style={styles.appVersion}>{t('client.about.version')} {appInfo.version}</Text>
+          <Text style={[styles.appName, dynamicStyles.appName]}>{appInfo.name}</Text>
+          <Text style={[styles.appVersion, dynamicStyles.appVersion]}>{t('client.about.version')} {appInfo.version}</Text>
         </View>
         
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>{t('client.about.information')}</Text>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>{t('client.about.version')}</Text>
-            <Text style={styles.infoValue}>{appInfo.version}</Text>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.about.information')}</Text>
+          <View style={[styles.infoItem, dynamicStyles.infoItem]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('client.about.version')}</Text>
+            <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{appInfo.version}</Text>
           </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>{t('client.about.build')}</Text>
-            <Text style={styles.infoValue}>{appInfo.build}</Text>
+          <View style={[styles.infoItem, dynamicStyles.infoItem]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('client.about.build')}</Text>
+            <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{appInfo.build}</Text>
           </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>{t('client.about.developer')}</Text>
-            <Text style={styles.infoValue}>FixDrive Team</Text>
+          <View style={[styles.infoItem, dynamicStyles.infoItem]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('client.about.developer')}</Text>
+            <Text style={[styles.infoValue, dynamicStyles.infoValue]}>FixDrive Team</Text>
           </View>
         </View>
         
         <View style={styles.linksSection}>
-          <Text style={styles.sectionTitle}>{t('client.about.links')}</Text>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.about.links')}</Text>
           <TouchableOpacity 
-            style={styles.linkItem}
+            style={[styles.linkItem, dynamicStyles.linkItem]}
             onPress={() => handleOpenLink('https://junago.net')}
           >
             <Ionicons name="globe" size={24} color={currentColors.primary} />
-            <Text style={styles.linkText}>{t('client.about.website')}</Text>
+            <Text style={[styles.linkText, dynamicStyles.linkText]}>{t('client.about.website')}</Text>
             <Ionicons name="open-outline" size={20} color={currentColors.textSecondary} />
           </TouchableOpacity>
           <TouchableOpacity 
-            style={styles.linkItem}
+            style={[styles.linkItem, dynamicStyles.linkItem]}
             onPress={() => handleOpenLink('mailto:junago@junago.net')}
           >
             <Ionicons name="mail" size={24} color={currentColors.primary} />
-            <Text style={styles.linkText}>{t('client.about.support')}</Text>
+            <Text style={[styles.linkText, dynamicStyles.linkText]}>{t('client.about.support')}</Text>
             <Ionicons name="open-outline" size={20} color={currentColors.textSecondary} />
           </TouchableOpacity>
           <TouchableOpacity 
-            style={styles.linkItem}
+            style={[styles.linkItem, dynamicStyles.linkItem]}
             onPress={() => setShowPrivacyModal(true)}
           >
             <Ionicons name="shield-checkmark" size={24} color={currentColors.primary} />
-            <Text style={styles.linkText}>{t('client.about.privacy')}</Text>
+            <Text style={[styles.linkText, dynamicStyles.linkText]}>{t('client.about.privacy')}</Text>
             <Ionicons name="open-outline" size={20} color={currentColors.textSecondary} />
           </TouchableOpacity>
           <TouchableOpacity 
-            style={styles.linkItem}
+            style={[styles.linkItem, dynamicStyles.linkItem]}
             onPress={() => setShowTermsModal(true)}
           >
             <Ionicons name="document-text" size={24} color={currentColors.primary} />
-            <Text style={styles.linkText}>{t('client.about.terms')}</Text>
+            <Text style={[styles.linkText, dynamicStyles.linkText]}>{t('client.about.terms')}</Text>
             <Ionicons name="open-outline" size={20} color={currentColors.textSecondary} />
           </TouchableOpacity>
         </View>
@@ -119,9 +120,9 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
         onRequestClose={() => setShowPrivacyModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{t('client.about.privacy')}</Text>
+          <View style={[styles.modalContent, dynamicStyles.modalContent]}>
+            <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
+              <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('client.about.privacy')}</Text>
               <TouchableOpacity 
                 onPress={() => setShowPrivacyModal(false)}
                 style={styles.modalCloseButton}
@@ -130,7 +131,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.modalScrollView}>
-              <Text style={styles.modalText}>
+              <Text style={[styles.modalText, dynamicStyles.modalText]}>
                 {t('client.about.privacyText')}
               </Text>
             </ScrollView>
@@ -146,9 +147,9 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
         onRequestClose={() => setShowTermsModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{t('client.about.terms')}</Text>
+          <View style={[styles.modalContent, dynamicStyles.modalContent]}>
+            <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
+              <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('client.about.terms')}</Text>
               <TouchableOpacity 
                 onPress={() => setShowTermsModal(false)}
                 style={styles.modalCloseButton}
@@ -157,7 +158,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.modalScrollView}>
-              <Text style={styles.modalText}>
+              <Text style={[styles.modalText, dynamicStyles.modalText]}>
                 {t('client.about.termsText')}
               </Text>
             </ScrollView>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
-import { PaymentHistoryScreenStyles as styles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
+import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
 import { mockPaymentHistory } from '../../mocks/paymentHistoryMock';
 
 /**
@@ -18,6 +19,8 @@ import { mockPaymentHistory } from '../../mocks/paymentHistoryMock';
  */
 
 const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getPaymentHistoryScreenStyles(isDark);
   const [payments] = useState(mockPaymentHistory);
 
   const getPaymentIcon = (type: string) => {
@@ -64,12 +67,12 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
-        <Text style={styles.title}>История платежей</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>История платежей</Text>
         <TouchableOpacity style={styles.filterButton}>
           <Ionicons name="filter" size={24} color="#003366" />
         </TouchableOpacity>
@@ -83,15 +86,15 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
         {payments.length === 0 ? (
           <View style={[styles.emptyState, { alignItems: 'center', justifyContent: 'center' }]}>
             <Ionicons name="document-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyTitle}>Нет платежей</Text>
-            <Text style={styles.emptyDescription}>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет платежей</Text>
+            <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
               История платежей пуста
             </Text>
           </View>
         ) : (
           <>
             {payments.map((payment) => (
-              <View key={payment.id} style={styles.paymentItem}>
+              <View key={payment.id} style={[styles.paymentItem, dynamicStyles.paymentItem]}>
                 <View style={styles.paymentHeader}>
                   <View style={styles.paymentInfo}>
                     <Ionicons 
@@ -100,8 +103,8 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
                       color={getPaymentColor(payment.type)} 
                     />
                     <View style={styles.paymentDetails}>
-                      <Text style={styles.paymentTitle}>{payment.title}</Text>
-                      <Text style={styles.paymentDate}>{payment.date} • {payment.time}</Text>
+                      <Text style={[styles.paymentTitle, dynamicStyles.paymentTitle]}>{payment.title}</Text>
+                      <Text style={[styles.paymentDate, dynamicStyles.paymentDate]}>{payment.date} • {payment.time}</Text>
                     </View>
                   </View>
                   <View style={styles.paymentAmount}>
@@ -117,7 +120,7 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
                   </View>
                 </View>
                 {payment.description && (
-                  <Text style={styles.paymentDescription}>{payment.description}</Text>
+                  <Text style={[styles.paymentDescription, dynamicStyles.paymentDescription]}>{payment.description}</Text>
                 )}
               </View>
             ))}

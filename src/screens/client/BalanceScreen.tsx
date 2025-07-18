@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
-import { BalanceScreenStyles as styles } from '../../styles/screens/profile/BalanceScreen.styles';
+import { BalanceScreenStyles as styles, getBalanceScreenStyles } from '../../styles/screens/profile/BalanceScreen.styles';
 import { Transaction, TopUpMethod, WithdrawalMethod } from '../../types/balance';
 import { 
   mockTransactions, 
@@ -31,6 +31,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
+  const dynamicStyles = getBalanceScreenStyles(isDark);
   
   const [balance] = useState(mockBalance);
   const [transactions] = useState<Transaction[]>(mockTransactions);
@@ -105,12 +106,12 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={styles.title}>{t('client.balance.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{t('client.balance.title')}</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -133,11 +134,11 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
         {/* Быстрые суммы пополнения */}
         <View style={styles.quickTopUp}>
-          <Text style={styles.sectionTitle}>{t('client.balance.quickTopUp')}</Text>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
           <View style={styles.quickAmounts}>
             {mockQuickAmounts.map((amount, index) => (
-              <TouchableOpacity key={index} style={styles.quickAmountButton} onPress={() => handleQuickTopUp(amount)}>
-                <Text style={styles.quickAmountText}>{amount}</Text>
+              <TouchableOpacity key={index} style={[styles.quickAmountButton, dynamicStyles.quickAmountButton]} onPress={() => handleQuickTopUp(amount)}>
+                <Text style={[styles.quickAmountText, dynamicStyles.quickAmountText]}>{amount}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -146,15 +147,15 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         {/* История операций */}
         <View style={styles.transactionsSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{t('client.balance.transactionHistory')}</Text>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.transactionHistory')}</Text>
             <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.showAllText}>{t('client.balance.showAll')}</Text>
+              <Text style={[styles.showAllText, dynamicStyles.showAllText]}>{t('client.balance.showAll')}</Text>
             </TouchableOpacity>
           </View>
           
           {transactions.map((transaction) => (
-            <View key={transaction.id} style={styles.transactionItem}>
-              <View style={styles.transactionIcon}>
+            <View key={transaction.id} style={[styles.transactionItem, dynamicStyles.transactionItem]}>
+              <View style={[styles.transactionIcon, dynamicStyles.transactionIcon]}>
                 <Ionicons 
                   name={getTransactionIcon(transaction.type) as any} 
                   size={24} 
@@ -162,8 +163,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 />
               </View>
               <View style={styles.transactionDetails}>
-                <Text style={styles.transactionDescription}>{transaction.description}</Text>
-                <Text style={styles.transactionDate}>{transaction.date} • {transaction.time}</Text>
+                <Text style={[styles.transactionDescription, dynamicStyles.transactionDescription]}>{transaction.description}</Text>
+                <Text style={[styles.transactionDate, dynamicStyles.transactionDate]}>{transaction.date} • {transaction.time}</Text>
               </View>
               <View style={styles.transactionAmount}>
                 <Text style={[styles.transactionAmountText, getTransactionAmountStyle(transaction.type)]}>

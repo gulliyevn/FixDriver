@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const CarsScreenStyles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export const CarsScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 60,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -29,7 +30,6 @@ export const CarsScreenStyles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  // Пустое состояние
   emptyState: {
     flex: 1,
     alignItems: 'center',
@@ -61,7 +61,6 @@ export const CarsScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  // Автомобили
   carItem: {
     backgroundColor: '#f9f9f9',
     borderRadius: 16,
@@ -71,7 +70,7 @@ export const CarsScreenStyles = StyleSheet.create({
   carHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 16,
   },
   carInfo: {
@@ -84,25 +83,24 @@ export const CarsScreenStyles = StyleSheet.create({
     flex: 1,
   },
   carModel: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#003366',
     marginBottom: 4,
   },
   carPlate: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
     color: '#888',
   },
   statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '600',
     color: '#fff',
+    fontWeight: '600',
   },
   carSpecs: {
     flexDirection: 'row',
@@ -129,28 +127,27 @@ export const CarsScreenStyles = StyleSheet.create({
   editButton: {
     flex: 1,
     backgroundColor: '#003366',
-    borderRadius: 12,
-    paddingVertical: 12,
+    borderRadius: 8,
+    paddingVertical: 8,
     alignItems: 'center',
   },
   editButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
   deleteButton: {
     flex: 1,
     backgroundColor: '#e53935',
-    borderRadius: 12,
-    paddingVertical: 12,
+    borderRadius: 8,
+    paddingVertical: 8,
     alignItems: 'center',
   },
   deleteButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
-  // Добавить новый автомобиль
   addNewCarButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -167,4 +164,48 @@ export const CarsScreenStyles = StyleSheet.create({
     color: '#003366',
     marginLeft: 8,
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getCarsScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    emptyTitle: {
+      color: currentColors.text,
+    },
+    emptyDescription: {
+      color: currentColors.textSecondary,
+    },
+    carItem: {
+      backgroundColor: currentColors.card,
+    },
+    carModel: {
+      color: currentColors.text,
+    },
+    carPlate: {
+      color: currentColors.textSecondary,
+    },
+    specValue: {
+      color: currentColors.text,
+    },
+    specLabel: {
+      color: currentColors.textSecondary,
+    },
+    addNewCarButton: {
+      backgroundColor: currentColors.surface,
+    },
+    addNewCarText: {
+      color: currentColors.text,
+    },
+  };
+}; 

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../constants/colors';
 
 export const RulesModalStyles = StyleSheet.create({
   modalContainer: {
@@ -114,4 +115,45 @@ export const RulesModalStyles = StyleSheet.create({
     color: '#333',
     lineHeight: 24,
   },
-}); 
+});
+
+// Функции для динамических стилей с поддержкой темной темы
+export const getRulesModalStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    modalContainer: {
+      backgroundColor: currentColors.background,
+    },
+    modalHeader: {
+      borderBottomColor: currentColors.border,
+    },
+    modalTitle: {
+      color: currentColors.text,
+    },
+    slideItem: {
+      backgroundColor: currentColors.card,
+    },
+    slideIcon: {
+      backgroundColor: currentColors.surface,
+    },
+    slideTitle: {
+      color: currentColors.text,
+    },
+    slideContent: {
+      color: currentColors.textSecondary,
+    },
+    slideOverlay: {
+      backgroundColor: currentColors.background,
+    },
+    slideHeader: {
+      borderBottomColor: currentColors.border,
+    },
+    slideHeaderTitle: {
+      color: currentColors.text,
+    },
+    slideText: {
+      color: currentColors.text,
+    },
+  };
+}; 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
-import { ResidenceScreenStyles as styles } from '../../styles/screens/profile/ResidenceScreen.styles';
+import { ResidenceScreenStyles as styles, getResidenceScreenStyles } from '../../styles/screens/profile/ResidenceScreen.styles';
 import { Address } from '../../mocks/residenceMock';
 import AddressModal from '../../components/AddressModal';
 import { useAddresses } from '../../hooks/useAddresses';
@@ -19,6 +20,8 @@ import { useAddresses } from '../../hooks/useAddresses';
  */
 
 const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation, route }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getResidenceScreenStyles(isDark);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
@@ -87,12 +90,12 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
-        <Text style={styles.title}>Резиденция</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>Резиденция</Text>
         <View style={styles.headerSpacer} />
       </View>
       
@@ -105,12 +108,12 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
         {loading ? (
           <View style={styles.emptyState}>
             <ActivityIndicator size="large" color="#003366" />
-            <Text style={styles.emptyStateText}>Загрузка адресов...</Text>
+            <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>Загрузка адресов...</Text>
           </View>
         ) : error ? (
           <View style={styles.emptyState}>
             <Ionicons name="alert-circle-outline" size={64} color="#f44336" />
-            <Text style={styles.emptyStateText}>{error}</Text>
+            <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>{error}</Text>
             <TouchableOpacity 
               style={styles.retryButton}
               onPress={refreshAddresses}
@@ -121,34 +124,34 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
         ) : addresses.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="location-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyStateText}>
+            <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>
               У вас пока нет сохраненных адресов{'\n'}
               Добавьте первый адрес для быстрого заказа поездок
             </Text>
           </View>
         ) : (
           addresses.map((address) => (
-            <View key={address.id} style={styles.addressItem}>
+            <View key={address.id} style={[styles.addressItem, dynamicStyles.addressItem]}>
               <View style={styles.addressHeader}>
-                <View style={styles.addressInfo}>
-                  <Text style={styles.addressTitle}>{address.title}</Text>
-                  <Text style={styles.addressText}>{address.address}</Text>
-                  {address.category && (
-                    <Text style={styles.addressDescription}>{address.category}</Text>
-                  )}
-                </View>
+                                  <View style={styles.addressInfo}>
+                    <Text style={[styles.addressTitle, dynamicStyles.addressTitle]}>{address.title}</Text>
+                    <Text style={[styles.addressText, dynamicStyles.addressText]}>{address.address}</Text>
+                    {address.category && (
+                      <Text style={[styles.addressDescription, dynamicStyles.addressDescription]}>{address.category}</Text>
+                    )}
+                  </View>
                 <View style={styles.actionButtons}>
                   <TouchableOpacity 
-                    style={styles.editButton}
+                    style={[styles.editButton, dynamicStyles.editButton]}
                     onPress={() => handleEditAddress(address)}
                   >
-                    <Ionicons name="pencil" size={20} color="#003366" />
+                    <Ionicons name="pencil" size={18} color={isDark ? '#fff' : '#2196f3'} />
                   </TouchableOpacity>
                   <TouchableOpacity 
-                    style={styles.deleteButton}
+                    style={[styles.deleteButton, dynamicStyles.deleteButton]}
                     onPress={() => handleDeleteAddress(address)}
                   >
-                    <Ionicons name="trash" size={20} color="#f44336" />
+                    <Ionicons name="trash" size={18} color="#f44336" />
                   </TouchableOpacity>
                 </View>
               </View>

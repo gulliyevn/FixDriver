@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
-import { DebtsScreenStyles as styles } from '../../styles/screens/profile/DebtsScreen.styles';
+import { DebtsScreenStyles as styles, getDebtsScreenStyles } from '../../styles/screens/profile/DebtsScreen.styles';
 import { mockDebts } from '../../mocks/debtsMock';
 
 /**
@@ -17,6 +18,8 @@ import { mockDebts } from '../../mocks/debtsMock';
  */
 
 const DebtsScreen: React.FC<ClientScreenProps<'Debts'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getDebtsScreenStyles(isDark);
   const [debts] = useState(mockDebts);
 
   const handlePayDebt = (debtId: string, amount: string) => {
@@ -57,12 +60,12 @@ const DebtsScreen: React.FC<ClientScreenProps<'Debts'>> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
-        <Text style={styles.title}>Мои долги</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>Мои долги</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -70,19 +73,19 @@ const DebtsScreen: React.FC<ClientScreenProps<'Debts'>> = ({ navigation }) => {
         {debts.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="checkmark-circle-outline" size={64} color="#4caf50" />
-            <Text style={styles.emptyTitle}>Нет активных долгов</Text>
-            <Text style={styles.emptyDescription}>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет активных долгов</Text>
+            <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
               У вас нет неоплаченных долгов
             </Text>
           </View>
         ) : (
           <>
             {debts.map((debt) => (
-              <View key={debt.id} style={styles.debtItem}>
+              <View key={debt.id} style={[styles.debtItem, dynamicStyles.debtItem]}>
                 <View style={styles.debtHeader}>
                   <View style={styles.debtInfo}>
-                    <Text style={styles.debtTitle}>{debt.title}</Text>
-                    <Text style={styles.debtDescription}>{debt.description}</Text>
+                    <Text style={[styles.debtTitle, dynamicStyles.debtTitle]}>{debt.title}</Text>
+                    <Text style={[styles.debtDescription, dynamicStyles.debtDescription]}>{debt.description}</Text>
                   </View>
                   <View style={[styles.statusBadge, { backgroundColor: getDebtStatusColor(debt.status) }]}>
                     <Text style={styles.statusText}>{getDebtStatusText(debt.status)}</Text>
@@ -90,12 +93,12 @@ const DebtsScreen: React.FC<ClientScreenProps<'Debts'>> = ({ navigation }) => {
                 </View>
                 <View style={styles.debtDetails}>
                   <View style={styles.debtAmount}>
-                    <Text style={styles.amountLabel}>Сумма долга</Text>
-                    <Text style={styles.amountValue}>{debt.amount}</Text>
+                    <Text style={[styles.amountLabel, dynamicStyles.amountLabel]}>Сумма долга</Text>
+                    <Text style={[styles.amountValue, dynamicStyles.amountValue]}>{debt.amount}</Text>
                   </View>
                   <View style={styles.debtDate}>
-                    <Text style={styles.dateLabel}>Срок погашения</Text>
-                    <Text style={styles.dateValue}>{debt.dueDate}</Text>
+                    <Text style={[styles.dateLabel, dynamicStyles.dateLabel]}>Срок погашения</Text>
+                    <Text style={[styles.dateValue, dynamicStyles.dateValue]}>{debt.dueDate}</Text>
                   </View>
                 </View>
                 {debt.status !== 'paid' && (

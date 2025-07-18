@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Pressable, ScrollView, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
-import { HelpScreenStyles as styles } from '../../styles/screens/profile/HelpScreen.styles';
+import { HelpScreenStyles as styles, getHelpScreenStyles } from '../../styles/screens/profile/HelpScreen.styles';
 import RulesModal from '../../components/RulesModal';
 import BookingHelpModal from '../../components/BookingHelpModal';
 import PaymentHelpModal from '../../components/PaymentHelpModal';
 import SafetyHelpModal from '../../components/SafetyHelpModal';
+import { useTheme } from '../../context/ThemeContext';
 
 /**
  * Экран помощи и правил
@@ -20,6 +21,8 @@ import SafetyHelpModal from '../../components/SafetyHelpModal';
  */
 
 const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getHelpScreenStyles(isDark);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -77,12 +80,12 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#003366" />
+          <Ionicons name="arrow-back" size={24} color={isDark ? '#fff' : '#003366'} />
         </TouchableOpacity>
-        <Text style={styles.title}>Помощь и правила</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>Помощь и правила</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -91,14 +94,14 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.description}>
+        <Text style={[styles.description, dynamicStyles.description]}>
           Найдите ответы на часто задаваемые вопросы и ознакомьтесь с правилами сервиса
         </Text>
         
         {helpSections.map((section) => (
           <TouchableOpacity 
             key={section.id} 
-            style={styles.helpItem}
+            style={[styles.helpItem, dynamicStyles.helpItem]}
             onPress={() => {
               switch(section.id) {
                 case '1':
@@ -120,20 +123,20 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
             }}
             activeOpacity={0.7}
           >
-            <View style={styles.helpIcon}>
-              <Ionicons name={section.icon as any} size={24} color="#003366" />
+            <View style={[styles.helpIcon, dynamicStyles.helpIcon]}>
+              <Ionicons name={section.icon as any} size={24} color={isDark ? '#fff' : '#003366'} />
             </View>
             <View style={styles.helpInfo}>
-              <Text style={styles.helpTitle}>{section.title}</Text>
-              <Text style={styles.helpDescription}>{section.description}</Text>
+              <Text style={[styles.helpTitle, dynamicStyles.helpTitle]}>{section.title}</Text>
+              <Text style={[styles.helpDescription, dynamicStyles.helpDescription]}>{section.description}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#ccc" />
+            <Ionicons name="chevron-forward" size={20} color={isDark ? '#666' : '#ccc'} />
           </TouchableOpacity>
         ))}
         
         <View style={styles.contactSection}>
-          <Text style={styles.contactTitle}>Нужна помощь?</Text>
-          <Text style={styles.contactDescription}>
+          <Text style={[styles.contactTitle, dynamicStyles.contactTitle]}>Нужна помощь?</Text>
+          <Text style={[styles.contactDescription, dynamicStyles.contactDescription]}>
             Свяжитесь с нашей службой поддержки
           </Text>
           <TouchableOpacity 

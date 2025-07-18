@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
 
 export const TabBarStyles = StyleSheet.create({
   tabBar: {
+    flexDirection: 'row',
     borderTopWidth: 1,
     paddingBottom: 8,
     paddingTop: 8,
@@ -18,34 +18,19 @@ export const TabBarStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 8,
-  },
-  tabIcon: {
-    width: 24,
-    height: 24,
-    marginBottom: 4,
-  },
-  tabIconActive: {
-    tintColor: colors.light.primary,
-  },
-  tabIconInactive: {
-    tintColor: colors.light.textSecondary,
+    position: 'relative',
   },
   tabLabel: {
     fontSize: 12,
     fontWeight: '500',
-  },
-  tabLabelActive: {
-    color: colors.light.primary,
-  },
-  tabLabelInactive: {
-    color: colors.light.textSecondary,
+    marginTop: 4,
   },
   tabBadge: {
     position: 'absolute',
     top: 4,
     right: '50%',
     marginRight: -8,
-    backgroundColor: colors.light.error,
+    backgroundColor: '#EF4444',
     borderRadius: 8,
     minWidth: 16,
     height: 16,

@@ -81,7 +81,8 @@
     "map": "Mapa",
     "drivers": "Conductores",
     "plus": "Viaje",
-    "chats": "Chats"
+    "chats": "Chats",
+    "schedule": "Horario"
   },
   "breadcrumbs": {
     "home": "Inicio",

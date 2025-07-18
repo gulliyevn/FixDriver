@@ -81,7 +81,8 @@
     "map": "Harita",
     "drivers": "Sürücüler",
     "plus": "Yolculuk",
-    "chats": "Sohbetler"
+    "chats": "Sohbetler",
+    "schedule": "Program"
   },
   "breadcrumbs": {
     "home": "Ana Sayfa",

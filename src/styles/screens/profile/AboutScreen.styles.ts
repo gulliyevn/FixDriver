@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const AboutScreenStyles = StyleSheet.create({
   container: {
@@ -158,4 +159,63 @@ export const AboutScreenStyles = StyleSheet.create({
     color: '#333',
     lineHeight: 20,
   },
-}); 
+});
+
+// Функции для динамических стилей с поддержкой темной темы
+export const getAboutScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    appIcon: {
+      backgroundColor: currentColors.surface,
+    },
+    appName: {
+      color: currentColors.text,
+    },
+    appVersion: {
+      color: currentColors.textSecondary,
+    },
+    appDescription: {
+      color: currentColors.textSecondary,
+    },
+    sectionTitle: {
+      color: currentColors.text,
+    },
+    infoItem: {
+      backgroundColor: currentColors.card,
+    },
+    infoLabel: {
+      color: currentColors.text,
+    },
+    infoValue: {
+      color: currentColors.textSecondary,
+    },
+    linkItem: {
+      backgroundColor: currentColors.card,
+    },
+    linkText: {
+      color: currentColors.text,
+    },
+    modalContent: {
+      backgroundColor: currentColors.card,
+    },
+    modalHeader: {
+      borderBottomColor: currentColors.border,
+    },
+    modalTitle: {
+      color: currentColors.text,
+    },
+    modalText: {
+      color: currentColors.text,
+    },
+  };
+}; 

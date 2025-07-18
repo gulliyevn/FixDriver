@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const CardsScreenStyles = StyleSheet.create({
   container: {
@@ -127,4 +128,48 @@ export const CardsScreenStyles = StyleSheet.create({
     color: '#003366',
     marginLeft: 8,
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getCardsScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    emptyTitle: {
+      color: currentColors.text,
+    },
+    emptyDescription: {
+      color: currentColors.textSecondary,
+    },
+    cardItem: {
+      backgroundColor: currentColors.card,
+    },
+    cardName: {
+      color: currentColors.text,
+    },
+    cardNumber: {
+      color: currentColors.textSecondary,
+    },
+    cardType: {
+      color: currentColors.text,
+    },
+    cardExpiry: {
+      color: currentColors.textSecondary,
+    },
+    addNewCardButton: {
+      backgroundColor: currentColors.surface,
+    },
+    addNewCardText: {
+      color: currentColors.text,
+    },
+  };
+}; 

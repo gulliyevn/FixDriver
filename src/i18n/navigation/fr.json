@@ -80,8 +80,9 @@
     "resume": "Reprendre",
     "map": "Carte",
     "drivers": "Chauffeurs",
-    "plus": "Course",
-    "chats": "Chats"
+    "plus": "Trajet",
+    "chats": "Chats",
+    "schedule": "Planning"
   },
   "breadcrumbs": {
     "home": "Accueil",

@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Address, addressCategoryOptions } from '../mocks/residenceMock';
-import { AddressModalStyles as styles } from '../styles/components/AddressModal.styles';
+import { AddressModalStyles as styles, getAddressModalStyles } from '../styles/components/AddressModal.styles';
 import Select from './Select';
 import MapViewComponent from './MapView';
 import * as Location from 'expo-location';
+import { useTheme } from '../context/ThemeContext';
 
 interface AddressModalProps {
   visible: boolean;
@@ -35,6 +36,8 @@ const AddressModal: React.FC<AddressModalProps> = ({
   addresses = [],
   setDefaultAddress
 }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getAddressModalStyles(isDark);
   const [title, setTitle] = useState('');
   const [addressText, setAddressText] = useState('');
   const [category, setCategory] = useState('');
@@ -196,14 +199,14 @@ const AddressModal: React.FC<AddressModalProps> = ({
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView 
-        style={{ flex: 1, backgroundColor: '#fff' }}
+        style={{ flex: 1, backgroundColor: isDark ? '#1a1a1a' : '#fff' }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.modalHeader}>
+        <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#003366" />
+            <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
           </TouchableOpacity>
-          <Text style={styles.modalTitle}>
+          <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
             {mode === 'add' ? 'Добавить адрес' : 'Редактировать адрес'}
           </Text>
           <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
@@ -211,15 +214,15 @@ const AddressModal: React.FC<AddressModalProps> = ({
           </TouchableOpacity>
         </View>
 
-        <View style={styles.formContainer}>
+        <View style={[styles.formContainer, dynamicStyles.formContainer]}>
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>
+            <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
               Название
             </Text>
             <TextInput
-              style={styles.textInput}
+              style={[styles.textInput, dynamicStyles.textInput]}
               placeholder="Например: Дом, Работа"
-              placeholderTextColor="#999"
+              placeholderTextColor={isDark ? '#999' : '#999'}
               value={title}
               onChangeText={setTitle}
               maxLength={50}
@@ -227,7 +230,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>
+            <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
               Категория
             </Text>
             <Select
@@ -241,27 +244,27 @@ const AddressModal: React.FC<AddressModalProps> = ({
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>
+            <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
               Адрес
             </Text>
-            <View style={styles.addressInputContainer}>
+            <View style={[styles.addressInputContainer, dynamicStyles.addressInputContainer]}>
               <TextInput
-                style={styles.addressInput}
+                style={[styles.addressInput, dynamicStyles.addressInput]}
                 placeholder="Введите полный адрес"
-                placeholderTextColor="#999"
+                placeholderTextColor={isDark ? '#999' : '#999'}
                 value={addressText}
                 onChangeText={setAddressText}
                 multiline
                 maxLength={200}
               />
               <TouchableOpacity 
-                style={styles.mapButton}
+                style={[styles.mapButton, dynamicStyles.mapButton]}
                 onPress={() => {
                   // Открываем модальное окно с картой
                   setShowMapModal(true);
                 }}
               >
-                <Ionicons name="map-outline" size={24} color="#003366" />
+                <Ionicons name="map-outline" size={24} color={isDark ? '#fff' : '#003366'} />
               </TouchableOpacity>
             </View>
           </View>
@@ -275,7 +278,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
               size={24} 
               color={isDefault ? '#4caf50' : '#ccc'} 
             />
-            <Text style={styles.checkboxText}>
+            <Text style={[styles.checkboxText, dynamicStyles.checkboxText]}>
               По умолчанию
             </Text>
           </TouchableOpacity>
@@ -289,12 +292,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
         presentationStyle="pageSheet"
         onRequestClose={() => setShowMapModal(false)}
       >
-        <View style={styles.mapModalContainer}>
-          <View style={styles.mapModalHeader}>
+        <View style={[styles.mapModalContainer, dynamicStyles.mapModalContainer]}>
+          <View style={[styles.mapModalHeader, dynamicStyles.mapModalHeader]}>
             <TouchableOpacity onPress={() => setShowMapModal(false)} style={styles.mapCloseButton}>
-              <Ionicons name="close" size={24} color="#003366" />
+              <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
             </TouchableOpacity>
-            <Text style={styles.mapModalTitle}>Выберите адрес</Text>
+            <Text style={[styles.mapModalTitle, dynamicStyles.mapModalTitle]}>Выберите адрес</Text>
             <TouchableOpacity 
               onPress={() => setShowMapModal(false)} 
               style={styles.mapConfirmButton}
@@ -303,7 +306,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             </TouchableOpacity>
           </View>
           
-          <View style={styles.mapContainer}>
+          <View style={[styles.mapContainer, dynamicStyles.mapContainer]}>
             <MapViewComponent
               onLocationSelect={handleMapLocationSelect}
               showNearbyDrivers={false}

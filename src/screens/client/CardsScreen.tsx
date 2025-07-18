@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
-import { CardsScreenStyles as styles } from '../../styles/screens/profile/CardsScreen.styles';
+import { CardsScreenStyles as styles, getCardsScreenStyles } from '../../styles/screens/profile/CardsScreen.styles';
 import { mockCards } from '../../mocks/cardsMock';
 
 /**
@@ -18,6 +19,8 @@ import { mockCards } from '../../mocks/cardsMock';
  */
 
 const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getCardsScreenStyles(isDark);
   const [cards] = useState(mockCards);
 
   const handleAddCard = () => {
@@ -66,12 +69,12 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
-        <Text style={styles.title}>Мои карты</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>Мои карты</Text>
         <TouchableOpacity onPress={handleAddCard} style={styles.addButton}>
           <Ionicons name="add" size={24} color="#003366" />
         </TouchableOpacity>
@@ -81,8 +84,8 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
         {cards.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="card-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyTitle}>Нет добавленных карт</Text>
-            <Text style={styles.emptyDescription}>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет добавленных карт</Text>
+            <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
               Добавьте банковскую карту для быстрого пополнения баланса
             </Text>
             <TouchableOpacity style={styles.addCardButton} onPress={handleAddCard}>
@@ -92,7 +95,7 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
         ) : (
           <>
             {cards.map((card) => (
-              <View key={card.id} style={styles.cardItem}>
+              <View key={card.id} style={[styles.cardItem, dynamicStyles.cardItem]}>
                 <View style={styles.cardHeader}>
                   <View style={styles.cardInfo}>
                     <Ionicons 
@@ -101,8 +104,8 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
                       color={getCardColor(card.type)} 
                     />
                     <View style={styles.cardDetails}>
-                      <Text style={styles.cardName}>{card.name}</Text>
-                      <Text style={styles.cardNumber}>•••• {card.lastFour}</Text>
+                      <Text style={[styles.cardName, dynamicStyles.cardName]}>{card.name}</Text>
+                      <Text style={[styles.cardNumber, dynamicStyles.cardNumber]}>•••• {card.lastFour}</Text>
                     </View>
                   </View>
                   <TouchableOpacity 
@@ -113,15 +116,15 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.cardFooter}>
-                  <Text style={styles.cardType}>{card.type.toUpperCase()}</Text>
-                  <Text style={styles.cardExpiry}>Действует до {card.expiry}</Text>
+                  <Text style={[styles.cardType, dynamicStyles.cardType]}>{card.type.toUpperCase()}</Text>
+                  <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry]}>Действует до {card.expiry}</Text>
                 </View>
               </View>
             ))}
             
-            <TouchableOpacity style={styles.addNewCardButton} onPress={handleAddCard}>
+            <TouchableOpacity style={[styles.addNewCardButton, dynamicStyles.addNewCardButton]} onPress={handleAddCard}>
               <Ionicons name="add-circle-outline" size={24} color="#003366" />
-              <Text style={styles.addNewCardText}>Добавить новую карту</Text>
+              <Text style={[styles.addNewCardText, dynamicStyles.addNewCardText]}>Добавить новую карту</Text>
             </TouchableOpacity>
           </>
         )}

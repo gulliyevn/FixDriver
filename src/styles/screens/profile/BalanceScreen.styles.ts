@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const BalanceScreenStyles = StyleSheet.create({
   container: {
@@ -181,4 +182,45 @@ export const BalanceScreenStyles = StyleSheet.create({
   statusBadgePending: {
     backgroundColor: '#ff9800',
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getBalanceScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    sectionTitle: {
+      color: currentColors.text,
+    },
+    quickAmountButton: {
+      backgroundColor: currentColors.surface,
+    },
+    quickAmountText: {
+      color: currentColors.text,
+    },
+    showAllText: {
+      color: currentColors.primary,
+    },
+    transactionItem: {
+      backgroundColor: currentColors.card,
+    },
+    transactionIcon: {
+      backgroundColor: currentColors.surface,
+    },
+    transactionDescription: {
+      color: currentColors.text,
+    },
+    transactionDate: {
+      color: currentColors.textSecondary,
+    },
+  };
+}; 

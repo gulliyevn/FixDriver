@@ -13,6 +13,7 @@ import {
   Linking
 } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import { getCurrentColors } from '../../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { ChatScreenStyles } from '../../styles/screens/ChatScreen.styles';
 import { ChatService } from '../../services/ChatService';
@@ -26,147 +27,103 @@ interface DisplayMessage {
   isRead: boolean;
 }
 
-interface ChatScreenParams {
-  driverId?: string;
-  driverName?: string;
-  driverCar?: string;
-  driverNumber?: string;
-  driverStatus?: 'online' | 'offline';
-}
-
 const ChatScreen: React.FC = () => {
   const { isDark } = useTheme();
+  const currentColors = getCurrentColors(isDark);
   const navigation = useNavigation();
   const route = useRoute();
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
+  const [messages, setMessages] = useState<DisplayMessage[]>([]);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Mock данные для водителя (в реальном приложении будут приходить из route.params)
-  const params = route.params as ChatScreenParams;
+  // Моковые данные водителя
   const driverData = {
-    driverId: params?.driverId || 'driver_1',
-    driverName: params?.driverName || 'Алексей Петров',
-    driverCar: params?.driverCar || 'Toyota Camry',
-    driverNumber: params?.driverNumber || '10-AA-123',
-    driverStatus: params?.driverStatus || 'online'
+    driverName: 'Александр Петров',
+    driverCar: 'Toyota Camry',
+    driverNumber: '+7 (999) 123-45-67',
+    driverStatus: 'online' as 'online' | 'offline'
   };
 
-  const loadChatMessages = useCallback(async () => {
-    try {
-      // Ищем существующий чат с водителем
-      const chats = await ChatService.getChats('me');
-      const existingChat = chats.find(chat => chat.driverId === driverData.driverId);
-      
-      let chatId: string;
-      
-      if (existingChat) {
-        // Если чат существует, загружаем его сообщения
-        chatId = existingChat.id;
-      } else {
-        // Если чата нет, создаем новый
-        const newChat = await ChatService.createChat(
-          driverData.driverId,
-          params?.driverName || 'Водитель'
-        );
-        chatId = newChat.id;
-      }
-      
-      // Загружаем сообщения
-      const chatMessages = await ChatService.getMessages(chatId);
-      
-      // Конвертируем сообщения в формат для отображения
-      const displayMessages: DisplayMessage[] = chatMessages.map(msg => ({
-        id: msg.id,
-        text: msg.content,
-        sender: msg.senderId === 'me' ? 'client' : 'driver',
-        timestamp: new Date(msg.timestamp).toLocaleTimeString('ru-RU', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-        isRead: msg.isRead,
-      }));
-      
-      setMessages(displayMessages);
-      
-      // Отмечаем сообщения как прочитанные
-      await ChatService.markMessagesAsRead(chatId);
-      
-      // Автопрокрутка вниз после загрузки сообщений
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-      
-    } catch (error) {
-      console.error('❌ Ошибка загрузки чата:', error);
-    }
-  }, [driverData.driverId, params?.driverName]);
-
-  // Загрузка сообщений чата при монтировании компонента
   useEffect(() => {
-    loadChatMessages();
-  }, [loadChatMessages]);
+    // Загружаем историю сообщений
+    loadMessages();
+  }, []);
+
+  const loadMessages = async () => {
+    try {
+      setIsLoading(true);
+      // Здесь будет загрузка сообщений с сервера
+      const mockMessages: DisplayMessage[] = [
+        {
+          id: '1',
+          text: 'Здравствуйте! Я подъеду через 5 минут.',
+          sender: 'driver',
+          timestamp: new Date(Date.now() - 300000).toISOString(),
+          isRead: true
+        },
+        {
+          id: '2',
+          text: 'Спасибо, буду ждать у подъезда.',
+          sender: 'client',
+          timestamp: new Date(Date.now() - 240000).toISOString(),
+          isRead: true
+        },
+        {
+          id: '3',
+          text: 'Я уже на месте. Белая Toyota Camry.',
+          sender: 'driver',
+          timestamp: new Date(Date.now() - 120000).toISOString(),
+          isRead: true
+        }
+      ];
+      setMessages(mockMessages);
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      Alert.alert('Ошибка', 'Не удалось загрузить сообщения');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
-    
-    try {
-      // Находим чат с водителем
-      const chats = await ChatService.getChats('me');
-      const chat = chats.find(chat => chat.driverId === driverData.driverId);
-      
-      if (!chat) {
-        Alert.alert('Ошибка', 'Чат не найден');
-        return;
-      }
 
-      // Отправляем сообщение
-      await ChatService.sendMessage(chat.id, message.trim(), 'me');
-      
-      // Обновляем локальное состояние
-      const newMessage: DisplayMessage = {
-        id: Date.now().toString(),
-        text: message.trim(),
-        sender: 'client',
-        timestamp: new Date().toLocaleTimeString('ru-RU', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-        isRead: false,
-      };
-      
-      setMessages([...messages, newMessage]);
-      setMessage('');
-      
-      // Автопрокрутка вниз после отправки сообщения
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-      
+    const newMessage: DisplayMessage = {
+      id: Date.now().toString(),
+      text: message.trim(),
+      sender: 'client',
+      timestamp: new Date().toISOString(),
+      isRead: false
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+    setMessage('');
+
+    // Прокручиваем к последнему сообщению
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+
+    try {
+      // Здесь будет отправка сообщения на сервер
+      await ChatService.sendMessage('chat_1', newMessage.text);
     } catch (error) {
+      console.error('Error sending message:', error);
       Alert.alert('Ошибка', 'Не удалось отправить сообщение');
     }
   };
 
   const handleCallDriver = () => {
-    const phoneNumber = '+994501234567'; // Номер телефона водителя
-    
     Alert.alert(
-      'Звонок водителю',
-      `Позвонить водителю ${driverData.driverName}?`,
+      'Позвонить водителю',
+      `Позвонить ${driverData.driverName}?`,
       [
         { text: 'Отмена', style: 'cancel' },
         { 
           text: 'Позвонить', 
           onPress: () => {
-            try {
-              const url = `tel:${phoneNumber}`;
-              Linking.openURL(url).catch(() => {
-                Alert.alert('Ошибка', 'Не удалось совершить звонок');
-              });
-            } catch (error) {
-              Alert.alert('Ошибка', 'Не удалось совершить звонок');
-            }
+            Linking.openURL(`tel:${driverData.driverNumber}`);
           }
         }
       ]
@@ -174,15 +131,19 @@ const ChatScreen: React.FC = () => {
   };
 
   const formatTime = (timestamp: string) => {
-    return timestamp;
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
   };
 
   return (
-    <SafeAreaView style={[ChatScreenStyles.container, { backgroundColor: isDark ? '#111827' : '#F8FAFC' }]}>
+    <SafeAreaView style={[ChatScreenStyles.container, { backgroundColor: currentColors.background }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       
       {/* Header */}
-      <View style={ChatScreenStyles.header}>
+      <View style={[ChatScreenStyles.header, { backgroundColor: currentColors.surface }]}>
         <View style={ChatScreenStyles.headerContent}>
           <TouchableOpacity 
             style={ChatScreenStyles.backButton} 
@@ -192,24 +153,24 @@ const ChatScreen: React.FC = () => {
             <Ionicons 
               name="chevron-back" 
               size={20} 
-              color={isDark ? '#F9FAFB' : '#1F2937'} 
+              color={currentColors.primary} 
             />
           </TouchableOpacity>
           <View style={ChatScreenStyles.driverInfo}>
-            <View style={ChatScreenStyles.driverAvatar}>
+            <View style={[ChatScreenStyles.driverAvatar, { backgroundColor: currentColors.surface }]}>
               <Text style={{ fontSize: 20 }}>👨‍💼</Text>
             </View>
             <View style={ChatScreenStyles.driverDetails}>
-              <Text style={ChatScreenStyles.driverName}>{driverData.driverName}</Text>
-              <Text style={ChatScreenStyles.carInfo}>{driverData.driverCar} • {driverData.driverNumber}</Text>
+              <Text style={[ChatScreenStyles.driverName, { color: currentColors.text }]}>{driverData.driverName}</Text>
+              <Text style={[ChatScreenStyles.carInfo, { color: currentColors.textSecondary }]}>{driverData.driverCar} • {driverData.driverNumber}</Text>
               <View style={ChatScreenStyles.statusContainer}>
-                <View style={[ChatScreenStyles.statusDot, { backgroundColor: driverData.driverStatus === 'online' ? '#10B981' : '#6B7280' }]} />
-                <Text style={ChatScreenStyles.statusText}>{driverData.driverStatus === 'online' ? 'В сети' : 'Не в сети'}</Text>
+                <View style={[ChatScreenStyles.statusDot, { backgroundColor: driverData.driverStatus === 'online' ? currentColors.success : currentColors.textSecondary }]} />
+                <Text style={[ChatScreenStyles.statusText, { color: currentColors.textSecondary }]}>{driverData.driverStatus === 'online' ? 'В сети' : 'Не в сети'}</Text>
               </View>
             </View>
           </View>
           <TouchableOpacity style={ChatScreenStyles.callButton} onPress={handleCallDriver}>
-            <Ionicons name="call" size={24} color="#1E3A8A" />
+            <Ionicons name="call" size={24} color={currentColors.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -228,7 +189,7 @@ const ChatScreen: React.FC = () => {
         >
           {messages.length === 0 ? (
             <View style={ChatScreenStyles.emptyChat}>
-              <Text style={[ChatScreenStyles.emptyChatText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+              <Text style={[ChatScreenStyles.emptyChatText, { color: currentColors.textSecondary }]}>
                 Напишите первое сообщение
               </Text>
             </View>
@@ -238,25 +199,25 @@ const ChatScreen: React.FC = () => {
                 key={msg.id} 
                 style={[
                   ChatScreenStyles.messageContainer,
-                  msg.sender === 'client' ? ChatScreenStyles.clientMessage : ChatScreenStyles.driverMessage
+                  msg.sender === 'client' ? ChatScreenStyles.clientMessage : ChatScreenStyles.userMessage
                 ]}
               >
                 <View style={[
                   ChatScreenStyles.messageBubble,
                   msg.sender === 'client' 
-                    ? { backgroundColor: '#1E3A8A' } 
-                    : { backgroundColor: isDark ? '#374151' : '#F3F4F6' }
+                    ? { backgroundColor: currentColors.primary } 
+                    : { backgroundColor: currentColors.surface }
                 ]}>
                   <Text style={[
                     ChatScreenStyles.messageText,
-                    { color: msg.sender === 'client' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937') }
+                    { color: msg.sender === 'client' ? '#FFFFFF' : currentColors.text }
                   ]}>
                     {msg.text}
                   </Text>
                   <View style={ChatScreenStyles.messageFooter}>
                     <Text style={[
                       ChatScreenStyles.messageTime,
-                      { color: msg.sender === 'client' ? '#E5E7EB' : '#6B7280' }
+                      { color: msg.sender === 'client' ? 'rgba(255, 255, 255, 0.7)' : currentColors.textSecondary }
                     ]}>
                       {formatTime(msg.timestamp)}
                     </Text>
@@ -264,7 +225,7 @@ const ChatScreen: React.FC = () => {
                       <Ionicons 
                         name={msg.isRead ? "checkmark-done" : "checkmark"} 
                         size={14} 
-                        color={msg.isRead ? "#10B981" : "#E5E7EB"} 
+                        color={msg.isRead ? currentColors.success : "rgba(255, 255, 255, 0.7)"} 
                       />
                     )}
                   </View>
@@ -275,20 +236,24 @@ const ChatScreen: React.FC = () => {
         </ScrollView>
 
         {/* Message Input */}
-        <View style={ChatScreenStyles.inputContainer}>
-          <View style={ChatScreenStyles.inputRow}>
+        <View style={[ChatScreenStyles.inputContainer, { backgroundColor: currentColors.surface }]}>
+          <View style={[ChatScreenStyles.inputRow, { backgroundColor: currentColors.surface, borderTopColor: currentColors.border }]}>
             <TextInput
-              style={ChatScreenStyles.messageInput}
+              style={[ChatScreenStyles.messageInput, { 
+                backgroundColor: currentColors.background,
+                color: currentColors.text,
+                borderColor: currentColors.border
+              }]}
               placeholder="Введите сообщение..."
+              placeholderTextColor={currentColors.textSecondary}
               value={message}
               onChangeText={setMessage}
-              placeholderTextColor="#6B7280"
               multiline
             />
             <TouchableOpacity 
               style={[
                 ChatScreenStyles.sendButton,
-                { backgroundColor: message.trim() ? '#1E3A8A' : '#E5E7EB' }
+                { backgroundColor: message.trim() ? currentColors.primary : currentColors.border }
               ]}
               onPress={handleSendMessage}
               disabled={!message.trim()}
@@ -296,7 +261,7 @@ const ChatScreen: React.FC = () => {
               <Ionicons 
                 name="send" 
                 size={20} 
-                color={message.trim() ? '#FFFFFF' : '#6B7280'} 
+                color={message.trim() ? '#FFFFFF' : currentColors.textSecondary} 
               />
             </TouchableOpacity>
           </View>

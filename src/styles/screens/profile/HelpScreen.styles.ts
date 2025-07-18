@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const HelpScreenStyles = StyleSheet.create({
   container: {
@@ -102,4 +103,42 @@ export const HelpScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-}); 
+});
+
+// Функции для динамических стилей с поддержкой темной темы
+export const getHelpScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    description: {
+      color: currentColors.textSecondary,
+    },
+    helpItem: {
+      backgroundColor: currentColors.card,
+    },
+    helpIcon: {
+      backgroundColor: currentColors.surface,
+    },
+    helpTitle: {
+      color: currentColors.text,
+    },
+    helpDescription: {
+      color: currentColors.textSecondary,
+    },
+    contactTitle: {
+      color: currentColors.text,
+    },
+    contactDescription: {
+      color: currentColors.textSecondary,
+    },
+  };
+}; 

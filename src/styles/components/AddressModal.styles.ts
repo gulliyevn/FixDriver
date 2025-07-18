@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../constants/colors';
 
 export const AddressModalStyles = StyleSheet.create({
   modalHeader: {
@@ -151,4 +152,60 @@ export const AddressModalStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 32,
   },
-}); 
+});
+
+// Функции для динамических стилей с поддержкой темной темы
+export const getAddressModalStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    modalHeader: {
+      backgroundColor: currentColors.card,
+      borderBottomColor: currentColors.border,
+    },
+    modalTitle: {
+      color: currentColors.text,
+    },
+    formContainer: {
+      backgroundColor: currentColors.background,
+    },
+    inputLabel: {
+      color: currentColors.text,
+    },
+    textInput: {
+      backgroundColor: currentColors.surface,
+      borderColor: currentColors.border,
+      color: currentColors.text,
+    },
+    addressInputContainer: {
+      backgroundColor: currentColors.surface,
+      borderColor: currentColors.border,
+    },
+    addressInput: {
+      color: currentColors.text,
+    },
+    mapButton: {
+      backgroundColor: currentColors.primary,
+      borderColor: currentColors.primary,
+    },
+    checkboxText: {
+      color: currentColors.text,
+    },
+    mapModalContainer: {
+      backgroundColor: currentColors.background,
+    },
+    mapModalHeader: {
+      backgroundColor: currentColors.card,
+      borderBottomColor: currentColors.border,
+    },
+    mapModalTitle: {
+      color: currentColors.text,
+    },
+    mapContainer: {
+      backgroundColor: currentColors.background,
+    },
+    mapInstructions: {
+      color: currentColors.textSecondary,
+    },
+  };
+}; 

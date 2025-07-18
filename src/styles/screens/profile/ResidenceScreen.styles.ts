@@ -1,24 +1,19 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../../constants/colors';
 
 export const ResidenceScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 60,
     borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    borderBottomColor: '#f0f0f0',
   },
   backButton: {
     padding: 8,
@@ -31,106 +26,15 @@ export const ResidenceScreenStyles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
-  addButton: {
-    padding: 8,
-    backgroundColor: '#003366',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
-  },
   content: {
     flex: 1,
-    paddingHorizontal: 16,
   },
   contentContainer: {
-    paddingTop: 20,
+    paddingHorizontal: 16,
+    paddingBottom: 100,
   },
-  addressItem: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  addressHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  addressInfo: {
-    flex: 1,
-    marginRight: 12,
-  },
-  actionButtons: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 8,
-  },
-  addressTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
-    marginBottom: 8,
-  },
-  addressText: {
-    fontSize: 16,
-    color: '#888',
-  },
-  addressDescription: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-    marginTop: 4,
-  },
-  defaultBadge: {
-    backgroundColor: '#4caf50',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-    marginTop: 12,
-  },
-  defaultText: {
-    fontSize: 12,
-    color: '#fff',
-    fontWeight: '600',
-  },
-
-  editButton: {
-    padding: 6,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 16,
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-  },
-  deleteButton: {
-    padding: 6,
-    backgroundColor: '#fff5f5',
-    borderRadius: 16,
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#fed7d7',
-  },
-
   emptyState: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
@@ -140,18 +44,88 @@ export const ResidenceScreenStyles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
     marginTop: 16,
+    lineHeight: 24,
   },
   retryButton: {
-    marginTop: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
     backgroundColor: '#003366',
-    borderRadius: 8,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 16,
   },
   retryButtonText: {
     color: '#fff',
-    fontWeight: '600',
     fontSize: 16,
+    fontWeight: '600',
+  },
+  addressItem: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+  },
+  addressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  addressInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  addressTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#003366',
+    marginBottom: 4,
+  },
+  addressText: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 4,
+  },
+  addressDescription: {
+    fontSize: 12,
+    color: '#aaa',
+    fontStyle: 'italic',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  editButton: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#e3f2fd',
+    borderWidth: 1,
+    borderColor: '#2196f3',
+    minWidth: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  deleteButton: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#ffebee',
+    borderWidth: 1,
+    borderColor: '#f44336',
+    minWidth: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  defaultBadge: {
+    backgroundColor: '#e8f5e8',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+    marginTop: 12,
+  },
+  defaultText: {
+    fontSize: 12,
+    color: '#4caf50',
+    fontWeight: '600',
   },
   floatingAddButton: {
     position: 'absolute',
@@ -163,10 +137,53 @@ export const ResidenceScreenStyles = StyleSheet.create({
     backgroundColor: '#003366',
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowRadius: 4,
   },
-}); 
+});
+
+// Функция для получения динамических стилей в зависимости от темы
+export const getResidenceScreenStyles = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    container: {
+      backgroundColor: currentColors.background,
+    },
+    header: {
+      borderBottomColor: currentColors.border,
+    },
+    title: {
+      color: currentColors.text,
+    },
+    emptyStateText: {
+      color: currentColors.textSecondary,
+    },
+    addressItem: {
+      backgroundColor: currentColors.card,
+    },
+    addressTitle: {
+      color: currentColors.text,
+    },
+    addressText: {
+      color: currentColors.textSecondary,
+    },
+    addressDescription: {
+      color: currentColors.textSecondary,
+    },
+    editButton: {
+      backgroundColor: currentColors.surface,
+      borderColor: currentColors.primary,
+    },
+    deleteButton: {
+      backgroundColor: currentColors.surface,
+      borderColor: '#f44336',
+    },
+  };
+}; 

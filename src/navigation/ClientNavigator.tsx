@@ -8,50 +8,30 @@ import ScheduleScreen from '../screens/client/ScheduleScreen';
 import ClientProfileStack from './ClientProfileStack';
 import { ClientStackParamList } from '../types/navigation';
 import { useLanguage } from '../context/LanguageContext';
+import TabBar from './TabBar';
 
 const Tab = createBottomTabNavigator<ClientStackParamList>();
 
-// Обёртка для TabBar, если потребуется кастомизация
-// function TabBarWithLanguage(props: any) {
-//   useLanguage();
-//   return <TabBar {...props} />;
-// }
+// Обёртка для TabBar, чтобы подписаться на смену языка
+function TabBarWithLanguage(props: any) {
+  useLanguage();
+  return <TabBar {...props} />;
+}
 
 const ClientNavigator: React.FC = () => {
-  // useLanguage(); // если потребуется форсировать ререндер
   return (
     <Tab.Navigator
       id={undefined}
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
-
-          if (route.name === 'Map') {
-            iconName = focused ? 'map' : 'map-outline';
-          } else if (route.name === 'Drivers') {
-            iconName = focused ? 'people' : 'people-outline';
-          } else if (route.name === 'Schedule') {
-            iconName = focused ? 'calendar' : 'calendar-outline';
-          } else if (route.name === 'Chat') {
-            iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'person' : 'person-outline';
-          } else {
-            iconName = 'help-outline';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: 'gray',
+      tabBar={(props) => <TabBarWithLanguage {...props} />}
+      screenOptions={{
         headerShown: false,
-      })}
+      }}
     >
       <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen name="Drivers" component={DriversScreen} />
       <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Chat" component={ChatListScreen} />
-      <Tab.Screen name="Profile" component={ClientProfileStack} />
+      <Tab.Screen name="ClientProfile" component={ClientProfileStack} />
     </Tab.Navigator>
   );
 };

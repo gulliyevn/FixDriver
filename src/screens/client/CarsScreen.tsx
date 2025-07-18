@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
-import { CarsScreenStyles as styles } from '../../styles/screens/profile/CarsScreen.styles';
+import { CarsScreenStyles as styles, getCarsScreenStyles } from '../../styles/screens/profile/CarsScreen.styles';
 import { mockCars } from '../../mocks/carsMock';
 
 /**
@@ -18,6 +19,8 @@ import { mockCars } from '../../mocks/carsMock';
  */
 
 const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
+  const { isDark } = useTheme();
+  const dynamicStyles = getCarsScreenStyles(isDark);
   const [cars] = useState(mockCars);
 
   const handleAddCar = () => {
@@ -70,12 +73,12 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, dynamicStyles.container]}>
+      <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#003366" />
         </TouchableOpacity>
-        <Text style={styles.title}>Мои автомобили</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>Мои автомобили</Text>
         <TouchableOpacity onPress={handleAddCar} style={styles.addButton}>
           <Ionicons name="add" size={24} color="#003366" />
         </TouchableOpacity>
@@ -85,8 +88,8 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
         {cars.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="car-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyTitle}>Нет добавленных автомобилей</Text>
-            <Text style={styles.emptyDescription}>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет добавленных автомобилей</Text>
+            <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
               Добавьте автомобиль для работы водителем
             </Text>
             <TouchableOpacity style={styles.addCarButton} onPress={handleAddCar}>
@@ -96,13 +99,13 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
         ) : (
           <>
             {cars.map((car) => (
-              <View key={car.id} style={styles.carItem}>
+              <View key={car.id} style={[styles.carItem, dynamicStyles.carItem]}>
                 <View style={styles.carHeader}>
                   <View style={styles.carInfo}>
                     <Ionicons name="car" size={32} color="#003366" />
                     <View style={styles.carDetails}>
-                      <Text style={styles.carModel}>{car.model}</Text>
-                      <Text style={styles.carPlate}>{car.plateNumber}</Text>
+                      <Text style={[styles.carModel, dynamicStyles.carModel]}>{car.model}</Text>
+                      <Text style={[styles.carPlate, dynamicStyles.carPlate]}>{car.plateNumber}</Text>
                     </View>
                   </View>
                   <View style={[styles.statusBadge, { backgroundColor: getCarStatusColor(car.status) }]}>
@@ -111,16 +114,16 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
                 </View>
                 <View style={styles.carSpecs}>
                   <View style={styles.specItem}>
-                    <Text style={styles.specLabel}>Год выпуска</Text>
-                    <Text style={styles.specValue}>{car.year}</Text>
+                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Год выпуска</Text>
+                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.year}</Text>
                   </View>
                   <View style={styles.specItem}>
-                    <Text style={styles.specLabel}>Цвет</Text>
-                    <Text style={styles.specValue}>{car.color}</Text>
+                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Цвет</Text>
+                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.color}</Text>
                   </View>
                   <View style={styles.specItem}>
-                    <Text style={styles.specLabel}>Тип</Text>
-                    <Text style={styles.specValue}>{car.type}</Text>
+                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Тип</Text>
+                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.type}</Text>
                   </View>
                 </View>
                 <View style={styles.carActions}>
@@ -137,9 +140,9 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
               </View>
             ))}
             
-            <TouchableOpacity style={styles.addNewCarButton} onPress={handleAddCar}>
+            <TouchableOpacity style={[styles.addNewCarButton, dynamicStyles.addNewCarButton]} onPress={handleAddCar}>
               <Ionicons name="add-circle-outline" size={24} color="#003366" />
-              <Text style={styles.addNewCarText}>Добавить новый автомобиль</Text>
+              <Text style={[styles.addNewCarText, dynamicStyles.addNewCarText]}>Добавить новый автомобиль</Text>
             </TouchableOpacity>
           </>
         )}
