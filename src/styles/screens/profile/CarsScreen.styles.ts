@@ -11,7 +11,8 @@ export const CarsScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60,
+    paddingTop: 45,
+    paddingBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -152,7 +153,7 @@ export const CarsScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9f9f9',
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 20,
@@ -187,7 +188,7 @@ export const getCarsScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     carItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     carModel: {
       color: currentColors.text,

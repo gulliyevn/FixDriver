@@ -11,7 +11,8 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60,
+    paddingTop: 45,
+    paddingBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -130,7 +131,7 @@ export const getPaymentHistoryScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     paymentItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     paymentTitle: {
       color: currentColors.text,

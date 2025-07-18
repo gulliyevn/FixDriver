@@ -205,7 +205,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       ]}>
         {!item.isUser && (
           <View style={SupportChatScreenStyles.supportHeader}>
-            <Ionicons name="person-circle" size={16} color="#1E3A8A" />
+            <Ionicons name="person-circle" size={16} color="#003366" />
             <Text style={SupportChatScreenStyles.supportName}>Поддержка</Text>
           </View>
         )}
@@ -263,12 +263,15 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   );
 
   return (
-    <SafeAreaView style={[
+    <View style={[
       SupportChatScreenStyles.container,
       isDark && SupportChatScreenStyles.containerDark
     ]}>
       <KeyboardAvoidingView
-        style={SupportChatScreenStyles.keyboardView}
+        style={[
+          SupportChatScreenStyles.keyboardView,
+          { backgroundColor: isDark ? '#1F2937' : '#F5F5F5' }
+        ]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
       {/* Header */}
@@ -324,6 +327,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
             renderItem={renderMessage}
             keyExtractor={(item) => item.id}
             contentContainerStyle={SupportChatScreenStyles.messagesContent}
+            style={{ backgroundColor: isDark ? '#1F2937' : '#F5F5F5' }}
             showsVerticalScrollIndicator={false}
             onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
             ListFooterComponent={() => (
@@ -369,7 +373,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         </TouchableOpacity>
       </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

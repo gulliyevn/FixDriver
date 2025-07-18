@@ -11,7 +11,8 @@ export const HelpScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 45, // Устанавливаем отступ сверху
+    paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -123,7 +124,7 @@ export const getHelpScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     helpItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     helpIcon: {
       backgroundColor: currentColors.surface,

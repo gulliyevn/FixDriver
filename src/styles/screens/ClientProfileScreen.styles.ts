@@ -82,11 +82,9 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
     marginHorizontal: 10,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#e5e5e5',
     marginTop: 16,
     marginBottom: 16,
   },
@@ -115,12 +113,13 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 18,
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e5e5',
+    backgroundColor: '#f9f9f9',
+    marginHorizontal: 10,
+    marginBottom: 8,
+    borderRadius: 12,
   },
   menuItemFirst: {
-    borderTopWidth: 1,
-    borderTopColor: '#e5e5e5',
+    marginTop: 16,
   },
   menuIcon: {
     width: 32,
@@ -161,9 +160,10 @@ export const ClientProfileScreenStyles = StyleSheet.create({
   logout: {
     paddingVertical: 18,
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e5e5',
+    backgroundColor: '#f9f9f9',
+    marginHorizontal: 10,
+    marginTop: 16,
+    borderRadius: 12,
   },
   logoutText: {
     color: '#e53935',
@@ -196,8 +196,7 @@ export const getClientProfileStyles = (isDark: boolean) => {
       color: currentColors.primary,
     },
     statsBox: {
-      backgroundColor: currentColors.card,
-      borderColor: currentColors.border,
+      backgroundColor: currentColors.surface,
     },
     statValue: {
       color: currentColors.text,
@@ -209,11 +208,10 @@ export const getClientProfileStyles = (isDark: boolean) => {
       backgroundColor: currentColors.border,
     },
     menuItem: {
-      backgroundColor: currentColors.card,
-      borderBottomColor: currentColors.border,
+      backgroundColor: currentColors.surface,
     },
     menuItemFirst: {
-      borderTopColor: currentColors.border,
+      // marginTop уже установлен в базовых стилях
     },
     balanceIcon: {
       color: currentColors.primary,
@@ -237,8 +235,7 @@ export const getClientProfileStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     logout: {
-      backgroundColor: currentColors.card,
-      borderBottomColor: currentColors.border,
+      backgroundColor: currentColors.surface,
     },
   };
 }; 

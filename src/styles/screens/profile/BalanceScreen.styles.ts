@@ -11,7 +11,8 @@ export const BalanceScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 45, // Устанавливаем отступ сверху
+    paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -90,7 +91,7 @@ export const BalanceScreenStyles = StyleSheet.create({
     gap: 12,
   },
   quickAmountButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9f9f9',
     borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -130,7 +131,7 @@ export const BalanceScreenStyles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -211,10 +212,10 @@ export const getBalanceScreenStyles = (isDark: boolean) => {
       color: currentColors.primary,
     },
     transactionItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     transactionIcon: {
-      backgroundColor: currentColors.surface,
+      backgroundColor: currentColors.card,
     },
     transactionDescription: {
       color: currentColors.text,

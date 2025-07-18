@@ -3,19 +3,20 @@ import { StyleSheet } from 'react-native';
 export const SupportChatScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F5F5F5',
   },
   containerDark: {
-    backgroundColor: '#111827',
+    backgroundColor: '#1F2937',
   },
   keyboardView: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 45,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
@@ -23,7 +24,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
   },
   headerDark: {
     borderBottomColor: '#374151',
-    backgroundColor: '#1F2937',
+    backgroundColor: '#374151',
   },
   backButton: {
     padding: 8,
@@ -64,7 +65,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
   },
   messagesContainer: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#F5F5F5',
   },
   messagesContent: {
     padding: 16,
@@ -86,20 +87,15 @@ export const SupportChatScreenStyles = StyleSheet.create({
     paddingVertical: 12,
   },
   userBubble: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#003366',
     borderBottomRightRadius: 6,
   },
   userBubbleDark: {
     backgroundColor: '#3B82F6',
   },
   supportBubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f9f9f9',
     borderBottomLeftRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   supportBubbleDark: {
     backgroundColor: '#374151',
@@ -112,7 +108,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
   supportName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#003366',
     marginLeft: 4,
   },
   messageText: {
@@ -178,15 +174,10 @@ export const SupportChatScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f9f9f9',
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   quickQuestionButtonDark: {
     backgroundColor: '#374151',
@@ -209,7 +200,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F5F5F5',
     borderTopWidth: 1,
     borderTopColor: '#E5E7EB',
   },
@@ -233,7 +224,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#f9f9f9',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -250,7 +241,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#003366',
     alignItems: 'center',
     justifyContent: 'center',
   },

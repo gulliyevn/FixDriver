@@ -11,7 +11,8 @@ export const DebtsScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60,
+    paddingTop: 45,
+    paddingBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -151,7 +152,7 @@ export const getDebtsScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     debtItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     debtTitle: {
       color: currentColors.text,

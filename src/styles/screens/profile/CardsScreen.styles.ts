@@ -11,7 +11,8 @@ export const CardsScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 45, // Устанавливаем отступ сверху
+    paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -116,7 +117,7 @@ export const CardsScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9f9f9',
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 20,
@@ -151,7 +152,7 @@ export const getCardsScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     cardItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     cardName: {
       color: currentColors.text,

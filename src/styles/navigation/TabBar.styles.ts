@@ -5,7 +5,7 @@ export const TabBarStyles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 1,
     paddingBottom: 8,
-    paddingTop: 8,
+    paddingTop: 0, // Убираем отступ сверху полностью
     height: 88,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
@@ -17,13 +17,14 @@ export const TabBarStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 0, // Убираем вертикальные отступы
+    marginTop: -6, // Поднимаем иконки еще выше
     position: 'relative',
   },
   tabLabel: {
     fontSize: 12,
     fontWeight: '500',
-    marginTop: 4,
+    marginTop: 2, // Уменьшаем отступ между иконкой и текстом
   },
   tabBadge: {
     position: 'absolute',
@@ -44,7 +45,7 @@ export const TabBarStyles = StyleSheet.create({
   },
   tabIndicator: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 14, // Приближаем индикатор еще ближе к иконке
     width: 20,
     height: 3,
     borderRadius: 1.5,

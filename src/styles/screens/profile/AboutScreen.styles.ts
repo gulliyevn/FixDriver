@@ -11,7 +11,8 @@ export const AboutScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 60, // Увеличиваем отступ сверху для SafeArea
+    paddingTop: 45, // Устанавливаем отступ сверху
+    paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -191,7 +192,7 @@ export const getAboutScreenStyles = (isDark: boolean) => {
       color: currentColors.text,
     },
     infoItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     infoLabel: {
       color: currentColors.text,
@@ -200,7 +201,7 @@ export const getAboutScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     linkItem: {
-      backgroundColor: currentColors.card,
+      backgroundColor: currentColors.surface,
     },
     linkText: {
       color: currentColors.text,
