@@ -5,7 +5,7 @@
   "logoutCancel": "Cancel",
   "logoutConfirmButton": "Logout",
   "notifications": "Notifications",
-  "notificationsCenter": "Notifications Center",
+  "notificationsCenter": "Notification Center",
   "deleteNotification": "Delete notification",
   "deleteNotificationConfirm": "Are you sure you want to delete this notification?",
   "delete": "Delete",
@@ -24,6 +24,40 @@
   "selectLanguage": "Select language",
   "languageChanged": "Language changed",
   "languageChangeSuccess": "Language changed successfully. Restart the app to apply changes.",
+  "residence": {
+    "title": "Residence",
+    "loading": "Loading addresses...",
+    "retry": "Retry",
+    "emptyState": "You don't have any saved addresses yet\nAdd your first address for quick ride ordering",
+    "defaultBadge": "Default",
+    "deleteConfirm": "Delete address",
+    "deleteMessage": "Are you sure you want to delete the address \"{title}\"?",
+    "deleteSuccess": "Address deleted",
+    "deleteError": "Failed to delete address",
+    "setDefaultSuccess": "Address set as default",
+    "setDefaultError": "Failed to set address as default",
+    "addSuccess": "Address added",
+    "addError": "Failed to add address",
+    "updateSuccess": "Address updated",
+    "updateError": "Failed to update address",
+    "saveError": "Failed to save address",
+    "modal": {
+      "addTitle": "Add address",
+      "editTitle": "Edit address",
+      "nameLabel": "Name",
+      "namePlaceholder": "For example: Home, Work",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Enter full address",
+      "defaultLabel": "Default",
+      "saveError": "Failed to save address",
+      "nameRequired": "Enter address name",
+      "addressRequired": "Enter address",
+      "mapTitle": "Select address",
+      "mapDone": "Done"
+    }
+  },
   "settings": {
     "title": "Settings",
     "notifications": {
@@ -35,10 +69,10 @@
     "language": {
       "section": "Language",
       "current": "Language selection",
-      "title": "Select Language",
-      "select": "Choose your preferred language:",
+      "title": "Language selection",
+      "select": "Select your preferred language:",
       "success": {
-        "title": "Language Changed",
+        "title": "Language changed",
         "message": "Language changed to {language}"
       },
       "error": {
@@ -48,11 +82,11 @@
     },
     "appearance": {
       "title": "Appearance",
-      "darkMode": "Dark mode"
+      "darkMode": "Dark theme"
     },
     "location": {
       "title": "Location",
-      "autoLocation": "Auto location"
+      "autoLocation": "Auto detection"
     },
     "security": {
       "title": "Security",
@@ -68,7 +102,7 @@
   "editProfile": "Edit profile",
   "editProfileDesc": "Change personal data",
   "paymentMethods": "Payment methods",
-  "paymentMethodsDesc": "Manage cards",
+  "paymentMethodsDesc": "Card management",
   "security": "Security",
   "securityDesc": "Security settings",
   "support": "Support",

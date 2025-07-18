@@ -15,8 +15,6 @@ export const AddressModalStyles = StyleSheet.create({
   },
   closeButton: {
     padding: 8,
-    borderRadius: 20,
-    backgroundColor: '#f5f5f5',
   },
   modalTitle: {
     fontSize: 18,
@@ -115,8 +113,6 @@ export const AddressModalStyles = StyleSheet.create({
   },
   mapCloseButton: {
     padding: 8,
-    borderRadius: 20,
-    backgroundColor: '#f5f5f5',
   },
   mapModalTitle: {
     fontSize: 18,

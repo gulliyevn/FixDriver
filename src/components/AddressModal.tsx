@@ -16,6 +16,7 @@ import Select from './Select';
 import MapViewComponent from './MapView';
 import * as Location from 'expo-location';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 
 interface AddressModalProps {
   visible: boolean;
@@ -37,6 +38,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   setDefaultAddress
 }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const dynamicStyles = getAddressModalStyles(isDark);
   const [title, setTitle] = useState('');
   const [addressText, setAddressText] = useState('');
@@ -160,11 +162,11 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
   const handleSave = async () => {
     if (!title.trim()) {
-      Alert.alert('Ошибка', 'Введите название адреса');
+      Alert.alert('Ошибка', t('profile.residence.modal.nameRequired'));
       return;
     }
     if (!addressText.trim()) {
-      Alert.alert('Ошибка', 'Введите адрес');
+      Alert.alert('Ошибка', t('profile.residence.modal.addressRequired'));
       return;
     }
 
@@ -187,7 +189,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Error in handleSave:', error);
-      Alert.alert('Ошибка', 'Не удалось сохранить адрес');
+      Alert.alert('Ошибка', t('profile.residence.modal.saveError'));
     }
   };
 
@@ -204,10 +206,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
       >
         <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
+            <Ionicons name="close" size={24} color={isDark ? '#fff' : '#000'} />
           </TouchableOpacity>
           <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
-            {mode === 'add' ? 'Добавить адрес' : 'Редактировать адрес'}
+            {mode === 'add' ? t('profile.residence.modal.addTitle') : t('profile.residence.modal.editTitle')}
           </Text>
           <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
             <Ionicons name="checkmark" size={24} color="#fff" />
@@ -217,11 +219,11 @@ const AddressModal: React.FC<AddressModalProps> = ({
         <View style={[styles.formContainer, dynamicStyles.formContainer]}>
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-              Название
+              {t('profile.residence.modal.nameLabel')}
             </Text>
             <TextInput
               style={[styles.textInput, dynamicStyles.textInput]}
-              placeholder="Например: Дом, Работа"
+              placeholder={t('profile.residence.modal.namePlaceholder')}
               placeholderTextColor={isDark ? '#999' : '#999'}
               value={title}
               onChangeText={setTitle}
@@ -231,13 +233,13 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-              Категория
+              {t('profile.residence.modal.categoryLabel')}
             </Text>
             <Select
               options={addressCategoryOptions}
               value={category}
               onSelect={(option) => setCategory(option.value as string)}
-              placeholder="Выберите категорию"
+              placeholder={t('profile.residence.modal.categoryPlaceholder')}
               compact={true}
               searchable={true}
             />
@@ -245,12 +247,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-              Адрес
+              {t('profile.residence.modal.addressLabel')}
             </Text>
             <View style={[styles.addressInputContainer, dynamicStyles.addressInputContainer]}>
               <TextInput
                 style={[styles.addressInput, dynamicStyles.addressInput]}
-                placeholder="Введите полный адрес"
+                placeholder={t('profile.residence.modal.addressPlaceholder')}
                 placeholderTextColor={isDark ? '#999' : '#999'}
                 value={addressText}
                 onChangeText={setAddressText}
@@ -264,7 +266,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
                   setShowMapModal(true);
                 }}
               >
-                <Ionicons name="map-outline" size={24} color={isDark ? '#fff' : '#003366'} />
+                <Ionicons name="map-outline" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
           </View>
@@ -279,7 +281,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
               color={isDefault ? '#4caf50' : '#ccc'} 
             />
             <Text style={[styles.checkboxText, dynamicStyles.checkboxText]}>
-              По умолчанию
+              {t('profile.residence.modal.defaultLabel')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -295,14 +297,14 @@ const AddressModal: React.FC<AddressModalProps> = ({
         <View style={[styles.mapModalContainer, dynamicStyles.mapModalContainer]}>
           <View style={[styles.mapModalHeader, dynamicStyles.mapModalHeader]}>
             <TouchableOpacity onPress={() => setShowMapModal(false)} style={styles.mapCloseButton}>
-              <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
+              <Ionicons name="close" size={24} color={isDark ? '#fff' : '#000'} />
             </TouchableOpacity>
-            <Text style={[styles.mapModalTitle, dynamicStyles.mapModalTitle]}>Выберите адрес</Text>
+            <Text style={[styles.mapModalTitle, dynamicStyles.mapModalTitle]}>{t('profile.residence.modal.mapTitle')}</Text>
             <TouchableOpacity 
               onPress={() => setShowMapModal(false)} 
               style={styles.mapConfirmButton}
             >
-              <Text style={styles.mapConfirmButtonText}>Готово</Text>
+              <Text style={styles.mapConfirmButtonText}>{t('profile.residence.modal.mapDone')}</Text>
             </TouchableOpacity>
           </View>
           

@@ -13,7 +13,7 @@
   "markAllAsRead": "Alle als gelesen markieren",
   "addChild": "Kind hinzufügen",
   "option": "Option",
-  "optionNotAvailable": "{option} wird in der nächsten Aktualisierung verfügbar sein",
+  "optionNotAvailable": "{option} wird im nächsten Update verfügbar sein",
   "locationEnabled": "Standort aktiviert",
   "locationDisabled": "Standort deaktiviert",
   "notificationsEnabled": "Benachrichtigungen aktiviert",
@@ -24,6 +24,40 @@
   "selectLanguage": "Sprache auswählen",
   "languageChanged": "Sprache geändert",
   "languageChangeSuccess": "Sprache erfolgreich geändert. Starten Sie die App neu, um die Änderungen zu übernehmen.",
+  "residence": {
+    "title": "Wohnsitz",
+    "loading": "Adressen werden geladen...",
+    "retry": "Wiederholen",
+    "emptyState": "Sie haben noch keine gespeicherten Adressen\nFügen Sie Ihre erste Adresse für schnelle Fahrtbestellungen hinzu",
+    "defaultBadge": "Standard",
+    "deleteConfirm": "Adresse löschen",
+    "deleteMessage": "Sind Sie sicher, dass Sie die Adresse \"{title}\" löschen möchten?",
+    "deleteSuccess": "Adresse gelöscht",
+    "deleteError": "Adresse konnte nicht gelöscht werden",
+    "setDefaultSuccess": "Adresse als Standard gesetzt",
+    "setDefaultError": "Adresse konnte nicht als Standard gesetzt werden",
+    "addSuccess": "Adresse hinzugefügt",
+    "addError": "Adresse konnte nicht hinzugefügt werden",
+    "updateSuccess": "Adresse aktualisiert",
+    "updateError": "Adresse konnte nicht aktualisiert werden",
+    "saveError": "Adresse konnte nicht gespeichert werden",
+    "modal": {
+      "addTitle": "Adresse hinzufügen",
+      "editTitle": "Adresse bearbeiten",
+      "nameLabel": "Name",
+      "namePlaceholder": "Zum Beispiel: Zuhause, Arbeit",
+      "categoryLabel": "Kategorie",
+      "categoryPlaceholder": "Kategorie auswählen",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Vollständige Adresse eingeben",
+      "defaultLabel": "Standard",
+      "saveError": "Adresse konnte nicht gespeichert werden",
+      "nameRequired": "Adressname eingeben",
+      "addressRequired": "Adresse eingeben",
+      "mapTitle": "Adresse auswählen",
+      "mapDone": "Fertig"
+    }
+  },
   "settings": {
     "title": "Einstellungen",
     "notifications": {
@@ -35,11 +69,11 @@
     "language": {
       "section": "Sprache",
       "current": "Sprachauswahl",
-      "title": "Sprache auswählen",
+      "title": "Sprachauswahl",
       "select": "Wählen Sie Ihre bevorzugte Sprache:",
       "success": {
         "title": "Sprache geändert",
-        "message": "Sprache zu {language} geändert"
+        "message": "Sprache wurde zu {language} geändert"
       },
       "error": {
         "title": "Fehler",
@@ -48,11 +82,11 @@
     },
     "appearance": {
       "title": "Erscheinungsbild",
-      "darkMode": "Dunkler Modus"
+      "darkMode": "Dunkles Thema"
     },
     "location": {
       "title": "Standort",
-      "autoLocation": "Automatischer Standort"
+      "autoLocation": "Automatische Erkennung"
     },
     "security": {
       "title": "Sicherheit",
@@ -68,7 +102,7 @@
   "editProfile": "Profil bearbeiten",
   "editProfileDesc": "Persönliche Daten ändern",
   "paymentMethods": "Zahlungsmethoden",
-  "paymentMethodsDesc": "Karten verwalten",
+  "paymentMethodsDesc": "Kartenverwaltung",
   "security": "Sicherheit",
   "securityDesc": "Sicherheitseinstellungen",
   "support": "Support",

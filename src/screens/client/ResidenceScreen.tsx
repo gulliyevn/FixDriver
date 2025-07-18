@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import { getCurrentColors } from '../../constants/colors';
 import { ClientScreenProps } from '../../types/navigation';
 import { ResidenceScreenStyles as styles, getResidenceScreenStyles } from '../../styles/screens/profile/ResidenceScreen.styles';
 import { Address } from '../../mocks/residenceMock';
 import AddressModal from '../../components/AddressModal';
 import { useAddresses } from '../../hooks/useAddresses';
+import { useI18n } from '../../hooks/useI18n';
 
 /**
  * Экран резиденции
@@ -21,7 +23,9 @@ import { useAddresses } from '../../hooks/useAddresses';
 
 const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation, route }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const dynamicStyles = getResidenceScreenStyles(isDark);
+  const currentColors = getCurrentColors(isDark);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
@@ -51,12 +55,12 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
 
   const handleDeleteAddress = (address: Address) => {
     Alert.alert(
-      'Удалить адрес',
-      `Вы уверены, что хотите удалить адрес "${address.title}"?`,
+      t('profile.residence.deleteConfirm'),
+      t('profile.residence.deleteMessage', { title: address.title }),
       [
-        { text: 'Отмена', style: 'cancel' },
+        { text: t('profile.cancel'), style: 'cancel' },
         { 
-          text: 'Удалить', 
+          text: t('profile.delete'), 
           style: 'destructive',
           onPress: async () => {
             await deleteAddress(address.id);
@@ -85,7 +89,7 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
       }
     } catch (error) {
       console.error('Error saving address:', error);
-      Alert.alert('Ошибка', 'Не удалось сохранить адрес');
+      Alert.alert('Ошибка', t('profile.residence.saveError'));
     }
   };
 
@@ -93,22 +97,22 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
     <View style={[styles.container, dynamicStyles.container]}>
       <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#003366" />
+          <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>Резиденция</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{t('profile.residence.title')}</Text>
         <View style={styles.headerSpacer} />
       </View>
       
       <ScrollView 
         style={styles.content} 
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={[styles.contentContainer, { paddingTop: 20 }]}
         showsVerticalScrollIndicator={false}
       >
         
         {loading ? (
           <View style={styles.emptyState}>
             <ActivityIndicator size="large" color="#003366" />
-            <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>Загрузка адресов...</Text>
+            <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>{t('profile.residence.loading')}</Text>
           </View>
         ) : error ? (
           <View style={styles.emptyState}>
@@ -118,15 +122,14 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
               style={styles.retryButton}
               onPress={refreshAddresses}
             >
-              <Text style={styles.retryButtonText}>Повторить</Text>
+              <Text style={styles.retryButtonText}>{t('profile.residence.retry')}</Text>
             </TouchableOpacity>
           </View>
         ) : addresses.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="location-outline" size={64} color="#ccc" />
             <Text style={[styles.emptyStateText, dynamicStyles.emptyStateText]}>
-              У вас пока нет сохраненных адресов{'\n'}
-              Добавьте первый адрес для быстрого заказа поездок
+              {t('profile.residence.emptyState')}
             </Text>
           </View>
         ) : (
@@ -157,7 +160,7 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
               </View>
               {address.isDefault && (
                 <View style={styles.defaultBadge}>
-                  <Text style={styles.defaultText}>По умолчанию</Text>
+                  <Text style={styles.defaultText}>{t('profile.residence.defaultBadge')}</Text>
                 </View>
               )}
             </View>

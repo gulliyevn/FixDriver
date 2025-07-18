@@ -1,13 +1,13 @@
 {
   "title": "Profil",
-  "logout": "Déconnexion",
-  "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter?",
+  "logout": "Se déconnecter",
+  "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "logoutCancel": "Annuler",
-  "logoutConfirmButton": "Déconnexion",
+  "logoutConfirmButton": "Se déconnecter",
   "notifications": "Notifications",
   "notificationsCenter": "Centre de notifications",
   "deleteNotification": "Supprimer la notification",
-  "deleteNotificationConfirm": "Êtes-vous sûr de vouloir supprimer cette notification?",
+  "deleteNotificationConfirm": "Êtes-vous sûr de vouloir supprimer cette notification ?",
   "delete": "Supprimer",
   "cancel": "Annuler",
   "markAllAsRead": "Marquer tout comme lu",
@@ -23,7 +23,41 @@
   "currentLanguage": "Sélection de langue",
   "selectLanguage": "Sélectionner la langue",
   "languageChanged": "Langue modifiée",
-  "languageChangeSuccess": "Langue modifiée avec succès. Redémarrez l'application pour appliquer les changements.",
+  "languageChangeSuccess": "Langue modifiée avec succès. Redémarrez l'application pour appliquer les modifications.",
+  "residence": {
+    "title": "Résidence",
+    "loading": "Chargement des adresses...",
+    "retry": "Réessayer",
+    "emptyState": "Vous n'avez pas encore d'adresses sauvegardées\nAjoutez votre première adresse pour des commandes de trajet rapides",
+    "defaultBadge": "Par défaut",
+    "deleteConfirm": "Supprimer l'adresse",
+    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse \"{title}\" ?",
+    "deleteSuccess": "Adresse supprimée",
+    "deleteError": "Impossible de supprimer l'adresse",
+    "setDefaultSuccess": "Adresse définie par défaut",
+    "setDefaultError": "Impossible de définir l'adresse par défaut",
+    "addSuccess": "Adresse ajoutée",
+    "addError": "Impossible d'ajouter l'adresse",
+    "updateSuccess": "Adresse mise à jour",
+    "updateError": "Impossible de mettre à jour l'adresse",
+    "saveError": "Impossible de sauvegarder l'adresse",
+    "modal": {
+      "addTitle": "Ajouter une adresse",
+      "editTitle": "Modifier l'adresse",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Par exemple: Maison, Travail",
+      "categoryLabel": "Catégorie",
+      "categoryPlaceholder": "Sélectionner une catégorie",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Entrez l'adresse complète",
+      "defaultLabel": "Par défaut",
+      "saveError": "Impossible de sauvegarder l'adresse",
+      "nameRequired": "Entrez le nom de l'adresse",
+      "addressRequired": "Entrez l'adresse",
+      "mapTitle": "Sélectionner une adresse",
+      "mapDone": "Terminé"
+    }
+  },
   "settings": {
     "title": "Paramètres",
     "notifications": {
@@ -35,24 +69,24 @@
     "language": {
       "section": "Langue",
       "current": "Sélection de langue",
-      "title": "Sélectionner la langue",
-      "select": "Choisissez votre langue préférée:",
+      "title": "Sélection de langue",
+      "select": "Sélectionnez votre langue préférée :",
       "success": {
         "title": "Langue modifiée",
         "message": "Langue changée vers {language}"
       },
       "error": {
         "title": "Erreur",
-        "message": "Échec du changement de langue"
+        "message": "Impossible de changer la langue"
       }
     },
     "appearance": {
       "title": "Apparence",
-      "darkMode": "Mode sombre"
+      "darkMode": "Thème sombre"
     },
     "location": {
       "title": "Localisation",
-      "autoLocation": "Localisation automatique"
+      "autoLocation": "Détection automatique"
     },
     "security": {
       "title": "Sécurité",
@@ -68,7 +102,7 @@
   "editProfile": "Modifier le profil",
   "editProfileDesc": "Modifier les données personnelles",
   "paymentMethods": "Méthodes de paiement",
-  "paymentMethodsDesc": "Gérer les cartes",
+  "paymentMethodsDesc": "Gestion des cartes",
   "security": "Sécurité",
   "securityDesc": "Paramètres de sécurité",
   "support": "Support",

@@ -24,18 +24,52 @@
   "selectLanguage": "اختر اللغة",
   "languageChanged": "تم تغيير اللغة",
   "languageChangeSuccess": "تم تغيير اللغة بنجاح. أعد تشغيل التطبيق لتطبيق التغييرات.",
+  "residence": {
+    "title": "الإقامة",
+    "loading": "جاري تحميل العناوين...",
+    "retry": "إعادة المحاولة",
+    "emptyState": "ليس لديك عناوين محفوظة بعد\nأضف عنوانك الأول لطلبات الرحلات السريعة",
+    "defaultBadge": "افتراضي",
+    "deleteConfirm": "حذف العنوان",
+    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان \"{title}\"؟",
+    "deleteSuccess": "تم حذف العنوان",
+    "deleteError": "فشل في حذف العنوان",
+    "setDefaultSuccess": "تم تعيين العنوان كافتراضي",
+    "setDefaultError": "فشل في تعيين العنوان كافتراضي",
+    "addSuccess": "تم إضافة العنوان",
+    "addError": "فشل في إضافة العنوان",
+    "updateSuccess": "تم تحديث العنوان",
+    "updateError": "فشل في تحديث العنوان",
+    "saveError": "فشل في حفظ العنوان",
+    "modal": {
+      "addTitle": "إضافة عنوان",
+      "editTitle": "تعديل العنوان",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "مثال: المنزل، العمل",
+      "categoryLabel": "الفئة",
+      "categoryPlaceholder": "اختر الفئة",
+      "addressLabel": "العنوان",
+      "addressPlaceholder": "أدخل العنوان الكامل",
+      "defaultLabel": "افتراضي",
+      "saveError": "فشل في حفظ العنوان",
+      "nameRequired": "أدخل اسم العنوان",
+      "addressRequired": "أدخل العنوان",
+      "mapTitle": "اختر العنوان",
+      "mapDone": "تم"
+    }
+  },
   "settings": {
     "title": "الإعدادات",
     "notifications": {
       "title": "الإشعارات",
-      "push": "الإشعارات الفورية",
+      "push": "إشعارات الدفع",
       "sound": "الصوت",
       "vibration": "الاهتزاز"
     },
     "language": {
       "section": "اللغة",
       "current": "اختيار اللغة",
-      "title": "اختر اللغة",
+      "title": "اختيار اللغة",
       "select": "اختر لغتك المفضلة:",
       "success": {
         "title": "تم تغيير اللغة",
@@ -52,7 +86,7 @@
     },
     "location": {
       "title": "الموقع",
-      "autoLocation": "الموقع التلقائي"
+      "autoLocation": "الكشف التلقائي"
     },
     "security": {
       "title": "الأمان",
@@ -72,7 +106,7 @@
   "security": "الأمان",
   "securityDesc": "إعدادات الأمان",
   "support": "الدعم",
-  "supportDesc": "تواصل مع الدعم",
+  "supportDesc": "التواصل مع الدعم",
   "about": "حول التطبيق",
   "aboutDesc": "الإصدار 1.0.0",
   "darkTheme": "الوضع المظلم",

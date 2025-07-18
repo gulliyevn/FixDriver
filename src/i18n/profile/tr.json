@@ -13,7 +13,7 @@
   "markAllAsRead": "Tümünü okundu olarak işaretle",
   "addChild": "Çocuk ekle",
   "option": "Seçenek",
-  "optionNotAvailable": "{option} bir sonraki güncellemede kullanılabilir olacak",
+  "optionNotAvailable": "{option} bir sonraki güncellemede mevcut olacak",
   "locationEnabled": "Konum etkin",
   "locationDisabled": "Konum devre dışı",
   "notificationsEnabled": "Bildirimler etkin",
@@ -24,6 +24,40 @@
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil değiştirildi",
   "languageChangeSuccess": "Dil başarıyla değiştirildi. Değişiklikleri uygulamak için uygulamayı yeniden başlatın.",
+  "residence": {
+    "title": "İkamet",
+    "loading": "Adresler yükleniyor...",
+    "retry": "Tekrar dene",
+    "emptyState": "Henüz kaydedilmiş adresiniz yok\nHızlı yolculuk siparişi için ilk adresinizi ekleyin",
+    "defaultBadge": "Varsayılan",
+    "deleteConfirm": "Adresi sil",
+    "deleteMessage": "\"{title}\" adresini silmek istediğinizden emin misiniz?",
+    "deleteSuccess": "Adres silindi",
+    "deleteError": "Adres silinemedi",
+    "setDefaultSuccess": "Adres varsayılan olarak ayarlandı",
+    "setDefaultError": "Adres varsayılan olarak ayarlanamadı",
+    "addSuccess": "Adres eklendi",
+    "addError": "Adres eklenemedi",
+    "updateSuccess": "Adres güncellendi",
+    "updateError": "Adres güncellenemedi",
+    "saveError": "Adres kaydedilemedi",
+    "modal": {
+      "addTitle": "Adres ekle",
+      "editTitle": "Adresi düzenle",
+      "nameLabel": "Ad",
+      "namePlaceholder": "Örneğin: Ev, İş",
+      "categoryLabel": "Kategori",
+      "categoryPlaceholder": "Kategori seçin",
+      "addressLabel": "Adres",
+      "addressPlaceholder": "Tam adresi girin",
+      "defaultLabel": "Varsayılan",
+      "saveError": "Adres kaydedilemedi",
+      "nameRequired": "Adres adını girin",
+      "addressRequired": "Adresi girin",
+      "mapTitle": "Adres seçin",
+      "mapDone": "Tamam"
+    }
+  },
   "settings": {
     "title": "Ayarlar",
     "notifications": {
@@ -35,10 +69,10 @@
     "language": {
       "section": "Dil",
       "current": "Dil seçimi",
-      "title": "Dil Seç",
+      "title": "Dil seçimi",
       "select": "Tercih ettiğiniz dili seçin:",
       "success": {
-        "title": "Dil Değiştirildi",
+        "title": "Dil değiştirildi",
         "message": "Dil {language} diline değiştirildi"
       },
       "error": {
@@ -48,11 +82,11 @@
     },
     "appearance": {
       "title": "Görünüm",
-      "darkMode": "Karanlık mod"
+      "darkMode": "Karanlık tema"
     },
     "location": {
       "title": "Konum",
-      "autoLocation": "Otomatik konum"
+      "autoLocation": "Otomatik algılama"
     },
     "security": {
       "title": "Güvenlik",
@@ -61,22 +95,22 @@
     },
     "data": {
       "title": "Veriler",
-      "export": "Verileri dışa aktar",
+      "export": "Veri dışa aktar",
       "deleteAccount": "Hesabı sil"
     }
   },
   "editProfile": "Profili düzenle",
   "editProfileDesc": "Kişisel verileri değiştir",
   "paymentMethods": "Ödeme yöntemleri",
-  "paymentMethodsDesc": "Kartları yönet",
+  "paymentMethodsDesc": "Kart yönetimi",
   "security": "Güvenlik",
   "securityDesc": "Güvenlik ayarları",
   "support": "Destek",
-  "supportDesc": "Destekle iletişime geç",
+  "supportDesc": "Destekle iletişim",
   "about": "Uygulama hakkında",
   "aboutDesc": "Sürüm 1.0.0",
   "darkTheme": "Karanlık tema",
-  "trips": "Yolculuk",
+  "trips": "Yolculuklar",
   "spent": "Harcanan",
   "rating": "Değerlendirme"
 }

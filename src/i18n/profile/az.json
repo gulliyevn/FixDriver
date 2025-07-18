@@ -5,7 +5,7 @@
   "logoutCancel": "Ləğv et",
   "logoutConfirmButton": "Çıxış",
   "notifications": "Bildirişlər",
-  "notificationsCenter": "Bildiriş Mərkəzi",
+  "notificationsCenter": "Bildiriş mərkəzi",
   "deleteNotification": "Bildirişi sil",
   "deleteNotificationConfirm": "Bu bildirişi silmək istədiyinizə əminsiniz?",
   "delete": "Sil",
@@ -14,31 +14,65 @@
   "addChild": "Uşaq əlavə et",
   "option": "Seçim",
   "optionNotAvailable": "{option} növbəti yeniləmədə mövcud olacaq",
-  "locationEnabled": "Məkan aktiv",
-  "locationDisabled": "Məkan deaktiv",
-  "notificationsEnabled": "Bildirişlər aktiv",
-  "notificationsDisabled": "Bildirişlər deaktiv",
+  "locationEnabled": "Geolokasiya aktivdir",
+  "locationDisabled": "Geolokasiya deaktivdir",
+  "notificationsEnabled": "Bildirişlər aktivdir",
+  "notificationsDisabled": "Bildirişlər deaktivdir",
   "language": "Dil",
   "languageSettings": "Dil parametrləri",
   "currentLanguage": "Dil seçimi",
   "selectLanguage": "Dil seç",
   "languageChanged": "Dil dəyişdirildi",
   "languageChangeSuccess": "Dil uğurla dəyişdirildi. Dəyişiklikləri tətbiq etmək üçün tətbiqi yenidən başladın.",
+  "residence": {
+    "title": "Yaşayış yeri",
+    "loading": "Ünvanlar yüklənir...",
+    "retry": "Yenidən cəhd et",
+    "emptyState": "Hələ heç bir saxlanmış ünvanınız yoxdur\nTez səyahət sifariş etmək üçün ilk ünvanınızı əlavə edin",
+    "defaultBadge": "Varsayılan",
+    "deleteConfirm": "Ünvanı sil",
+    "deleteMessage": "\"{title}\" ünvanını silmək istədiyinizə əminsiniz?",
+    "deleteSuccess": "Ünvan silindi",
+    "deleteError": "Ünvanı silmək mümkün olmadı",
+    "setDefaultSuccess": "Ünvan varsayılan olaraq təyin edildi",
+    "setDefaultError": "Ünvanı varsayılan olaraq təyin etmək mümkün olmadı",
+    "addSuccess": "Ünvan əlavə edildi",
+    "addError": "Ünvan əlavə etmək mümkün olmadı",
+    "updateSuccess": "Ünvan yeniləndi",
+    "updateError": "Ünvanı yeniləmək mümkün olmadı",
+    "saveError": "Ünvanı saxlamaq mümkün olmadı",
+    "modal": {
+      "addTitle": "Ünvan əlavə et",
+      "editTitle": "Ünvanı redaktə et",
+      "nameLabel": "Ad",
+      "namePlaceholder": "Məsələn: Ev, İş",
+      "categoryLabel": "Kateqoriya",
+      "categoryPlaceholder": "Kateqoriya seçin",
+      "addressLabel": "Ünvan",
+      "addressPlaceholder": "Tam ünvanı daxil edin",
+      "defaultLabel": "Varsayılan",
+      "saveError": "Ünvanı saxlamaq mümkün olmadı",
+      "nameRequired": "Ünvan adını daxil edin",
+      "addressRequired": "Ünvanı daxil edin",
+      "mapTitle": "Ünvan seçin",
+      "mapDone": "Hazır"
+    }
+  },
   "settings": {
     "title": "Parametrlər",
     "notifications": {
       "title": "Bildirişlər",
-      "push": "Push bildirişlər",
+      "push": "Push-bildirişlər",
       "sound": "Səs",
       "vibration": "Vibrasiya"
     },
     "language": {
       "section": "Dil",
       "current": "Dil seçimi",
-      "title": "Dil Seç",
+      "title": "Dil seçimi",
       "select": "Üstünlük verdiyiniz dili seçin:",
       "success": {
-        "title": "Dil Dəyişdirildi",
+        "title": "Dil dəyişdirildi",
         "message": "Dil {language} dilinə dəyişdirildi"
       },
       "error": {
@@ -48,11 +82,11 @@
     },
     "appearance": {
       "title": "Görünüş",
-      "darkMode": "Qaranlıq rejim"
+      "darkMode": "Qaranlıq tema"
     },
     "location": {
       "title": "Məkan",
-      "autoLocation": "Avtomatik məkan"
+      "autoLocation": "Avtomatik müəyyən etmə"
     },
     "security": {
       "title": "Təhlükəsizlik",
@@ -68,15 +102,15 @@
   "editProfile": "Profili redaktə et",
   "editProfileDesc": "Şəxsi məlumatları dəyişdir",
   "paymentMethods": "Ödəniş üsulları",
-  "paymentMethodsDesc": "Kartları idarə et",
+  "paymentMethodsDesc": "Kart idarəetməsi",
   "security": "Təhlükəsizlik",
   "securityDesc": "Təhlükəsizlik parametrləri",
   "support": "Dəstək",
-  "supportDesc": "Dəstəklə əlaqə saxla",
+  "supportDesc": "Dəstəklə əlaqə",
   "about": "Tətbiq haqqında",
   "aboutDesc": "Versiya 1.0.0",
   "darkTheme": "Qaranlıq tema",
-  "trips": "Səyahət",
-  "spent": "Xərclənən",
+  "trips": "Səyahətlər",
+  "spent": "Xərclənib",
   "rating": "Reytinq"
 }

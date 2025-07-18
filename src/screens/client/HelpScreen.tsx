@@ -9,6 +9,7 @@ import BookingHelpModal from '../../components/BookingHelpModal';
 import PaymentHelpModal from '../../components/PaymentHelpModal';
 import SafetyHelpModal from '../../components/SafetyHelpModal';
 import { useTheme } from '../../context/ThemeContext';
+import { getCurrentColors } from '../../constants/colors';
 
 /**
  * Экран помощи и правил
@@ -25,6 +26,7 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
   const dynamicStyles = getHelpScreenStyles(isDark);
+  const currentColors = getCurrentColors(isDark);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -85,7 +87,7 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
     <View style={[styles.container, dynamicStyles.container]}>
       <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={isDark ? '#fff' : '#003366'} />
+          <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
         <Text style={[styles.title, dynamicStyles.title]}>{t('help.title')}</Text>
         <View style={styles.placeholder} />
