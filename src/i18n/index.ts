@@ -9,6 +9,7 @@ const common = require('./common');
 const errors = require('./errors');
 const notifications = require('./notifications');
 const support = require('./support');
+const help = require('./help');
 const navigation = require('./navigation');
 const components = require('./components');
 const driver = require('./driver');
@@ -40,6 +41,7 @@ const createTranslations = (lang: string) => ({
   errors: errors[lang],
   notifications: notifications[lang],
   support: support[lang],
+  help: help[lang],
   navigation: navigation[lang],
   components: components[lang],
   driver: driver[lang],

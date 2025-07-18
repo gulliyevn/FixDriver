@@ -1,57 +1,11 @@
 {
-  "auth": {
-    "invalidCredentials": "Ungültige E-Mail oder Passwort",
-    "userNotFound": "Benutzer nicht gefunden",
-    "accountLocked": "Konto gesperrt",
-    "tooManyAttempts": "Zu viele Anmeldeversuche",
-    "tokenExpired": "Sitzung abgelaufen",
-    "tokenInvalid": "Re-Authentifizierung erforderlich",
-    "emailNotVerified": "E-Mail nicht verifiziert",
-    "phoneNotVerified": "Telefon nicht verifiziert",
-    "weakPassword": "Passwort ist zu schwach",
-    "emailAlreadyExists": "E-Mail wird bereits verwendet",
-    "phoneAlreadyExists": "Telefonnummer wird bereits verwendet",
-    "generic": "Authentifizierungsfehler"
-  },
-  "network": {
-    "noInternet": "Keine Internetverbindung",
-    "timeout": "Anfrage-Timeout",
-    "serverError": "Serverfehler",
-    "badRequest": "Ungültige Anfrage",
-    "unauthorized": "Autorisierung erforderlich",
-    "forbidden": "Zugriff verboten",
-    "notFound": "Ressource nicht gefunden",
-    "rateLimited": "Zu viele Anfragen",
-    "generic": "Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung."
-  },
-  "validation": {
-    "invalidEmail": "Ungültige E-Mail",
-    "invalidPhone": "Ungültige Telefonnummer",
-    "invalidPassword": "Ungültiges Passwort",
-    "invalidName": "Ungültiger Name",
-    "invalidLicense": "Ungültige Führerscheinnummer",
-    "invalidVehicle": "Ungültige Fahrzeugnummer",
-    "invalidOTP": "Ungültiger Bestätigungscode",
-    "missingFields": "Füllen Sie alle erforderlichen Felder aus",
-    "fieldRequired": "Feld ist erforderlich",
-    "licenseExpired": "Führerschein ist abgelaufen",
-    "invalidVehicleYear": "Ungültiges Fahrzeugjahr"
-  },
-  "general": {
-    "unknown": "Ein unbekannter Fehler ist aufgetreten",
-    "generic": "Ein Fehler ist aufgetreten",
-    "retry": "Wiederholen",
-    "details": "Fehlerdetails",
-    "understand": "Verstanden",
-    "checkConnection": "Verbindung überprüfen",
-    "contactSupport": "Support kontaktieren"
-  },
-  "actions": {
-    "checkCredentials": "Anmeldedaten überprüfen",
-    "register": "Registrieren",
-    "login": "Anmelden",
-    "restorePassword": "Passwort wiederherstellen",
-    "retryRequest": "Anfrage wiederholen",
-    "refreshToken": "Token aktualisieren"
-  }
+  "error": "Fehler",
+  "networkError": "Netzwerkfehler",
+  "serverError": "Serverfehler",
+  "timeout": "Anfrage-Timeout",
+  "unauthorized": "Nicht autorisiert",
+  "forbidden": "Zugriff verweigert",
+  "notFound": "Nicht gefunden",
+  "validationError": "Validierungsfehler",
+  "unknownError": "Unbekannter Fehler aufgetreten"
 } 

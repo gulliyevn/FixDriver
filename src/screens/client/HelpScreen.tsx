@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Pressable, ScrollView, Linking, Alert } f
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { HelpScreenStyles as styles, getHelpScreenStyles } from '../../styles/screens/profile/HelpScreen.styles';
+import { useI18n } from '../../hooks/useI18n';
 import RulesModal from '../../components/RulesModal';
 import BookingHelpModal from '../../components/BookingHelpModal';
 import PaymentHelpModal from '../../components/PaymentHelpModal';
@@ -22,16 +23,16 @@ import { useTheme } from '../../context/ThemeContext';
 
 const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const dynamicStyles = getHelpScreenStyles(isDark);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showSafetyModal, setShowSafetyModal] = useState(false);
 
-
   const handleSupportContact = async () => {
     const phoneNumber = '+994516995513';
-    const message = 'Здравствуйте! Мне нужна помощь с приложением FixDrive.';
+    const message = t('support.whatsappMessage');
     const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
     const webUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
@@ -43,39 +44,40 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         await Linking.openURL(webUrl);
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Не удалось открыть WhatsApp');
+      Alert.alert(t('errors.error'), t('support.whatsappError'));
     }
   };
+
   const helpSections = [
     {
       id: '1',
-      title: 'Как заказать поездку?',
+      title: t('help.howToOrder'),
       icon: 'car',
-      description: 'Узнайте, как быстро заказать поездку'
+      description: t('help.howToOrderDesc')
     },
     {
       id: '2',
-      title: 'Оплата и тарифы',
+      title: t('help.paymentAndRates'),
       icon: 'card',
-      description: 'Информация о способах оплаты и тарифах'
+      description: t('help.paymentAndRatesDesc')
     },
     {
       id: '3',
-      title: 'Безопасность',
+      title: t('help.safetyTitle'),
       icon: 'shield-checkmark',
-      description: 'Меры безопасности в поездках'
+      description: t('help.safetyDesc')
     },
     {
       id: '4',
-      title: 'Правила пользования',
+      title: t('help.rulesTitle'),
       icon: 'document-text',
-      description: 'Основные правила сервиса'
+      description: t('help.rulesDesc')
     },
     {
       id: '5',
-      title: 'Поддержка',
+      title: t('help.support'),
       icon: 'chatbubbles',
-      description: 'Связаться с поддержкой'
+      description: t('help.supportDesc')
     }
   ];
 
@@ -85,7 +87,7 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={isDark ? '#fff' : '#003366'} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>Помощь и правила</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{t('help.title')}</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -95,7 +97,7 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <Text style={[styles.description, dynamicStyles.description]}>
-          Найдите ответы на часто задаваемые вопросы и ознакомьтесь с правилами сервиса
+          {t('help.description')}
         </Text>
         
         {helpSections.map((section) => (
@@ -133,37 +135,40 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
             <Ionicons name="chevron-forward" size={20} color={isDark ? '#666' : '#ccc'} />
           </TouchableOpacity>
         ))}
-        
+
+        {/* Секция контакта */}
         <View style={styles.contactSection}>
-          <Text style={[styles.contactTitle, dynamicStyles.contactTitle]}>Нужна помощь?</Text>
+          <Text style={[styles.contactTitle, dynamicStyles.contactTitle]}>{t('help.contactTitle')}</Text>
           <Text style={[styles.contactDescription, dynamicStyles.contactDescription]}>
-            Свяжитесь с нашей службой поддержки
+            {t('help.contactDescription')}
           </Text>
           <TouchableOpacity 
-            style={styles.contactButton}
+            style={styles.contactButton} 
             onPress={handleSupportContact}
+            activeOpacity={0.8}
           >
-            <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" style={styles.supportIcon} />
-            <Text style={styles.contactButtonText}>Связаться с поддержкой</Text>
+            <Ionicons name="logo-whatsapp" size={24} color="#fff" />
+            <Text style={styles.contactButtonText}>{t('help.contactWhatsApp')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      
+
+      {/* Модальные окна */}
       <RulesModal 
-        visible={showRulesModal}
-        onClose={() => setShowRulesModal(false)}
+        visible={showRulesModal} 
+        onClose={() => setShowRulesModal(false)} 
       />
       <BookingHelpModal 
-        visible={showBookingModal}
-        onClose={() => setShowBookingModal(false)}
+        visible={showBookingModal} 
+        onClose={() => setShowBookingModal(false)} 
       />
       <PaymentHelpModal 
-        visible={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
+        visible={showPaymentModal} 
+        onClose={() => setShowPaymentModal(false)} 
       />
       <SafetyHelpModal 
-        visible={showSafetyModal}
-        onClose={() => setShowSafetyModal(false)}
+        visible={showSafetyModal} 
+        onClose={() => setShowSafetyModal(false)} 
       />
     </View>
   );

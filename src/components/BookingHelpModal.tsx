@@ -6,6 +6,7 @@ import { RulesSlidesStyles as slideStyles } from '../styles/components/RulesSlid
 import { getBookingHelpSlides, BookingHelpSlide } from '../mocks/bookingHelpMock';
 import { createSlideAnimation, slideAnimationConfig } from '../styles/animations';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 
 interface BookingHelpModalProps {
   visible: boolean;
@@ -14,6 +15,7 @@ interface BookingHelpModalProps {
 
 const BookingHelpModal: React.FC<BookingHelpModalProps> = ({ visible, onClose }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const dynamicStyles = getRulesModalStyles(isDark);
   const [activeSlide, setActiveSlide] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -46,7 +48,7 @@ const BookingHelpModal: React.FC<BookingHelpModalProps> = ({ visible, onClose })
           >
             <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
           </TouchableOpacity>
-          <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>Как заказать поездку?</Text>
+          <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('help.howToOrder')}</Text>
           <View style={styles.placeholder} />
         </View>
         
@@ -62,8 +64,8 @@ const BookingHelpModal: React.FC<BookingHelpModalProps> = ({ visible, onClose })
                 <Ionicons name={slide.icon as any} size={24} color={isDark ? '#fff' : '#003366'} />
               </View>
               <View style={slideStyles.slideInfo}>
-                <Text style={[slideStyles.slideTitle, dynamicStyles.slideTitle]}>{slide.title}</Text>
-                <Text style={[slideStyles.slideDescription, dynamicStyles.slideContent]}>{slide.description}</Text>
+                <Text style={[slideStyles.slideTitle, dynamicStyles.slideTitle]}>{t(slide.title)}</Text>
+                <Text style={[slideStyles.slideDescription, dynamicStyles.slideContent]}>{t(slide.description)}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={isDark ? '#666' : '#ccc'} />
             </TouchableOpacity>
@@ -84,12 +86,12 @@ const BookingHelpModal: React.FC<BookingHelpModalProps> = ({ visible, onClose })
                 <TouchableOpacity onPress={closeSlide} style={slideStyles.backButton}>
                   <Ionicons name="arrow-back" size={24} color={isDark ? '#fff' : '#003366'} />
                 </TouchableOpacity>
-                <Text style={[slideStyles.slideHeaderTitle, dynamicStyles.slideHeaderTitle]}>{slides[activeSlide]?.title}</Text>
+                <Text style={[slideStyles.slideHeaderTitle, dynamicStyles.slideHeaderTitle]}>{t(slides[activeSlide]?.title)}</Text>
                 <View style={styles.placeholder} />
               </View>
               <ScrollView style={slideStyles.slideScroll}>
                 <Text style={[slideStyles.slideText, dynamicStyles.slideText]}>
-                  {slides[activeSlide]?.content}
+                  {t(slides[activeSlide]?.content)}
                 </Text>
               </ScrollView>
             </View>

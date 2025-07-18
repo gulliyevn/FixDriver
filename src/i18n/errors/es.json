@@ -1,57 +1,11 @@
 {
-  "auth": {
-    "invalidCredentials": "Correo electrónico o contraseña incorrectos",
-    "userNotFound": "Usuario no encontrado",
-    "accountLocked": "Cuenta bloqueada",
-    "tooManyAttempts": "Demasiados intentos de inicio de sesión",
-    "tokenExpired": "Sesión expirada",
-    "tokenInvalid": "Re-autenticación requerida",
-    "emailNotVerified": "Correo electrónico no verificado",
-    "phoneNotVerified": "Teléfono no verificado",
-    "weakPassword": "La contraseña es muy débil",
-    "emailAlreadyExists": "El correo electrónico ya está en uso",
-    "phoneAlreadyExists": "El número de teléfono ya está en uso",
-    "generic": "Error de autenticación"
-  },
-  "network": {
-    "noInternet": "Sin conexión a internet",
-    "timeout": "Tiempo de espera de la solicitud",
-    "serverError": "Error del servidor",
-    "badRequest": "Solicitud incorrecta",
-    "unauthorized": "Autorización requerida",
-    "forbidden": "Acceso prohibido",
-    "notFound": "Recurso no encontrado",
-    "rateLimited": "Demasiadas solicitudes",
-    "generic": "Error de red. Verifica tu conexión a internet."
-  },
-  "validation": {
-    "invalidEmail": "Correo electrónico inválido",
-    "invalidPhone": "Número de teléfono inválido",
-    "invalidPassword": "Contraseña inválida",
-    "invalidName": "Nombre inválido",
-    "invalidLicense": "Número de licencia inválido",
-    "invalidVehicle": "Número de vehículo inválido",
-    "invalidOTP": "Código de verificación inválido",
-    "missingFields": "Completa todos los campos obligatorios",
-    "fieldRequired": "El campo es obligatorio",
-    "licenseExpired": "La licencia de conducir ha expirado",
-    "invalidVehicleYear": "Año de vehículo inválido"
-  },
-  "general": {
-    "unknown": "Ocurrió un error desconocido",
-    "generic": "Ocurrió un error",
-    "retry": "Reintentar",
-    "details": "Detalles del error",
-    "understand": "Entendido",
-    "checkConnection": "Verificar conexión",
-    "contactSupport": "Contactar soporte"
-  },
-  "actions": {
-    "checkCredentials": "Verificar credenciales",
-    "register": "Registrarse",
-    "login": "Iniciar sesión",
-    "restorePassword": "Restaurar contraseña",
-    "retryRequest": "Reintentar solicitud",
-    "refreshToken": "Actualizar token"
-  }
+  "error": "Error",
+  "networkError": "Error de red",
+  "serverError": "Error del servidor",
+  "timeout": "Tiempo de espera agotado",
+  "unauthorized": "No autorizado",
+  "forbidden": "Acceso prohibido",
+  "notFound": "No encontrado",
+  "validationError": "Error de validación",
+  "unknownError": "Error desconocido ocurrió"
 } 

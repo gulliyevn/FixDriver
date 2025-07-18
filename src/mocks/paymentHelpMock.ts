@@ -6,37 +6,35 @@ export interface PaymentHelpSlide {
   description: string;
 }
 
-export const paymentHelpSlides: PaymentHelpSlide[] = [
-  {
-    id: 1,
-    title: 'Способы оплаты',
-    icon: 'card',
-    content: 'Доступны различные способы оплаты: банковские карты, электронные кошельки, наличные при получении. Выберите удобный для вас способ.',
-    description: 'Какие способы оплаты доступны'
-  },
-  {
-    id: 2,
-    title: 'Расчет тарифа',
-    icon: 'calculator',
-    content: 'Тариф рассчитывается автоматически на основе расстояния, времени поездки и выбранного тарифного плана. Все цены указаны в манатах.',
-    description: 'Как рассчитывается стоимость поездки'
-  },
-  {
-    id: 3,
-    title: 'Тарифные планы',
-    icon: 'pricetag',
-    content: 'Выберите подходящий тарифный план: базовый, премиум или корпоративный. Каждый план имеет свои преимущества и особенности.',
-    description: 'Какие тарифные планы доступны'
-  },
-  {
-    id: 4,
-    title: 'Возврат средств',
-    icon: 'refresh',
-    content: 'В случае отмены поездки или технических проблем, средства возвращаются на ваш счет в течение 1-3 рабочих дней.',
-    description: 'Как происходит возврат средств'
-  }
-];
-
 export const getPaymentHelpSlides = (): PaymentHelpSlide[] => {
-  return paymentHelpSlides;
+  return [
+    {
+      id: 1,
+      title: 'help.payment.paymentMethods.title',
+      icon: 'card',
+      content: 'help.payment.paymentMethods.content',
+      description: 'help.payment.paymentMethods.description'
+    },
+    {
+      id: 2,
+      title: 'help.payment.tariffCalculation.title',
+      icon: 'calculator',
+      content: 'help.payment.tariffCalculation.content',
+      description: 'help.payment.tariffCalculation.description'
+    },
+    {
+      id: 3,
+      title: 'help.payment.tariffPlans.title',
+      icon: 'pricetag',
+      content: 'help.payment.tariffPlans.content',
+      description: 'help.payment.tariffPlans.description'
+    },
+    {
+      id: 4,
+      title: 'help.payment.refund.title',
+      icon: 'refresh',
+      content: 'help.payment.refund.content',
+      description: 'help.payment.refund.description'
+    }
+  ];
 }; 

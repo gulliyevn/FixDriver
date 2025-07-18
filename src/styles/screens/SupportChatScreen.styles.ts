@@ -16,7 +16,7 @@ export const SupportChatScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 45,
+    paddingTop: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
@@ -254,5 +254,87 @@ export const SupportChatScreenStyles = StyleSheet.create({
   sendIcon: {
     width: 20,
     height: 20,
+  },
+  // Стили для прикрепленных файлов
+  attachmentsContainer: {
+    marginTop: 8,
+  },
+  attachmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 4,
+  },
+  imageAttachment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  documentAttachment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  attachmentName: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginLeft: 8,
+    flex: 1,
+  },
+  attachmentNameDark: {
+    color: '#9CA3AF',
+  },
+  // Стили для кнопки прикрепления
+  attachButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  attachButtonDark: {
+    backgroundColor: '#374151',
+  },
+  // Стили для предварительного просмотра прикрепленных файлов
+  attachedFilesPreview: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#F5F5F5',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  attachedFilesPreviewDark: {
+    backgroundColor: '#1F2937',
+    borderTopColor: '#374151',
+  },
+  attachedFilePreview: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E5E7EB',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 8,
+    marginBottom: 4,
+  },
+  attachedFilePreviewDark: {
+    backgroundColor: '#374151',
+  },
+  attachedFilePreviewName: {
+    fontSize: 12,
+    color: '#374151',
+    marginLeft: 6,
+    maxWidth: 100,
+  },
+  attachedFilePreviewNameDark: {
+    color: '#9CA3AF',
+  },
+  removeFileButton: {
+    marginLeft: 6,
+    padding: 2,
   },
 }); 

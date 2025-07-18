@@ -1,57 +1,11 @@
 {
-  "auth": {
-    "invalidCredentials": "Email ou mot de passe incorrect",
-    "userNotFound": "Utilisateur non trouvé",
-    "accountLocked": "Compte verrouillé",
-    "tooManyAttempts": "Trop de tentatives de connexion",
-    "tokenExpired": "Session expirée",
-    "tokenInvalid": "Ré-authentification requise",
-    "emailNotVerified": "Email non vérifié",
-    "phoneNotVerified": "Téléphone non vérifié",
-    "weakPassword": "Le mot de passe est trop faible",
-    "emailAlreadyExists": "Email déjà utilisé",
-    "phoneAlreadyExists": "Numéro de téléphone déjà utilisé",
-    "generic": "Erreur d'authentification"
-  },
-  "network": {
-    "noInternet": "Pas de connexion internet",
-    "timeout": "Délai d'attente de la requête",
-    "serverError": "Erreur serveur",
-    "badRequest": "Requête incorrecte",
-    "unauthorized": "Autorisation requise",
-    "forbidden": "Accès interdit",
-    "notFound": "Ressource non trouvée",
-    "rateLimited": "Trop de requêtes",
-    "generic": "Erreur réseau. Vérifiez votre connexion internet."
-  },
-  "validation": {
-    "invalidEmail": "Email invalide",
-    "invalidPhone": "Numéro de téléphone invalide",
-    "invalidPassword": "Mot de passe invalide",
-    "invalidName": "Nom invalide",
-    "invalidLicense": "Numéro de permis invalide",
-    "invalidVehicle": "Numéro de véhicule invalide",
-    "invalidOTP": "Code de vérification invalide",
-    "missingFields": "Remplissez tous les champs obligatoires",
-    "fieldRequired": "Le champ est obligatoire",
-    "licenseExpired": "Le permis de conduire a expiré",
-    "invalidVehicleYear": "Année de véhicule invalide"
-  },
-  "general": {
-    "unknown": "Une erreur inconnue s'est produite",
-    "generic": "Une erreur s'est produite",
-    "retry": "Réessayer",
-    "details": "Détails de l'erreur",
-    "understand": "Compris",
-    "checkConnection": "Vérifier la connexion",
-    "contactSupport": "Contacter le support"
-  },
-  "actions": {
-    "checkCredentials": "Vérifier les identifiants",
-    "register": "S'inscrire",
-    "login": "Se connecter",
-    "restorePassword": "Restaurer le mot de passe",
-    "retryRequest": "Réessayer la requête",
-    "refreshToken": "Actualiser le token"
-  }
+  "error": "Erreur",
+  "networkError": "Erreur réseau",
+  "serverError": "Erreur serveur",
+  "timeout": "Délai d'attente dépassé",
+  "unauthorized": "Non autorisé",
+  "forbidden": "Accès interdit",
+  "notFound": "Non trouvé",
+  "validationError": "Erreur de validation",
+  "unknownError": "Erreur inconnue survenue"
 } 

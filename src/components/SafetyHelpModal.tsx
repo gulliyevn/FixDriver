@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity, ScrollView, Modal, Animated } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { RulesModalStyles as styles, getRulesModalStyles } from '../styles/components/RulesModal.styles';
 import { RulesSlidesStyles as slideStyles } from '../styles/components/RulesSlides.styles';
-import { getSafetyHelpSlides, SafetyHelpSlide } from '../mocks/safetyHelpMock';
+import { SafetyHelpSlide } from '../mocks/safetyHelpMock';
 import { createSlideAnimation, slideAnimationConfig } from '../styles/animations';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 
 interface SafetyHelpModalProps {
   visible: boolean;
@@ -14,10 +15,40 @@ interface SafetyHelpModalProps {
 
 const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const dynamicStyles = getRulesModalStyles(isDark);
   const [activeSlide, setActiveSlide] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const slides: SafetyHelpSlide[] = getSafetyHelpSlides();
+  const slides: SafetyHelpSlide[] = [
+    {
+      id: 1,
+      title: t('help.safety.driverCheck.title'),
+      icon: 'shield-checkmark',
+      content: t('help.safety.driverCheck.content'),
+      description: t('help.safety.driverCheck.description')
+    },
+    {
+      id: 2,
+      title: t('help.safety.routeTracking.title'),
+      icon: 'location',
+      content: t('help.safety.routeTracking.content'),
+      description: t('help.safety.routeTracking.description')
+    },
+    {
+      id: 3,
+      title: t('help.safety.emergencyButton.title'),
+      icon: 'warning',
+      content: t('help.safety.emergencyButton.content'),
+      description: t('help.safety.emergencyButton.description')
+    },
+    {
+      id: 4,
+      title: t('help.safety.ratingSystem.title'),
+      icon: 'star',
+      content: t('help.safety.ratingSystem.content'),
+      description: t('help.safety.ratingSystem.description')
+    }
+  ];
 
   // Мемоизируем функции анимации
   const openSlide = useCallback((slideIndex: number) => {
@@ -46,7 +77,7 @@ const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) =
           >
             <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
           </TouchableOpacity>
-          <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>Безопасность</Text>
+          <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('help.safetyTitle')}</Text>
           <View style={styles.placeholder} />
         </View>
         

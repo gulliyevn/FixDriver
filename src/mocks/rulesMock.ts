@@ -6,37 +6,35 @@ export interface RuleSlide {
   description: string;
 }
 
-export const rulesSlides: RuleSlide[] = [
-  {
-    id: 1,
-    title: 'Общие положения',
-    icon: 'document-text',
-    content: 'Основные правила использования сервиса FixDrive. Используя сервис, вы соглашаетесь с настоящими правилами пользования. Сервис предоставляет платформу для заказа поездок между водителями и пассажирами.',
-    description: 'Узнайте об основных принципах работы сервиса'
-  },
-  {
-    id: 2,
-    title: 'Условия',
-    icon: 'list',
-    content: 'Условия использования сервиса. Для использования сервиса необходимо создать аккаунт с действительными данными. Вы несете ответственность за сохранность учетных данных.',
-    description: 'Условия регистрации и использования аккаунта'
-  },
-  {
-    id: 3,
-    title: 'Политика',
-    icon: 'settings',
-    content: 'Политика конфиденциальности и обработки данных. Мы собираем и обрабатываем ваши данные в соответствии с законодательством. Ваша конфиденциальность важна для нас.',
-    description: 'Политика конфиденциальности и защиты данных'
-  },
-  {
-    id: 4,
-    title: 'Правила',
-    icon: 'checkmark-circle',
-    content: 'Дополнительные правила и ограничения. При заказе поездки указывайте точный адрес назначения. Отмена поездки должна производиться заблаговременно.',
-    description: 'Дополнительные правила заказа и отмены поездок'
-  }
-];
-
 export const getRulesSlides = (): RuleSlide[] => {
-  return rulesSlides;
+  return [
+    {
+      id: 1,
+      title: 'help.rules.generalProvisions.title',
+      icon: 'document-text',
+      content: 'help.rules.generalProvisions.content',
+      description: 'help.rules.generalProvisions.description'
+    },
+    {
+      id: 2,
+      title: 'help.rules.terms.title',
+      icon: 'list',
+      content: 'help.rules.terms.content',
+      description: 'help.rules.terms.description'
+    },
+    {
+      id: 3,
+      title: 'help.rules.policy.title',
+      icon: 'settings',
+      content: 'help.rules.policy.content',
+      description: 'help.rules.policy.description'
+    },
+    {
+      id: 4,
+      title: 'help.rules.rules.title',
+      icon: 'checkmark-circle',
+      content: 'help.rules.rules.content',
+      description: 'help.rules.rules.description'
+    }
+  ];
 }; 

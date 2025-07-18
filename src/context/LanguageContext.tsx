@@ -100,7 +100,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   // Memoize translation function to prevent unnecessary re-renders
   const t = useCallback((key: string, params?: Record<string, string | number>): string => {
     return i18nT(key, params);
-  }, [language]);
+  }, [language, updateKey]);
 
   // Memoize context value to prevent unnecessary re-renders
   const value = useMemo<LanguageContextType>(() => ({

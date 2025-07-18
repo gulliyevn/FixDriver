@@ -11,16 +11,26 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../../context/ThemeContext';
+import { useI18n } from '../../hooks/useI18n';
 import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
-import { mockSupportData } from '../../mocks';
 import { supportService, SupportMessage, SupportTicket } from '../../services/SupportService';
+
+interface AttachedFile {
+  id: string;
+  name: string;
+  uri: string;
+  type: 'image' | 'document';
+  size?: number;
+}
 
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
+  attachments?: AttachedFile[];
 }
 
 interface SupportChatScreenProps {
@@ -35,13 +45,19 @@ interface SupportChatScreenProps {
 
 const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [currentTicket, setCurrentTicket] = useState<SupportTicket | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const flatListRef = useRef<FlatList>(null);
 
-  const { quickQuestions } = mockSupportData;
+  const quickQuestions = [
+    { id: 'q1', question: t('support.quickQuestion1') },
+    { id: 'q2', question: t('support.quickQuestion2') },
+    { id: 'q3', question: t('support.quickQuestion3') },
+  ];
 
   useEffect(() => {
     initializeSupportChat();
@@ -52,8 +68,8 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
     
     try {
       // Создаем новый тикет поддержки
-      const initialMessage = route?.params?.initialMessage || 'Начало чата с поддержкой';
-      const ticket = supportService.createSupportTicket('Чат с поддержкой', initialMessage);
+      const initialMessage = route?.params?.initialMessage || t('support.initialMessage');
+      const ticket = supportService.createSupportTicket(t('support.chatTitle'), initialMessage);
       setCurrentTicket(ticket);
       
       // Конвертируем сообщения тикета в формат для отображения
@@ -73,17 +89,20 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       
     } catch (error) {
       console.error('Ошибка инициализации чата поддержки:', error);
-      Alert.alert('Ошибка', 'Не удалось инициализировать чат поддержки');
+      Alert.alert(t('errors.error'), t('support.initError'));
     } finally {
       setIsLoading(false);
     }
   };
 
   const sendMessage = () => {
-    if (!inputText.trim() || !currentTicket) return;
+    if ((!inputText.trim() && attachedFiles.length === 0) || !currentTicket) return;
 
     const messageText = inputText.trim();
+    const filesToSend = [...attachedFiles];
+    
     setInputText('');
+    setAttachedFiles([]);
 
     try {
       // Добавляем сообщение пользователя в тикет
@@ -95,6 +114,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         text: messageText,
         isUser: true,
         timestamp: new Date(),
+        attachments: filesToSend.length > 0 ? filesToSend : undefined,
       };
       
       setMessages(prev => [...prev, userMessage]);
@@ -124,7 +144,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       
     } catch (error) {
       console.error('Ошибка отправки сообщения:', error);
-      Alert.alert('Ошибка', 'Не удалось отправить сообщение');
+      Alert.alert(t('errors.error'), t('support.sendError'));
     }
   };
 
@@ -170,7 +190,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       
     } catch (error) {
       console.error('Ошибка выбора быстрого вопроса:', error);
-      Alert.alert('Ошибка', 'Не удалось отправить быстрый вопрос');
+      Alert.alert(t('errors.error'), t('support.quickQuestionError'));
     }
   };
 
@@ -181,13 +201,111 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
     });
   };
 
+  const handleAttachFile = async () => {
+    Alert.alert(
+      t('support.attachFile'),
+      t('support.selectFileType'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        { 
+          text: t('support.takePhoto'), 
+          onPress: () => takePhoto() 
+        },
+        { 
+          text: t('support.choosePhoto'), 
+          onPress: () => pickImage() 
+        },
+        { 
+          text: t('support.document'), 
+          onPress: () => pickDocument() 
+        }
+      ]
+    );
+  };
+
+  const takePhoto = async () => {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(t('errors.permissionDenied'), t('support.cameraPermissionError'));
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const newFile: AttachedFile = {
+          id: Date.now().toString(),
+          name: `camera_${Date.now()}.jpg`,
+          uri: asset.uri,
+          type: 'image',
+          size: asset.fileSize,
+        };
+        setAttachedFiles(prev => [...prev, newFile]);
+      }
+    } catch (error) {
+      console.error('Ошибка фотографирования:', error);
+      Alert.alert(t('errors.error'), t('support.cameraError'));
+    }
+  };
+
+  const pickImage = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(t('errors.permissionDenied'), t('support.photoPermissionError'));
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const newFile: AttachedFile = {
+          id: Date.now().toString(),
+          name: `photo_${Date.now()}.jpg`,
+          uri: asset.uri,
+          type: 'image',
+          size: asset.fileSize,
+        };
+        setAttachedFiles(prev => [...prev, newFile]);
+      }
+    } catch (error) {
+      console.error('Ошибка выбора изображения:', error);
+      Alert.alert(t('errors.error'), t('support.photoSelectionError'));
+    }
+  };
+
+  const pickDocument = async () => {
+    Alert.alert(
+      t('support.documentPicker'),
+      t('support.documentPickerInfo'),
+      [{ text: t('common.ok'), style: 'default' }]
+    );
+  };
+
+  const removeAttachedFile = (fileId: string) => {
+    setAttachedFiles(prev => prev.filter(file => file.id !== fileId));
+  };
+
   const handleClose = () => {
     Alert.alert(
-      'Закрыть чат',
-      'Вы уверены, что хотите закрыть чат?',
+      t('support.closeChat'),
+      t('support.closeChatConfirm'),
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Закрыть', onPress: () => navigation.goBack(), style: 'destructive' }
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('support.close'), onPress: () => navigation.goBack(), style: 'destructive' }
       ]
     );
   };
@@ -206,7 +324,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         {!item.isUser && (
           <View style={SupportChatScreenStyles.supportHeader}>
             <Ionicons name="person-circle" size={16} color="#003366" />
-            <Text style={SupportChatScreenStyles.supportName}>Поддержка</Text>
+            <Text style={SupportChatScreenStyles.supportName}>{t('support.supportName')}</Text>
           </View>
         )}
         <Text style={[
@@ -217,6 +335,38 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         ]}>
           {item.text}
         </Text>
+        
+        {/* Прикрепленные файлы */}
+        {item.attachments && item.attachments.length > 0 && (
+          <View style={SupportChatScreenStyles.attachmentsContainer}>
+            {item.attachments.map((file) => (
+              <View key={file.id} style={SupportChatScreenStyles.attachmentItem}>
+                {file.type === 'image' ? (
+                  <View style={SupportChatScreenStyles.imageAttachment}>
+                    <Ionicons name="image" size={20} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                    <Text style={[
+                      SupportChatScreenStyles.attachmentName,
+                      isDark && SupportChatScreenStyles.attachmentNameDark
+                    ]}>
+                      {file.name}
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={SupportChatScreenStyles.documentAttachment}>
+                    <Ionicons name="document" size={20} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                    <Text style={[
+                      SupportChatScreenStyles.attachmentName,
+                      isDark && SupportChatScreenStyles.attachmentNameDark
+                    ]}>
+                      {file.name}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+        
         <Text style={[
           SupportChatScreenStyles.messageTime,
           item.isUser 
@@ -235,7 +385,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         SupportChatScreenStyles.quickQuestionsTitle,
         isDark && SupportChatScreenStyles.quickQuestionsTitleDark
       ]}>
-        Быстрые вопросы:
+        {t('support.quickQuestions')}:
       </Text>
       {quickQuestions.map((question, index) => (
         <TouchableOpacity
@@ -263,7 +413,7 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
   );
 
   return (
-    <View style={[
+    <SafeAreaView style={[
       SupportChatScreenStyles.container,
       isDark && SupportChatScreenStyles.containerDark
     ]}>
@@ -274,106 +424,154 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         ]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-      {/* Header */}
-      <View style={[
-        SupportChatScreenStyles.header,
-        isDark && SupportChatScreenStyles.headerDark
-      ]}>
-        <TouchableOpacity 
-          style={SupportChatScreenStyles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
-        </TouchableOpacity>
-        
-        <View style={SupportChatScreenStyles.headerInfo}>
-          <Text style={[
-            SupportChatScreenStyles.headerTitle,
-            isDark && SupportChatScreenStyles.headerTitleDark
-          ]}>
-            Поддержка
-          </Text>
-          <View style={SupportChatScreenStyles.statusContainer}>
-            <View style={SupportChatScreenStyles.onlineIndicator} />
+        {/* Header */}
+        <View style={[
+          SupportChatScreenStyles.header,
+          isDark && SupportChatScreenStyles.headerDark
+        ]}>
+          <TouchableOpacity 
+            style={SupportChatScreenStyles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+          </TouchableOpacity>
+          
+          <View style={SupportChatScreenStyles.headerInfo}>
             <Text style={[
-              SupportChatScreenStyles.statusText,
-              isDark && SupportChatScreenStyles.statusTextDark
+              SupportChatScreenStyles.headerTitle,
+              isDark && SupportChatScreenStyles.headerTitleDark
             ]}>
-              Онлайн
+              {t('support.title')}
             </Text>
+            <View style={SupportChatScreenStyles.statusContainer}>
+              <View style={SupportChatScreenStyles.onlineIndicator} />
+              <Text style={[
+                SupportChatScreenStyles.statusText,
+                isDark && SupportChatScreenStyles.statusTextDark
+              ]}>
+                {t('support.online')}
+              </Text>
+            </View>
           </View>
+          
+          <TouchableOpacity style={SupportChatScreenStyles.closeButton} onPress={handleClose}>
+            <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+          </TouchableOpacity>
         </View>
-        
-        <TouchableOpacity style={SupportChatScreenStyles.closeButton} onPress={handleClose}>
-          <Ionicons name="close" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
-        </TouchableOpacity>
-      </View>
 
-      {/* Messages */}
-      <View style={SupportChatScreenStyles.messagesContainer}>
-        {isLoading ? (
-          <View style={SupportChatScreenStyles.loadingContainer}>
-            <Text style={[
-              SupportChatScreenStyles.loadingText,
-              isDark && SupportChatScreenStyles.loadingTextDark
-            ]}>
-              Подключение к поддержке...
-            </Text>
+        {/* Messages */}
+        <View style={SupportChatScreenStyles.messagesContainer}>
+          {isLoading ? (
+            <View style={SupportChatScreenStyles.loadingContainer}>
+              <Text style={[
+                SupportChatScreenStyles.loadingText,
+                isDark && SupportChatScreenStyles.loadingTextDark
+              ]}>
+                {t('support.connecting')}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              ref={flatListRef}
+              data={messages}
+              renderItem={renderMessage}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={SupportChatScreenStyles.messagesContent}
+              style={{ backgroundColor: isDark ? '#1F2937' : '#F5F5F5' }}
+              showsVerticalScrollIndicator={false}
+              onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+              ListFooterComponent={() => (
+                <>
+                  {messages.length === 1 && renderQuickQuestions()}
+                </>
+              )}
+            />
+          )}
+        </View>
+
+        {/* Предварительный просмотр прикрепленных файлов */}
+        {attachedFiles.length > 0 && (
+          <View style={[
+            SupportChatScreenStyles.attachedFilesPreview,
+            isDark && SupportChatScreenStyles.attachedFilesPreviewDark
+          ]}>
+            {attachedFiles.map((file) => (
+              <View key={file.id} style={[
+                SupportChatScreenStyles.attachedFilePreview,
+                isDark && SupportChatScreenStyles.attachedFilePreviewDark
+              ]}>
+                <Ionicons 
+                  name={file.type === 'image' ? 'image' : 'document'} 
+                  size={16} 
+                  color={isDark ? '#9CA3AF' : '#6B7280'} 
+                />
+                <Text style={[
+                  SupportChatScreenStyles.attachedFilePreviewName,
+                  isDark && SupportChatScreenStyles.attachedFilePreviewNameDark
+                ]} numberOfLines={1}>
+                  {file.name}
+                </Text>
+                <TouchableOpacity
+                  style={SupportChatScreenStyles.removeFileButton}
+                  onPress={() => removeAttachedFile(file.id)}
+                >
+                  <Ionicons name="close-circle" size={16} color="#EF4444" />
+                </TouchableOpacity>
+              </View>
+            ))}
           </View>
-        ) : (
-          <FlatList
-            ref={flatListRef}
-            data={messages}
-            renderItem={renderMessage}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={SupportChatScreenStyles.messagesContent}
-            style={{ backgroundColor: isDark ? '#1F2937' : '#F5F5F5' }}
-            showsVerticalScrollIndicator={false}
-            onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-            ListFooterComponent={() => (
-              <>
-                {messages.length === 1 && renderQuickQuestions()}
-              </>
-            )}
-          />
         )}
-      </View>
 
-      {/* Input */}
-      <View style={[
-        SupportChatScreenStyles.inputContainer,
-        isDark && SupportChatScreenStyles.inputContainerDark
-      ]}>
-        <TextInput
-          style={[
-            SupportChatScreenStyles.textInput,
-            isDark && SupportChatScreenStyles.textInputDark
-          ]}
-          value={inputText}
-          onChangeText={setInputText}
-          placeholder="Введите сообщение..."
-          placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
-          multiline
-          maxLength={500}
-        />
-        <TouchableOpacity
-          style={[
-            SupportChatScreenStyles.sendButton,
-            isDark && SupportChatScreenStyles.sendButtonDark,
-            !inputText.trim() && SupportChatScreenStyles.sendButtonDisabled
-          ]}
-          onPress={sendMessage}
-          disabled={!inputText.trim()}
-        >
-          <Ionicons 
-            name="send" 
-            size={20} 
-            color="#FFFFFF" 
+        {/* Input */}
+        <View style={[
+          SupportChatScreenStyles.inputContainer,
+          isDark && SupportChatScreenStyles.inputContainerDark
+        ]}>
+          <TouchableOpacity
+            style={[
+              SupportChatScreenStyles.attachButton,
+              isDark && SupportChatScreenStyles.attachButtonDark
+            ]}
+            onPress={handleAttachFile}
+          >
+            <Ionicons 
+              name="attach" 
+              size={20} 
+              color={isDark ? '#9CA3AF' : '#6B7280'} 
+            />
+          </TouchableOpacity>
+          
+          <TextInput
+            style={[
+              SupportChatScreenStyles.textInput,
+              isDark && SupportChatScreenStyles.textInputDark
+            ]}
+            value={inputText}
+            onChangeText={setInputText}
+            placeholder={t('support.messagePlaceholder')}
+            placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
+            multiline
+            maxLength={500}
           />
-        </TouchableOpacity>
-      </View>
+          
+          <TouchableOpacity
+            style={[
+              SupportChatScreenStyles.sendButton,
+              isDark && SupportChatScreenStyles.sendButtonDark,
+              (!inputText.trim() && attachedFiles.length === 0) && SupportChatScreenStyles.sendButtonDisabled
+            ]}
+            onPress={sendMessage}
+            disabled={!inputText.trim() && attachedFiles.length === 0}
+          >
+            <Ionicons 
+              name="send" 
+              size={20} 
+              color="#FFFFFF" 
+            />
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 };
 

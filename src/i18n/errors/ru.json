@@ -1,57 +1,12 @@
 {
-  "auth": {
-    "invalidCredentials": "Неверный email или пароль",
-    "userNotFound": "Пользователь не найден",
-    "accountLocked": "Аккаунт заблокирован",
-    "tooManyAttempts": "Слишком много попыток входа",
-    "tokenExpired": "Сессия истекла",
-    "tokenInvalid": "Необходима повторная авторизация",
-    "emailNotVerified": "Email не подтвержден",
-    "phoneNotVerified": "Телефон не подтвержден",
-    "weakPassword": "Пароль слишком слабый",
-    "emailAlreadyExists": "Email уже используется",
-    "phoneAlreadyExists": "Номер телефона уже используется",
-    "generic": "Ошибка аутентификации"
-  },
-  "network": {
-    "noInternet": "Нет подключения к интернету",
-    "timeout": "Превышено время ожидания",
-    "serverError": "Ошибка сервера",
-    "badRequest": "Некорректный запрос",
-    "unauthorized": "Необходима авторизация",
-    "forbidden": "Доступ запрещен",
-    "notFound": "Ресурс не найден",
-    "rateLimited": "Слишком много запросов",
-    "generic": "Ошибка сети. Проверьте подключение к интернету."
-  },
-  "validation": {
-    "invalidEmail": "Некорректный email",
-    "invalidPhone": "Некорректный номер телефона",
-    "invalidPassword": "Некорректный пароль",
-    "invalidName": "Некорректное имя",
-    "invalidLicense": "Некорректный номер прав",
-    "invalidVehicle": "Некорректный номер автомобиля",
-    "invalidOTP": "Некорректный код подтверждения",
-    "missingFields": "Заполните все обязательные поля",
-    "fieldRequired": "Поле обязательно для заполнения",
-    "licenseExpired": "Срок действия водительских прав истек",
-    "invalidVehicleYear": "Некорректный год выпуска автомобиля"
-  },
-  "general": {
-    "unknown": "Произошла неизвестная ошибка",
-    "generic": "Произошла ошибка",
-    "retry": "Повторить",
-    "details": "Детали ошибки",
-    "understand": "Понятно",
-    "checkConnection": "Проверить соединение",
-    "contactSupport": "Связаться с поддержкой"
-  },
-  "actions": {
-    "checkCredentials": "Проверить данные",
-    "register": "Зарегистрироваться",
-    "login": "Войти",
-    "restorePassword": "Восстановить пароль",
-    "retryRequest": "Повторить запрос",
-    "refreshToken": "Обновить токен"
-  }
+  "error": "Ошибка",
+  "networkError": "Ошибка сети",
+  "serverError": "Ошибка сервера",
+  "timeout": "Время ожидания истекло",
+  "unauthorized": "Не авторизован",
+  "forbidden": "Доступ запрещен",
+  "notFound": "Не найдено",
+  "validationError": "Ошибка валидации",
+  "unknownError": "Произошла неизвестная ошибка",
+  "permissionDenied": "Разрешение отклонено"
 } 
