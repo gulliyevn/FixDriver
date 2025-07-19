@@ -21,6 +21,7 @@ import Button from '../../components/Button';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 import { useLanguage } from '../../context/LanguageContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ServerConnectionTest } from '../../components/ServerConnectionTest';
 
 type NavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -224,6 +225,13 @@ const LoginScreen: React.FC = () => {
               <Text style={LoginScreenStyles.registerLinkUnderlineDark}>{t('login.registerLink')}</Text>
             </TouchableOpacity>
           </View>
+
+          {/* Server Connection Test */}
+          {__DEV__ && (
+            <View style={{ marginTop: 20 }}>
+              <ServerConnectionTest />
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

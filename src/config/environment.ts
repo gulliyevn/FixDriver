@@ -1,77 +1,100 @@
-export const ENV = {
-  // API Configuration
-  API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://api.fixdrive.com',
-  API_TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '30000'),
-  
-  // Google Maps
-  GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-  
-  // MapTiler
-  MAPTILER_API_KEY: process.env.EXPO_PUBLIC_MAPTILER_API_KEY || '',
-  
-  // Stripe
-  STRIPE_PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
-  
-  // Social Auth
-  GOOGLE_CLIENT_ID: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
-  FACEBOOK_APP_ID: process.env.EXPO_PUBLIC_FACEBOOK_APP_ID || '',
-  
-  // App Configuration
-  APP_NAME: 'FixDrive',
-  APP_VERSION: '1.0.0',
-  
-  // Feature Flags
-  ENABLE_PUSH_NOTIFICATIONS: true,
-  ENABLE_LOCATION_TRACKING: true,
-  ENABLE_SOCIAL_AUTH: true,
-  
-  // Development
-  IS_DEVELOPMENT: process.env.EXPO_PUBLIC_IS_DEVELOPMENT === 'true' || __DEV__,
-  ENABLE_LOGGING: __DEV__,
-  
-  // Security
-  JWT_SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'dev-jwt-secret-change-in-production',
-  
-  // Support
-  SUPPORT_EMAIL: 'support@fixdrive.com',
-  SUPPORT_PHONE: '+7 (999) 123-45-67',
-  
-  // Business Logic
-  MAX_BOOKING_DAYS_AHEAD: 30,
-  MIN_BOOKING_TIME_AHEAD: 30, // minutes
-  CANCELLATION_FEE_PERCENT: 10,
-  DRIVER_COMMISSION_PERCENT: 20,
+// Конфигурация окружения для FixDrive
+
+export const ENV_CONFIG = {
+  // API конфигурация
+  API: {
+    // Базовый URL для API
+    BASE_URL: __DEV__ 
+      ? 'http://31.97.76.106:8080'  // Реальный сервер в разработке
+      : 'https://api.fixdrive.com', // Продакшен URL
+    
+    // Таймаут запросов (30 секунд)
+    TIMEOUT: 30000,
+    
+    // Заголовки по умолчанию
+    DEFAULT_HEADERS: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  },
+
+  // JWT конфигурация
+  JWT: {
+    // Секретный ключ (должен совпадать с бэкендом)
+    SECRET: 'default-secret-change-me',
+    
+    // Время жизни токенов (должно совпадать с бэкендом)
+    ACCESS_TOKEN_EXPIRY: 30 * 60, // 30 минут
+    REFRESH_TOKEN_EXPIRY: 30 * 24 * 60 * 60, // 30 дней
+  },
+
+  // Twilio конфигурация для OTP
+  TWILIO: {
+    ACCOUNT_SID: process.env.EXPO_PUBLIC_TWILIO_ACCOUNT_SID || '',
+    AUTH_TOKEN: process.env.EXPO_PUBLIC_TWILIO_AUTH_TOKEN || '',
+    FROM_PHONE: process.env.EXPO_PUBLIC_TWILIO_FROM_PHONE || '',
+  },
+
+  // Redis конфигурация (если нужно)
+  REDIS: {
+    HOST: process.env.EXPO_PUBLIC_REDIS_HOST || '31.97.76.106',
+    PORT: process.env.EXPO_PUBLIC_REDIS_PORT || '6379',
+    PASSWORD: process.env.EXPO_PUBLIC_REDIS_PASSWORD || '',
+    DB: 0,
+  },
+
+  // Логирование
+  LOGGING: {
+    // Включить логирование API запросов
+    ENABLE_API_LOGS: __DEV__,
+    
+    // Включить логирование ошибок
+    ENABLE_ERROR_LOGS: true,
+    
+    // Маскировать чувствительные данные
+    MASK_SENSITIVE_DATA: true,
+  },
 };
 
-export const getApiUrl = (endpoint: string) => `${ENV.API_BASE_URL}${endpoint}`;
+// Утилиты для работы с конфигурацией
+export const ConfigUtils = {
+  /**
+   * Получить полный URL для API эндпоинта
+   */
+  getApiUrl(endpoint: string): string {
+    return `${ENV_CONFIG.API.BASE_URL}${endpoint}`;
+  },
 
-// Проверка обязательных переменных окружения
-export const validateEnvironment = () => {
-  const requiredVars = [
-    'EXPO_PUBLIC_API_BASE_URL',
-    'EXPO_PUBLIC_JWT_SECRET',
-  ];
+  /**
+   * Получить заголовки для авторизованных запросов
+   */
+  async getAuthHeaders(): Promise<Record<string, string>> {
+    const { useAuth } = await import('../context/AuthContext');
+    // В реальном использовании нужно получить контекст
+    // Здесь возвращаем базовые заголовки
+    return {
+      ...ENV_CONFIG.API.DEFAULT_HEADERS,
+    };
+  },
 
-  const missingVars = requiredVars.filter(varName => !process.env[varName]);
-  
-  if (missingVars.length > 0 && !__DEV__) {
-    console.warn('⚠️ Missing required environment variables:', missingVars);
-  }
-  
-  return missingVars.length === 0;
-};
-
-export const isProduction = () => !ENV.IS_DEVELOPMENT;
-
-export const logError = (error: unknown, context?: string) => {
-  if (ENV.ENABLE_LOGGING) {
-    console.error(`[${context || 'APP'}] Error:`, error);
-  }
-  // TODO: Add error reporting service (Sentry, etc.)
-};
-
-export const logInfo = (message: string, data?: unknown) => {
-  if (ENV.ENABLE_LOGGING) {
-
-  }
+  /**
+   * Проверить, доступен ли сервер
+   */
+  async checkServerHealth(): Promise<boolean> {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      const response = await fetch(this.getApiUrl('/health'), {
+        method: 'GET',
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      return response.ok;
+    } catch (error) {
+      console.error('Server health check failed:', error);
+      return false;
+    }
+  },
 }; 

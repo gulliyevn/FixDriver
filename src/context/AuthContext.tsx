@@ -122,68 +122,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // В реальном приложении здесь будет API запрос
-      if (__DEV__) {
-        // Mock для разработки
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Определяем роль на основе email
-        let role = UserRole.CLIENT;
-        if (email.includes('driver')) {
-          role = UserRole.DRIVER;
-        }
-        
-        // Используем централизованные мок-данные
-        const mockUser = createAuthMockUser({
-          email,
-          role
-        });
-
-        // Генерируем JWT токены
-        const tokens = await JWTService.generateTokens({
-          userId: mockUser.id,
-          email: mockUser.email,
-          role: mockUser.role,
-          phone: mockUser.phone,
-        });
-
+      // Используем AuthService для входа
+      const authService = await import('../services/AuthService');
+      const result = await authService.AuthService.login(email, password, authMethod);
+      
+      if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens(tokens),
-          AsyncStorage.setItem('user', JSON.stringify(mockUser)),
+          JWTService.saveTokens(result.tokens),
+          AsyncStorage.setItem('user', JSON.stringify(result.user)),
         ]);
 
-
-
-        setUser(mockUser);
+        setUser(result.user);
         return true;
       } else {
-        // Реальный API запрос
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Login failed');
-        }
-
-        const data = await response.json();
-        
-        // Сохраняем токены и данные пользователя
-        await Promise.all([
-          JWTService.saveTokens(data.tokens),
-          AsyncStorage.setItem('user', JSON.stringify(data.user)),
-        ]);
-
-        setUser(data.user);
-        return true;
+        console.error('Login failed:', result.message);
+        return false;
       }
     } catch (error) {
-      
+      console.error('Login error:', error);
       return false;
     } finally {
       setIsLoading(false);
@@ -205,64 +162,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // В реальном приложении здесь будет API запрос
-      if (__DEV__) {
-        // Mock для разработки
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const newUser = createAuthMockUser({
-          email: userData.email,
-          role: userData.role,
-          name: userData.name,
-          surname: userData.surname,
-          phone: userData.phone,
-        });
-
-        // Генерируем JWT токены
-        const tokens = await JWTService.generateTokens({
-          userId: newUser.id,
-          email: newUser.email,
-          role: newUser.role,
-          phone: newUser.phone,
-        });
-
+      // Используем AuthService для регистрации
+      const authService = await import('../services/AuthService');
+      const result = await authService.AuthService.register(userData, password);
+      
+      if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens(tokens),
-          AsyncStorage.setItem('user', JSON.stringify(newUser)),
+          JWTService.saveTokens(result.tokens),
+          AsyncStorage.setItem('user', JSON.stringify(result.user)),
         ]);
 
-
-
-        setUser(newUser);
+        setUser(result.user);
         return true;
       } else {
-        // Реальный API запрос
-        const response = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...userData, password }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Registration failed');
-        }
-
-        const data = await response.json();
-        
-        // Сохраняем токены и данные пользователя
-        await Promise.all([
-          JWTService.saveTokens(data.tokens),
-          AsyncStorage.setItem('user', JSON.stringify(data.user)),
-        ]);
-
-        setUser(data.user);
-        return true;
+        console.error('Registration failed:', result.message);
+        return false;
       }
     } catch (error) {
-      
+      console.error('Registration error:', error);
       return false;
     } finally {
       setIsLoading(false);

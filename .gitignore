@@ -10,3 +10,6 @@ coverage/
 *.log
 
 FIXDRIVE_CONCEPT.md
+
+# Backend services
+Auth/
