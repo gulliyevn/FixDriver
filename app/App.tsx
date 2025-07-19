@@ -21,7 +21,7 @@ function App() {
         const notificationService = PushNotificationService.getInstance();
         await notificationService.requestPermissions();
       } catch (error) {
-        console.error('Error initializing notifications:', error);
+  
       }
     };
 

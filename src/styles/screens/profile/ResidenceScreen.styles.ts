@@ -115,6 +115,16 @@ export const ResidenceScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  defaultButton: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff8e1',
+    borderWidth: 1,
+    borderColor: '#ffc107',
+    minWidth: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   defaultBadge: {
     backgroundColor: '#e8f5e8',
     borderRadius: 8,
@@ -185,6 +195,10 @@ export const getResidenceScreenStyles = (isDark: boolean) => {
     deleteButton: {
       backgroundColor: currentColors.surface,
       borderColor: '#f44336',
+    },
+    defaultButton: {
+      backgroundColor: currentColors.surface,
+      borderColor: '#ffc107',
     },
   };
 }; 

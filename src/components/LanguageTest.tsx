@@ -20,7 +20,7 @@ const LanguageTest: React.FC = () => {
       await setLanguage(newLang);
       
     } catch (error) {
-      console.error('Test: Language change failed:', error);
+      
     }
   };
 

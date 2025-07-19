@@ -74,7 +74,7 @@ export class AuthService {
         };
       }
     } catch (error) {
-      console.error('Login error:', error);
+      
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Login failed'
@@ -145,7 +145,7 @@ export class AuthService {
         };
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Registration failed'
@@ -166,7 +166,7 @@ export class AuthService {
         message: 'Logged out successfully'
       };
     } catch (error) {
-      console.error('Logout error:', error);
+      
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Logout failed'
@@ -202,7 +202,7 @@ export class AuthService {
         };
       }
     } catch (error) {
-      console.error('Token refresh error:', error);
+      
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Token refresh failed'

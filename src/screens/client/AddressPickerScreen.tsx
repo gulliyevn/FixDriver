@@ -62,7 +62,7 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
       );
 
     } catch (error) {
-      console.error('Error getting location:', error);
+      
       Alert.alert('Ошибка', 'Не удалось получить местоположение');
     } finally {
       setLoading(false);
@@ -96,7 +96,7 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
         setAddress('Адрес не найден');
       }
     } catch (error) {
-      console.error('Error getting address:', error);
+      
       setAddress('Ошибка получения адреса');
     } finally {
       setLoading(false);

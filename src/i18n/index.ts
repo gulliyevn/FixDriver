@@ -98,7 +98,7 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     notifyLanguageChange(language);
   } catch (error) {
-    console.error('Error setting language:', error);
+
     throw error;
   }
 };
@@ -110,7 +110,7 @@ export const getLanguage = async (): Promise<SupportedLanguage> => {
       return storedLanguage as SupportedLanguage;
     }
   } catch (error) {
-    console.error('Error getting language:', error);
+
   }
   return DEFAULT_LANGUAGE;
 };
@@ -121,20 +121,21 @@ export const initializeLanguage = async (): Promise<void> => {
     i18n.locale = language;
     notifyLanguageChange(language);
   } catch (error) {
-    console.error('Error initializing language:', error);
+
     i18n.locale = DEFAULT_LANGUAGE;
   }
 };
 
 // Main translation function with better error handling
 export const t = (key: string, params?: Record<string, string | number>): string => {
+  
   try {
     // Add debug info for missing translations
     const translation = i18n.t(key, params);
     
     // If translation is the same as key, it means translation is missing
     if (translation === key) {
-      console.warn(`Missing translation for key: ${key} in locale: ${i18n.locale}`);
+
       // Try to find the key in the current locale's translations
       const currentTranslations = i18n.translations[i18n.locale];
       if (currentTranslations) {
@@ -152,7 +153,7 @@ export const t = (key: string, params?: Record<string, string | number>): string
     
     return translation;
   } catch (error) {
-    console.error(`Translation error for key "${key}":`, error);
+
     return key;
   }
 };

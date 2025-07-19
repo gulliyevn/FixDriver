@@ -40,7 +40,7 @@ const ChatListScreen: React.FC = () => {
       const chatList: Chat[] = await ChatService.getChats();
       setChats(chatList);
     } catch (error) {
-      console.error('Error loading chats:', error);
+      
       Alert.alert('Ошибка', 'Не удалось загрузить чаты');
     } finally {
       setLoading(false);

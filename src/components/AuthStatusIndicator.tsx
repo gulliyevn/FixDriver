@@ -54,7 +54,7 @@ export default function AuthStatusIndicator({
         onRefresh?.();
       }
     } catch {
-      console.error('Ошибка обновления токена');
+      
     }
   };
 

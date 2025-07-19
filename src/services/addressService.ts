@@ -51,7 +51,7 @@ class AddressService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('API request failed:', error);
+      
       throw error;
     }
   }
@@ -74,7 +74,7 @@ class AddressService {
       
       throw new Error(response.message || 'Failed to fetch addresses');
     } catch (error) {
-      console.error('Failed to get addresses:', error);
+      
       throw error;
     }
   }
@@ -95,7 +95,7 @@ class AddressService {
       
       throw new Error(response.message || 'Failed to create address');
     } catch (error) {
-      console.error('Failed to create address:', error);
+      
       throw error;
     }
   }
@@ -116,7 +116,7 @@ class AddressService {
       
       throw new Error(response.message || 'Failed to update address');
     } catch (error) {
-      console.error('Failed to update address:', error);
+      
       throw error;
     }
   }
@@ -132,7 +132,7 @@ class AddressService {
       
       return response.success;
     } catch (error) {
-      console.error('Failed to delete address:', error);
+      
       throw error;
     }
   }
@@ -148,7 +148,7 @@ class AddressService {
       
       return response.success;
     } catch (error) {
-      console.error('Failed to set default address:', error);
+      
       throw error;
     }
   }
@@ -166,7 +166,7 @@ class AddressService {
       
       return null;
     } catch (error) {
-      console.error('Failed to get default address:', error);
+      
       return null;
     }
   }
@@ -184,7 +184,7 @@ class AddressService {
       
       return [];
     } catch (error) {
-      console.error('Failed to search addresses:', error);
+      
       return [];
     }
   }
@@ -206,7 +206,7 @@ class AddressService {
       
       return null;
     } catch (error) {
-      console.error('Failed to geocode address:', error);
+      
       return null;
     }
   }

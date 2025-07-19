@@ -35,24 +35,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       const savedTheme = await AsyncStorage.getItem('theme');
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
         setTheme(savedTheme);
-        console.log('Theme loaded:', savedTheme);
+
       } else {
-        console.log('No saved theme found, using default: light');
+
       }
     } catch (error) {
-      console.error('Error loading theme:', error);
+      
     }
   };
 
   const toggleTheme = async () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    console.log('Theme toggled to:', newTheme);
+    
     try {
       await AsyncStorage.setItem('theme', newTheme);
-      console.log('Theme saved to AsyncStorage');
+      
     } catch (error) {
-      console.error('Error saving theme:', error);
+      
     }
   };
 

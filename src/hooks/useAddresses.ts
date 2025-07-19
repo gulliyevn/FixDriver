@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Alert } from 'react-native';
 import { Address } from '../mocks/residenceMock';
 import { addressService, CreateAddressRequest, UpdateAddressRequest } from '../services/addressService';
 
@@ -35,7 +34,7 @@ export const useAddresses = (): UseAddressesReturn => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось загрузить адреса';
       setError(errorMessage);
-      console.error('Failed to load addresses:', err);
+
     } finally {
       setLoading(false);
     }
@@ -55,12 +54,10 @@ export const useAddresses = (): UseAddressesReturn => {
       const newAddress = await mockAddAddress(addressData);
       
       setAddresses(prev => [...prev, newAddress]);
-      Alert.alert('Успех', 'Адрес добавлен');
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось добавить адрес';
-      Alert.alert('Ошибка', errorMessage);
-      console.error('Failed to add address:', err);
+
       return false;
     }
   }, []);
@@ -78,16 +75,13 @@ export const useAddresses = (): UseAddressesReturn => {
         setAddresses(prev => 
           prev.map(addr => addr.id === id ? updatedAddress : addr)
         );
-        Alert.alert('Успех', 'Адрес обновлен');
         return true;
       } else {
-        Alert.alert('Ошибка', 'Не удалось обновить адрес');
         return false;
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось обновить адрес';
-      Alert.alert('Ошибка', errorMessage);
-      console.error('Failed to update address:', err);
+
       return false;
     }
   }, []);
@@ -103,16 +97,13 @@ export const useAddresses = (): UseAddressesReturn => {
       
       if (success) {
         setAddresses(prev => prev.filter(addr => addr.id !== id));
-        Alert.alert('Успех', 'Адрес удален');
         return true;
       } else {
-        Alert.alert('Ошибка', 'Не удалось удалить адрес');
         return false;
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось удалить адрес';
-      Alert.alert('Ошибка', errorMessage);
-      console.error('Failed to delete address:', err);
+
       return false;
     }
   }, []);
@@ -127,26 +118,27 @@ export const useAddresses = (): UseAddressesReturn => {
       const success = await mockSetDefault(id);
       
       if (success) {
-        // Обновляем состояние локально
+        // Находим адрес, который устанавливаем как дефолтный
+        const targetAddress = addresses.find(addr => addr.id === id);
+        if (!targetAddress) return false;
+        
+        // Обновляем состояние локально - сбрасываем isDefault только для адресов той же категории
         setAddresses(prev => 
           prev.map(addr => ({
             ...addr,
-            isDefault: addr.id === id
+            isDefault: addr.id === id || (addr.category === targetAddress.category && addr.isDefault && addr.id !== id ? false : addr.isDefault)
           }))
         );
-        Alert.alert('Успех', 'Адрес установлен по умолчанию');
         return true;
       } else {
-        Alert.alert('Ошибка', 'Не удалось установить адрес по умолчанию');
         return false;
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось установить адрес по умолчанию';
-      Alert.alert('Ошибка', errorMessage);
-      console.error('Failed to set default address:', err);
+
       return false;
     }
-  }, []);
+  }, [addresses]);
 
   // Загружаем адреса при монтировании компонента
   useEffect(() => {

@@ -166,7 +166,7 @@ class APIClient {
     try {
       data = isJson ? await response.json() : await response.text();
     } catch (error) {
-      console.error('Error parsing response:', error);
+      
       data = null;
     }
 
@@ -221,7 +221,7 @@ class APIClient {
         };
       } else {
         // Токен не обновился - НЕ выкидываем пользователя
-        console.warn('Token refresh failed, but continuing without authentication');
+
         this.processQueue(null, null);
         return {
           success: false,
@@ -230,7 +230,7 @@ class APIClient {
         };
       }
     } catch (error) {
-      console.error('Auth error handling failed:', error);
+      
       this.processQueue(null, null);
       return {
         success: false,
@@ -269,7 +269,7 @@ class APIClient {
       });
       return response.ok;
     } catch (error) {
-      console.warn('API health check failed:', error);
+      
       return false;
     }
   }
@@ -279,7 +279,7 @@ class APIClient {
    * TODO: Добавить более детальную обработку ошибок для production
    */
   private handleError(error: Error): APIResponse {
-    console.error('API request error:', error);
+    
     
     if (error.name === 'AbortError') {
       return {

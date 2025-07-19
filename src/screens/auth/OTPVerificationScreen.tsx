@@ -14,6 +14,7 @@ import { AuthStackParamList } from '../../types/navigation';
 import Button from '../../components/Button';
 import { OTPService } from '../../services/OTPService';
 import { OTPVerificationScreenStyles as styles } from '../../styles/screens/OTPVerificationScreen.styles';
+import { useI18n } from '../../hooks/useI18n';
 
 type OTPVerificationScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'OTPVerification'>;
 type OTPVerificationScreenRouteProp = RouteProp<AuthStackParamList, 'OTPVerification'>;
@@ -25,6 +26,7 @@ interface OTPVerificationScreenProps {
 
 const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigation, route }) => {
   const { phone, type } = route.params;
+  const { t } = useI18n();
 
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +41,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       setCanResend(false);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send OTP';
-      Alert.alert('Error', errorMessage);
+      Alert.alert(t('common.error'), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -66,10 +68,10 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       await OTPService.resendOTP(phone);
       setTimeLeft(60);
       setCanResend(false);
-      Alert.alert('Success', 'OTP has been resent to your phone');
+              Alert.alert(t('common.success'), 'OTP has been resent to your phone');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to resend OTP';
-      Alert.alert('Error', errorMessage);
+      Alert.alert(t('common.error'), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +79,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
 
   const handleVerifyOTP = async () => {
     if (!otp.trim()) {
-      Alert.alert('Error', 'Please enter the OTP');
+      Alert.alert(t('common.error'), 'Please enter the OTP');
       return;
     }
 
@@ -88,19 +90,19 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       if (isValid) {
         if (type === 'register') {
           // Handle registration flow
-          Alert.alert('Success', 'Phone verified successfully');
+          Alert.alert(t('common.success'), 'Phone verified successfully');
           // Navigate to complete registration
         } else {
           // Handle forgot password flow
-          Alert.alert('Success', 'OTP verified successfully');
+          Alert.alert(t('common.success'), 'OTP verified successfully');
           // Navigate to reset password
         }
       } else {
-        Alert.alert('Error', 'Invalid OTP. Please try again.');
+        Alert.alert(t('common.error'), 'Invalid OTP. Please try again.');
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to verify OTP';
-      Alert.alert('Error', errorMessage);
+      Alert.alert(t('common.error'), errorMessage);
     } finally {
       setIsLoading(false);
     }

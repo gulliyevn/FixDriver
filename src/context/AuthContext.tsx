@@ -57,10 +57,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       
       // Если обновление не удалось - НЕ выходим автоматически
-      console.warn('Token refresh failed, but keeping user in app');
+      
       return false;
     } catch (error) {
-      console.error('Auth refresh error:', error);
+      
       // Не выходим автоматически при ошибках обновления
       return false;
     } finally {
@@ -90,21 +90,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setUser(fullUser);
           } else {
             // Если данных пользователя нет, но токен валиден - пытаемся восстановить
-            console.warn('User data not found, but token is valid. Attempting to restore...');
+    
             // Не выходим автоматически, даем пользователю остаться в приложении
           }
         } else {
           // Токен невалиден - пытаемся обновить
-          console.warn('Token invalid, attempting to refresh...');
+  
           const refreshed = await refreshAuth();
           if (!refreshed) {
             // Если обновление не удалось, НЕ выходим автоматически
-            console.warn('Token refresh failed, but keeping user in app');
+    
           }
         }
       }
     } catch (error) {
-      console.error('Auth initialization error:', error);
+      
       // Не выходим автоматически при ошибках инициализации
     } finally {
       setIsLoading(false);
@@ -183,7 +183,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return true;
       }
     } catch (error) {
-      console.error('Login error:', error);
+      
       return false;
     } finally {
       setIsLoading(false);
@@ -262,7 +262,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return true;
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      
       return false;
     } finally {
       setIsLoading(false);
@@ -290,7 +290,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             });
           }
         } catch (error) {
-          console.error('Logout API error:', error);
+  
         }
       }
 
@@ -302,7 +302,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(null);
     } catch (error) {
-      console.error('Logout error:', error);
+      
     } finally {
       setIsLoading(false);
     }

@@ -73,7 +73,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to initialize language';
       setError(errorMessage);
-      console.error('Language initialization error:', err);
+
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +90,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to change language';
       setError(errorMessage);
-      console.error('Language change error:', err);
+
       throw err;
     } finally {
       setIsLoading(false);

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 import { SelectStyles } from '../styles/components/Select.styles';
 
 export interface SelectOption {
@@ -56,6 +57,7 @@ const Select: React.FC<SelectProps> = ({
   compact = false,
 }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedValues, setSelectedValues] = useState<(string | number)[]>(
@@ -93,7 +95,7 @@ const Select: React.FC<SelectProps> = ({
         const option = options.find(opt => opt.value === selectedValues[0]);
         return option?.label || placeholder;
       }
-      return `Выбрано: ${selectedValues.length}`;
+      return `${t('common.selected')}: ${selectedValues.length}`;
     }
     
     return selectedOption?.label || placeholder;
@@ -232,7 +234,7 @@ const Select: React.FC<SelectProps> = ({
                       color: isDark ? '#F9FAFB' : '#1F2937',
                     }
                   ]}
-                  placeholder="Поиск..."
+                  placeholder={t('common.search')}
                   placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
                   value={searchQuery}
                   onChangeText={setSearchQuery}

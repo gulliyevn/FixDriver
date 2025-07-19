@@ -23,6 +23,8 @@
   "notAvailable": "Недоступно",
   "featureSoon": "Функция будет доступна в ближайшее время",
   "add": "Добавить",
+  "selected": "Выбрано",
+  "search": "Поиск",
   "permissionDenied": "Разрешение отклонено",
   "roleSelect": {
     "chooseAccountType": "Выберите тип аккаунта",

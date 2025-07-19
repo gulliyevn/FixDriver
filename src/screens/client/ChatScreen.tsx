@@ -79,7 +79,7 @@ const ChatScreen: React.FC = () => {
       ];
       setMessages(mockMessages);
     } catch (error) {
-      console.error('Error loading messages:', error);
+      
       Alert.alert('Ошибка', 'Не удалось загрузить сообщения');
     } finally {
       setIsLoading(false);
@@ -109,7 +109,7 @@ const ChatScreen: React.FC = () => {
       // Здесь будет отправка сообщения на сервер
       await ChatService.sendMessage('chat_1', newMessage.text);
     } catch (error) {
-      console.error('Error sending message:', error);
+      
       Alert.alert('Ошибка', 'Не удалось отправить сообщение');
     }
   };

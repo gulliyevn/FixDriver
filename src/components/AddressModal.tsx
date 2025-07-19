@@ -10,7 +10,7 @@ import {
   Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Address, addressCategoryOptions } from '../mocks/residenceMock';
+import { Address, getAddressCategoryOptions } from '../mocks/residenceMock';
 import { AddressModalStyles as styles, getAddressModalStyles } from '../styles/components/AddressModal.styles';
 import Select from './Select';
 import MapViewComponent from './MapView';
@@ -87,7 +87,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             return;
           }
         } catch (osmError) {
-          console.log('OpenStreetMap Geocoding failed, trying Yandex...');
+  
           
           // Пробуем Yandex Geocoding API
           try {
@@ -102,14 +102,14 @@ const AddressModal: React.FC<AddressModalProps> = ({
               return;
             }
           } catch (yandexError) {
-            console.log('Yandex Geocoding failed, using Expo Location result');
+
           }
         }
       }
       
       if (reverseGeocode && reverseGeocode.length > 0) {
         const addressLocation = reverseGeocode[0];
-        console.log('Geocoding result:', addressLocation);
+
         
         // Собираем полный адрес с деталями
         let streetPart = '';
@@ -155,27 +155,30 @@ const AddressModal: React.FC<AddressModalProps> = ({
         setAddressText('Адрес не найден');
       }
     } catch (error) {
-      console.error('Error getting address:', error);
       setAddressText('Ошибка получения адреса');
     }
   };
 
   const handleSave = async () => {
     if (!title.trim()) {
-      Alert.alert('Ошибка', t('profile.residence.modal.nameRequired'));
+      Alert.alert(t('common.error'), t('profile.residence.modal.nameRequired'));
       return;
     }
     if (!addressText.trim()) {
-      Alert.alert('Ошибка', t('profile.residence.modal.addressRequired'));
+      Alert.alert(t('common.error'), t('profile.residence.modal.addressRequired'));
       return;
     }
 
     try {
-      // Если устанавливаем адрес по умолчанию, сначала сбрасываем все остальные
+      // Если устанавливаем адрес по умолчанию, сначала сбрасываем адреса той же категории
       if (isDefault) {
-        // Находим текущий адрес по умолчанию и сбрасываем его
-        const currentDefaultAddress = addresses?.find(addr => addr.isDefault && addr.id !== address?.id);
-        if (currentDefaultAddress) {
+        // Находим текущий адрес по умолчанию той же категории и сбрасываем его
+        const currentDefaultAddress = addresses?.find(addr => 
+          addr.isDefault && 
+          addr.id !== address?.id && 
+          addr.category === category.trim()
+        );
+        if (currentDefaultAddress && setDefaultAddress) {
           await setDefaultAddress(currentDefaultAddress.id);
         }
       }
@@ -188,8 +191,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
       });
       onClose();
     } catch (error) {
-      console.error('Error in handleSave:', error);
-      Alert.alert('Ошибка', t('profile.residence.modal.saveError'));
+      Alert.alert(t('common.error'), t('profile.residence.modal.saveError'));
     }
   };
 
@@ -236,7 +238,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
               {t('profile.residence.modal.categoryLabel')}
             </Text>
             <Select
-              options={addressCategoryOptions}
+              options={getAddressCategoryOptions(t)}
               value={category}
               onSelect={(option) => setCategory(option.value as string)}
               placeholder={t('profile.residence.modal.categoryPlaceholder')}

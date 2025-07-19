@@ -13,19 +13,54 @@ export interface Address {
 import { SelectOption } from '../components/Select';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Предустановленные варианты категорий для адресов
+// Функция для получения переведенных категорий адресов
+export const getAddressCategoryOptions = (t: (key: string) => string): SelectOption[] => {
+
+  
+  // Проверяем простые переводы
+  const test1 = t('profile.residence.title');
+  const test2 = t('common.ok');
+  
+  
+  
+  // Проверяем отдельные переводы категорий
+  const selectCategory = t('profile.residence.categories.selectCategory');
+  const home = t('profile.residence.categories.home');
+  const work = t('profile.residence.categories.work');
+  
+  
+  
+  const options: SelectOption[] = [
+    { value: '', label: selectCategory },
+    { value: 'home', label: home, icon: 'home' as const },
+    { value: 'work', label: work, icon: 'briefcase' as const },
+    { value: 'university', label: t('profile.residence.categories.university'), icon: 'school' as const },
+    { value: 'mall', label: t('profile.residence.categories.mall'), icon: 'cart' as const },
+    { value: 'hospital', label: t('profile.residence.categories.hospital'), icon: 'medical' as const },
+    { value: 'gym', label: t('profile.residence.categories.gym'), icon: 'fitness' as const },
+    { value: 'restaurant', label: t('profile.residence.categories.restaurant'), icon: 'restaurant' as const },
+    { value: 'parents', label: t('profile.residence.categories.parents'), icon: 'people' as const },
+    { value: 'dacha', label: t('profile.residence.categories.dacha'), icon: 'leaf' as const },
+    { value: 'other', label: t('profile.residence.categories.other'), icon: 'ellipsis-horizontal' as const },
+  ];
+  
+  
+  return options;
+};
+
+// Предустановленные варианты категорий для адресов (для обратной совместимости)
 export const addressCategoryOptions: SelectOption[] = [
   { value: '', label: 'Выберите категорию' },
-  { value: 'Дом', label: 'Дом', icon: 'home' },
-  { value: 'Работа', label: 'Работа', icon: 'briefcase' },
-  { value: 'Университет', label: 'Университет', icon: 'school' },
-  { value: 'Торговый центр', label: 'Торговый центр', icon: 'cart' },
-  { value: 'Больница', label: 'Больница', icon: 'medical' },
-  { value: 'Спортзал', label: 'Спортзал', icon: 'fitness' },
-  { value: 'Ресторан', label: 'Ресторан', icon: 'restaurant' },
-  { value: 'Родители', label: 'Родители', icon: 'people' },
-  { value: 'Дача', label: 'Дача', icon: 'leaf' },
-  { value: 'Другой', label: 'Другой', icon: 'ellipsis-horizontal' },
+  { value: 'home', label: 'Дом', icon: 'home' },
+  { value: 'work', label: 'Работа', icon: 'briefcase' },
+  { value: 'university', label: 'Университет', icon: 'school' },
+  { value: 'mall', label: 'Торговый центр', icon: 'cart' },
+  { value: 'hospital', label: 'Больница', icon: 'medical' },
+  { value: 'gym', label: 'Спортзал', icon: 'fitness' },
+  { value: 'restaurant', label: 'Ресторан', icon: 'restaurant' },
+  { value: 'parents', label: 'Родители', icon: 'people' },
+  { value: 'dacha', label: 'Дача', icon: 'leaf' },
+  { value: 'other', label: 'Другой', icon: 'ellipsis-horizontal' },
 ];
 
 // Начальные адреса по умолчанию
@@ -34,7 +69,7 @@ const defaultAddresses: Address[] = [
     id: '1',
     title: 'Дом',
     address: 'ул. Ленина, 123, кв. 45',
-    category: 'Дом',
+    category: 'home',
     isDefault: true,
     latitude: 40.3777,
     longitude: 49.8920,
@@ -45,7 +80,7 @@ const defaultAddresses: Address[] = [
     id: '2',
     title: 'Работа',
     address: 'пр. Гейдара Алиева, 78, офис 15',
-    category: 'Работа',
+    category: 'work',
     isDefault: false,
     latitude: 40.4093,
     longitude: 49.8671,
@@ -66,7 +101,7 @@ export const getAddresses = async (): Promise<Address[]> => {
       return mockAddresses;
     }
   } catch (error) {
-    console.error('Error loading addresses from storage:', error);
+
   }
   
   // Если нет сохраненных адресов, возвращаем дефолтные
@@ -101,7 +136,7 @@ const saveAddressesToStorage = async () => {
   try {
     await AsyncStorage.setItem('user_addresses', JSON.stringify(mockAddresses));
   } catch (error) {
-    console.error('Error saving addresses to storage:', error);
+
   }
 };
 
@@ -140,8 +175,12 @@ export const setDefaultAddress = async (id: string): Promise<boolean> => {
   const address = mockAddresses.find(addr => addr.id === id);
   if (!address) return false;
   
-  // Сбрасываем все адреса как не по умолчанию
-  mockAddresses.forEach(addr => addr.isDefault = false);
+  // Сбрасываем только адреса той же категории как не по умолчанию
+  mockAddresses.forEach(addr => {
+    if (addr.category === address.category) {
+      addr.isDefault = false;
+    }
+  });
   
   // Устанавливаем выбранный как по умолчанию
   address.isDefault = true;

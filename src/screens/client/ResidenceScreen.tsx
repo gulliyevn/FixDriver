@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { getCurrentColors } from '../../constants/colors';
 import { ClientScreenProps } from '../../types/navigation';
 import { ResidenceScreenStyles as styles, getResidenceScreenStyles } from '../../styles/screens/profile/ResidenceScreen.styles';
-import { Address } from '../../mocks/residenceMock';
+import { Address, getAddressCategoryOptions } from '../../mocks/residenceMock';
 import AddressModal from '../../components/AddressModal';
 import { useAddresses } from '../../hooks/useAddresses';
 import { useI18n } from '../../hooks/useI18n';
@@ -41,6 +41,13 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
     setDefaultAddress,
   } = useAddresses();
 
+  // Функция для получения переведенного названия категории
+  const getCategoryLabel = (categoryKey: string): string => {
+    const categoryOptions = getAddressCategoryOptions(t);
+    const category = categoryOptions.find(opt => opt.value === categoryKey);
+    return category ? category.label : categoryKey;
+  };
+
   const handleAddAddress = () => {
     setModalMode('add');
     setSelectedAddress(null);
@@ -63,7 +70,13 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
           text: t('profile.delete'), 
           style: 'destructive',
           onPress: async () => {
-            await deleteAddress(address.id);
+            const success = await deleteAddress(address.id);
+            if (success) {
+              await refreshAddresses();
+              Alert.alert(t('common.success'), t('profile.residence.deleteSuccess', { title: address.title }));
+            } else {
+              Alert.alert(t('common.error'), t('profile.residence.deleteError'));
+            }
           }
         },
       ]
@@ -71,7 +84,13 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
   };
 
   const handleSetDefault = async (address: Address) => {
-    await setDefaultAddress(address.id);
+    const success = await setDefaultAddress(address.id);
+    if (success) {
+      await refreshAddresses();
+      Alert.alert(t('common.success'), t('profile.residence.setDefaultSuccess'));
+    } else {
+      Alert.alert(t('common.error'), t('profile.residence.setDefaultError'));
+    }
   };
 
   const handleSaveAddress = async (addressData: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -80,16 +99,23 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
         const success = await addAddress(addressData);
         if (success) {
           setShowModal(false);
+          await refreshAddresses();
+          Alert.alert(t('common.success'), t('profile.residence.addSuccess'));
+        } else {
+          Alert.alert(t('common.error'), t('profile.residence.addError'));
         }
       } else if (modalMode === 'edit' && selectedAddress) {
         const success = await updateAddress(selectedAddress.id, addressData);
         if (success) {
           setShowModal(false);
+          await refreshAddresses();
+          Alert.alert(t('common.success'), t('profile.residence.updateSuccess'));
+        } else {
+          Alert.alert(t('common.error'), t('profile.residence.updateError'));
         }
       }
     } catch (error) {
-      console.error('Error saving address:', error);
-      Alert.alert('Ошибка', t('profile.residence.saveError'));
+      Alert.alert(t('common.error'), t('profile.residence.saveError'));
     }
   };
 
@@ -140,10 +166,18 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
                     <Text style={[styles.addressTitle, dynamicStyles.addressTitle]}>{address.title}</Text>
                     <Text style={[styles.addressText, dynamicStyles.addressText]}>{address.address}</Text>
                     {address.category && (
-                      <Text style={[styles.addressDescription, dynamicStyles.addressDescription]}>{address.category}</Text>
+                      <Text style={[styles.addressDescription, dynamicStyles.addressDescription]}>{getCategoryLabel(address.category)}</Text>
                     )}
                   </View>
                 <View style={styles.actionButtons}>
+                  {!address.isDefault && (
+                    <TouchableOpacity 
+                      style={[styles.defaultButton, dynamicStyles.defaultButton]}
+                      onPress={() => handleSetDefault(address)}
+                    >
+                      <Ionicons name="star-outline" size={18} color={isDark ? '#fff' : '#ffc107'} />
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity 
                     style={[styles.editButton, dynamicStyles.editButton]}
                     onPress={() => handleEditAddress(address)}
