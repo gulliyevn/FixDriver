@@ -9,12 +9,15 @@
     "sendButton": "Enviar",
     "sending": "Enviando...",
     "title": "¿Olvidaste tu contraseña?",
+    "subtitle": "Ingresa tu correo electrónico para restablecer tu contraseña",
+    "email": "Correo electrónico",
     "emailPlaceholder": "Ingresa tu correo electrónico",
     "errorTitle": "Error",
     "errorEmpty": "Por favor ingresa tu correo electrónico",
     "errorInvalid": "Por favor ingresa un correo electrónico válido",
     "successTitle": "Correo enviado",
-    "successText": "Revisa tu correo electrónico para restablecer la contraseña"
+    "successText": "Revisa tu correo electrónico para restablecer la contraseña",
+    "backToLogin": "Volver al inicio de sesión"
   },
   "loginButton": "Iniciar sesión",
   "loginSuccess": "Inicio de sesión exitoso",

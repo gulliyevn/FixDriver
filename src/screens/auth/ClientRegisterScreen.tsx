@@ -15,13 +15,18 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLanguage } from '../../context/LanguageContext';
-import { ClientRegisterScreenStyles as styles, PLACEHOLDER_COLOR } from '../../styles/screens/ClientRegisterScreen.styles';
+import { useTheme } from '../../context/ThemeContext';
+import { createClientRegisterScreenStyles, getPlaceholderColor } from '../../styles/screens/ClientRegisterScreen.styles';
 import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 
 const ClientRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
   const { t } = useLanguage();
+  const { isDark } = useTheme();
+  
+  // Создаем стили с учетом текущей темы
+  const styles = createClientRegisterScreenStyles(isDark);
 
   const [form, setForm] = useState({
     firstName: '',
@@ -88,7 +93,7 @@ const ClientRegisterScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
     <KeyboardAvoidingView
         style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -96,7 +101,7 @@ const ClientRegisterScreen: React.FC = () => {
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back" size={24} color="#23408E" />
+              <Ionicons name="arrow-back" size={24} color={isDark ? "#60A5FA" : "#23408E"} />
             </TouchableOpacity>
             <Text style={styles.title}>{t('register.title')}</Text>
             <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
@@ -110,7 +115,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.firstName}
                 onChangeText={(v) => handleChange('firstName', v)}
                 placeholder={t('register.firstNamePlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
                 autoCapitalize="words"
               />
               {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
@@ -122,7 +127,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.lastName}
                 onChangeText={(v) => handleChange('lastName', v)}
                 placeholder={t('register.lastNamePlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
                 autoCapitalize="words"
               />
               {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
@@ -134,7 +139,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.email}
                 onChangeText={(v) => handleChange('email', v)}
                 placeholder={t('register.emailPlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -147,7 +152,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.phone}
                 onChangeText={(v) => handleChange('phone', v)}
                 placeholder={t('register.phonePlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
                 keyboardType="phone-pad"
               />
               {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
@@ -159,7 +164,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.password}
                 onChangeText={(v) => handleChange('password', v)}
                 placeholder={t('register.passwordPlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
                 secureTextEntry
               />
               {form.password && <PasswordStrengthIndicator value={form.password} showFeedback={true} />}
@@ -172,7 +177,7 @@ const ClientRegisterScreen: React.FC = () => {
                 value={form.confirmPassword}
                 onChangeText={(v) => handleChange('confirmPassword', v)}
                 placeholder={t('register.confirmPasswordPlaceholder')}
-                placeholderTextColor={PLACEHOLDER_COLOR}
+                placeholderTextColor={getPlaceholderColor(isDark)}
                 secureTextEntry
               />
               {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}

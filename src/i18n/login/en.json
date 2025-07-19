@@ -9,12 +9,15 @@
     "sendButton": "Send",
     "sending": "Sending...",
     "title": "Forgot password?",
+    "subtitle": "Enter your e-mail to reset your password",
+    "email": "E-mail",
     "emailPlaceholder": "Enter your e-mail",
     "errorTitle": "Error",
     "errorEmpty": "Please enter your e-mail",
     "errorInvalid": "Please enter a valid e-mail",
     "successTitle": "Email sent",
-    "successText": "Check your e-mail for password reset instructions"
+    "successText": "Check your e-mail for password reset instructions",
+    "backToLogin": "Back to login"
   },
   "loginButton": "Sign In",
   "loginSuccess": "Login successful",

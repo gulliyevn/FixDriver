@@ -9,12 +9,15 @@
     "sendButton": "Gönder",
     "sending": "Gönderiliyor...",
     "title": "Şifreni mi unuttun?",
+    "subtitle": "Şifrenizi sıfırlamak için e-postanızı girin",
+    "email": "E-posta",
     "emailPlaceholder": "E-posta girin",
     "errorTitle": "Hata",
     "errorEmpty": "Lütfen e-posta girin",
     "errorInvalid": "Lütfen geçerli bir e-posta girin",
     "successTitle": "E-posta gönderildi",
-    "successText": "Şifre sıfırlama talimatları için e-postanızı kontrol edin"
+    "successText": "Şifre sıfırlama talimatları için e-postanızı kontrol edin",
+    "backToLogin": "Girişe geri dön"
   },
   "loginButton": "Giriş Yap",
   "loginSuccess": "Giriş başarılı",

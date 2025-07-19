@@ -1,187 +1,221 @@
 import { StyleSheet } from 'react-native';
+import { SIZES, SHADOWS, getCurrentColors } from '../../constants/colors';
 
-export const ClientRegisterScreenStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F7F8FA',
-  },
-  scrollContent: {
-    flexGrow: 1,
-    padding: 24,
-    paddingBottom: 40,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 24,
-    position: 'relative',
-  },
-  backButton: {
-    position: 'absolute',
-    left: -16,
-    top: 0,
-    padding: 8,
-    zIndex: 2,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#23408E',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  form: {
-    marginTop: 8,
-  },
-  inputContainer: {
-    marginBottom: 18,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 8,
-  },
-  requiredStar: {
-    color: '#DC2626',
-    fontWeight: 'bold',
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    color: '#111827',
-  },
-  errorText: {
-    color: '#DC2626',
-    fontSize: 13,
-    marginTop: 4,
-  },
-  registerButton: {
-    marginTop: 16,
-    marginBottom: 8,
-    borderRadius: 12,
-    backgroundColor: '#23408E',
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  registerButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  loginLink: {
-    color: '#23408E',
-    textDecorationLine: 'underline',
-    fontWeight: '600',
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 24,
-  },
-  loginRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginTop: 8,
-  },
-  alreadyRegisteredText: {
-    color: '#6B7280',
-    fontSize: 15,
-    fontWeight: '400',
-    paddingRight: 2,
-  },
-  loginLinkSmall: {
-    color: '#23408E',
-    fontSize: 15,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
-  agreeText: {
-    color: '#111827',
-    fontSize: 14,
-    flex: 1,
-    flexWrap: 'wrap',
-  },
-  link: {
-    color: '#23408E',
-    textDecorationLine: 'underline',
-    fontWeight: '600',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 24,
-    width: '85%',
-    maxWidth: 400,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#23408E',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  modalText: {
-    fontSize: 15,
-    color: '#111827',
-    marginBottom: 16,
-    textAlign: 'left',
-  },
-  modalCloseBtn: {
-    marginTop: 16,
-    backgroundColor: '#23408E',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 32,
-  },
-  modalCloseText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    flexWrap: 'wrap',
-    flex: 1,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-  checkboxChecked: {
-    borderColor: '#23408E',
-    backgroundColor: '#23408E',
-  },
-}); 
+// Создаем функцию для получения стилей с учетом темы
+export const createClientRegisterScreenStyles = (isDark: boolean) => {
+  const currentColors = getCurrentColors(isDark);
+  
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: currentColors.background,
+    },
+    scrollContent: {
+      flexGrow: 1,
+      padding: SIZES.xl,
+      paddingBottom: 40,
+    },
+    header: {
+      alignItems: 'center',
+      marginBottom: SIZES.xl,
+      position: 'relative',
+    },
+    backButton: {
+      position: 'absolute',
+      left: -16,
+      top: 0,
+      padding: 8,
+      zIndex: 2,
+    },
+    title: {
+      fontSize: SIZES.fontSize.title,
+      fontWeight: '700',
+      color: currentColors.primary,
+      marginBottom: SIZES.sm,
+      textAlign: 'center',
+    },
+    subtitle: {
+      fontSize: SIZES.fontSize.lg,
+      color: currentColors.textSecondary,
+      textAlign: 'center',
+      marginBottom: SIZES.lg,
+    },
+    form: {
+      marginTop: SIZES.sm,
+    },
+    inputContainer: {
+      marginBottom: SIZES.lg,
+    },
+    label: {
+      fontSize: SIZES.fontSize.lg,
+      fontWeight: '600',
+      color: currentColors.text,
+      marginBottom: SIZES.sm,
+    },
+    requiredStar: {
+      color: currentColors.error,
+      fontWeight: 'bold',
+    },
+    input: {
+      backgroundColor: currentColors.surface,
+      borderRadius: SIZES.radius.md,
+      borderWidth: 1,
+      borderColor: currentColors.border,
+      paddingHorizontal: SIZES.lg,
+      paddingVertical: SIZES.md,
+      fontSize: SIZES.fontSize.lg,
+      color: currentColors.text,
+      minHeight: SIZES.inputHeight.md,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    inputFocused: {
+      borderColor: currentColors.primary,
+      borderWidth: 2,
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    inputError: {
+      borderColor: currentColors.error,
+      borderWidth: 2,
+    },
+    errorText: {
+      color: currentColors.error,
+      fontSize: SIZES.fontSize.sm,
+      marginTop: SIZES.xs,
+    },
+    registerButton: {
+      marginTop: SIZES.lg,
+      marginBottom: SIZES.sm,
+      borderRadius: SIZES.radius.md,
+      backgroundColor: currentColors.primary,
+      paddingVertical: SIZES.lg,
+      alignItems: 'center',
+      minHeight: SIZES.buttonHeight.md,
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    registerButtonText: {
+      color: '#fff',
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+    },
+    registerButtonDisabled: {
+      backgroundColor: currentColors.border,
+      opacity: 0.6,
+    },
+    loginLink: {
+      color: currentColors.primary,
+      textDecorationLine: 'underline',
+      fontWeight: '600',
+      fontSize: SIZES.fontSize.lg,
+      textAlign: 'center',
+      marginTop: SIZES.xl,
+    },
+    loginRow: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+      marginTop: SIZES.sm,
+    },
+    alreadyRegisteredText: {
+      color: currentColors.textSecondary,
+      fontSize: SIZES.fontSize.md,
+      fontWeight: '400',
+      paddingRight: 2,
+    },
+    loginLinkSmall: {
+      color: currentColors.primary,
+      fontSize: SIZES.fontSize.md,
+      fontWeight: '700',
+      textDecorationLine: 'underline',
+    },
+    agreeText: {
+      color: currentColors.text,
+      fontSize: SIZES.fontSize.sm,
+      flex: 1,
+      flexWrap: 'wrap',
+    },
+    link: {
+      color: currentColors.primary,
+      textDecorationLine: 'underline',
+      fontWeight: '600',
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: currentColors.overlay,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: currentColors.surface,
+      borderRadius: SIZES.radius.lg,
+      padding: SIZES.xl,
+      width: '85%',
+      maxWidth: 400,
+      alignItems: 'center',
+      shadowColor: currentColors.cardShadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: isDark ? 0.4 : 0.2,
+      shadowRadius: 8,
+      elevation: 5,
+      borderWidth: 1,
+      borderColor: currentColors.border,
+    },
+    modalTitle: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: currentColors.primary,
+      marginBottom: SIZES.md,
+      textAlign: 'center',
+    },
+    modalText: {
+      fontSize: SIZES.fontSize.md,
+      color: currentColors.text,
+      marginBottom: SIZES.lg,
+      textAlign: 'left',
+    },
+    modalCloseBtn: {
+      marginTop: SIZES.lg,
+      backgroundColor: currentColors.primary,
+      borderRadius: SIZES.radius.sm,
+      paddingVertical: SIZES.md,
+      paddingHorizontal: SIZES.xl,
+    },
+    modalCloseText: {
+      color: currentColors.surface,
+      fontSize: SIZES.fontSize.lg,
+      fontWeight: '700',
+    },
+    checkboxContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: SIZES.sm,
+      flexWrap: 'wrap',
+      flex: 1,
+    },
+    checkbox: {
+      width: 24,
+      height: 24,
+      borderRadius: 6,
+      borderWidth: 2,
+      borderColor: currentColors.border,
+      backgroundColor: currentColors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: SIZES.sm,
+    },
+    checkboxChecked: {
+      borderColor: currentColors.primary,
+      backgroundColor: currentColors.primary,
+    },
+  });
+};
 
+// Для обратной совместимости
+export const ClientRegisterScreenStyles = createClientRegisterScreenStyles(false);
+
+// Функция для получения цвета плейсхолдера в зависимости от темы
+export const getPlaceholderColor = (isDark: boolean) => {
+  return isDark ? '#9CA3AF' : '#374151';
+};
+
+// Для обратной совместимости
 export const PLACEHOLDER_COLOR = '#374151'; 

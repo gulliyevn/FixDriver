@@ -9,12 +9,15 @@
     "sendButton": "Senden",
     "sending": "Wird gesendet...",
     "title": "Passwort vergessen?",
+    "subtitle": "Geben Sie Ihre E-Mail ein, um Ihr Passwort zurückzusetzen",
+    "email": "E-Mail",
     "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
     "errorTitle": "Fehler",
     "errorEmpty": "Bitte geben Sie Ihre E-Mail ein",
     "errorInvalid": "Bitte geben Sie eine gültige E-Mail ein",
     "successTitle": "E-Mail gesendet",
-    "successText": "Überprüfen Sie Ihre E-Mail, um das Passwort zurückzusetzen"
+    "successText": "Überprüfen Sie Ihre E-Mail, um das Passwort zurückzusetzen",
+    "backToLogin": "Zurück zur Anmeldung"
   },
   "loginButton": "Anmelden",
   "loginSuccess": "Anmeldung erfolgreich",

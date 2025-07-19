@@ -9,12 +9,15 @@
     "sendButton": "Envoyer",
     "sending": "Envoi...",
     "title": "Mot de passe oublié ?",
+    "subtitle": "Entrez votre e-mail pour réinitialiser votre mot de passe",
+    "email": "E-mail",
     "emailPlaceholder": "Entrez votre e-mail",
     "errorTitle": "Erreur",
     "errorEmpty": "Veuillez entrer votre e-mail",
     "errorInvalid": "Veuillez entrer un e-mail valide",
     "successTitle": "E-mail envoyé",
-    "successText": "Vérifiez votre e-mail pour réinitialiser le mot de passe"
+    "successText": "Vérifiez votre e-mail pour réinitialiser le mot de passe",
+    "backToLogin": "Retour à la connexion"
   },
   "loginButton": "Se connecter",
   "loginSuccess": "Connexion réussie",

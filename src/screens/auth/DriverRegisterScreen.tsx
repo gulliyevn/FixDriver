@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useLanguage } from '../../context/LanguageContext';
-import { DriverRegisterScreenStyles as styles, PLACEHOLDER_COLOR } from '../../styles/screens/DriverRegisterScreen.styles';
+import { useTheme } from '../../context/ThemeContext';
+import { createDriverRegisterScreenStyles, getPlaceholderColor } from '../../styles/screens/DriverRegisterScreen.styles';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
 import Select from '../../components/Select';
 import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
@@ -32,6 +33,10 @@ import {
 const DriverRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
   const { t, isLoading } = useLanguage();
+  const { isDark } = useTheme();
+  
+  // Создаем стили с учетом текущей темы
+  const styles = createDriverRegisterScreenStyles(isDark);
 
   const [form, setForm] = useState({
     firstName: '',
@@ -152,12 +157,12 @@ const DriverRegisterScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-              <Text style={{ color: '#23408E', fontSize: 24 }}>{'←'}</Text>
+              <Text style={{ color: isDark ? '#60A5FA' : '#23408E', fontSize: 24 }}>{'←'}</Text>
             </TouchableOpacity>
             <Text style={styles.title}>{t('register.titleDriver')}</Text>
             <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
@@ -165,22 +170,22 @@ const DriverRegisterScreen: React.FC = () => {
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.firstName')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.firstName} onChangeText={(v) => handleChange('firstName', v)} placeholder={t('register.firstNamePlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} autoCapitalize="words" />
+              <TextInput style={styles.input} value={form.firstName} onChangeText={(v) => handleChange('firstName', v)} placeholder={t('register.firstNamePlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} autoCapitalize="words" />
               {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.lastName')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.lastName} onChangeText={(v) => handleChange('lastName', v)} placeholder={t('register.lastNamePlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} autoCapitalize="words" />
+              <TextInput style={styles.input} value={form.lastName} onChangeText={(v) => handleChange('lastName', v)} placeholder={t('register.lastNamePlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} autoCapitalize="words" />
               {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.email')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.email} onChangeText={(v) => handleChange('email', v)} placeholder={t('register.emailPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} keyboardType="email-address" autoCapitalize="none" />
+              <TextInput style={styles.input} value={form.email} onChangeText={(v) => handleChange('email', v)} placeholder={t('register.emailPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} keyboardType="email-address" autoCapitalize="none" />
               {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.phone')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.phone} onChangeText={(v) => handleChange('phone', v)} placeholder={t('register.phonePlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} keyboardType="phone-pad" />
+              <TextInput style={styles.input} value={form.phone} onChangeText={(v) => handleChange('phone', v)} placeholder={t('register.phonePlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} keyboardType="phone-pad" />
               {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
             </View>
             <View style={styles.inputContainer}>
@@ -190,12 +195,12 @@ const DriverRegisterScreen: React.FC = () => {
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.licenseNumber')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.licenseNumber} onChangeText={(v) => handleChange('licenseNumber', v)} placeholder={t('register.licenseNumberPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} autoCapitalize="characters" textContentType="none" autoComplete="off" />
+              <TextInput style={styles.input} value={form.licenseNumber} onChangeText={(v) => handleChange('licenseNumber', v)} placeholder={t('register.licenseNumberPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} autoCapitalize="characters" textContentType="none" autoComplete="off" />
               {errors.licenseNumber && <Text style={styles.errorText}>{errors.licenseNumber}</Text>}
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.licenseExpiry')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.licenseExpiry} onChangeText={(v) => handleChange('licenseExpiry', v)} placeholder={t('register.licenseExpiryPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} keyboardType="numbers-and-punctuation" maxLength={10} textContentType="none" autoComplete="off" />
+              <TextInput style={styles.input} value={form.licenseExpiry} onChangeText={(v) => handleChange('licenseExpiry', v)} placeholder={t('register.licenseExpiryPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} keyboardType="numbers-and-punctuation" maxLength={10} textContentType="none" autoComplete="off" />
               {errors.licenseExpiry && <Text style={styles.errorText}>{errors.licenseExpiry}</Text>}
             </View>
             <PhotoUpload
@@ -209,7 +214,7 @@ const DriverRegisterScreen: React.FC = () => {
             {errors.licensePhoto && <Text style={styles.errorText}>{errors.licensePhoto}</Text>}
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.vehicleNumber')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.vehicleNumber} onChangeText={(v) => handleChange('vehicleNumber', v)} placeholder={t('register.vehicleNumberPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} autoCapitalize="characters" />
+              <TextInput style={styles.input} value={form.vehicleNumber} onChangeText={(v) => handleChange('vehicleNumber', v)} placeholder={t('register.vehicleNumberPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} autoCapitalize="characters" />
               {errors.vehicleNumber && <Text style={styles.errorText}>{errors.vehicleNumber}</Text>}
             </View>
             <View style={styles.inputContainer}>
@@ -239,7 +244,7 @@ const DriverRegisterScreen: React.FC = () => {
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.carMileage')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.carMileage} onChangeText={(v) => handleChange('carMileage', v)} placeholder={t('register.carMileagePlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} keyboardType="numeric" />
+              <TextInput style={styles.input} value={form.carMileage} onChangeText={(v) => handleChange('carMileage', v)} placeholder={t('register.carMileagePlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} keyboardType="numeric" />
               {errors.carMileage && <Text style={styles.errorText}>{errors.carMileage}</Text>}
             </View>
             <PhotoUpload
@@ -253,13 +258,13 @@ const DriverRegisterScreen: React.FC = () => {
             {errors.passportPhoto && <Text style={styles.errorText}>{errors.passportPhoto}</Text>}
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.password')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.password} onChangeText={(v) => handleChange('password', v)} placeholder={t('register.passwordPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} secureTextEntry />
+              <TextInput style={styles.input} value={form.password} onChangeText={(v) => handleChange('password', v)} placeholder={t('register.passwordPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} secureTextEntry />
               {form.password && <PasswordStrengthIndicator value={form.password} showFeedback={true} />}
               {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.confirmPassword')} <Text style={styles.requiredStar}>*</Text></Text>
-              <TextInput style={styles.input} value={form.confirmPassword} onChangeText={(v) => handleChange('confirmPassword', v)} placeholder={t('register.confirmPasswordPlaceholder')} placeholderTextColor={PLACEHOLDER_COLOR} secureTextEntry />
+              <TextInput style={styles.input} value={form.confirmPassword} onChangeText={(v) => handleChange('confirmPassword', v)} placeholder={t('register.confirmPasswordPlaceholder')} placeholderTextColor={getPlaceholderColor(isDark)} secureTextEntry />
               {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
             </View>
             <AgreementCheckbox agree={agree} onAgreeChange={setAgree} styles={styles} />

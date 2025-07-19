@@ -9,12 +9,15 @@
     "sendButton": "Göndər",
     "sending": "Göndərilir...",
     "title": "Şifrəni unutmusunuz?",
+    "subtitle": "Şifrənizi sıfırlamaq üçün e-poçtunuzu daxil edin",
+    "email": "E-poçt",
     "emailPlaceholder": "E-poçt daxil edin",
     "errorTitle": "Xəta",
     "errorEmpty": "Zəhmət olmasa e-poçt daxil edin",
     "errorInvalid": "Zəhmət olmasa düzgün e-poçt daxil edin",
     "successTitle": "E-poçt göndərildi",
-    "successText": "Şifrəni sıfırlamaq üçün e-poçtunuzu yoxlayın"
+    "successText": "Şifrəni sıfırlamaq üçün e-poçtunuzu yoxlayın",
+    "backToLogin": "Girişə qayıt"
   },
   "loginButton": "Daxil ol",
   "loginSuccess": "Giriş uğurlu",
