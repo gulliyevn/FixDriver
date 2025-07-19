@@ -16,5 +16,28 @@
   "error": "Erreur",
   "success": "Succès",
   "warning": "Avertissement",
-  "info": "Information"
+  "info": "Information",
+  "selectLanguage": "Sélectionner la langue",
+  "attention": "Attention",
+  "tryAgain": "Réessayer",
+  "notAvailable": "Non disponible",
+  "featureSoon": "Fonctionnalité bientôt disponible",
+  "permissionDenied": "Permission refusée",
+  "roleSelect": {
+    "chooseAccountType": "Choisissez le type de compte",
+    "clientTitle": "Client",
+    "clientSubtitle": "Réservez des trajets pour vous et vos enfants",
+    "clientSafe": "Trajets sûrs",
+    "clientTracking": "Suivi en direct",
+    "clientPayment": "Paiement facile",
+    "driverTitle": "Chauffeur",
+    "driverSubtitle": "Gagnez en fournissant des services de transport",
+    "driverFlexible": "Horaires flexibles",
+    "driverIncome": "Revenu élevé",
+    "driverSupport": "Support 24/7",
+    "choose": "Choisir",
+    "alreadyAccount": "Vous avez déjà un compte ?",
+    "login": "Connexion",
+    "language": "Langue"
+  }
 }
