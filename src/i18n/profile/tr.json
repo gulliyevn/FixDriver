@@ -68,7 +68,11 @@
       "nameRequired": "Adres adını girin",
       "addressRequired": "Adresi girin",
       "mapTitle": "Adres seçin",
-      "mapDone": "Tamam"
+      "mapDone": "Tamam",
+      "addressValid": "Adres bulundu",
+      "addressInvalid": "Adres bulunamadı",
+      "addressChecking": "Adres kontrol ediliyor...",
+      "verifyAddress": "Adresi doğrula"
     }
   },
   "settings": {

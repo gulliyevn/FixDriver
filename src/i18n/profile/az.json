@@ -68,7 +68,11 @@
       "nameRequired": "Ünvan adını daxil edin",
       "addressRequired": "Ünvanı daxil edin",
       "mapTitle": "Ünvan seçin",
-      "mapDone": "Hazır"
+      "mapDone": "Hazır",
+      "addressValid": "Ünvan tapıldı",
+      "addressInvalid": "Ünvan tapılmadı",
+      "addressChecking": "Ünvan yoxlanılır...",
+      "verifyAddress": "Ünvanı yoxla"
     }
   },
   "settings": {

@@ -68,7 +68,11 @@
       "nameRequired": "Введите название адреса",
       "addressRequired": "Введите адрес",
       "mapTitle": "Выберите адрес",
-      "mapDone": "Готово"
+      "mapDone": "Готово",
+      "addressValid": "Адрес найден",
+      "addressInvalid": "Адрес не найден",
+      "addressChecking": "Проверка адреса...",
+      "verifyAddress": "Проверить адрес"
     }
   },
   "settings": {

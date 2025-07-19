@@ -32,6 +32,9 @@ export const AddressModalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  saveButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
   formContainer: {
     flex: 1,
     padding: 16,
@@ -148,6 +151,39 @@ export const AddressModalStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 32,
   },
+  // Стили для валидации адреса
+  validationContainer: {
+    marginTop: 8,
+  },
+  validationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  validationText: {
+    fontSize: 14,
+    marginLeft: 8,
+    color: '#666',
+  },
+  validationTextValid: {
+    color: '#4caf50',
+  },
+  validationTextInvalid: {
+    color: '#f44336',
+  },
+  verifyButton: {
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#2196f3',
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  verifyButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
 
 // Функции для динамических стилей с поддержкой темной темы
@@ -199,6 +235,9 @@ export const getAddressModalStyles = (isDark: boolean) => {
     },
     mapContainer: {
       backgroundColor: currentColors.background,
+    },
+    validationText: {
+      color: currentColors.textSecondary,
     },
     mapInstructions: {
       color: currentColors.textSecondary,

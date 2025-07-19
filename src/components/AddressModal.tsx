@@ -7,7 +7,8 @@ import {
   TextInput, 
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Address, getAddressCategoryOptions } from '../mocks/residenceMock';
@@ -49,6 +50,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
     latitude: number;
     longitude: number;
   } | null>(null);
+  const [addressValidation, setAddressValidation] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
 
   useEffect(() => {
     if (address && mode === 'edit') {
@@ -84,6 +86,8 @@ const AddressModal: React.FC<AddressModalProps> = ({
           
           if (data.display_name) {
             setAddressText(data.display_name);
+            // Автоматически верифицируем адрес, выбранный по карте
+            setAddressValidation('valid');
             return;
           }
         } catch (osmError) {
@@ -99,6 +103,8 @@ const AddressModal: React.FC<AddressModalProps> = ({
             if (yandexData.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.text) {
               const yandexAddress = yandexData.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
               setAddressText(yandexAddress);
+              // Автоматически верифицируем адрес, выбранный по карте
+              setAddressValidation('valid');
               return;
             }
           } catch (yandexError) {
@@ -151,11 +157,59 @@ const AddressModal: React.FC<AddressModalProps> = ({
         
         const formattedAddress = addressParts.join(', ');
         setAddressText(formattedAddress || 'Адрес не найден');
+        
+        // Автоматически верифицируем адрес, выбранный по карте
+        if (formattedAddress && formattedAddress !== 'Адрес не найден') {
+          setAddressValidation('valid');
+        }
       } else {
         setAddressText('Адрес не найден');
+        setAddressValidation('invalid');
       }
     } catch (error) {
       setAddressText('Ошибка получения адреса');
+      setAddressValidation('invalid');
+    }
+  };
+
+  const verifyAddress = async (address: string) => {
+    if (!address.trim()) {
+      setAddressValidation('idle');
+      return;
+    }
+
+    setAddressValidation('checking');
+    
+    try {
+      // Используем наш API для верификации
+      const { addressService } = await import('../services/addressService');
+      const isValid = await addressService.verifyAddress(address);
+      
+      setAddressValidation(isValid ? 'valid' : 'invalid');
+    } catch (error) {
+      setAddressValidation('invalid');
+    }
+  };
+
+  const handleDefaultChange = async (newIsDefault: boolean) => {
+    setIsDefault(newIsDefault);
+    
+    // Если устанавливаем как "по умолчанию", сбрасываем другие адреса той же категории
+    if (newIsDefault && category.trim() && setDefaultAddress) {
+      const currentDefaultAddress = addresses?.find(addr => 
+        addr.isDefault && 
+        addr.id !== address?.id && 
+        addr.category === category.trim()
+      );
+      
+      if (currentDefaultAddress) {
+        try {
+          await setDefaultAddress(currentDefaultAddress.id);
+        } catch (error) {
+          // Если не удалось сбросить, возвращаем галочку
+          setIsDefault(false);
+        }
+      }
     }
   };
 
@@ -169,20 +223,25 @@ const AddressModal: React.FC<AddressModalProps> = ({
       return;
     }
 
-    try {
-      // Если устанавливаем адрес по умолчанию, сначала сбрасываем адреса той же категории
-      if (isDefault) {
-        // Находим текущий адрес по умолчанию той же категории и сбрасываем его
-        const currentDefaultAddress = addresses?.find(addr => 
-          addr.isDefault && 
-          addr.id !== address?.id && 
-          addr.category === category.trim()
-        );
-        if (currentDefaultAddress && setDefaultAddress) {
-          await setDefaultAddress(currentDefaultAddress.id);
-        }
-      }
+    // Проверяем верификацию адреса перед сохранением
+    if (addressValidation !== 'valid') {
+      Alert.alert(
+        t('common.error'), 
+        t('profile.residence.modal.addressInvalid'),
+        [
+          {
+            text: t('common.ok'),
+            onPress: () => {
+              // Автоматически запускаем верификацию
+              verifyAddress(addressText);
+            }
+          }
+        ]
+      );
+      return;
+    }
 
+    try {
       onSave({
         title: title.trim(),
         address: addressText.trim(),
@@ -213,8 +272,19 @@ const AddressModal: React.FC<AddressModalProps> = ({
           <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
             {mode === 'add' ? t('profile.residence.modal.addTitle') : t('profile.residence.modal.editTitle')}
           </Text>
-          <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
-            <Ionicons name="checkmark" size={24} color="#fff" />
+          <TouchableOpacity 
+            onPress={handleSave} 
+            style={[
+              styles.saveButton, 
+              addressValidation !== 'valid' && styles.saveButtonDisabled
+            ]}
+            disabled={addressValidation !== 'valid'}
+          >
+            <Ionicons 
+              name="checkmark" 
+              size={24} 
+              color={addressValidation === 'valid' ? "#fff" : "#ccc"} 
+            />
           </TouchableOpacity>
         </View>
 
@@ -257,7 +327,19 @@ const AddressModal: React.FC<AddressModalProps> = ({
                 placeholder={t('profile.residence.modal.addressPlaceholder')}
                 placeholderTextColor={isDark ? '#999' : '#999'}
                 value={addressText}
-                onChangeText={setAddressText}
+                onChangeText={(text) => {
+                  setAddressText(text);
+                  // Сбрасываем валидацию при изменении текста
+                  if (addressValidation !== 'idle') {
+                    setAddressValidation('idle');
+                  }
+                }}
+                onBlur={() => {
+                  // Верифицируем адрес при потере фокуса
+                  if (addressText.trim()) {
+                    verifyAddress(addressText);
+                  }
+                }}
                 multiline
                 maxLength={200}
               />
@@ -271,11 +353,51 @@ const AddressModal: React.FC<AddressModalProps> = ({
                 <Ionicons name="map-outline" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
+            
+            {/* Индикатор верификации адреса */}
+            {addressText.trim() && (
+              <View style={styles.validationContainer}>
+                {addressValidation === 'checking' && (
+                  <View style={styles.validationItem}>
+                    <ActivityIndicator size="small" color="#2196f3" />
+                    <Text style={[styles.validationText, dynamicStyles.validationText]}>
+                      {t('profile.residence.modal.addressChecking')}
+                    </Text>
+                  </View>
+                )}
+                {addressValidation === 'valid' && (
+                  <View style={styles.validationItem}>
+                    <Ionicons name="checkmark-circle" size={16} color="#4caf50" />
+                    <Text style={[styles.validationText, styles.validationTextValid, dynamicStyles.validationText]}>
+                      {t('profile.residence.modal.addressValid')}
+                    </Text>
+                  </View>
+                )}
+                {addressValidation === 'invalid' && (
+                  <View style={styles.validationItem}>
+                    <Ionicons name="close-circle" size={16} color="#f44336" />
+                    <Text style={[styles.validationText, styles.validationTextInvalid, dynamicStyles.validationText]}>
+                      {t('profile.residence.modal.addressInvalid')}
+                    </Text>
+                  </View>
+                )}
+                {addressValidation === 'invalid' && (
+                  <TouchableOpacity 
+                    style={styles.verifyButton}
+                    onPress={() => verifyAddress(addressText)}
+                  >
+                    <Text style={styles.verifyButtonText}>
+                      {t('profile.residence.modal.verifyAddress')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
           </View>
 
           <TouchableOpacity
             style={styles.checkboxContainer}
-            onPress={() => setIsDefault(!isDefault)}
+            onPress={() => handleDefaultChange(!isDefault)}
           >
             <Ionicons 
               name={isDefault ? 'checkmark-circle' : 'ellipse-outline'} 

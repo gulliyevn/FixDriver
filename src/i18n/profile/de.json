@@ -68,7 +68,11 @@
       "nameRequired": "Adressname eingeben",
       "addressRequired": "Adresse eingeben",
       "mapTitle": "Adresse auswählen",
-      "mapDone": "Fertig"
+      "mapDone": "Fertig",
+      "addressValid": "Adresse gefunden",
+      "addressInvalid": "Adresse nicht gefunden",
+      "addressChecking": "Adresse wird überprüft...",
+      "verifyAddress": "Adresse überprüfen"
     }
   },
   "settings": {

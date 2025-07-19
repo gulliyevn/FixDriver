@@ -68,7 +68,11 @@
       "nameRequired": "أدخل اسم العنوان",
       "addressRequired": "أدخل العنوان",
       "mapTitle": "اختر العنوان",
-      "mapDone": "تم"
+      "mapDone": "تم",
+      "addressValid": "تم العثور على العنوان",
+      "addressInvalid": "العنوان غير موجود",
+      "addressChecking": "جاري التحقق من العنوان...",
+      "verifyAddress": "تحقق من العنوان"
     }
   },
   "settings": {
