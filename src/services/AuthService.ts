@@ -1,4 +1,4 @@
-import { createAuthMockUser } from '../mocks/auth';
+import { createAuthMockUser, findAuthUserByCredentials } from '../mocks/auth';
 import JWTService, { TokenResponse } from './JWTService';
 import { User, UserRole } from '../types/user';
 import { ENV_CONFIG, ConfigUtils } from '../config/environment';
@@ -78,6 +78,12 @@ export class AuthService {
    */
   static async login(email: string, password: string, authMethod?: string): Promise<AuthResponse> {
     try {
+      // В dev режиме всегда используем моки для тестирования
+      if (__DEV__) {
+        console.log('🔧 DEV mode: Using mock authentication');
+        return this.mockLogin(email, password);
+      }
+
       // Проверяем доступность сервера
       const isServerAvailable = await ConfigUtils.checkServerHealth();
       
@@ -279,26 +285,66 @@ export class AuthService {
 
   // Fallback методы для моков
   private static async mockLogin(email: string, password: string): Promise<AuthResponse> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    let role = UserRole.CLIENT;
-    if (email.includes('driver')) {
-      role = UserRole.DRIVER;
-    }
-    
-    const mockUser = createAuthMockUser({ email, role });
-    const tokens = await JWTService.forceRefreshTokens({
-      userId: mockUser.id,
-      email: mockUser.email,
-      role: mockUser.role,
-      phone: mockUser.phone,
-    });
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('🔐 Mock Login Attempt:', { email, password });
+      console.log('📋 Available mock users:');
+      console.log('   Client: client@example.com / password123');
+      console.log('   Driver: driver@example.com / password123');
+      
+      // Сначала пытаемся найти пользователя в готовых моках
+      console.log('🔍 Searching for existing user...');
+      const existingUser = findAuthUserByCredentials(email, password);
+      
+      if (existingUser) {
+        console.log('✅ Mock user found:', existingUser.email, existingUser.role);
+        console.log('🔑 Generating tokens for existing user...');
+        const tokens = await JWTService.forceRefreshTokens({
+          userId: existingUser.id,
+          email: existingUser.email,
+          role: existingUser.role,
+          phone: existingUser.phone,
+        });
+        console.log('🎫 Tokens generated successfully');
 
-    return {
-      success: true,
-      user: mockUser,
-      tokens,
-    };
+        return {
+          success: true,
+          user: existingUser,
+          tokens,
+        };
+      }
+      
+      console.log('⚠️ Mock user not found, creating new user');
+      // Если пользователь не найден, создаем нового
+      let role = UserRole.CLIENT;
+      if (email.includes('driver')) {
+        role = UserRole.DRIVER;
+      }
+      
+      console.log('👤 Creating new mock user with role:', role);
+      const mockUser = createAuthMockUser({ email, role });
+      console.log('🔑 Generating tokens for new user...');
+      const tokens = await JWTService.forceRefreshTokens({
+        userId: mockUser.id,
+        email: mockUser.email,
+        role: mockUser.role,
+        phone: mockUser.phone,
+      });
+      console.log('🎫 Tokens generated successfully for new user');
+
+      return {
+        success: true,
+        user: mockUser,
+        tokens,
+      };
+    } catch (error) {
+      console.error('❌ Mock login error:', error);
+      return {
+        success: false,
+        message: 'Mock login failed: ' + (error instanceof Error ? error.message : 'Unknown error'),
+      };
+    }
   }
 
   private static async mockRegister(userData: any, password: string): Promise<AuthResponse> {

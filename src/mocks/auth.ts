@@ -69,10 +69,19 @@ const mockPasswords: Record<string, string> = {
 
 // Функция для поиска пользователя по email и паролю
 export const findAuthUserByCredentials = (email: string, password: string): (Client | Driver) | null => {
+  console.log('🔍 findAuthUserByCredentials called with:', { email, password });
+  console.log('📋 Available mock users:', mockUsers.map(u => ({ email: u.email, role: u.role })));
+  console.log('🔑 Available passwords:', Object.keys(mockPasswords));
+  
   const user = mockUsers.find(user => user.email === email);
+  console.log('👤 Found user:', user ? { email: user.email, role: user.role } : 'null');
+  
   if (user && mockPasswords[email] === password) {
+    console.log('✅ User and password match!');
     return user;
   }
+  
+  console.log('❌ No match found. User exists:', !!user, 'Password correct:', mockPasswords[email] === password);
   return null;
 };
 

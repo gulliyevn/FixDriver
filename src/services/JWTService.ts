@@ -335,11 +335,23 @@ export class JWTService {
     role: 'client' | 'driver';
     phone: string;
   }): Promise<TokenResponse> {
-    // Сначала очищаем старые токены
-    await this.clearTokens();
-    
-    // Генерируем новые токены
-    return await this.generateTokens(userData);
+    try {
+      console.log('🔄 forceRefreshTokens called with:', userData);
+      
+      // Сначала очищаем старые токены
+      console.log('🧹 Clearing old tokens...');
+      await this.clearTokens();
+      
+      // Генерируем новые токены
+      console.log('🔑 Generating new tokens...');
+      const tokens = await this.generateTokens(userData);
+      console.log('✅ Tokens generated successfully');
+      
+      return tokens;
+    } catch (error) {
+      console.error('❌ forceRefreshTokens error:', error);
+      throw error;
+    }
   }
 
   /**

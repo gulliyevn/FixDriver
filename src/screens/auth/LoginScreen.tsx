@@ -107,19 +107,26 @@ const LoginScreen: React.FC = () => {
   };
 
   const handleAutoLogin = async (type: 'client' | 'driver') => {
+    console.log('🚀 Auto login attempt for:', type);
     setLoading(true);
     try {
       const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
       const password = 'password123';
       
+      console.log('📧 Using credentials:', { email, password });
+      
       const success = await login(email, password);
       
+      console.log('✅ Login result:', success);
+      
       if (success) {
-  
+        console.log('🎉 Auto login successful!');
       } else {
+        console.log('❌ Auto login failed');
         Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }
     } catch (error) {
+      console.error('💥 Auto login error:', error);
       Alert.alert(t('login.loginError'), t('login.loginErrorGeneric'));
     } finally {
       setLoading(false);
