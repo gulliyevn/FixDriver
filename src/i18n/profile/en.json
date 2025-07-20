@@ -109,13 +109,15 @@
       "title": "Security",
       "changePassword": "Change password",
       "passwordChangedSuccess": "Password successfully changed",
-      "passwordChangeError": "Failed to change password. Please try again.",
-      "biometric": "Biometric authentication"
+      "passwordChangeError": "Failed to change password. Please try again."
     },
     "data": {
       "title": "Data",
-      "export": "Export data",
-      "deleteAccount": "Delete account"
+      "deleteAccount": "Delete account",
+      "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+      "deleteAccountSuccess": "Account deleted",
+      "deleteAccountSuccessMessage": "Your account has been successfully deleted.",
+      "deleteAccountError": "Failed to delete account. Please try again."
     }
   },
   "editProfile": "Edit profile",

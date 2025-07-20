@@ -7,6 +7,8 @@ import { LanguageModalStyles as languageModalStyles, getLanguageModalColors } fr
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../hooks/useNotifications';
+import { useAuth } from '../../context/AuthContext';
+import { ProfileService } from '../../services/ProfileService';
 import { getCurrentColors } from '../../constants/colors';
 
 /**
@@ -24,6 +26,7 @@ import { getCurrentColors } from '../../constants/colors';
 const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation }) => {
   const { isDark, theme, toggleTheme } = useTheme();
   const { t, language, languageOptions, setLanguage } = useLanguage();
+  const { logout } = useAuth();
   const currentColors = getCurrentColors(isDark);
   const languageModalColors = getLanguageModalColors(isDark);
   const settingsColors = getSettingsScreenColors(isDark);
@@ -162,26 +165,62 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
             </View>
             <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.settingItem, settingsColors.settingItem]}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="finger-print" size={24} color={currentColors.primary} />
-              <Text style={[styles.settingLabel, settingsColors.settingLabel]}>{t('profile.settings.security.biometric')}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
-          </TouchableOpacity>
         </View>
 
         {/* Данные */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, settingsColors.sectionTitle]}>{t('profile.settings.data.title')}</Text>
-          <TouchableOpacity style={[styles.settingItem, settingsColors.settingItem]}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="download" size={24} color={currentColors.primary} />
-              <Text style={[styles.settingLabel, settingsColors.settingLabel]}>{t('profile.settings.data.export')}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.settingItem, settingsColors.settingItem]}>
+          <TouchableOpacity 
+            style={[styles.settingItem, settingsColors.settingItem]}
+            activeOpacity={0.7}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            onPress={() => {
+              console.log('Delete account button pressed');
+              Alert.alert(
+                t('profile.settings.data.deleteAccount'),
+                t('profile.settings.data.deleteAccountConfirm'),
+                [
+                  { text: t('common.cancel'), style: 'cancel' },
+                  { 
+                    text: t('profile.settings.data.deleteAccount'), 
+                    style: 'destructive',
+                                         onPress: async () => {
+                       try {
+                         // Вызываем API для удаления аккаунта
+                         const result = await ProfileService.deleteAccount();
+                         
+                         if (!result.success) {
+                           throw new Error(result.message || 'Failed to delete account');
+                         }
+                         
+                         Alert.alert(
+                           t('profile.settings.data.deleteAccountSuccess'),
+                           t('profile.settings.data.deleteAccountSuccessMessage'),
+                           [
+                             {
+                               text: t('common.ok'),
+                               onPress: async () => {
+                                 // Выходим из аккаунта после удаления
+                                 await logout();
+                                 // Перенаправляем на экран входа
+                                 navigation.navigate('Auth', { screen: 'Login' });
+                               }
+                             }
+                           ]
+                         );
+                       } catch (error) {
+                         Alert.alert(
+                           t('common.error'),
+                           t('profile.settings.data.deleteAccountError') || 'Не удалось удалить аккаунт',
+                           [{ text: t('common.ok') }]
+                         );
+                       }
+                     }
+                  }
+                ]
+              );
+            }}
+          >
             <View style={styles.settingInfo}>
               <Ionicons name="trash" size={24} color={currentColors.error} />
               <Text style={[styles.settingLabel, settingsColors.settingLabel, settingsColors.dangerText]}>{t('profile.settings.data.deleteAccount')}</Text>

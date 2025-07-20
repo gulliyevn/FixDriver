@@ -41,7 +41,8 @@
     "residence": "Residence",
     "help": "Help & rules",
     "about": "About app",
-    "logout": "Logout"
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to logout from your account?"
   },
   "schedule": {
     "title": "Schedule",
@@ -58,7 +59,14 @@
     "quickTopUp": "Quick top up",
     "transactionHistory": "Transaction history",
     "showAll": "Show all",
-    "pay": "Pay"
+    "pay": "Pay",
+    "cashback": {
+      "title": "Cashback",
+      "available": "Available to use",
+      "use": "Use",
+      "history": "History",
+      "description": "Accumulated cashback can be used to pay for trips"
+    }
   },
   "debts": {
     "title": "My debts",

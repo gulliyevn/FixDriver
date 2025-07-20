@@ -109,13 +109,15 @@
       "title": "Sécurité",
       "changePassword": "Changer le mot de passe",
       "passwordChangedSuccess": "Mot de passe modifié avec succès",
-      "passwordChangeError": "Impossible de modifier le mot de passe. Veuillez réessayer.",
-      "biometric": "Authentification biométrique"
+      "passwordChangeError": "Impossible de modifier le mot de passe. Veuillez réessayer."
     },
     "data": {
       "title": "Données",
-      "export": "Exporter les données",
-      "deleteAccount": "Supprimer le compte"
+      "deleteAccount": "Supprimer le compte",
+      "deleteAccountConfirm": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action ne peut pas être annulée.",
+      "deleteAccountSuccess": "Compte supprimé",
+      "deleteAccountSuccessMessage": "Votre compte a été supprimé avec succès.",
+      "deleteAccountError": "Impossible de supprimer le compte. Veuillez réessayer."
     }
   },
   "editProfile": "Modifier le profil",

@@ -109,13 +109,15 @@
       "title": "Безопасность",
       "changePassword": "Изменить пароль",
       "passwordChangedSuccess": "Пароль успешно изменен",
-      "passwordChangeError": "Не удалось изменить пароль. Попробуйте еще раз.",
-      "biometric": "Биометрическая аутентификация"
+      "passwordChangeError": "Не удалось изменить пароль. Попробуйте еще раз."
     },
     "data": {
       "title": "Данные",
-      "export": "Экспорт данных",
-      "deleteAccount": "Удалить аккаунт"
+      "deleteAccount": "Удалить аккаунт",
+      "deleteAccountConfirm": "Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.",
+      "deleteAccountSuccess": "Аккаунт удален",
+      "deleteAccountSuccessMessage": "Ваш аккаунт был успешно удален.",
+      "deleteAccountError": "Не удалось удалить аккаунт. Попробуйте еще раз."
     }
   },
   "editProfile": "Редактировать профиль",

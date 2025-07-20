@@ -41,7 +41,8 @@
     "residence": "Wohnsitz",
     "help": "Hilfe & Regeln",
     "about": "Über die App",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "logoutConfirm": "Sind Sie sicher, dass Sie sich von Ihrem Konto abmelden möchten?"
   },
   "schedule": {
     "title": "Zeitplan",
@@ -58,7 +59,14 @@
     "quickTopUp": "Schnell aufladen",
     "transactionHistory": "Transaktionshistorie",
     "showAll": "Alle anzeigen",
-    "pay": "Zahlen"
+    "pay": "Zahlen",
+    "cashback": {
+      "title": "Cashback",
+      "available": "Verfügbar zur Nutzung",
+      "use": "Verwenden",
+      "history": "Verlauf",
+      "description": "Gesammeltes Cashback kann für Fahrten verwendet werden"
+    }
   },
   "debts": {
     "title": "Meine Schulden",

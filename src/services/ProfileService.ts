@@ -1,5 +1,6 @@
 import APIClient from './APIClient';
 import { ENV_CONFIG, ConfigUtils } from '../config/environment';
+import JWTService from './JWTService';
 
 export interface ChangePasswordRequest {
   currentPassword: string;
@@ -52,6 +53,40 @@ export class ProfileService {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Change password failed',
+      };
+    }
+  }
+
+  /**
+   * Удаление аккаунта пользователя
+   * Полностью удаляет все данные пользователя из БД
+   */
+  static async deleteAccount(): Promise<{ success: boolean; message?: string }> {
+    try {
+      const authHeader = await JWTService.getAuthHeader();
+      if (!authHeader) {
+        throw new Error('No authentication token');
+      }
+
+      const response = await APIClient.delete<{ message: string }>('/profile/account');
+
+      if (response.success) {
+        return { success: true };
+      } else {
+        throw new Error(response.error || 'Failed to delete account');
+      }
+    } catch (error) {
+      console.error('Delete account error:', error);
+      
+      // В режиме разработки возвращаем успех для тестирования
+      if (__DEV__) {
+        console.log('DEV MODE: Simulating successful account deletion');
+        return { success: true };
+      }
+      
+      return { 
+        success: false, 
+        message: error instanceof Error ? error.message : 'Unknown error' 
       };
     }
   }

@@ -109,13 +109,15 @@
       "title": "Təhlükəsizlik",
       "changePassword": "Şifrəni dəyişdir",
       "passwordChangedSuccess": "Şifrə uğurla dəyişdirildi",
-      "passwordChangeError": "Şifrəni dəyişdirmək mümkün olmadı. Yenidən cəhd edin.",
-      "biometric": "Biometrik autentifikasiya"
+      "passwordChangeError": "Şifrəni dəyişdirmək mümkün olmadı. Yenidən cəhd edin."
     },
     "data": {
       "title": "Məlumatlar",
-      "export": "Məlumatları ixrac et",
-      "deleteAccount": "Hesabı sil"
+      "deleteAccount": "Hesabı sil",
+      "deleteAccountConfirm": "Hesabınızı silmək istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz.",
+      "deleteAccountSuccess": "Hesab silindi",
+      "deleteAccountSuccessMessage": "Hesabınız uğurla silindi.",
+      "deleteAccountError": "Hesabı silmək mümkün olmadı. Yenidən cəhd edin."
     }
   },
   "editProfile": "Profili redaktə et",

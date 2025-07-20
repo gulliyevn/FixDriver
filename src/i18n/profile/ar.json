@@ -109,13 +109,15 @@
       "title": "الأمان",
       "changePassword": "تغيير كلمة المرور",
       "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح",
-      "passwordChangeError": "فشل في تغيير كلمة المرور. يرجى المحاولة مرة أخرى.",
-      "biometric": "المصادقة البيومترية"
+      "passwordChangeError": "فشل في تغيير كلمة المرور. يرجى المحاولة مرة أخرى."
     },
     "data": {
       "title": "البيانات",
-      "export": "تصدير البيانات",
-      "deleteAccount": "حذف الحساب"
+      "deleteAccount": "حذف الحساب",
+      "deleteAccountConfirm": "هل أنت متأكد من أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteAccountSuccess": "تم حذف الحساب",
+      "deleteAccountSuccessMessage": "تم حذف حسابك بنجاح.",
+      "deleteAccountError": "فشل في حذف الحساب. يرجى المحاولة مرة أخرى."
     }
   },
   "editProfile": "تعديل الملف الشخصي",

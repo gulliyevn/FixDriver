@@ -109,13 +109,15 @@
       "title": "Güvenlik",
       "changePassword": "Şifre değiştir",
       "passwordChangedSuccess": "Şifre başarıyla değiştirildi",
-      "passwordChangeError": "Şifre değiştirilemedi. Lütfen tekrar deneyin.",
-      "biometric": "Biyometrik kimlik doğrulama"
+      "passwordChangeError": "Şifre değiştirilemedi. Lütfen tekrar deneyin."
     },
     "data": {
       "title": "Veriler",
-      "export": "Veri dışa aktar",
-      "deleteAccount": "Hesabı sil"
+      "deleteAccount": "Hesabı sil",
+      "deleteAccountConfirm": "Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "deleteAccountSuccess": "Hesap silindi",
+      "deleteAccountSuccessMessage": "Hesabınız başarıyla silindi.",
+      "deleteAccountError": "Hesap silinemedi. Lütfen tekrar deneyin."
     }
   },
   "editProfile": "Profili düzenle",

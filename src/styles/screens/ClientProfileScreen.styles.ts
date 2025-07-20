@@ -170,6 +170,25 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // VIP стили
+  vipMenuItem: {
+    backgroundColor: '#fff8e1',
+    borderWidth: 1,
+    borderColor: '#FFD700',
+  },
+  vipContent: {
+    flex: 1,
+    marginRight: 8,
+  },
+  vipLabel: {
+    color: '#FF8F00',
+    fontWeight: '700',
+  },
+  vipDescription: {
+    fontSize: 13,
+    color: '#FF8F00',
+    marginTop: 2,
+  },
 });
 
 // Функция для получения динамических стилей в зависимости от темы
@@ -236,6 +255,16 @@ export const getClientProfileStyles = (isDark: boolean) => {
     },
     logout: {
       backgroundColor: currentColors.surface,
+    },
+    vipMenuItem: {
+      backgroundColor: isDark ? '#2a2a2a' : '#fff8e1',
+      borderColor: '#FFD700',
+    },
+    vipLabel: {
+      color: '#FF8F00',
+    },
+    vipDescription: {
+      color: '#FF8F00',
     },
   };
 }; 

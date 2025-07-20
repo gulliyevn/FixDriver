@@ -41,7 +41,8 @@
     "residence": "Residencia",
     "help": "Ayuda y reglas",
     "about": "Acerca de la app",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "logoutConfirm": "¿Está seguro de que desea cerrar sesión de su cuenta?"
   },
   "schedule": {
     "title": "Horario",
@@ -58,7 +59,14 @@
     "quickTopUp": "Recarga rápida",
     "transactionHistory": "Historial de transacciones",
     "showAll": "Mostrar todo",
-    "pay": "Pagar"
+    "pay": "Pagar",
+    "cashback": {
+      "title": "Cashback",
+      "available": "Disponible para usar",
+      "use": "Usar",
+      "history": "Historial",
+      "description": "El cashback acumulado se puede usar para pagar viajes"
+    }
   },
   "debts": {
     "title": "Mis deudas",

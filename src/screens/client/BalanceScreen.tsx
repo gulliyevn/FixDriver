@@ -132,6 +132,31 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           </View>
         </View>
 
+        {/* Cashback система */}
+        <View style={styles.cashbackSection}>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.cashback.title')}</Text>
+            <TouchableOpacity onPress={() => {}}>
+              <Text style={[styles.showAllText, dynamicStyles.showAllText]}>{t('client.balance.cashback.history')}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.cashbackCard, dynamicStyles.cashbackCard]}>
+            <View style={styles.cashbackInfo}>
+              <Ionicons name="gift" size={32} color={currentColors.primary} />
+              <View style={styles.cashbackText}>
+                <Text style={[styles.cashbackAmount, dynamicStyles.cashbackAmount]}>125 AZN</Text>
+                <Text style={[styles.cashbackLabel, dynamicStyles.cashbackLabel]}>{t('client.balance.cashback.available')}</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={[styles.cashbackButton, dynamicStyles.cashbackButton]} onPress={() => {}}>
+              <Text style={styles.cashbackButtonText}>{t('client.balance.cashback.use')}</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={[styles.cashbackDescription, dynamicStyles.cashbackDescription]}>
+            {t('client.balance.cashback.description')}
+          </Text>
+        </View>
+
         {/* Быстрые суммы пополнения */}
         <View style={styles.quickTopUp}>
           <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>

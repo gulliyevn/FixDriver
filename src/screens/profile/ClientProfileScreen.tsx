@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -126,6 +126,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
         <Text style={[styles.menuLabel, dynamicStyles.menuLabel]}>{t('client.settings')}</Text>
         <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
       </TouchableOpacity>
+
       <TouchableOpacity style={[styles.menuItem, dynamicStyles.menuItem]} onPress={() => navigation.navigate('Residence')}>
         <Ionicons name="home" size={22} color={currentColors.primary} style={styles.menuIcon} />
         <Text style={[styles.menuLabel, dynamicStyles.menuLabel]}>{t('client.profile.residence')}</Text>
@@ -143,7 +144,23 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
         <Text style={[styles.menuVersion, dynamicStyles.menuVersion]}>1.0.0</Text>
       </TouchableOpacity>
       {/* Выйти */}
-      <TouchableOpacity style={[styles.logout, dynamicStyles.logout]} onPress={logout}>
+      <TouchableOpacity 
+        style={[styles.logout, dynamicStyles.logout]} 
+        onPress={() => {
+          Alert.alert(
+            t('client.profile.logout'),
+            t('client.profile.logoutConfirm'),
+            [
+              { text: t('common.cancel'), style: 'cancel' },
+              { 
+                text: t('client.profile.logout'), 
+                style: 'destructive',
+                onPress: logout
+              }
+            ]
+          );
+        }}
+      >
         <Text style={styles.logoutText}>{t('client.profile.logout')}</Text>
       </TouchableOpacity>
     </ScrollView>

@@ -183,6 +183,52 @@ export const BalanceScreenStyles = StyleSheet.create({
   statusBadgePending: {
     backgroundColor: '#ff9800',
   },
+  // Cashback система
+  cashbackSection: {
+    marginBottom: 24,
+  },
+  cashbackCard: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 12,
+  },
+  cashbackInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  cashbackText: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  cashbackAmount: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#4caf50',
+    marginBottom: 4,
+  },
+  cashbackLabel: {
+    fontSize: 14,
+    color: '#888',
+  },
+  cashbackButton: {
+    backgroundColor: '#4caf50',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  cashbackButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  cashbackDescription: {
+    fontSize: 14,
+    color: '#888',
+    lineHeight: 20,
+  },
 });
 
 // Функция для получения динамических стилей в зависимости от темы
@@ -221,6 +267,21 @@ export const getBalanceScreenStyles = (isDark: boolean) => {
       color: currentColors.text,
     },
     transactionDate: {
+      color: currentColors.textSecondary,
+    },
+    cashbackCard: {
+      backgroundColor: currentColors.surface,
+    },
+    cashbackAmount: {
+      color: currentColors.success,
+    },
+    cashbackLabel: {
+      color: currentColors.textSecondary,
+    },
+    cashbackButton: {
+      backgroundColor: currentColors.success,
+    },
+    cashbackDescription: {
       color: currentColors.textSecondary,
     },
   };

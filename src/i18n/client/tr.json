@@ -41,7 +41,8 @@
     "residence": "İkamet",
     "help": "Yardım ve kurallar",
     "about": "Uygulama hakkında",
-    "logout": "Çıkış"
+    "logout": "Çıkış",
+    "logoutConfirm": "Hesabınızdan çıkmak istediğinizden emin misiniz?"
   },
   "schedule": {
     "title": "Program",
@@ -58,7 +59,14 @@
     "quickTopUp": "Hızlı yükleme",
     "transactionHistory": "İşlem geçmişi",
     "showAll": "Tümünü göster",
-    "pay": "Öde"
+    "pay": "Öde",
+    "cashback": {
+      "title": "Nakit iade",
+      "available": "Kullanım için mevcut",
+      "use": "Kullan",
+      "history": "Geçmiş",
+      "description": "Biriken nakit iade seyahatler için ödeme yapmak için kullanılabilir"
+    }
   },
   "debts": {
     "title": "Borçlarım",

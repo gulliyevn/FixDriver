@@ -41,7 +41,8 @@
     "residence": "Résidence",
     "help": "Aide et règles",
     "about": "À propos de l'app",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?"
   },
   "schedule": {
     "title": "Planning",
@@ -58,7 +59,14 @@
     "quickTopUp": "Recharge rapide",
     "transactionHistory": "Historique des transactions",
     "showAll": "Afficher tout",
-    "pay": "Payer"
+    "pay": "Payer",
+    "cashback": {
+      "title": "Cashback",
+      "available": "Disponible à utiliser",
+      "use": "Utiliser",
+      "history": "Historique",
+      "description": "Le cashback accumulé peut être utilisé pour payer les trajets"
+    }
   },
   "debts": {
     "title": "Mes dettes",

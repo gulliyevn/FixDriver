@@ -109,13 +109,15 @@
       "title": "Seguridad",
       "changePassword": "Cambiar contraseña",
       "passwordChangedSuccess": "Contraseña cambiada exitosamente",
-      "passwordChangeError": "No se pudo cambiar la contraseña. Inténtalo de nuevo.",
-      "biometric": "Autenticación biométrica"
+      "passwordChangeError": "No se pudo cambiar la contraseña. Inténtalo de nuevo."
     },
     "data": {
       "title": "Datos",
-      "export": "Exportar datos",
-      "deleteAccount": "Eliminar cuenta"
+      "deleteAccount": "Eliminar cuenta",
+      "deleteAccountConfirm": "¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer.",
+      "deleteAccountSuccess": "Cuenta eliminada",
+      "deleteAccountSuccessMessage": "Su cuenta ha sido eliminada exitosamente.",
+      "deleteAccountError": "No se pudo eliminar la cuenta. Inténtelo de nuevo."
     }
   },
   "editProfile": "Editar perfil",

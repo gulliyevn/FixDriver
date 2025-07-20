@@ -41,7 +41,8 @@
     "residence": "Yaşayış yeri",
     "help": "Kömək və qaydalar",
     "about": "Tətbiq haqqında",
-    "logout": "Çıxış"
+    "logout": "Çıxış",
+    "logoutConfirm": "Hesabınızdan çıxmaq istədiyinizə əminsiniz?"
   },
   "schedule": {
     "title": "Cədvəl",
@@ -58,7 +59,14 @@
     "quickTopUp": "Tez yüklə",
     "transactionHistory": "Əməliyyat tarixçəsi",
     "showAll": "Hamısını göstər",
-    "pay": "Ödə"
+    "pay": "Ödə",
+    "cashback": {
+      "title": "Keşbek",
+      "available": "İstifadə üçün mövcud",
+      "use": "İstifadə et",
+      "history": "Tarixçə",
+      "description": "Yığılmış keşbek səyahətlər üçün ödəniş etmək üçün istifadə edilə bilər"
+    }
   },
   "debts": {
     "title": "Borclarım",

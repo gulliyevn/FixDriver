@@ -109,13 +109,15 @@
       "title": "Sicherheit",
       "changePassword": "Passwort ändern",
       "passwordChangedSuccess": "Passwort erfolgreich geändert",
-      "passwordChangeError": "Passwort konnte nicht geändert werden. Bitte versuchen Sie es erneut.",
-      "biometric": "Biometrische Authentifizierung"
+      "passwordChangeError": "Passwort konnte nicht geändert werden. Bitte versuchen Sie es erneut."
     },
     "data": {
       "title": "Daten",
-      "export": "Daten exportieren",
-      "deleteAccount": "Konto löschen"
+      "deleteAccount": "Konto löschen",
+      "deleteAccountConfirm": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteAccountSuccess": "Konto gelöscht",
+      "deleteAccountSuccessMessage": "Ihr Konto wurde erfolgreich gelöscht.",
+      "deleteAccountError": "Konto konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
     }
   },
   "editProfile": "Profil bearbeiten",
