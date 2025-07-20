@@ -112,8 +112,8 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
         <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
       </TouchableOpacity>
       <TouchableOpacity style={[styles.menuItem, dynamicStyles.menuItem]} onPress={() => navigation.navigate('Cars')}>
-        <Ionicons name="car" size={22} color={currentColors.primary} style={styles.menuIcon} />
-        <Text style={[styles.menuLabel, dynamicStyles.menuLabel]}>{t('client.profile.cars')}</Text>
+        <Ionicons name="time" size={22} color={currentColors.primary} style={styles.menuIcon} />
+        <Text style={[styles.menuLabel, dynamicStyles.menuLabel]}>{t('client.profile.trips')}</Text>
         <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
       </TouchableOpacity>
       <TouchableOpacity style={[styles.menuItem, dynamicStyles.menuItem]} onPress={() => navigation.navigate('PaymentHistory')}>

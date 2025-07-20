@@ -36,13 +36,23 @@
     "balance": "My balance",
     "cards": "Cards",
     "debts": "My debts",
-    "cars": "Cars",
+    "trips": "Trips",
     "paymentHistory": "Payment history",
-    "residence": "Residence",
+    "residence": "Location",
     "help": "Help & rules",
     "about": "About app",
     "logout": "Logout",
-    "logoutConfirm": "Are you sure you want to logout from your account?"
+    "logoutConfirm": "Are you sure you want to logout from your account?",
+    "vip": {
+      "title": "VIP Status",
+      "description": "Priority service and bonuses",
+      "upgrade": "Upgrade",
+      "benefits": "Benefits",
+      "priority": "Priority booking",
+      "bestDrivers": "Best drivers",
+      "extraCashback": "Extra cashback",
+      "premiumSupport": "Premium support"
+    }
   },
   "schedule": {
     "title": "Schedule",
@@ -144,7 +154,7 @@
     "contactSupport": "Contact support"
   },
   "residence": {
-    "title": "Residence",
+    "title": "Location",
     "default": "Default"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "This year",
       "reset": "Reset",
       "apply": "Apply"
+    }
+  },
+  "trips": {
+    "title": "Trips",
+    "noTrips": "No trips",
+    "emptyDescription": "Trip history is empty",
+    "driver": "Driver",
+    "status": {
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "scheduled": "Scheduled"
+    },
+    "filter": {
+      "title": "Filter",
+      "tripType": "Trip type",
+      "status": "Status",
+      "period": "Period",
+      "allTypes": "All types",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "scheduled": "Scheduled",
+      "allStatuses": "All statuses",
+      "allTime": "All time",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "reset": "Reset",
+      "apply": "Apply"
+    },
+    "mock": {
+      "tripToCityCenter": "Trip to city center",
+      "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",
+      "tripToAirport": "Trip to airport",
+      "routeCenterAirport": "Route: center - Heydar Aliyev airport",
+      "tripToMall": "Trip to mall",
+      "routeToMall": "Route: home - shopping center",
+      "tripToWork": "Trip to work",
+      "routeToWork": "Route: home - office"
     }
   }
 }

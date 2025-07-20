@@ -1,74 +1,106 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ClientScreenProps } from '../../types/navigation';
 import { CarsScreenStyles as styles, getCarsScreenStyles } from '../../styles/screens/profile/CarsScreen.styles';
-import { mockCars } from '../../mocks/carsMock';
+import { getMockTrips } from '../../mocks/tripsMock';
+import TripsFilter, { TripFilter } from '../../components/TripsFilter';
+import { colors } from '../../constants/colors';
 
 /**
- * Экран управления автомобилями
+ * Экран истории поездок
  * 
  * TODO для интеграции с бэкендом:
- * 1. Заменить useState на useCars hook
- * 2. Подключить CarsService для API вызовов
+ * 1. Заменить useState на useTrips hook
+ * 2. Подключить TripsService для API вызовов
  * 3. Добавить обработку ошибок и загрузки
- * 4. Реализовать добавление/удаление автомобилей
- * 5. Подключить проверку документов
- * 6. Добавить валидацию данных
+ * 4. Реализовать фильтрацию и поиск
+ * 5. Добавить экспорт данных
+ * 6. Подключить пагинацию
  */
 
 const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
+  const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getCarsScreenStyles(isDark);
-  const [cars] = useState(mockCars);
+  
 
-  const handleAddCar = () => {
-    Alert.alert(
-      'Добавить автомобиль',
-      'Выберите способ добавления',
-      [
-        { text: 'Сканировать документы', onPress: () => {} },
-        { text: 'Ввести вручную', onPress: () => {} },
-        { text: 'Отмена', style: 'cancel' }
-      ]
-    );
-  };
+  
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState<TripFilter>({
+    status: 'all',
+    dateRange: 'all'
+  });
+  
+  const allTrips = useMemo(() => getMockTrips(t), [t]);
+  
+  const filteredTrips = useMemo(() => {
+    let filtered = allTrips;
+    
+    // Фильтр по статусу
+    if (currentFilter.status !== 'all') {
+      filtered = filtered.filter(trip => trip.status === currentFilter.status);
+    }
+    
+    // Фильтр по дате (упрощенная логика для мок данных)
+    if (currentFilter.dateRange !== 'all') {
+      switch (currentFilter.dateRange) {
+        case 'today':
+          filtered = filtered.filter((_, index) => index === 0);
+          break;
+        case 'week':
+          filtered = filtered.filter((_, index) => index < 2);
+          break;
+        case 'month':
+          filtered = filtered.filter((_, index) => index < 3);
+          break;
+        case 'year':
+          break;
+      }
+    }
+    
+    return filtered;
+  }, [allTrips, currentFilter]);
 
-  const handleDeleteCar = (carId: string) => {
-    Alert.alert(
-      'Удалить автомобиль',
-      'Вы уверены, что хотите удалить этот автомобиль?',
-      [
-        { text: 'Удалить', style: 'destructive', onPress: () => {} },
-        { text: 'Отмена', style: 'cancel' }
-      ]
-    );
-  };
-
-  const getCarStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return '#4caf50';
-      case 'pending':
-        return '#ff9800';
-      case 'expired':
-        return '#e53935';
+  const getTripIcon = (type: string) => {
+    switch (type) {
+      case 'completed':
+        return 'checkmark-circle';
+      case 'cancelled':
+        return 'close-circle';
+      case 'scheduled':
+        return 'time';
       default:
-        return '#888';
+        return 'car';
     }
   };
 
-  const getCarStatusText = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'Активен';
-      case 'pending':
-        return 'На проверке';
-      case 'expired':
-        return 'Истек';
+  const getTripColor = (type: string) => {
+    switch (type) {
+      case 'completed':
+        return '#4caf50';
+      case 'cancelled':
+        return '#e53935';
+      case 'scheduled':
+        return '#2196f3';
       default:
-        return 'Неизвестно';
+        return '#003366';
+    }
+  };
+
+  const getTripStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return '#4caf50';
+      case 'cancelled':
+        return '#e53935';
+      case 'scheduled':
+        return '#2196f3';
+      default:
+        return '#888';
     }
   };
 
@@ -76,77 +108,79 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
     <View style={[styles.container, dynamicStyles.container]}>
       <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#003366" />
+          <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>Мои автомобили</Text>
-        <TouchableOpacity onPress={handleAddCar} style={styles.addButton}>
-          <Ionicons name="add" size={24} color="#003366" />
+        <Text style={[styles.title, dynamicStyles.title]}>{t('client.trips.title')}</Text>
+        <TouchableOpacity 
+          style={styles.filterButton}
+          onPress={() => setFilterVisible(true)}
+        >
+          <Ionicons name="filter" size={24} color={currentColors.primary} />
         </TouchableOpacity>
       </View>
       
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {cars.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Ionicons name="car-outline" size={64} color="#ccc" />
-            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет добавленных автомобилей</Text>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={[styles.contentContainer, { paddingTop: 16 }]}
+        showsVerticalScrollIndicator={false}
+      >
+
+        {filteredTrips.length === 0 ? (
+          <View style={[styles.emptyState, { alignItems: 'center', justifyContent: 'center' }]}>
+            <Ionicons name="car-outline" size={64} color={currentColors.textSecondary} />
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('client.trips.noTrips')}</Text>
             <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
-              Добавьте автомобиль для работы водителем
+              {t('client.trips.emptyDescription')}
             </Text>
-            <TouchableOpacity style={styles.addCarButton} onPress={handleAddCar}>
-              <Text style={styles.addCarButtonText}>Добавить автомобиль</Text>
-            </TouchableOpacity>
           </View>
         ) : (
           <>
-            {cars.map((car) => (
-              <View key={car.id} style={[styles.carItem, dynamicStyles.carItem]}>
+            {filteredTrips.map((trip) => (
+              <View key={trip.id} style={[styles.carItem, dynamicStyles.carItem]}>
                 <View style={styles.carHeader}>
                   <View style={styles.carInfo}>
-                    <Ionicons name="car" size={32} color="#003366" />
+                    <Ionicons 
+                      name={getTripIcon(trip.type) as any} 
+                      size={24} 
+                      color={getTripColor(trip.type)} 
+                    />
                     <View style={styles.carDetails}>
-                      <Text style={[styles.carModel, dynamicStyles.carModel]}>{car.model}</Text>
-                      <Text style={[styles.carPlate, dynamicStyles.carPlate]}>{car.plateNumber}</Text>
+                      <Text style={[styles.carModel, dynamicStyles.carModel]}>{trip.title}</Text>
+                      <Text style={[styles.carPlate, dynamicStyles.carPlate]}>{trip.date} • {trip.time}</Text>
                     </View>
                   </View>
-                  <View style={[styles.statusBadge, { backgroundColor: getCarStatusColor(car.status) }]}>
-                    <Text style={styles.statusText}>{getCarStatusText(car.status)}</Text>
+                  <View style={styles.paymentAmount}>
+                    <Text style={[styles.amountText, { color: getTripColor(trip.type) }]}>
+                      {trip.amount}
+                    </Text>
+                    <View style={[styles.statusBadge, { backgroundColor: getTripStatusColor(trip.status) }]}>
+                      <Text style={styles.statusText}>
+                        {trip.status === 'completed' ? t('client.trips.status.completed') : 
+                         trip.status === 'cancelled' ? t('client.trips.status.cancelled') : t('client.trips.status.scheduled')}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-                <View style={styles.carSpecs}>
-                  <View style={styles.specItem}>
-                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Год выпуска</Text>
-                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.year}</Text>
-                  </View>
-                  <View style={styles.specItem}>
-                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Цвет</Text>
-                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.color}</Text>
-                  </View>
-                  <View style={styles.specItem}>
-                    <Text style={[styles.specLabel, dynamicStyles.specLabel]}>Тип</Text>
-                    <Text style={[styles.specValue, dynamicStyles.specValue]}>{car.type}</Text>
-                  </View>
-                </View>
-                <View style={styles.carActions}>
-                  <TouchableOpacity style={styles.editButton}>
-                    <Text style={styles.editButtonText}>Редактировать</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={styles.deleteButton}
-                    onPress={() => handleDeleteCar(car.id)}
-                  >
-                    <Text style={styles.deleteButtonText}>Удалить</Text>
-                  </TouchableOpacity>
-                </View>
+                {trip.description && (
+                  <Text style={[styles.carPlate, dynamicStyles.carPlate]}>{trip.description}</Text>
+                )}
+                {trip.driver && (
+                  <Text style={[styles.carPlate, dynamicStyles.carPlate]}>
+                    {t('client.trips.driver')}: {trip.driver}
+                  </Text>
+                )}
               </View>
             ))}
-            
-            <TouchableOpacity style={[styles.addNewCarButton, dynamicStyles.addNewCarButton]} onPress={handleAddCar}>
-              <Ionicons name="add-circle-outline" size={24} color="#003366" />
-              <Text style={[styles.addNewCarText, dynamicStyles.addNewCarText]}>Добавить новый автомобиль</Text>
-            </TouchableOpacity>
           </>
         )}
       </ScrollView>
+      
+      <TripsFilter
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        onApply={setCurrentFilter}
+        currentFilter={currentFilter}
+      />
     </View>
   );
 };

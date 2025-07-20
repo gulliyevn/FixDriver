@@ -25,7 +25,7 @@
   "languageChanged": "Idioma cambiado",
   "languageChangeSuccess": "Idioma cambiado exitosamente. Reinicia la aplicación para aplicar los cambios.",
   "residence": {
-    "title": "Residencia",
+    "title": "Ubicación",
     "loading": "Cargando direcciones...",
     "retry": "Reintentar",
     "emptyState": "Aún no tienes direcciones guardadas\nAgrega tu primera dirección para pedidos rápidos de viajes",

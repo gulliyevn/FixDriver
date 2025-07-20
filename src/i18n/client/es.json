@@ -36,13 +36,23 @@
     "balance": "Mi saldo",
     "cards": "Tarjetas",
     "debts": "Mis deudas",
-    "cars": "Coches",
+    "trips": "Viajes",
     "paymentHistory": "Historial de pagos",
-    "residence": "Residencia",
+    "residence": "Ubicación",
     "help": "Ayuda y reglas",
     "about": "Acerca de la app",
     "logout": "Cerrar sesión",
-    "logoutConfirm": "¿Está seguro de que desea cerrar sesión de su cuenta?"
+    "logoutConfirm": "¿Está seguro de que desea cerrar sesión de su cuenta?",
+    "vip": {
+      "title": "Estado VIP",
+      "description": "Servicio prioritario y bonificaciones",
+      "upgrade": "Mejorar",
+      "benefits": "Beneficios",
+      "priority": "Reserva prioritaria",
+      "bestDrivers": "Mejores conductores",
+      "extraCashback": "Cashback extra",
+      "premiumSupport": "Soporte premium"
+    }
   },
   "schedule": {
     "title": "Horario",
@@ -144,7 +154,7 @@
     "contactSupport": "Contactar soporte"
   },
   "residence": {
-    "title": "Residencia",
+    "title": "Ubicación",
     "default": "Predeterminado"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "Este año",
       "reset": "Restablecer",
       "apply": "Aplicar"
+    }
+  },
+  "trips": {
+    "title": "Viajes",
+    "noTrips": "No hay viajes",
+    "emptyDescription": "El historial de viajes está vacío",
+    "driver": "Conductor",
+    "status": {
+      "completed": "Completado",
+      "cancelled": "Cancelado",
+      "scheduled": "Programado"
+    },
+    "filter": {
+      "title": "Filtro",
+      "tripType": "Tipo de viaje",
+      "status": "Estado",
+      "period": "Período",
+      "allTypes": "Todos los tipos",
+      "completed": "Completados",
+      "cancelled": "Cancelados",
+      "scheduled": "Programados",
+      "allStatuses": "Todos los estados",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisYear": "Este año",
+      "reset": "Restablecer",
+      "apply": "Aplicar"
+    },
+    "mock": {
+      "tripToCityCenter": "Viaje al centro de la ciudad",
+      "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",
+      "tripToAirport": "Viaje al aeropuerto",
+      "routeCenterAirport": "Ruta: centro - Aeropuerto Heydar Aliyev",
+      "tripToMall": "Viaje al centro comercial",
+      "routeToMall": "Ruta: casa - centro comercial",
+      "tripToWork": "Viaje al trabajo",
+      "routeToWork": "Ruta: casa - oficina"
     }
   }
 }

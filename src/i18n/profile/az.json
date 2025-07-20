@@ -25,7 +25,7 @@
   "languageChanged": "Dil dəyişdirildi",
   "languageChangeSuccess": "Dil uğurla dəyişdirildi. Dəyişiklikləri tətbiq etmək üçün tətbiqi yenidən başladın.",
   "residence": {
-    "title": "Yaşayış yeri",
+    "title": "Məkan",
     "loading": "Ünvanlar yüklənir...",
     "retry": "Yenidən cəhd et",
     "emptyState": "Hələ heç bir saxlanmış ünvanınız yoxdur\nTez səyahət sifariş etmək üçün ilk ünvanınızı əlavə edin",

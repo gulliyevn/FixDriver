@@ -36,9 +36,8 @@
     "balance": "Мой баланс",
     "cards": "Карты",
     "debts": "Мои долги",
-    "cars": "Автомобили",
     "paymentHistory": "История платежей",
-    "residence": "Резиденция",
+    "residence": "Локация",
     "help": "Помощь и правила",
     "about": "О приложении",
     "logout": "Выйти",
@@ -95,19 +94,7 @@
     "expires": "Действует до",
     "addNewCard": "Добавить новую карту"
   },
-  "cars": {
-    "title": "Мои автомобили",
-    "noCars": "Нет добавленных автомобилей",
-    "addCar": "Добавить автомобиль",
-    "scanDocuments": "Сканировать документы",
-    "enterManually": "Ввести вручную",
-    "delete": "Удалить",
-    "year": "Год выпуска",
-    "color": "Цвет",
-    "type": "Тип",
-    "edit": "Редактировать",
-    "addNewCar": "Добавить новый автомобиль"
-  },
+
   "plus": {
     "title": "Бронирование",
     "step1": {
@@ -154,7 +141,7 @@
     "contactSupport": "Написать в поддержку"
   },
   "residence": {
-    "title": "Резиденция",
+    "title": "Локация",
     "default": "По умолчанию"
   },
   "paymentHistory": {
@@ -193,6 +180,45 @@
       "thisYear": "В этом году",
       "reset": "Сбросить",
       "apply": "Применить"
+    }
+  },
+  "trips": {
+    "title": "Поездки",
+    "noTrips": "Нет поездок",
+    "emptyDescription": "История поездок пуста",
+    "driver": "Водитель",
+    "status": {
+      "completed": "Завершена",
+      "cancelled": "Отменена",
+      "scheduled": "Запланирована"
+    },
+    "filter": {
+      "title": "Фильтр",
+      "tripType": "Тип поездки",
+      "status": "Статус",
+      "period": "Период",
+      "allTypes": "Все типы",
+      "completed": "Завершенные",
+      "cancelled": "Отмененные",
+      "scheduled": "Запланированные",
+      "allStatuses": "Все статусы",
+      "allTime": "Все время",
+      "today": "Сегодня",
+      "thisWeek": "На этой неделе",
+      "thisMonth": "В этом месяце",
+      "thisYear": "В этом году",
+      "reset": "Сбросить",
+      "apply": "Применить"
+    },
+    "mock": {
+      "tripToCityCenter": "Поездка в центр города",
+      "routeLeninGagarin": "Маршрут: ул. Ленина - ул. Гагарина",
+      "tripToAirport": "Поездка в аэропорт",
+      "routeCenterAirport": "Маршрут: центр - аэропорт Гейдар Алиев",
+      "tripToMall": "Поездка в торговый центр",
+      "routeToMall": "Маршрут: дом - торговый центр",
+      "tripToWork": "Поездка на работу",
+      "routeToWork": "Маршрут: дом - офис"
     }
   }
 }

@@ -3,22 +3,21 @@ import { View, Text, TouchableOpacity, Modal, ScrollView, Animated } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
-import { PaymentHistoryFilterStyles as styles, getPaymentHistoryFilterStyles } from '../styles/components/PaymentHistoryFilter.styles';
+import { TripsFilterStyles as styles, getTripsFilterStyles } from '../styles/components/TripsFilter.styles';
 
-export interface PaymentFilter {
-  type: 'all' | 'trip' | 'topup' | 'refund' | 'fee';
-  status: 'all' | 'completed' | 'pending' | 'failed';
+export interface TripFilter {
+  status: 'all' | 'completed' | 'cancelled' | 'scheduled';
   dateRange: 'all' | 'today' | 'week' | 'month' | 'year';
 }
 
-interface PaymentHistoryFilterProps {
+interface TripsFilterProps {
   visible: boolean;
   onClose: () => void;
-  onApply: (filter: PaymentFilter) => void;
-  currentFilter: PaymentFilter;
+  onApply: (filter: TripFilter) => void;
+  currentFilter: TripFilter;
 }
 
-const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
+const TripsFilter: React.FC<TripsFilterProps> = ({
   visible,
   onClose,
   onApply,
@@ -26,46 +25,43 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
-  const dynamicStyles = getPaymentHistoryFilterStyles(isDark);
-  const [filter, setFilter] = useState<PaymentFilter>(currentFilter);
+  const dynamicStyles = getTripsFilterStyles(isDark);
+  const [filter, setFilter] = useState<TripFilter>({
+    status: currentFilter.status,
+    dateRange: currentFilter.dateRange
+  });
   
   const slideAnim = useRef(new Animated.Value(300)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  const paymentTypes = [
-    { key: 'all', label: t('client.paymentHistory.filter.allTypes'), icon: 'list' },
-    { key: 'trip', label: t('client.paymentHistory.filter.trips'), icon: 'car' },
-    { key: 'topup', label: t('client.paymentHistory.filter.topUps'), icon: 'add-circle' },
-    { key: 'refund', label: t('client.paymentHistory.filter.refunds'), icon: 'refresh-circle' },
-    { key: 'fee', label: t('client.paymentHistory.filter.fees'), icon: 'card' }
-  ];
-
-  const statuses = [
-    { key: 'all', label: t('client.paymentHistory.filter.allStatuses'), icon: 'checkmark-circle' },
-    { key: 'completed', label: t('client.paymentHistory.status.completed'), icon: 'checkmark-circle' },
-    { key: 'pending', label: t('client.paymentHistory.status.pending'), icon: 'time' },
-    { key: 'failed', label: t('client.paymentHistory.status.failed'), icon: 'close-circle' }
-  ];
-
-  const dateRanges = [
-    { key: 'all', label: t('client.paymentHistory.filter.allTime'), icon: 'calendar' },
-    { key: 'today', label: t('client.paymentHistory.filter.today'), icon: 'today' },
-    { key: 'week', label: t('client.paymentHistory.filter.thisWeek'), icon: 'calendar-outline' },
-    { key: 'month', label: t('client.paymentHistory.filter.thisMonth'), icon: 'calendar' },
-    { key: 'year', label: t('client.paymentHistory.filter.thisYear'), icon: 'calendar' }
-  ];
-
-  const handleApply = () => {
-    onApply(filter);
-    onClose();
-  };
-
+  
   // Инициализация анимации
   useEffect(() => {
     if (visible) {
       fadeAnim.setValue(1);
     }
   }, []);
+
+
+
+  const statuses = [
+    { key: 'all', label: t('client.trips.filter.allStatuses'), icon: 'checkmark-circle' },
+    { key: 'completed', label: t('client.trips.status.completed'), icon: 'checkmark-circle' },
+    { key: 'cancelled', label: t('client.trips.status.cancelled'), icon: 'close-circle' },
+    { key: 'scheduled', label: t('client.trips.status.scheduled'), icon: 'time' }
+  ];
+
+  const dateRanges = [
+    { key: 'all', label: t('client.trips.filter.allTime'), icon: 'calendar' },
+    { key: 'today', label: t('client.trips.filter.today'), icon: 'today' },
+    { key: 'week', label: t('client.trips.filter.thisWeek'), icon: 'calendar-outline' },
+    { key: 'month', label: t('client.trips.filter.thisMonth'), icon: 'calendar' },
+    { key: 'year', label: t('client.trips.filter.thisYear'), icon: 'calendar' }
+  ];
+
+  const handleApply = () => {
+    onApply(filter);
+    onClose();
+  };
 
   // Анимация появления/скрытия
   useEffect(() => {
@@ -92,8 +88,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
   }, [visible, fadeAnim, slideAnim]);
 
   const handleReset = () => {
-    const resetFilter: PaymentFilter = {
-      type: 'all',
+    const resetFilter: TripFilter = {
       status: 'all',
       dateRange: 'all'
     };
@@ -123,7 +118,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
         ]}>
           <View style={styles.header}>
             <Text style={[styles.title, dynamicStyles.title]}>
-              {t('client.paymentHistory.filter.title')}
+              {t('client.trips.filter.title')}
             </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={dynamicStyles.title.color} />
@@ -131,52 +126,10 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Тип платежа */}
-            <View style={styles.section}>
-              <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
-                {t('client.paymentHistory.filter.paymentType')}
-              </Text>
-              {paymentTypes.map((type) => (
-                <TouchableOpacity
-                  key={type.key}
-                  style={[
-                    styles.optionContainer,
-                    filter.type === type.key 
-                      ? [styles.optionContainerSelected, dynamicStyles.optionContainerSelected]
-                      : styles.optionContainerUnselected
-                  ]}
-                  onPress={() => setFilter({ ...filter, type: type.key as any })}
-                >
-                  <Ionicons 
-                    name={type.icon as any} 
-                    size={20} 
-                    color={filter.type === type.key ? dynamicStyles.optionTextSelected.color : '#888'} 
-                    style={styles.optionIcon}
-                  />
-                  <Text style={[
-                    styles.optionText,
-                    filter.type === type.key 
-                      ? dynamicStyles.optionTextSelected
-                      : dynamicStyles.optionTextUnselected
-                  ]}>
-                    {type.label}
-                  </Text>
-                  {filter.type === type.key && (
-                    <Ionicons 
-                      name="checkmark" 
-                      size={20} 
-                      color={dynamicStyles.optionTextSelected.color} 
-                      style={styles.checkmark}
-                    />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </View>
-
             {/* Статус */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
-                {t('client.paymentHistory.filter.status')}
+                {t('client.trips.filter.status')}
               </Text>
               {statuses.map((status) => (
                 <TouchableOpacity
@@ -218,7 +171,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
             {/* Период */}
             <View style={styles.section}>
               <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
-                {t('client.paymentHistory.filter.period')}
+                {t('client.trips.filter.period')}
               </Text>
               {dateRanges.map((range) => (
                 <TouchableOpacity
@@ -265,7 +218,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
               onPress={handleReset}
             >
               <Text style={[styles.resetButtonText, dynamicStyles.resetButtonText]}>
-                {t('client.paymentHistory.filter.reset')}
+                {t('client.trips.filter.reset')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -273,7 +226,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
               onPress={handleApply}
             >
               <Text style={[styles.applyButtonText, dynamicStyles.applyButtonText]}>
-                {t('client.paymentHistory.filter.apply')}
+                {t('client.trips.filter.apply')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -283,4 +236,4 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
   );
 };
 
-export default PaymentHistoryFilter; 
+export default TripsFilter; 

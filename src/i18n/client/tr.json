@@ -36,13 +36,23 @@
     "balance": "Bakiyem",
     "cards": "Kartlar",
     "debts": "Borçlarım",
-    "cars": "Arabalar",
+    "trips": "Yolculuklar",
     "paymentHistory": "Ödeme geçmişi",
-    "residence": "İkamet",
+    "residence": "Konum",
     "help": "Yardım ve kurallar",
     "about": "Uygulama hakkında",
     "logout": "Çıkış",
-    "logoutConfirm": "Hesabınızdan çıkmak istediğinizden emin misiniz?"
+    "logoutConfirm": "Hesabınızdan çıkmak istediğinizden emin misiniz?",
+    "vip": {
+      "title": "VIP Durumu",
+      "description": "Öncelikli hizmet ve bonuslar",
+      "upgrade": "Yükselt",
+      "benefits": "Avantajlar",
+      "priority": "Öncelikli rezervasyon",
+      "bestDrivers": "En iyi sürücüler",
+      "extraCashback": "Ekstra nakit iadesi",
+      "premiumSupport": "Premium destek"
+    }
   },
   "schedule": {
     "title": "Program",
@@ -144,7 +154,7 @@
     "contactSupport": "Destekle iletişim"
   },
   "residence": {
-    "title": "İkamet",
+    "title": "Konum",
     "default": "Varsayılan"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "Bu yıl",
       "reset": "Sıfırla",
       "apply": "Uygula"
+    }
+  },
+  "trips": {
+    "title": "Yolculuklar",
+    "noTrips": "Yolculuk yok",
+    "emptyDescription": "Yolculuk geçmişi boş",
+    "driver": "Sürücü",
+    "status": {
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi",
+      "scheduled": "Planlandı"
+    },
+    "filter": {
+      "title": "Filtre",
+      "tripType": "Yolculuk türü",
+      "status": "Durum",
+      "period": "Dönem",
+      "allTypes": "Tüm türler",
+      "completed": "Tamamlanan",
+      "cancelled": "İptal edilen",
+      "scheduled": "Planlanan",
+      "allStatuses": "Tüm durumlar",
+      "allTime": "Tüm zaman",
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl",
+      "reset": "Sıfırla",
+      "apply": "Uygula"
+    },
+    "mock": {
+      "tripToCityCenter": "Şehir merkezine yolculuk",
+      "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
+      "tripToAirport": "Havaalanına yolculuk",
+      "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
+      "tripToMall": "Alışveriş merkezine yolculuk",
+      "routeToMall": "Rota: ev - alışveriş merkezi",
+      "tripToWork": "İşe yolculuk",
+      "routeToWork": "Rota: ev - ofis"
     }
   }
 }

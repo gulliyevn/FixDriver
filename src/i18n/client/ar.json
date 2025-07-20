@@ -36,13 +36,23 @@
     "balance": "رصيدي",
     "cards": "البطاقات",
     "debts": "ديوني",
-    "cars": "السيارات",
+    "trips": "الرحلات",
     "paymentHistory": "تاريخ المدفوعات",
-    "residence": "الإقامة",
+    "residence": "الموقع",
     "help": "المساعدة والقواعد",
     "about": "حول التطبيق",
     "logout": "تسجيل الخروج",
-    "logoutConfirm": "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟"
+    "logoutConfirm": "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟",
+    "vip": {
+      "title": "حالة VIP",
+      "description": "خدمة أولوية ومكافآت",
+      "upgrade": "ترقية",
+      "benefits": "المزايا",
+      "priority": "حجز ذو أولوية",
+      "bestDrivers": "أفضل السائقين",
+      "extraCashback": "استرداد نقدي إضافي",
+      "premiumSupport": "دعم متميز"
+    }
   },
   "schedule": {
     "title": "الجدول",
@@ -144,7 +154,7 @@
     "contactSupport": "تواصل مع الدعم"
   },
   "residence": {
-    "title": "الإقامة",
+    "title": "الموقع",
     "default": "افتراضي"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "هذا العام",
       "reset": "إعادة تعيين",
       "apply": "تطبيق"
+    }
+  },
+  "trips": {
+    "title": "الرحلات",
+    "noTrips": "لا توجد رحلات",
+    "emptyDescription": "تاريخ الرحلات فارغ",
+    "driver": "السائق",
+    "status": {
+      "completed": "مكتمل",
+      "cancelled": "ملغي",
+      "scheduled": "مجدول"
+    },
+    "filter": {
+      "title": "مرشح",
+      "tripType": "نوع الرحلة",
+      "status": "الحالة",
+      "period": "الفترة",
+      "allTypes": "جميع الأنواع",
+      "completed": "مكتملة",
+      "cancelled": "ملغية",
+      "scheduled": "مجدولة",
+      "allStatuses": "جميع الحالات",
+      "allTime": "كل الوقت",
+      "today": "اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "thisMonth": "هذا الشهر",
+      "thisYear": "هذا العام",
+      "reset": "إعادة تعيين",
+      "apply": "تطبيق"
+    },
+    "mock": {
+      "tripToCityCenter": "رحلة إلى مركز المدينة",
+      "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
+      "tripToAirport": "رحلة إلى المطار",
+      "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
+      "tripToMall": "رحلة إلى المركز التجاري",
+      "routeToMall": "المسار: المنزل - المركز التجاري",
+      "tripToWork": "رحلة إلى العمل",
+      "routeToWork": "المسار: المنزل - المكتب"
     }
   }
 }

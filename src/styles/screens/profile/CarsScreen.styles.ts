@@ -24,12 +24,15 @@ export const CarsScreenStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#003366',
   },
-  addButton: {
+  filterButton: {
     padding: 8,
   },
   content: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  contentContainer: {
+    paddingBottom: 20,
   },
   emptyState: {
     flex: 1,
@@ -92,6 +95,14 @@ export const CarsScreenStyles = StyleSheet.create({
   carPlate: {
     fontSize: 14,
     color: '#888',
+  },
+  paymentAmount: {
+    alignItems: 'flex-end',
+  },
+  amountText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
   },
   statusBadge: {
     paddingHorizontal: 8,

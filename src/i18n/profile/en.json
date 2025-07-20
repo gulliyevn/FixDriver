@@ -25,7 +25,7 @@
   "languageChanged": "Language changed",
   "languageChangeSuccess": "Language changed successfully. Restart the app to apply changes.",
   "residence": {
-    "title": "Residence",
+    "title": "Location",
     "loading": "Loading addresses...",
     "retry": "Retry",
     "emptyState": "You don't have any saved addresses yet\nAdd your first address for quick ride ordering",

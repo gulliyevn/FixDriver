@@ -25,7 +25,7 @@
   "languageChanged": "Dil değiştirildi",
   "languageChangeSuccess": "Dil başarıyla değiştirildi. Değişiklikleri uygulamak için uygulamayı yeniden başlatın.",
   "residence": {
-    "title": "İkamet",
+    "title": "Konum",
     "loading": "Adresler yükleniyor...",
     "retry": "Tekrar dene",
     "emptyState": "Henüz kaydedilmiş adresiniz yok\nHızlı yolculuk siparişi için ilk adresinizi ekleyin",

@@ -36,13 +36,23 @@
     "balance": "Balansım",
     "cards": "Kartlar",
     "debts": "Borclarım",
-    "cars": "Avtomobillər",
+    "trips": "Səfərlər",
     "paymentHistory": "Ödəniş tarixçəsi",
-    "residence": "Yaşayış yeri",
+    "residence": "Məkan",
     "help": "Kömək və qaydalar",
     "about": "Tətbiq haqqında",
     "logout": "Çıxış",
-    "logoutConfirm": "Hesabınızdan çıxmaq istədiyinizə əminsiniz?"
+    "logoutConfirm": "Hesabınızdan çıxmaq istədiyinizə əminsiniz?",
+    "vip": {
+      "title": "VIP Status",
+      "description": "Prioritet xidmət və bonuslar",
+      "upgrade": "Yüksəlt",
+      "benefits": "Üstünlüklər",
+      "priority": "Prioritet büroninq",
+      "bestDrivers": "Ən yaxşı sürücülər",
+      "extraCashback": "Əlavə keşbek",
+      "premiumSupport": "Premium dəstək"
+    }
   },
   "schedule": {
     "title": "Cədvəl",
@@ -144,7 +154,7 @@
     "contactSupport": "Dəstəklə əlaqə"
   },
   "residence": {
-    "title": "Yaşayış yeri",
+    "title": "Məkan",
     "default": "Varsayılan"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "Bu il",
       "reset": "Sıfırla",
       "apply": "Tətbiq et"
+    }
+  },
+  "trips": {
+    "title": "Səfərlər",
+    "noTrips": "Səyahət yoxdur",
+    "emptyDescription": "Səyahət tarixçəsi boşdur",
+    "driver": "Sürücü",
+    "status": {
+      "completed": "Tamamlandı",
+      "cancelled": "Ləğv edildi",
+      "scheduled": "Planlaşdırılıb"
+    },
+    "filter": {
+      "title": "Filter",
+      "tripType": "Səyahət növü",
+      "status": "Status",
+      "period": "Dövr",
+      "allTypes": "Bütün növlər",
+      "completed": "Tamamlanmış",
+      "cancelled": "Ləğv edilmiş",
+      "scheduled": "Planlaşdırılmış",
+      "allStatuses": "Bütün statuslar",
+      "allTime": "Bütün vaxt",
+      "today": "Bu gün",
+      "thisWeek": "Bu həftə",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu il",
+      "reset": "Sıfırla",
+      "apply": "Tətbiq et"
+    },
+    "mock": {
+      "tripToCityCenter": "Şəhər mərkəzinə səyahət",
+      "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",
+      "tripToAirport": "Hava limanına səyahət",
+      "routeCenterAirport": "Marşrut: mərkəz - Heydər Əliyev hava limanı",
+      "tripToMall": "Ticarət mərkəzinə səyahət",
+      "routeToMall": "Marşrut: ev - ticarət mərkəzi",
+      "tripToWork": "İşə səyahət",
+      "routeToWork": "Marşrut: ev - ofis"
     }
   }
 }

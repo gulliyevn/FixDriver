@@ -25,7 +25,7 @@
   "languageChanged": "Sprache geändert",
   "languageChangeSuccess": "Sprache erfolgreich geändert. Starten Sie die App neu, um die Änderungen zu übernehmen.",
   "residence": {
-    "title": "Wohnsitz",
+    "title": "Standort",
     "loading": "Adressen werden geladen...",
     "retry": "Wiederholen",
     "emptyState": "Sie haben noch keine gespeicherten Adressen\nFügen Sie Ihre erste Adresse für schnelle Fahrtbestellungen hinzu",

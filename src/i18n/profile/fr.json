@@ -25,7 +25,7 @@
   "languageChanged": "Langue modifiée",
   "languageChangeSuccess": "Langue modifiée avec succès. Redémarrez l'application pour appliquer les modifications.",
   "residence": {
-    "title": "Résidence",
+    "title": "Emplacement",
     "loading": "Chargement des adresses...",
     "retry": "Réessayer",
     "emptyState": "Vous n'avez pas encore d'adresses sauvegardées\nAjoutez votre première adresse pour des commandes de trajet rapides",

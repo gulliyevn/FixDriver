@@ -36,13 +36,23 @@
     "balance": "Mein Guthaben",
     "cards": "Karten",
     "debts": "Meine Schulden",
-    "cars": "Autos",
+    "trips": "Fahrten",
     "paymentHistory": "Zahlungshistorie",
-    "residence": "Wohnsitz",
+    "residence": "Standort",
     "help": "Hilfe & Regeln",
     "about": "Über die App",
     "logout": "Abmelden",
-    "logoutConfirm": "Sind Sie sicher, dass Sie sich von Ihrem Konto abmelden möchten?"
+    "logoutConfirm": "Sind Sie sicher, dass Sie sich von Ihrem Konto abmelden möchten?",
+    "vip": {
+      "title": "VIP Status",
+      "description": "Prioritätsdienst und Boni",
+      "upgrade": "Upgrade",
+      "benefits": "Vorteile",
+      "priority": "Prioritätsbuchung",
+      "bestDrivers": "Beste Fahrer",
+      "extraCashback": "Extra Cashback",
+      "premiumSupport": "Premium Support"
+    }
   },
   "schedule": {
     "title": "Zeitplan",
@@ -144,7 +154,7 @@
     "contactSupport": "Support kontaktieren"
   },
   "residence": {
-    "title": "Wohnsitz",
+    "title": "Standort",
     "default": "Standard"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "Dieses Jahr",
       "reset": "Zurücksetzen",
       "apply": "Anwenden"
+    }
+  },
+  "trips": {
+    "title": "Fahrten",
+    "noTrips": "Keine Fahrten",
+    "emptyDescription": "Fahrtverlauf ist leer",
+    "driver": "Fahrer",
+    "status": {
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "scheduled": "Geplant"
+    },
+    "filter": {
+      "title": "Filter",
+      "tripType": "Fahrttyp",
+      "status": "Status",
+      "period": "Zeitraum",
+      "allTypes": "Alle Typen",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "scheduled": "Geplant",
+      "allStatuses": "Alle Status",
+      "allTime": "Alle Zeit",
+      "today": "Heute",
+      "thisWeek": "Diese Woche",
+      "thisMonth": "Diesen Monat",
+      "thisYear": "Dieses Jahr",
+      "reset": "Zurücksetzen",
+      "apply": "Anwenden"
+    },
+    "mock": {
+      "tripToCityCenter": "Fahrt ins Stadtzentrum",
+      "routeLeninGagarin": "Route: Lenin-Straße - Gagarin-Straße",
+      "tripToAirport": "Fahrt zum Flughafen",
+      "routeCenterAirport": "Route: Zentrum - Heydar Aliyev Flughafen",
+      "tripToMall": "Fahrt zum Einkaufszentrum",
+      "routeToMall": "Route: Zuhause - Einkaufszentrum",
+      "tripToWork": "Fahrt zur Arbeit",
+      "routeToWork": "Route: Zuhause - Büro"
     }
   }
 }

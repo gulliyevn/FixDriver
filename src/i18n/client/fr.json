@@ -36,13 +36,23 @@
     "balance": "Mon solde",
     "cards": "Cartes",
     "debts": "Mes dettes",
-    "cars": "Voitures",
+    "trips": "Trajets",
     "paymentHistory": "Historique des paiements",
-    "residence": "Résidence",
+    "residence": "Emplacement",
     "help": "Aide et règles",
     "about": "À propos de l'app",
     "logout": "Déconnexion",
-    "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?"
+    "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?",
+    "vip": {
+      "title": "Statut VIP",
+      "description": "Service prioritaire et bonus",
+      "upgrade": "Améliorer",
+      "benefits": "Avantages",
+      "priority": "Réservation prioritaire",
+      "bestDrivers": "Meilleurs chauffeurs",
+      "extraCashback": "Cashback supplémentaire",
+      "premiumSupport": "Support premium"
+    }
   },
   "schedule": {
     "title": "Planning",
@@ -144,7 +154,7 @@
     "contactSupport": "Contacter le support"
   },
   "residence": {
-    "title": "Résidence",
+    "title": "Emplacement",
     "default": "Par défaut"
   },
   "paymentHistory": {
@@ -183,6 +193,45 @@
       "thisYear": "Cette année",
       "reset": "Réinitialiser",
       "apply": "Appliquer"
+    }
+  },
+  "trips": {
+    "title": "Trajets",
+    "noTrips": "Aucun trajet",
+    "emptyDescription": "L'historique des trajets est vide",
+    "driver": "Chauffeur",
+    "status": {
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "scheduled": "Programmé"
+    },
+    "filter": {
+      "title": "Filtre",
+      "tripType": "Type de trajet",
+      "status": "Statut",
+      "period": "Période",
+      "allTypes": "Tous les types",
+      "completed": "Terminés",
+      "cancelled": "Annulés",
+      "scheduled": "Programmés",
+      "allStatuses": "Tous les statuts",
+      "allTime": "Tout le temps",
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
+      "thisMonth": "Ce mois",
+      "thisYear": "Cette année",
+      "reset": "Réinitialiser",
+      "apply": "Appliquer"
+    },
+    "mock": {
+      "tripToCityCenter": "Trajet vers le centre-ville",
+      "routeLeninGagarin": "Itinéraire: Rue Lénine - Rue Gagarine",
+      "tripToAirport": "Trajet vers l'aéroport",
+      "routeCenterAirport": "Itinéraire: centre - Aéroport Heydar Aliyev",
+      "tripToMall": "Trajet vers le centre commercial",
+      "routeToMall": "Itinéraire: maison - centre commercial",
+      "tripToWork": "Trajet vers le travail",
+      "routeToWork": "Itinéraire: maison - bureau"
     }
   }
 }
