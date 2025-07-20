@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "Ödəniş tarixçəsi",
-    "noPayments": "Ödəniş yoxdur"
+    "noPayments": "Ödəniş yoxdur",
+    "emptyDescription": "Ödəniş tarixçəsi boşdur",
+    "status": {
+      "completed": "Tamamlandı",
+      "pending": "Gözləyir",
+      "failed": "Xəta"
+    },
+    "mock": {
+      "tripToCityCenter": "Şəhər mərkəzinə səyahət",
+      "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",
+      "balanceTopUp": "Balans yükləmə",
+      "tripToAirport": "Hava limanına səyahət",
+      "routeCenterAirport": "Marşrut: mərkəz - Heydər Əliyev hava limanı",
+      "refund": "Vəsait qaytarma",
+      "refundForCancelledTrip": "Ləğv edilmiş səyahət üçün qaytarma"
+    },
+    "filter": {
+      "title": "Filter",
+      "paymentType": "Ödəniş növü",
+      "status": "Status",
+      "period": "Dövr",
+      "allTypes": "Bütün növlər",
+      "trips": "Səyahətlər",
+      "topUps": "Yükləmələr",
+      "refunds": "Qaytarmalar",
+      "fees": "Komissiyalar",
+      "allStatuses": "Bütün statuslar",
+      "allTime": "Bütün vaxt",
+      "today": "Bu gün",
+      "thisWeek": "Bu həftə",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu il",
+      "reset": "Sıfırla",
+      "apply": "Tətbiq et"
+    }
   }
 }

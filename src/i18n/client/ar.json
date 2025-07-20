@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "تاريخ المدفوعات",
-    "noPayments": "لا توجد مدفوعات"
+    "noPayments": "لا توجد مدفوعات",
+    "emptyDescription": "تاريخ المدفوعات فارغ",
+    "status": {
+      "completed": "مكتمل",
+      "pending": "قيد الانتظار",
+      "failed": "فشل"
+    },
+    "mock": {
+      "tripToCityCenter": "رحلة إلى مركز المدينة",
+      "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
+      "balanceTopUp": "إعادة شحن الرصيد",
+      "tripToAirport": "رحلة إلى المطار",
+      "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
+      "refund": "استرداد",
+      "refundForCancelledTrip": "استرداد للرحلة الملغاة"
+    },
+    "filter": {
+      "title": "مرشح",
+      "paymentType": "نوع الدفع",
+      "status": "الحالة",
+      "period": "الفترة",
+      "allTypes": "جميع الأنواع",
+      "trips": "الرحلات",
+      "topUps": "إعادة الشحن",
+      "refunds": "الاسترداد",
+      "fees": "الرسوم",
+      "allStatuses": "جميع الحالات",
+      "allTime": "كل الوقت",
+      "today": "اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "thisMonth": "هذا الشهر",
+      "thisYear": "هذا العام",
+      "reset": "إعادة تعيين",
+      "apply": "تطبيق"
+    }
   }
 }

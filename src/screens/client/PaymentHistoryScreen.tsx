@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ClientScreenProps } from '../../types/navigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
-import { mockPaymentHistory } from '../../mocks/paymentHistoryMock';
+import { getMockPaymentHistory } from '../../mocks/paymentHistoryMock';
+import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
+import { colors } from '../../constants/colors';
 
 /**
  * Экран истории платежей
@@ -20,8 +23,58 @@ import { mockPaymentHistory } from '../../mocks/paymentHistoryMock';
 
 const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
+  const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getPaymentHistoryScreenStyles(isDark);
-  const [payments] = useState(mockPaymentHistory);
+  
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState<PaymentFilter>({
+    type: 'all',
+    status: 'all',
+    dateRange: 'all'
+  });
+  
+  const allPayments = useMemo(() => getMockPaymentHistory(t), [t]);
+  
+  const filteredPayments = useMemo(() => {
+    let filtered = allPayments;
+    
+    // Фильтр по типу
+    if (currentFilter.type !== 'all') {
+      filtered = filtered.filter(payment => payment.type === currentFilter.type);
+    }
+    
+    // Фильтр по статусу
+    if (currentFilter.status !== 'all') {
+      filtered = filtered.filter(payment => payment.status === currentFilter.status);
+    }
+    
+    // Фильтр по дате (упрощенная логика для мок данных)
+    if (currentFilter.dateRange !== 'all') {
+      const today = new Date();
+      const paymentDate = new Date('2024-01-15'); // Используем дату из мок данных
+      
+      switch (currentFilter.dateRange) {
+        case 'today':
+          // Для демонстрации показываем только первую запись как "сегодняшнюю"
+          filtered = filtered.filter((_, index) => index === 0);
+          break;
+        case 'week':
+          // Показываем первые 2 записи как "за неделю"
+          filtered = filtered.filter((_, index) => index < 2);
+          break;
+        case 'month':
+          // Показываем первые 3 записи как "за месяц"
+          filtered = filtered.filter((_, index) => index < 3);
+          break;
+        case 'year':
+          // Показываем все записи как "за год"
+          break;
+      }
+    }
+    
+    return filtered;
+  }, [allPayments, currentFilter]);
 
   const getPaymentIcon = (type: string) => {
     switch (type) {
@@ -70,30 +123,33 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
     <View style={[styles.container, dynamicStyles.container]}>
       <View style={[styles.header, dynamicStyles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#003366" />
+          <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>История платежей</Text>
-        <TouchableOpacity style={styles.filterButton}>
-          <Ionicons name="filter" size={24} color="#003366" />
+        <Text style={[styles.title, dynamicStyles.title]}>{t('client.paymentHistory.title')}</Text>
+        <TouchableOpacity 
+          style={styles.filterButton}
+          onPress={() => setFilterVisible(true)}
+        >
+          <Ionicons name="filter" size={24} color={currentColors.primary} />
         </TouchableOpacity>
       </View>
       
       <ScrollView 
         style={styles.content} 
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={[styles.contentContainer, { paddingTop: 16 }]}
         showsVerticalScrollIndicator={false}
       >
-        {payments.length === 0 ? (
+        {filteredPayments.length === 0 ? (
           <View style={[styles.emptyState, { alignItems: 'center', justifyContent: 'center' }]}>
-            <Ionicons name="document-outline" size={64} color="#ccc" />
-            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>Нет платежей</Text>
+            <Ionicons name="document-outline" size={64} color={currentColors.textSecondary} />
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('client.paymentHistory.noPayments')}</Text>
             <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
-              История платежей пуста
+              {t('client.paymentHistory.emptyDescription')}
             </Text>
           </View>
         ) : (
           <>
-            {payments.map((payment) => (
+            {filteredPayments.map((payment) => (
               <View key={payment.id} style={[styles.paymentItem, dynamicStyles.paymentItem]}>
                 <View style={styles.paymentHeader}>
                   <View style={styles.paymentInfo}>
@@ -112,10 +168,10 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
                       {payment.amount}
                     </Text>
                     <View style={[styles.statusBadge, { backgroundColor: getPaymentStatusColor(payment.status) }]}>
-                      <Text style={styles.statusText}>
-                        {payment.status === 'completed' ? 'Выполнено' : 
-                         payment.status === 'pending' ? 'В обработке' : 'Ошибка'}
-                      </Text>
+                                          <Text style={styles.statusText}>
+                      {payment.status === 'completed' ? t('client.paymentHistory.status.completed') : 
+                       payment.status === 'pending' ? t('client.paymentHistory.status.pending') : t('client.paymentHistory.status.failed')}
+                    </Text>
                     </View>
                   </View>
                 </View>
@@ -127,6 +183,13 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
           </>
         )}
       </ScrollView>
+      
+      <PaymentHistoryFilter
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        onApply={setCurrentFilter}
+        currentFilter={currentFilter}
+      />
     </View>
   );
 };

@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "Historial de pagos",
-    "noPayments": "No hay pagos"
+    "noPayments": "No hay pagos",
+    "emptyDescription": "El historial de pagos está vacío",
+    "status": {
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "failed": "Fallido"
+    },
+    "mock": {
+      "tripToCityCenter": "Viaje al centro de la ciudad",
+      "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",
+      "balanceTopUp": "Recarga de saldo",
+      "tripToAirport": "Viaje al aeropuerto",
+      "routeCenterAirport": "Ruta: centro - Aeropuerto Heydar Aliyev",
+      "refund": "Reembolso",
+      "refundForCancelledTrip": "Reembolso por viaje cancelado"
+    },
+    "filter": {
+      "title": "Filtro",
+      "paymentType": "Tipo de pago",
+      "status": "Estado",
+      "period": "Período",
+      "allTypes": "Todos los tipos",
+      "trips": "Viajes",
+      "topUps": "Recargas",
+      "refunds": "Reembolsos",
+      "fees": "Comisiones",
+      "allStatuses": "Todos los estados",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisYear": "Este año",
+      "reset": "Restablecer",
+      "apply": "Aplicar"
+    }
   }
 }

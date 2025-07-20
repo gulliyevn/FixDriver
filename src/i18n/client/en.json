@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "Payment history",
-    "noPayments": "No payments"
+    "noPayments": "No payments",
+    "emptyDescription": "Payment history is empty",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "mock": {
+      "tripToCityCenter": "Trip to city center",
+      "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",
+      "balanceTopUp": "Balance top-up",
+      "tripToAirport": "Trip to airport",
+      "routeCenterAirport": "Route: center - Heydar Aliyev airport",
+      "refund": "Refund",
+      "refundForCancelledTrip": "Refund for cancelled trip"
+    },
+    "filter": {
+      "title": "Filter",
+      "paymentType": "Payment type",
+      "status": "Status",
+      "period": "Period",
+      "allTypes": "All types",
+      "trips": "Trips",
+      "topUps": "Top-ups",
+      "refunds": "Refunds",
+      "fees": "Fees",
+      "allStatuses": "All statuses",
+      "allTime": "All time",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "reset": "Reset",
+      "apply": "Apply"
+    }
   }
 }

@@ -159,6 +159,40 @@
   },
   "paymentHistory": {
     "title": "История платежей",
-    "noPayments": "Нет платежей"
+    "noPayments": "Нет платежей",
+    "emptyDescription": "История платежей пуста",
+    "status": {
+      "completed": "Выполнено",
+      "pending": "В обработке",
+      "failed": "Ошибка"
+    },
+    "mock": {
+      "tripToCityCenter": "Поездка в центр города",
+      "routeLeninGagarin": "Маршрут: ул. Ленина - ул. Гагарина",
+      "balanceTopUp": "Пополнение баланса",
+      "tripToAirport": "Поездка в аэропорт",
+      "routeCenterAirport": "Маршрут: центр - аэропорт Гейдар Алиев",
+      "refund": "Возврат средств",
+      "refundForCancelledTrip": "Возврат за отмененную поездку"
+    },
+    "filter": {
+      "title": "Фильтр",
+      "paymentType": "Тип платежа",
+      "status": "Статус",
+      "period": "Период",
+      "allTypes": "Все типы",
+      "trips": "Поездки",
+      "topUps": "Пополнения",
+      "refunds": "Возвраты",
+      "fees": "Комиссии",
+      "allStatuses": "Все статусы",
+      "allTime": "Все время",
+      "today": "Сегодня",
+      "thisWeek": "На этой неделе",
+      "thisMonth": "В этом месяце",
+      "thisYear": "В этом году",
+      "reset": "Сбросить",
+      "apply": "Применить"
+    }
   }
 }

@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "Ödeme geçmişi",
-    "noPayments": "Ödeme yok"
+    "noPayments": "Ödeme yok",
+    "emptyDescription": "Ödeme geçmişi boş",
+    "status": {
+      "completed": "Tamamlandı",
+      "pending": "Beklemede",
+      "failed": "Başarısız"
+    },
+    "mock": {
+      "tripToCityCenter": "Şehir merkezine yolculuk",
+      "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
+      "balanceTopUp": "Bakiye yükleme",
+      "tripToAirport": "Havaalanına yolculuk",
+      "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
+      "refund": "İade",
+      "refundForCancelledTrip": "İptal edilen yolculuk için iade"
+    },
+    "filter": {
+      "title": "Filtre",
+      "paymentType": "Ödeme türü",
+      "status": "Durum",
+      "period": "Dönem",
+      "allTypes": "Tüm türler",
+      "trips": "Yolculuklar",
+      "topUps": "Yüklemeler",
+      "refunds": "İadeler",
+      "fees": "Ücretler",
+      "allStatuses": "Tüm durumlar",
+      "allTime": "Tüm zaman",
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl",
+      "reset": "Sıfırla",
+      "apply": "Uygula"
+    }
   }
 }

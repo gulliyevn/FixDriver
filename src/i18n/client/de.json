@@ -149,6 +149,40 @@
   },
   "paymentHistory": {
     "title": "Zahlungshistorie",
-    "noPayments": "Keine Zahlungen"
+    "noPayments": "Keine Zahlungen",
+    "emptyDescription": "Zahlungshistorie ist leer",
+    "status": {
+      "completed": "Abgeschlossen",
+      "pending": "Ausstehend",
+      "failed": "Fehlgeschlagen"
+    },
+    "mock": {
+      "tripToCityCenter": "Fahrt ins Stadtzentrum",
+      "routeLeninGagarin": "Route: Lenin-Straße - Gagarin-Straße",
+      "balanceTopUp": "Guthaben aufladen",
+      "tripToAirport": "Fahrt zum Flughafen",
+      "routeCenterAirport": "Route: Zentrum - Heydar Aliyev Flughafen",
+      "refund": "Rückerstattung",
+      "refundForCancelledTrip": "Rückerstattung für stornierte Fahrt"
+    },
+    "filter": {
+      "title": "Filter",
+      "paymentType": "Zahlungstyp",
+      "status": "Status",
+      "period": "Zeitraum",
+      "allTypes": "Alle Typen",
+      "trips": "Fahrten",
+      "topUps": "Aufladungen",
+      "refunds": "Rückerstattungen",
+      "fees": "Gebühren",
+      "allStatuses": "Alle Status",
+      "allTime": "Alle Zeit",
+      "today": "Heute",
+      "thisWeek": "Diese Woche",
+      "thisMonth": "Diesen Monat",
+      "thisYear": "Dieses Jahr",
+      "reset": "Zurücksetzen",
+      "apply": "Anwenden"
+    }
   }
 }
