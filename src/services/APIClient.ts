@@ -1,5 +1,5 @@
 import JWTService from './JWTService';
-import { ENV } from '../config/environment';
+import { ENV_CONFIG } from '../config/environment';
 
 // Типы для fetch API
 declare global {
@@ -10,8 +10,8 @@ declare global {
 
 // Конфигурация API
 const API_CONFIG = {
-  BASE_URL: ENV.API_BASE_URL,
-  TIMEOUT: ENV.API_TIMEOUT,
+  BASE_URL: ENV_CONFIG.API.BASE_URL,
+  TIMEOUT: ENV_CONFIG.API.TIMEOUT,
   RETRY_ATTEMPTS: 3,
 };
 

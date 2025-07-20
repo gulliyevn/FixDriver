@@ -1,11 +1,11 @@
 import { Alert, Linking } from 'react-native';
-import { ENV, logError } from '../config/environment';
+import { ENV_CONFIG, logError } from '../config/environment';
 
 /**
  * Production-ready error handler
  */
 export const handleProductionError = (error: unknown, context: string = 'App') => {
-  logError(error, context);
+  logError(error instanceof Error ? error : String(error), context);
   
   // Show user-friendly error message
   Alert.alert(
@@ -32,11 +32,11 @@ export const contactSupport = () => {
       { text: 'Отмена', style: 'cancel' },
       { 
         text: 'Email', 
-        onPress: () => Linking.openURL(`mailto:${ENV.SUPPORT_EMAIL}`) 
+        onPress: () => Linking.openURL(`mailto:${ENV_CONFIG.SUPPORT.EMAIL}`) 
       },
       { 
         text: 'Телефон', 
-        onPress: () => Linking.openURL(`tel:${ENV.SUPPORT_PHONE}`) 
+        onPress: () => Linking.openURL(`tel:${ENV_CONFIG.SUPPORT.PHONE}`) 
       }
     ]
   );
@@ -116,7 +116,7 @@ export const deepClone = <T>(obj: T): T => {
   try {
     return JSON.parse(JSON.stringify(obj));
   } catch (error) {
-    logError(error, 'DeepClone');
+    logError(error instanceof Error ? error : String(error), 'DeepClone');
     return obj;
   }
 };

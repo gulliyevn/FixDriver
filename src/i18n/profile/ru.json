@@ -108,6 +108,8 @@
     "security": {
       "title": "Безопасность",
       "changePassword": "Изменить пароль",
+      "passwordChangedSuccess": "Пароль успешно изменен",
+      "passwordChangeError": "Не удалось изменить пароль. Попробуйте еще раз.",
       "biometric": "Биометрическая аутентификация"
     },
     "data": {

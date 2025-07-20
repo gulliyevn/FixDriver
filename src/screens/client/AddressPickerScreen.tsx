@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { ClientScreenProps } from '../../types/navigation';
+import MapService from '../../services/MapService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
   } | null>(null);
   const [address, setAddress] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -36,34 +38,52 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
   const getCurrentLocation = async () => {
     try {
       setLoading(true);
+      setLocationError(null);
       
-      // Запрашиваем разрешения
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Ошибка', 'Необходим доступ к геолокации для выбора адреса');
-        return;
+      // Используем улучшенный MapService с retry
+      const currentLocation = await MapService.getCurrentLocationWithRetry(3);
+      
+      setLocation({
+        coords: {
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          altitude: null,
+          accuracy: 10,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+        },
+        timestamp: currentLocation.timestamp || Date.now(),
+      });
+      
+      setSelectedLocation({
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+      });
+
+      setAddress(currentLocation.address || 'Адрес не найден');
+
+      // Центрируем карту на текущей локации
+      if (mapRef.current) {
+        mapRef.current.animateToRegion({
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
       }
 
-      // Получаем текущее местоположение
-      const currentLocation = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
-      setLocation(currentLocation);
-      setSelectedLocation({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-      });
-
-      // Получаем адрес по координатам
-      await getAddressFromCoordinates(
-        currentLocation.coords.latitude,
-        currentLocation.coords.longitude
-      );
-
     } catch (error) {
+      console.error('Ошибка получения локации:', error);
+      setLocationError('Не удалось получить местоположение. Проверьте настройки геолокации.');
       
-      Alert.alert('Ошибка', 'Не удалось получить местоположение');
+      // Показываем дефолтную локацию
+      const defaultLocation = await MapService.getCurrentLocation();
+      setSelectedLocation({
+        latitude: defaultLocation.latitude,
+        longitude: defaultLocation.longitude,
+      });
+      setAddress(defaultLocation.address || 'Выберите адрес на карте');
     } finally {
       setLoading(false);
     }
@@ -73,31 +93,13 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
     try {
       setLoading(true);
       
-      // Используем встроенный геокодинг Expo Location
-      const reverseGeocode = await Location.reverseGeocodeAsync({
-        latitude,
-        longitude
-      });
+      // Используем MapService для геокодинга
+      const locationData = await MapService.geocodeAddress(`${latitude}, ${longitude}`);
+      setAddress(locationData.address || 'Адрес не найден');
       
-      if (reverseGeocode && reverseGeocode.length > 0) {
-        const location = reverseGeocode[0];
-        const addressParts = [
-          location.street,
-          location.streetNumber,
-          location.city,
-          location.region,
-          location.postalCode,
-          location.country
-        ].filter(Boolean);
-        
-        const formattedAddress = addressParts.join(', ');
-        setAddress(formattedAddress || 'Адрес не найден');
-      } else {
-        setAddress('Адрес не найден');
-      }
     } catch (error) {
-      
-      setAddress('Ошибка получения адреса');
+      console.warn('Ошибка получения адреса:', error);
+      setAddress('Адрес не найден');
     } finally {
       setLoading(false);
     }
@@ -119,11 +121,28 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
     }
   };
 
-  const initialRegion = {
-    latitude: 55.7558, // Москва по умолчанию
-    longitude: 37.6176,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+  const handleRetryLocation = () => {
+    getCurrentLocation();
+  };
+
+  // Получаем начальный регион на основе локали устройства
+  const getInitialRegion = () => {
+    if (selectedLocation) {
+      return {
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      };
+    }
+    
+    // Дефолтный регион для Азербайджана
+    return {
+      latitude: 40.3777,
+      longitude: 49.8920,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
   };
 
   return (
@@ -143,20 +162,36 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
           ref={mapRef}
           style={styles.map}
           provider={PROVIDER_GOOGLE}
-          initialRegion={initialRegion}
+          initialRegion={getInitialRegion()}
           onPress={handleMapPress}
           showsUserLocation={true}
           showsMyLocationButton={true}
+          showsCompass={true}
+          showsScale={true}
+          showsTraffic={false}
+          showsBuildings={true}
+          showsIndoors={true}
         >
           {selectedLocation && (
             <Marker
               coordinate={selectedLocation}
               title="Выбранный адрес"
               description={address}
+              pinColor="#003366"
             />
           )}
         </MapView>
       </View>
+
+      {locationError && (
+        <View style={styles.errorContainer}>
+          <Ionicons name="warning-outline" size={20} color="#ff6b6b" />
+          <Text style={styles.errorText}>{locationError}</Text>
+          <TouchableOpacity onPress={handleRetryLocation} style={styles.retryButton}>
+            <Text style={styles.retryButtonText}>Повторить</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <View style={styles.addressContainer}>
         {loading ? (
@@ -266,6 +301,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     flex: 1,
+  },
+  errorContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  errorText: {
+    color: '#ff6b6b',
+    fontSize: 14,
+    flex: 1,
+    marginLeft: 8,
+  },
+  retryButton: {
+    backgroundColor: '#003366',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

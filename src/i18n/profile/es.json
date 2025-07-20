@@ -108,6 +108,8 @@
     "security": {
       "title": "Seguridad",
       "changePassword": "Cambiar contraseña",
+      "passwordChangedSuccess": "Contraseña cambiada exitosamente",
+      "passwordChangeError": "No se pudo cambiar la contraseña. Inténtalo de nuevo.",
       "biometric": "Autenticación biométrica"
     },
     "data": {

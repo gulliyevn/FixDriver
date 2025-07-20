@@ -108,6 +108,8 @@
     "security": {
       "title": "Təhlükəsizlik",
       "changePassword": "Şifrəni dəyişdir",
+      "passwordChangedSuccess": "Şifrə uğurla dəyişdirildi",
+      "passwordChangeError": "Şifrəni dəyişdirmək mümkün olmadı. Yenidən cəhd edin.",
       "biometric": "Biometrik autentifikasiya"
     },
     "data": {

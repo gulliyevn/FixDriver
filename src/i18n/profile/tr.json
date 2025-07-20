@@ -108,6 +108,8 @@
     "security": {
       "title": "Güvenlik",
       "changePassword": "Şifre değiştir",
+      "passwordChangedSuccess": "Şifre başarıyla değiştirildi",
+      "passwordChangeError": "Şifre değiştirilemedi. Lütfen tekrar deneyin.",
       "biometric": "Biyometrik kimlik doğrulama"
     },
     "data": {

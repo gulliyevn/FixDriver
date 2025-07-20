@@ -26,10 +26,7 @@ const RoleSelectScreen: React.FC = () => {
   // Получаем текущие цвета
   const currentColors = getCurrentColors(isDark);
 
-  // Отладочная информация
-  console.log('Current language:', language);
-  console.log('Client title translation:', t('common.roleSelect.clientTitle'));
-  console.log('Driver title translation:', t('common.roleSelect.driverTitle'));
+
 
 
   const handleRoleSelect = (role: 'client' | 'driver') => {

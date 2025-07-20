@@ -152,7 +152,10 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
         {/* Безопасность */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, settingsColors.sectionTitle]}>{t('profile.settings.security.title')}</Text>
-          <TouchableOpacity style={[styles.settingItem, settingsColors.settingItem]}>
+          <TouchableOpacity 
+            style={[styles.settingItem, settingsColors.settingItem]}
+            onPress={() => navigation.navigate('ChangePassword')}
+          >
             <View style={styles.settingInfo}>
               <Ionicons name="lock-closed" size={24} color={currentColors.primary} />
               <Text style={[styles.settingLabel, settingsColors.settingLabel]}>{t('profile.settings.security.changePassword')}</Text>

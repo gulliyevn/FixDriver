@@ -1,6 +1,6 @@
-import { ENV } from '../config/environment';
+import { ENV_CONFIG } from '../config/environment';
 
-export const MAPTILER_API_KEY = ENV.MAPTILER_API_KEY;
+export const MAPTILER_API_KEY = ENV_CONFIG.MAP?.MAPTILER_API_KEY || '';
 
 export const MAP_CONFIG = {
   // MapTiler стили карт

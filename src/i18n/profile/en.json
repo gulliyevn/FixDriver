@@ -108,6 +108,8 @@
     "security": {
       "title": "Security",
       "changePassword": "Change password",
+      "passwordChangedSuccess": "Password successfully changed",
+      "passwordChangeError": "Failed to change password. Please try again.",
       "biometric": "Biometric authentication"
     },
     "data": {

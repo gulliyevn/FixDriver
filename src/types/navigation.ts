@@ -91,6 +91,7 @@ export type ClientStackParamList = {
   AddressPicker: {
     onAddressSelected: (address: string, latitude: number, longitude: number) => void;
   };
+  ChangePassword: undefined;
 };
 
 // Параметры для водительских экранов

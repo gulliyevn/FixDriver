@@ -43,6 +43,23 @@ export const ENV_CONFIG = {
     DB: 0,
   },
 
+  // Stripe конфигурация
+  STRIPE: {
+    PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_...',
+    SECRET_KEY: process.env.EXPO_PUBLIC_STRIPE_SECRET_KEY || 'sk_test_...',
+  },
+
+  // Поддержка
+  SUPPORT: {
+    EMAIL: process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'support@fixdrive.com',
+    PHONE: process.env.EXPO_PUBLIC_SUPPORT_PHONE || '+994501234567',
+  },
+
+  // Карты
+  MAP: {
+    MAPTILER_API_KEY: process.env.EXPO_PUBLIC_MAPTILER_API_KEY || 'your_maptiler_key_here',
+  },
+
   // Логирование
   LOGGING: {
     // Включить логирование API запросов
@@ -54,6 +71,19 @@ export const ENV_CONFIG = {
     // Маскировать чувствительные данные
     MASK_SENSITIVE_DATA: true,
   },
+};
+
+// Функция для логирования ошибок
+export const logError = (error: Error | string, context?: string) => {
+  if (ENV_CONFIG.LOGGING.ENABLE_ERROR_LOGS) {
+    const timestamp = new Date().toISOString();
+    const errorMessage = error instanceof Error ? error.message : error;
+    console.error(`[${timestamp}] ${context ? `[${context}] ` : ''}${errorMessage}`);
+    
+    if (error instanceof Error && error.stack) {
+      console.error(error.stack);
+    }
+  }
 };
 
 // Утилиты для работы с конфигурацией

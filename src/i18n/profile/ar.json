@@ -108,6 +108,8 @@
     "security": {
       "title": "الأمان",
       "changePassword": "تغيير كلمة المرور",
+      "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح",
+      "passwordChangeError": "فشل في تغيير كلمة المرور. يرجى المحاولة مرة أخرى.",
       "biometric": "المصادقة البيومترية"
     },
     "data": {

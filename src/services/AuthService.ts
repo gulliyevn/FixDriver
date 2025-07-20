@@ -80,7 +80,7 @@ export class AuthService {
     try {
       // В dev режиме всегда используем моки для тестирования
       if (__DEV__) {
-        console.log('🔧 DEV mode: Using mock authentication');
+  
         return this.mockLogin(email, password);
       }
 
@@ -288,25 +288,21 @@ export class AuthService {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('🔐 Mock Login Attempt:', { email, password });
-      console.log('📋 Available mock users:');
-      console.log('   Client: client@example.com / password123');
-      console.log('   Driver: driver@example.com / password123');
+
       
       // Сначала пытаемся найти пользователя в готовых моках
-      console.log('🔍 Searching for existing user...');
+      
       const existingUser = findAuthUserByCredentials(email, password);
       
       if (existingUser) {
-        console.log('✅ Mock user found:', existingUser.email, existingUser.role);
-        console.log('🔑 Generating tokens for existing user...');
+
         const tokens = await JWTService.forceRefreshTokens({
           userId: existingUser.id,
           email: existingUser.email,
           role: existingUser.role,
           phone: existingUser.phone,
         });
-        console.log('🎫 Tokens generated successfully');
+
 
         return {
           success: true,
@@ -315,23 +311,23 @@ export class AuthService {
         };
       }
       
-      console.log('⚠️ Mock user not found, creating new user');
+      
       // Если пользователь не найден, создаем нового
       let role = UserRole.CLIENT;
       if (email.includes('driver')) {
         role = UserRole.DRIVER;
       }
       
-      console.log('👤 Creating new mock user with role:', role);
+      
       const mockUser = createAuthMockUser({ email, role });
-      console.log('🔑 Generating tokens for new user...');
+      
       const tokens = await JWTService.forceRefreshTokens({
         userId: mockUser.id,
         email: mockUser.email,
         role: mockUser.role,
         phone: mockUser.phone,
       });
-      console.log('🎫 Tokens generated successfully for new user');
+      
 
       return {
         success: true,
