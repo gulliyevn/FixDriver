@@ -80,9 +80,32 @@
   "debts": {
     "title": "Мои долги",
     "noDebts": "Нет активных долгов",
+    "noDebtsDescription": "У вас нет неоплаченных долгов",
     "debtAmount": "Сумма долга",
     "dueDate": "Срок погашения",
-    "payDebt": "Погасить долг"
+    "payDebt": "Погасить долг",
+    "confirmPayment": "Подтверждение платежа",
+    "confirmPaymentMessage": "Погасить долг на сумму {amount}?",
+    "paymentSuccess": "Долг погашен",
+    "paymentSuccessMessage": "Долг успешно погашен",
+    "status": {
+      "overdue": "Просрочен",
+      "dueSoon": "Скоро срок",
+      "active": "Активный",
+      "paid": "Погашен"
+    },
+    "tripDebt": "Долг за поездку",
+    "serviceDebt": "Долг за услуги",
+    "penaltyDebt": "Долг за штраф",
+    "subscriptionDebt": "Долг за подписку",
+    "parkingDebt": "Долг за парковку",
+    "unpaidTrip": "Неоплаченная поездка",
+    "unpaidService": "Неоплаченная услуга",
+    "unpaidPenalty": "Неоплаченный штраф",
+    "unpaidSubscription": "Неоплаченная подписка",
+    "unpaidParking": "Неоплаченная парковка",
+    "toAirport": "в аэропорт",
+    "toCityCenter": "в центр города"
   },
   "cards": {
     "title": "Мои карты",

@@ -81,9 +81,32 @@
   "debts": {
     "title": "ديوني",
     "noDebts": "لا توجد ديون نشطة",
+    "noDebtsDescription": "ليس لديك ديون غير مدفوعة",
     "debtAmount": "مبلغ الدين",
     "dueDate": "تاريخ الاستحقاق",
-    "payDebt": "سداد الدين"
+    "payDebt": "سداد الدين",
+    "confirmPayment": "تأكيد الدفع",
+    "confirmPaymentMessage": "سداد الدين بمبلغ {amount}؟",
+    "paymentSuccess": "تم سداد الدين",
+    "paymentSuccessMessage": "تم سداد الدين بنجاح",
+    "status": {
+      "overdue": "متأخر",
+      "dueSoon": "يستحق قريباً",
+      "active": "نشط",
+      "paid": "مدفوع"
+    },
+    "tripDebt": "دين الرحلة",
+    "serviceDebt": "دين الخدمة",
+    "penaltyDebt": "دين الغرامة",
+    "subscriptionDebt": "دين الاشتراك",
+    "parkingDebt": "دين موقف السيارات",
+    "unpaidTrip": "رحلة غير مدفوعة",
+    "unpaidService": "خدمة غير مدفوعة",
+    "unpaidPenalty": "غرامة غير مدفوعة",
+    "unpaidSubscription": "اشتراك غير مدفوع",
+    "unpaidParking": "موقف سيارات غير مدفوع",
+    "toAirport": "إلى المطار",
+    "toCityCenter": "إلى مركز المدينة"
   },
   "cards": {
     "title": "بطاقاتي",

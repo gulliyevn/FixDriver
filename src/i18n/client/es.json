@@ -81,9 +81,32 @@
   "debts": {
     "title": "Mis deudas",
     "noDebts": "No hay deudas activas",
+    "noDebtsDescription": "No tienes deudas impagas",
     "debtAmount": "Cantidad de deuda",
     "dueDate": "Fecha de vencimiento",
-    "payDebt": "Pagar deuda"
+    "payDebt": "Pagar deuda",
+    "confirmPayment": "Confirmación de pago",
+    "confirmPaymentMessage": "¿Pagar deuda por {amount}?",
+    "paymentSuccess": "Deuda pagada",
+    "paymentSuccessMessage": "Deuda pagada exitosamente",
+    "status": {
+      "overdue": "Vencida",
+      "dueSoon": "Vence pronto",
+      "active": "Activa",
+      "paid": "Pagada"
+    },
+    "tripDebt": "Deuda de viaje",
+    "serviceDebt": "Deuda de servicio",
+    "penaltyDebt": "Deuda de multa",
+    "subscriptionDebt": "Deuda de suscripción",
+    "parkingDebt": "Deuda de estacionamiento",
+    "unpaidTrip": "Viaje impago",
+    "unpaidService": "Servicio impago",
+    "unpaidPenalty": "Multa impaga",
+    "unpaidSubscription": "Suscripción impaga",
+    "unpaidParking": "Estacionamiento impago",
+    "toAirport": "al aeropuerto",
+    "toCityCenter": "al centro de la ciudad"
   },
   "cards": {
     "title": "Mis tarjetas",

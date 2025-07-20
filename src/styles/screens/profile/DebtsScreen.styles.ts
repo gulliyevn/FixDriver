@@ -30,6 +30,7 @@ export const DebtsScreenStyles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 16,
   },
   emptyState: {
     flex: 1,
@@ -129,6 +130,61 @@ export const DebtsScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Стили для модалки подтверждения
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    marginHorizontal: 32,
+    minWidth: 280,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#003366',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButton: {
+    backgroundColor: '#003366',
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  cancelButtonText: {
+    color: '#666',
+  },
+  confirmButtonText: {
+    color: '#fff',
+  },
 });
 
 // Функция для получения динамических стилей в зависимости от темы
@@ -170,6 +226,21 @@ export const getDebtsScreenStyles = (isDark: boolean) => {
       color: currentColors.text,
     },
     dateLabel: {
+      color: currentColors.textSecondary,
+    },
+    modalContent: {
+      backgroundColor: currentColors.background,
+    },
+    modalTitle: {
+      color: currentColors.text,
+    },
+    modalMessage: {
+      color: currentColors.textSecondary,
+    },
+    cancelButton: {
+      backgroundColor: currentColors.surface,
+    },
+    cancelButtonText: {
       color: currentColors.textSecondary,
     },
   };

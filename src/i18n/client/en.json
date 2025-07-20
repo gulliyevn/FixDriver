@@ -81,9 +81,32 @@
   "debts": {
     "title": "My debts",
     "noDebts": "No active debts",
+    "noDebtsDescription": "You have no unpaid debts",
     "debtAmount": "Debt amount",
     "dueDate": "Due date",
-    "payDebt": "Pay debt"
+    "payDebt": "Pay debt",
+    "confirmPayment": "Payment confirmation",
+    "confirmPaymentMessage": "Pay debt for {amount}?",
+    "paymentSuccess": "Debt paid",
+    "paymentSuccessMessage": "Debt successfully paid",
+    "status": {
+      "overdue": "Overdue",
+      "dueSoon": "Due soon",
+      "active": "Active",
+      "paid": "Paid"
+    },
+    "tripDebt": "Trip debt",
+    "serviceDebt": "Service debt",
+    "penaltyDebt": "Penalty debt",
+    "subscriptionDebt": "Subscription debt",
+    "parkingDebt": "Parking debt",
+    "unpaidTrip": "Unpaid trip",
+    "unpaidService": "Unpaid service",
+    "unpaidPenalty": "Unpaid penalty",
+    "unpaidSubscription": "Unpaid subscription",
+    "unpaidParking": "Unpaid parking",
+    "toAirport": "to airport",
+    "toCityCenter": "to city center"
   },
   "cards": {
     "title": "My cards",

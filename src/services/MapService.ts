@@ -110,10 +110,10 @@ export class MapService {
       // Получаем адрес по координатам с retry
       let address = 'Определение адреса...';
       try {
-        const addressResponse = await Location.reverseGeocodeAsync({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
+      const addressResponse = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
 
         if (addressResponse[0]) {
           const addr = addressResponse[0];
@@ -317,9 +317,9 @@ export class MapService {
             let address = 'Обновление адреса...';
             try {
               const addressResponse = await Location.reverseGeocodeAsync({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-              });
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
 
               if (addressResponse[0]) {
                 const addr = addressResponse[0];

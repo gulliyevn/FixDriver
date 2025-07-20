@@ -81,9 +81,32 @@
   "debts": {
     "title": "Mes dettes",
     "noDebts": "Aucune dette active",
+    "noDebtsDescription": "Vous n'avez pas de dettes impayées",
     "debtAmount": "Montant de la dette",
     "dueDate": "Date d'échéance",
-    "payDebt": "Payer la dette"
+    "payDebt": "Payer la dette",
+    "confirmPayment": "Confirmation de paiement",
+    "confirmPaymentMessage": "Payer la dette de {amount}?",
+    "paymentSuccess": "Dette payée",
+    "paymentSuccessMessage": "Dette payée avec succès",
+    "status": {
+      "overdue": "En retard",
+      "dueSoon": "Échéance proche",
+      "active": "Active",
+      "paid": "Payée"
+    },
+    "tripDebt": "Dette de voyage",
+    "serviceDebt": "Dette de service",
+    "penaltyDebt": "Dette d'amende",
+    "subscriptionDebt": "Dette d'abonnement",
+    "parkingDebt": "Dette de stationnement",
+    "unpaidTrip": "Voyage impayé",
+    "unpaidService": "Service impayé",
+    "unpaidPenalty": "Amende impayée",
+    "unpaidSubscription": "Abonnement impayé",
+    "unpaidParking": "Stationnement impayé",
+    "toAirport": "vers l'aéroport",
+    "toCityCenter": "vers le centre-ville"
   },
   "cards": {
     "title": "Mes cartes",

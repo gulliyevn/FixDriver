@@ -81,9 +81,32 @@
   "debts": {
     "title": "Borclarım",
     "noDebts": "Aktiv borc yoxdur",
+    "noDebtsDescription": "Ödənilməmiş borcunuz yoxdur",
     "debtAmount": "Borc məbləği",
     "dueDate": "Ödəniş tarixi",
-    "payDebt": "Borcu ödə"
+    "payDebt": "Borcu ödə",
+    "confirmPayment": "Ödəniş təsdiqi",
+    "confirmPaymentMessage": "{amount} məbləğində borcu ödə?",
+    "paymentSuccess": "Borc ödənildi",
+    "paymentSuccessMessage": "Borc uğurla ödənildi",
+    "status": {
+      "overdue": "Gecikmiş",
+      "dueSoon": "Tezliklə ödəniş",
+      "active": "Aktiv",
+      "paid": "Ödənilmiş"
+    },
+    "tripDebt": "Səyahət borcu",
+    "serviceDebt": "Xidmət borcu",
+    "penaltyDebt": "Cərimə borcu",
+    "subscriptionDebt": "Abunəlik borcu",
+    "parkingDebt": "Parkinq borcu",
+    "unpaidTrip": "Ödənilməmiş səyahət",
+    "unpaidService": "Ödənilməmiş xidmət",
+    "unpaidPenalty": "Ödənilməmiş cərimə",
+    "unpaidSubscription": "Ödənilməmiş abunəlik",
+    "unpaidParking": "Ödənilməmiş parkinq",
+    "toAirport": "hava limanına",
+    "toCityCenter": "şəhər mərkəzinə"
   },
   "cards": {
     "title": "Kartlarım",

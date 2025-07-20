@@ -81,9 +81,32 @@
   "debts": {
     "title": "Meine Schulden",
     "noDebts": "Keine aktiven Schulden",
+    "noDebtsDescription": "Sie haben keine unbezahlten Schulden",
     "debtAmount": "Schuldenbetrag",
     "dueDate": "Fälligkeitsdatum",
-    "payDebt": "Schuld bezahlen"
+    "payDebt": "Schuld bezahlen",
+    "confirmPayment": "Zahlungsbestätigung",
+    "confirmPaymentMessage": "Schuld für {amount} bezahlen?",
+    "paymentSuccess": "Schuld bezahlt",
+    "paymentSuccessMessage": "Schuld erfolgreich bezahlt",
+    "status": {
+      "overdue": "Überfällig",
+      "dueSoon": "Bald fällig",
+      "active": "Aktiv",
+      "paid": "Bezahlt"
+    },
+    "tripDebt": "Fahrtenschuld",
+    "serviceDebt": "Dienstleistungsschuld",
+    "penaltyDebt": "Strafschuld",
+    "subscriptionDebt": "Abonnement-Schuld",
+    "parkingDebt": "Parkgebühren-Schuld",
+    "unpaidTrip": "Unbezahlte Fahrt",
+    "unpaidService": "Unbezahlte Dienstleistung",
+    "unpaidPenalty": "Unbezahlte Strafe",
+    "unpaidSubscription": "Unbezahltes Abonnement",
+    "unpaidParking": "Unbezahlte Parkgebühren",
+    "toAirport": "zum Flughafen",
+    "toCityCenter": "ins Stadtzentrum"
   },
   "cards": {
     "title": "Meine Karten",
