@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { colors } from '../../../constants/colors';
 
 export const BalanceScreenStyles = StyleSheet.create({
@@ -15,6 +15,7 @@ export const BalanceScreenStyles = StyleSheet.create({
     paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+    backgroundColor: '#fff',
   },
   backButton: {
     padding: 8,
@@ -31,13 +32,14 @@ export const BalanceScreenStyles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
+  contentContainer: {
+    paddingVertical: 16,
+  },
   // Основной баланс
   balanceCard: {
     backgroundColor: '#003366',
     borderRadius: 16,
     padding: 24,
-    marginTop: 16,
-    marginBottom: 24,
   },
   balanceLabel: {
     fontSize: 16,
@@ -54,7 +56,9 @@ export const BalanceScreenStyles = StyleSheet.create({
   balanceActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
+    gap: 6,
+    marginBottom: 12,
+    marginTop: -4,
   },
   actionButton: {
     flex: 1,
@@ -66,6 +70,7 @@ export const BalanceScreenStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     gap: 8,
+    marginBottom: 0,
   },
   withdrawButton: {
     backgroundColor: '#e53935',
@@ -78,6 +83,41 @@ export const BalanceScreenStyles = StyleSheet.create({
   // Быстрое пополнение
   quickTopUp: {
     marginBottom: 24,
+  },
+  quickTopUpCard: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+  },
+  quickTopUpHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    justifyContent: 'center',
+  },
+  quickTopUpIcon: {
+    marginRight: 8,
+  },
+  quickAmountsRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  quickAmountButtonLarge: {
+    width: 90,
+    height: 44,
+    backgroundColor: '#003366',
+    marginHorizontal: 8,
+    marginBottom: 12,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quickAmountTextLarge: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
   },
   sectionTitle: {
     fontSize: 18,
@@ -231,6 +271,86 @@ export const BalanceScreenStyles = StyleSheet.create({
   },
 });
 
+// === ДОБАВЛЕНО: Стили для анимированных и обычных View/Text из BalanceScreen.tsx ===
+
+export const balanceCardAnimated: ViewStyle = {
+  backfaceVisibility: 'hidden',
+  position: 'absolute',
+  width: '100%',
+  height: 220,
+  top: 0,
+  left: 0,
+  padding: 32,
+};
+
+export const balanceCardFrontRow: ViewStyle = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+
+export const cashbackText: TextStyle = {
+  color: '#fff',
+  opacity: 0.7,
+  fontSize: 16,
+  marginTop: -2,
+};
+
+export const flipButton: ViewStyle = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: 80,
+};
+
+export const balanceActionsMargin: ViewStyle = {
+  marginTop: 8,
+};
+
+export const balanceCardBack: ViewStyle = {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  height: 180,
+  paddingLeft: 24,
+  paddingTop: 16,
+};
+
+export const cardBackRow: ViewStyle = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+};
+
+export const cardBackText: TextStyle = {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
+  marginRight: 16,
+};
+
+export const cardBackTextNormal: TextStyle = {
+  color: '#fff',
+  fontSize: 16,
+  marginRight: 16,
+};
+
+export const cardBackTextLetter: TextStyle = {
+  color: '#fff',
+  fontSize: 16,
+  letterSpacing: 1,
+  marginRight: 16,
+};
+
+export const cardBackTextLast: TextStyle = {
+  color: '#fff',
+  fontSize: 16,
+};
+
+export const sectionTitleCenter: TextStyle = {
+  textAlign: 'center',
+  marginBottom: 16,
+};
+
 // Функция для получения динамических стилей в зависимости от темы
 export const getBalanceScreenStyles = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
@@ -284,5 +404,94 @@ export const getBalanceScreenStyles = (isDark: boolean) => {
     cashbackDescription: {
       color: currentColors.textSecondary,
     },
+    quickTopUpCard: {
+      backgroundColor: currentColors.surface,
+    },
+    quickTopUpHeader: {
+      justifyContent: 'center',
+    },
+    quickTopUpIcon: {},
+    quickAmountsRow: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginBottom: 12,
+    },
+    quickAmountButtonLarge: {
+      backgroundColor: currentColors.primary,
+      width: 90,
+      height: 44,
+      marginHorizontal: 8,
+      marginBottom: 12,
+      borderRadius: 14,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    quickAmountTextLarge: {
+      color: '#fff',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+    balanceCard: {
+      height: 180,
+    },
   };
+}; 
+
+// Функция для получения цветовых стилей в зависимости от темы
+export const getBalanceScreenColors = (isDark: boolean) => {
+  const colors = isDark ? {
+    background: '#111827',
+    surface: '#1F2937',
+    text: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    primary: '#3B82F6',
+    border: '#374151',
+    card: '#1F2937',
+    danger: '#F87171',
+  } : {
+    background: '#ffffff',
+    surface: '#f9f9f9',
+    text: '#003366',
+    textSecondary: '#666666',
+    primary: '#083198',
+    border: '#f0f0f0',
+    card: '#ffffff',
+    danger: '#e53935',
+  };
+
+  return {
+    container: { backgroundColor: colors.background },
+    header: { 
+      backgroundColor: colors.background,
+      borderBottomColor: colors.border 
+    },
+    title: { color: colors.text },
+    sectionTitle: { color: colors.text },
+  };
+}; 
+
+export const cardWrapper: ViewStyle = {
+  marginTop: 24,
+};
+
+export const cardContainer: ViewStyle = {
+  position: 'relative',
+  height: 220,
+  overflow: 'visible',
+  marginBottom: 40,
+  width: '95%',
+  alignSelf: 'flex-end',
+  marginLeft: 'auto',
+  left: 0,
+}; 
+
+export const cardContainerWithWidth: ViewStyle = {
+  position: 'relative',
+  height: 220,
+  overflow: 'visible',
+  marginBottom: 40,
+  alignSelf: 'flex-end',
+  marginLeft: 'auto',
+  left: 0,
+  paddingRight: 16,
 }; 
