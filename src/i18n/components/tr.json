@@ -72,7 +72,8 @@
     "expand": "Genişlet",
     "collapse": "Daralt",
     "details": "Detaylar",
-    "summary": "Özet"
+    "summary": "Özet",
+    "deleteConfirm": "Kartı silmek istediğinizden emin misiniz?"
   },
   "list": {
     "empty": "Liste boş",
@@ -361,5 +362,27 @@
     "refreshing": "Yenileniyor...",
     "syncing": "Senkronize ediliyor...",
     "validating": "Doğrulanıyor..."
+  },
+  "cards": {
+    "title": "Kartlarım",
+    "addTitle": "Kart ekle",
+    "holderPlaceholder": "Kart sahibi adı",
+    "numberPlaceholder": "Kart numarası",
+    "expiryPlaceholder": "AA/YY",
+    "cvvPlaceholder": "CVV",
+    "add": "Kart ekle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "default": "Varsayılan",
+    "delete": "Kartı sil",
+    "empty": "Eklenmiş kart yok",
+    "emptyDescription": "Hızlı bakiye yükleme için banka kartı ekleyin",
+    "holderError": "Kart sahibi adını girin (en az 2 karakter)",
+    "numberError": "16 haneli kart numarasını girin",
+    "expiryError": "AA/YY formatı",
+    "expiryMonthError": "Ay 01-12 arası",
+    "expiryPastError": "Tarih geçmişte olmamalı",
+    "cvvError": "CVV: 3-4 hane",
+    "deleteConfirm": "Kartı silmek istediğinizden emin misiniz?"
   }
 }

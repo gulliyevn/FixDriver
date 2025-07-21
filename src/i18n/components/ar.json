@@ -72,7 +72,10 @@
     "expand": "توسيع",
     "collapse": "طي",
     "details": "التفاصيل",
-    "summary": "الملخص"
+    "summary": "الملخص",
+    "deleteConfirm": "هل أنت متأكد أنك تريد حذف البطاقة؟",
+    "delete": "حذف",
+    "cancel": "إلغاء"
   },
   "list": {
     "empty": "القائمة فارغة",
@@ -361,5 +364,27 @@
     "refreshing": "جاري التحديث...",
     "syncing": "جاري المزامنة...",
     "validating": "جاري التحقق..."
+  },
+  "cards": {
+    "title": "بطاقاتي",
+    "addTitle": "إضافة بطاقة",
+    "holderPlaceholder": "اسم حامل البطاقة",
+    "numberPlaceholder": "رقم البطاقة",
+    "expiryPlaceholder": "ش/س",
+    "cvvPlaceholder": "CVV",
+    "add": "إضافة بطاقة",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "default": "افتراضي",
+    "delete": "حذف البطاقة",
+    "empty": "لا توجد بطاقات مضافة",
+    "emptyDescription": "أضف بطاقة بنكية لشحن الرصيد السريع",
+    "holderError": "أدخل اسم حامل البطاقة (الحد الأدنى حرفان)",
+    "numberError": "أدخل 16 رقم من رقم البطاقة",
+    "expiryError": "تنسيق ش/س",
+    "expiryMonthError": "الشهر من 01 إلى 12",
+    "expiryPastError": "التاريخ يجب ألا يكون في الماضي",
+    "cvvError": "CVV: 3-4 أرقام",
+    "deleteConfirm": "هل أنت متأكد من حذف البطاقة؟"
   }
 }

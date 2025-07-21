@@ -72,7 +72,10 @@
     "expand": "Erweitern",
     "collapse": "Zusammenklappen",
     "details": "Details",
-    "summary": "Zusammenfassung"
+    "summary": "Zusammenfassung",
+    "deleteConfirm": "Sind Sie sicher, dass Sie die Karte löschen möchten?",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
   },
   "list": {
     "empty": "Liste ist leer",
@@ -361,5 +364,27 @@
     "refreshing": "Wird aktualisiert...",
     "syncing": "Wird synchronisiert...",
     "validating": "Wird validiert..."
+  },
+  "cards": {
+    "title": "Meine Karten",
+    "addTitle": "Karte hinzufügen",
+    "holderPlaceholder": "Karteninhaber Name",
+    "numberPlaceholder": "Kartennummer",
+    "expiryPlaceholder": "MM/JJ",
+    "cvvPlaceholder": "CVV",
+    "add": "Karte hinzufügen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "default": "Standard",
+    "delete": "Karte löschen",
+    "empty": "Keine Karten hinzugefügt",
+    "emptyDescription": "Fügen Sie eine Bankkarte für schnelle Guthabenaufladung hinzu",
+    "holderError": "Karteninhaber Name eingeben (mindestens 2 Zeichen)",
+    "numberError": "16-stellige Kartennummer eingeben",
+    "expiryError": "Format MM/JJ",
+    "expiryMonthError": "Monat 01 bis 12",
+    "expiryPastError": "Datum darf nicht in der Vergangenheit liegen",
+    "cvvError": "CVV: 3-4 Ziffern",
+    "deleteConfirm": "Sind Sie sicher, dass Sie die Karte löschen möchten?"
   }
 }

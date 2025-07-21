@@ -35,7 +35,6 @@ export * from './rulesMock';
 export * from './paymentHistoryMock';
 export * from './balanceMock';
 export * from './cardsMock';
-export * from './debtsMock';
 
 // Моки автомобилей
 export * from './carsMock';

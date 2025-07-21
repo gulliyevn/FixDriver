@@ -361,5 +361,27 @@
     "refreshing": "Refreshing...",
     "syncing": "Syncing...",
     "validating": "Validating..."
+  },
+  "cards": {
+    "title": "My cards",
+    "addTitle": "Add card",
+    "holderPlaceholder": "Cardholder name",
+    "numberPlaceholder": "Card number",
+    "expiryPlaceholder": "MM/YY",
+    "cvvPlaceholder": "CVV",
+    "add": "Add card",
+    "save": "Save",
+    "cancel": "Cancel",
+    "default": "Default",
+    "delete": "Delete card",
+    "empty": "No cards added",
+    "emptyDescription": "Add a bank card for quick balance top-up",
+    "holderError": "Enter cardholder name (min 2 chars)",
+    "numberError": "Enter 16 digits card number",
+    "expiryError": "Format MM/YY",
+    "expiryMonthError": "Month 01 to 12",
+    "expiryPastError": "Date must not be in the past",
+    "cvvError": "CVV: 3-4 digits",
+    "deleteConfirm": "Are you sure you want to delete the card?"
   }
 }

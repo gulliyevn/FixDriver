@@ -30,6 +30,7 @@ export const CardsScreenStyles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    marginTop: 16, // Отступ под хедером
   },
   // Пустое состояние
   emptyState: {
@@ -128,6 +129,73 @@ export const CardsScreenStyles = StyleSheet.create({
     fontWeight: '600',
     color: '#003366',
     marginLeft: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+    marginTop: -80,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#003366',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 4,
+    color: '#003366',
+    backgroundColor: '#fff',
+    fontFamily: 'System',
+    fontSize: 15,
+    fontWeight: '400',
+  },
+  errorText: {
+    color: '#e53935',
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalButtonText: {
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  modalButtonCancel: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+    marginRight: 8,
+  },
+  modalButtonSave: {
+    backgroundColor: '#003366',
+    marginLeft: 8,
+  },
+  modalButtonDisabled: {
+    backgroundColor: '#f9f9f9',
+    opacity: 0.5,
   },
 });
 

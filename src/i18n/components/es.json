@@ -72,7 +72,10 @@
     "expand": "Expandir",
     "collapse": "Contraer",
     "details": "Detalles",
-    "summary": "Resumen"
+    "summary": "Resumen",
+    "deleteConfirm": "¿Está seguro de que desea eliminar la tarjeta?",
+    "delete": "Eliminar",
+    "cancel": "Cancelar"
   },
   "list": {
     "empty": "Lista vacía",
@@ -361,5 +364,27 @@
     "refreshing": "Actualizando...",
     "syncing": "Sincronizando...",
     "validating": "Validando..."
+  },
+  "cards": {
+    "title": "Mis tarjetas",
+    "addTitle": "Agregar tarjeta",
+    "holderPlaceholder": "Nombre del titular",
+    "numberPlaceholder": "Número de tarjeta",
+    "expiryPlaceholder": "MM/AA",
+    "cvvPlaceholder": "CVV",
+    "add": "Agregar tarjeta",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "default": "Predeterminada",
+    "delete": "Eliminar tarjeta",
+    "empty": "No hay tarjetas agregadas",
+    "emptyDescription": "Agregue una tarjeta bancaria para recarga rápida de saldo",
+    "holderError": "Ingrese nombre del titular (mínimo 2 caracteres)",
+    "numberError": "Ingrese 16 dígitos del número de tarjeta",
+    "expiryError": "Formato MM/AA",
+    "expiryMonthError": "Mes 01 a 12",
+    "expiryPastError": "La fecha no debe estar en el pasado",
+    "cvvError": "CVV: 3-4 dígitos",
+    "deleteConfirm": "¿Está seguro de que desea eliminar la tarjeta?"
   }
 }

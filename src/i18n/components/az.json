@@ -72,7 +72,10 @@
     "expand": "Genişlət",
     "collapse": "Daralt",
     "details": "Təfərrüatlar",
-    "summary": "Xülasə"
+    "summary": "Xülasə",
+    "deleteConfirm": "Kartı silmək istədiyinizə əminsiniz?",
+    "delete": "Sil",
+    "cancel": "Ləğv et"
   },
   "list": {
     "empty": "Siyahı boşdur",
@@ -361,5 +364,27 @@
     "refreshing": "Yenilənir...",
     "syncing": "Sinxronlaşdırılır...",
     "validating": "Yoxlanılır..."
+  },
+  "cards": {
+    "title": "Kartlarım",
+    "addTitle": "Kart əlavə et",
+    "holderPlaceholder": "Kart sahibinin adı",
+    "numberPlaceholder": "Kart nömrəsi",
+    "expiryPlaceholder": "AA/İİ",
+    "cvvPlaceholder": "CVV",
+    "add": "Kart əlavə et",
+    "save": "Yadda saxla",
+    "cancel": "Ləğv et",
+    "default": "Varsayılan",
+    "delete": "Kartı sil",
+    "empty": "Əlavə edilmiş kart yoxdur",
+    "emptyDescription": "Tez balans yükləmə üçün bank kartı əlavə edin",
+    "holderError": "Kart sahibinin adını daxil edin (minimum 2 simvol)",
+    "numberError": "16 rəqəmli kart nömrəsini daxil edin",
+    "expiryError": "AA/İİ formatı",
+    "expiryMonthError": "Ay 01-dən 12-yə qədər",
+    "expiryPastError": "Tarix keçmişdə olmamalıdır",
+    "cvvError": "CVV: 3-4 rəqəm",
+    "deleteConfirm": "Kartı silmək istədiyinizə əminsiniz?"
   }
 }

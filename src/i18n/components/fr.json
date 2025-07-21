@@ -72,7 +72,10 @@
     "expand": "Développer",
     "collapse": "Réduire",
     "details": "Détails",
-    "summary": "Résumé"
+    "summary": "Résumé",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer la carte ?",
+    "delete": "Supprimer",
+    "cancel": "Annuler"
   },
   "list": {
     "empty": "Liste vide",
@@ -361,5 +364,27 @@
     "refreshing": "Actualisation...",
     "syncing": "Synchronisation...",
     "validating": "Validation..."
+  },
+  "cards": {
+    "title": "Mes cartes",
+    "addTitle": "Ajouter une carte",
+    "holderPlaceholder": "Nom du titulaire",
+    "numberPlaceholder": "Numéro de carte",
+    "expiryPlaceholder": "MM/AA",
+    "cvvPlaceholder": "CVV",
+    "add": "Ajouter une carte",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "default": "Par défaut",
+    "delete": "Supprimer la carte",
+    "empty": "Aucune carte ajoutée",
+    "emptyDescription": "Ajoutez une carte bancaire pour un rechargement rapide du solde",
+    "holderError": "Entrez le nom du titulaire (minimum 2 caractères)",
+    "numberError": "Entrez 16 chiffres du numéro de carte",
+    "expiryError": "Format MM/AA",
+    "expiryMonthError": "Mois 01 à 12",
+    "expiryPastError": "La date ne doit pas être dans le passé",
+    "cvvError": "CVV: 3-4 chiffres",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer la carte ?"
   }
 }

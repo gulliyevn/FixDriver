@@ -766,5 +766,27 @@
     "xoConstraintViolationException": "Нарушение ограничений XO...",
     "yoConstraintViolationException": "Нарушение ограничений YO...",
     "zoConstraintViolationException": "Нарушение ограничений ZO..."
+  },
+  "cards": {
+    "title": "Мои карты",
+    "addTitle": "Добавить карту",
+    "holderPlaceholder": "Имя владельца",
+    "numberPlaceholder": "Номер карты",
+    "expiryPlaceholder": "MM/YY",
+    "cvvPlaceholder": "CVV",
+    "add": "Добавить карту",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "default": "По умолчанию",
+    "delete": "Удалить карту",
+    "empty": "Нет добавленных карт",
+    "emptyDescription": "Добавьте банковскую карту для быстрого пополнения баланса",
+    "holderError": "Введите имя владельца (минимум 2 символа)",
+    "numberError": "Введите 16 цифр номера карты",
+    "expiryError": "Формат MM/YY",
+    "expiryMonthError": "Месяц от 01 до 12",
+    "expiryPastError": "Срок не должен быть в прошлом",
+    "cvvError": "CVV: 3-4 цифры",
+    "deleteConfirm": "Вы уверены, что хотите удалить карту?"
   }
 }
