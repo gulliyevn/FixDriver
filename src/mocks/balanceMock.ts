@@ -4,7 +4,7 @@ export const mockTransactions: Transaction[] = [
   {
     id: '1',
     type: 'payment',
-    amount: '-15.50 AZN',
+    amount: '-15.50 AFc',
     description: 'Поездка в центр города',
     date: '2024-01-15',
     time: '14:30',
@@ -13,7 +13,7 @@ export const mockTransactions: Transaction[] = [
   {
     id: '2',
     type: 'topup',
-    amount: '+100 AZN',
+    amount: '+100 AFc',
     description: 'Пополнение с карты',
     date: '2024-01-14',
     time: '10:15',
@@ -22,7 +22,7 @@ export const mockTransactions: Transaction[] = [
   {
     id: '3',
     type: 'payment',
-    amount: '-8.75 AZN',
+    amount: '-8.75 AFc',
     description: 'Поездка в аэропорт',
     date: '2024-01-13',
     time: '09:45',
@@ -31,7 +31,7 @@ export const mockTransactions: Transaction[] = [
   {
     id: '4',
     type: 'refund',
-    amount: '+12.00 AZN',
+    amount: '+12.00 AFc',
     description: 'Возврат средств',
     date: '2024-01-12',
     time: '16:20',
@@ -65,5 +65,9 @@ export const mockWithdrawalMethods: WithdrawalMethod[] = [
   }
 ];
 
-export const mockBalance = '0 AZN';
-export const mockQuickAmounts = ['10 AZN', '25 AZN', '50 AZN', '100 AZN']; 
+export const mockBalance = '0 AFc';
+export const mockQuickAmounts = [
+  '10', '25', '100',
+  '15', '50', '200',
+  '20', '75', '500',
+]; 

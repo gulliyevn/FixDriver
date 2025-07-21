@@ -11,7 +11,7 @@ export class PackageService {
             id: 'single',
             name: 'Разовая поездка',
             type: 'single',
-            price: 25, // AZN
+            price: 25, // AFc
             duration: 0,
             description: 'Оплата за одну поездку',
             isActive: false,

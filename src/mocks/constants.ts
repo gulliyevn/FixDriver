@@ -51,7 +51,7 @@ export const MOCK_PAYMENT_TYPES = {
 
 // Валюты
 export const MOCK_CURRENCIES = {
-  AZN: 'AZN',
+  AFc: 'AFc',
   USD: 'USD',
   EUR: 'EUR',
 };

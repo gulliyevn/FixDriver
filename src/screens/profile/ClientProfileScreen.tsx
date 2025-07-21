@@ -33,9 +33,9 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
   const getUserStats = (userId: string) => {
     return {
       trips: 127,
-      spent: '12 450 AZN',
+      spent: '12 450 AFc',
       rating: user.rating,
-      balance: '0 AZN',
+      balance: '0 AFc',
       address: user.address,
       email: user.email,
       memberSince: new Date(user.createdAt).getFullYear(),

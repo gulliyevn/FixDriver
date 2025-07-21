@@ -88,7 +88,7 @@ export class StripeService {
 
   // Создать платежное намерение
   // TODO: Заменить на реальный Stripe API запрос к /payment_intents/create
-  static async createPaymentIntent(amount: number, currency: string = 'azn'): Promise<PaymentIntent> {
+  static async createPaymentIntent(amount: number, currency: string = 'afc'): Promise<PaymentIntent> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({

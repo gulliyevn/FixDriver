@@ -35,9 +35,9 @@ const DriverProfileScreen: React.FC<DriverScreenProps<'DriverProfile'>> = ({ nav
   const getDriverStats = (userId: string) => {
     return {
       trips: 89,
-      earnings: '8 750 AZN',
+      earnings: '8 750 AFc',
       rating: user.rating,
-      balance: '1 250 AZN',
+      balance: '1 250 AFc',
       address: user.address,
       email: user.email,
       memberSince: new Date(user.createdAt).getFullYear(),
