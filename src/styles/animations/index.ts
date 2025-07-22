@@ -1,1 +1,2 @@
-export { createSlideAnimation, slideAnimationConfig } from './RulesAnimations'; 
+export { createSlideAnimation, slideAnimationConfig } from './RulesAnimations';
+export * from './BalanceAnimations'; 

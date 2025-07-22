@@ -1,4 +1,5 @@
 import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { Animated } from 'react-native';
 import { colors } from '../../../constants/colors';
 
 export const BalanceScreenStyles = StyleSheet.create({
@@ -746,98 +747,118 @@ export const flipButtonFront: ViewStyle = {
   alignItems: 'center',
 };
 
-  // === Новые стили для вынесенных из TSX инлайн-стилей ===
-  // cardFrontButton: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   borderWidth: 2,
-  //   borderRadius: 16,
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 16,
-  //   marginRight: 6,
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.12,
-  //   shadowRadius: 8,
-  //   elevation: 4,
-  // },
-  // cardFrontButton2: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   borderWidth: 2,
-  //   borderRadius: 16,
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 16,
-  //   marginLeft: 6,
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.12,
-  //   shadowRadius: 8,
-  //   elevation: 4,
-  // },
-  // cardFrontBtnText: {
-  //   fontSize: 16,
-  //   fontWeight: '700',
-  //   marginLeft: 8,
-  // },
-  // cardBackBtnContainer: {
-  //   position: 'absolute',
-  //   right: 16,
-  //   top: '50%',
-  //   transform: [{ translateY: -16 }],
-  // },
-  // modalOverlay: {
-  //   flex: 1,
-  //   backgroundColor: 'rgba(0,0,0,0.4)',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-  // modalOverlayDark: {
-  //   backgroundColor: 'rgba(0,0,0,0.7)',
-  // },
-  // modalContainer: {
-  //   borderRadius: 16,
-  //   padding: 24,
-  //   width: '85%',
-  //   shadowColor: '#000',
-  //   shadowOffset: { width: 0, height: 8 },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 24,
-  //   elevation: 16,
-  // },
-  // modalTitle: {
-  //   fontSize: 20,
-  //   fontWeight: '700',
-  //   marginBottom: 16,
-  // },
-  // modalLabel: {
-  //   fontSize: 16,
-  //   marginBottom: 8,
-  // },
-  // modalInput: {
-  //   borderWidth: 1,
-  //   borderRadius: 8,
-  //   padding: 12,
-  //   fontSize: 18,
-  //   marginBottom: 20,
-  // },
-  // modalPayBtn: {
-  //   borderRadius: 10,
-  //   paddingVertical: 14,
-  //   alignItems: 'center',
-  //   marginBottom: 8,
-  // },
-  // modalPayBtnText: {
-  //   color: '#fff',
-  //   fontSize: 18,
-  //   fontWeight: '600',
-  // },
-  // modalCancelBtn: {
-  //   alignItems: 'center',
-  //   marginTop: 4,
-  // },
-  // modalCancelBtnText: {
-  //   fontSize: 16,
-  // }, 
+
+
+// === Новые стили для инлайн-стилей из BalanceScreen.tsx ===
+
+export const mainBalanceContainer: ViewStyle = {
+  marginTop: 12,
+};
+
+export const cardContainerWithDynamicWidth = (screenWidth: number): ViewStyle => ({
+  ...cardContainerWithWidth,
+  width: screenWidth * 0.95,
+});
+
+export const balanceCardWithTheme = (currentColors: { primary: string }): ViewStyle => ({
+  backgroundColor: currentColors.primary,
+  borderColor: currentColors.primary,
+});
+
+export const cardFrontButtonWithTheme = (cardBg: string, topUpBtnColor: string): ViewStyle => ({
+  backgroundColor: cardBg,
+  borderColor: topUpBtnColor,
+  shadowColor: topUpBtnColor,
+});
+
+export const cardFrontButton2WithTheme = (cardBg: string, cashbackBtnColor: string): ViewStyle => ({
+  backgroundColor: cardBg,
+  borderColor: cashbackBtnColor,
+  shadowColor: cashbackBtnColor,
+});
+
+export const cardFrontBtnTextWithColor = (color: string): TextStyle => ({
+  color,
+});
+
+export const quickAmountsRowWithLayout: ViewStyle = {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  marginBottom: 12,
+};
+
+export const quickAmountTextWithTheme: TextStyle = {
+  color: '#fff',
+  fontSize: 16,
+  textAlign: 'center',
+};
+
+export const modalContainerWithTheme = (currentColors: { card: string }): ViewStyle => ({
+  backgroundColor: currentColors.card,
+});
+
+export const modalTitleWithTheme = (currentColors: { text: string }): TextStyle => ({
+  color: currentColors.text,
+});
+
+export const modalLabelWithTheme = (currentColors: { textSecondary: string }): TextStyle => ({
+  color: currentColors.textSecondary,
+});
+
+export const modalInputWithTheme = (currentColors: { border: string; text: string; surface: string }): ViewStyle & TextStyle => ({
+  borderColor: currentColors.border,
+  color: currentColors.text,
+  backgroundColor: currentColors.surface,
+});
+
+export const modalPayBtnWithTheme = (currentColors: { primary: string }): ViewStyle => ({
+  backgroundColor: currentColors.primary,
+});
+
+export const modalCancelBtnTextWithTheme = (currentColors: { textSecondary: string }): TextStyle => ({
+  color: currentColors.textSecondary,
+});
+
+export const cvvStickerWithAnimation = (
+  stickerOpacity: Animated.Value,
+  stickerTranslateX: Animated.Value,
+  stickerTranslateY: Animated.Value,
+  stickerRotate: Animated.Value
+): ViewStyle => ({
+  opacity: stickerOpacity,
+  transform: [
+    { translateX: stickerTranslateX },
+    { translateY: stickerTranslateY },
+    {
+      rotate: stickerRotate.interpolate({
+        inputRange: [0, 0.3, 1],
+        outputRange: ['0deg', '15deg', '45deg']
+      })
+    }
+  ]
+});
+
+export const cvvTextWithOpacity = (cvvOpacity: Animated.Value): TextStyle => ({
+  opacity: cvvOpacity,
+});
+
+export const copiedIconStyle: ViewStyle = {
+  marginRight: 4,
+};
+
+export const flipIconColor = (isDark: boolean): string => {
+  return isDark ? '#083198' : '#3B82F6';
+};
+
+export const backIconColor = (isDark: boolean): string => {
+  return isDark ? '#3B82F6' : '#083198';
+};
+
+export const cardNumberLine: ViewStyle = {
+  height: 40,
+  backgroundColor: '#6d6565',
+  width: '123%',
+  position: 'absolute',
+  bottom: -5,
+  left: -32.5,
+}; 
