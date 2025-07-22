@@ -53,6 +53,13 @@ export const BalanceScreenStyles = StyleSheet.create({
     color: '#fff',
     marginBottom: 24,
   },
+  balanceCurrency: {
+    color: '#fff',
+    fontSize: 24,
+    marginLeft: 6,
+    fontWeight: '700',
+    marginBottom: 14,
+  },
   balanceActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -269,6 +276,219 @@ export const BalanceScreenStyles = StyleSheet.create({
     color: '#888',
     lineHeight: 20,
   },
+  balanceCardBorder: {
+    borderWidth: 2,
+    // borderColor будет задаваться динамически через dynamicStyles
+  },
+  // === Новые стили для вынесенных из TSX инлайн-стилей ===
+  cardFrontButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginRight: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  cardFrontButton2: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginLeft: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  cardFrontBtnText: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginLeft: 8,
+  },
+  cardBackBtnContainer: {
+    position: 'absolute',
+    right: -8,
+    top: -8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalOverlayDark: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+  },
+  modalContainer: {
+    borderRadius: 16,
+    padding: 24,
+    width: '85%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 16,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 16,
+  },
+  modalLabel: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalPayBtn: {
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  modalPayBtnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  modalCancelBtn: {
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  modalCancelBtnText: {
+    fontSize: 16,
+  },
+  balanceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardBackTextCenter: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 2,
+    marginBottom: 0,
+  },
+  cardNumberText: {
+    fontSize: 24,
+    fontWeight: '600',
+    letterSpacing: 1,
+    color: '#fff',
+  },
+  cardNumberContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transform: [{ translateY: -8 }],
+  },
+  copyButton: {
+    marginLeft: 8,
+    padding: 4,
+  },
+  copiedNotification: {
+    position: 'absolute',
+    top: '45%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+  copiedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  copiedText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  cardDetailsContainer: {
+    position: 'absolute',
+    bottom: 24,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingLeft: 24,
+    gap: 5,
+  },
+  cardDetailsText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#fff',
+    opacity: 0.8,
+  },
+  cardNameContainer: {
+    position: 'absolute',
+    bottom: -8,
+    left: 0,
+    right: 0,
+    paddingLeft: 8,
+  },
+  cardNameText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff',
+    opacity: 0.9,
+    letterSpacing: 1,
+  },
+  cvvContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    position: 'relative',
+  },
+  cvvSticker: {
+    position: 'absolute',
+    left: -8,
+    top: -2,
+    backgroundColor: '#333',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: '#555',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  cvvStickerText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
 });
 
 // === ДОБАВЛЕНО: Стили для анимированных и обычных View/Text из BalanceScreen.tsx ===
@@ -308,7 +528,7 @@ export const balanceActionsMargin: ViewStyle = {
 
 export const balanceCardBack: ViewStyle = {
   flex: 1,
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
   alignItems: 'flex-start',
   height: 180,
   paddingLeft: 24,
@@ -316,9 +536,10 @@ export const balanceCardBack: ViewStyle = {
 };
 
 export const cardBackRow: ViewStyle = {
+  display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  flexWrap: 'wrap',
+  flexWrap: 'nowrap',
 };
 
 export const cardBackText: TextStyle = {
@@ -336,9 +557,9 @@ export const cardBackTextNormal: TextStyle = {
 
 export const cardBackTextLetter: TextStyle = {
   color: '#fff',
-  fontSize: 16,
-  letterSpacing: 1,
-  marginRight: 16,
+  fontSize: 24,
+  fontWeight: '700',
+  letterSpacing: 2,
 };
 
 export const cardBackTextLast: TextStyle = {
@@ -513,6 +734,110 @@ export const cardSpacer: ViewStyle = {
 }; 
 
 export const flipButtonBack: ViewStyle = {
-  alignItems: 'flex-end',
-  marginTop: 12,
+  height: 40,
+  width: 40,
+  justifyContent: 'center',
+  alignItems: 'center',
 }; 
+
+export const flipButtonFront: ViewStyle = {
+  height: 80,
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+  // === Новые стили для вынесенных из TSX инлайн-стилей ===
+  // cardFrontButton: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   borderWidth: 2,
+  //   borderRadius: 16,
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 16,
+  //   marginRight: 6,
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.12,
+  //   shadowRadius: 8,
+  //   elevation: 4,
+  // },
+  // cardFrontButton2: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   borderWidth: 2,
+  //   borderRadius: 16,
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 16,
+  //   marginLeft: 6,
+  //   shadowOffset: { width: 0, height: 2 },
+  //   shadowOpacity: 0.12,
+  //   shadowRadius: 8,
+  //   elevation: 4,
+  // },
+  // cardFrontBtnText: {
+  //   fontSize: 16,
+  //   fontWeight: '700',
+  //   marginLeft: 8,
+  // },
+  // cardBackBtnContainer: {
+  //   position: 'absolute',
+  //   right: 16,
+  //   top: '50%',
+  //   transform: [{ translateY: -16 }],
+  // },
+  // modalOverlay: {
+  //   flex: 1,
+  //   backgroundColor: 'rgba(0,0,0,0.4)',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+  // modalOverlayDark: {
+  //   backgroundColor: 'rgba(0,0,0,0.7)',
+  // },
+  // modalContainer: {
+  //   borderRadius: 16,
+  //   padding: 24,
+  //   width: '85%',
+  //   shadowColor: '#000',
+  //   shadowOffset: { width: 0, height: 8 },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 24,
+  //   elevation: 16,
+  // },
+  // modalTitle: {
+  //   fontSize: 20,
+  //   fontWeight: '700',
+  //   marginBottom: 16,
+  // },
+  // modalLabel: {
+  //   fontSize: 16,
+  //   marginBottom: 8,
+  // },
+  // modalInput: {
+  //   borderWidth: 1,
+  //   borderRadius: 8,
+  //   padding: 12,
+  //   fontSize: 18,
+  //   marginBottom: 20,
+  // },
+  // modalPayBtn: {
+  //   borderRadius: 10,
+  //   paddingVertical: 14,
+  //   alignItems: 'center',
+  //   marginBottom: 8,
+  // },
+  // modalPayBtnText: {
+  //   color: '#fff',
+  //   fontSize: 18,
+  //   fontWeight: '600',
+  // },
+  // modalCancelBtn: {
+  //   alignItems: 'center',
+  //   marginTop: 4,
+  // },
+  // modalCancelBtnText: {
+  //   fontSize: 16,
+  // }, 

@@ -8,6 +8,8 @@ import { ClientProfileScreenStyles as styles, getClientProfileStyles } from '../
 import { mockUsers } from '../../mocks/users';
 import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 // TODO: Для подключения бэкенда заменить на:
 // import { useProfile } from '../../hooks/useProfile';
@@ -21,6 +23,19 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getClientProfileStyles(isDark);
   const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
+
+  // Баланс из AsyncStorage
+  const [balance, setBalance] = React.useState<string>('0');
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+      (async () => {
+        const stored = await AsyncStorage.getItem('user_balance');
+        if (isActive) setBalance(stored ?? '0');
+      })();
+      return () => { isActive = false; };
+    }, [])
+  );
   
 // TODO: Для бэкенда заменить на:
 // const { user, loading: userLoading } = useProfile();
@@ -35,7 +50,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
       trips: 127,
       spent: '12 450 AFc',
       rating: user.rating,
-      balance: '0 AFc',
+      balance: balance + ' AFc',
       address: user.address,
       email: user.email,
       memberSince: new Date(user.createdAt).getFullYear(),

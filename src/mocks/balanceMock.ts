@@ -65,7 +65,7 @@ export const mockWithdrawalMethods: WithdrawalMethod[] = [
   }
 ];
 
-export const mockBalance = '0 AFc';
+export const mockBalance = '0';
 export const mockQuickAmounts = [
   '10', '25', '100',
   '15', '50', '200',
