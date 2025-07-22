@@ -495,3 +495,24 @@ export const cardContainerWithWidth: ViewStyle = {
   left: 0,
   paddingRight: 16,
 }; 
+
+export const animatedCardFront: ViewStyle = {
+  position: 'absolute',
+  width: '100%',
+  backfaceVisibility: 'hidden',
+};
+
+export const animatedCardBack: ViewStyle = {
+  position: 'absolute',
+  width: '100%',
+  backfaceVisibility: 'hidden',
+};
+
+export const cardSpacer: ViewStyle = {
+  height: 180,
+}; 
+
+export const flipButtonBack: ViewStyle = {
+  alignItems: 'flex-end',
+  marginTop: 12,
+}; 

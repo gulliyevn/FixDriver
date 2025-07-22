@@ -28,6 +28,10 @@ import {
   cardBackTextLast,
   sectionTitleCenter,
   cardContainerWithWidth,
+  animatedCardFront,
+  animatedCardBack,
+  cardSpacer,
+  flipButtonBack,
 } from '../../styles/screens/profile/BalanceScreen.styles';
 
 /**
@@ -53,32 +57,36 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const [transactions] = useState<Transaction[]>(mockTransactions);
   const [topUpMethods] = useState<TopUpMethod[]>(mockTopUpMethods);
   const [withdrawalMethods] = useState<WithdrawalMethod[]>(mockWithdrawalMethods);
-  const [isFlipped, setIsFlipped] = useState(false);
+  // Вместо flipAnim._value используем ref
   const flipAnim = useRef(new Animated.Value(0)).current;
+  const isFlippedRef = useRef(false);
 
   const handleFlip = () => {
-    const toValue = isFlipped ? 0 : 1;
+    const toValue = isFlippedRef.current ? 0 : 1;
     Animated.timing(flipAnim, {
-      toValue: 0.5,
-      duration: 350,
+      toValue,
+      duration: 600,
       useNativeDriver: true,
     }).start(() => {
-      setIsFlipped((prev) => !prev);
-      Animated.timing(flipAnim, {
-        toValue,
-        duration: 350,
-        useNativeDriver: true,
-      }).start();
+      isFlippedRef.current = !isFlippedRef.current;
     });
   };
 
-  const rotateY = flipAnim.interpolate({
+  const frontInterpolate = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: ['0deg', '90deg', '180deg'],
   });
-  const rotateYBack = flipAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['180deg', '360deg'],
+  const backInterpolate = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['180deg', '90deg', '0deg'],
+  });
+  const frontOpacity = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1, 0, 0],
+  });
+  const backOpacity = flipAnim.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0, 0, 1],
   });
 
   const handleTopUp = () => {
@@ -169,78 +177,91 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         showsVerticalScrollIndicator={false}>
         {/* Основной баланс с анимацией */}
         <View style={{ marginTop: 12 }}>
-          <View style={[cardContainerWithWidth, { width: screenWidth * 0.95 }]}>
-            {/* Front side */}
-            <Animated.View style={[
-              styles.balanceCard,
-              dynamicStyles.balanceCard,
-              balanceCardAnimated,
-              { transform: [{ rotateY }], },
-            ]}>
-              {!isFlipped && (
-                <>
-                  <View style={balanceCardFrontRow}>
-                    <View>
-                      <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
-                      <Text style={styles.balanceAmount}>{balance}</Text>
-                      <Text style={cashbackText}>CashBack: 125 AFc</Text>
-                    </View>
-                    <TouchableOpacity onPress={handleFlip} style={flipButton}>
-                      <Ionicons name="swap-horizontal" size={32} color="#fff" />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={[styles.balanceActions, balanceActionsMargin]}> 
-                    <TouchableOpacity style={styles.actionButton} onPress={handleTopUp}>
-                      <Ionicons name="add-circle" size={24} color="#fff" />
-                      <Text style={styles.actionButtonText}>{t('client.balance.topUp')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.actionButton, styles.cashbackButton]} onPress={handleUseCashback}>
-                      <Ionicons name="gift" size={24} color="#fff" />
-                      <Text style={styles.actionButtonText}>{t('client.balance.cashback.use')}</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-            </Animated.View>
-            {/* Back side */}
-            <Animated.View style={[
-              styles.balanceCard,
-              dynamicStyles.balanceCard,
-              balanceCardAnimated,
-              { transform: [{ rotateY: rotateYBack }], },
-            ]}>
-              {isFlipped && (
-                <View style={balanceCardBack}>
-                  <View style={cardBackRow}>
-                    <Text style={cardBackText}>DIGITAL AFc CARD</Text>
-                    <Text style={cardBackTextLetter}>1234 5678 9012 3456</Text>
-                    <Text style={cardBackTextNormal}>Иван Иванов</Text>
-                    <Text style={cardBackTextNormal}>12/25</Text>
-                    <Text style={cardBackTextLast}>CVV: 123</Text>
-                  </View>
+          <View style={[cardContainerWithWidth, { width: screenWidth * 0.95 }]}>  
+            {/* Front side - всегда в DOM */}
+            <Animated.View
+              style={[
+                styles.balanceCard,
+                dynamicStyles.balanceCard,
+                balanceCardAnimated,
+                animatedCardFront,
+                { 
+                  transform: [{ rotateY: frontInterpolate }],
+                  opacity: frontOpacity,
+                },
+              ]}
+            >
+              <View style={balanceCardFrontRow}>
+                <View>
+                  <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
+                  <Text style={styles.balanceAmount}>{balance}</Text>
+                  <Text style={cashbackText}>CashBack: 125 AFc</Text>
                 </View>
-              )}
+                <TouchableOpacity onPress={handleFlip} style={flipButton}>
+                  <Ionicons name="swap-horizontal" size={32} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.balanceActions, balanceActionsMargin]}> 
+                <TouchableOpacity style={styles.actionButton} onPress={handleTopUp}>
+                  <Ionicons name="add-circle" size={24} color="#fff" />
+                  <Text style={styles.actionButtonText}>{t('client.balance.topUp')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.actionButton, styles.cashbackButton]} onPress={handleUseCashback}>
+                  <Ionicons name="gift" size={24} color="#fff" />
+                  <Text style={styles.actionButtonText}>{t('client.balance.cashback.use')}</Text>
+                </TouchableOpacity>
+              </View>
             </Animated.View>
+            {/* Back side - всегда в DOM */}
+            <Animated.View
+              style={[
+                styles.balanceCard,
+                dynamicStyles.balanceCard,
+                balanceCardAnimated,
+                animatedCardBack,
+                {
+                  transform: [{ rotateY: backInterpolate }],
+                  opacity: backOpacity,
+                },
+              ]}
+            >
+              <View style={balanceCardBack}>
+                <View style={cardBackRow}>
+                  <Text style={cardBackText}>DIGITAL AFc CARD</Text>
+                  <Text style={cardBackTextLetter}>1234 5678 9012 3456</Text>
+                  <Text style={cardBackTextNormal}>Иван Иванов</Text>
+                  <Text style={cardBackTextNormal}>12/25</Text>
+                  <Text style={cardBackTextLast}>CVV: 123</Text>
+                </View>
+                <View style={flipButtonBack}>
+                  <TouchableOpacity onPress={handleFlip} style={flipButton}>
+                    <Ionicons name="swap-horizontal" size={32} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Animated.View>
+            {/* Spacer для высоты */}
+            <View style={cardSpacer} />
           </View>
         </View>
         {/* Кнопки вынесены ниже карты */}
         {/* Быстрое пополнение - обновлённый красивый вид */}
         <View style={[styles.quickTopUpCard, dynamicStyles.quickTopUpCard]}> 
-          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle, sectionTitleCenter as TextStyle]}>{t('client.balance.quickTopUp')}</Text>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
           {[0, 1, 2].map(row => (
-            <View key={row} style={[styles.quickAmountsRow, dynamicStyles.quickAmountsRow]}>
+            <View key={row} style={[styles.quickAmountsRow, dynamicStyles.quickAmountsRow || {}]}>
               {mockQuickAmounts.slice(row * 3, row * 3 + 3).map((amount) => (
                 <TouchableOpacity
                   key={amount}
                   style={[
                     styles.quickAmountButton,
-                    dynamicStyles.quickAmountButton,
+                    dynamicStyles.quickAmountButton || {},
                     styles.quickAmountButtonLarge,
-                    dynamicStyles.quickAmountButtonLarge,
+                    dynamicStyles.quickAmountButtonLarge || {},
                   ]}
                   onPress={() => handleQuickTopUp(amount)}
                 >
-                  <Text style={[styles.quickAmountText, styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge]}>{amount}</Text>
+                  <Text style={[styles.quickAmountText, styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge || {}]}>{amount}</Text>
                 </TouchableOpacity>
               ))}
             </View>
