@@ -134,19 +134,19 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
     
     if (cashbackNum < 20) {
       Alert.alert(
-        'Недостаточно средств',
-        'Для вывода средств нужны минимум 20 AFc'
+        t('client.balance.insufficientFunds'),
+        t('client.balance.minimumWithdrawal')
       );
       return;
     }
     
     Alert.alert(
-      'Использование кэшбэка',
-      'Вы уверены что хотите использовать Cashback?',
+      t('client.balance.useCashback'),
+      t('client.balance.useCashbackConfirm'),
       [
-        { text: 'Отмена', style: 'cancel' },
+        { text: t('client.balance.cancel'), style: 'cancel' },
         {
-          text: 'Да',
+          text: t('client.balance.yes'),
           onPress: () => {
             setBalance((prev: string) => {
               const cleanPrev = String(prev).replace(/AFc/gi, '').replace(/\s+/g, '');
@@ -157,7 +157,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
             });
             setCashback('0');
             AsyncStorage.setItem(CASHBACK_KEY, '0');
-            Alert.alert('Успешно', `Кэшбэк ${cashbackNum} AFc добавлен к балансу`);
+            Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
           }
         }
       ]
@@ -173,7 +173,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const handleFakeStripePayment = () => {
     const amountNum = parseFloat(topUpAmount.replace(',', '.'));
     if (isNaN(amountNum) || amountNum <= 0) {
-      Alert.alert('Ошибка', 'Введите корректную сумму');
+      Alert.alert(t('client.balance.error'), t('client.balance.enterValidAmount'));
       return;
     }
     setBalance((prev: string) => {
@@ -184,7 +184,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       return newBalance;
     });
     setTopUpModalVisible(false);
-    Alert.alert('Оплата прошла успешно', `Баланс пополнен на ${amountNum} AFc`);
+    Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
   };
 
   const [showCopied, setShowCopied] = useState(false);
@@ -341,7 +341,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                   <View style={styles.copiedNotification}>
                                       <View style={styles.copiedContainer}>
                     <Ionicons name="checkmark-circle" size={16} color="#fff" style={copiedIconStyle} />
-                    <Text style={styles.copiedText}>Скопировано</Text>
+                    <Text style={styles.copiedText}>{t('client.balance.copied')}</Text>
                   </View>
                   </View>
                 )}
@@ -386,12 +386,12 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       >
         <View style={[styles.modalOverlay, isDark && styles.modalOverlayDark]}>
           <View style={[styles.modalContainer, modalContainerWithTheme(currentColors)]}> 
-            <Text style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}>Пополнение баланса</Text>
-            <Text style={[styles.modalLabel, modalLabelWithTheme(currentColors)]}>Сумма в AFc</Text>
+            <Text style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}>{t('client.balance.balanceTopUp')}</Text>
+            <Text style={[styles.modalLabel, modalLabelWithTheme(currentColors)]}>{t('client.balance.amountInAFc')}</Text>
             <TextInput
               value={topUpAmount}
               onChangeText={setTopUpAmount}
-              placeholder="Введите сумму"
+              placeholder={t('client.balance.enterAmount')}
               placeholderTextColor={currentColors.textSecondary}
               keyboardType="numeric"
               style={[styles.modalInput, modalInputWithTheme(currentColors)]}
@@ -400,19 +400,19 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
               style={[styles.modalPayBtn, modalPayBtnWithTheme(currentColors)]}
               onPress={() => {
                 Alert.alert(
-                  'Подтверждение',
-                  `Вы уверены, что хотите пополнить баланс на ${topUpAmount} AFc?`,
+                  t('client.balance.confirm'),
+                  t('client.balance.confirmTopUp', { 0: topUpAmount }),
                   [
-                    { text: 'Отмена', style: 'cancel' },
-                    { text: 'Пополнить', onPress: handleFakeStripePayment }
+                    { text: t('client.balance.cancel'), style: 'cancel' },
+                    { text: t('client.balance.topUpBalance'), onPress: handleFakeStripePayment }
                   ]
                 );
               }}
             >
-              <Text style={styles.modalPayBtnText}>Оплатить</Text>
+              <Text style={styles.modalPayBtnText}>{t('client.balance.payButton')}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setTopUpModalVisible(false)} style={styles.modalCancelBtn}>
-              <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>Отмена</Text>
+              <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>{t('client.balance.cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>
