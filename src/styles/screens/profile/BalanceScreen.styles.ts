@@ -857,8 +857,8 @@ export const backIconColor = (isDark: boolean): string => {
 export const cardNumberLine: ViewStyle = {
   height: 40,
   backgroundColor: '#6d6565',
-  width: '123%',
+  width: '124%',
   position: 'absolute',
   bottom: -5,
-  left: -32.5,
+  left: -34,
 }; 

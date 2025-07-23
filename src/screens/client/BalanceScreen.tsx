@@ -122,8 +122,10 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   });
 
   const handleTopUp = (amount?: string) => {
-    if (amount) setTopUpAmount(amount);
-    else setTopUpAmount('');
+    if (amount) {
+      setTopUpAmount(amount);
+    }
+    // Не очищаем topUpAmount если amount не передан
     setTopUpModalVisible(true);
   };
 
@@ -184,7 +186,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       return newBalance;
     });
     setTopUpModalVisible(false);
-    Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
+    Alert.alert(t('client.balance.paymentSuccess'), `Баланс пополнен на ${amountNum} AFc`);
   };
 
   const [showCopied, setShowCopied] = useState(false);
@@ -399,9 +401,12 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
             <TouchableOpacity
               style={[styles.modalPayBtn, modalPayBtnWithTheme(currentColors)]}
               onPress={() => {
+                const message = `Вы уверены, что хотите пополнить баланс на ${topUpAmount} AFc?`;
+                console.log('Message:', message);
+                console.log('topUpAmount:', topUpAmount);
                 Alert.alert(
                   t('client.balance.confirm'),
-                  t('client.balance.confirmTopUp', { 0: topUpAmount }),
+                  message,
                   [
                     { text: t('client.balance.cancel'), style: 'cancel' },
                     { text: t('client.balance.topUpBalance'), onPress: handleFakeStripePayment }
