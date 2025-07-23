@@ -11,9 +11,9 @@ import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import NotificationsScreen from '../common/NotificationsScreen';
+import { useProfile } from '../../hooks/useProfile';
 
 // TODO: Для подключения бэкенда заменить на:
-// import { useProfile } from '../../hooks/useProfile';
 // import { useNotifications } from '../../hooks/useNotifications';
 // import { useUserStats } from '../../hooks/useUserStats';
 
@@ -26,17 +26,27 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
   const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
   const [notificationsModalVisible, setNotificationsModalVisible] = useState(false);
 
+  // Используем хук для работы с профилем
+  const { profile, loading, error, loadProfile } = useProfile();
+  
+
+
   // Баланс из AsyncStorage
   const [balance, setBalance] = React.useState<string>('0');
+  
   useFocusEffect(
     React.useCallback(() => {
       let isActive = true;
       (async () => {
         const stored = await AsyncStorage.getItem('user_balance');
-        if (isActive) setBalance(stored ?? '0');
+        if (isActive) {
+          setBalance(stored ?? '0');
+          // Перезагружаем профиль при фокусе экрана
+          loadProfile();
+        }
       })();
       return () => { isActive = false; };
-    }, [])
+    }, []) // Убираем loadProfile из зависимостей
   );
   
 // TODO: Для бэкенда заменить на:
@@ -44,35 +54,54 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
 // const { notificationsCount, loading: notificationsLoading } = useNotifications();
 // const { userStats, loading: statsLoading } = useUserStats();
   
-  const user = mockUsers[0]; // Используем первого клиента из моков
-
   // Данные из мокдата
   const getUserStats = (userId: string) => {
+    if (!profile) return null;
+    
     return {
       trips: 127,
       spent: '12 450 AFc',
-      rating: user.rating,
+      rating: profile.rating,
       balance: balance + ' AFc',
-      address: user.address,
-      email: user.email,
-      memberSince: new Date(user.createdAt).getFullYear(),
-      id: user.id,
-      role: user.role,
-      avatar: user.avatar,
+      address: profile.address,
+      email: profile.email,
+      memberSince: new Date(profile.createdAt).getFullYear(),
+      id: profile.id,
+      role: profile.role,
+      avatar: profile.avatar,
     };
   };
 
-  const userStats = getUserStats(user.id);
+  const userStats = getUserStats(profile?.id || '') || {
+    trips: 0,
+    spent: '0 AFc',
+    rating: 0,
+    balance: '0 AFc',
+    address: '',
+    email: '',
+    memberSince: new Date().getFullYear(),
+    id: '',
+    role: '',
+    avatar: '',
+  };
 
-// TODO: Для бэкенда добавить обработку загрузки
-// if (userLoading || notificationsLoading || statsLoading) {
-//   return <LoadingSpinner />;
-// }
+// Обработка загрузки
+if (loading) {
+  return (
+    <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <Text style={[styles.profileName, dynamicStyles.profileName]}>Загрузка профиля...</Text>
+    </View>
+  );
+}
 
-// TODO: Для бэкенда добавить обработку ошибок
-// if (!user) {
-//   return <ErrorDisplay message="Не удалось загрузить профиль" />;
-// }
+// Обработка ошибок
+if (error || !profile) {
+  return (
+    <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <Text style={[styles.profileName, dynamicStyles.profileName]}>{error || 'Не удалось загрузить профиль'}</Text>
+    </View>
+  );
+}
 
   return (
     <>
@@ -83,9 +112,9 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
             <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileText} onPress={() => navigation.navigate('EditClientProfile')}>
-            <Text style={[styles.profileName, dynamicStyles.profileName]}>{user.name} {user.surname}</Text>
-            <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{user.phone}</Text>
-            <Text style={[styles.profileEmail, dynamicStyles.profileEmail]}>{user.email}</Text>
+            <Text style={[styles.profileName, dynamicStyles.profileName]}>{profile?.name || ''} {profile?.surname || ''}</Text>
+            <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{profile?.phone || ''}</Text>
+            <Text style={[styles.profileEmail, dynamicStyles.profileEmail]}>{profile?.email || ''}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.bell, dynamicStyles.bell]} onPress={() => setNotificationsModalVisible(true)}>
             <Ionicons name="notifications-outline" size={24} color={currentColors.primary} />

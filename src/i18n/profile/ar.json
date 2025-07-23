@@ -182,5 +182,19 @@
     "message": "فتح صفحة السائق؟",
     "cancel": "إلغاء",
     "proceed": "اذهب"
+  },
+  "saveProfileConfirm": {
+    "title": "حفظ التغييرات",
+    "message": "هل أنت متأكد من أنك تريد حفظ التغييرات في ملفك الشخصي؟",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  },
+  "saveProfileSuccess": {
+    "title": "نجح",
+    "message": "تم حفظ الملف الشخصي"
+  },
+  "saveProfileError": {
+    "title": "خطأ",
+    "message": "فشل في حفظ الملف الشخصي"
   }
 }

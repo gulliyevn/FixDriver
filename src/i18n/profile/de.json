@@ -182,5 +182,19 @@
     "message": "Fahrerseite öffnen?",
     "cancel": "Abbrechen",
     "proceed": "Gehen"
+  },
+  "saveProfileConfirm": {
+    "title": "Änderungen speichern",
+    "message": "Sind Sie sicher, dass Sie die Änderungen an Ihrem Profil speichern möchten?",
+    "cancel": "Abbrechen",
+    "save": "Speichern"
+  },
+  "saveProfileSuccess": {
+    "title": "Erfolg",
+    "message": "Profil gespeichert"
+  },
+  "saveProfileError": {
+    "title": "Fehler",
+    "message": "Profil konnte nicht gespeichert werden"
   }
 }

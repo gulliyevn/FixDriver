@@ -57,6 +57,7 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
     position: 'relative',
+    marginLeft: 0,
   },
   avatarText: {
     color: '#fff',
@@ -72,9 +73,12 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#003366',
-    textAlign: 'center',
+    textAlign: 'left',
     marginTop: 0,
     marginHorizontal: 16,
+    flex: 1,
+    marginLeft: 0,
+    marginRight: 50,
   },
   rightCircle: {
     width: 32,
@@ -85,6 +89,9 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
+    marginRight: 20,
+    position: 'absolute',
+    right: 0,
   },
   arrowsContainer: {
     flexDirection: 'row',
@@ -103,6 +110,7 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     marginTop: 8,
+    width: '100%',
     marginHorizontal: -20,
     borderWidth: 1,
     borderColor: '#e9ecef',
@@ -260,6 +268,54 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Стили для режима просмотра информации
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  infoLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#003366',
+  },
+  infoValue: {
+    fontSize: 16,
+    color: '#666',
+    flex: 1,
+    textAlign: 'right',
+  },
+  // Стили для кнопки редактирования
+  editButton: {
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Стили для контейнера заголовка секции
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingVertical: 4,
+  },
+  // Стили для редактируемых полей
+  infoRowEditing: {
+    borderWidth: 2,
+    borderColor: '#003366',
+  },
+  infoInput: {
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
+    textAlign: 'right',
+  },
 });
 
 export const getEditClientProfileScreenColors = (isDark: boolean) => {
@@ -314,6 +370,18 @@ export const getEditClientProfileScreenColors = (isDark: boolean) => {
     },
     rightCircle: { 
       backgroundColor: colors.border 
+    },
+    infoRow: { backgroundColor: colors.surface },
+    infoLabel: { color: colors.text },
+    infoValue: { color: colors.textSecondary },
+    editButton: { color: colors.primary },
+    sectionHeader: { backgroundColor: colors.background },
+    infoRowEditing: { 
+      borderColor: colors.primary,
+    },
+    infoInput: { 
+      backgroundColor: 'transparent',
+      color: colors.text 
     },
   };
 }; 

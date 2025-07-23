@@ -181,6 +181,20 @@
     "title": "Sürücü ol",
     "message": "Sürücü səhifəsini açmaq?",
     "cancel": "Ləğv et",
-    "proceed": "Keç"
+    "proceed": "Get"
+  },
+  "saveProfileConfirm": {
+    "title": "Dəyişiklikləri saxla",
+    "message": "Profilinizdəki dəyişiklikləri saxlamaq istədiyinizə əminsiniz?",
+    "cancel": "Ləğv et",
+    "save": "Saxla"
+  },
+  "saveProfileSuccess": {
+    "title": "Uğurlu",
+    "message": "Profil saxlanıldı"
+  },
+  "saveProfileError": {
+    "title": "Xəta",
+    "message": "Profil saxlanılmadı"
   }
 }

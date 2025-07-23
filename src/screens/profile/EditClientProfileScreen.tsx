@@ -9,6 +9,7 @@ import { mockUsers, mockDrivers } from '../../mocks/users';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation, StackActions, CommonActions } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import { useProfile } from '../../hooks/useProfile';
 
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -18,6 +19,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
   const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
   
+  const { updateProfile } = useProfile();
   const user = mockUsers[0];
   
   // Состояние формы
@@ -29,13 +31,62 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     birthDate: '1990-01-01',
   });
 
+  // Исходные данные для сравнения
+  const originalData = {
+    firstName: user.name,
+    lastName: user.surname,
+    phone: user.phone,
+    email: user.email,
+    birthDate: '1990-01-01',
+  };
+
   const [familyMembers] = useState([
     { id: '1', name: 'Анна Петрова', type: 'child', age: 8 },
     { id: '2', name: 'Михаил Петров', type: 'spouse', age: 35 },
   ]);
 
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  // Функция для проверки изменений
+  const hasChanges = () => {
+    return (
+      formData.firstName !== originalData.firstName ||
+      formData.lastName !== originalData.lastName ||
+      formData.phone !== originalData.phone ||
+      formData.email !== originalData.email ||
+      formData.birthDate !== originalData.birthDate
+    );
+  };
+
+  // Асинхронная функция сохранения профиля
+  const saveProfile = async () => {
+    try {
+      // Используем хук для обновления профиля
+      const success = await updateProfile({
+        name: formData.firstName,
+        surname: formData.lastName,
+        phone: formData.phone,
+        email: formData.email,
+        birthDate: formData.birthDate,
+      });
+      
+      if (success) {
+        // Обновляем исходные данные для следующего сравнения
+        originalData.firstName = formData.firstName;
+        originalData.lastName = formData.lastName;
+        originalData.phone = formData.phone;
+        originalData.email = formData.email;
+        originalData.birthDate = formData.birthDate;
+      }
+      
+      return success;
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      return false;
+    }
+  };
 
 
 
@@ -161,7 +212,61 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           <Ionicons name="arrow-back" size={24} color={dynamicStyles.backButton.color} />
         </TouchableOpacity>
         <Text style={[styles.title, dynamicStyles.title]}>{t('profile.editProfile')}</Text>
-        <View style={styles.placeholder} />
+        <TouchableOpacity 
+          onPress={() => {
+            if (isEditingPersonalInfo) {
+              // Если в режиме редактирования, проверяем изменения
+              if (hasChanges()) {
+                // Если есть изменения, показываем подтверждение
+                Alert.alert(
+                  t('profile.saveProfileConfirm.title'),
+                  t('profile.saveProfileConfirm.message'),
+                  [
+                    { 
+                      text: t('profile.saveProfileConfirm.cancel'), 
+                      style: 'cancel' 
+                    },
+                    { 
+                      text: t('profile.saveProfileConfirm.save'), 
+                      onPress: async () => {
+                        const success = await saveProfile();
+                        if (success) {
+                          setIsEditingPersonalInfo(false);
+                          // Показываем уведомление об успешном сохранении
+                          Alert.alert(
+                            t('profile.saveProfileSuccess.title'),
+                            t('profile.saveProfileSuccess.message'),
+                            [{ text: 'OK' }]
+                          );
+                        } else {
+                          // Показываем ошибку
+                          Alert.alert(
+                            t('profile.saveProfileError.title'),
+                            t('profile.saveProfileError.message'),
+                            [{ text: 'OK' }]
+                          );
+                        }
+                      }
+                    }
+                  ]
+                );
+              } else {
+                // Если изменений нет, просто выключаем режим редактирования
+                setIsEditingPersonalInfo(false);
+              }
+            } else {
+              // Если в режиме просмотра, включаем редактирование
+              setIsEditingPersonalInfo(true);
+            }
+          }}
+          style={styles.backButton}
+        >
+          <Ionicons 
+            name={isEditingPersonalInfo ? "checkmark" : "create-outline"} 
+            size={24} 
+            color={isDark ? currentColors.dark.primary : currentColors.light.primary} 
+          />
+        </TouchableOpacity>
       </View>
       
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
@@ -222,7 +327,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                 <Ionicons name={profilePhoto ? "camera" : "add"} size={10} color={isDark ? '#3B82F6' : '#083198'} />
               </TouchableOpacity>
             </View>
-            <Text style={[styles.profileName, dynamicStyles.profileName]}>
+            <Text 
+              style={[styles.profileName, dynamicStyles.profileName]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {user.name} {user.surname}
             </Text>
             <TouchableOpacity 
@@ -248,68 +357,93 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           </View>
         </View>
 
-        {/* Основные поля профиля */}
+                {/* Основные поля профиля */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
             {t('profile.personalInfo')}
           </Text>
           
-          <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-            {t('profile.firstName')}
-          </Text>
-          <TextInput
-            style={[styles.inputField, dynamicStyles.inputField]}
-            value={formData.firstName}
-            onChangeText={(text) => setFormData({...formData, firstName: text})}
-            placeholder={t('profile.firstNamePlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-          />
-          
-          <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-            {t('profile.lastName')}
-          </Text>
-          <TextInput
-            style={[styles.inputField, dynamicStyles.inputField]}
-            value={formData.lastName}
-            onChangeText={(text) => setFormData({...formData, lastName: text})}
-            placeholder={t('profile.lastNamePlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-          />
-          
-          <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-            {t('profile.phone')}
-          </Text>
-          <TextInput
-            style={[styles.inputField, dynamicStyles.inputField]}
-            value={formData.phone}
-            onChangeText={(text) => setFormData({...formData, phone: text})}
-            placeholder={t('profile.phonePlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-            keyboardType="phone-pad"
-          />
-          
-          <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-            {t('profile.email')}
-          </Text>
-          <TextInput
-            style={[styles.inputField, dynamicStyles.inputField]}
-            value={formData.email}
-            onChangeText={(text) => setFormData({...formData, email: text})}
-            placeholder={t('profile.emailPlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-            keyboardType="email-address"
-          />
-          
-          <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
-            {t('profile.birthDate')}
-          </Text>
-          <TextInput
-            style={[styles.inputField, dynamicStyles.inputField]}
-            value={formData.birthDate}
-            onChangeText={(text) => setFormData({...formData, birthDate: text})}
-            placeholder={t('profile.birthDatePlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-          />
+          {/* Имя */}
+          <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.firstName')}:</Text>
+            {isEditingPersonalInfo ? (
+              <TextInput
+                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                value={formData.firstName}
+                onChangeText={(text) => setFormData({...formData, firstName: text})}
+                placeholder={t('profile.firstNamePlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+              />
+            ) : (
+              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.firstName}</Text>
+            )}
+          </View>
+
+          {/* Фамилия */}
+          <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.lastName')}:</Text>
+            {isEditingPersonalInfo ? (
+              <TextInput
+                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                value={formData.lastName}
+                onChangeText={(text) => setFormData({...formData, lastName: text})}
+                placeholder={t('profile.lastNamePlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+              />
+            ) : (
+              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.lastName}</Text>
+            )}
+          </View>
+
+          {/* Телефон */}
+          <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.phone')}:</Text>
+            {isEditingPersonalInfo ? (
+              <TextInput
+                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                value={formData.phone}
+                onChangeText={(text) => setFormData({...formData, phone: text})}
+                placeholder={t('profile.phonePlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                keyboardType="phone-pad"
+              />
+            ) : (
+              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.phone}</Text>
+            )}
+          </View>
+
+          {/* Email */}
+          <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.email')}:</Text>
+            {isEditingPersonalInfo ? (
+              <TextInput
+                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                value={formData.email}
+                onChangeText={(text) => setFormData({...formData, email: text})}
+                placeholder={t('profile.emailPlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                keyboardType="email-address"
+              />
+            ) : (
+              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.email}</Text>
+            )}
+          </View>
+
+          {/* Дата рождения */}
+          <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
+            <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.birthDate')}:</Text>
+            {isEditingPersonalInfo ? (
+              <TextInput
+                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                value={formData.birthDate}
+                onChangeText={(text) => setFormData({...formData, birthDate: text})}
+                placeholder={t('profile.birthDatePlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+              />
+            ) : (
+              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.birthDate}</Text>
+            )}
+          </View>
         </View>
 
         {/* Семейная информация */}

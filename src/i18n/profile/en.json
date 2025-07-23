@@ -182,5 +182,19 @@
     "message": "Open driver page?",
     "cancel": "Cancel",
     "proceed": "Go"
+  },
+  "saveProfileConfirm": {
+    "title": "Save changes",
+    "message": "Are you sure you want to save changes to your profile?",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "saveProfileSuccess": {
+    "title": "Success",
+    "message": "Profile saved"
+  },
+  "saveProfileError": {
+    "title": "Error",
+    "message": "Failed to save profile"
   }
 } 

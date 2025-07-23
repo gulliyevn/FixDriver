@@ -179,8 +179,22 @@
   "deletePhotoMessage": "¿Estás seguro de que quieres eliminar la foto?",
   "becomeDriverModal": {
     "title": "Convertirse en conductor",
-    "message": "¿Abrir página de conductor?",
+    "message": "¿Abrir página del conductor?",
     "cancel": "Cancelar",
     "proceed": "Ir"
+  },
+  "saveProfileConfirm": {
+    "title": "Guardar cambios",
+    "message": "¿Está seguro de que quiere guardar los cambios en su perfil?",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  },
+  "saveProfileSuccess": {
+    "title": "Éxito",
+    "message": "Perfil guardado"
+  },
+  "saveProfileError": {
+    "title": "Error",
+    "message": "No se pudo guardar el perfil"
   }
 }

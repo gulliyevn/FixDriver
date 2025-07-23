@@ -182,5 +182,19 @@
     "message": "Ouvrir la page chauffeur?",
     "cancel": "Annuler",
     "proceed": "Aller"
+  },
+  "saveProfileConfirm": {
+    "title": "Enregistrer les modifications",
+    "message": "Êtes-vous sûr de vouloir enregistrer les modifications de votre profil?",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
+  },
+  "saveProfileSuccess": {
+    "title": "Succès",
+    "message": "Profil enregistré"
+  },
+  "saveProfileError": {
+    "title": "Erreur",
+    "message": "Impossible d'enregistrer le profil"
   }
 }

@@ -63,7 +63,7 @@
   "balance": {
     "title": "Мой баланс",
     "currentBalance": "Текущий баланс",
-    "topUp": "Топап",
+    "topUp": "Внести",
     "withdraw": "Вывести",
     "quickTopUp": "Быстрое пополнение",
     "transactionHistory": "История операций",

@@ -182,5 +182,19 @@
     "message": "Sürücü sayfasını aç?",
     "cancel": "İptal",
     "proceed": "Git"
+  },
+  "saveProfileConfirm": {
+    "title": "Değişiklikleri kaydet",
+    "message": "Profilinizdeki değişiklikleri kaydetmek istediğinizden emin misiniz?",
+    "cancel": "İptal",
+    "save": "Kaydet"
+  },
+  "saveProfileSuccess": {
+    "title": "Başarılı",
+    "message": "Profil kaydedildi"
+  },
+  "saveProfileError": {
+    "title": "Hata",
+    "message": "Profil kaydedilemedi"
   }
 }
