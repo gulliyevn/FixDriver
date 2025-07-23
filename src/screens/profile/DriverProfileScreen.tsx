@@ -5,8 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { DriverProfileScreenStyles as styles, getDriverProfileStyles } from '../../styles/screens/DriverProfileScreen.styles';
-import { mockUsers } from '../../mocks/users';
-import { DriverScreenProps } from '../../types/navigation';
+import { mockUsers, mockDrivers } from '../../mocks/users';
+import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
 import { Driver } from '../../types/user';
 
@@ -15,7 +15,7 @@ import { Driver } from '../../types/user';
 // import { useNotifications } from '../../hooks/useNotifications';
 // import { useDriverStats } from '../../hooks/useDriverStats';
 
-const DriverProfileScreen: React.FC<DriverScreenProps<'DriverProfile'>> = ({ navigation }) => {
+const DriverProfileScreen: React.FC<ClientScreenProps<'DriverProfile'>> = ({ navigation }) => {
   const { logout } = useAuth();
   const { t } = useLanguage();
   const { isDark } = useTheme();
@@ -28,28 +28,37 @@ const DriverProfileScreen: React.FC<DriverScreenProps<'DriverProfile'>> = ({ nav
 // const { notificationsCount, loading: notificationsLoading } = useNotifications();
 // const { driverStats, loading: statsLoading } = useDriverStats();
   
-  const user = mockUsers.find(u => u.role === 'driver') || mockUsers[1]; // Используем водителя из моков
-  const driver = user as Driver; // Приводим к типу Driver
+  const driver = mockDrivers[0] || mockDrivers[1]; // Используем водителя из моков
+  const user = mockUsers[0]; // Используем клиента для базовой информации
+  
+  // Проверяем, что у нас есть водитель
+  if (!driver) {
+    return (
+      <View style={[styles.container, dynamicStyles.container]}>
+        <Text style={[styles.profileName, dynamicStyles.profileName]}>Нет данных водителя</Text>
+      </View>
+    );
+  }
 
   // Данные из мокдата
-  const getDriverStats = (userId: string) => {
+  const getDriverStats = (driverId: string) => {
     return {
       trips: 89,
       earnings: '8 750 AFc',
-      rating: user.rating,
+      rating: driver.rating,
       balance: '1 250 AFc',
-      address: user.address,
-      email: user.email,
-      memberSince: new Date(user.createdAt).getFullYear(),
-      id: user.id,
-      role: user.role,
-      avatar: user.avatar,
-      car: driver.car || 'Toyota Camry 2020',
+      address: 'ул. Низами, 23, Баку', // Заглушка
+      email: driver.email,
+      memberSince: new Date(driver.created_at).getFullYear(),
+      id: driver.id,
+      role: 'driver',
+      avatar: driver.avatar,
+      car: `${driver.vehicle_brand || 'Toyota'} ${driver.vehicle_model || 'Camry'} ${driver.vehicle_year || '2020'}`,
       isAvailable: driver.isAvailable || true,
     };
   };
 
-  const driverStats = getDriverStats(user.id);
+  const driverStats = getDriverStats(driver.id);
 
 // TODO: Для бэкенда добавить обработку загрузки
 // if (userLoading || notificationsLoading || statsLoading) {
@@ -69,9 +78,9 @@ const DriverProfileScreen: React.FC<DriverScreenProps<'DriverProfile'>> = ({ nav
           <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
         </View>
         <View style={styles.profileText}>
-          <Text style={[styles.profileName, dynamicStyles.profileName]}>{user.name} {user.surname}</Text>
-          <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{user.phone}</Text>
-          <Text style={[styles.profileEmail, dynamicStyles.profileEmail]}>{user.email}</Text>
+          <Text style={[styles.profileName, dynamicStyles.profileName]}>{driver.first_name} {driver.last_name}</Text>
+          <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{driver.phone_number}</Text>
+          <Text style={[styles.profileEmail, dynamicStyles.profileEmail]}>{driver.email}</Text>
           <Text style={[styles.profileCar, dynamicStyles.profileCar]}>{driverStats.car}</Text>
         </View>
         <TouchableOpacity style={[styles.bell, dynamicStyles.bell]} onPress={() => {}}>

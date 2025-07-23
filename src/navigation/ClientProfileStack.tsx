@@ -12,6 +12,10 @@ import BalanceScreen from '../screens/client/BalanceScreen';
 import AddressPickerScreen from '../screens/client/AddressPickerScreen';
 import ChangePasswordScreen from '../screens/client/ChangePasswordScreen';
 import SupportChatScreen from '../screens/common/SupportChatScreen';
+import EditClientProfileScreen from '../screens/profile/EditClientProfileScreen';
+import DriverProfileScreen from '../screens/profile/DriverProfileScreen';
+
+import NotificationsScreen from '../screens/common/NotificationsScreen';
 import { ClientStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<ClientStackParamList>();
@@ -36,6 +40,10 @@ const ClientProfileStack: React.FC = () => {
       <Stack.Screen name="AddressPicker" component={AddressPickerScreen} />
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="SupportChat" component={SupportChatScreen} />
+      <Stack.Screen name="EditClientProfile" component={EditClientProfileScreen} />
+      <Stack.Screen name="DriverProfile" component={DriverProfileScreen} />
+
+      <Stack.Screen name="Notifications" component={NotificationsScreen} />
     </Stack.Navigator>
   );
 };

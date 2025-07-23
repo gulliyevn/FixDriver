@@ -73,6 +73,7 @@ export type ClientStackParamList = {
   // Профильные экраны
   ClientProfile: undefined;
   EditClientProfile: undefined;
+  DriverProfile: undefined;
   PaymentPackage: undefined;
   AddChild: undefined;
   ChildrenList: undefined;

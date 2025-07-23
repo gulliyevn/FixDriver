@@ -122,38 +122,42 @@ export const initializeLanguage = async (): Promise<void> => {
     notifyLanguageChange(language);
   } catch (error) {
 
+
     i18n.locale = DEFAULT_LANGUAGE;
   }
 };
 
 // Main translation function with better error handling
 export const t = (key: string, params?: Record<string, string | number>): string => {
-  
   try {
-    // Add debug info for missing translations
-    const translation = i18n.t(key, params);
+    const currentLocale = i18n.locale;
     
-    // If translation is the same as key, it means translation is missing
-    if (translation === key) {
-
-      // Try to find the key in the current locale's translations
-      const currentTranslations = i18n.translations[i18n.locale];
-      if (currentTranslations) {
-
-        // Try to find the key in each namespace
-        Object.keys(currentTranslations).forEach(namespace => {
-          const namespaceTranslations = currentTranslations[namespace];
-          if (namespaceTranslations && typeof namespaceTranslations === 'object') {
-
-          }
-        });
-      }
+    // Get current translations for the locale
+    const currentTranslations = i18n.translations[currentLocale];
+    if (!currentTranslations) {
       return key;
     }
     
-    return translation;
+    // Split key by dots to traverse the object
+    const keys = key.split('.');
+    let current = currentTranslations;
+    
+    // Traverse the translations object
+    for (const k of keys) {
+      if (current && typeof current === 'object' && k in current) {
+        current = current[k];
+      } else {
+        return key;
+      }
+    }
+    
+    // Check if we found a string translation
+    if (typeof current === 'string') {
+      return current;
+    }
+    
+    return key;
   } catch (error) {
-
     return key;
   }
 };

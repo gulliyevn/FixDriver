@@ -25,8 +25,10 @@ import { getCurrentColors } from '../../constants/colors';
 
 const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation }) => {
   const { isDark, theme, toggleTheme } = useTheme();
-  const { t, language, languageOptions, setLanguage } = useLanguage();
+  const { language, languageOptions, setLanguage, t } = useLanguage();
   const { logout } = useAuth();
+  
+
   const currentColors = getCurrentColors(isDark);
   const languageModalColors = getLanguageModalColors(isDark);
   const settingsColors = getSettingsScreenColors(isDark);
@@ -175,7 +177,6 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
             activeOpacity={0.7}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             onPress={() => {
-              console.log('Delete account button pressed');
               Alert.alert(
                 t('profile.settings.data.deleteAccount'),
                 t('profile.settings.data.deleteAccountConfirm'),
