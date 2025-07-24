@@ -1,100 +1,17 @@
 {
-  "title": "الملف الشخصي",
-  "logout": "تسجيل الخروج",
-  "logoutConfirm": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
-  "logoutCancel": "إلغاء",
-  "logoutConfirmButton": "تسجيل الخروج",
-  "notifications": "الإشعارات",
-  "notificationsCenter": "مركز الإشعارات",
-  "deleteNotification": "حذف الإشعار",
-  "deleteNotificationConfirm": "هل أنت متأكد من أنك تريد حذف هذا الإشعار؟",
-  "delete": "حذف",
-  "cancel": "إلغاء",
-  "markAllAsRead": "تحديد الكل كمقروء",
-  "addChild": "إضافة طفل",
-  "option": "خيار",
-  "optionNotAvailable": "{option} سيكون متاحاً في التحديث القادم",
-  "locationEnabled": "الموقع مفعل",
-  "locationDisabled": "الموقع معطل",
-  "notificationsEnabled": "الإشعارات مفعلة",
-  "notificationsDisabled": "الإشعارات معطلة",
-  "language": "اللغة",
-  "languageSettings": "إعدادات اللغة",
-  "currentLanguage": "اختيار اللغة",
-  "selectLanguage": "اختر اللغة",
-  "languageChanged": "تم تغيير اللغة",
-  "languageChangeSuccess": "تم تغيير اللغة بنجاح. أعد تشغيل التطبيق لتطبيق التغييرات.",
-  "residence": {
-    "title": "الموقع",
-    "loading": "جاري تحميل العناوين...",
-    "retry": "إعادة المحاولة",
-    "emptyState": "ليس لديك عناوين محفوظة بعد\nأضف عنوانك الأول لطلبات الرحلات السريعة",
-    "defaultBadge": "افتراضي",
-    "deleteConfirm": "حذف العنوان",
-    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان \"%{title}\"؟",
-    "deleteSuccess": "تم حذف العنوان \"%{title}\"",
-    "deleteError": "فشل في حذف العنوان",
-    "setDefaultSuccess": "تم تعيين العنوان كافتراضي للفئة",
-    "setDefaultError": "فشل في تعيين العنوان كافتراضي",
-    "addSuccess": "تم إضافة العنوان",
-    "addError": "فشل في إضافة العنوان",
-    "updateSuccess": "تم تحديث العنوان",
-    "updateError": "فشل في تحديث العنوان",
-    "saveError": "تعذر حفظ العنوان",
-    "categories": {
-      "selectCategory": "اختر الفئة",
-      "home": "المنزل",
-      "work": "العمل",
-      "university": "الجامعة",
-      "mall": "مركز تسوق",
-      "hospital": "مستشفى",
-      "gym": "نادي رياضي",
-      "restaurant": "مطعم",
-      "parents": "الوالدين",
-      "dacha": "منزل ريفي",
-      "other": "أخرى"
-    },
-    "modal": {
-      "addTitle": "إضافة عنوان",
-      "editTitle": "تعديل العنوان",
-      "nameLabel": "الاسم",
-      "namePlaceholder": "مثال: المنزل، العمل",
-      "categoryLabel": "الفئة",
-      "categoryPlaceholder": "اختر الفئة",
-      "addressLabel": "العنوان",
-      "addressPlaceholder": "أدخل العنوان الكامل",
-      "defaultLabel": "افتراضي",
-      "saveError": "فشل في حفظ العنوان",
-      "nameRequired": "أدخل اسم العنوان",
-      "addressRequired": "أدخل العنوان",
-      "mapTitle": "اختر العنوان",
-      "mapDone": "تم",
-      "addressValid": "تم العثور على العنوان",
-      "addressInvalid": "العنوان غير موجود",
-      "addressChecking": "جاري التحقق من العنوان...",
-      "verifyAddress": "تحقق من العنوان"
-    }
-  },
   "settings": {
     "title": "الإعدادات",
     "notifications": {
       "title": "الإشعارات",
-      "push": "إشعارات الدفع",
-      "sound": "الصوت",
-      "vibration": "الاهتزاز"
+      "push": "إشعارات الدفع"
     },
     "language": {
       "section": "اللغة",
-      "current": "اختيار اللغة",
+      "current": "اللغة الحالية",
       "title": "اختيار اللغة",
-      "select": "اختر لغتك المفضلة:",
-      "success": {
-        "title": "تم تغيير اللغة",
-        "message": "تم تغيير اللغة إلى {language}"
-      },
       "error": {
-        "title": "خطأ",
-        "message": "فشل في تغيير اللغة"
+        "title": "خطأ في اللغة",
+        "message": "تعذر تغيير اللغة"
       }
     },
     "appearance": {
@@ -103,21 +20,23 @@
     },
     "location": {
       "title": "الموقع",
-      "autoLocation": "الكشف التلقائي"
+      "autoLocation": "اكتشاف تلقائي"
     },
     "security": {
       "title": "الأمان",
       "changePassword": "تغيير كلمة المرور",
       "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح",
-      "passwordChangeError": "فشل في تغيير كلمة المرور. يرجى المحاولة مرة أخرى."
+      "passwordChangeError": "فشل في تغيير كلمة المرور",
+      "changingPassword": "جاري تغيير كلمة المرور...",
+      "passwordSameError": "يجب أن تكون كلمة المرور الجديدة مختلفة عن الحالية"
     },
     "data": {
       "title": "البيانات",
       "deleteAccount": "حذف الحساب",
-      "deleteAccountConfirm": "هل أنت متأكد من أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteAccountConfirm": "هل أنت متأكد أنك تريد حذف حسابك؟",
       "deleteAccountSuccess": "تم حذف الحساب",
       "deleteAccountSuccessMessage": "تم حذف حسابك بنجاح.",
-      "deleteAccountError": "فشل في حذف الحساب. يرجى المحاولة مرة أخرى."
+      "deleteAccountError": "تعذر حذف الحساب"
     }
   },
   "editProfile": "تعديل الملف الشخصي",
@@ -132,12 +51,12 @@
   "aboutDesc": "الإصدار 1.0.0",
   "darkTheme": "الوضع المظلم",
   "trips": "الرحلات",
-  "spent": "المنفق",
+  "spent": "المُنفق",
   "rating": "التقييم",
   "changePhoto": "تغيير الصورة",
   "personalInfo": "المعلومات الشخصية",
   "firstName": "الاسم الأول",
-  "firstNamePlaceholder": "أدخل اسمك الأول",
+  "firstNamePlaceholder": "أدخل الاسم الأول",
   "lastName": "اسم العائلة",
   "lastNamePlaceholder": "أدخل اسم العائلة",
   "phone": "الهاتف",
@@ -159,12 +78,12 @@
   "vipTitle": "اشتراك VIP",
   "vipDescription": "احصل على خدمة ذات أولوية وعروض حصرية وخصومات خاصة",
   "upgradeToVip": "الترقية إلى VIP",
-  "becomeDriver": "تصبح سائقاً",
+  "becomeDriver": "أن تصبح سائقاً",
   "becomeDriverButton": "التسجيل كسائق",
   "addPhoto": "إضافة صورة",
   "addPhotoMessage": "اختر طريقة إضافة الصورة",
   "takePhoto": "التقاط صورة",
-  "chooseFromGallery": "اختر من المعرض",
+  "chooseFromGallery": "اختيار من المعرض",
   "cameraAccess": "الوصول إلى الكاميرا",
   "cameraAccessRequired": "مطلوب الوصول إلى الكاميرا لالتقاط صورة",
   "galleryAccess": "الوصول إلى المعرض",
@@ -178,10 +97,10 @@
   "deletePhotoConfirm": "حذف الصورة",
   "deletePhotoMessage": "هل أنت متأكد من أنك تريد حذف الصورة؟",
   "becomeDriverModal": {
-    "title": "كن سائقاً",
+    "title": "أن تصبح سائقاً",
     "message": "فتح صفحة السائق؟",
     "cancel": "إلغاء",
-    "proceed": "اذهب"
+    "proceed": "المتابعة"
   },
   "saveProfileConfirm": {
     "title": "حفظ التغييرات",
@@ -196,5 +115,31 @@
   "saveProfileError": {
     "title": "خطأ",
     "message": "فشل في حفظ الملف الشخصي"
-  }
-}
+  },
+  "verifyEmail": {
+    "title": "التحقق من البريد الإلكتروني",
+    "message": "أدخل الرمز المرسل إلى بريدك الإلكتروني",
+    "success": {
+      "title": "نجح",
+      "message": "تم التحقق من البريد الإلكتروني بنجاح"
+    },
+    "error": {
+      "title": "خطأ",
+      "message": "رمز غير صحيح"
+    }
+  },
+  "verifyPhone": {
+    "title": "التحقق من الهاتف",
+    "message": "أدخل الرمز المرسل عبر الرسائل النصية",
+    "success": {
+      "title": "نجح",
+      "message": "تم التحقق من الهاتف بنجاح"
+    },
+    "error": {
+      "title": "خطأ",
+      "message": "رمز غير صحيح"
+    }
+  },
+  "loadingProfile": "جاري تحميل الملف الشخصي...",
+  "failedToLoadProfile": "فشل في تحميل الملف الشخصي"
+} 

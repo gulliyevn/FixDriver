@@ -2,12 +2,12 @@
   "title": "Bildirişlər",
   "noNotifications": "Hələ bildirişiniz yoxdur",
   "noNotificationsSubtitle": "Yeni bildirişlər burada görünəcək",
-  "markAllAsRead": "Hamısını oxunmuş kimi işarələ",
+  "markAllAsRead": "Hamısını oxunmuş kimi qeyd et",
   "clearAll": "Hamısını təmizlə",
   "delete": "Sil",
-  "markAsRead": "Oxunmuş kimi işarələ",
-  "markAsUnread": "Oxunmamış kimi işarələ",
-  "filter": "Filtr",
+  "markAsRead": "Oxunmuş kimi qeyd et",
+  "markAsUnread": "Oxunmamış kimi qeyd et",
+  "filter": "Filter",
   "all": "Hamısı",
   "unread": "Oxunmamış",
   "read": "Oxunmuş",
@@ -58,19 +58,23 @@
     "vibration": "Vibrasiya",
     "quietHours": "Sakit saatlar",
     "quietHoursStart": "Sakit saatlar başlanğıcı",
-    "quietHoursEnd": "Sakit saatlar bitişi"
+    "quietHoursEnd": "Sakit saatlar sonu"
   },
   "alerts": {
-    "markAllReadTitle": "Hamısını oxunmuş kimi işarələ?",
-    "markAllReadMessage": "Bütün bildirişlər oxunmuş kimi işarələnəcək",
+    "markAllReadTitle": "Hamısını oxunmuş kimi qeyd et?",
+    "markAllReadMessage": "Bütün bildirişlər oxunmuş kimi qeyd olunacaq",
     "clearAllTitle": "Bütün bildirişləri təmizlə?",
-    "clearAllMessage": "Bütün bildirişlər daimi olaraq silinəcək",
+    "clearAllMessage": "Bütün bildirişlər həmişəlik silinəcək",
     "deleteTitle": "Bildirişi sil?",
-    "deleteMessage": "Bu bildiriş daimi olaraq silinəcək"
+    "deleteMessage": "Bu bildiriş həmişəlik silinəcək"
   },
   "buttons": {
     "cancel": "Ləğv et",
-    "confirm": "Təsdiqlə",
-    "ok": "Tamam"
-  }
+    "confirm": "Təsdiq et",
+    "ok": "OK"
+  },
+  "readAll": "Hamısını Oxu",
+  "showAll": "Bütün Bildirişləri Göstər",
+  "online": "Onlayn",
+  "offline": "Oflayn"
 } 

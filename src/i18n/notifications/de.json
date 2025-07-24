@@ -28,8 +28,8 @@
     "orderStarted": "Bestellung #{orderId} gestartet",
     "orderCompleted": "Bestellung #{orderId} abgeschlossen",
     "orderCancelled": "Bestellung #{orderId} storniert",
-    "paymentReceived": "Zahlung in Höhe von {amount} erhalten",
-    "paymentFailed": "Zahlung in Höhe von {amount} fehlgeschlagen",
+    "paymentReceived": "Zahlung erhalten für {amount}",
+    "paymentFailed": "Zahlung fehlgeschlagen für {amount}",
     "driverNearby": "Fahrer {driverName} nähert sich",
     "tripStarted": "Fahrt gestartet",
     "tripEnded": "Fahrt beendet",
@@ -72,5 +72,9 @@
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
     "ok": "OK"
-  }
+  },
+  "readAll": "Alle Lesen",
+  "showAll": "Alle Benachrichtigungen Anzeigen",
+  "online": "Online",
+  "offline": "Offline"
 } 

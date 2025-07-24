@@ -4,8 +4,9 @@
   "serverError": "Server error",
   "timeout": "Request timeout",
   "unauthorized": "Unauthorized",
-  "forbidden": "Access forbidden",
+  "forbidden": "Forbidden",
   "notFound": "Not found",
   "validationError": "Validation error",
-  "unknownError": "Unknown error occurred"
+  "unknownError": "An unknown error occurred",
+  "permissionDenied": "Access Denied"
 } 

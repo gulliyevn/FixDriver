@@ -1,0 +1,10 @@
+{
+  "title": "Tema Ayarları",
+  "current": "Mevcut Tema",
+  "dark": "Koyu Tema",
+  "light": "Açık Tema",
+  "darkDescription": "Düşük ışık koşullarında rahat kullanım için koyu tema kullanın",
+  "lightDescription": "Parlak koşullarda net görüntü için açık tema kullanın",
+  "switchToLight": "Açık Temaya Geç",
+  "switchToDark": "Koyu Temaya Geç"
+} 

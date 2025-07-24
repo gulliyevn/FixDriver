@@ -1,126 +1,45 @@
 {
-  "title": "Profil",
-  "logout": "Abmelden",
-  "logoutConfirm": "Sind Sie sicher, dass Sie sich abmelden möchten?",
-  "logoutCancel": "Abbrechen",
-  "logoutConfirmButton": "Abmelden",
-  "notifications": "Benachrichtigungen",
-  "notificationsCenter": "Benachrichtigungszentrum",
-  "deleteNotification": "Benachrichtigung löschen",
-  "deleteNotificationConfirm": "Sind Sie sicher, dass Sie diese Benachrichtigung löschen möchten?",
-  "delete": "Löschen",
-  "cancel": "Abbrechen",
-  "markAllAsRead": "Alle als gelesen markieren",
-  "addChild": "Kind hinzufügen",
-  "option": "Option",
-  "optionNotAvailable": "{option} wird im nächsten Update verfügbar sein",
-  "locationEnabled": "Standort aktiviert",
-  "locationDisabled": "Standort deaktiviert",
-  "notificationsEnabled": "Benachrichtigungen aktiviert",
-  "notificationsDisabled": "Benachrichtigungen deaktiviert",
-  "language": "Sprache",
-  "languageSettings": "Spracheinstellungen",
-  "currentLanguage": "Sprachauswahl",
-  "selectLanguage": "Sprache auswählen",
-  "languageChanged": "Sprache geändert",
-  "languageChangeSuccess": "Sprache erfolgreich geändert. Starten Sie die App neu, um die Änderungen zu übernehmen.",
-  "residence": {
-    "title": "Standort",
-    "loading": "Adressen werden geladen...",
-    "retry": "Wiederholen",
-    "emptyState": "Sie haben noch keine gespeicherten Adressen\nFügen Sie Ihre erste Adresse für schnelle Fahrtbestellungen hinzu",
-    "defaultBadge": "Standard",
-    "deleteConfirm": "Adresse löschen",
-    "deleteMessage": "Sind Sie sicher, dass Sie die Adresse \"%{title}\" löschen möchten?",
-    "deleteSuccess": "Adresse \"%{title}\" gelöscht",
-    "deleteError": "Adresse konnte nicht gelöscht werden",
-    "setDefaultSuccess": "Adresse als Standard für Kategorie gesetzt",
-    "setDefaultError": "Adresse konnte nicht als Standard gesetzt werden",
-    "addSuccess": "Adresse hinzugefügt",
-    "addError": "Adresse konnte nicht hinzugefügt werden",
-    "updateSuccess": "Adresse aktualisiert",
-    "updateError": "Adresse konnte nicht aktualisiert werden",
-    "saveError": "Adresse konnte nicht gespeichert werden",
-    "categories": {
-      "selectCategory": "Kategorie wählen",
-      "home": "Zuhause",
-      "work": "Arbeit",
-      "university": "Universität",
-      "mall": "Einkaufszentrum",
-      "hospital": "Krankenhaus",
-      "gym": "Fitnessstudio",
-      "restaurant": "Restaurant",
-      "parents": "Eltern",
-      "dacha": "Landhaus",
-      "other": "Andere"
-    },
-    "modal": {
-      "addTitle": "Adresse hinzufügen",
-      "editTitle": "Adresse bearbeiten",
-      "nameLabel": "Name",
-      "namePlaceholder": "Zum Beispiel: Zuhause, Arbeit",
-      "categoryLabel": "Kategorie",
-      "categoryPlaceholder": "Kategorie auswählen",
-      "addressLabel": "Adresse",
-      "addressPlaceholder": "Vollständige Adresse eingeben",
-      "defaultLabel": "Standard",
-      "saveError": "Adresse konnte nicht gespeichert werden",
-      "nameRequired": "Adressname eingeben",
-      "addressRequired": "Adresse eingeben",
-      "mapTitle": "Adresse auswählen",
-      "mapDone": "Fertig",
-      "addressValid": "Adresse gefunden",
-      "addressInvalid": "Adresse nicht gefunden",
-      "addressChecking": "Adresse wird überprüft...",
-      "verifyAddress": "Adresse überprüfen"
-    }
-  },
   "settings": {
     "title": "Einstellungen",
     "notifications": {
       "title": "Benachrichtigungen",
-      "push": "Push-Benachrichtigungen",
-      "sound": "Ton",
-      "vibration": "Vibration"
+      "push": "Push-Benachrichtigungen"
     },
     "language": {
       "section": "Sprache",
-      "current": "Sprachauswahl",
+      "current": "Aktuelle Sprache",
       "title": "Sprachauswahl",
-      "select": "Wählen Sie Ihre bevorzugte Sprache:",
-      "success": {
-        "title": "Sprache geändert",
-        "message": "Sprache wurde zu {language} geändert"
-      },
       "error": {
-        "title": "Fehler",
+        "title": "Sprachfehler",
         "message": "Sprache konnte nicht geändert werden"
       }
     },
     "appearance": {
       "title": "Erscheinungsbild",
-      "darkMode": "Dunkles Thema"
+      "darkMode": "Dunkler Modus"
     },
     "location": {
       "title": "Standort",
-      "autoLocation": "Automatische Erkennung"
+      "autoLocation": "Automatisch erkennen"
     },
     "security": {
       "title": "Sicherheit",
       "changePassword": "Passwort ändern",
       "passwordChangedSuccess": "Passwort erfolgreich geändert",
-      "passwordChangeError": "Passwort konnte nicht geändert werden. Bitte versuchen Sie es erneut."
+      "passwordChangeError": "Fehler beim Ändern des Passworts",
+      "changingPassword": "Passwort wird geändert...",
+      "passwordSameError": "Das neue Passwort muss sich vom aktuellen unterscheiden"
     },
     "data": {
       "title": "Daten",
       "deleteAccount": "Konto löschen",
-      "deleteAccountConfirm": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteAccountConfirm": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
       "deleteAccountSuccess": "Konto gelöscht",
       "deleteAccountSuccessMessage": "Ihr Konto wurde erfolgreich gelöscht.",
-      "deleteAccountError": "Konto konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+      "deleteAccountError": "Konto konnte nicht gelöscht werden"
     }
   },
-  "editProfile": "Profil Bearbeiten",
+  "editProfile": "Profil bearbeiten",
   "editProfileDesc": "Persönliche Daten ändern",
   "paymentMethods": "Zahlungsmethoden",
   "paymentMethodsDesc": "Kartenverwaltung",
@@ -128,9 +47,9 @@
   "securityDesc": "Sicherheitseinstellungen",
   "support": "Support",
   "supportDesc": "Support kontaktieren",
-  "about": "Über die App",
+  "about": "Über App",
   "aboutDesc": "Version 1.0.0",
-  "darkTheme": "Dunkles Thema",
+  "darkTheme": "Dunkles Theme",
   "trips": "Fahrten",
   "spent": "Ausgegeben",
   "rating": "Bewertung",
@@ -157,23 +76,23 @@
   "addFamilyMember": "Familienmitglied hinzufügen",
   "vipStatus": "VIP-Status",
   "vipTitle": "VIP-Abonnement",
-  "vipDescription": "Erhalten Sie Vorzugsbehandlung, exklusive Angebote und Sonderrabatte",
+  "vipDescription": "Erhalten Sie Prioritätsdienst, exklusive Angebote und spezielle Rabatte",
   "upgradeToVip": "Zu VIP upgraden",
   "becomeDriver": "Fahrer werden",
   "becomeDriverButton": "Als Fahrer registrieren",
   "addPhoto": "Foto hinzufügen",
-  "addPhotoMessage": "Wählen Sie, wie Sie ein Foto hinzufügen möchten",
+  "addPhotoMessage": "Foto-Hinzufügungsmethode wählen",
   "takePhoto": "Foto aufnehmen",
   "chooseFromGallery": "Aus Galerie wählen",
   "cameraAccess": "Kamerazugriff",
-  "cameraAccessRequired": "Kamerazugriff ist erforderlich, um ein Foto aufzunehmen",
-  "galleryAccess": "Galerie-Zugriff",
-  "galleryAccessRequired": "Galerie-Zugriff ist erforderlich, um ein Foto auszuwählen",
+  "cameraAccessRequired": "Kamerazugriff erforderlich, um Foto aufzunehmen",
+  "galleryAccess": "Galeriezugriff",
+  "galleryAccessRequired": "Galeriezugriff erforderlich, um Foto auszuwählen",
   "photoError": "Foto-Fehler",
   "photoTakeError": "Foto konnte nicht aufgenommen werden",
   "photoPickError": "Foto konnte nicht ausgewählt werden",
   "changePhoto": "Foto ändern",
-  "changePhotoMessage": "Wählen Sie, wie Sie das Foto ändern möchten",
+  "changePhotoMessage": "Foto-Änderungsmethode wählen",
   "deletePhoto": "Foto löschen",
   "deletePhotoConfirm": "Foto löschen",
   "deletePhotoMessage": "Sind Sie sicher, dass Sie das Foto löschen möchten?",
@@ -181,7 +100,7 @@
     "title": "Fahrer werden",
     "message": "Fahrerseite öffnen?",
     "cancel": "Abbrechen",
-    "proceed": "Gehen"
+    "proceed": "Fortfahren"
   },
   "saveProfileConfirm": {
     "title": "Änderungen speichern",
@@ -196,5 +115,31 @@
   "saveProfileError": {
     "title": "Fehler",
     "message": "Profil konnte nicht gespeichert werden"
-  }
-}
+  },
+  "verifyEmail": {
+    "title": "E-Mail-Verifizierung",
+    "message": "Geben Sie den Code ein, der an Ihre E-Mail gesendet wurde",
+    "success": {
+      "title": "Erfolg",
+      "message": "E-Mail erfolgreich verifiziert"
+    },
+    "error": {
+      "title": "Fehler",
+      "message": "Ungültiger Code"
+    }
+  },
+  "verifyPhone": {
+    "title": "Telefonverifizierung",
+    "message": "Geben Sie den Code ein, der per SMS gesendet wurde",
+    "success": {
+      "title": "Erfolg",
+      "message": "Telefon erfolgreich verifiziert"
+    },
+    "error": {
+      "title": "Fehler",
+      "message": "Ungültiger Code"
+    }
+  },
+  "loadingProfile": "Profil wird geladen...",
+  "failedToLoadProfile": "Fehler beim Laden des Profils"
+} 

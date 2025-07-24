@@ -18,9 +18,9 @@
   "notificationTypes": {
     "order": "طلب",
     "payment": "دفع",
-    "system": "النظام",
+    "system": "نظام",
     "promo": "عرض ترويجي",
-    "support": "الدعم"
+    "support": "دعم"
   },
   "messages": {
     "newOrder": "طلب جديد #{orderId}",
@@ -33,7 +33,7 @@
     "driverNearby": "السائق {driverName} يقترب",
     "tripStarted": "بدأت الرحلة",
     "tripEnded": "انتهت الرحلة",
-    "promoCode": "رمز ترويجي جديد: {code}",
+    "promoCode": "كود ترويجي جديد: {code}",
     "supportResponse": "رد من الدعم",
     "systemUpdate": "تحديث النظام",
     "maintenance": "صيانة"
@@ -54,11 +54,11 @@
     "paymentUpdates": "تحديثات الدفع",
     "promotional": "الإشعارات الترويجية",
     "systemUpdates": "تحديثات النظام",
-    "sound": "الصوت",
-    "vibration": "الاهتزاز",
-    "quietHours": "الساعات الهادئة",
-    "quietHoursStart": "بداية الساعات الهادئة",
-    "quietHoursEnd": "نهاية الساعات الهادئة"
+    "sound": "صوت",
+    "vibration": "اهتزاز",
+    "quietHours": "ساعات الهدوء",
+    "quietHoursStart": "بداية ساعات الهدوء",
+    "quietHoursEnd": "نهاية ساعات الهدوء"
   },
   "alerts": {
     "markAllReadTitle": "تحديد الكل كمقروء؟",
@@ -72,5 +72,9 @@
     "cancel": "إلغاء",
     "confirm": "تأكيد",
     "ok": "موافق"
-  }
+  },
+  "readAll": "قراءة الكل",
+  "showAll": "عرض جميع الإشعارات",
+  "online": "متصل",
+  "offline": "غير متصل"
 } 

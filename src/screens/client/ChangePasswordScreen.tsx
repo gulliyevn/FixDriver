@@ -70,7 +70,7 @@ const ChangePasswordScreen: React.FC<ClientScreenProps<'ChangePassword'>> = ({ n
     
     // Проверка что новый пароль отличается от текущего
     if (form.currentPassword === form.newPassword) {
-      newErrors.newPassword = 'Новый пароль должен отличаться от текущего';
+      newErrors.newPassword = t('profile.settings.security.passwordSameError');
     }
     
     setErrors(newErrors);
@@ -237,7 +237,7 @@ const ChangePasswordScreen: React.FC<ClientScreenProps<'ChangePassword'>> = ({ n
           disabled={!isFormValid || loading}
         >
           <Text style={styles.submitButtonText}>
-            {loading ? "Изменение пароля..." : t('profile.settings.security.changePassword')}
+            {loading ? t('profile.settings.security.changingPassword') : t('profile.settings.security.changePassword')}
           </Text>
         </TouchableOpacity>
       </ScrollView>

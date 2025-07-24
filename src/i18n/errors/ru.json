@@ -8,5 +8,5 @@
   "notFound": "Не найдено",
   "validationError": "Ошибка валидации",
   "unknownError": "Произошла неизвестная ошибка",
-  "permissionDenied": "Разрешение отклонено"
+  "permissionDenied": "Доступ запрещен"
 } 

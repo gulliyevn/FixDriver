@@ -1,127 +1,46 @@
 {
-  "title": "Profil",
-  "logout": "Çıxış",
-  "logoutConfirm": "Çıxmaq istədiyinizə əminsiniz?",
-  "logoutCancel": "Ləğv et",
-  "logoutConfirmButton": "Çıxış",
-  "notifications": "Bildirişlər",
-  "notificationsCenter": "Bildiriş mərkəzi",
-  "deleteNotification": "Bildirişi sil",
-  "deleteNotificationConfirm": "Bu bildirişi silmək istədiyinizə əminsiniz?",
-  "delete": "Sil",
-  "cancel": "Ləğv et",
-  "markAllAsRead": "Hamısını oxunmuş kimi qeyd et",
-  "addChild": "Uşaq əlavə et",
-  "option": "Seçim",
-  "optionNotAvailable": "{option} növbəti yeniləmədə mövcud olacaq",
-  "locationEnabled": "Geolokasiya aktivdir",
-  "locationDisabled": "Geolokasiya deaktivdir",
-  "notificationsEnabled": "Bildirişlər aktivdir",
-  "notificationsDisabled": "Bildirişlər deaktivdir",
-  "language": "Dil",
-  "languageSettings": "Dil parametrləri",
-  "currentLanguage": "Dil seçimi",
-  "selectLanguage": "Dil seç",
-  "languageChanged": "Dil dəyişdirildi",
-  "languageChangeSuccess": "Dil uğurla dəyişdirildi. Dəyişiklikləri tətbiq etmək üçün tətbiqi yenidən başladın.",
-  "residence": {
-    "title": "Məkan",
-    "loading": "Ünvanlar yüklənir...",
-    "retry": "Yenidən cəhd et",
-    "emptyState": "Hələ heç bir saxlanmış ünvanınız yoxdur\nTez səyahət sifariş etmək üçün ilk ünvanınızı əlavə edin",
-    "defaultBadge": "Varsayılan",
-    "deleteConfirm": "Ünvanı sil",
-    "deleteMessage": "\"%{title}\" ünvanını silmək istədiyinizə əminsiniz?",
-    "deleteSuccess": "\"%{title}\" ünvanı silindi",
-    "deleteError": "Ünvanı silmək mümkün olmadı",
-    "setDefaultSuccess": "Ünvan kateqoriya üçün varsayılan olaraq təyin edildi",
-    "setDefaultError": "Ünvanı varsayılan olaraq təyin etmək mümkün olmadı",
-    "addSuccess": "Ünvan əlavə edildi",
-    "addError": "Ünvan əlavə etmək mümkün olmadı",
-    "updateSuccess": "Ünvan yeniləndi",
-    "updateError": "Ünvanı yeniləmək mümkün olmadı",
-    "saveError": "Ünvanı saxlamaq mümkün olmadı",
-    "categories": {
-      "selectCategory": "Kateqoriya seçin",
-      "home": "Ev",
-      "work": "İş",
-      "university": "Universitet",
-      "mall": "Ticarət mərkəzi",
-      "hospital": "Xəstəxana",
-      "gym": "İdman zalı",
-      "restaurant": "Restoran",
-      "parents": "Valideynlər",
-      "dacha": "Bağ evi",
-      "other": "Digər"
-    },
-    "modal": {
-      "addTitle": "Ünvan əlavə et",
-      "editTitle": "Ünvanı redaktə et",
-      "nameLabel": "Ad",
-      "namePlaceholder": "Məsələn: Ev, İş",
-      "categoryLabel": "Kateqoriya",
-      "categoryPlaceholder": "Kateqoriya seçin",
-      "addressLabel": "Ünvan",
-      "addressPlaceholder": "Tam ünvanı daxil edin",
-      "defaultLabel": "Varsayılan",
-      "saveError": "Ünvanı saxlamaq mümkün olmadı",
-      "nameRequired": "Ünvan adını daxil edin",
-      "addressRequired": "Ünvanı daxil edin",
-      "mapTitle": "Ünvan seçin",
-      "mapDone": "Hazır",
-      "addressValid": "Ünvan tapıldı",
-      "addressInvalid": "Ünvan tapılmadı",
-      "addressChecking": "Ünvan yoxlanılır...",
-      "verifyAddress": "Ünvanı yoxla"
-    }
-  },
   "settings": {
-    "title": "Parametrlər",
+    "title": "Ayarlar",
     "notifications": {
       "title": "Bildirişlər",
-      "push": "Push-bildirişlər",
-      "sound": "Səs",
-      "vibration": "Vibrasiya"
+      "push": "Push bildirişləri"
     },
     "language": {
       "section": "Dil",
-      "current": "Dil seçimi",
+      "current": "Cari dil",
       "title": "Dil seçimi",
-      "select": "Üstünlük verdiyiniz dili seçin:",
-      "success": {
-        "title": "Dil dəyişdirildi",
-        "message": "Dil {language} dilinə dəyişdirildi"
-      },
       "error": {
-        "title": "Xəta",
-        "message": "Dili dəyişdirmək mümkün olmadı"
+        "title": "Dil xətası",
+        "message": "Dili dəyişmək mümkün olmadı"
       }
     },
     "appearance": {
       "title": "Görünüş",
-      "darkMode": "Qaranlıq tema"
+      "darkMode": "Qaranlıq rejim"
     },
     "location": {
       "title": "Məkan",
-      "autoLocation": "Avtomatik müəyyən etmə"
+      "autoLocation": "Avtomatik təyin et"
     },
     "security": {
       "title": "Təhlükəsizlik",
-      "changePassword": "Şifrəni dəyişdir",
+      "changePassword": "Şifrəni dəyiş",
       "passwordChangedSuccess": "Şifrə uğurla dəyişdirildi",
-      "passwordChangeError": "Şifrəni dəyişdirmək mümkün olmadı. Yenidən cəhd edin."
+      "passwordChangeError": "Şifrə dəyişdirilə bilmədi",
+      "changingPassword": "Şifrə dəyişdirilir...",
+      "passwordSameError": "Yeni şifrə cari şifrədən fərqli olmalıdır"
     },
     "data": {
-      "title": "Məlumatlar",
+      "title": "Məlumat",
       "deleteAccount": "Hesabı sil",
-      "deleteAccountConfirm": "Hesabınızı silmək istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz.",
+      "deleteAccountConfirm": "Hesabınızı silmək istədiyinizə əminsiniz?",
       "deleteAccountSuccess": "Hesab silindi",
       "deleteAccountSuccessMessage": "Hesabınız uğurla silindi.",
-      "deleteAccountError": "Hesabı silmək mümkün olmadı. Yenidən cəhd edin."
+      "deleteAccountError": "Hesabı silmək mümkün olmadı"
     }
   },
-  "editProfile": "Profili Redaktə Et",
-  "editProfileDesc": "Şəxsi məlumatları dəyişdir",
+  "editProfile": "Profili redaktə et",
+  "editProfileDesc": "Şəxsi məlumatları dəyiş",
   "paymentMethods": "Ödəniş üsulları",
   "paymentMethodsDesc": "Kart idarəetməsi",
   "security": "Təhlükəsizlik",
@@ -131,22 +50,22 @@
   "about": "Tətbiq haqqında",
   "aboutDesc": "Versiya 1.0.0",
   "darkTheme": "Qaranlıq tema",
-  "trips": "Səyahətlər",
-  "spent": "Xərclənib",
+  "trips": "Səfərlər",
+  "spent": "Xərclənmiş",
   "rating": "Reytinq",
-  "changePhoto": "Şəkli dəyişdir",
-  "personalInfo": "Şəxsi məlumatlar",
+  "changePhoto": "Şəkli dəyiş",
+  "personalInfo": "Şəxsi məlumat",
   "firstName": "Ad",
   "firstNamePlaceholder": "Adınızı daxil edin",
   "lastName": "Soyad",
   "lastNamePlaceholder": "Soyadınızı daxil edin",
   "phone": "Telefon",
-  "phonePlaceholder": "Telefon nömrənizi daxil edin",
+  "phonePlaceholder": "Telefon nömrəsini daxil edin",
   "email": "E-poçt",
-  "emailPlaceholder": "E-poçt ünvanınızı daxil edin",
+  "emailPlaceholder": "E-poçt ünvanını daxil edin",
   "birthDate": "Doğum tarixi",
-  "birthDatePlaceholder": "İİİİ-AA-GG",
-  "familyInfo": "Ailə məlumatları",
+  "birthDatePlaceholder": "YYYY-AA-GG",
+  "familyInfo": "Ailə məlumatı",
   "familyTypes": {
     "child": "Uşaq",
     "spouse": "Həyat yoldaşı",
@@ -172,14 +91,14 @@
   "photoError": "Şəkil xətası",
   "photoTakeError": "Şəkil çəkilmədi",
   "photoPickError": "Şəkil seçilmədi",
-  "changePhoto": "Şəkli dəyişdir",
+  "changePhoto": "Şəkli dəyiş",
   "changePhotoMessage": "Şəkil dəyişdirmə üsulunu seçin",
   "deletePhoto": "Şəkli sil",
   "deletePhotoConfirm": "Şəkli sil",
   "deletePhotoMessage": "Şəkli silmək istədiyinizə əminsiniz?",
   "becomeDriverModal": {
     "title": "Sürücü ol",
-    "message": "Sürücü səhifəsini açmaq?",
+    "message": "Sürücü səhifəsini aç?",
     "cancel": "Ləğv et",
     "proceed": "Get"
   },
@@ -196,5 +115,31 @@
   "saveProfileError": {
     "title": "Xəta",
     "message": "Profil saxlanılmadı"
-  }
-}
+  },
+  "verifyEmail": {
+    "title": "E-poçt təsdiqi",
+    "message": "E-poçtunuza göndərilən kodu daxil edin",
+    "success": {
+      "title": "Uğurlu",
+      "message": "E-poçt uğurla təsdiqləndi"
+    },
+    "error": {
+      "title": "Xəta",
+      "message": "Yanlış kod"
+    }
+  },
+  "verifyPhone": {
+    "title": "Telefon təsdiqi",
+    "message": "SMS ilə göndərilən kodu daxil edin",
+    "success": {
+      "title": "Uğurlu",
+      "message": "Telefon uğurla təsdiqləndi"
+    },
+    "error": {
+      "title": "Xəta",
+      "message": "Yanlış kod"
+    }
+  },
+  "loadingProfile": "Profil yüklənir...",
+  "failedToLoadProfile": "Profil yüklənə bilmədi"
+} 

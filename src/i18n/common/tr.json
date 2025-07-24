@@ -38,5 +38,6 @@
     "alreadyAccount": "Zaten hesabınız var mı?",
     "login": "Giriş yap",
     "language": "Dil"
-  }
-}
+  },
+  "verify": "Doğrula"
+} 

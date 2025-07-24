@@ -55,10 +55,10 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
       await setLanguage(langCode);
       setLanguageModalVisible(false);
     } catch (error) {
-      Alert.alert(
-        t('profile.settings.language.error.title'),
-        t('profile.settings.language.error.message')
-      );
+              Alert.alert(
+          t('profile.settings.language.error.title'),
+          t('profile.settings.language.error.message')
+        );
     }
   };
 
@@ -194,9 +194,9 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
                            throw new Error(result.message || 'Failed to delete account');
                          }
                          
-                         Alert.alert(
-                           t('profile.settings.data.deleteAccountSuccess'),
-                           t('profile.settings.data.deleteAccountSuccessMessage'),
+                                                 Alert.alert(
+                          t('profile.settings.data.deleteAccountSuccess'),
+                          t('profile.settings.data.deleteAccountSuccessMessage'),
                            [
                              {
                                text: t('common.ok'),
@@ -210,9 +210,9 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
                            ]
                          );
                        } catch (error) {
-                         Alert.alert(
-                           t('common.error'),
-                           t('profile.settings.data.deleteAccountError') || 'Не удалось удалить аккаунт',
+                                                 Alert.alert(
+                          t('common.error'),
+                          t('profile.settings.data.deleteAccountError') || 'Не удалось удалить аккаунт',
                            [{ text: t('common.ok') }]
                          );
                        }

@@ -1,99 +1,16 @@
 {
-  "title": "Профиль",
-  "logout": "Выйти",
-  "logoutConfirm": "Вы уверены, что хотите выйти?",
-  "logoutCancel": "Отмена",
-  "logoutConfirmButton": "Выйти",
-  "notifications": "Уведомления",
-  "notificationsCenter": "Центр уведомлений",
-  "deleteNotification": "Удалить уведомление",
-  "deleteNotificationConfirm": "Вы уверены, что хотите удалить это уведомление?",
-  "delete": "Удалить",
-  "cancel": "Отмена",
-  "markAllAsRead": "Отметить все как прочитанные",
-  "addChild": "Добавить ребенка",
-  "option": "Опция",
-  "optionNotAvailable": "{option} будет доступна в следующем обновлении",
-  "locationEnabled": "Геолокация включена",
-  "locationDisabled": "Геолокация отключена",
-  "notificationsEnabled": "Уведомления включены",
-  "notificationsDisabled": "Уведомления отключены",
-  "language": "Язык",
-  "languageSettings": "Настройки языка",
-  "currentLanguage": "Выбор языка",
-  "selectLanguage": "Выбрать язык",
-  "languageChanged": "Язык изменен",
-  "languageChangeSuccess": "Язык успешно изменен. Перезапустите приложение для применения изменений.",
-  "residence": {
-    "title": "Локация",
-    "loading": "Загрузка адресов...",
-    "retry": "Повторить",
-    "emptyState": "У вас пока нет сохраненных адресов\nДобавьте первый адрес для быстрого заказа поездок",
-    "defaultBadge": "По умолчанию",
-    "deleteConfirm": "Удалить адрес",
-    "deleteMessage": "Вы уверены, что хотите удалить адрес \"%{title}\"?",
-    "deleteSuccess": "Адрес \"%{title}\" удален",
-    "deleteError": "Не удалось удалить адрес",
-    "setDefaultSuccess": "Адрес установлен по умолчанию для категории",
-    "setDefaultError": "Не удалось установить адрес по умолчанию",
-    "addSuccess": "Адрес добавлен",
-    "addError": "Не удалось добавить адрес",
-    "updateSuccess": "Адрес обновлен",
-    "updateError": "Не удалось обновить адрес",
-    "saveError": "Не удалось сохранить адрес",
-    "categories": {
-      "selectCategory": "Выберите категорию",
-      "home": "Дом",
-      "work": "Работа",
-      "university": "Университет",
-      "mall": "Торговый центр",
-      "hospital": "Больница",
-      "gym": "Спортзал",
-      "restaurant": "Ресторан",
-      "parents": "Родители",
-      "dacha": "Дача",
-      "other": "Другой"
-    },
-    "modal": {
-      "addTitle": "Добавить адрес",
-      "editTitle": "Редактировать адрес",
-      "nameLabel": "Название",
-      "namePlaceholder": "Например: Дом, Работа",
-      "categoryLabel": "Категория",
-      "categoryPlaceholder": "Выберите категорию",
-      "addressLabel": "Адрес",
-      "addressPlaceholder": "Введите полный адрес",
-      "defaultLabel": "По умолчанию",
-      "saveError": "Не удалось сохранить адрес",
-      "nameRequired": "Введите название адреса",
-      "addressRequired": "Введите адрес",
-      "mapTitle": "Выберите адрес",
-      "mapDone": "Готово",
-      "addressValid": "Адрес найден",
-      "addressInvalid": "Адрес не найден",
-      "addressChecking": "Проверка адреса...",
-      "verifyAddress": "Проверить адрес"
-    }
-  },
   "settings": {
     "title": "Настройки",
     "notifications": {
       "title": "Уведомления",
-      "push": "Push-уведомления",
-      "sound": "Звук",
-      "vibration": "Вибрация"
+      "push": "Push-уведомления"
     },
     "language": {
       "section": "Язык",
-      "current": "Выбор языка",
+      "current": "Текущий язык",
       "title": "Выбор языка",
-      "select": "Выберите предпочитаемый язык:",
-      "success": {
-        "title": "Язык изменен",
-        "message": "Язык изменен на {language}"
-      },
       "error": {
-        "title": "Ошибка",
+        "title": "Ошибка языка",
         "message": "Не удалось изменить язык"
       }
     },
@@ -103,21 +20,23 @@
     },
     "location": {
       "title": "Местоположение",
-      "autoLocation": "Автоматическое определение"
+      "autoLocation": "Автоматически определять"
     },
     "security": {
       "title": "Безопасность",
       "changePassword": "Изменить пароль",
       "passwordChangedSuccess": "Пароль успешно изменен",
-      "passwordChangeError": "Не удалось изменить пароль. Попробуйте еще раз."
+      "passwordChangeError": "Не удалось изменить пароль",
+      "changingPassword": "Изменение пароля...",
+      "passwordSameError": "Новый пароль должен отличаться от текущего"
     },
     "data": {
       "title": "Данные",
       "deleteAccount": "Удалить аккаунт",
-      "deleteAccountConfirm": "Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.",
+      "deleteAccountConfirm": "Вы уверены, что хотите удалить аккаунт?",
       "deleteAccountSuccess": "Аккаунт удален",
-      "deleteAccountSuccessMessage": "Ваш аккаунт был успешно удален.",
-      "deleteAccountError": "Не удалось удалить аккаунт. Попробуйте еще раз."
+      "deleteAccountSuccessMessage": "Ваш аккаунт успешно удален.",
+      "deleteAccountError": "Не удалось удалить аккаунт"
     }
   },
   "editProfile": "Редактировать Профиль",
@@ -196,5 +115,69 @@
   "saveProfileError": {
     "title": "Ошибка",
     "message": "Не удалось сохранить профиль"
-  }
+  },
+  "verifyEmail": {
+    "title": "Верификация email",
+    "message": "Введите код, отправленный на ваш email",
+    "success": {
+      "title": "Успешно",
+      "message": "Email успешно верифицирован"
+    },
+    "error": {
+      "title": "Ошибка",
+      "message": "Неверный код"
+    }
+  },
+  "verifyPhone": {
+    "title": "Верификация телефона",
+    "message": "Введите код, отправленный в SMS",
+    "success": {
+      "title": "Успешно",
+      "message": "Телефон успешно верифицирован"
+    },
+    "error": {
+      "title": "Ошибка",
+      "message": "Неверный код"
+    }
+  },
+  "saveProfileConfirm": {
+    "title": "Сохранить изменения?",
+    "message": "Вы уверены, что хотите сохранить изменения?",
+    "cancel": "Отмена",
+    "save": "Сохранить"
+  },
+  "saveProfileSuccess": {
+    "title": "Профиль обновлен",
+    "message": "Ваши данные успешно сохранены"
+  },
+  "saveProfileError": {
+    "title": "Ошибка сохранения",
+    "message": "Не удалось сохранить изменения"
+  },
+  "verifyEmail": {
+    "title": "Подтвердить email",
+    "message": "Отправить код подтверждения на email?",
+    "success": {
+      "title": "Код отправлен",
+      "message": "Код подтверждения отправлен на ваш email"
+    },
+    "error": {
+      "title": "Ошибка отправки",
+      "message": "Не удалось отправить код подтверждения"
+    }
+  },
+  "verifyPhone": {
+    "title": "Подтвердить телефон",
+    "message": "Отправить код подтверждения на телефон?",
+    "success": {
+      "title": "Код отправлен",
+      "message": "Код подтверждения отправлен на ваш телефон"
+    },
+    "error": {
+      "title": "Ошибка отправки",
+      "message": "Не удалось отправить код подтверждения"
+    }
+  },
+  "loadingProfile": "Загрузка профиля...",
+  "failedToLoadProfile": "Не удалось загрузить профиль"
 } 

@@ -2,10 +2,11 @@
   "error": "Xəta",
   "networkError": "Şəbəkə xətası",
   "serverError": "Server xətası",
-  "timeout": "Sorğu vaxtı bitdi",
-  "unauthorized": "Avtorizasiya edilməyib",
-  "forbidden": "Giriş qadağandır",
+  "timeout": "Sorğu vaxtı keçdi",
+  "unauthorized": "Yetkisiz",
+  "forbidden": "Qadağan",
   "notFound": "Tapılmadı",
   "validationError": "Doğrulama xətası",
-  "unknownError": "Naməlum xəta baş verdi"
+  "unknownError": "Naməlum xəta baş verdi",
+  "permissionDenied": "Giriş Rədd Edildi"
 } 

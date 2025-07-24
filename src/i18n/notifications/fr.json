@@ -29,13 +29,13 @@
     "orderCompleted": "Commande #{orderId} terminée",
     "orderCancelled": "Commande #{orderId} annulée",
     "paymentReceived": "Paiement reçu pour {amount}",
-    "paymentFailed": "Échec du paiement pour {amount}",
+    "paymentFailed": "Paiement échoué pour {amount}",
     "driverNearby": "Le chauffeur {driverName} approche",
     "tripStarted": "Trajet commencé",
     "tripEnded": "Trajet terminé",
-    "promoCode": "Nouveau code promo : {code}",
+    "promoCode": "Nouveau code promo: {code}",
     "supportResponse": "Réponse du support",
-    "systemUpdate": "Mise à jour du système",
+    "systemUpdate": "Mise à jour système",
     "maintenance": "Maintenance"
   },
   "actions": {
@@ -61,16 +61,20 @@
     "quietHoursEnd": "Fin des heures silencieuses"
   },
   "alerts": {
-    "markAllReadTitle": "Marquer tout comme lu ?",
+    "markAllReadTitle": "Marquer tout comme lu?",
     "markAllReadMessage": "Toutes les notifications seront marquées comme lues",
-    "clearAllTitle": "Effacer toutes les notifications ?",
+    "clearAllTitle": "Effacer toutes les notifications?",
     "clearAllMessage": "Toutes les notifications seront définitivement supprimées",
-    "deleteTitle": "Supprimer la notification ?",
+    "deleteTitle": "Supprimer la notification?",
     "deleteMessage": "Cette notification sera définitivement supprimée"
   },
   "buttons": {
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "ok": "OK"
-  }
+  },
+  "readAll": "Tout Lire",
+  "showAll": "Afficher Toutes les Notifications",
+  "online": "En ligne",
+  "offline": "Hors ligne"
 } 

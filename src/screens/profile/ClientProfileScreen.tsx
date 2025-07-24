@@ -89,7 +89,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
 if (loading) {
   return (
     <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[styles.profileName, dynamicStyles.profileName]}>Загрузка профиля...</Text>
+      <Text style={[styles.profileName, dynamicStyles.profileName]}>{t('profile.loadingProfile')}</Text>
     </View>
   );
 }
@@ -98,7 +98,7 @@ if (loading) {
 if (error || !profile) {
   return (
     <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[styles.profileName, dynamicStyles.profileName]}>{error || 'Не удалось загрузить профиль'}</Text>
+      <Text style={[styles.profileName, dynamicStyles.profileName]}>{error || t('profile.failedToLoadProfile')}</Text>
     </View>
   );
 }

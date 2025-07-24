@@ -2,10 +2,11 @@
   "error": "Hata",
   "networkError": "Ağ hatası",
   "serverError": "Sunucu hatası",
-  "timeout": "İstek zaman aşımı",
+  "timeout": "İstek zaman aşımına uğradı",
   "unauthorized": "Yetkisiz",
-  "forbidden": "Erişim yasak",
+  "forbidden": "Yasak",
   "notFound": "Bulunamadı",
   "validationError": "Doğrulama hatası",
-  "unknownError": "Bilinmeyen hata oluştu"
+  "unknownError": "Bilinmeyen bir hata oluştu",
+  "permissionDenied": "Erişim Reddedildi"
 } 

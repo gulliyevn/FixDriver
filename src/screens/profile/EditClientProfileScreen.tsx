@@ -7,9 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { mockUsers, mockDrivers } from '../../mocks/users';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation, StackActions, CommonActions } from '@react-navigation/native';
+import { useNavigation, StackActions, CommonActions, useFocusEffect } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../../hooks/useProfile';
+import DatePicker from '../../components/DatePicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -48,6 +50,16 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  // Состояние верификации
+  const [verificationStatus, setVerificationStatus] = useState({
+    email: false,
+    phone: false,
+  });
+  const [isVerifying, setIsVerifying] = useState({
+    email: false,
+    phone: false,
+  });
 
   // Функция для проверки изменений
   const hasChanges = () => {
@@ -204,6 +216,121 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       Alert.alert(t('profile.photoError'), t('profile.photoPickError'));
     }
   };
+
+  // Функции верификации
+  const saveVerificationStatus = async (type: 'email' | 'phone', status: boolean) => {
+    try {
+      await AsyncStorage.setItem(`verification_${type}`, JSON.stringify(status));
+      console.log(`Verification status saved: ${type} = ${status}`);
+    } catch (error) {
+      console.error('Error saving verification status:', error);
+    }
+  };
+
+  const loadVerificationStatus = async () => {
+    try {
+      const emailVerified = await AsyncStorage.getItem('verification_email');
+      const phoneVerified = await AsyncStorage.getItem('verification_phone');
+      
+      const status = {
+        email: emailVerified ? JSON.parse(emailVerified) : false,
+        phone: phoneVerified ? JSON.parse(phoneVerified) : false,
+      };
+      setVerificationStatus(status);
+      console.log('Loaded verification status:', status);
+    } catch (error) {
+      console.error('Error loading verification status:', error);
+    }
+  };
+
+  const resetVerificationStatus = async (type: 'email' | 'phone') => {
+    try {
+      await AsyncStorage.removeItem(`verification_${type}`);
+      setVerificationStatus(prev => ({ ...prev, [type]: false }));
+      console.log(`Verification status reset: ${type}`);
+    } catch (error) {
+      console.error('Error resetting verification status:', error);
+    }
+  };
+
+  const verifyEmail = () => {
+    const title = t('profile.verifyEmail.title');
+    const message = t('profile.verifyEmail.message');
+    const cancelText = t('common.cancel');
+    const verifyText = t('common.verify');
+    const successTitle = t('profile.verifyEmail.success.title');
+    const successMessage = t('profile.verifyEmail.success.message');
+    const errorTitle = t('profile.verifyEmail.error.title');
+    const errorMessage = t('profile.verifyEmail.error.message');
+
+    Alert.prompt(
+      title,
+      message,
+      [
+        { text: cancelText, style: 'cancel' },
+        {
+          text: verifyText,
+          onPress: async (code) => {
+            if (code === '1234') {
+              setIsVerifying(prev => ({ ...prev, email: true }));
+              setTimeout(() => {
+                setVerificationStatus(prev => ({ ...prev, email: true }));
+                setIsVerifying(prev => ({ ...prev, email: false }));
+                saveVerificationStatus('email', true);
+                Alert.alert(successTitle, successMessage);
+              }, 1000);
+            } else {
+              Alert.alert(errorTitle, errorMessage);
+            }
+          }
+        }
+      ],
+      'plain-text'
+    );
+  };
+
+  const verifyPhone = () => {
+    const title = t('profile.verifyPhone.title');
+    const message = t('profile.verifyPhone.message');
+    const cancelText = t('common.cancel');
+    const verifyText = t('common.verify');
+    const successTitle = t('profile.verifyPhone.success.title');
+    const successMessage = t('profile.verifyPhone.success.message');
+    const errorTitle = t('profile.verifyPhone.error.title');
+    const errorMessage = t('profile.verifyPhone.error.message');
+
+    Alert.prompt(
+      title,
+      message,
+      [
+        { text: cancelText, style: 'cancel' },
+        {
+          text: verifyText,
+          onPress: async (code) => {
+            if (code === '1234') {
+              setIsVerifying(prev => ({ ...prev, phone: true }));
+              setTimeout(() => {
+                setVerificationStatus(prev => ({ ...prev, phone: true }));
+                setIsVerifying(prev => ({ ...prev, phone: false }));
+                saveVerificationStatus('phone', true);
+                Alert.alert(successTitle, successMessage);
+              }, 1000);
+            } else {
+              Alert.alert(errorTitle, errorMessage);
+            }
+          }
+        }
+      ],
+      'plain-text'
+    );
+  };
+
+  // Загружаем статус верификации при фокусе экрана
+  useFocusEffect(
+    React.useCallback(() => {
+      loadVerificationStatus();
+    }, [])
+  );
 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
@@ -398,51 +525,74 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           {/* Телефон */}
           <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
             <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.phone')}:</Text>
-            {isEditingPersonalInfo ? (
-              <TextInput
-                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
-                value={formData.phone}
-                onChangeText={(text) => setFormData({...formData, phone: text})}
-                placeholder={t('profile.phonePlaceholder')}
-                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-                keyboardType="phone-pad"
-              />
-            ) : (
-              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.phone}</Text>
-            )}
+            <View style={styles.infoValueContainer}>
+              {isEditingPersonalInfo ? (
+                <TextInput
+                  style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                  value={formData.phone}
+                  onChangeText={(text) => setFormData({...formData, phone: text})}
+                  placeholder={t('profile.phonePlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                  keyboardType="phone-pad"
+                />
+              ) : (
+                <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.phone}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.verifyButton}
+                onPress={verifyPhone}
+                onLongPress={() => verificationStatus.phone && resetVerificationStatus('phone')}
+                disabled={isVerifying.phone}
+              >
+                <Ionicons 
+                  name={verificationStatus.phone ? "checkmark-circle" : "shield-checkmark-outline"} 
+                  size={20} 
+                  color={verificationStatus.phone ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Email */}
           <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
             <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.email')}:</Text>
-            {isEditingPersonalInfo ? (
-              <TextInput
-                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
-                value={formData.email}
-                onChangeText={(text) => setFormData({...formData, email: text})}
-                placeholder={t('profile.emailPlaceholder')}
-                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-                keyboardType="email-address"
-              />
-            ) : (
-              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.email}</Text>
-            )}
+            <View style={styles.infoValueContainer}>
+              {isEditingPersonalInfo ? (
+                <TextInput
+                  style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
+                  value={formData.email}
+                  onChangeText={(text) => setFormData({...formData, email: text})}
+                  placeholder={t('profile.emailPlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                  keyboardType="email-address"
+                />
+              ) : (
+                <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.email}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.verifyButton}
+                onPress={verifyEmail}
+                onLongPress={() => verificationStatus.email && resetVerificationStatus('email')}
+                disabled={isVerifying.email}
+              >
+                <Ionicons 
+                  name={verificationStatus.email ? "checkmark-circle" : "shield-checkmark-outline"} 
+                  size={20} 
+                  color={verificationStatus.email ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Дата рождения */}
           <View style={[styles.infoRow, dynamicStyles.infoRow, isEditingPersonalInfo && styles.infoRowEditing]}>
             <Text style={[styles.infoLabel, dynamicStyles.infoLabel]}>{t('profile.birthDate')}:</Text>
-            {isEditingPersonalInfo ? (
-              <TextInput
-                style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
-                value={formData.birthDate}
-                onChangeText={(text) => setFormData({...formData, birthDate: text})}
-                placeholder={t('profile.birthDatePlaceholder')}
-                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-              />
-            ) : (
-              <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.birthDate}</Text>
-            )}
+            <DatePicker
+              value={formData.birthDate}
+              onChange={(date) => setFormData({...formData, birthDate: date})}
+              placeholder={t('profile.birthDatePlaceholder')}
+              inline={isEditingPersonalInfo}
+            />
           </View>
         </View>
 

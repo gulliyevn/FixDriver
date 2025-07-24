@@ -4,8 +4,9 @@
   "serverError": "Serverfehler",
   "timeout": "Anfrage-Timeout",
   "unauthorized": "Nicht autorisiert",
-  "forbidden": "Zugriff verweigert",
+  "forbidden": "Verboten",
   "notFound": "Nicht gefunden",
   "validationError": "Validierungsfehler",
-  "unknownError": "Unbekannter Fehler aufgetreten"
+  "unknownError": "Ein unbekannter Fehler ist aufgetreten",
+  "permissionDenied": "Zugriff Verweigert"
 } 

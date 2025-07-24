@@ -316,6 +316,22 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     margin: 0,
     textAlign: 'right',
   },
+  // Стили для верификации
+  infoValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  verifyButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 2,
+    paddingVertical: 6,
+    borderRadius: 0,
+    borderWidth: 0,
+    marginLeft: 4,
+  },
 });
 
 export const getEditClientProfileScreenColors = (isDark: boolean) => {

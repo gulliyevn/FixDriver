@@ -1,105 +1,22 @@
 {
-  "title": "Profil",
-  "logout": "Se déconnecter",
-  "logoutConfirm": "Êtes-vous sûr de vouloir vous déconnecter ?",
-  "logoutCancel": "Annuler",
-  "logoutConfirmButton": "Se déconnecter",
-  "notifications": "Notifications",
-  "notificationsCenter": "Centre de notifications",
-  "deleteNotification": "Supprimer la notification",
-  "deleteNotificationConfirm": "Êtes-vous sûr de vouloir supprimer cette notification ?",
-  "delete": "Supprimer",
-  "cancel": "Annuler",
-  "markAllAsRead": "Marquer tout comme lu",
-  "addChild": "Ajouter un enfant",
-  "option": "Option",
-  "optionNotAvailable": "{option} sera disponible dans la prochaine mise à jour",
-  "locationEnabled": "Localisation activée",
-  "locationDisabled": "Localisation désactivée",
-  "notificationsEnabled": "Notifications activées",
-  "notificationsDisabled": "Notifications désactivées",
-  "language": "Langue",
-  "languageSettings": "Paramètres de langue",
-  "currentLanguage": "Sélection de langue",
-  "selectLanguage": "Sélectionner la langue",
-  "languageChanged": "Langue modifiée",
-  "languageChangeSuccess": "Langue modifiée avec succès. Redémarrez l'application pour appliquer les modifications.",
-  "residence": {
-    "title": "Emplacement",
-    "loading": "Chargement des adresses...",
-    "retry": "Réessayer",
-    "emptyState": "Vous n'avez pas encore d'adresses sauvegardées\nAjoutez votre première adresse pour des commandes de trajet rapides",
-    "defaultBadge": "Par défaut",
-    "deleteConfirm": "Supprimer l'adresse",
-    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse \"%{title}\" ?",
-    "deleteSuccess": "Adresse \"%{title}\" supprimée",
-    "deleteError": "Impossible de supprimer l'adresse",
-    "setDefaultSuccess": "Adresse définie par défaut pour la catégorie",
-    "setDefaultError": "Impossible de définir l'adresse par défaut",
-    "addSuccess": "Adresse ajoutée",
-    "addError": "Impossible d'ajouter l'adresse",
-    "updateSuccess": "Adresse mise à jour",
-    "updateError": "Impossible de mettre à jour l'adresse",
-    "saveError": "Impossible d'enregistrer l'adresse",
-    "categories": {
-      "selectCategory": "Choisir une catégorie",
-      "home": "Maison",
-      "work": "Travail",
-      "university": "Université",
-      "mall": "Centre commercial",
-      "hospital": "Hôpital",
-      "gym": "Salle de sport",
-      "restaurant": "Restaurant",
-      "parents": "Parents",
-      "dacha": "Maison de campagne",
-      "other": "Autre"
-    },
-    "modal": {
-      "addTitle": "Ajouter une adresse",
-      "editTitle": "Modifier l'adresse",
-      "nameLabel": "Nom",
-      "namePlaceholder": "Par exemple: Maison, Travail",
-      "categoryLabel": "Catégorie",
-      "categoryPlaceholder": "Sélectionner une catégorie",
-      "addressLabel": "Adresse",
-      "addressPlaceholder": "Entrez l'adresse complète",
-      "defaultLabel": "Par défaut",
-      "saveError": "Impossible de sauvegarder l'adresse",
-      "nameRequired": "Entrez le nom de l'adresse",
-      "addressRequired": "Entrez l'adresse",
-      "mapTitle": "Sélectionner une adresse",
-      "mapDone": "Terminé",
-      "addressValid": "Adresse trouvée",
-      "addressInvalid": "Adresse introuvable",
-      "addressChecking": "Vérification de l'adresse...",
-      "verifyAddress": "Vérifier l'adresse"
-    }
-  },
   "settings": {
     "title": "Paramètres",
     "notifications": {
       "title": "Notifications",
-      "push": "Notifications push",
-      "sound": "Son",
-      "vibration": "Vibration"
+      "push": "Notifications push"
     },
     "language": {
       "section": "Langue",
-      "current": "Sélection de langue",
-      "title": "Sélection de langue",
-      "select": "Sélectionnez votre langue préférée :",
-      "success": {
-        "title": "Langue modifiée",
-        "message": "Langue changée vers {language}"
-      },
+      "current": "Langue actuelle",
+      "title": "Sélection de la langue",
       "error": {
-        "title": "Erreur",
+        "title": "Erreur de langue",
         "message": "Impossible de changer la langue"
       }
     },
     "appearance": {
       "title": "Apparence",
-      "darkMode": "Thème sombre"
+      "darkMode": "Mode sombre"
     },
     "location": {
       "title": "Localisation",
@@ -109,18 +26,20 @@
       "title": "Sécurité",
       "changePassword": "Changer le mot de passe",
       "passwordChangedSuccess": "Mot de passe modifié avec succès",
-      "passwordChangeError": "Impossible de modifier le mot de passe. Veuillez réessayer."
+      "passwordChangeError": "Échec de la modification du mot de passe",
+      "changingPassword": "Modification du mot de passe...",
+      "passwordSameError": "Le nouveau mot de passe doit être différent de l'actuel"
     },
     "data": {
       "title": "Données",
       "deleteAccount": "Supprimer le compte",
-      "deleteAccountConfirm": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action ne peut pas être annulée.",
+      "deleteAccountConfirm": "Êtes-vous sûr de vouloir supprimer votre compte ?",
       "deleteAccountSuccess": "Compte supprimé",
       "deleteAccountSuccessMessage": "Votre compte a été supprimé avec succès.",
-      "deleteAccountError": "Impossible de supprimer le compte. Veuillez réessayer."
+      "deleteAccountError": "Impossible de supprimer le compte"
     }
   },
-  "editProfile": "Modifier le Profil",
+  "editProfile": "Modifier le profil",
   "editProfileDesc": "Modifier les données personnelles",
   "paymentMethods": "Méthodes de paiement",
   "paymentMethodsDesc": "Gestion des cartes",
@@ -128,7 +47,7 @@
   "securityDesc": "Paramètres de sécurité",
   "support": "Support",
   "supportDesc": "Contacter le support",
-  "about": "À propos de l'application",
+  "about": "À propos de l'app",
   "aboutDesc": "Version 1.0.0",
   "darkTheme": "Thème sombre",
   "trips": "Trajets",
@@ -137,13 +56,13 @@
   "changePhoto": "Changer la photo",
   "personalInfo": "Informations personnelles",
   "firstName": "Prénom",
-  "firstNamePlaceholder": "Entrez votre prénom",
+  "firstNamePlaceholder": "Entrez le prénom",
   "lastName": "Nom de famille",
-  "lastNamePlaceholder": "Entrez votre nom de famille",
+  "lastNamePlaceholder": "Entrez le nom de famille",
   "phone": "Téléphone",
-  "phonePlaceholder": "Entrez votre numéro de téléphone",
+  "phonePlaceholder": "Entrez le numéro de téléphone",
   "email": "E-mail",
-  "emailPlaceholder": "Entrez votre e-mail",
+  "emailPlaceholder": "Entrez l'e-mail",
   "birthDate": "Date de naissance",
   "birthDatePlaceholder": "AAAA-MM-JJ",
   "familyInfo": "Informations familiales",
@@ -162,30 +81,30 @@
   "becomeDriver": "Devenir chauffeur",
   "becomeDriverButton": "S'inscrire comme chauffeur",
   "addPhoto": "Ajouter une photo",
-  "addPhotoMessage": "Choisissez comment ajouter une photo",
+  "addPhotoMessage": "Choisir la méthode d'ajout de photo",
   "takePhoto": "Prendre une photo",
   "chooseFromGallery": "Choisir dans la galerie",
   "cameraAccess": "Accès à la caméra",
-  "cameraAccessRequired": "L'accès à la caméra est requis pour prendre une photo",
+  "cameraAccessRequired": "Accès à la caméra requis pour prendre une photo",
   "galleryAccess": "Accès à la galerie",
-  "galleryAccessRequired": "L'accès à la galerie est requis pour choisir une photo",
+  "galleryAccessRequired": "Accès à la galerie requis pour sélectionner une photo",
   "photoError": "Erreur de photo",
-  "photoTakeError": "Impossible de prendre la photo",
-  "photoPickError": "Impossible de choisir la photo",
-  "changePhoto": "Modifier la photo",
-  "changePhotoMessage": "Choisissez comment modifier la photo",
+  "photoTakeError": "Échec de la prise de photo",
+  "photoPickError": "Échec de la sélection de photo",
+  "changePhoto": "Changer la photo",
+  "changePhotoMessage": "Choisir la méthode de changement de photo",
   "deletePhoto": "Supprimer la photo",
   "deletePhotoConfirm": "Supprimer la photo",
   "deletePhotoMessage": "Êtes-vous sûr de vouloir supprimer la photo ?",
   "becomeDriverModal": {
     "title": "Devenir chauffeur",
-    "message": "Ouvrir la page chauffeur?",
+    "message": "Ouvrir la page chauffeur ?",
     "cancel": "Annuler",
-    "proceed": "Aller"
+    "proceed": "Continuer"
   },
   "saveProfileConfirm": {
     "title": "Enregistrer les modifications",
-    "message": "Êtes-vous sûr de vouloir enregistrer les modifications de votre profil?",
+    "message": "Êtes-vous sûr de vouloir enregistrer les modifications de votre profil ?",
     "cancel": "Annuler",
     "save": "Enregistrer"
   },
@@ -195,6 +114,32 @@
   },
   "saveProfileError": {
     "title": "Erreur",
-    "message": "Impossible d'enregistrer le profil"
-  }
-}
+    "message": "Échec de l'enregistrement du profil"
+  },
+  "verifyEmail": {
+    "title": "Vérification de l'e-mail",
+    "message": "Entrez le code envoyé à votre e-mail",
+    "success": {
+      "title": "Succès",
+      "message": "E-mail vérifié avec succès"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Code invalide"
+    }
+  },
+  "verifyPhone": {
+    "title": "Vérification du téléphone",
+    "message": "Entrez le code envoyé par SMS",
+    "success": {
+      "title": "Succès",
+      "message": "Téléphone vérifié avec succès"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Code invalide"
+    }
+  },
+  "loadingProfile": "Chargement du profil...",
+  "failedToLoadProfile": "Échec du chargement du profil"
+} 

@@ -1,123 +1,42 @@
 {
-  "title": "Profil",
-  "logout": "Çıkış",
-  "logoutConfirm": "Çıkmak istediğinizden emin misiniz?",
-  "logoutCancel": "İptal",
-  "logoutConfirmButton": "Çıkış",
-  "notifications": "Bildirimler",
-  "notificationsCenter": "Bildirim Merkezi",
-  "deleteNotification": "Bildirimi sil",
-  "deleteNotificationConfirm": "Bu bildirimi silmek istediğinizden emin misiniz?",
-  "delete": "Sil",
-  "cancel": "İptal",
-  "markAllAsRead": "Tümünü okundu olarak işaretle",
-  "addChild": "Çocuk ekle",
-  "option": "Seçenek",
-  "optionNotAvailable": "{option} bir sonraki güncellemede mevcut olacak",
-  "locationEnabled": "Konum etkin",
-  "locationDisabled": "Konum devre dışı",
-  "notificationsEnabled": "Bildirimler etkin",
-  "notificationsDisabled": "Bildirimler devre dışı",
-  "language": "Dil",
-  "languageSettings": "Dil ayarları",
-  "currentLanguage": "Dil seçimi",
-  "selectLanguage": "Dil seç",
-  "languageChanged": "Dil değiştirildi",
-  "languageChangeSuccess": "Dil başarıyla değiştirildi. Değişiklikleri uygulamak için uygulamayı yeniden başlatın.",
-  "residence": {
-    "title": "Konum",
-    "loading": "Adresler yükleniyor...",
-    "retry": "Tekrar dene",
-    "emptyState": "Henüz kaydedilmiş adresiniz yok\nHızlı yolculuk siparişi için ilk adresinizi ekleyin",
-    "defaultBadge": "Varsayılan",
-    "deleteConfirm": "Adresi sil",
-    "deleteMessage": "\"%{title}\" adresini silmek istediğinizden emin misiniz?",
-    "deleteSuccess": "\"%{title}\" adresi silindi",
-    "deleteError": "Adres silinemedi",
-    "setDefaultSuccess": "Adres kategori için varsayılan olarak ayarlandı",
-    "setDefaultError": "Adres varsayılan olarak ayarlanamadı",
-    "addSuccess": "Adres eklendi",
-    "addError": "Adres eklenemedi",
-    "updateSuccess": "Adres güncellendi",
-    "updateError": "Adres güncellenemedi",
-    "saveError": "Adres kaydedilemedi",
-    "categories": {
-      "selectCategory": "Kategori seçin",
-      "home": "Ev",
-      "work": "İş",
-      "university": "Üniversite",
-      "mall": "Alışveriş merkezi",
-      "hospital": "Hastane",
-      "gym": "Spor salonu",
-      "restaurant": "Restoran",
-      "parents": "Aile",
-      "dacha": "Yazlık",
-      "other": "Diğer"
-    },
-    "modal": {
-      "addTitle": "Adres ekle",
-      "editTitle": "Adresi düzenle",
-      "nameLabel": "Ad",
-      "namePlaceholder": "Örneğin: Ev, İş",
-      "categoryLabel": "Kategori",
-      "categoryPlaceholder": "Kategori seçin",
-      "addressLabel": "Adres",
-      "addressPlaceholder": "Tam adresi girin",
-      "defaultLabel": "Varsayılan",
-      "saveError": "Adres kaydedilemedi",
-      "nameRequired": "Adres adını girin",
-      "addressRequired": "Adresi girin",
-      "mapTitle": "Adres seçin",
-      "mapDone": "Tamam",
-      "addressValid": "Adres bulundu",
-      "addressInvalid": "Adres bulunamadı",
-      "addressChecking": "Adres kontrol ediliyor...",
-      "verifyAddress": "Adresi doğrula"
-    }
-  },
   "settings": {
     "title": "Ayarlar",
     "notifications": {
       "title": "Bildirimler",
-      "push": "Push bildirimleri",
-      "sound": "Ses",
-      "vibration": "Titreşim"
+      "push": "Push bildirimleri"
     },
     "language": {
       "section": "Dil",
-      "current": "Dil seçimi",
+      "current": "Mevcut dil",
       "title": "Dil seçimi",
-      "select": "Tercih ettiğiniz dili seçin:",
-      "success": {
-        "title": "Dil değiştirildi",
-        "message": "Dil {language} diline değiştirildi"
-      },
       "error": {
-        "title": "Hata",
+        "title": "Dil hatası",
         "message": "Dil değiştirilemedi"
       }
     },
     "appearance": {
       "title": "Görünüm",
-      "darkMode": "Karanlık tema"
+      "darkMode": "Karanlık mod"
     },
     "location": {
       "title": "Konum",
-      "autoLocation": "Otomatik algılama"
+      "autoLocation": "Otomatik algıla"
     },
     "security": {
       "title": "Güvenlik",
       "changePassword": "Şifre değiştir",
       "passwordChangedSuccess": "Şifre başarıyla değiştirildi",
-      "passwordChangeError": "Şifre değiştirilemedi. Lütfen tekrar deneyin."
+      "passwordChangeError": "Şifre değiştirilemedi",
+      "changingPassword": "Şifre değiştiriliyor...",
+      "passwordSameError": "Yeni şifre mevcut şifreden farklı olmalıdır"
     },
     "data": {
-      "title": "Veriler",
+      "title": "Veri",
       "deleteAccount": "Hesabı sil",
-      "deleteAccountConfirm": "Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "deleteAccountConfirm": "Hesabınızı silmek istediğinizden emin misiniz?",
       "deleteAccountSuccess": "Hesap silindi",
       "deleteAccountSuccessMessage": "Hesabınız başarıyla silindi.",
-      "deleteAccountError": "Hesap silinemedi. Lütfen tekrar deneyin."
+      "deleteAccountError": "Hesap silinemedi"
     }
   },
   "editProfile": "Profili Düzenle",
@@ -196,5 +115,69 @@
   "saveProfileError": {
     "title": "Hata",
     "message": "Profil kaydedilemedi"
-  }
-}
+  },
+  "verifyEmail": {
+    "title": "E-posta doğrulama",
+    "message": "E-postanıza gönderilen kodu girin",
+    "success": {
+      "title": "Başarılı",
+      "message": "E-posta başarıyla doğrulandı"
+    },
+    "error": {
+      "title": "Hata",
+      "message": "Geçersiz kod"
+    }
+  },
+  "verifyPhone": {
+    "title": "Telefon doğrulama",
+    "message": "SMS ile gönderilen kodu girin",
+    "success": {
+      "title": "Başarılı",
+      "message": "Telefon başarıyla doğrulandı"
+    },
+    "error": {
+      "title": "Hata",
+      "message": "Geçersiz kod"
+    }
+  },
+  "saveProfileConfirm": {
+    "title": "Değişiklikleri Kaydet?",
+    "message": "Değişiklikleri kaydetmek istediğinizden emin misiniz?",
+    "cancel": "İptal",
+    "save": "Kaydet"
+  },
+  "saveProfileSuccess": {
+    "title": "Profil Güncellendi",
+    "message": "Verileriniz başarıyla kaydedildi"
+  },
+  "saveProfileError": {
+    "title": "Kaydetme Hatası",
+    "message": "Değişiklikleri kaydetmek başarısız"
+  },
+  "verifyEmail": {
+    "title": "E-posta Doğrula",
+    "message": "E-posta adresine doğrulama kodu gönder?",
+    "success": {
+      "title": "Kod Gönderildi",
+      "message": "Doğrulama kodu e-posta adresinize gönderildi"
+    },
+    "error": {
+      "title": "Gönderme Hatası",
+      "message": "Doğrulama kodu gönderilemedi"
+    }
+  },
+  "verifyPhone": {
+    "title": "Telefon Doğrula",
+    "message": "Telefona doğrulama kodu gönder?",
+    "success": {
+      "title": "Kod Gönderildi",
+      "message": "Doğrulama kodu telefonunuza gönderildi"
+    },
+    "error": {
+      "title": "Gönderme Hatası",
+      "message": "Doğrulama kodu gönderilemedi"
+    }
+  },
+  "loadingProfile": "Profil yükleniyor...",
+  "failedToLoadProfile": "Profil yüklenemedi"
+} 

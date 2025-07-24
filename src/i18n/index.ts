@@ -14,7 +14,9 @@ const navigation = require('./navigation');
 const components = require('./components');
 const driver = require('./driver');
 const client = require('./client');
-
+const cards = require('./components/cards');
+const about = require('./client/about');
+const theme = require('./profile/theme');
 // Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
   ru: { name: 'Русский', native: 'Русский', flag: '🇷🇺' },
@@ -43,9 +45,16 @@ const createTranslations = (lang: string) => ({
   support: support[lang],
   help: help[lang],
   navigation: navigation[lang],
-  components: components[lang],
+  components: {
+    ...components[lang],
+    cards: cards[lang],
+  },
   driver: driver[lang],
-  client: client[lang],
+  client: {
+    ...client[lang],
+    about: about[lang],
+  },
+  theme: theme[lang],
 });
 
 // Create i18n instance with translations

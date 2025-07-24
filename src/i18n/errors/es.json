@@ -4,8 +4,9 @@
   "serverError": "Error del servidor",
   "timeout": "Tiempo de espera agotado",
   "unauthorized": "No autorizado",
-  "forbidden": "Acceso prohibido",
+  "forbidden": "Prohibido",
   "notFound": "No encontrado",
   "validationError": "Error de validación",
-  "unknownError": "Error desconocido ocurrió"
+  "unknownError": "Ocurrió un error desconocido",
+  "permissionDenied": "Acceso Denegado"
 } 

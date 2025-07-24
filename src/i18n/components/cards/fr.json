@@ -1,0 +1,22 @@
+{
+  "title": "Mes Cartes",
+  "addTitle": "Ajouter une Carte",
+  "holderPlaceholder": "Nom du Titulaire",
+  "numberPlaceholder": "Numéro de Carte",
+  "expiryPlaceholder": "MM/AA",
+  "cvvPlaceholder": "CVV",
+  "holderError": "Veuillez saisir le nom du titulaire",
+  "numberError": "Veuillez saisir un numéro de carte valide",
+  "expiryError": "Veuillez saisir une date valide",
+  "expiryMonthError": "Le mois doit être entre 1 et 12",
+  "expiryPastError": "La date ne peut pas être dans le passé",
+  "cvvError": "Veuillez saisir un CVV valide",
+  "cancel": "Annuler",
+  "save": "Enregistrer",
+  "add": "Ajouter une Carte",
+  "delete": "Supprimer",
+  "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette carte?",
+  "empty": "Vous n'avez pas encore de cartes",
+  "emptyDescription": "Ajoutez une carte pour un paiement rapide des trajets",
+  "default": "Par Défaut"
+} 

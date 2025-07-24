@@ -72,5 +72,9 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "ok": "OK"
-  }
+  },
+  "readAll": "Read All",
+  "showAll": "Show All Notifications",
+  "online": "Online",
+  "offline": "Offline"
 } 

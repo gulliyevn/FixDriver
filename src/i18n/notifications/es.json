@@ -14,7 +14,7 @@
   "today": "Hoy",
   "yesterday": "Ayer",
   "thisWeek": "Esta semana",
-  "earlier": "Anteriormente",
+  "earlier": "Antes",
   "notificationTypes": {
     "order": "Pedido",
     "payment": "Pago",
@@ -62,15 +62,19 @@
   },
   "alerts": {
     "markAllReadTitle": "¿Marcar todo como leído?",
-    "markAllReadMessage": "Todas las notificaciones serán marcadas como leídas",
+    "markAllReadMessage": "Todas las notificaciones se marcarán como leídas",
     "clearAllTitle": "¿Limpiar todas las notificaciones?",
-    "clearAllMessage": "Todas las notificaciones serán eliminadas permanentemente",
+    "clearAllMessage": "Todas las notificaciones se eliminarán permanentemente",
     "deleteTitle": "¿Eliminar notificación?",
-    "deleteMessage": "Esta notificación será eliminada permanentemente"
+    "deleteMessage": "Esta notificación se eliminará permanentemente"
   },
   "buttons": {
     "cancel": "Cancelar",
     "confirm": "Confirmar",
     "ok": "OK"
-  }
+  },
+  "readAll": "Leer Todo",
+  "showAll": "Mostrar Todas las Notificaciones",
+  "online": "En línea",
+  "offline": "Sin conexión"
 } 

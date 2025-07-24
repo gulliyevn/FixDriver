@@ -1,152 +1,71 @@
 {
-  "title": "Profile",
-  "logout": "Logout",
-  "logoutConfirm": "Are you sure you want to logout?",
-  "logoutCancel": "Cancel",
-  "logoutConfirmButton": "Logout",
-  "notifications": "Notifications",
-  "notificationsCenter": "Notification Center",
-  "deleteNotification": "Delete notification",
-  "deleteNotificationConfirm": "Are you sure you want to delete this notification?",
-  "delete": "Delete",
-  "cancel": "Cancel",
-  "markAllAsRead": "Mark all as read",
-  "addChild": "Add child",
-  "option": "Option",
-  "optionNotAvailable": "{option} will be available in the next update",
-  "locationEnabled": "Location enabled",
-  "locationDisabled": "Location disabled",
-  "notificationsEnabled": "Notifications enabled",
-  "notificationsDisabled": "Notifications disabled",
-  "language": "Language",
-  "languageSettings": "Language settings",
-  "currentLanguage": "Language selection",
-  "selectLanguage": "Select language",
-  "languageChanged": "Language changed",
-  "languageChangeSuccess": "Language changed successfully. Restart the app to apply changes.",
-  "residence": {
-    "title": "Location",
-    "loading": "Loading addresses...",
-    "retry": "Retry",
-    "emptyState": "You don't have any saved addresses yet\nAdd your first address for quick ride ordering",
-    "defaultBadge": "Default",
-    "deleteConfirm": "Delete address",
-    "deleteMessage": "Are you sure you want to delete the address \"%{title}\"?",
-    "deleteSuccess": "Address \"%{title}\" deleted",
-    "deleteError": "Failed to delete address",
-    "setDefaultSuccess": "Address set as default for category",
-    "setDefaultError": "Failed to set address as default",
-    "addSuccess": "Address added",
-    "addError": "Failed to add address",
-    "updateSuccess": "Address updated",
-    "updateError": "Failed to update address",
-    "saveError": "Failed to save address",
-    "categories": {
-      "selectCategory": "Select category",
-      "home": "Home",
-      "work": "Work",
-      "university": "University",
-      "mall": "Shopping mall",
-      "hospital": "Hospital",
-      "gym": "Gym",
-      "restaurant": "Restaurant",
-      "parents": "Parents",
-      "dacha": "Country house",
-      "other": "Other"
-    },
-    "modal": {
-      "addTitle": "Add address",
-      "editTitle": "Edit address",
-      "nameLabel": "Name",
-      "namePlaceholder": "For example: Home, Work",
-      "categoryLabel": "Category",
-      "categoryPlaceholder": "Select category",
-      "addressLabel": "Address",
-      "addressPlaceholder": "Enter full address",
-      "defaultLabel": "Default",
-      "saveError": "Failed to save address",
-      "nameRequired": "Enter address name",
-      "addressRequired": "Enter address",
-      "mapTitle": "Select address",
-      "mapDone": "Done",
-      "addressValid": "Address found",
-      "addressInvalid": "Address not found",
-      "addressChecking": "Checking address...",
-      "verifyAddress": "Verify address"
-    }
-  },
   "settings": {
     "title": "Settings",
     "notifications": {
       "title": "Notifications",
-      "push": "Push notifications",
-      "sound": "Sound",
-      "vibration": "Vibration"
+      "push": "Push notifications"
     },
     "language": {
       "section": "Language",
-      "current": "Language selection",
+      "current": "Current language",
       "title": "Language selection",
-      "select": "Select your preferred language:",
-      "success": {
-        "title": "Language changed",
-        "message": "Language changed to {language}"
-      },
       "error": {
-        "title": "Error",
+        "title": "Language error",
         "message": "Failed to change language"
       }
     },
     "appearance": {
       "title": "Appearance",
-      "darkMode": "Dark theme"
+      "darkMode": "Dark mode"
     },
     "location": {
       "title": "Location",
-      "autoLocation": "Auto detection"
+      "autoLocation": "Auto detect"
     },
     "security": {
       "title": "Security",
       "changePassword": "Change password",
-      "passwordChangedSuccess": "Password successfully changed",
-      "passwordChangeError": "Failed to change password. Please try again."
+      "passwordChangedSuccess": "Password changed successfully",
+      "passwordChangeError": "Failed to change password",
+      "changingPassword": "Changing password...",
+      "passwordSameError": "New password must be different from current password"
     },
     "data": {
       "title": "Data",
       "deleteAccount": "Delete account",
-      "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+      "deleteAccountConfirm": "Are you sure you want to delete your account?",
       "deleteAccountSuccess": "Account deleted",
       "deleteAccountSuccessMessage": "Your account has been successfully deleted.",
-      "deleteAccountError": "Failed to delete account. Please try again."
+      "deleteAccountError": "Failed to delete account"
     }
   },
   "editProfile": "Edit Profile",
   "editProfileDesc": "Change personal data",
-  "paymentMethods": "Payment methods",
+  "paymentMethods": "Payment Methods",
   "paymentMethodsDesc": "Card management",
   "security": "Security",
   "securityDesc": "Security settings",
   "support": "Support",
   "supportDesc": "Contact support",
-  "about": "About app",
+  "about": "About App",
   "aboutDesc": "Version 1.0.0",
-  "darkTheme": "Dark theme",
+  "darkTheme": "Dark Theme",
   "trips": "Trips",
   "spent": "Spent",
   "rating": "Rating",
-  "changePhoto": "Change photo",
-  "personalInfo": "Personal information",
-  "firstName": "First name",
+  "changePhoto": "Change Photo",
+  "personalInfo": "Personal Information",
+  "firstName": "First Name",
   "firstNamePlaceholder": "Enter first name",
-  "lastName": "Last name",
+  "lastName": "Last Name",
   "lastNamePlaceholder": "Enter last name",
   "phone": "Phone",
   "phonePlaceholder": "Enter phone number",
   "email": "Email",
   "emailPlaceholder": "Enter email",
-  "birthDate": "Birth date",
+  "birthDate": "Birth Date",
   "birthDatePlaceholder": "YYYY-MM-DD",
-  "familyInfo": "Family information",
+  "familyInfo": "Family Information",
   "familyTypes": {
     "child": "Child",
     "spouse": "Spouse",
@@ -154,37 +73,37 @@
     "relative": "Relative"
   },
   "years": "years",
-  "addFamilyMember": "Add family member",
-  "vipStatus": "VIP status",
-  "vipTitle": "VIP subscription",
+  "addFamilyMember": "Add Family Member",
+  "vipStatus": "VIP Status",
+  "vipTitle": "VIP Subscription",
   "vipDescription": "Get priority service, exclusive offers and special discounts",
   "upgradeToVip": "Upgrade to VIP",
-  "becomeDriver": "Become a driver",
-  "becomeDriverButton": "Register as driver",
-  "addPhoto": "Add photo",
-  "addPhotoMessage": "Choose how to add photo",
-  "takePhoto": "Take photo",
-  "chooseFromGallery": "Choose from gallery",
-  "cameraAccess": "Camera access",
-  "cameraAccessRequired": "Camera access is required to take photo",
-  "galleryAccess": "Gallery access",
-  "galleryAccessRequired": "Gallery access is required to choose photo",
-  "photoError": "Photo error",
+  "becomeDriver": "Become Driver",
+  "becomeDriverButton": "Register as Driver",
+  "addPhoto": "Add Photo",
+  "addPhotoMessage": "Choose photo addition method",
+  "takePhoto": "Take Photo",
+  "chooseFromGallery": "Choose from Gallery",
+  "cameraAccess": "Camera Access",
+  "cameraAccessRequired": "Camera access required to take photo",
+  "galleryAccess": "Gallery Access",
+  "galleryAccessRequired": "Gallery access required to select photo",
+  "photoError": "Photo Error",
   "photoTakeError": "Failed to take photo",
-  "photoPickError": "Failed to choose photo",
-  "changePhoto": "Change photo",
-  "changePhotoMessage": "Choose how to change photo",
-  "deletePhoto": "Delete photo",
-  "deletePhotoConfirm": "Delete photo",
+  "photoPickError": "Failed to select photo",
+  "changePhoto": "Change Photo",
+  "changePhotoMessage": "Choose photo change method",
+  "deletePhoto": "Delete Photo",
+  "deletePhotoConfirm": "Delete Photo",
   "deletePhotoMessage": "Are you sure you want to delete the photo?",
   "becomeDriverModal": {
-    "title": "Become a driver",
+    "title": "Become Driver",
     "message": "Open driver page?",
     "cancel": "Cancel",
-    "proceed": "Go"
+    "proceed": "Proceed"
   },
   "saveProfileConfirm": {
-    "title": "Save changes",
+    "title": "Save Changes",
     "message": "Are you sure you want to save changes to your profile?",
     "cancel": "Cancel",
     "save": "Save"
@@ -196,5 +115,69 @@
   "saveProfileError": {
     "title": "Error",
     "message": "Failed to save profile"
-  }
+  },
+  "verifyEmail": {
+    "title": "Email Verification",
+    "message": "Enter the code sent to your email",
+    "success": {
+      "title": "Success",
+      "message": "Email verified successfully"
+    },
+    "error": {
+      "title": "Error",
+      "message": "Invalid code"
+    }
+  },
+  "verifyPhone": {
+    "title": "Phone Verification",
+    "message": "Enter the code sent via SMS",
+    "success": {
+      "title": "Success",
+      "message": "Phone verified successfully"
+    },
+    "error": {
+      "title": "Error",
+      "message": "Invalid code"
+    }
+  },
+  "saveProfileConfirm": {
+    "title": "Save Changes?",
+    "message": "Are you sure you want to save changes?",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "saveProfileSuccess": {
+    "title": "Profile Updated",
+    "message": "Your data has been successfully saved"
+  },
+  "saveProfileError": {
+    "title": "Save Error",
+    "message": "Failed to save changes"
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "message": "Send verification code to email?",
+    "success": {
+      "title": "Code Sent",
+      "message": "Verification code sent to your email"
+    },
+    "error": {
+      "title": "Send Error",
+      "message": "Failed to send verification code"
+    }
+  },
+  "verifyPhone": {
+    "title": "Verify Phone",
+    "message": "Send verification code to phone?",
+    "success": {
+      "title": "Code Sent",
+      "message": "Verification code sent to your phone"
+    },
+    "error": {
+      "title": "Send Error",
+      "message": "Failed to send verification code"
+    }
+  },
+  "loadingProfile": "Loading profile...",
+  "failedToLoadProfile": "Failed to load profile"
 } 
