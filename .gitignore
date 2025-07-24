@@ -9,7 +9,9 @@ coverage/
 .vscode/
 *.log
 
-FIXDRIVE_CONCEPT.md
+# Ignore all markdown files except README.md
+*.md
+!README.md
 
 # Backend services
 Auth/
