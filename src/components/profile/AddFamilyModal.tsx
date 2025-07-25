@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -20,6 +20,9 @@ interface AddFamilyModalProps {
   setNewFamilyMember: (member: NewFamilyMember) => void;
   onClose: () => void;
   onAdd: () => void;
+  onVerifyPhone?: () => void;
+  phoneVerificationStatus?: boolean;
+  isVerifyingPhone?: boolean;
 }
 
 const familyTypes = [
@@ -51,6 +54,9 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   setNewFamilyMember,
   onClose,
   onAdd,
+  onVerifyPhone,
+  phoneVerificationStatus = false,
+  isVerifyingPhone = false,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
@@ -61,11 +67,16 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
 
   return (
     <View style={styles.modalOverlay}>
-      <ScrollView 
-        contentContainerStyle={styles.modalScrollContainer}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
       >
-        <View style={[styles.modalContent, dynamicStyles.modalContent]}>
+        <ScrollView 
+          contentContainerStyle={styles.modalScrollContainer}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={[styles.modalContent, dynamicStyles.modalContent]}>
           <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
             {t('profile.addFamilyMember')}
           </Text>
@@ -152,35 +163,57 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
             )}
           </View>
 
-          {/* Телефон */}
-          <View style={styles.modalInputContainer}>
-            <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
-              {t('profile.phone')}
-            </Text>
-            <TextInput
-              style={[styles.modalInput, dynamicStyles.modalInput]}
-              value={newFamilyMember.phone}
-              onChangeText={(text) => setNewFamilyMember({...newFamilyMember, phone: text})}
-              placeholder={t('profile.phonePlaceholder')}
-              placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
-              keyboardType="phone-pad"
-            />
-          </View>
-
           {/* Дата рождения */}
           <View style={styles.modalInputContainer}>
             <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
               {t('profile.familyAge')} *
             </Text>
-            <DatePicker
-              value={newFamilyMember.age}
-              onChange={(date) => {
-                setNewFamilyMember({...newFamilyMember, age: date});
-              }}
-              placeholder={t('profile.familyAgePlaceholder')}
-              inline={true}
-              readOnly={false}
-            />
+            <View style={[styles.modalInput, dynamicStyles.modalInput, { alignItems: 'flex-start' }]}>
+              <DatePicker
+                value={newFamilyMember.age}
+                onChange={(date) => {
+                  setNewFamilyMember({...newFamilyMember, age: date});
+                }}
+                placeholder={t('profile.familyAgePlaceholder')}
+                inline={true}
+                readOnly={false}
+              />
+            </View>
+          </View>
+
+          {/* Телефон */}
+          <View style={styles.modalInputContainer}>
+            <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+              {t('profile.phone')}
+            </Text>
+            <View style={[styles.modalInput, dynamicStyles.modalInput, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+              <TextInput
+                style={[dynamicStyles.modalInput, { flex: 1, borderWidth: 0, backgroundColor: 'transparent', padding: 0, margin: 0 }]}
+                value={newFamilyMember.phone}
+                onChangeText={(text) => setNewFamilyMember({...newFamilyMember, phone: text})}
+                placeholder={t('profile.phonePlaceholder')}
+                placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                keyboardType="phone-pad"
+              />
+              {onVerifyPhone && (
+                <TouchableOpacity
+                  style={{ 
+                    paddingHorizontal: 2, 
+                    paddingVertical: 6, 
+                    marginLeft: 4,
+                    opacity: newFamilyMember.phone.trim() ? 1 : 0.5
+                  }}
+                  onPress={onVerifyPhone}
+                  disabled={isVerifyingPhone || !newFamilyMember.phone.trim()}
+                >
+                  <Ionicons 
+                    name={phoneVerificationStatus ? "checkmark-circle" : "shield-checkmark-outline"} 
+                    size={20} 
+                    color={phoneVerificationStatus ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
 
           {/* Кнопки */}
@@ -202,8 +235,9 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
+                  </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };

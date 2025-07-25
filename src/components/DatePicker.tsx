@@ -78,13 +78,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
   // Если в режиме редактирования (inline), показываем только кнопку без дополнительного текста
   if (inline) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ alignSelf: 'flex-start', width: 'auto' }}>
         <TouchableOpacity
           onPress={showDatePicker}
           disabled={disabled}
           style={[
             styles.inlinePickerButton,
-            { opacity: disabled ? 0.6 : 1 }
+            { opacity: disabled ? 0.6 : 1, width: 'auto' }
           ]}
         >
           <Text style={[

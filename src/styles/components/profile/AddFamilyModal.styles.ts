@@ -24,8 +24,8 @@ export const AddFamilyModalStyles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    margin: 20,
-    width: '100%',
+    margin: 40,
+    width: '98%',
     maxHeight: '120%',
     elevation: 10,
     shadowColor: '#000',
@@ -80,7 +80,7 @@ export const AddFamilyModalStyles = StyleSheet.create({
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 0,
     gap: 12,
   },
   modalCancelButton: {

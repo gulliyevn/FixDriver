@@ -233,6 +233,9 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         setNewFamilyMember={setNewFamilyMember}
         onClose={closeAddFamilyModal}
         onAdd={addFamilyMember}
+        onVerifyPhone={verifyPhone}
+        phoneVerificationStatus={verificationStatus.phone}
+        isVerifyingPhone={isVerifying.phone}
       />
     </View>
   );
