@@ -67,13 +67,22 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   const {
     familyMembers,
     expandedFamilyMember,
+    editingFamilyMember,
     showAddFamilyModal,
     newFamilyMember,
     setNewFamilyMember,
+    familyPhoneVerification,
+    familyPhoneVerifying,
     toggleFamilyMember,
     openAddFamilyModal,
     closeAddFamilyModal,
     addFamilyMember,
+    startEditingFamilyMember,
+    cancelEditingFamilyMember,
+    saveFamilyMember,
+    deleteFamilyMember,
+    verifyFamilyPhone,
+    resetFamilyPhoneVerification,
   } = useFamilyMembers();
   
 
@@ -219,8 +228,17 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         <FamilySection
           familyMembers={familyMembers}
           expandedFamilyMember={expandedFamilyMember}
+          editingFamilyMember={editingFamilyMember}
+          familyPhoneVerification={familyPhoneVerification}
+          familyPhoneVerifying={familyPhoneVerifying}
           onToggleFamilyMember={toggleFamilyMember}
           onOpenAddFamilyModal={openAddFamilyModal}
+          onStartEditing={startEditingFamilyMember}
+          onCancelEditing={cancelEditingFamilyMember}
+          onSaveMember={saveFamilyMember}
+          onDeleteMember={deleteFamilyMember}
+          onVerifyPhone={verifyFamilyPhone}
+          onResetPhoneVerification={resetFamilyPhoneVerification}
         />
 
         <VipSection />

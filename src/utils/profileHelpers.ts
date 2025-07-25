@@ -7,6 +7,22 @@ export const getDefaultDate = (): string => {
   return defaultDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
 };
 
+// Функция для точного расчета возраста
+export const calculateAge = (birthDate: string): number => {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  
+  // Если день рождения еще не наступил в этом году, уменьшаем возраст на 1
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  
+  return age;
+};
+
 // Функция для проверки изменений в форме
 export const hasChanges = (
   formData: {

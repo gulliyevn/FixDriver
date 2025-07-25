@@ -1,33 +1,59 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import FamilyMemberItem from './FamilyMemberItem';
 import { FamilySectionStyles as styles, getFamilySectionColors } from '../../styles/components/profile/FamilySection.styles';
 
 interface FamilyMember {
   id: string;
   name: string;
+  surname: string;
   type: string;
+  birthDate: string;
   age: number;
+  phone?: string;
+  phoneVerified?: boolean;
 }
 
 interface FamilySectionProps {
   familyMembers: FamilyMember[];
   expandedFamilyMember: string | null;
+  editingFamilyMember: string | null;
+  familyPhoneVerification: {[key: string]: boolean};
+  familyPhoneVerifying: {[key: string]: boolean};
   onToggleFamilyMember: (memberId: string) => void;
   onOpenAddFamilyModal: () => void;
+  onStartEditing: (memberId: string) => void;
+  onCancelEditing: () => void;
+  onSaveMember: (memberId: string, updatedData: Partial<FamilyMember>) => void;
+  onDeleteMember: (memberId: string) => void;
+  onVerifyPhone: (memberId: string) => void;
+  onResetPhoneVerification: (memberId: string) => void;
 }
 
 const FamilySection: React.FC<FamilySectionProps> = ({
   familyMembers,
   expandedFamilyMember,
+  editingFamilyMember,
+  familyPhoneVerification,
+  familyPhoneVerifying,
   onToggleFamilyMember,
   onOpenAddFamilyModal,
+  onStartEditing,
+  onCancelEditing,
+  onSaveMember,
+  onDeleteMember,
+  onVerifyPhone,
+  onResetPhoneVerification,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const dynamicStyles = getFamilySectionColors(isDark);
+  
+  // Состояние для редактируемых данных
+  const [editingData, setEditingData] = useState<{[key: string]: Partial<FamilyMember>}>({});
 
   return (
     <View style={styles.familySection}>
@@ -44,51 +70,22 @@ const FamilySection: React.FC<FamilySectionProps> = ({
       </View>
       
       {familyMembers.map((member) => (
-        <View key={member.id}>
-          <TouchableOpacity 
-            style={[styles.familyItem, dynamicStyles.familyItem]}
-            onPress={() => onToggleFamilyMember(member.id)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.familyInfo}>
-              <Text style={[styles.familyName, dynamicStyles.familyName]}>
-                {member.name}
-              </Text>
-              <Text style={[styles.familyType, dynamicStyles.familyType]}>
-                {t(`profile.familyTypes.${member.type}`)} • {member.age} {t('profile.years')}
-              </Text>
-            </View>
-            <Ionicons 
-              name="chevron-forward" 
-              size={20} 
-              color={dynamicStyles.familyType.color}
-              style={[
-                styles.familyIcon,
-                expandedFamilyMember === member.id && styles.familyIconExpanded
-              ]}
-            />
-          </TouchableOpacity>
-          
-          {expandedFamilyMember === member.id && (
-            <View style={[styles.familyExpandedContent, dynamicStyles.familyExpandedContent]}>
-              <Text style={[styles.familyExpandedText, dynamicStyles.familyExpandedText]}>
-                {t('profile.familyDetails')}: {member.name} - {t(`profile.familyTypes.${member.type}`)}, {member.age} {t('profile.years')}
-              </Text>
-              <TouchableOpacity style={[styles.editFamilyButton, dynamicStyles.editFamilyButton]}>
-                <Text style={[styles.editFamilyButtonText, dynamicStyles.editFamilyButtonText]}>
-                  {t('profile.editFamilyMember')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+        <FamilyMemberItem
+          key={member.id}
+          member={member}
+          isExpanded={expandedFamilyMember === member.id}
+          isEditing={editingFamilyMember === member.id}
+          phoneVerified={familyPhoneVerification[member.id] || member.phoneVerified || false}
+          isVerifyingPhone={familyPhoneVerifying[member.id] || false}
+          onToggle={() => onToggleFamilyMember(member.id)}
+          onStartEditing={() => onStartEditing(member.id)}
+          onCancelEditing={onCancelEditing}
+          onSave={(updatedData) => onSaveMember(member.id, updatedData)}
+          onDelete={() => onDeleteMember(member.id)}
+          onVerifyPhone={() => onVerifyPhone(member.id)}
+          onResetPhoneVerification={() => onResetPhoneVerification(member.id)}
+        />
       ))}
-      
-      <TouchableOpacity style={[styles.addFamilyButton, dynamicStyles.addFamilyButton]}>
-        <Text style={[styles.addFamilyText, dynamicStyles.addFamilyText]}>
-          {t('profile.addFamilyMember')}
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 };

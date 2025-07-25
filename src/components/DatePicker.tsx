@@ -30,10 +30,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const dynamicStyles = getDatePickerColors(isDark);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    // Закрываем пикер для Android и для inline режима на iOS
-    if (Platform.OS === 'android' || (Platform.OS === 'ios' && inline)) {
+    // Для Android закрываем пикер только при нажатии "OK"
+    if (Platform.OS === 'android' && event.type === 'set') {
       setShowPicker(false);
     }
+    
+    // Для iOS inline режима не закрываем автоматически - только по кнопке "Готово"
     
     if (selectedDate) {
       setCurrentDate(selectedDate);
@@ -105,7 +107,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
               <View style={styles.modalOverlay}>
                 <View style={[styles.modalContent, dynamicStyles.modalContent]}>
                   <View style={styles.modalHeader}>
-                    <TouchableOpacity onPress={() => setShowPicker(false)}>
+                    <TouchableOpacity onPress={() => {
+                      // Отменяем изменения, возвращаем исходную дату и закрываем пикер
+                      setCurrentDate(value ? new Date(value) : new Date());
+                      setShowPicker(false);
+                    }}>
                       <Text style={[styles.modalButtonText, dynamicStyles.modalButtonText]}>
                         Отмена
                       </Text>
@@ -113,7 +119,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
                     <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
                       Выберите дату
                     </Text>
-                    <TouchableOpacity onPress={() => setShowPicker(false)}>
+                    <TouchableOpacity onPress={() => {
+                      // Сохраняем текущую выбранную дату и закрываем пикер
+                      const formattedDate = currentDate.toISOString().split('T')[0];
+                      onChange(formattedDate);
+                      setShowPicker(false);
+                    }}>
                       <Text style={[styles.modalButtonText, dynamicStyles.modalButtonText]}>
                         Готово
                       </Text>
