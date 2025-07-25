@@ -8,11 +8,13 @@ import { FamilyMember } from '../../types/family';
 
 interface FamilyMemberViewModeProps {
   member: FamilyMember;
+  phoneVerified: boolean;
   onStartEditing: () => void;
 }
 
 const FamilyMemberViewMode: React.FC<FamilyMemberViewModeProps> = ({
   member,
+  phoneVerified,
   onStartEditing,
 }) => {
   const { isDark } = useTheme();
@@ -84,9 +86,9 @@ const FamilyMemberViewMode: React.FC<FamilyMemberViewModeProps> = ({
           </Text>
           {member.phone && (
             <Ionicons 
-              name={member.phoneVerified ? "checkmark-circle" : "shield-checkmark-outline"} 
+              name={phoneVerified ? "checkmark-circle" : "shield-checkmark-outline"} 
               size={20} 
-              color={member.phoneVerified ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
+              color={phoneVerified ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
             />
           )}
         </View>

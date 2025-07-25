@@ -110,6 +110,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
           ) : (
             <FamilyMemberViewMode
               member={member}
+              phoneVerified={phoneVerified}
               onStartEditing={onStartEditing}
             />
           )}

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { getDefaultDate, calculateAge } from '../utils/profileHelpers';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FamilyMember {
   id: string;
@@ -22,6 +23,7 @@ interface NewFamilyMember {
 }
 
 export const useFamilyMembers = () => {
+  const { t } = useLanguage();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([
     { 
       id: '1', 
@@ -133,17 +135,60 @@ export const useFamilyMembers = () => {
 
   const resetFamilyPhoneVerification = (memberId: string) => {
     setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: false }));
+    // Также сбрасываем статус в данных члена семьи
+    setFamilyMembers(prev => prev.map(member => 
+      member.id === memberId 
+        ? { ...member, phoneVerified: false }
+        : member
+    ));
   };
 
-  const verifyFamilyPhone = (memberId: string) => {
-    setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
-    
-    // Имитация API вызова
-    setTimeout(() => {
-      setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
-      setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
-    }, 2000);
-  };
+  const verifyFamilyPhone = useCallback((memberId: string) => {
+    const member = familyMembers.find(m => m.id === memberId);
+    if (!member || !member.phone) {
+      Alert.alert('Ошибка', 'Номер телефона не указан');
+      return;
+    }
+
+    const title = t('profile.verifyPhone.title');
+    const message = t('profile.verifyPhone.message');
+    const cancelText = t('common.cancel');
+    const verifyText = t('common.verify');
+    const successTitle = t('profile.verifyPhone.success.title');
+    const successMessage = t('profile.verifyPhone.success.message');
+    const errorTitle = t('profile.verifyPhone.error.title');
+    const errorMessage = t('profile.verifyPhone.error.message');
+
+    Alert.prompt(
+      title,
+      message,
+      [
+        { text: cancelText, style: 'cancel' },
+        {
+          text: verifyText,
+          onPress: async (code) => {
+            if (code === '1234') {
+              setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
+              setTimeout(() => {
+                setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
+                setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
+                // Обновляем статус в данных члена семьи
+                setFamilyMembers(prev => prev.map(member => 
+                  member.id === memberId 
+                    ? { ...member, phoneVerified: true }
+                    : member
+                ));
+                Alert.alert(successTitle, successMessage);
+              }, 1000);
+            } else {
+              Alert.alert(errorTitle, errorMessage);
+            }
+          }
+        }
+      ],
+      'plain-text'
+    );
+  }, [familyMembers, t]);
 
   return {
     familyMembers,
