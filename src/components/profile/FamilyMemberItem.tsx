@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { createFamilyMemberItemStyles } from '../../styles/components/profile/FamilyMemberItem.styles';
 import { FamilyMemberItemProps, FamilyMember } from '../../types/family';
+import { calculateAge } from '../../utils/profileHelpers';
 import FamilyMemberEditMode from './FamilyMemberEditMode';
 import FamilyMemberViewMode from './FamilyMemberViewMode';
 
@@ -33,7 +34,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
     surname: member.surname,
     type: member.type,
     birthDate: member.birthDate,
-    phone: member.phone || '',
+    phone: member.phone ?? '',
   });
 
   React.useEffect(() => {
@@ -43,26 +44,58 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         surname: member.surname,
         type: member.type,
         birthDate: member.birthDate,
-        phone: member.phone || '',
+        phone: member.phone ?? '',
       });
     }
-  }, [isEditing, member]);
+  }, [isEditing, member.id]); // Изменили зависимость с member на member.id
 
   const hasChanges = () => {
+    const phoneChanged = (editingData.phone ?? '') !== (member.phone ?? '');
     return (
       editingData.name !== member.name ||
       editingData.surname !== member.surname ||
       editingData.type !== member.type ||
       editingData.birthDate !== member.birthDate ||
-      editingData.phone !== (member.phone || '')
+      phoneChanged
     );
   };
 
   const handleToggle = () => {
     if (isEditing && hasChanges()) {
-      // Показываем диалог отмены изменений
+      // Показываем диалог подтверждения сохранения изменений
+      Alert.alert(
+        t('profile.saveChangesConfirm.title'),
+        t('profile.saveChangesConfirm.message'),
+        [
+          { 
+            text: t('profile.saveChangesConfirm.cancel'), 
+            style: 'cancel',
+            onPress: () => {
+              // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+              // НЕ закрываем блок, НЕ сбрасываем изменения
+            }
+          },
+          { 
+            text: t('profile.saveChangesConfirm.save'), 
+            onPress: () => {
+              // Сохраняем изменения и закрываем
+              const updatedData = {
+                ...editingData,
+                age: calculateAge(editingData.birthDate || member.birthDate),
+                phone: editingData.phone?.trim() || undefined,
+              };
+              onSave(updatedData);
+              onToggle();
+            }
+          }
+        ]
+      );
+    } else if (isEditing && !hasChanges()) {
+      // Если в режиме редактирования, но нет изменений - сразу закрываем блок
       onCancelEditing();
+      onToggle();
     } else {
+      // Обычное переключение (открыть/закрыть блок)
       onToggle();
     }
   };

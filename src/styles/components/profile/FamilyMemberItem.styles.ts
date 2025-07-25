@@ -175,6 +175,12 @@ export const createFamilyMemberItemStyles = (isDark: boolean) => StyleSheet.crea
     color: isDark ? '#F9FAFB' : '#003366',
   },
   
+  clearButton: {
+    paddingHorizontal: 2,
+    paddingVertical: 6,
+    marginLeft: 4,
+  },
+  
   verifyButton: {
     paddingHorizontal: 2,
     paddingVertical: 6,

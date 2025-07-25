@@ -61,6 +61,7 @@
   "lastNamePlaceholder": "Введите фамилию",
   "phone": "Телефон",
   "phonePlaceholder": "Введите номер телефона",
+  "noPhone": "Не указан",
   "email": "E-mail",
   "emailPlaceholder": "Введите e-mail",
   "birthDate": "Дата рождения",
@@ -74,6 +75,13 @@
   },
   "years": "лет",
   "addFamilyMember": "Добавить члена семьи",
+  "editFamilyMember": "Редактировать",
+  "saveChangesConfirm": {
+    "title": "Сохранить изменения",
+    "message": "У вас есть несохраненные изменения. Хотите сохранить их перед выходом?",
+    "cancel": "Отменить",
+    "save": "Сохранить"
+  },
   "vipStatus": "VIP статус",
   "vipTitle": "VIP подписка",
   "vipDescription": "Получите приоритетное обслуживание, эксклюзивные предложения и специальные скидки",

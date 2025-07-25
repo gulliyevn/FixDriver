@@ -96,6 +96,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     return hasChanges(formData, originalDataRef.current);
   };
 
+  // Функция для проверки изменений в семейной секции
+  const checkFamilyChanges = () => {
+    return editingFamilyMember !== null;
+  };
+
   // Асинхронная функция сохранения профиля
   const saveProfile = async () => {
     try {
@@ -154,7 +159,49 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
       <ProfileHeader
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => {
+          // Проверяем, есть ли несохраненные изменения
+          if (checkHasChanges() || checkFamilyChanges()) {
+            Alert.alert(
+              t('profile.saveChangesConfirm.title'),
+              t('profile.saveChangesConfirm.message'),
+              [
+                { 
+                  text: t('profile.saveChangesConfirm.cancel'), 
+                  style: 'cancel',
+                  onPress: () => {
+                    // При отмене НЕ делаем ничего - остаемся на странице с текущими изменениями
+                    // НЕ выходим со страницы, НЕ сбрасываем изменения
+                  }
+                },
+                { 
+                  text: t('profile.saveChangesConfirm.save'), 
+                  onPress: async () => {
+                    // Сохраняем изменения профиля
+                    if (checkHasChanges()) {
+                      const success = await saveProfile();
+                      if (!success) {
+                        Alert.alert(
+                          t('profile.saveProfileError.title'),
+                          t('profile.saveProfileError.message'),
+                          [{ text: 'OK' }]
+                        );
+                        return;
+                      }
+                    }
+                    // Отменяем редактирование семейной секции
+                    if (checkFamilyChanges()) {
+                      cancelEditingFamilyMember();
+                    }
+                    navigation.goBack();
+                  }
+                }
+              ]
+            );
+          } else {
+            navigation.goBack();
+          }
+        }}
                   onEditPress={() => {
            if (isEditingPersonalInfo) {
              // Если в режиме редактирования, проверяем изменения

@@ -111,7 +111,7 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
             <Text style={styles.avatarText}>{userName[0]}{userSurname[0]}</Text>
           )}
           <TouchableOpacity 
-            style={[styles.addPhotoButton, dynamicStyles.addPhotoButton]}
+            style={styles.addPhotoButton}
             onPress={() => {
               if (profilePhoto) {
                 Alert.alert(
@@ -155,7 +155,7 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
             }}
             accessibilityLabel={profilePhoto ? t('profile.changePhoto') : t('profile.addPhoto')}
           >
-            <Ionicons name={profilePhoto ? "camera" : "add"} size={10} color={isDark ? '#3B82F6' : '#083198'} />
+            <Ionicons name={profilePhoto ? "camera" : "add"} size={10} color="#083198" />
           </TouchableOpacity>
         </View>
         <Text 

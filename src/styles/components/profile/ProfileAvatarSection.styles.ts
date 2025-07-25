@@ -82,7 +82,7 @@ export const ProfileAvatarSectionStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#003366',
+    borderColor: '#e0e0e0',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -115,10 +115,6 @@ export const getProfileAvatarSectionColors = (isDark: boolean) => {
     },
     rightCircle: { 
       backgroundColor: colors.border 
-    },
-    addPhotoButton: { 
-      backgroundColor: colors.text,
-      borderColor: colors.primary 
     },
   };
 }; 

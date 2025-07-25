@@ -61,6 +61,7 @@
   "lastNamePlaceholder": "Enter last name",
   "phone": "Phone",
   "phonePlaceholder": "Enter phone number",
+  "noPhone": "Not specified",
   "email": "Email",
   "emailPlaceholder": "Enter email",
   "birthDate": "Birth Date",
@@ -74,6 +75,13 @@
   },
   "years": "years",
   "addFamilyMember": "Add Family Member",
+  "editFamilyMember": "Edit",
+  "saveChangesConfirm": {
+    "title": "Save Changes",
+    "message": "You have unsaved changes. Do you want to save them before exiting?",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
   "vipStatus": "VIP Status",
   "vipTitle": "VIP Subscription",
   "vipDescription": "Get priority service, exclusive offers and special discounts",

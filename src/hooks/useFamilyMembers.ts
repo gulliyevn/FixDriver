@@ -42,7 +42,7 @@ export const useFamilyMembers = () => {
       type: 'spouse', 
       birthDate: '1988-07-22',
       age: 35,
-      phone: '+7 999 987-65-43',
+      phone: undefined,
       phoneVerified: false
     },
   ]);
@@ -122,7 +122,12 @@ export const useFamilyMembers = () => {
 
   const saveFamilyMember = (memberId: string, updatedData: Partial<FamilyMember>) => {
     setFamilyMembers(prev => prev.map(member => 
-      member.id === memberId ? { ...member, ...updatedData } : member
+      member.id === memberId ? { 
+        ...member, 
+        ...updatedData,
+        // Сбрасываем верификацию телефона, если номер изменился
+        phoneVerified: updatedData.phone !== member.phone ? false : member.phoneVerified
+      } : member
     ));
     setEditingFamilyMember(null);
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -45,7 +45,7 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
       editingData.surname !== member.surname ||
       editingData.type !== member.type ||
       editingData.birthDate !== member.birthDate ||
-      editingData.phone !== (member.phone || '')
+      (editingData.phone || '') !== (member.phone || '')
     );
   };
 
@@ -62,6 +62,7 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
               const updatedData = {
                 ...editingData,
                 age: calculateAge(editingData.birthDate || member.birthDate),
+                phone: editingData.phone?.trim() || undefined,
               };
               onSave(updatedData);
             }
@@ -194,17 +195,30 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
         <View style={styles.phoneContainer}>
           <TextInput
             style={styles.phoneInput}
-            value={editingData.phone}
+            value={editingData.phone ?? ''}
             onChangeText={(text) => {
               setEditingData({...editingData, phone: text});
-              if (text !== member.phone) {
+              if (text !== (member.phone ?? '')) {
                 onResetPhoneVerification();
               }
             }}
             placeholder={t('profile.phonePlaceholder')}
             placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
             keyboardType="phone-pad"
+            editable={true}
+            selectTextOnFocus={false}
           />
+          {editingData.phone && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => {
+                setEditingData({...editingData, phone: ''});
+                onResetPhoneVerification();
+              }}
+            >
+              <Ionicons name="close-circle" size={16} color={isDark ? '#9CA3AF' : '#666666'} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={[
               styles.verifyButton,
