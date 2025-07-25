@@ -190,6 +190,35 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     color: '#666',
     marginTop: 2,
   },
+  familyIcon: {
+    transform: [{ rotate: '90deg' }],
+  },
+  familyIconExpanded: {
+    transform: [{ rotate: '270deg' }],
+  },
+  familyExpandedContent: {
+    backgroundColor: '#f0f0f0',
+    padding: 12,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  familyExpandedText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  editFamilyButton: {
+    backgroundColor: '#003366',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  editFamilyButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+  },
   addFamilyButton: {
     backgroundColor: '#f9f9f9',
     paddingVertical: 12,
@@ -304,6 +333,17 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     marginBottom: 16,
     paddingVertical: 4,
   },
+  addIconButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#f0f0f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    marginTop: -6,
+  },
   // Стили для редактируемых полей
   infoRowEditing: {
     borderWidth: 2,
@@ -332,6 +372,163 @@ export const EditClientProfileScreenStyles = StyleSheet.create({
     borderWidth: 0,
     marginLeft: 4,
   },
+  // Стили для модального окна добавления члена семьи
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    zIndex: 1000,
+    elevation: 5,
+    paddingTop: 80,
+  },
+  modalScrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    margin: 20,
+    width: '85%',
+    maxHeight: '120%',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#003366',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalInputContainer: {
+    marginBottom: 16,
+  },
+  typeInputContainer: {
+    position: 'relative',
+  },
+  modalInputLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#003366',
+    marginBottom: 8,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  modalSelectButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#fff',
+  },
+  modalSelectText: {
+    fontSize: 16,
+    color: '#003366',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 12,
+  },
+  modalCancelButton: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modalCancelButtonText: {
+    fontSize: 16,
+    color: '#666',
+    fontWeight: '500',
+  },
+  modalSaveButton: {
+    flex: 1,
+    backgroundColor: '#003366',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modalSaveButtonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  // Стили для выпадающего списка типов
+  typeDropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    marginTop: 4,
+    maxHeight: 200,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    zIndex: 1000,
+  },
+  typeDropdownScroll: {
+    maxHeight: 200,
+  },
+  typeOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  typeOptionSelected: {
+    backgroundColor: '#f8f9fa',
+  },
+  typeOptionLast: {
+    borderBottomWidth: 0,
+  },
+  typeOptionText: {
+    fontSize: 16,
+    color: '#003366',
+  },
+  typeOptionTextSelected: {
+    fontWeight: '600',
+  },
+
 });
 
 export const getEditClientProfileScreenColors = (isDark: boolean) => {
@@ -373,6 +570,14 @@ export const getEditClientProfileScreenColors = (isDark: boolean) => {
     familyItem: { backgroundColor: colors.surface },
     familyName: { color: colors.text },
     familyType: { color: colors.textSecondary },
+    familyExpandedContent: { backgroundColor: colors.border },
+    familyExpandedText: { color: colors.textSecondary },
+    editFamilyButton: { backgroundColor: colors.primary },
+    editFamilyButtonText: { color: colors.background },
+    addIconButton: { 
+      backgroundColor: colors.surface,
+      borderColor: colors.border 
+    },
     addFamilyButton: { backgroundColor: colors.surface },
     addFamilyText: { color: colors.text },
     addPhotoButton: { 
@@ -399,5 +604,31 @@ export const getEditClientProfileScreenColors = (isDark: boolean) => {
       backgroundColor: 'transparent',
       color: colors.text 
     },
+    modalContent: { backgroundColor: colors.background },
+    modalTitle: { color: colors.text },
+    modalInputLabel: { color: colors.text },
+    modalInput: { 
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      color: colors.text 
+    },
+    modalSelectButton: { 
+      backgroundColor: colors.surface,
+      borderColor: colors.border 
+    },
+    modalSelectText: { color: colors.text },
+    modalCancelButton: { backgroundColor: colors.surface },
+    modalCancelButtonText: { color: colors.textSecondary },
+    modalSaveButton: { backgroundColor: colors.primary },
+    modalSaveButtonText: { color: colors.background },
+    typeDropdown: { 
+      backgroundColor: colors.background,
+      borderColor: colors.border 
+    },
+    typeOption: { borderBottomColor: colors.border },
+    typeOptionSelected: { backgroundColor: colors.surface },
+    typeOptionText: { color: colors.text },
+    typeOptionTextSelected: { color: colors.primary },
+
   };
 }; 

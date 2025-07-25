@@ -34,13 +34,13 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   });
 
   // Исходные данные для сравнения
-  const originalData = {
+  const originalDataRef = useRef({
     firstName: user.name,
     lastName: user.surname,
     phone: user.phone,
     email: user.email,
     birthDate: '1990-01-01',
-  };
+  });
 
   const [familyMembers] = useState([
     { id: '1', name: 'Анна Петрова', type: 'child', age: 8 },
@@ -61,14 +61,55 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     phone: false,
   });
 
+  // Состояние для отслеживания открытых семейных элементов
+  const [expandedFamilyMember, setExpandedFamilyMember] = useState<string | null>(null);
+  
+  // Состояние для модального окна добавления члена семьи
+  const [showAddFamilyModal, setShowAddFamilyModal] = useState(false);
+  const [newFamilyMember, setNewFamilyMember] = useState({
+    name: '',
+    surname: '',
+    type: 'child',
+    age: '',
+    phone: '',
+  });
+  
+  const familyTypes = [
+    { key: 'husband', label: 'Муж' },
+    { key: 'wife', label: 'Жена' },
+    { key: 'son', label: 'Сын' },
+    { key: 'daughter', label: 'Дочь' },
+    { key: 'mother', label: 'Мать' },
+    { key: 'father', label: 'Отец' },
+    { key: 'grandmother', label: 'Бабушка' },
+    { key: 'grandfather', label: 'Дедушка' },
+    { key: 'brother', label: 'Брат' },
+    { key: 'sister', label: 'Сестра' },
+    { key: 'uncle', label: 'Дядя' },
+    { key: 'aunt', label: 'Тетя' },
+    { key: 'cousin', label: 'Двоюродный брат/сестра' },
+    { key: 'nephew', label: 'Племянник' },
+    { key: 'niece', label: 'Племянница' },
+    { key: 'stepfather', label: 'Отчим' },
+    { key: 'stepmother', label: 'Мачеха' },
+    { key: 'stepson', label: 'Пасынок' },
+    { key: 'stepdaughter', label: 'Падчерица' },
+    { key: 'other', label: 'Другое' },
+  ];
+  
+  // Состояние для выпадающего списка типа семьи
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  
+
+
   // Функция для проверки изменений
   const hasChanges = () => {
     return (
-      formData.firstName !== originalData.firstName ||
-      formData.lastName !== originalData.lastName ||
-      formData.phone !== originalData.phone ||
-      formData.email !== originalData.email ||
-      formData.birthDate !== originalData.birthDate
+      formData.firstName !== originalDataRef.current.firstName ||
+      formData.lastName !== originalDataRef.current.lastName ||
+      formData.phone !== originalDataRef.current.phone ||
+      formData.email !== originalDataRef.current.email ||
+      formData.birthDate !== originalDataRef.current.birthDate
     );
   };
 
@@ -86,11 +127,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       
       if (success) {
         // Обновляем исходные данные для следующего сравнения
-        originalData.firstName = formData.firstName;
-        originalData.lastName = formData.lastName;
-        originalData.phone = formData.phone;
-        originalData.email = formData.email;
-        originalData.birthDate = formData.birthDate;
+        originalDataRef.current.firstName = formData.firstName;
+        originalDataRef.current.lastName = formData.lastName;
+        originalDataRef.current.phone = formData.phone;
+        originalDataRef.current.email = formData.email;
+        originalDataRef.current.birthDate = formData.birthDate;
       }
       
       return success;
@@ -289,6 +330,39 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     );
   };
 
+  const toggleFamilyMember = (memberId: string) => {
+    setExpandedFamilyMember(expandedFamilyMember === memberId ? null : memberId);
+  };
+
+  const openAddFamilyModal = () => {
+    setShowAddFamilyModal(true);
+  };
+
+  const closeAddFamilyModal = () => {
+    setShowAddFamilyModal(false);
+    setNewFamilyMember({
+      name: '',
+      surname: '',
+      type: 'child',
+      age: '',
+      phone: '',
+    });
+  };
+
+  const addFamilyMember = () => {
+    // Здесь должна быть логика добавления в API
+    console.log('Adding family member:', newFamilyMember);
+    
+    // В реальном приложении здесь будет API вызов
+    Alert.alert(
+      'Успешно',
+      'Член семьи добавлен',
+      [{ text: 'OK', onPress: closeAddFamilyModal }]
+    );
+  };
+
+
+
   const verifyPhone = () => {
     const title = t('profile.verifyPhone.title');
     const message = t('profile.verifyPhone.message');
@@ -378,7 +452,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                   ]
                 );
               } else {
-                // Если изменений нет, просто выключаем режим редактирования
+                // Если изменений нет, просто выключаем режим редактирования без подтверждения
                 setIsEditingPersonalInfo(false);
               }
             } else {
@@ -592,29 +666,63 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
               onChange={(date) => setFormData({...formData, birthDate: date})}
               placeholder={t('profile.birthDatePlaceholder')}
               inline={isEditingPersonalInfo}
+              readOnly={!isEditingPersonalInfo}
             />
           </View>
         </View>
 
         {/* Семейная информация */}
         <View style={styles.familySection}>
-          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
-            {t('profile.familyInfo')}
-          </Text>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
+              {t('profile.familyInfo')}
+            </Text>
+            <TouchableOpacity 
+              style={[styles.addIconButton, dynamicStyles.addIconButton]}
+              onPress={openAddFamilyModal}
+            >
+              <Ionicons name="add" size={20} color={isDark ? '#3B82F6' : '#083198'} />
+            </TouchableOpacity>
+          </View>
           
           {familyMembers.map((member) => (
-            <View key={member.id} style={[styles.familyItem, dynamicStyles.familyItem]}>
-              <View style={styles.familyInfo}>
-                <Text style={[styles.familyName, dynamicStyles.familyName]}>
-                  {member.name}
-                </Text>
-                <Text style={[styles.familyType, dynamicStyles.familyType]}>
-                  {t(`profile.familyTypes.${member.type}`)} • {member.age} {t('profile.years')}
-                </Text>
-              </View>
-              <TouchableOpacity>
-                <Ionicons name="chevron-forward" size={20} color={dynamicStyles.familyType.color} />
+            <View key={member.id}>
+              <TouchableOpacity 
+                style={[styles.familyItem, dynamicStyles.familyItem]}
+                onPress={() => toggleFamilyMember(member.id)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.familyInfo}>
+                  <Text style={[styles.familyName, dynamicStyles.familyName]}>
+                    {member.name}
+                  </Text>
+                  <Text style={[styles.familyType, dynamicStyles.familyType]}>
+                    {t(`profile.familyTypes.${member.type}`)} • {member.age} {t('profile.years')}
+                  </Text>
+                </View>
+                <Ionicons 
+                  name="chevron-forward" 
+                  size={20} 
+                  color={dynamicStyles.familyType.color}
+                  style={[
+                    styles.familyIcon,
+                    expandedFamilyMember === member.id && styles.familyIconExpanded
+                  ]}
+                />
               </TouchableOpacity>
+              
+              {expandedFamilyMember === member.id && (
+                <View style={[styles.familyExpandedContent, dynamicStyles.familyExpandedContent]}>
+                  <Text style={[styles.familyExpandedText, dynamicStyles.familyExpandedText]}>
+                    {t('profile.familyDetails')}: {member.name} - {t(`profile.familyTypes.${member.type}`)}, {member.age} {t('profile.years')}
+                  </Text>
+                  <TouchableOpacity style={[styles.editFamilyButton, dynamicStyles.editFamilyButton]}>
+                    <Text style={[styles.editFamilyButtonText, dynamicStyles.editFamilyButtonText]}>
+                      {t('profile.editFamilyMember')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           ))}
           
@@ -638,12 +746,157 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
               <Text style={styles.vipButtonText}>{t('profile.upgradeToVip')}</Text>
             </TouchableOpacity>
           </View>
-        </View>
-
-
-
+                </View>
 
       </ScrollView>
+
+      {/* Модальное окно добавления члена семьи */}
+      {showAddFamilyModal && (
+        <View style={styles.modalOverlay}>
+          <ScrollView 
+            contentContainerStyle={styles.modalScrollContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={[styles.modalContent, dynamicStyles.modalContent]}>
+              <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
+                {t('profile.addFamilyMember')}
+              </Text>
+              
+              {/* Имя */}
+              <View style={styles.modalInputContainer}>
+                <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+                  {t('profile.firstName')} *
+                </Text>
+                <TextInput
+                  style={[styles.modalInput, dynamicStyles.modalInput]}
+                  value={newFamilyMember.name}
+                  onChangeText={(text) => setNewFamilyMember({...newFamilyMember, name: text})}
+                  placeholder={t('profile.firstNamePlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                />
+              </View>
+
+              {/* Фамилия */}
+              <View style={styles.modalInputContainer}>
+                <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+                  {t('profile.lastName')} *
+                </Text>
+                <TextInput
+                  style={[styles.modalInput, dynamicStyles.modalInput]}
+                  value={newFamilyMember.surname}
+                  onChangeText={(text) => setNewFamilyMember({...newFamilyMember, surname: text})}
+                  placeholder={t('profile.lastNamePlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                />
+              </View>
+
+              {/* Тип */}
+              <View style={[styles.modalInputContainer, styles.typeInputContainer]}>
+                <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+                  {t('profile.familyType')} *
+                </Text>
+                <TouchableOpacity
+                  style={[styles.modalSelectButton, dynamicStyles.modalSelectButton]}
+                  onPress={() => setShowTypeDropdown(!showTypeDropdown)}
+                >
+                  <Text style={[styles.modalSelectText, dynamicStyles.modalSelectText]}>
+                    {familyTypes.find(t => t.key === newFamilyMember.type)?.label || 'Выберите тип'}
+                  </Text>
+                  <Ionicons 
+                    name={showTypeDropdown ? "chevron-up" : "chevron-down"} 
+                    size={16} 
+                    color={isDark ? '#9CA3AF' : '#666666'} 
+                  />
+                </TouchableOpacity>
+                
+                {/* Выпадающий список типов */}
+                {showTypeDropdown && (
+                  <View style={[styles.typeDropdown, dynamicStyles.typeDropdown]}>
+                    <ScrollView style={styles.typeDropdownScroll} showsVerticalScrollIndicator={false}>
+                      {familyTypes.map((type) => (
+                        <TouchableOpacity
+                          key={type.key}
+                          style={[
+                            styles.typeOption, 
+                            dynamicStyles.typeOption,
+                            newFamilyMember.type === type.key && styles.typeOptionSelected,
+                            type.key === 'other' && styles.typeOptionLast
+                          ]}
+                          onPress={() => {
+                            setNewFamilyMember({...newFamilyMember, type: type.key});
+                            setShowTypeDropdown(false);
+                          }}
+                        >
+                          <Text style={[
+                            styles.typeOptionText, 
+                            dynamicStyles.typeOptionText,
+                            newFamilyMember.type === type.key && styles.typeOptionTextSelected
+                          ]}>
+                            {type.label}
+                          </Text>
+                          {newFamilyMember.type === type.key && (
+                            <Ionicons name="checkmark" size={16} color={isDark ? '#3B82F6' : '#083198'} />
+                          )}
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+              </View>
+
+              {/* Возраст */}
+              <View style={styles.modalInputContainer}>
+                <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+                  {t('profile.familyAge')} *
+                </Text>
+                <TextInput
+                  style={[styles.modalInput, dynamicStyles.modalInput]}
+                  value={newFamilyMember.age}
+                  onChangeText={(text) => setNewFamilyMember({...newFamilyMember, age: text})}
+                  placeholder={t('profile.familyAgePlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                  keyboardType="numeric"
+                />
+              </View>
+
+              {/* Телефон */}
+              <View style={styles.modalInputContainer}>
+                <Text style={[styles.modalInputLabel, dynamicStyles.modalInputLabel]}>
+                  {t('profile.phone')}
+                </Text>
+                <TextInput
+                  style={[styles.modalInput, dynamicStyles.modalInput]}
+                  value={newFamilyMember.phone}
+                  onChangeText={(text) => setNewFamilyMember({...newFamilyMember, phone: text})}
+                  placeholder={t('profile.phonePlaceholder')}
+                  placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
+                  keyboardType="phone-pad"
+                />
+              </View>
+
+              {/* Кнопки */}
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  style={[styles.modalCancelButton, dynamicStyles.modalCancelButton]}
+                  onPress={closeAddFamilyModal}
+                >
+                  <Text style={[styles.modalCancelButtonText, dynamicStyles.modalCancelButtonText]}>
+                    {t('common.cancel')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalSaveButton, dynamicStyles.modalSaveButton]}
+                  onPress={addFamilyMember}
+                >
+                  <Text style={[styles.modalSaveButtonText, dynamicStyles.modalSaveButtonText]}>
+                    {t('common.add')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };

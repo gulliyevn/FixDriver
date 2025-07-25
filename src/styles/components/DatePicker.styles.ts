@@ -47,15 +47,23 @@ export const DatePickerStyles = StyleSheet.create({
     textAlign: 'right',
     minWidth: 80,
   },
+  readOnlyText: {
+    fontSize: 16,
+    textAlign: 'right',
+    minWidth: 80,
+  },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     padding: 20,
+    marginHorizontal: 20,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -77,6 +85,12 @@ export const DatePickerStyles = StyleSheet.create({
   },
   datePickerContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: 200,
+    flex: 1,
+    marginLeft: 0,
+    paddingLeft: 0,
   },
 });
 
@@ -109,6 +123,11 @@ export const getDatePickerColors = (isDark: boolean) => {
     modalContent: { backgroundColor: colors.background },
     modalButtonText: { color: colors.primary },
     modalTitle: { color: colors.text },
-    datePickerContainer: { backgroundColor: colors.surface },
+    datePickerContainer: { 
+      backgroundColor: colors.surface,
+      width: '100%',
+      marginLeft: 0,
+      paddingLeft: 0,
+    },
   };
 }; 
