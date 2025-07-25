@@ -19,7 +19,7 @@ export * from './PaymentPackageCard.styles';
 export * from './PhoneInput.styles';
 export * from './PhotoUpload.styles';
 export * from './ProfileChildrenSection.styles';
-export * from './ProfileHeader.styles';
+export * from './profile';
 export * from './ProfileNotificationsModal.styles';
 export * from './ProfileOption.styles';
 export * from './ProgressBar.styles';
