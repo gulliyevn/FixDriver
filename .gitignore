@@ -1,17 +1,283 @@
+# ===== FIXDRIVE .GITIGNORE =====
+# React Native + Expo + TypeScript + Node.js
+
+# ===== ОСНОВНЫЕ ФАЙЛЫ =====
+
+# Зависимости
 node_modules/
-.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# ===== REACT NATIVE =====
+
+# React Native
 .expo/
 dist/
-build/
-coverage/
+web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
 .DS_Store
-.idea/
+*.pem
+
+# local env files
+.env*.local
+
+# ===== EXPO =====
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+
+# Expo CLI
+.expo/
+
+# ===== ANDROID =====
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# Android Studio
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/jarRepositories.xml
+.idea/androidTestResultsUserPreferences.xml
+.idea/deploymentTargetDropDown.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/navEditor.xml
+
+# Android Gradle Plugin
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Android Profiling
+*.hprof
+
+# ===== IOS =====
+
+# Xcode
+build/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# CocoaPods
+/ios/Pods/
+
+# ===== TYPESCRIPT =====
+
+# TypeScript
+*.tsbuildinfo
+
+# ===== ТЕСТИРОВАНИЕ =====
+
+# Jest
+coverage/
+.nyc_output/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# ===== РАЗРАБОТКА =====
+
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ===== БЕЗОПАСНОСТЬ =====
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.keystore
+google-services.json
+GoogleService-Info.plist
+
+# API Keys
+src/config/secrets.ts
+src/config/api-keys.ts
+
+# ===== ВРЕМЕННЫЕ ФАЙЛЫ =====
+
+# Temporary folders
+tmp/
+temp/
+.tmp/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# ===== ДОКУМЕНТАЦИЯ =====
+
+# Documentation builds
+docs/build/
+docs/.docusaurus/
+
+# ===== МОНИТОРИНГ =====
+
+# Analytics
+analytics/
+metrics/
+
+# Crash reports
+crashlytics/
+sentry/
+
+# ===== ДЕПЛОЙ =====
+
+# Build outputs
+build/
+dist/
+out/
+
+# Deployment
+.deploy/
+.deployment
+
+# ===== СПЕЦИФИЧНЫЕ ДЛЯ FIXDRIVE =====
+
+# Конфиденциальные данные
+src/config/environment.prod.ts
+src/config/environment.staging.ts
+
+# Моки для продакшена
+src/mocks/production.ts
+
+# Логи приложения
+logs/
 *.log
 
-# Ignore all markdown files except README.md
-*.md
-!README.md
+# Кэш карт
+.cache/maps/
+.cache/location/
 
-# Backend services
-Auth/
+# Временные файлы загрузки
+uploads/temp/
+uploads/cache/
+
+# ===== ДОПОЛНИТЕЛЬНЫЕ ИСКЛЮЧЕНИЯ =====
+
+# Storybook
+storybook-static/
+
+# Bundle analyzer
+bundle-analyzer-report.html
+
+# Performance
+.perf/
+
+# ===== СИСТЕМНЫЕ ФАЙЛЫ =====
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===== ПРИМЕЧАНИЯ =====
+
+# Важно: НЕ игнорировать следующие файлы:
+# !package.json
+# !tsconfig.json
+# !babel.config.js
+# !metro.config.js
+# !app.json
+# !app.config.js
+# !jest.config.js
+# !.eslintrc.js
+# !.prettierrc
+# !README.md
+# !LICENSE

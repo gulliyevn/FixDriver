@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Animated } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
 import { EditClientProfileScreenStyles as styles, getEditClientProfileScreenColors } from '../../styles/screens/profile/EditClientProfileScreen.styles';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
@@ -20,6 +19,7 @@ import AddFamilyModal from '../../components/profile/AddFamilyModal';
 import ProfileAvatarSection from '../../components/profile/ProfileAvatarSection';
 import VipSection from '../../components/profile/VipSection';
 import ProfileHeader from '../../components/profile/ProfileHeader';
+import { useLanguage } from '../../context/LanguageContext';
 
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -84,12 +84,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     verifyFamilyPhone,
     resetFamilyPhoneVerification,
   } = useFamilyMembers();
-  
-
-  
-
-  
-
 
   // Функция для проверки изменений
   const checkHasChanges = () => {
@@ -102,7 +96,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   };
 
   // Асинхронная функция сохранения профиля
-  const saveProfile = async () => {
+  const saveProfile = async (): Promise<boolean> => {
     try {
       // Используем хук для обновления профиля
       const success = await updateProfile({
@@ -112,26 +106,22 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         email: formData.email,
         birthDate: formData.birthDate,
       });
-      
+
       if (success) {
-        // Обновляем исходные данные для следующего сравнения
-        originalDataRef.current.firstName = formData.firstName;
-        originalDataRef.current.lastName = formData.lastName;
-        originalDataRef.current.phone = formData.phone;
-        originalDataRef.current.email = formData.email;
-        originalDataRef.current.birthDate = formData.birthDate;
+        Alert.alert('Успех', 'Профиль успешно обновлен');
+        setIsEditingPersonalInfo(false);
+        // Обновляем исходные данные
+        originalDataRef.current = { ...formData };
+        return true;
+      } else {
+        Alert.alert('Ошибка', 'Не удалось обновить профиль');
+        return false;
       }
-      
-      return success;
     } catch (error) {
-      console.error('Error saving profile:', error);
+      Alert.alert('Ошибка', 'Произошла ошибка при обновлении профиля');
       return false;
     }
   };
-
-
-
-
 
   const handleCirclePressAction = () => {
     // Анимация вращения
@@ -146,8 +136,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       handleCirclePress(navigation, login, t);
     });
   };
-
-
 
   // Загружаем статус верификации при фокусе экрана
   useFocusEffect(
@@ -179,15 +167,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                   onPress: async () => {
                     // Сохраняем изменения профиля
                     if (checkHasChanges()) {
-                      const success = await saveProfile();
-                      if (!success) {
-                        Alert.alert(
-                          t('profile.saveProfileError.title'),
-                          t('profile.saveProfileError.message'),
-                          [{ text: 'OK' }]
-                        );
-                        return;
-                      }
+                      await saveProfile();
                     }
                     // Отменяем редактирование семейной секции
                     if (checkFamilyChanges()) {
@@ -221,19 +201,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                       const success = await saveProfile();
                       if (success) {
                         setIsEditingPersonalInfo(false);
-                        // Показываем уведомление об успешном сохранении
-                        Alert.alert(
-                          t('profile.saveProfileSuccess.title'),
-                          t('profile.saveProfileSuccess.message'),
-                          [{ text: 'OK' }]
-                        );
-                      } else {
-                        // Показываем ошибку
-                        Alert.alert(
-                          t('profile.saveProfileError.title'),
-                          t('profile.saveProfileError.message'),
-                          [{ text: 'OK' }]
-                        );
                       }
                     }
                   }
@@ -288,7 +255,9 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           onResetPhoneVerification={resetFamilyPhoneVerification}
         />
 
-        <VipSection />
+        <VipSection 
+          onVipPress={() => navigation.navigate('PremiumPackages')}
+        />
 
       </ScrollView>
 

@@ -89,6 +89,7 @@ export type ClientStackParamList = {
   Help: undefined;
   About: undefined;
   Balance: undefined;
+  PremiumPackages: undefined;
   AddressPicker: {
     onAddressSelected: (address: string, latitude: number, longitude: number) => void;
   };

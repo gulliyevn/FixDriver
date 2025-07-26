@@ -14,6 +14,7 @@ import ChangePasswordScreen from '../screens/client/ChangePasswordScreen';
 import SupportChatScreen from '../screens/common/SupportChatScreen';
 import EditClientProfileScreen from '../screens/profile/EditClientProfileScreen';
 import DriverProfileScreen from '../screens/profile/DriverProfileScreen';
+import PremiumPackagesScreen from '../screens/profile/PremiumPackagesScreen';
 
 import NotificationsScreen from '../screens/common/NotificationsScreen';
 import { ClientStackParamList } from '../types/navigation';
@@ -42,6 +43,7 @@ const ClientProfileStack: React.FC = () => {
       <Stack.Screen name="SupportChat" component={SupportChatScreen} />
       <Stack.Screen name="EditClientProfile" component={EditClientProfileScreen} />
       <Stack.Screen name="DriverProfile" component={DriverProfileScreen} />
+      <Stack.Screen name="PremiumPackages" component={PremiumPackagesScreen} />
 
       <Stack.Screen name="Notifications" component={NotificationsScreen} />
     </Stack.Navigator>
