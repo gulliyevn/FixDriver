@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
-import { CarsScreenStyles as styles, getCarsScreenStyles } from '../../styles/screens/profile/CarsScreen.styles';
+import { TripsScreenStyles as styles, getTripsScreenStyles } from '../../styles/screens/profile/TripsScreen.styles';
 import { getMockTrips } from '../../mocks/tripsMock';
 import TripsFilter, { TripFilter } from '../../components/TripsFilter';
 import { colors } from '../../constants/colors';
@@ -21,11 +21,11 @@ import { colors } from '../../constants/colors';
  * 6. Подключить пагинацию
  */
 
-const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
+const TripsScreen: React.FC<ClientScreenProps<'Trips'>> = ({ navigation }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
-  const dynamicStyles = getCarsScreenStyles(isDark);
+  const dynamicStyles = getTripsScreenStyles(isDark);
   
 
   
@@ -185,4 +185,4 @@ const CarsScreen: React.FC<ClientScreenProps<'Cars'>> = ({ navigation }) => {
   );
 };
 
-export default CarsScreen; 
+export default TripsScreen; 

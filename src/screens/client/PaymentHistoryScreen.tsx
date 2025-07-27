@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
 import { getMockPaymentHistory } from '../../mocks/paymentHistoryMock';
@@ -23,7 +23,7 @@ import { colors } from '../../constants/colors';
 
 const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ navigation }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getPaymentHistoryScreenStyles(isDark);
   

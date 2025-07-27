@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Modal, ScrollView, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useI18n } from '../hooks/useI18n';
 import { TripsFilterStyles as styles, getTripsFilterStyles } from '../styles/components/TripsFilter.styles';
 
 export interface TripFilter {
@@ -24,7 +24,7 @@ const TripsFilter: React.FC<TripsFilterProps> = ({
   currentFilter
 }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const dynamicStyles = getTripsFilterStyles(isDark);
   const [filter, setFilter] = useState<TripFilter>({
     status: currentFilter.status,

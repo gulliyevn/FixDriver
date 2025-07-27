@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { colors } from '../../../constants/colors';
 
-export const CarsScreenStyles = StyleSheet.create({
+export const TripsScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -179,7 +179,7 @@ export const CarsScreenStyles = StyleSheet.create({
 });
 
 // Функция для получения динамических стилей в зависимости от темы
-export const getCarsScreenStyles = (isDark: boolean) => {
+export const getTripsScreenStyles = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
   
   return {

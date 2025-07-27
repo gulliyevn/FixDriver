@@ -82,7 +82,7 @@ export type ClientStackParamList = {
   // Новые экраны профиля
   Cards: undefined;
   Debts: undefined;
-  Cars: undefined;
+  Trips: undefined;
   PaymentHistory: undefined;
   Settings: undefined;
   Residence: undefined;

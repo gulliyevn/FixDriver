@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
 import CardsScreen from '../screens/client/CardsScreen';
-import CarsScreen from '../screens/client/CarsScreen';
+import TripsScreen from '../screens/client/TripsScreen';
 import PaymentHistoryScreen from '../screens/client/PaymentHistoryScreen';
 import SettingsScreen from '../screens/client/SettingsScreen';
 import ResidenceScreen from '../screens/client/ResidenceScreen';
@@ -31,7 +31,7 @@ const ClientProfileStack: React.FC = () => {
     >
       <Stack.Screen name="ClientProfile" component={ClientProfileScreen} />
       <Stack.Screen name="Cards" component={CardsScreen} />
-      <Stack.Screen name="Cars" component={CarsScreen} />
+      <Stack.Screen name="Trips" component={TripsScreen} />
       <Stack.Screen name="PaymentHistory" component={PaymentHistoryScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Residence" component={ResidenceScreen} />
