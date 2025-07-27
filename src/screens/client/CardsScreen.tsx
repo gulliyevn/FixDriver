@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, Modal, TextInput, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { ClientScreenProps } from '../../types/navigation';
@@ -69,7 +70,12 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      await CardService.initMockIfEmpty(mockCards);
+      // Инициализируем моковые данные только при первом запуске приложения
+      // (когда в AsyncStorage вообще нет ключа cards)
+      const hasCardsKey = await AsyncStorage.getItem('cards');
+      if (!hasCardsKey) {
+        await CardService.initMockIfEmpty(mockCards);
+      }
       const loaded = await CardService.getCards();
       setCards(loaded);
       const def = loaded.find(c => c.isDefault);
@@ -89,6 +95,8 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
     const digits = number.replace(/\D/g, '');
     if (digits.startsWith('4')) return 'visa';
     if (digits.startsWith('5')) return 'mastercard';
+    if (digits.startsWith('34') || digits.startsWith('37')) return 'visa'; // American Express (но показываем как Visa)
+    if (digits.startsWith('6')) return 'mastercard'; // Discover (но показываем как Mastercard)
     return 'visa'; // по умолчанию
   };
 
@@ -131,21 +139,31 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
   const handleSaveCard = async () => {
     const errs = getCardErrors();
     setErrors(errs);
-    if (errs.holderName || errs.number || errs.expiry || errs.cvv) return;
-    const id = (cards.length + 1).toString();
+    if (errs.holderName || errs.number || errs.expiry || errs.cvv) {
+      return;
+    }
+    const id = Date.now().toString();
     const lastFour = newCard.number.slice(-4);
+    const cardType = getCardType(newCard.number);
     const newCardData: Card = {
       id,
       name: newCard.holderName,
       holderName: newCard.holderName,
       lastFour,
-      type: newCard.type as 'visa' | 'mastercard',
+      type: cardType,
       expiry: newCard.expiry,
-      isDefault: false,
+      isDefault: cards.length === 0, // Если это первая карта, делаем её по умолчанию
     };
     await CardService.addCard(newCardData);
+    
+    // Если это первая карта, устанавливаем её как карту по умолчанию
+    if (cards.length === 0) {
+      await CardService.setDefault(id);
+    }
+    
     const loaded = await CardService.getCards();
     setCards(loaded);
+    setDefaultCardId(newCardData.isDefault ? id : defaultCardId);
     setShowAddModal(false);
     setNewCard({ holderName: '', number: '', expiry: '', type: 'visa', cvv: '' });
     setErrors({ holderName: '', number: '', expiry: '', cvv: '' });
@@ -200,6 +218,24 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
     }
   };
 
+  const handleCardNumberChange = (text: string) => {
+    // Удаляем все нецифровые символы
+    const digits = text.replace(/\D/g, '');
+    // Ограничиваем до 16 цифр
+    const limited = digits.slice(0, 16);
+    // Форматируем в группы по 4 цифры
+    let formatted = '';
+    for (let i = 0; i < limited.length; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formatted += ' ';
+      }
+      formatted += limited[i];
+    }
+    // Определяем тип карты на основе номера
+    const cardType = getCardType(formatted);
+    setNewCard(prev => ({ ...prev, number: formatted, type: cardType }));
+  };
+
   const handleExpiryChange = (v: string) => {
     let digits = v.replace(/\D/g, '');
     digits = digits.slice(0, 4);
@@ -246,59 +282,52 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
         onRequestClose={handleCancelAdd}
       >
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContainer, { backgroundColor: currentColors.surface }] }>
-            <Text style={[styles.modalTitle, { color: currentColors.text }]}>{t('components.cards.addTitle')}</Text>
+          <View style={[styles.modalContainer, dynamicStyles.modalContainer]}>
+            <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('components.cards.addTitle')}</Text>
             <TextInput
                               placeholder={t('components.cards.holderPlaceholder')}
               placeholderTextColor={currentColors.textSecondary}
               value={newCard.holderName}
               onChangeText={v => setNewCard(c => ({ ...c, holderName: v }))}
-              style={[styles.input, { color: currentColors.text, backgroundColor: currentColors.background, borderColor: currentColors.border }]}
+              style={[styles.input, dynamicStyles.input]}
             />
-                            {!!errors.holderName && <Text style={[styles.errorText, { color: currentColors.error }]}>{t('components.cards.holderError')}</Text>}
-            <View style={{ position: 'relative', width: '100%' }}>
+                            {!!errors.holderName && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.holderError')}</Text>}
+            <View style={styles.inputContainer}>
               <TextInput
                 placeholder={t('components.cards.numberPlaceholder')}
                 placeholderTextColor={currentColors.textSecondary}
                 value={newCard.number}
-                onChangeText={text => setNewCard(prev => ({ ...prev, number: text }))}
-                style={[
-                  styles.input,
-                  {
-                    color: currentColors.text,
-                    backgroundColor: currentColors.background,
-                    borderColor: currentColors.border,
-                    paddingRight: 40,
-                  }
-                ]}
+                onChangeText={handleCardNumberChange}
+                style={[styles.input, styles.inputWithIcon, dynamicStyles.input]}
                 keyboardType="numeric"
                 maxLength={19}
               />
               <TouchableOpacity
                 onPress={handleScanCard}
-                style={{
-                  position: 'absolute',
-                  right: 10,
-                  top: 0,
-                  bottom: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                  width: 32,
-                }}
+                style={styles.scanButton}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 <Ionicons name="scan-outline" size={22} color={currentColors.primary} />
               </TouchableOpacity>
+              {/* Индикатор типа карты */}
+              {newCard.number.length > 0 && (
+                <View style={styles.cardTypeIndicator}>
+                  {newCard.type === 'visa' ? (
+                    <VisaIcon width={24} height={24} />
+                  ) : newCard.type === 'mastercard' ? (
+                    <MastercardIcon width={24} height={24} />
+                  ) : null}
+                </View>
+              )}
             </View>
-                            {!!errors.number && <Text style={[styles.errorText, { color: currentColors.error }]}>{t('components.cards.numberError')}</Text>}
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
+                            {!!errors.number && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.numberError')}</Text>}
+            <View style={styles.inputRow}>
               <TextInput
                                   placeholder={t('components.cards.expiryPlaceholder')}
                 placeholderTextColor={currentColors.textSecondary}
                 value={newCard.expiry}
                 onChangeText={handleExpiryChange}
-                style={[styles.input, { color: currentColors.text, backgroundColor: currentColors.background, borderColor: currentColors.border, flex: 1 }]}
+                style={[styles.input, styles.inputFlex, dynamicStyles.inputFlex]}
                 keyboardType="numeric"
                 maxLength={5}
               />
@@ -310,20 +339,20 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
                 maxLength={4}
                 keyboardType="number-pad"
                 secureTextEntry
-                style={[styles.input, { flex: 1, color: currentColors.text, backgroundColor: currentColors.background, borderColor: currentColors.border }]}
+                style={[styles.input, styles.inputFlex, dynamicStyles.inputFlex]}
               />
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-              <View style={{ flex: 1 }}>
-                {!!errors.expiry && <Text style={[styles.errorText, { color: currentColors.error }]}>{errors.expiry}</Text>}
+            <View style={styles.errorRow}>
+              <View style={styles.errorContainer}>
+                {!!errors.expiry && <Text style={[styles.errorText, dynamicStyles.errorText]}>{errors.expiry}</Text>}
               </View>
-              <View style={{ flex: 1 }}>
-                {!!errors.cvv && <Text style={[styles.errorText, { color: currentColors.error }]}>{t('components.cards.cvvError')}</Text>}
+              <View style={styles.errorContainer}>
+                {!!errors.cvv && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.cvvError')}</Text>}
               </View>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-              <TouchableOpacity onPress={handleCancelAdd} style={[styles.modalButton, styles.modalButtonCancel, { borderColor: currentColors.border, backgroundColor: currentColors.surface }] }>
-                <Text style={[styles.modalButtonText, { color: currentColors.text }]}>{t('components.cards.cancel')}</Text>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity onPress={handleCancelAdd} style={[styles.modalButton, styles.modalButtonCancel, dynamicStyles.modalButtonCancel]}>
+                <Text style={[styles.modalButtonText, dynamicStyles.modalButtonText]}>{t('components.cards.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleSaveCard}
@@ -331,11 +360,11 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
                   styles.modalButton,
                   styles.modalButtonSave,
                   !isCardValid() && styles.modalButtonDisabled,
-                  { backgroundColor: isCardValid() ? currentColors.primary : currentColors.surface },
+                  isCardValid() ? dynamicStyles.modalButtonSave : dynamicStyles.modalButtonSaveDisabled,
                 ]}
                 disabled={!isCardValid()}
               >
-                                  <Text style={[styles.modalButtonText, { color: isCardValid() ? '#fff' : currentColors.textSecondary }]}>{t('components.cards.save')}</Text>
+                                  <Text style={[styles.modalButtonText, isCardValid() ? dynamicStyles.modalButtonTextSave : dynamicStyles.modalButtonTextSaveDisabled]}>{t('components.cards.save')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -373,29 +402,22 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
                     )}
                     <View style={styles.cardDetails}>
                       <Text style={[styles.cardName, dynamicStyles.cardName]}>{card.holderName || card.name}</Text>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={styles.cardNumberRow}>
                         <Text style={[styles.cardNumber, dynamicStyles.cardNumber]}>•••• {card.lastFour}</Text>
-                        <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry, { marginLeft: 12 }]}> {card.expiry}</Text>
+                        <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry, styles.cardExpiryWithMargin]}> {card.expiry}</Text>
                       </View>
                       <TouchableOpacity
-                        style={{
-                          alignSelf: 'flex-start',
-                          marginTop: 8,
-                          paddingVertical: 2,
-                          paddingHorizontal: 10,
-                          borderRadius: 8,
-                          backgroundColor: card.id === defaultCardId ? currentColors.primary : currentColors.surface,
-                          borderWidth: card.id === defaultCardId ? 0 : 1,
-                          borderColor: currentColors.primary,
-                        }}
+                        style={[
+                          styles.defaultButton,
+                          card.id === defaultCardId ? dynamicStyles.defaultButton : dynamicStyles.defaultButtonInactive
+                        ]}
                         onPress={() => handleSetDefault(card.id)}
                         disabled={card.id === defaultCardId}
                       >
-                        <Text style={{
-                          color: card.id === defaultCardId ? '#fff' : currentColors.primary,
-                          fontSize: 12,
-                          fontWeight: '600',
-                        }}>
+                        <Text style={[
+                          styles.defaultButtonText,
+                          card.id === defaultCardId ? dynamicStyles.defaultButtonText : dynamicStyles.defaultButtonTextInactive
+                        ]}>
                           {t('components.cards.default')}
                         </Text>
                       </TouchableOpacity>

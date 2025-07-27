@@ -1,13 +1,13 @@
-import en from './en.json';
-import ru from './ru.json';
-import tr from './tr.json';
-import az from './az.json';
-import fr from './fr.json';
-import ar from './ar.json';
-import es from './es.json';
-import de from './de.json';
+const en = require('./en.json');
+const ru = require('./ru.json');
+const tr = require('./tr.json');
+const az = require('./az.json');
+const fr = require('./fr.json');
+const ar = require('./ar.json');
+const es = require('./es.json');
+const de = require('./de.json');
 
-export default {
+module.exports = {
   en,
   ru,
   tr,

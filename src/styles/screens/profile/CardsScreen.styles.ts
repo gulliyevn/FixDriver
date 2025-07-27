@@ -197,6 +197,71 @@ export const CardsScreenStyles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     opacity: 0.5,
   },
+  // Инлайн стили из компонента
+  inputContainer: {
+    position: 'relative',
+    width: '100%',
+  },
+  inputWithIcon: {
+    paddingRight: 80,
+  },
+  scanButton: {
+    position: 'absolute',
+    right: 10,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: 32,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
+  },
+  inputFlex: {
+    flex: 1,
+  },
+  errorRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  errorContainer: {
+    flex: 1,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  cardNumberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardExpiryWithMargin: {
+    marginLeft: 12,
+  },
+  defaultButton: {
+    alignSelf: 'flex-start',
+    marginTop: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  defaultButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  cardTypeIndicator: {
+    position: 'absolute',
+    right: 50,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: 32,
+  },
 });
 
 // Функция для получения динамических стилей в зависимости от темы
@@ -239,6 +304,64 @@ export const getCardsScreenStyles = (isDark: boolean) => {
     },
     addNewCardText: {
       color: currentColors.text,
+    },
+    // Динамические стили для инлайн элементов
+    modalContainer: {
+      backgroundColor: currentColors.surface,
+    },
+    modalTitle: {
+      color: currentColors.text,
+    },
+    input: {
+      color: currentColors.text,
+      backgroundColor: currentColors.background,
+      borderColor: currentColors.border,
+    },
+    inputFlex: {
+      color: currentColors.text,
+      backgroundColor: currentColors.background,
+      borderColor: currentColors.border,
+      flex: 1,
+    },
+    errorText: {
+      color: currentColors.error,
+    },
+    modalButtonCancel: {
+      borderColor: currentColors.border,
+      backgroundColor: currentColors.surface,
+    },
+    modalButtonText: {
+      color: currentColors.text,
+    },
+    modalButtonSave: {
+      backgroundColor: currentColors.primary,
+    },
+    modalButtonSaveDisabled: {
+      backgroundColor: currentColors.surface,
+    },
+    modalButtonTextSave: {
+      color: '#fff',
+    },
+    modalButtonTextSaveDisabled: {
+      color: currentColors.textSecondary,
+    },
+    cardExpiryWithMargin: {
+      marginLeft: 12,
+    },
+    defaultButton: {
+      backgroundColor: currentColors.primary,
+      borderWidth: 0,
+    },
+    defaultButtonInactive: {
+      backgroundColor: currentColors.surface,
+      borderWidth: 1,
+      borderColor: currentColors.primary,
+    },
+    defaultButtonText: {
+      color: '#fff',
+    },
+    defaultButtonTextInactive: {
+      color: currentColors.primary,
     },
   };
 }; 
