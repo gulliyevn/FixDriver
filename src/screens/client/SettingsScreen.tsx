@@ -5,7 +5,7 @@ import { ClientScreenProps } from '../../types/navigation';
 import { SettingsScreenStyles as styles, getSettingsScreenColors } from '../../styles/screens/profile/SettingsScreen.styles';
 import { LanguageModalStyles as languageModalStyles, getLanguageModalColors } from '../../styles/components/LanguageModal.styles';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useAuth } from '../../context/AuthContext';
 import { ProfileService } from '../../services/ProfileService';
@@ -25,9 +25,8 @@ import { getCurrentColors } from '../../constants/colors';
 
 const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation }) => {
   const { isDark, theme, toggleTheme } = useTheme();
-  const { language, languageOptions, setLanguage, t } = useLanguage();
+  const { language, languageOptions, setLanguage, t } = useI18n();
   const { logout } = useAuth();
-  
 
   const currentColors = getCurrentColors(isDark);
   const languageModalColors = getLanguageModalColors(isDark);

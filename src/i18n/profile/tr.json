@@ -39,6 +39,57 @@
       "deleteAccountError": "Hesap silinemedi"
     }
   },
+  "residence": {
+    "title": "Konum",
+    "deleteConfirm": "Adresi Sil",
+    "deleteMessage": "{title} adresini silmek istediğinizden emin misiniz?",
+    "deleteSuccess": "{title} adresi silindi",
+    "deleteError": "Adres silinemedi",
+    "setDefaultSuccess": "Adres varsayılan olarak ayarlandı",
+    "setDefaultError": "Adres varsayılan olarak ayarlanamadı",
+    "addSuccess": "Adres başarıyla eklendi",
+    "addError": "Adres eklenemedi",
+    "updateSuccess": "Adres başarıyla güncellendi",
+    "updateError": "Adres güncellenemedi",
+    "saveError": "Adres kaydedilemedi",
+    "loading": "Adresler yükleniyor...",
+    "retry": "Tekrar dene",
+    "emptyState": "Henüz adres eklenmedi",
+    "defaultBadge": "Varsayılan",
+    "modal": {
+      "addTitle": "Adres Ekle",
+      "editTitle": "Adresi Düzenle",
+      "nameLabel": "Ad",
+      "namePlaceholder": "Adres adını girin",
+      "nameRequired": "Adres adı gerekli",
+      "categoryLabel": "Kategori",
+      "categoryPlaceholder": "Kategori seçin",
+      "addressLabel": "Adres",
+      "addressPlaceholder": "Adres girin",
+      "addressRequired": "Adres gerekli",
+      "addressChecking": "Adres kontrol ediliyor...",
+      "addressValid": "Adres geçerli",
+      "addressInvalid": "Adres geçersiz",
+      "verifyAddress": "Adresi Doğrula",
+      "defaultLabel": "Varsayılan olarak ayarla",
+      "mapTitle": "Konum Seç",
+      "mapDone": "Tamam",
+      "saveError": "Adres kaydedilemedi"
+    },
+    "categories": {
+      "selectCategory": "Kategori seçin",
+      "home": "Ev",
+      "work": "İş",
+      "university": "Üniversite",
+      "mall": "Alışveriş Merkezi",
+      "hospital": "Hastane",
+      "gym": "Spor Salonu",
+      "restaurant": "Restoran",
+      "parents": "Ebeveynler",
+      "dacha": "Yazlık",
+      "other": "Diğer"
+    }
+  },
   "editProfile": "Profili Düzenle",
   "editProfileDesc": "Kişisel verileri değiştir",
   "paymentMethods": "Ödeme yöntemleri",
@@ -91,7 +142,6 @@
   "photoError": "Fotoğraf hatası",
   "photoTakeError": "Fotoğraf çekilemedi",
   "photoPickError": "Fotoğraf seçilemedi",
-  "changePhoto": "Fotoğrafı değiştir",
   "changePhotoMessage": "Fotoğraf değiştirme yöntemini seçin",
   "deletePhoto": "Fotoğrafı sil",
   "deletePhotoConfirm": "Fotoğrafı sil",
@@ -101,44 +151,6 @@
     "message": "Sürücü sayfasını aç?",
     "cancel": "İptal",
     "proceed": "Git"
-  },
-  "saveProfileConfirm": {
-    "title": "Değişiklikleri kaydet",
-    "message": "Profilinizdeki değişiklikleri kaydetmek istediğinizden emin misiniz?",
-    "cancel": "İptal",
-    "save": "Kaydet"
-  },
-  "saveProfileSuccess": {
-    "title": "Başarılı",
-    "message": "Profil kaydedildi"
-  },
-  "saveProfileError": {
-    "title": "Hata",
-    "message": "Profil kaydedilemedi"
-  },
-  "verifyEmail": {
-    "title": "E-posta doğrulama",
-    "message": "E-postanıza gönderilen kodu girin",
-    "success": {
-      "title": "Başarılı",
-      "message": "E-posta başarıyla doğrulandı"
-    },
-    "error": {
-      "title": "Hata",
-      "message": "Geçersiz kod"
-    }
-  },
-  "verifyPhone": {
-    "title": "Telefon doğrulama",
-    "message": "SMS ile gönderilen kodu girin",
-    "success": {
-      "title": "Başarılı",
-      "message": "Telefon başarıyla doğrulandı"
-    },
-    "error": {
-      "title": "Hata",
-      "message": "Geçersiz kod"
-    }
   },
   "saveProfileConfirm": {
     "title": "Değişiklikleri Kaydet?",
@@ -179,5 +191,6 @@
     }
   },
   "loadingProfile": "Profil yükleniyor...",
-  "failedToLoadProfile": "Profil yüklenemedi"
+  "failedToLoadProfile": "Profil yüklenemedi",
+  "delete": "Sil"
 } 

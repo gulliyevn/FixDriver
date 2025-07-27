@@ -39,6 +39,57 @@
       "deleteAccountError": "تعذر حذف الحساب"
     }
   },
+  "residence": {
+    "title": "الموقع",
+    "deleteConfirm": "حذف العنوان",
+    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان {title}؟",
+    "deleteSuccess": "تم حذف العنوان {title}",
+    "deleteError": "فشل في حذف العنوان",
+    "setDefaultSuccess": "تم تعيين العنوان كافتراضي",
+    "setDefaultError": "فشل في تعيين العنوان كافتراضي",
+    "addSuccess": "تم إضافة العنوان بنجاح",
+    "addError": "فشل في إضافة العنوان",
+    "updateSuccess": "تم تحديث العنوان بنجاح",
+    "updateError": "فشل في تحديث العنوان",
+    "saveError": "فشل في حفظ العنوان",
+    "loading": "جاري تحميل العناوين...",
+    "retry": "إعادة المحاولة",
+    "emptyState": "لم يتم إضافة عناوين بعد",
+    "defaultBadge": "افتراضي",
+    "modal": {
+      "addTitle": "إضافة عنوان",
+      "editTitle": "تعديل العنوان",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "أدخل اسم العنوان",
+      "nameRequired": "اسم العنوان مطلوب",
+      "categoryLabel": "الفئة",
+      "categoryPlaceholder": "اختر الفئة",
+      "addressLabel": "العنوان",
+      "addressPlaceholder": "أدخل العنوان",
+      "addressRequired": "العنوان مطلوب",
+      "addressChecking": "جاري التحقق من العنوان...",
+      "addressValid": "العنوان صحيح",
+      "addressInvalid": "العنوان غير صحيح",
+      "verifyAddress": "التحقق من العنوان",
+      "defaultLabel": "تعيين كافتراضي",
+      "mapTitle": "اختر الموقع",
+      "mapDone": "تم",
+      "saveError": "فشل في حفظ العنوان"
+    },
+    "categories": {
+      "selectCategory": "اختر الفئة",
+      "home": "المنزل",
+      "work": "العمل",
+      "university": "الجامعة",
+      "mall": "مركز التسوق",
+      "hospital": "المستشفى",
+      "gym": "صالة رياضية",
+      "restaurant": "مطعم",
+      "parents": "الوالدان",
+      "dacha": "بيت الريف",
+      "other": "آخر"
+    }
+  },
   "editProfile": "تعديل الملف الشخصي",
   "editProfileDesc": "تغيير البيانات الشخصية",
   "paymentMethods": "طرق الدفع",
@@ -91,7 +142,6 @@
   "photoError": "خطأ في الصورة",
   "photoTakeError": "فشل في التقاط الصورة",
   "photoPickError": "فشل في اختيار الصورة",
-  "changePhoto": "تغيير الصورة",
   "changePhotoMessage": "اختر طريقة تغيير الصورة",
   "deletePhoto": "حذف الصورة",
   "deletePhotoConfirm": "حذف الصورة",
@@ -141,5 +191,6 @@
     }
   },
   "loadingProfile": "جاري تحميل الملف الشخصي...",
-  "failedToLoadProfile": "فشل في تحميل الملف الشخصي"
+  "failedToLoadProfile": "فشл в تحميل الملف الشخصي",
+  "delete": "حذف"
 } 

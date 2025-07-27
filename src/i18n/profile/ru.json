@@ -39,6 +39,57 @@
       "deleteAccountError": "Не удалось удалить аккаунт"
     }
   },
+  "residence": {
+    "title": "Местоположение",
+    "deleteConfirm": "Удалить адрес",
+    "deleteMessage": "Вы уверены, что хотите удалить адрес {title}?",
+    "deleteSuccess": "Адрес {title} был удален",
+    "deleteError": "Не удалось удалить адрес",
+    "setDefaultSuccess": "Адрес установлен по умолчанию",
+    "setDefaultError": "Не удалось установить адрес по умолчанию",
+    "addSuccess": "Адрес успешно добавлен",
+    "addError": "Не удалось добавить адрес",
+    "updateSuccess": "Адрес успешно обновлен",
+    "updateError": "Не удалось обновить адрес",
+    "saveError": "Не удалось сохранить адрес",
+    "loading": "Загрузка адресов...",
+    "retry": "Повторить",
+    "emptyState": "Адреса еще не добавлены",
+    "defaultBadge": "По умолчанию",
+    "modal": {
+      "addTitle": "Добавить адрес",
+      "editTitle": "Редактировать адрес",
+      "nameLabel": "Название",
+      "namePlaceholder": "Введите название адреса",
+      "nameRequired": "Название адреса обязательно",
+      "categoryLabel": "Категория",
+      "categoryPlaceholder": "Выберите категорию",
+      "addressLabel": "Адрес",
+      "addressPlaceholder": "Введите адрес",
+      "addressRequired": "Адрес обязателен",
+      "addressChecking": "Проверка адреса...",
+      "addressValid": "Адрес действителен",
+      "addressInvalid": "Адрес недействителен",
+      "verifyAddress": "Проверить адрес",
+      "defaultLabel": "Установить по умолчанию",
+      "mapTitle": "Выбрать местоположение",
+      "mapDone": "Готово",
+      "saveError": "Не удалось сохранить адрес"
+    },
+    "categories": {
+      "selectCategory": "Выберите категорию",
+      "home": "Дом",
+      "work": "Работа",
+      "university": "Университет",
+      "mall": "Торговый центр",
+      "hospital": "Больница",
+      "gym": "Спортзал",
+      "restaurant": "Ресторан",
+      "parents": "Родители",
+      "dacha": "Дача",
+      "other": "Другой"
+    }
+  },
   "editProfile": "Редактировать Профиль",
   "editProfileDesc": "Изменить личные данные",
   "paymentMethods": "Способы оплаты",
@@ -99,7 +150,6 @@
   "photoError": "Ошибка фото",
   "photoTakeError": "Не удалось сделать фото",
   "photoPickError": "Не удалось выбрать фото",
-  "changePhoto": "Изменить фото",
   "changePhotoMessage": "Выберите способ изменения фото",
   "deletePhoto": "Удалить фото",
   "deletePhotoConfirm": "Удалить фото",
@@ -109,44 +159,6 @@
     "message": "Открыть страницу водителя?",
     "cancel": "Отмена",
     "proceed": "Перейти"
-  },
-  "saveProfileConfirm": {
-    "title": "Сохранить изменения",
-    "message": "Вы уверены, что хотите сохранить изменения в профиле?",
-    "cancel": "Отмена",
-    "save": "Сохранить"
-  },
-  "saveProfileSuccess": {
-    "title": "Успешно",
-    "message": "Профиль сохранен"
-  },
-  "saveProfileError": {
-    "title": "Ошибка",
-    "message": "Не удалось сохранить профиль"
-  },
-  "verifyEmail": {
-    "title": "Верификация email",
-    "message": "Введите код, отправленный на ваш email",
-    "success": {
-      "title": "Успешно",
-      "message": "Email успешно верифицирован"
-    },
-    "error": {
-      "title": "Ошибка",
-      "message": "Неверный код"
-    }
-  },
-  "verifyPhone": {
-    "title": "Верификация телефона",
-    "message": "Введите код, отправленный в SMS",
-    "success": {
-      "title": "Успешно",
-      "message": "Телефон успешно верифицирован"
-    },
-    "error": {
-      "title": "Ошибка",
-      "message": "Неверный код"
-    }
   },
   "saveProfileConfirm": {
     "title": "Сохранить изменения?",
@@ -187,5 +199,6 @@
     }
   },
   "loadingProfile": "Загрузка профиля...",
-  "failedToLoadProfile": "Не удалось загрузить профиль"
+  "failedToLoadProfile": "Не удалось загрузить профиль",
+  "delete": "Удалить"
 } 

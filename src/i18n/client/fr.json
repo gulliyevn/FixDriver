@@ -36,7 +36,6 @@
     "balance": "Mon solde",
     "cards": "Cartes",
     "debts": "Mes dettes",
-    "trips": "Trajets",
     "paymentHistory": "Historique des paiements",
     "residence": "Emplacement",
     "help": "Aide et règles",
@@ -177,20 +176,7 @@
     "stops": "arrêts",
     "call": "Appeler"
   },
-  "about": {
-    "title": "À propos de l'app",
-    "version": "Version",
-    "information": "Information",
-    "build": "Build",
-    "developer": "Développeur",
-    "links": "Liens",
-    "website": "Site web",
-    "support": "Contacter le support",
-    "privacy": "Politique de confidentialité",
-    "privacyText": "Le texte complet de la politique de confidentialité sera ici...",
-    "terms": "Conditions d'utilisation",
-    "termsText": "Le texte complet des conditions d'utilisation sera ici..."
-  },
+
   "help": {
     "title": "Aide et règles",
     "needHelp": "Besoin d'aide ?",

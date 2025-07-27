@@ -36,7 +36,6 @@
     "balance": "Bakiyem",
     "cards": "Kartlar",
     "debts": "Borçlarım",
-    "trips": "Yolculuklar",
     "paymentHistory": "Ödeme geçmişi",
     "residence": "Konum",
     "help": "Yardım ve kurallar",
@@ -177,20 +176,7 @@
     "stops": "duraklar",
     "call": "Ara"
   },
-  "about": {
-    "title": "Uygulama hakkında",
-    "version": "Sürüm",
-    "information": "Bilgi",
-    "build": "Derleme",
-    "developer": "Geliştirici",
-    "links": "Bağlantılar",
-    "website": "Web sitesi",
-    "support": "Destekle iletişim",
-    "privacy": "Gizlilik politikası",
-    "privacyText": "Gizlilik politikasının tam metni burada olacak...",
-    "terms": "Kullanım şartları",
-    "termsText": "Kullanım şartlarının tam metni burada olacak..."
-  },
+
   "help": {
     "title": "Yardım ve kurallar",
     "needHelp": "Yardıma mı ihtiyacınız var?",

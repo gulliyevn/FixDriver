@@ -36,7 +36,6 @@
     "balance": "Mein Guthaben",
     "cards": "Karten",
     "debts": "Meine Schulden",
-    "trips": "Fahrten",
     "paymentHistory": "Zahlungshistorie",
     "residence": "Standort",
     "help": "Hilfe & Regeln",
@@ -177,20 +176,7 @@
     "stops": "Stopps",
     "call": "Anrufen"
   },
-  "about": {
-    "title": "Über die App",
-    "version": "Version",
-    "information": "Information",
-    "build": "Build",
-    "developer": "Entwickler",
-    "links": "Links",
-    "website": "Website",
-    "support": "Support kontaktieren",
-    "privacy": "Datenschutzrichtlinie",
-    "privacyText": "Der vollständige Text der Datenschutzrichtlinie wird hier stehen...",
-    "terms": "Nutzungsbedingungen",
-    "termsText": "Der vollständige Text der Nutzungsbedingungen wird hier stehen..."
-  },
+
   "help": {
     "title": "Hilfe & Regeln",
     "needHelp": "Brauchen Sie Hilfe?",

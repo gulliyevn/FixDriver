@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { RulesModalStyles as styles } from '../styles/components/RulesModal.styles';
 import { useI18n } from '../hooks/useI18n';
+import { styles } from '../styles/components/ConditionsModal.styles';
 
 interface ConditionsModalProps {
   visible: boolean;
@@ -27,11 +27,11 @@ const ConditionsModal: React.FC<ConditionsModalProps> = ({ visible, onClose }) =
           >
             <Ionicons name="close" size={24} color="#003366" />
           </TouchableOpacity>
-          <Text style={styles.modalTitle}>{t('conditions.title')}</Text>
+          <Text style={styles.modalTitle}>{t('conditions.conditions.title')}</Text>
           <View style={styles.placeholder} />
         </View>
         <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
-          <Text style={styles.rulesText}>{t('conditions.text')}</Text>
+          <Text style={styles.rulesText}>{t('conditions.conditions.text')}</Text>
         </ScrollView>
       </View>
     </Modal>

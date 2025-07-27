@@ -36,7 +36,6 @@
     "balance": "Balansım",
     "cards": "Kartlar",
     "debts": "Borclarım",
-    "trips": "Səfərlər",
     "paymentHistory": "Ödəniş tarixçəsi",
     "residence": "Məkan",
     "help": "Kömək və qaydalar",
@@ -177,20 +176,7 @@
     "stops": "dayanacaq",
     "call": "Zəng et"
   },
-  "about": {
-    "title": "Tətbiq haqqında",
-    "version": "Versiya",
-    "information": "Məlumat",
-    "build": "Yığım",
-    "developer": "İnkişafçı",
-    "links": "Linklər",
-    "website": "Veb sayt",
-    "support": "Dəstəklə əlaqə",
-    "privacy": "Gizlilik siyasəti",
-    "privacyText": "Məxfilik siyasətinin tam mətni burada olacaq...",
-    "terms": "İstifadə şərtləri",
-    "termsText": "İstifadə şərtlərinin tam mətni burada olacaq..."
-  },
+
   "help": {
     "title": "Kömək və qaydalar",
     "needHelp": "Kömək lazımdır?",

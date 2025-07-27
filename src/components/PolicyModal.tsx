@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { RulesModalStyles as styles } from '../styles/components/RulesModal.styles';
 import { useI18n } from '../hooks/useI18n';
+import { styles } from '../styles/components/PolicyModal.styles';
 
 interface PolicyModalProps {
   visible: boolean;
@@ -27,11 +27,11 @@ const PolicyModal: React.FC<PolicyModalProps> = ({ visible, onClose }) => {
           >
             <Ionicons name="close" size={24} color="#003366" />
           </TouchableOpacity>
-          <Text style={styles.modalTitle}>{t('policy.title')}</Text>
+          <Text style={styles.modalTitle}>{t('policy.policy.title')}</Text>
           <View style={styles.placeholder} />
         </View>
         <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
-          <Text style={styles.rulesText}>{t('policy.text')}</Text>
+          <Text style={styles.rulesText}>{t('policy.policy.text')}</Text>
         </ScrollView>
       </View>
     </Modal>

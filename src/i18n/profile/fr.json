@@ -39,6 +39,57 @@
       "deleteAccountError": "Impossible de supprimer le compte"
     }
   },
+  "residence": {
+    "title": "Localisation",
+    "deleteConfirm": "Supprimer l'adresse",
+    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse {title}?",
+    "deleteSuccess": "L'adresse {title} a été supprimée",
+    "deleteError": "Impossible de supprimer l'adresse",
+    "setDefaultSuccess": "Adresse définie par défaut",
+    "setDefaultError": "Impossible de définir l'adresse par défaut",
+    "addSuccess": "Adresse ajoutée avec succès",
+    "addError": "Impossible d'ajouter l'adresse",
+    "updateSuccess": "Adresse mise à jour avec succès",
+    "updateError": "Impossible de mettre à jour l'adresse",
+    "saveError": "Impossible de sauvegarder l'adresse",
+    "loading": "Chargement des adresses...",
+    "retry": "Réessayer",
+    "emptyState": "Aucune adresse ajoutée pour le moment",
+    "defaultBadge": "Par défaut",
+    "modal": {
+      "addTitle": "Ajouter une adresse",
+      "editTitle": "Modifier l'adresse",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez le nom de l'adresse",
+      "nameRequired": "Le nom de l'adresse est requis",
+      "categoryLabel": "Catégorie",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Entrez l'adresse",
+      "addressRequired": "L'adresse est requise",
+      "addressChecking": "Vérification de l'adresse...",
+      "addressValid": "L'adresse est valide",
+      "addressInvalid": "L'adresse est invalide",
+      "verifyAddress": "Vérifier l'adresse",
+      "defaultLabel": "Définir par défaut",
+      "mapTitle": "Sélectionner l'emplacement",
+      "mapDone": "Terminé",
+      "saveError": "Impossible de sauvegarder l'adresse"
+    },
+    "categories": {
+      "selectCategory": "Sélectionner une catégorie",
+      "home": "Maison",
+      "work": "Travail",
+      "university": "Université",
+      "mall": "Centre commercial",
+      "hospital": "Hôpital",
+      "gym": "Salle de sport",
+      "restaurant": "Restaurant",
+      "parents": "Parents",
+      "dacha": "Maison de campagne",
+      "other": "Autre"
+    }
+  },
   "editProfile": "Modifier le profil",
   "editProfileDesc": "Modifier les données personnelles",
   "paymentMethods": "Méthodes de paiement",
@@ -91,7 +142,6 @@
   "photoError": "Erreur de photo",
   "photoTakeError": "Échec de la prise de photo",
   "photoPickError": "Échec de la sélection de photo",
-  "changePhoto": "Changer la photo",
   "changePhotoMessage": "Choisir la méthode de changement de photo",
   "deletePhoto": "Supprimer la photo",
   "deletePhotoConfirm": "Supprimer la photo",
@@ -141,5 +191,6 @@
     }
   },
   "loadingProfile": "Chargement du profil...",
-  "failedToLoadProfile": "Échec du chargement du profil"
+  "failedToLoadProfile": "Échec du chargement du profil",
+  "delete": "Supprimer"
 } 

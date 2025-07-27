@@ -17,6 +17,7 @@ const client = require('./client');
 const cards = require('./components/cards');
 const about = require('./client/about');
 const theme = require('./profile/theme');
+
 // Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
   ru: { name: 'Русский', native: 'Русский', flag: '🇷🇺' },
@@ -35,27 +36,29 @@ export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
 const DEFAULT_LANGUAGE: SupportedLanguage = 'ru';
 
 // Create translations for each language (сохраняем namespace)
-const createTranslations = (lang: string) => ({
-  common: common[lang],
-  login: login[lang],
-  register: register[lang],
-  profile: profile[lang],
-  errors: errors[lang],
-  notifications: notifications[lang],
-  support: support[lang],
-  help: help[lang],
-  navigation: navigation[lang],
-  components: {
-    ...components[lang],
-    cards: cards[lang],
-  },
-  driver: driver[lang],
-  client: {
-    ...client[lang],
-    about: about[lang],
-  },
-  theme: theme[lang],
-});
+const createTranslations = (lang: string) => {
+  return {
+    common: common[lang],
+    login: login[lang],
+    register: register[lang],
+    profile: profile[lang],
+    errors: errors[lang],
+    notifications: notifications[lang],
+    support: support[lang],
+    help: help[lang],
+    navigation: navigation[lang],
+    components: {
+      ...components[lang],
+      cards: cards[lang],
+    },
+    driver: driver[lang],
+    client: {
+      ...client[lang],
+      about: about[lang],
+    },
+    theme: theme[lang],
+  };
+};
 
 // Create i18n instance with translations
 const i18n = new I18n({
@@ -136,37 +139,17 @@ export const initializeLanguage = async (): Promise<void> => {
   }
 };
 
-// Main translation function with better error handling
+// Main translation function using i18n-js
 export const t = (key: string, params?: Record<string, string | number>): string => {
   try {
-    const currentLocale = i18n.locale;
-    
-    // Get current translations for the locale
-    const currentTranslations = i18n.translations[currentLocale];
-    if (!currentTranslations) {
-      return key;
+    const result = i18n.t(key, params);
+    // Debug: проверяем только ключи профиля
+    if (key.startsWith('profile.') && result === key) {
+      console.log(`Missing profile translation: ${key}, locale: ${i18n.locale}`);
     }
-    
-    // Split key by dots to traverse the object
-    const keys = key.split('.');
-    let current = currentTranslations;
-    
-    // Traverse the translations object
-    for (const k of keys) {
-      if (current && typeof current === 'object' && k in current) {
-        current = current[k];
-      } else {
-        return key;
-      }
-    }
-    
-    // Check if we found a string translation
-    if (typeof current === 'string') {
-      return current;
-    }
-    
-    return key;
+    return result;
   } catch (error) {
+    console.error('Translation error:', error, 'for key:', key);
     return key;
   }
 };

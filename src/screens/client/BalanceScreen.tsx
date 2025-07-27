@@ -9,7 +9,7 @@ import {
   mockQuickAmounts 
 } from '../../mocks/balanceMock';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createCVVStickAnimation } from '../../styles/animations';
@@ -61,7 +61,7 @@ import {
 
 const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getBalanceScreenStyles(isDark);
   const balanceColors = getBalanceScreenColors(isDark);

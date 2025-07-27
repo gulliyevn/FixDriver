@@ -39,6 +39,57 @@
       "deleteAccountError": "Konto konnte nicht gelöscht werden"
     }
   },
+  "residence": {
+    "title": "Standort",
+    "deleteConfirm": "Adresse löschen",
+    "deleteMessage": "Sind Sie sicher, dass Sie die Adresse {title} löschen möchten?",
+    "deleteSuccess": "Adresse {title} wurde gelöscht",
+    "deleteError": "Adresse konnte nicht gelöscht werden",
+    "setDefaultSuccess": "Adresse als Standard gesetzt",
+    "setDefaultError": "Adresse konnte nicht als Standard gesetzt werden",
+    "addSuccess": "Adresse erfolgreich hinzugefügt",
+    "addError": "Adresse konnte nicht hinzugefügt werden",
+    "updateSuccess": "Adresse erfolgreich aktualisiert",
+    "updateError": "Adresse konnte nicht aktualisiert werden",
+    "saveError": "Adresse konnte nicht gespeichert werden",
+    "loading": "Adressen werden geladen...",
+    "retry": "Wiederholen",
+    "emptyState": "Noch keine Adressen hinzugefügt",
+    "defaultBadge": "Standard",
+    "modal": {
+      "addTitle": "Adresse hinzufügen",
+      "editTitle": "Adresse bearbeiten",
+      "nameLabel": "Name",
+      "namePlaceholder": "Adressname eingeben",
+      "nameRequired": "Adressname ist erforderlich",
+      "categoryLabel": "Kategorie",
+      "categoryPlaceholder": "Kategorie auswählen",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Adresse eingeben",
+      "addressRequired": "Adresse ist erforderlich",
+      "addressChecking": "Adresse wird überprüft...",
+      "addressValid": "Adresse ist gültig",
+      "addressInvalid": "Adresse ist ungültig",
+      "verifyAddress": "Adresse überprüfen",
+      "defaultLabel": "Als Standard festlegen",
+      "mapTitle": "Standort auswählen",
+      "mapDone": "Fertig",
+      "saveError": "Adresse konnte nicht gespeichert werden"
+    },
+    "categories": {
+      "selectCategory": "Kategorie auswählen",
+      "home": "Zuhause",
+      "work": "Arbeit",
+      "university": "Universität",
+      "mall": "Einkaufszentrum",
+      "hospital": "Krankenhaus",
+      "gym": "Fitnessstudio",
+      "restaurant": "Restaurant",
+      "parents": "Eltern",
+      "dacha": "Landhaus",
+      "other": "Andere"
+    }
+  },
   "editProfile": "Profil bearbeiten",
   "editProfileDesc": "Persönliche Daten ändern",
   "paymentMethods": "Zahlungsmethoden",
@@ -91,7 +142,6 @@
   "photoError": "Foto-Fehler",
   "photoTakeError": "Foto konnte nicht aufgenommen werden",
   "photoPickError": "Foto konnte nicht ausgewählt werden",
-  "changePhoto": "Foto ändern",
   "changePhotoMessage": "Foto-Änderungsmethode wählen",
   "deletePhoto": "Foto löschen",
   "deletePhotoConfirm": "Foto löschen",
@@ -141,5 +191,6 @@
     }
   },
   "loadingProfile": "Profil wird geladen...",
-  "failedToLoadProfile": "Fehler beim Laden des Profils"
+  "failedToLoadProfile": "Fehler beim Laden des Profils",
+  "delete": "Löschen"
 } 

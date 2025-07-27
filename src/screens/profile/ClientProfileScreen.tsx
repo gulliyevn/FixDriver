@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { useTheme } from '../../context/ThemeContext';
 import { ClientProfileScreenStyles as styles, getClientProfileStyles } from '../../styles/screens/ClientProfileScreen.styles';
 import { mockUsers } from '../../mocks/users';
@@ -19,7 +19,7 @@ import { useProfile } from '../../hooks/useProfile';
 
 const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ navigation }) => {
   const { logout } = useAuth();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getClientProfileStyles(isDark);

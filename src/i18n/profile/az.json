@@ -39,7 +39,58 @@
       "deleteAccountError": "Hesabı silmək mümkün olmadı"
     }
   },
-  "editProfile": "Profili redaktə et",
+  "residence": {
+    "title": "Məkan",
+    "deleteConfirm": "Ünvanı Sil",
+    "deleteMessage": "{title} ünvanını silmək istədiyinizə əminsiniz?",
+    "deleteSuccess": "{title} ünvanı silindi",
+    "deleteError": "Ünvan silinə bilmədi",
+    "setDefaultSuccess": "Ünvan standart olaraq təyin edildi",
+    "setDefaultError": "Ünvan standart olaraq təyin edilə bilmədi",
+    "addSuccess": "Ünvan uğurla əlavə edildi",
+    "addError": "Ünvan əlavə edilə bilmədi",
+    "updateSuccess": "Ünvan uğurla yeniləndi",
+    "updateError": "Ünvan yenilənə bilmədi",
+    "saveError": "Ünvan saxlanıla bilmədi",
+    "loading": "Ünvanlar yüklənir...",
+    "retry": "Yenidən cəhd et",
+    "emptyState": "Hələ ünvan əlavə edilməyib",
+    "defaultBadge": "Standart",
+    "modal": {
+      "addTitle": "Ünvan Əlavə Et",
+      "editTitle": "Ünvanı Redaktə Et",
+      "nameLabel": "Ad",
+      "namePlaceholder": "Ünvan adını daxil edin",
+      "nameRequired": "Ünvan adı tələb olunur",
+      "categoryLabel": "Kateqoriya",
+      "categoryPlaceholder": "Kateqoriya seçin",
+      "addressLabel": "Ünvan",
+      "addressPlaceholder": "Ünvan daxil edin",
+      "addressRequired": "Ünvan tələb olunur",
+      "addressChecking": "Ünvan yoxlanılır...",
+      "addressValid": "Ünvan düzgündür",
+      "addressInvalid": "Ünvan düzgün deyil",
+      "verifyAddress": "Ünvanı Təsdiqlə",
+      "defaultLabel": "Varsayılan olaraq təyin et",
+      "mapTitle": "Məkan Seç",
+      "mapDone": "Tamam",
+      "saveError": "Ünvan saxlanıla bilmədi"
+    },
+    "categories": {
+      "selectCategory": "Kateqoriya seçin",
+      "home": "Ev",
+      "work": "İş",
+      "university": "Universitet",
+      "mall": "Ticarət Mərkəzi",
+      "hospital": "Xəstəxana",
+      "gym": "İdman Zalları",
+      "restaurant": "Restoran",
+      "parents": "Valideynlər",
+      "dacha": "Yay evi",
+      "other": "Digər"
+    }
+  },
+  "editProfile": "Profili Redaktə Et",
   "editProfileDesc": "Şəxsi məlumatları dəyiş",
   "paymentMethods": "Ödəniş üsulları",
   "paymentMethodsDesc": "Kart idarəetməsi",
@@ -91,7 +142,6 @@
   "photoError": "Şəkil xətası",
   "photoTakeError": "Şəkil çəkilmədi",
   "photoPickError": "Şəkil seçilmədi",
-  "changePhoto": "Şəkli dəyiş",
   "changePhotoMessage": "Şəkil dəyişdirmə üsulunu seçin",
   "deletePhoto": "Şəkli sil",
   "deletePhotoConfirm": "Şəkli sil",
@@ -141,5 +191,6 @@
     }
   },
   "loadingProfile": "Profil yüklənir...",
-  "failedToLoadProfile": "Profil yüklənə bilmədi"
+  "failedToLoadProfile": "Profil yüklənə bilmədi",
+  "delete": "Sil"
 } 

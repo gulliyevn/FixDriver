@@ -39,6 +39,57 @@
       "deleteAccountError": "Failed to delete account"
     }
   },
+  "residence": {
+    "title": "Location",
+    "deleteConfirm": "Delete Address",
+    "deleteMessage": "Are you sure you want to delete address {title}?",
+    "deleteSuccess": "Address {title} has been deleted",
+    "deleteError": "Failed to delete address",
+    "setDefaultSuccess": "Address set as default",
+    "setDefaultError": "Failed to set address as default",
+    "addSuccess": "Address added successfully",
+    "addError": "Failed to add address",
+    "updateSuccess": "Address updated successfully",
+    "updateError": "Failed to update address",
+    "saveError": "Failed to save address",
+    "loading": "Loading addresses...",
+    "retry": "Retry",
+    "emptyState": "No addresses added yet",
+    "defaultBadge": "Default",
+    "modal": {
+      "addTitle": "Add Address",
+      "editTitle": "Edit Address",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter address name",
+      "nameRequired": "Address name is required",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Enter address",
+      "addressRequired": "Address is required",
+      "addressChecking": "Checking address...",
+      "addressValid": "Address is valid",
+      "addressInvalid": "Address is invalid",
+      "verifyAddress": "Verify Address",
+      "defaultLabel": "Set as default",
+      "mapTitle": "Select Location",
+      "mapDone": "Done",
+      "saveError": "Failed to save address"
+    },
+    "categories": {
+      "selectCategory": "Select category",
+      "home": "Home",
+      "work": "Work",
+      "university": "University",
+      "mall": "Shopping Mall",
+      "hospital": "Hospital",
+      "gym": "Gym",
+      "restaurant": "Restaurant",
+      "parents": "Parents",
+      "dacha": "Country House",
+      "other": "Other"
+    }
+  },
   "editProfile": "Edit Profile",
   "editProfileDesc": "Change personal data",
   "paymentMethods": "Payment Methods",
@@ -99,7 +150,6 @@
   "photoError": "Photo Error",
   "photoTakeError": "Failed to take photo",
   "photoPickError": "Failed to select photo",
-  "changePhoto": "Change Photo",
   "changePhotoMessage": "Choose photo change method",
   "deletePhoto": "Delete Photo",
   "deletePhotoConfirm": "Delete Photo",
@@ -109,44 +159,6 @@
     "message": "Open driver page?",
     "cancel": "Cancel",
     "proceed": "Proceed"
-  },
-  "saveProfileConfirm": {
-    "title": "Save Changes",
-    "message": "Are you sure you want to save changes to your profile?",
-    "cancel": "Cancel",
-    "save": "Save"
-  },
-  "saveProfileSuccess": {
-    "title": "Success",
-    "message": "Profile saved"
-  },
-  "saveProfileError": {
-    "title": "Error",
-    "message": "Failed to save profile"
-  },
-  "verifyEmail": {
-    "title": "Email Verification",
-    "message": "Enter the code sent to your email",
-    "success": {
-      "title": "Success",
-      "message": "Email verified successfully"
-    },
-    "error": {
-      "title": "Error",
-      "message": "Invalid code"
-    }
-  },
-  "verifyPhone": {
-    "title": "Phone Verification",
-    "message": "Enter the code sent via SMS",
-    "success": {
-      "title": "Success",
-      "message": "Phone verified successfully"
-    },
-    "error": {
-      "title": "Error",
-      "message": "Invalid code"
-    }
   },
   "saveProfileConfirm": {
     "title": "Save Changes?",
@@ -187,5 +199,6 @@
     }
   },
   "loadingProfile": "Loading profile...",
-  "failedToLoadProfile": "Failed to load profile"
+  "failedToLoadProfile": "Failed to load profile",
+  "delete": "Delete"
 } 

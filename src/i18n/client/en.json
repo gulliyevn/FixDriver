@@ -36,7 +36,6 @@
     "balance": "My balance",
     "cards": "Cards",
     "debts": "My debts",
-    "trips": "Trips",
     "paymentHistory": "Payment history",
     "residence": "Location",
     "help": "Help & rules",
@@ -177,20 +176,7 @@
     "stops": "stops",
     "call": "Call"
   },
-  "about": {
-    "title": "About app",
-    "version": "Version",
-    "information": "Information",
-    "build": "Build",
-    "developer": "Developer",
-    "links": "Links",
-    "website": "Website",
-    "support": "Contact support",
-    "privacy": "Privacy policy",
-    "privacyText": "Full privacy policy text will be here...",
-    "terms": "Terms of use",
-    "termsText": "Full terms of use text will be here..."
-  },
+
   "help": {
     "title": "Help & rules",
     "needHelp": "Need help?",

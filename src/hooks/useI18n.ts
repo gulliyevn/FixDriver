@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { getLanguageOptions, getLanguageInfo, type SupportedLanguage } from '../i18n';
+import { getLanguageOptions, getLanguageInfo, type SupportedLanguage, t as i18nT } from '../i18n';
 
 export const useI18n = () => {
-  const { t, setLanguage, language, languageOptions, isLoading, error } = useLanguage();
+  const { setLanguage, language, languageOptions, isLoading, error } = useLanguage();
 
   const changeLanguage = useCallback(async (newLanguage: SupportedLanguage) => {
     await setLanguage(newLanguage);
@@ -22,7 +22,7 @@ export const useI18n = () => {
   }, [language]);
 
   return {
-    t,
+    t: i18nT,
     setLanguage: changeLanguage,
     getCurrentLanguage: getCurrentLang,
     getStoredLanguage,

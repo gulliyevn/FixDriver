@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { AboutScreenStyles as styles, getAboutScreenStyles } from '../../styles/screens/profile/AboutScreen.styles';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 
 /**
@@ -20,7 +20,7 @@ import { colors } from '../../constants/colors';
 
 const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getAboutScreenStyles(isDark);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);

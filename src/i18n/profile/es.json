@@ -39,6 +39,57 @@
       "deleteAccountError": "No se pudo eliminar la cuenta"
     }
   },
+  "residence": {
+    "title": "Ubicación",
+    "deleteConfirm": "Eliminar dirección",
+    "deleteMessage": "¿Estás seguro de que quieres eliminar la dirección {title}?",
+    "deleteSuccess": "La dirección {title} ha sido eliminada",
+    "deleteError": "No se pudo eliminar la dirección",
+    "setDefaultSuccess": "Dirección establecida como predeterminada",
+    "setDefaultError": "No se pudo establecer la dirección como predeterminada",
+    "addSuccess": "Dirección agregada exitosamente",
+    "addError": "No se pudo agregar la dirección",
+    "updateSuccess": "Dirección actualizada exitosamente",
+    "updateError": "No se pudo actualizar la dirección",
+    "saveError": "No se pudo guardar la dirección",
+    "loading": "Cargando direcciones...",
+    "retry": "Reintentar",
+    "emptyState": "Aún no se han agregado direcciones",
+    "defaultBadge": "Predeterminada",
+    "modal": {
+      "addTitle": "Agregar dirección",
+      "editTitle": "Editar dirección",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ingrese el nombre de la dirección",
+      "nameRequired": "El nombre de la dirección es requerido",
+      "categoryLabel": "Categoría",
+      "categoryPlaceholder": "Seleccione una categoría",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Ingrese la dirección",
+      "addressRequired": "La dirección es requerida",
+      "addressChecking": "Verificando dirección...",
+      "addressValid": "La dirección es válida",
+      "addressInvalid": "La dirección es inválida",
+      "verifyAddress": "Verificar dirección",
+      "defaultLabel": "Establecer como predeterminada",
+      "mapTitle": "Seleccionar ubicación",
+      "mapDone": "Listo",
+      "saveError": "No se pudo guardar la dirección"
+    },
+    "categories": {
+      "selectCategory": "Seleccionar categoría",
+      "home": "Casa",
+      "work": "Trabajo",
+      "university": "Universidad",
+      "mall": "Centro comercial",
+      "hospital": "Hospital",
+      "gym": "Gimnasio",
+      "restaurant": "Restaurante",
+      "parents": "Padres",
+      "dacha": "Casa de campo",
+      "other": "Otro"
+    }
+  },
   "editProfile": "Editar perfil",
   "editProfileDesc": "Cambiar datos personales",
   "paymentMethods": "Métodos de pago",
@@ -91,7 +142,6 @@
   "photoError": "Error de foto",
   "photoTakeError": "Error al tomar foto",
   "photoPickError": "Error al seleccionar foto",
-  "changePhoto": "Cambiar foto",
   "changePhotoMessage": "Elegir método de cambiar foto",
   "deletePhoto": "Eliminar foto",
   "deletePhotoConfirm": "Eliminar foto",
@@ -141,5 +191,6 @@
     }
   },
   "loadingProfile": "Cargando perfil...",
-  "failedToLoadProfile": "Error al cargar perfil"
+  "failedToLoadProfile": "Error al cargar perfil",
+  "delete": "Eliminar"
 } 
