@@ -42,8 +42,8 @@
   "residence": {
     "title": "Standort",
     "deleteConfirm": "Adresse löschen",
-    "deleteMessage": "Sind Sie sicher, dass Sie die Adresse {title} löschen möchten?",
-    "deleteSuccess": "Adresse {title} wurde gelöscht",
+    "deleteMessage": "Sind Sie sicher, dass Sie die Adresse %{title} löschen möchten?",
+    "deleteSuccess": "Adresse %{title} wurde gelöscht",
     "deleteError": "Adresse konnte nicht gelöscht werden",
     "setDefaultSuccess": "Adresse als Standard gesetzt",
     "setDefaultError": "Adresse konnte nicht als Standard gesetzt werden",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "Profil wird geladen...",
   "failedToLoadProfile": "Fehler beim Laden des Profils",
+  "cancel": "Abbrechen",
   "delete": "Löschen"
 } 

@@ -42,8 +42,8 @@
   "residence": {
     "title": "Местоположение",
     "deleteConfirm": "Удалить адрес",
-    "deleteMessage": "Вы уверены, что хотите удалить адрес {title}?",
-    "deleteSuccess": "Адрес {title} был удален",
+    "deleteMessage": "Вы уверены, что хотите удалить адрес %{title}?",
+    "deleteSuccess": "Адрес %{title} был удален",
     "deleteError": "Не удалось удалить адрес",
     "setDefaultSuccess": "Адрес установлен по умолчанию",
     "setDefaultError": "Не удалось установить адрес по умолчанию",
@@ -200,5 +200,6 @@
   },
   "loadingProfile": "Загрузка профиля...",
   "failedToLoadProfile": "Не удалось загрузить профиль",
+  "cancel": "Отмена",
   "delete": "Удалить"
 } 

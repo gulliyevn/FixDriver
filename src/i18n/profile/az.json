@@ -42,8 +42,8 @@
   "residence": {
     "title": "Məkan",
     "deleteConfirm": "Ünvanı Sil",
-    "deleteMessage": "{title} ünvanını silmək istədiyinizə əminsiniz?",
-    "deleteSuccess": "{title} ünvanı silindi",
+    "deleteMessage": "%{title} ünvanını silmək istədiyinizə əminsiniz?",
+    "deleteSuccess": "%{title} ünvanı silindi",
     "deleteError": "Ünvan silinə bilmədi",
     "setDefaultSuccess": "Ünvan standart olaraq təyin edildi",
     "setDefaultError": "Ünvan standart olaraq təyin edilə bilmədi",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "Profil yüklənir...",
   "failedToLoadProfile": "Profil yüklənə bilmədi",
+  "cancel": "Ləğv et",
   "delete": "Sil"
 } 

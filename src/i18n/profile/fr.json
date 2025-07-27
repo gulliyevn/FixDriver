@@ -42,8 +42,8 @@
   "residence": {
     "title": "Localisation",
     "deleteConfirm": "Supprimer l'adresse",
-    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse {title}?",
-    "deleteSuccess": "L'adresse {title} a été supprimée",
+    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse %{title}?",
+    "deleteSuccess": "L'adresse %{title} a été supprimée",
     "deleteError": "Impossible de supprimer l'adresse",
     "setDefaultSuccess": "Adresse définie par défaut",
     "setDefaultError": "Impossible de définir l'adresse par défaut",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "Chargement du profil...",
   "failedToLoadProfile": "Échec du chargement du profil",
+  "cancel": "Annuler",
   "delete": "Supprimer"
 } 

@@ -42,8 +42,8 @@
   "residence": {
     "title": "الموقع",
     "deleteConfirm": "حذف العنوان",
-    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان {title}؟",
-    "deleteSuccess": "تم حذف العنوان {title}",
+    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان %{title}؟",
+    "deleteSuccess": "تم حذف العنوان %{title}",
     "deleteError": "فشل في حذف العنوان",
     "setDefaultSuccess": "تم تعيين العنوان كافتراضي",
     "setDefaultError": "فشل في تعيين العنوان كافتراضي",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "جاري تحميل الملف الشخصي...",
   "failedToLoadProfile": "فشл в تحميل الملف الشخصي",
+  "cancel": "إلغاء",
   "delete": "حذف"
 } 

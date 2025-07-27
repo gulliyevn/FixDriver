@@ -42,8 +42,8 @@
   "residence": {
     "title": "Location",
     "deleteConfirm": "Delete Address",
-    "deleteMessage": "Are you sure you want to delete address {title}?",
-    "deleteSuccess": "Address {title} has been deleted",
+    "deleteMessage": "Are you sure you want to delete address %{title}?",
+    "deleteSuccess": "Address %{title} has been deleted",
     "deleteError": "Failed to delete address",
     "setDefaultSuccess": "Address set as default",
     "setDefaultError": "Failed to set address as default",
@@ -200,5 +200,6 @@
   },
   "loadingProfile": "Loading profile...",
   "failedToLoadProfile": "Failed to load profile",
+  "cancel": "Cancel",
   "delete": "Delete"
 } 

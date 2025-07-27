@@ -42,8 +42,8 @@
   "residence": {
     "title": "Ubicación",
     "deleteConfirm": "Eliminar dirección",
-    "deleteMessage": "¿Estás seguro de que quieres eliminar la dirección {title}?",
-    "deleteSuccess": "La dirección {title} ha sido eliminada",
+    "deleteMessage": "¿Estás seguro de que quieres eliminar la dirección %{title}?",
+    "deleteSuccess": "La dirección %{title} ha sido eliminada",
     "deleteError": "No se pudo eliminar la dirección",
     "setDefaultSuccess": "Dirección establecida como predeterminada",
     "setDefaultError": "No se pudo establecer la dirección como predeterminada",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "Cargando perfil...",
   "failedToLoadProfile": "Error al cargar perfil",
+  "cancel": "Cancelar",
   "delete": "Eliminar"
 } 

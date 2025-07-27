@@ -42,8 +42,8 @@
   "residence": {
     "title": "Konum",
     "deleteConfirm": "Adresi Sil",
-    "deleteMessage": "{title} adresini silmek istediğinizden emin misiniz?",
-    "deleteSuccess": "{title} adresi silindi",
+    "deleteMessage": "%{title} adresini silmek istediğinizden emin misiniz?",
+    "deleteSuccess": "%{title} adresi silindi",
     "deleteError": "Adres silinemedi",
     "setDefaultSuccess": "Adres varsayılan olarak ayarlandı",
     "setDefaultError": "Adres varsayılan olarak ayarlanamadı",
@@ -192,5 +192,6 @@
   },
   "loadingProfile": "Profil yükleniyor...",
   "failedToLoadProfile": "Profil yüklenemedi",
+  "cancel": "İptal",
   "delete": "Sil"
 } 
