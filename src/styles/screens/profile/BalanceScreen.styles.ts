@@ -395,7 +395,10 @@ export const BalanceScreenStyles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 1,
     color: '#fff',
+    position: 'absolute',
+    left: -10,
   },
+
   cardNumberContainer: {
     position: 'absolute',
     top: '50%',
@@ -404,11 +407,12 @@ export const BalanceScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    transform: [{ translateY: -8 }],
+    transform: [{ translateY: 2 }],
   },
   copyButton: {
-    marginLeft: 8,
-    padding: 4,
+    position: 'absolute',
+    right: 0,
+    padding: 0,
   },
   copiedNotification: {
     position: 'absolute',
@@ -854,11 +858,6 @@ export const backIconColor = (isDark: boolean): string => {
   return isDark ? '#3B82F6' : '#083198';
 };
 
-export const cardNumberLine: ViewStyle = {
-  height: 40,
-  backgroundColor: '#6d6565',
-  width: '124%',
-  position: 'absolute',
-  bottom: -5,
-  left: -34,
-}; 
+
+
+ 

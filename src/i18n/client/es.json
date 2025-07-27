@@ -76,7 +76,7 @@
     "cancel": "Cancelar",
     "yes": "Sí",
     "success": "Exitoso",
-    "cashbackAdded": "Cashback {0} AFc agregado al saldo",
+    "cashbackAdded": "Cashback %{0} AFc agregado al saldo",
     "error": "Error",
     "enterValidAmount": "Por favor ingrese un monto válido",
     "paymentSuccess": "Pago exitoso",

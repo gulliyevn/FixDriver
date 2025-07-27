@@ -95,7 +95,8 @@
       "use": "استخدم",
       "history": "السجل",
       "description": "يمكن استخدام الاسترداد النقدي المتراكم لدفع الرحلات"
-    }
+    },
+    "cardHolderName": "IVAN IVANOV"
   },
   "debts": {
     "title": "ديوني",

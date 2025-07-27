@@ -44,7 +44,6 @@ import {
   copiedIconStyle,
   flipIconColor,
   backIconColor,
-  cardNumberLine,
 } from '../../styles/screens/profile/BalanceScreen.styles';
 
 /**
@@ -186,7 +185,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       return newBalance;
     });
     setTopUpModalVisible(false);
-    Alert.alert(t('client.balance.paymentSuccess'), `Баланс пополнен на ${amountNum} AFc`);
+    Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
   };
 
   const [showCopied, setShowCopied] = useState(false);
@@ -199,7 +198,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
   const handleCopyCardNumber = async () => {
     try {
-      await Clipboard.setString('1234 5678 9012 3456');
+      await Clipboard.setString('9876 5432 1098 7654');
       setShowCopied(true);
       setTimeout(() => setShowCopied(false), 2000);
     } catch (error) {
@@ -304,8 +303,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 </View>
                 <Text style={[cardBackText, styles.cardBackTextCenter]}>DIGITAL AFc CARD</Text>
                 <View style={styles.cardNumberContainer}>
-                  <View style={cardNumberLine} />
-                  <Text style={[cardBackText, styles.cardNumberText]}>1234 5678 9012 3456</Text>
+                  <Text style={[cardBackText, styles.cardNumberText]} numberOfLines={1}>9876 5432 1098 7654</Text>
                   <TouchableOpacity style={styles.copyButton} onPress={handleCopyCardNumber}>
                     <Ionicons name="copy-outline" size={16} color="#fff" />
                   </TouchableOpacity>
@@ -337,6 +335,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                   </View>
                 </View>
                 <View style={styles.cardNameContainer}>
+                  {/* TODO: Получать имя держателя карты из БД/профиля пользователя */}
                   <Text style={[cardBackText, styles.cardNameText]}>IVAN IVANOV</Text>
                 </View>
                 {showCopied && (
@@ -401,12 +400,9 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
             <TouchableOpacity
               style={[styles.modalPayBtn, modalPayBtnWithTheme(currentColors)]}
               onPress={() => {
-                const message = `Вы уверены, что хотите пополнить баланс на ${topUpAmount} AFc?`;
-                console.log('Message:', message);
-                console.log('topUpAmount:', topUpAmount);
                 Alert.alert(
                   t('client.balance.confirm'),
-                  message,
+                  t('client.balance.confirmTopUp', { 0: topUpAmount }),
                   [
                     { text: t('client.balance.cancel'), style: 'cancel' },
                     { text: t('client.balance.topUpBalance'), onPress: handleFakeStripePayment }
