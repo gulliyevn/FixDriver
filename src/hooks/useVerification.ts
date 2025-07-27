@@ -60,74 +60,102 @@ export const useVerification = () => {
   }, []);
 
   const verifyEmail = useCallback(() => {
-    const title = t('profile.verifyEmail.title');
-    const message = t('profile.verifyEmail.message');
+    const codeSentTitle = t('profile.verifyEmail.success.title');
+    const codeSentMessage = t('profile.verifyEmail.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = t('profile.verifyEmail.success.title');
-    const successMessage = t('profile.verifyEmail.success.message');
+    const successTitle = 'Успешно';
+    const successMessage = 'Email успешно верифицирован';
     const errorTitle = t('profile.verifyEmail.error.title');
     const errorMessage = t('profile.verifyEmail.error.message');
 
-    Alert.prompt(
-      title,
-      message,
+    // Сначала показываем "Код отправлен"
+    Alert.alert(
+      codeSentTitle,
+      codeSentMessage,
       [
         { text: cancelText, style: 'cancel' },
         {
           text: verifyText,
-          onPress: async (code) => {
-            if (code === '1234') {
-              setIsVerifying(prev => ({ ...prev, email: true }));
-              setTimeout(() => {
-                setVerificationStatus(prev => ({ ...prev, email: true }));
-                setIsVerifying(prev => ({ ...prev, email: false }));
-                saveVerificationStatus('email', true);
-                Alert.alert(successTitle, successMessage);
-              }, 1000);
-            } else {
-              Alert.alert(errorTitle, errorMessage);
-            }
+          onPress: () => {
+            // Затем показываем поле ввода кода
+            Alert.prompt(
+              'Введите код',
+              'Введите код подтверждения из email',
+              [
+                { text: cancelText, style: 'cancel' },
+                {
+                  text: verifyText,
+                  onPress: async (code) => {
+                    if (code === '1234') {
+                      setIsVerifying(prev => ({ ...prev, email: true }));
+                      setTimeout(() => {
+                        setVerificationStatus(prev => ({ ...prev, email: true }));
+                        setIsVerifying(prev => ({ ...prev, email: false }));
+                        saveVerificationStatus('email', true);
+                        Alert.alert(successTitle, successMessage);
+                      }, 1000);
+                    } else {
+                      Alert.alert(errorTitle, errorMessage);
+                    }
+                  }
+                }
+              ],
+              'plain-text'
+            );
           }
         }
-      ],
-      'plain-text'
+      ]
     );
   }, [t, saveVerificationStatus]);
 
   const verifyPhone = useCallback(() => {
-    const title = t('profile.verifyPhone.title');
-    const message = t('profile.verifyPhone.message');
+    const codeSentTitle = t('profile.verifyPhone.success.title');
+    const codeSentMessage = t('profile.verifyPhone.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = t('profile.verifyPhone.success.title');
-    const successMessage = t('profile.verifyPhone.success.message');
+    const successTitle = 'Успешно';
+    const successMessage = 'Телефон успешно верифицирован';
     const errorTitle = t('profile.verifyPhone.error.title');
     const errorMessage = t('profile.verifyPhone.error.message');
 
-    Alert.prompt(
-      title,
-      message,
+    // Сначала показываем "Код отправлен"
+    Alert.alert(
+      codeSentTitle,
+      codeSentMessage,
       [
         { text: cancelText, style: 'cancel' },
         {
           text: verifyText,
-          onPress: async (code) => {
-            if (code === '1234') {
-              setIsVerifying(prev => ({ ...prev, phone: true }));
-              setTimeout(() => {
-                setVerificationStatus(prev => ({ ...prev, phone: true }));
-                setIsVerifying(prev => ({ ...prev, phone: false }));
-                saveVerificationStatus('phone', true);
-                Alert.alert(successTitle, successMessage);
-              }, 1000);
-            } else {
-              Alert.alert(errorTitle, errorMessage);
-            }
+          onPress: () => {
+            // Затем показываем поле ввода кода
+            Alert.prompt(
+              'Введите код',
+              'Введите код подтверждения из SMS',
+              [
+                { text: cancelText, style: 'cancel' },
+                {
+                  text: verifyText,
+                  onPress: async (code) => {
+                    if (code === '1234') {
+                      setIsVerifying(prev => ({ ...prev, phone: true }));
+                      setTimeout(() => {
+                        setVerificationStatus(prev => ({ ...prev, phone: true }));
+                        setIsVerifying(prev => ({ ...prev, phone: false }));
+                        saveVerificationStatus('phone', true);
+                        Alert.alert(successTitle, successMessage);
+                      }, 1000);
+                    } else {
+                      Alert.alert(errorTitle, errorMessage);
+                    }
+                  }
+                }
+              ],
+              'plain-text'
+            );
           }
         }
-      ],
-      'plain-text'
+      ]
     );
   }, [t, saveVerificationStatus]);
 

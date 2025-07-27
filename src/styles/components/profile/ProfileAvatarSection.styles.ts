@@ -16,11 +16,7 @@ export const ProfileAvatarSectionStyles = StyleSheet.create({
     position: 'relative',
     marginLeft: 0,
   },
-  avatarText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '600',
-  },
+
   avatarImage: {
     width: 60,
     height: 60,

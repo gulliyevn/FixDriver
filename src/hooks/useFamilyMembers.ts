@@ -155,43 +155,57 @@ export const useFamilyMembers = () => {
       return;
     }
 
-    const title = t('profile.verifyPhone.title');
-    const message = t('profile.verifyPhone.message');
+    const codeSentTitle = t('profile.verifyPhone.success.title');
+    const codeSentMessage = t('profile.verifyPhone.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = t('profile.verifyPhone.success.title');
-    const successMessage = t('profile.verifyPhone.success.message');
+    const successTitle = 'Успешно';
+    const successMessage = 'Телефон успешно верифицирован';
     const errorTitle = t('profile.verifyPhone.error.title');
     const errorMessage = t('profile.verifyPhone.error.message');
 
-    Alert.prompt(
-      title,
-      message,
+    // Сначала показываем "Код отправлен"
+    Alert.alert(
+      codeSentTitle,
+      codeSentMessage,
       [
         { text: cancelText, style: 'cancel' },
         {
           text: verifyText,
-          onPress: async (code) => {
-            if (code === '1234') {
-              setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
-              setTimeout(() => {
-                setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
-                setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
-                // Обновляем статус в данных члена семьи
-                setFamilyMembers(prev => prev.map(member => 
-                  member.id === memberId 
-                    ? { ...member, phoneVerified: true }
-                    : member
-                ));
-                Alert.alert(successTitle, successMessage);
-              }, 1000);
-            } else {
-              Alert.alert(errorTitle, errorMessage);
-            }
+          onPress: () => {
+            // Затем показываем поле ввода кода
+            Alert.prompt(
+              'Введите код',
+              'Введите код подтверждения из SMS',
+              [
+                { text: cancelText, style: 'cancel' },
+                {
+                  text: verifyText,
+                  onPress: async (code) => {
+                    if (code === '1234') {
+                      setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
+                      setTimeout(() => {
+                        setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
+                        setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
+                        // Обновляем статус в данных члена семьи
+                        setFamilyMembers(prev => prev.map(member => 
+                          member.id === memberId 
+                            ? { ...member, phoneVerified: true }
+                            : member
+                        ));
+                        Alert.alert(successTitle, successMessage);
+                      }, 1000);
+                    } else {
+                      Alert.alert(errorTitle, errorMessage);
+                    }
+                  }
+                }
+              ],
+              'plain-text'
+            );
           }
         }
-      ],
-      'plain-text'
+      ]
     );
   }, [familyMembers, t]);
 

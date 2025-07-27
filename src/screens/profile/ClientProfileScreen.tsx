@@ -105,7 +105,8 @@ if (error || !profile) {
 
   return (
     <>
-      <ScrollView style={[styles.container, dynamicStyles.container]} contentContainerStyle={styles.contentContainer}>
+      {/* Фиксированная секция с аватаром и статистикой */}
+      <View style={[styles.fixedSection, dynamicStyles.fixedSection]}>
         {/* Аватар, имя, телефон, колокол */}
         <View style={styles.profileRow}>
           <TouchableOpacity style={styles.avatar} onPress={() => navigation.navigate('EditClientProfile')}>
@@ -142,6 +143,12 @@ if (error || !profile) {
             <Text style={[styles.statLabel, dynamicStyles.statLabel]}>{t('client.profile.rating')}</Text>
           </View>
         </View>
+        {/* Тонкая линия под статистикой */}
+        <View style={[styles.statsDivider, dynamicStyles.statsDivider]} />
+      </View>
+
+      {/* Скроллируемая секция с меню */}
+      <ScrollView style={[styles.scrollSection, dynamicStyles.scrollSection]} contentContainerStyle={styles.contentContainer}>
         {/* Пункты меню */}
         <TouchableOpacity style={[styles.menuItem, styles.menuItemFirst, dynamicStyles.menuItem, dynamicStyles.menuItemFirst]} onPress={() => navigation.navigate('Balance')}>
           <Ionicons name="refresh" size={28} color={currentColors.primary} style={styles.menuIcon} />

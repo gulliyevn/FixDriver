@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { AboutScreenStyles as styles, getAboutScreenStyles } from '../../styles/screens/profile/AboutScreen.styles';
@@ -53,10 +53,16 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
       >
         <View style={styles.appInfo}>
           <View style={[styles.appIcon, dynamicStyles.appIcon]}>
-            <Ionicons name="car" size={64} color={currentColors.primary} />
+            <Image 
+              source={require('../../../assets/icon.png')} 
+              style={styles.appLogo}
+              resizeMode="contain"
+            />
           </View>
-          <Text style={[styles.appName, dynamicStyles.appName]}>{appInfo.name}</Text>
-          <Text style={[styles.appVersion, dynamicStyles.appVersion]}>{t('client.about.version')} {appInfo.version}</Text>
+          <View style={styles.appTextContainer}>
+            <Text style={[styles.appName, dynamicStyles.appName]}>{appInfo.name}</Text>
+            <Text style={[styles.appVersion, dynamicStyles.appVersion]}>by Axivion LLC</Text>
+          </View>
         </View>
         
         <View style={styles.infoSection}>

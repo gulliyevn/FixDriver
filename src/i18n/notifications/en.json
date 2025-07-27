@@ -48,7 +48,7 @@
   "settings": {
     "title": "Notification settings",
     "pushNotifications": "Push notifications",
-    "emailNotifications": "Email notifications",
+    "emailNotifications": "E-mail notifications",
     "smsNotifications": "SMS notifications",
     "orderUpdates": "Order updates",
     "paymentUpdates": "Payment updates",

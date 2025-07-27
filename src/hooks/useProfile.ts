@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockUsers } from '../mocks/users';
 
 export interface UserProfile {
@@ -24,11 +25,22 @@ export const useProfile = () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Загрузка профиля...');
       
-      // Имитация асинхронной загрузки
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Сначала пытаемся загрузить сохраненные данные
+      const savedProfile = await AsyncStorage.getItem('user_profile');
       
-      // Получаем актуальные данные из моков
+      if (savedProfile) {
+        const parsedProfile = JSON.parse(savedProfile);
+        console.log('Загружен сохраненный профиль:', parsedProfile);
+        setProfile(parsedProfile);
+        setLoading(false);
+        return;
+      }
+      
+      console.log('Сохраненного профиля нет, создаем новый из моков');
+      
+      // Если сохраненных данных нет, загружаем из моков
       const user = mockUsers[0];
       
       const userProfile: UserProfile = {
@@ -37,7 +49,7 @@ export const useProfile = () => {
         surname: user.surname,
         phone: user.phone,
         email: user.email,
-        birthDate: '1990-01-01', // Можно добавить в моки
+        birthDate: '1990-01-01',
         rating: user.rating,
         address: user.address,
         createdAt: user.createdAt,
@@ -45,7 +57,12 @@ export const useProfile = () => {
         avatar: user.avatar,
       };
       
+      console.log('Создан новый профиль:', userProfile);
+      
+      // Сохраняем начальные данные
+      await AsyncStorage.setItem('user_profile', JSON.stringify(userProfile));
       setProfile(userProfile);
+      console.log('Начальный профиль сохранен');
     } catch (err) {
       console.error('Error loading profile:', err);
       setError('Не удалось загрузить профиль');
@@ -56,25 +73,37 @@ export const useProfile = () => {
 
   const updateProfile = async (updatedData: Partial<UserProfile>) => {
     try {
-      setLoading(true);
       setError(null);
-      
-      // Имитация асинхронного обновления
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Обновляем данные в моках
-      const user = mockUsers[0];
-      if (updatedData.name) user.name = updatedData.name;
-      if (updatedData.surname) user.surname = updatedData.surname;
-      if (updatedData.phone) user.phone = updatedData.phone;
-      if (updatedData.email) user.email = updatedData.email;
+      console.log('updateProfile вызван с данными:', updatedData);
       
       // Обновляем локальное состояние
       if (profile) {
-        setProfile({
+        const updatedProfile = {
           ...profile,
           ...updatedData
-        });
+        };
+        
+        console.log('Обновленный профиль:', updatedProfile);
+        
+        // Сохраняем в AsyncStorage
+        await AsyncStorage.setItem('user_profile', JSON.stringify(updatedProfile));
+        console.log('Профиль сохранен в AsyncStorage');
+        
+        // Обновляем состояние
+        setProfile(updatedProfile);
+        
+        // Обновляем данные в моках для совместимости
+        const user = mockUsers[0];
+        if (updatedData.name) user.name = updatedData.name;
+        if (updatedData.surname) user.surname = updatedData.surname;
+        if (updatedData.phone) user.phone = updatedData.phone;
+        if (updatedData.email) user.email = updatedData.email;
+        if (updatedData.birthDate) user.birthDate = updatedData.birthDate;
+        if (updatedData.avatar) user.avatar = updatedData.avatar;
+        
+        console.log('Моки обновлены');
+      } else {
+        console.log('Профиль не загружен, не могу обновить');
       }
       
       return true;
@@ -82,8 +111,6 @@ export const useProfile = () => {
       setError('Не удалось обновить профиль');
       console.error('Error updating profile:', err);
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 

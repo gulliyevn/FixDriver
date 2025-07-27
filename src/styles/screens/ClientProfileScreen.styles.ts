@@ -6,6 +6,12 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  fixedSection: {
+    // Фиксированная секция с аватаром и статистикой
+  },
+  scrollSection: {
+    flex: 1,
+  },
   contentContainer: {
     paddingBottom: 32,
   },
@@ -87,6 +93,11 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 16,
     marginBottom: 16,
+  },
+  statsDivider: {
+    height: 1,
+    backgroundColor: '#e5e5e5',
+    marginHorizontal: 10,
   },
   statCol: {
     flex: 1,
@@ -199,6 +210,12 @@ export const getClientProfileStyles = (isDark: boolean) => {
     container: {
       backgroundColor: currentColors.background,
     },
+    fixedSection: {
+      backgroundColor: currentColors.background,
+    },
+    scrollSection: {
+      backgroundColor: currentColors.background,
+    },
     profileName: {
       color: currentColors.text,
     },
@@ -224,6 +241,9 @@ export const getClientProfileStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     statDivider: {
+      backgroundColor: currentColors.border,
+    },
+    statsDivider: {
       backgroundColor: currentColors.border,
     },
     menuItem: {

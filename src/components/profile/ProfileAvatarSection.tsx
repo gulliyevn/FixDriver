@@ -108,7 +108,11 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
           {profilePhoto ? (
             <Image source={{ uri: profilePhoto }} style={styles.avatarImage} />
           ) : (
-            <Text style={styles.avatarText}>{userName[0]}{userSurname[0]}</Text>
+            <Ionicons 
+              name="person-circle-outline" 
+              size={60} 
+              color={isDark ? '#3B82F6' : '#083198'} 
+            />
           )}
           <TouchableOpacity 
             style={styles.addPhotoButton}

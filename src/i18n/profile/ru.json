@@ -113,8 +113,8 @@
   "phone": "Телефон",
   "phonePlaceholder": "Введите номер телефона",
   "noPhone": "Не указан",
-  "email": "E-mail",
-  "emailPlaceholder": "Введите e-mail",
+  "email": "Почта",
+  "emailPlaceholder": "Введите почту",
   "birthDate": "Дата рождения",
   "birthDatePlaceholder": "ГГГГ-ММ-ДД",
   "familyInfo": "Семейная информация",
@@ -175,11 +175,11 @@
     "message": "Не удалось сохранить изменения"
   },
   "verifyEmail": {
-    "title": "Подтвердить email",
-    "message": "Отправить код подтверждения на email?",
+    "title": "Подтвердить почту",
+    "message": "Отправить код подтверждения на почту?",
     "success": {
       "title": "Код отправлен",
-      "message": "Код подтверждения отправлен на ваш email"
+      "message": "Код подтверждения отправлен на вашу почту"
     },
     "error": {
       "title": "Ошибка отправки",

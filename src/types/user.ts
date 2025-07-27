@@ -14,6 +14,7 @@ export interface User {
   rating: number;
   createdAt: string;
   address: string;
+  birthDate?: string;
 }
 
 export interface Driver extends User {

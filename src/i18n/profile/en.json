@@ -113,8 +113,8 @@
   "phone": "Phone",
   "phonePlaceholder": "Enter phone number",
   "noPhone": "Not specified",
-  "email": "Email",
-  "emailPlaceholder": "Enter email",
+  "email": "E-mail",
+  "emailPlaceholder": "Enter e-mail",
   "birthDate": "Birth Date",
   "birthDatePlaceholder": "YYYY-MM-DD",
   "familyInfo": "Family Information",
@@ -175,11 +175,11 @@
     "message": "Failed to save changes"
   },
   "verifyEmail": {
-    "title": "Verify Email",
-    "message": "Send verification code to email?",
+    "title": "Verify E-mail",
+    "message": "Send verification code to e-mail?",
     "success": {
       "title": "Code Sent",
-      "message": "Verification code sent to your email"
+      "message": "Verification code sent to your e-mail"
     },
     "error": {
       "title": "Send Error",

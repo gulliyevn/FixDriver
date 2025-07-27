@@ -48,7 +48,7 @@
   "settings": {
     "title": "Настройки уведомлений",
     "pushNotifications": "Push-уведомления",
-    "emailNotifications": "Email-уведомления",
+    "emailNotifications": "Уведомления на почту",
     "smsNotifications": "SMS-уведомления",
     "orderUpdates": "Обновления заказов",
     "paymentUpdates": "Обновления платежей",

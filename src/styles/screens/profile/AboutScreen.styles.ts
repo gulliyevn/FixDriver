@@ -35,8 +35,12 @@ export const AboutScreenStyles = StyleSheet.create({
     paddingVertical: 16,
   },
   appInfo: {
+    flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 16,
     marginBottom: 32,
+    marginLeft: 16,
+    marginRight: 16,
   },
   appIcon: {
     width: 80,
@@ -45,18 +49,20 @@ export const AboutScreenStyles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginRight: 24,
+  },
+  appTextContainer: {
+    flex: 1,
   },
   appName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
     color: '#003366',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   appVersion: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#888',
-    marginBottom: 12,
   },
   appDescription: {
     fontSize: 16,

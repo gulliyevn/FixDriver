@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Animated } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { EditClientProfileScreenStyles as styles, getEditClientProfileScreenColors } from '../../styles/screens/profile/EditClientProfileScreen.styles';
@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { mockUsers } from '../../mocks/users';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../../hooks/useProfile';
 import { useVerification } from '../../hooks/useVerification';
@@ -29,8 +29,8 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
   const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
   
-  const { updateProfile } = useProfile();
-  const user = mockUsers[0];
+  const { profile, updateProfile, loadProfile } = useProfile();
+  const user = profile || mockUsers[0];
   
   // Состояние формы
   const [formData, setFormData] = useState({
@@ -38,7 +38,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     lastName: user.surname,
     phone: user.phone,
     email: user.email,
-    birthDate: '1990-01-01',
+    birthDate: user.birthDate || '1990-01-01',
   });
 
   // Исходные данные для сравнения
@@ -47,8 +47,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     lastName: user.surname,
     phone: user.phone,
     email: user.email,
-    birthDate: '1990-01-01',
+    birthDate: user.birthDate || '1990-01-01',
   });
+
+  // Исходное фото для сравнения
+  const originalPhotoRef = useRef<string | null>(user.avatar);
 
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
@@ -87,7 +90,9 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
 
   // Функция для проверки изменений
   const checkHasChanges = () => {
-    return hasChanges(formData, originalDataRef.current);
+    const formChanges = hasChanges(formData, originalDataRef.current);
+    const photoChanges = profilePhoto !== originalPhotoRef.current;
+    return formChanges || photoChanges;
   };
 
   // Функция для проверки изменений в семейной секции
@@ -98,24 +103,36 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   // Асинхронная функция сохранения профиля
   const saveProfile = async (): Promise<boolean> => {
     try {
-      // Используем хук для обновления профиля
-      const success = await updateProfile({
-        name: formData.firstName,
-        surname: formData.lastName,
-        phone: formData.phone,
-        email: formData.email,
-        birthDate: formData.birthDate,
-      });
+      // Проверяем, есть ли изменения в форме (кроме даты и фото, которые сохраняются автоматически)
+      const hasFormChanges = formData.firstName !== originalDataRef.current.firstName ||
+                            formData.lastName !== originalDataRef.current.lastName ||
+                            formData.phone !== originalDataRef.current.phone ||
+                            formData.email !== originalDataRef.current.email;
 
-      if (success) {
-        Alert.alert('Успех', 'Профиль успешно обновлен');
-        setIsEditingPersonalInfo(false);
-        // Обновляем исходные данные
-        originalDataRef.current = { ...formData };
-        return true;
+      if (hasFormChanges) {
+        // Сохраняем только изменения в форме
+        const success = await updateProfile({
+          name: formData.firstName,
+          surname: formData.lastName,
+          phone: formData.phone,
+          email: formData.email,
+        });
+
+        if (success) {
+          Alert.alert('Успех', 'Профиль успешно обновлен');
+          setIsEditingPersonalInfo(false);
+          // Обновляем исходные данные
+          originalDataRef.current = { ...formData };
+          originalPhotoRef.current = profilePhoto;
+          return true;
+        } else {
+          Alert.alert('Ошибка', 'Не удалось обновить профиль');
+          return false;
+        }
       } else {
-        Alert.alert('Ошибка', 'Не удалось обновить профиль');
-        return false;
+        // Если изменений в форме нет, просто закрываем режим редактирования
+        setIsEditingPersonalInfo(false);
+        return true;
       }
     } catch (error) {
       Alert.alert('Ошибка', 'Произошла ошибка при обновлении профиля');
@@ -137,12 +154,62 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     });
   };
 
-  // Загружаем статус верификации при фокусе экрана
-  useFocusEffect(
-    React.useCallback(() => {
-      loadVerificationStatus();
-    }, [loadVerificationStatus])
-  );
+  // Загружаем данные только один раз при монтировании компонента
+  useEffect(() => {
+    loadProfile();
+    loadVerificationStatus();
+  }, []); // Пустой массив зависимостей - выполняется только один раз
+
+  // Обновляем форму при изменении профиля
+  useEffect(() => {
+    if (profile && !formData.firstName) {
+      console.log('Загружаем данные из профиля:', profile);
+      setFormData({
+        firstName: profile.name,
+        lastName: profile.surname,
+        phone: profile.phone,
+        email: profile.email,
+        birthDate: profile.birthDate || '1990-01-01',
+      });
+      setProfilePhoto(profile.avatar || null);
+      // Обновляем исходные данные
+      originalDataRef.current = {
+        firstName: profile.name,
+        lastName: profile.surname,
+        phone: profile.phone,
+        email: profile.email,
+        birthDate: profile.birthDate || '1990-01-01',
+      };
+      originalPhotoRef.current = profile.avatar;
+      console.log('Исходное фото установлено:', originalPhotoRef.current);
+    }
+  }, [profile]);
+
+  // Автоматически сохраняем фото при его изменении
+  useEffect(() => {
+    console.log('useEffect фото сработал:', {
+      profile: !!profile,
+      profilePhoto,
+      profileAvatar: profile?.avatar,
+      originalPhoto: originalPhotoRef.current
+    });
+    
+    if (profile && profilePhoto !== null && profilePhoto !== profile.avatar && profilePhoto !== originalPhotoRef.current) {
+      console.log('Автосохранение фото:', profilePhoto);
+      // Сохраняем только фото, не трогая остальные данные
+      updateProfile({ avatar: profilePhoto });
+    }
+  }, [profilePhoto, profile]);
+
+  // Автоматически сохраняем дату при её изменении
+  useEffect(() => {
+    if (profile && formData.birthDate !== profile.birthDate && formData.birthDate !== originalDataRef.current.birthDate) {
+      // Сохраняем только дату, не трогая остальные данные
+      updateProfile({ birthDate: formData.birthDate });
+    }
+  }, [formData.birthDate]);
+
+
 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
@@ -159,7 +226,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                   style: 'cancel',
                   onPress: () => {
                     // При отмене НЕ делаем ничего - остаемся на странице с текущими изменениями
-                    // НЕ выходим со страницы, НЕ сбрасываем изменения
                   }
                 },
                 { 

@@ -89,7 +89,13 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             <TextInput
               style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
               value={formData.phone}
-              onChangeText={(text) => setFormData({...formData, phone: text})}
+              onChangeText={(text) => {
+                setFormData({...formData, phone: text});
+                // Сбрасываем верификацию при изменении номера
+                if (verificationStatus.phone && text !== formData.phone) {
+                  onResetVerification('phone');
+                }
+              }}
               placeholder={t('profile.phonePlaceholder')}
               placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
               keyboardType="phone-pad"
@@ -97,18 +103,29 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           ) : (
             <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.phone}</Text>
           )}
-          <TouchableOpacity
-            style={styles.verifyButton}
-            onPress={onVerifyPhone}
-            onLongPress={() => verificationStatus.phone && onResetVerification('phone')}
-            disabled={isVerifying.phone}
-          >
-            <Ionicons 
-              name={verificationStatus.phone ? "checkmark-circle" : "shield-checkmark-outline"} 
-              size={20} 
-              color={verificationStatus.phone ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
-            />
-          </TouchableOpacity>
+          {verificationStatus.phone ? (
+            // Если верифицирован - показываем галочку (некликабельную)
+            <View style={styles.verifyButton}>
+              <Ionicons 
+                name="checkmark-circle" 
+                size={20} 
+                color="#4CAF50" 
+              />
+            </View>
+          ) : (
+            // Если не верифицирован - показываем кликабельный щит
+            <TouchableOpacity
+              style={styles.verifyButton}
+              onPress={onVerifyPhone}
+              disabled={isVerifying.phone}
+            >
+              <Ionicons 
+                name="shield-checkmark-outline" 
+                size={20} 
+                color={isDark ? '#3B82F6' : '#083198'} 
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -120,7 +137,13 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             <TextInput
               style={[styles.infoValue, dynamicStyles.infoValue, styles.infoInput]}
               value={formData.email}
-              onChangeText={(text) => setFormData({...formData, email: text})}
+              onChangeText={(text) => {
+                setFormData({...formData, email: text});
+                // Сбрасываем верификацию при изменении email
+                if (verificationStatus.email && text !== formData.email) {
+                  onResetVerification('email');
+                }
+              }}
               placeholder={t('profile.emailPlaceholder')}
               placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
               keyboardType="email-address"
@@ -128,18 +151,29 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
           ) : (
             <Text style={[styles.infoValue, dynamicStyles.infoValue]}>{formData.email}</Text>
           )}
-          <TouchableOpacity
-            style={styles.verifyButton}
-            onPress={onVerifyEmail}
-            onLongPress={() => verificationStatus.email && onResetVerification('email')}
-            disabled={isVerifying.email}
-          >
-            <Ionicons 
-              name={verificationStatus.email ? "checkmark-circle" : "shield-checkmark-outline"} 
-              size={20} 
-              color={verificationStatus.email ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
-            />
-          </TouchableOpacity>
+          {verificationStatus.email ? (
+            // Если верифицирован - показываем галочку (некликабельную)
+            <View style={styles.verifyButton}>
+              <Ionicons 
+                name="checkmark-circle" 
+                size={20} 
+                color="#4CAF50" 
+              />
+            </View>
+          ) : (
+            // Если не верифицирован - показываем кликабельный щит
+            <TouchableOpacity
+              style={styles.verifyButton}
+              onPress={onVerifyEmail}
+              disabled={isVerifying.email}
+            >
+              <Ionicons 
+                name="shield-checkmark-outline" 
+                size={20} 
+                color={isDark ? '#3B82F6' : '#083198'} 
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 

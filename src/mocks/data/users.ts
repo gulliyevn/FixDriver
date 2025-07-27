@@ -17,6 +17,7 @@ export const mockUsers: User[] = [
     rating: 4.8,
     createdAt: '2024-01-01T00:00:00Z',
     address: 'ул. Низами, 23, Баку',
+    birthDate: '1990-01-01',
   },
 ];
 
