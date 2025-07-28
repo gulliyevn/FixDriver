@@ -82,7 +82,9 @@
     "paymentSuccess": "Zahlung erfolgreich",
     "balanceToppedUp": "Guthaben um %{0} AFc aufgeladen",
     "copied": "Kopiert",
-    "balanceTopUp": "Guthaben aufladen",
+    "balanceTopUp": "Aufladen",
+    "topUpHistory": "Aufladungsverlauf",
+    "loadingMore": "Lädt...",
     "amountInAFc": "Betrag in AFc",
     "enterAmount": "Betrag eingeben",
     "confirm": "Bestätigen",
@@ -187,9 +189,13 @@
     "default": "Standard"
   },
   "paymentHistory": {
-    "title": "Zahlungshistorie",
-    "noPayments": "Keine Zahlungen",
-    "emptyDescription": "Zahlungshistorie ist leer",
+    "title": "Transaktionshistorie",
+    "noPayments": "Keine Transaktionen",
+    "emptyDescription": "Transaktionshistorie ist leer",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "viewAll": "Alle anzeigen",
+    "showLess": "Weniger anzeigen",
     "status": {
       "completed": "Abgeschlossen",
       "pending": "Ausstehend",
@@ -198,7 +204,7 @@
     "mock": {
       "tripToCityCenter": "Fahrt ins Stadtzentrum",
       "routeLeninGagarin": "Route: Lenin-Straße - Gagarin-Straße",
-      "balanceTopUp": "Guthaben aufladen",
+      "balanceTopUp": "Aufladen",
       "tripToAirport": "Fahrt zum Flughafen",
       "routeCenterAirport": "Route: Zentrum - Heydar Aliyev Flughafen",
       "refund": "Rückerstattung",

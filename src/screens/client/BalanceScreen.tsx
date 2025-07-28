@@ -8,12 +8,14 @@ import {
   mockCashback,
   mockQuickAmounts 
 } from '../../mocks/balanceMock';
+import { PaymentHistory } from '../../mocks/paymentHistoryMock';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createCVVStickAnimation } from '../../styles/animations';
 import BalanceCardDecoration from '../../components/BalanceCardDecoration';
+import PaymentHistorySection from '../../components/PaymentHistorySection';
 
 type PackageType = 'free' | 'basic' | 'premium' | 'family';
 import {
@@ -77,15 +79,26 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
   const BALANCE_KEY = 'user_balance';
   const CASHBACK_KEY = 'user_cashback';
-  const [balance, setBalance] = useState(mockBalance);
-  const [cashback, setCashback] = useState(mockCashback);
+  const TOPUP_HISTORY_KEY = 'topup_history';
+  const [balance, setBalance] = useState('0');
+  const [cashback, setCashback] = useState('0');
+  const [topUpHistory, setTopUpHistory] = useState<PaymentHistory[]>([]);
   const [currentPackage, setCurrentPackage] = useState<PackageType>('free');
   React.useEffect(() => {
     (async () => {
       const storedBalance = await AsyncStorage.getItem(BALANCE_KEY);
       const storedCashback = await AsyncStorage.getItem(CASHBACK_KEY);
+      const storedHistory = await AsyncStorage.getItem(TOPUP_HISTORY_KEY);
+      
       if (storedBalance !== null) setBalance(storedBalance);
       if (storedCashback !== null) setCashback(storedCashback);
+      if (storedHistory !== null) {
+        try {
+          setTopUpHistory(JSON.parse(storedHistory));
+        } catch (error) {
+          console.log('Error parsing topup history:', error);
+        }
+      }
     })();
     // Инициализируем анимацию быстрого пополнения в свернутом состоянии
     quickTopUpHeight.setValue(0);
@@ -177,6 +190,30 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
   const screenWidth = Dimensions.get('window').width;
 
+  const addToTopUpHistory = async (amount: number) => {
+    const now = new Date();
+    const newRecord: PaymentHistory = {
+      id: Date.now().toString(),
+      title: t('client.paymentHistory.mock.balanceTopUp'),
+      amount: `+${amount} AFc`,
+      type: 'topup',
+      status: 'completed',
+      date: now.toISOString().split('T')[0],
+      time: now.toTimeString().split(' ')[0].substring(0, 5)
+    };
+
+    const updatedHistory = [newRecord, ...topUpHistory];
+    setTopUpHistory(updatedHistory);
+    
+    try {
+      await AsyncStorage.setItem(TOPUP_HISTORY_KEY, JSON.stringify(updatedHistory));
+    } catch (error) {
+      console.log('Error saving topup history:', error);
+    }
+  };
+
+
+
   const handleFakeStripePayment = () => {
     const amountNum = parseFloat(topUpAmount.replace(',', '.'));
     if (isNaN(amountNum) || amountNum <= 0) {
@@ -190,6 +227,10 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       AsyncStorage.setItem(BALANCE_KEY, newBalance);
       return newBalance;
     });
+    
+    // Добавляем запись в историю пополнений
+    addToTopUpHistory(amountNum);
+    
     setTopUpModalVisible(false);
     Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
   };
@@ -435,7 +476,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           </Animated.View>
         </View>
 
-        {/* Удалена секция FixBack */}
+        {/* История транзакций */}
+        <PaymentHistorySection customHistory={topUpHistory} />
       </ScrollView>
       {/* Модальное окно пополнения */}
       <Modal

@@ -82,7 +82,9 @@
     "paymentSuccess": "تم الدفع بنجاح",
     "balanceToppedUp": "تم إعادة شحن الرصيد بمبلغ {0} AFc",
     "copied": "تم النسخ",
-    "balanceTopUp": "إعادة شحن الرصيد",
+    "balanceTopUp": "إعادة شحن",
+    "topUpHistory": "سجل إعادة الشحن",
+    "loadingMore": "جاري التحميل...",
     "amountInAFc": "المبلغ بـ AFc",
     "enterAmount": "أدخل المبلغ",
     "confirm": "تأكيد",
@@ -188,9 +190,13 @@
     "default": "افتراضي"
   },
   "paymentHistory": {
-    "title": "تاريخ المدفوعات",
-    "noPayments": "لا توجد مدفوعات",
-    "emptyDescription": "تاريخ المدفوعات فارغ",
+    "title": "سجل المعاملات",
+    "noPayments": "لا توجد معاملات",
+    "emptyDescription": "سجل المعاملات فارغ",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "viewAll": "عرض الكل",
+    "showLess": "عرض أقل",
     "status": {
       "completed": "مكتمل",
       "pending": "قيد الانتظار",
@@ -199,7 +205,7 @@
     "mock": {
       "tripToCityCenter": "رحلة إلى مركز المدينة",
       "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
-      "balanceTopUp": "إعادة شحن الرصيد",
+      "balanceTopUp": "إعادة شحن",
       "tripToAirport": "رحلة إلى المطار",
       "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
       "refund": "استرداد",

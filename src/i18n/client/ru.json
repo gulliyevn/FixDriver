@@ -82,7 +82,9 @@
     "paymentSuccess": "Оплата прошла успешно",
     "balanceToppedUp": "Баланс пополнен на %{0} AFc",
     "copied": "Скопировано",
-    "balanceTopUp": "Пополнение баланса",
+    "balanceTopUp": "Пополнение",
+    "topUpHistory": "История пополнений",
+    "loadingMore": "Загрузка...",
     "amountInAFc": "Сумма в AFc",
     "enterAmount": "Введите сумму",
     "confirm": "Подтверждение",
@@ -175,9 +177,13 @@
     "default": "По умолчанию"
   },
   "paymentHistory": {
-    "title": "История платежей",
-    "noPayments": "Нет платежей",
-    "emptyDescription": "История платежей пуста",
+    "title": "История транзакций",
+    "noPayments": "Нет транзакций",
+    "emptyDescription": "История транзакций пуста",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "viewAll": "Показать все",
+    "showLess": "Скрыть",
     "status": {
       "completed": "Выполнено",
       "pending": "В обработке",
@@ -186,7 +192,7 @@
     "mock": {
       "tripToCityCenter": "Поездка в центр города",
       "routeLeninGagarin": "Маршрут: ул. Ленина - ул. Гагарина",
-      "balanceTopUp": "Пополнение баланса",
+      "balanceTopUp": "Пополнение",
       "tripToAirport": "Поездка в аэропорт",
       "routeCenterAirport": "Маршрут: центр - аэропорт Гейдар Алиев",
       "refund": "Возврат средств",

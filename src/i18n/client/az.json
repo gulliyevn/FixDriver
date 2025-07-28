@@ -82,7 +82,9 @@
     "paymentSuccess": "Ödəniş uğurla tamamlandı",
     "balanceToppedUp": "Balans %{0} AFc ilə yükləndi",
     "copied": "Kopyalandı",
-    "balanceTopUp": "Balans yüklə",
+    "balanceTopUp": "Yüklə",
+    "topUpHistory": "Yükləmə tarixçəsi",
+    "loadingMore": "Yüklənir...",
     "amountInAFc": "AFc ilə məbləğ",
     "enterAmount": "Məbləğ daxil edin",
     "confirm": "Təsdiq",
@@ -187,9 +189,13 @@
     "default": "Varsayılan"
   },
   "paymentHistory": {
-    "title": "Ödəniş tarixçəsi",
-    "noPayments": "Ödəniş yoxdur",
-    "emptyDescription": "Ödəniş tarixçəsi boşdur",
+    "title": "Tranzaksiya tarixçəsi",
+    "noPayments": "Tranzaksiya yoxdur",
+    "emptyDescription": "Tranzaksiya tarixçəsi boşdur",
+    "today": "Bu gün",
+    "yesterday": "Dünən",
+    "viewAll": "Hamısını göstər",
+    "showLess": "Az göstər",
     "status": {
       "completed": "Tamamlandı",
       "pending": "Gözləyir",
@@ -198,7 +204,7 @@
     "mock": {
       "tripToCityCenter": "Şəhər mərkəzinə səyahət",
       "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",
-      "balanceTopUp": "Balans yükləmə",
+      "balanceTopUp": "Yükləmə",
       "tripToAirport": "Hava limanına səyahət",
       "routeCenterAirport": "Marşrut: mərkəz - Heydər Əliyev hava limanı",
       "refund": "Vəsait qaytarma",

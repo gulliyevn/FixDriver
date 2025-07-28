@@ -82,7 +82,9 @@
     "paymentSuccess": "Ödeme başarılı",
     "balanceToppedUp": "Bakiye %{0} AFc ile yüklendi",
     "copied": "Kopyalandı",
-    "balanceTopUp": "Bakiye yükle",
+    "balanceTopUp": "Yükle",
+    "topUpHistory": "Yükleme geçmişi",
+    "loadingMore": "Yükleniyor...",
     "amountInAFc": "AFc cinsinden miktar",
     "enterAmount": "Miktar girin",
     "confirm": "Onayla",
@@ -187,9 +189,13 @@
     "default": "Varsayılan"
   },
   "paymentHistory": {
-    "title": "Ödeme geçmişi",
-    "noPayments": "Ödeme yok",
-    "emptyDescription": "Ödeme geçmişi boş",
+    "title": "İşlem geçmişi",
+    "noPayments": "İşlem yok",
+    "emptyDescription": "İşlem geçmişi boş",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "viewAll": "Tümünü göster",
+    "showLess": "Daha az göster",
     "status": {
       "completed": "Tamamlandı",
       "pending": "Beklemede",
@@ -198,7 +204,7 @@
     "mock": {
       "tripToCityCenter": "Şehir merkezine yolculuk",
       "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
-      "balanceTopUp": "Bakiye yükleme",
+      "balanceTopUp": "Yükleme",
       "tripToAirport": "Havaalanına yolculuk",
       "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
       "refund": "İade",
