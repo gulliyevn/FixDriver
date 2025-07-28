@@ -71,12 +71,12 @@
     "pay": "Погасить",
     "insufficientFunds": "Недостаточно средств",
     "minimumWithdrawal": "Для вывода средств нужны минимум 20 AFc",
-    "useCashback": "Использование кэшбэка",
-    "useCashbackConfirm": "Вы уверены что хотите использовать Cashback?",
+    "useCashback": "Использование FixBack",
+    "useCashbackConfirm": "Вы уверены что хотите использовать FixBack?",
     "cancel": "Отмена",
     "yes": "Да",
     "success": "Успешно",
-    "cashbackAdded": "Кэшбэк %{0} AFc добавлен к балансу",
+    "cashbackAdded": "FixBack %{0} AFc добавлен к балансу",
     "error": "Ошибка",
     "enterValidAmount": "Введите корректную сумму",
     "paymentSuccess": "Оплата прошла успешно",
@@ -90,11 +90,11 @@
     "topUpBalance": "Пополнить",
     "payButton": "Оплатить",
     "cashback": {
-      "title": "Кэшбэк",
+      "title": "FixBack",
       "available": "Доступно для использования",
       "use": "Снять",
       "history": "История",
-      "description": "Накопленный кэшбэк можно использовать для оплаты поездок"
+      "description": "Накопленный FixBack можно использовать для оплаты поездок"
     }
   },
   "debts": {

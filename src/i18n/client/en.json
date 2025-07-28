@@ -71,12 +71,12 @@
     "pay": "Pay",
     "insufficientFunds": "Insufficient funds",
     "minimumWithdrawal": "Minimum 20 AFc required for withdrawal",
-    "useCashback": "Use cashback",
-    "useCashbackConfirm": "Are you sure you want to use cashback?",
+    "useCashback": "Use FixBack",
+    "useCashbackConfirm": "Are you sure you want to use FixBack?",
     "cancel": "Cancel",
     "yes": "Yes",
     "success": "Success",
-    "cashbackAdded": "Cashback %{0} AFc added to balance",
+    "cashbackAdded": "FixBack %{0} AFc added to balance",
     "error": "Error",
     "enterValidAmount": "Please enter a valid amount",
     "paymentSuccess": "Payment successful",
@@ -90,11 +90,11 @@
     "topUpBalance": "Top up balance",
     "payButton": "Pay",
     "cashback": {
-      "title": "Cashback",
+      "title": "FixBack",
       "available": "Available to use",
       "use": "Use",
       "history": "History",
-      "description": "Accumulated cashback can be used to pay for trips"
+      "description": "Accumulated FixBack can be used to pay for trips"
     }
   },
   "debts": {

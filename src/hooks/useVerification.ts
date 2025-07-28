@@ -27,9 +27,8 @@ export const useVerification = () => {
   const saveVerificationStatus = useCallback(async (type: 'email' | 'phone', status: boolean) => {
     try {
       await AsyncStorage.setItem(`verification_${type}`, JSON.stringify(status));
-      console.log(`Verification status saved: ${type} = ${status}`);
     } catch (error) {
-      console.error('Error saving verification status:', error);
+      // Error saving verification status
     }
   }, []);
 
@@ -43,9 +42,8 @@ export const useVerification = () => {
         phone: phoneVerified ? JSON.parse(phoneVerified) : false,
       };
       setVerificationStatus(status);
-      console.log('Loaded verification status:', status);
     } catch (error) {
-      console.error('Error loading verification status:', error);
+      // Error loading verification status
     }
   }, []);
 
@@ -53,9 +51,8 @@ export const useVerification = () => {
     try {
       await AsyncStorage.removeItem(`verification_${type}`);
       setVerificationStatus(prev => ({ ...prev, [type]: false }));
-      console.log(`Verification status reset: ${type}`);
     } catch (error) {
-      console.error('Error resetting verification status:', error);
+      // Error resetting verification status
     }
   }, []);
 

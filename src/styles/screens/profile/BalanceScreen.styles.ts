@@ -38,9 +38,10 @@ export const BalanceScreenStyles = StyleSheet.create({
   },
   // Основной баланс
   balanceCard: {
-    backgroundColor: '#003366',
+    backgroundColor: '#231f20', // Светлый режим
     borderRadius: 16,
     padding: 24,
+    overflow: 'hidden',
   },
   balanceLabel: {
     fontSize: 16,
@@ -101,8 +102,8 @@ export const BalanceScreenStyles = StyleSheet.create({
   quickTopUpHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
   },
   quickTopUpIcon: {
     marginRight: 8,
@@ -764,9 +765,9 @@ export const cardContainerWithDynamicWidth = (screenWidth: number): ViewStyle =>
   width: screenWidth * 0.95,
 });
 
-export const balanceCardWithTheme = (currentColors: { primary: string }): ViewStyle => ({
-  backgroundColor: currentColors.primary,
-  borderColor: currentColors.primary,
+export const balanceCardWithTheme = (currentColors: { primary: string }, isDark?: boolean): ViewStyle => ({
+  backgroundColor: isDark ? '#70686a' : '#231f20',
+  borderColor: isDark ? '#70686a' : '#231f20',
 });
 
 export const cardFrontButtonWithTheme = (cardBg: string, topUpBtnColor: string): ViewStyle => ({

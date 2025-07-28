@@ -13,6 +13,9 @@ import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createCVVStickAnimation } from '../../styles/animations';
+import BalanceCardDecoration from '../../components/BalanceCardDecoration';
+
+type PackageType = 'free' | 'basic' | 'premium' | 'family';
 import {
   balanceCardAnimated,
   balanceCardFrontRow,
@@ -76,6 +79,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const CASHBACK_KEY = 'user_cashback';
   const [balance, setBalance] = useState(mockBalance);
   const [cashback, setCashback] = useState(mockCashback);
+  const [currentPackage, setCurrentPackage] = useState<PackageType>('free');
   React.useEffect(() => {
     (async () => {
       const storedBalance = await AsyncStorage.getItem(BALANCE_KEY);
@@ -83,6 +87,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       if (storedBalance !== null) setBalance(storedBalance);
       if (storedCashback !== null) setCashback(storedCashback);
     })();
+    // Инициализируем анимацию быстрого пополнения в свернутом состоянии
+    quickTopUpHeight.setValue(0);
   }, []);
 
 
@@ -190,11 +196,13 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
   const [showCopied, setShowCopied] = useState(false);
   const [showCVV, setShowCVV] = useState(false);
+  const [isQuickTopUpExpanded, setIsQuickTopUpExpanded] = useState(false);
   const cvvOpacity = useRef(new Animated.Value(0)).current;
   const stickerOpacity = useRef(new Animated.Value(1)).current;
   const stickerTranslateX = useRef(new Animated.Value(0)).current;
   const stickerTranslateY = useRef(new Animated.Value(0)).current;
   const stickerRotate = useRef(new Animated.Value(0)).current;
+  const quickTopUpHeight = useRef(new Animated.Value(0)).current;
 
   const handleCopyCardNumber = async () => {
     try {
@@ -213,6 +221,24 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
     )(showCVV);
   };
 
+  const handleToggleQuickTopUp = () => {
+    const toValue = isQuickTopUpExpanded ? 0 : 1;
+    Animated.timing(quickTopUpHeight, {
+      toValue,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => {
+      setIsQuickTopUpExpanded(!isQuickTopUpExpanded);
+    });
+  };
+
+  const handlePackageChange = () => {
+    const packages: PackageType[] = ['free', 'basic', 'premium', 'family'];
+    const currentIndex = packages.indexOf(currentPackage);
+    const nextIndex = (currentIndex + 1) % packages.length;
+    setCurrentPackage(packages[nextIndex]);
+  };
+
   return (
     <View style={[styles.container, balanceColors.container]}>
       <View style={[styles.header, balanceColors.header]}>
@@ -220,7 +246,23 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           <Ionicons name="arrow-back" size={24} color={backIconColorValue} />
         </TouchableOpacity>
         <Text style={[styles.title, balanceColors.title]}>{t('client.balance.title')}</Text>
-        <View style={styles.placeholder} />
+        <TouchableOpacity onPress={handlePackageChange} style={styles.backButton}>
+          <Ionicons 
+            name={
+              currentPackage === 'free' ? 'remove-circle' : 
+              currentPackage === 'basic' ? 'star' : 
+              currentPackage === 'premium' ? 'diamond' : 
+              'people'
+            } 
+            size={24} 
+            color={
+              currentPackage === 'free' ? '#6B7280' : 
+              currentPackage === 'basic' ? '#3B82F6' : 
+              currentPackage === 'premium' ? '#8B5CF6' : 
+              '#F59E0B'
+            } 
+          />
+        </TouchableOpacity>
       </View>
       
       <ScrollView style={styles.content} 
@@ -234,7 +276,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
               style={[
                 styles.balanceCard,
                 styles.balanceCardBorder,
-                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors) },
+                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors, isDark) },
                 balanceCardAnimated,
                 animatedCardFront,
                 { 
@@ -243,6 +285,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 },
               ]}
             >
+              {/* Декорация в верхней части карты */}
+              <BalanceCardDecoration isDark={isDark} packageType={currentPackage} />
               <View style={balanceCardFrontRow}>
                 <View>
                   <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
@@ -252,7 +296,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                       <Text style={styles.balanceCurrency}>AFc</Text>
                     )}
                   </View>
-                  <Text style={cashbackText}>CashBack: {cashback} AFc</Text>
+                  <Text style={cashbackText}>FixBack: {cashback} AFc</Text>
                 </View>
                 <TouchableOpacity onPress={handleFlip} style={flipButtonFront}>
                   <Ionicons name="swap-horizontal" size={32} color={flipIconColorValue} />
@@ -286,7 +330,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
               style={[
                 styles.balanceCard,
                 styles.balanceCardBorder,
-                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors) },
+                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors, isDark) },
                 balanceCardAnimated,
                 animatedCardBack,
                 {
@@ -295,6 +339,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 },
               ]}
             >
+              {/* Декорация обратной стороны карты */}
+              <BalanceCardDecoration isDark={isDark} packageType={currentPackage} isBackSide={true} />
               <View style={balanceCardBack}>
                 <View style={styles.cardBackBtnContainer}>
                   <TouchableOpacity onPress={handleFlip} style={flipButtonBack}>
@@ -353,30 +399,59 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           </View>
         </View>
         {/* Кнопки вынесены ниже карты */}
-        {/* Быстрое пополнение - обновлённый красивый вид */}
+        {/* Быстрое пополнение - раскрывающаяся секция */}
         <View style={[styles.quickTopUpCard, dynamicStyles.quickTopUpCard]}> 
-          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
-          {[0, 1, 2].map(row => (
-            <View key={row} style={[styles.quickAmountsRow, quickAmountsRowWithLayout]}>
-              {mockQuickAmounts.slice(row * 3, row * 3 + 3).map((amount) => (
-                <TouchableOpacity
-                  key={amount}
-                  style={[
-                    styles.quickAmountButton,
-                    dynamicStyles.quickAmountButton || {},
-                    styles.quickAmountButtonLarge,
-                    dynamicStyles.quickAmountButtonLarge || {},
-                  ]}
-                  onPress={() => { handleTopUp(amount); }}
-                >
-                  <Text style={[styles.quickAmountText, styles.quickAmountTextLarge, quickAmountTextWithTheme]}>{amount}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ))}
+          <TouchableOpacity 
+            style={styles.quickTopUpHeader} 
+            onPress={handleToggleQuickTopUp}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
+            <Animated.View style={{
+              transform: [{
+                rotate: quickTopUpHeight.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0deg', '180deg']
+                })
+              }]
+            }}>
+              <Ionicons 
+                name="chevron-down" 
+                size={24} 
+                color={currentColors.text} 
+              />
+            </Animated.View>
+          </TouchableOpacity>
+          
+          <Animated.View style={{
+            height: quickTopUpHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 200] // Высота контента
+            }),
+            overflow: 'hidden'
+          }}>
+            {[0, 1, 2].map(row => (
+              <View key={row} style={[styles.quickAmountsRow, quickAmountsRowWithLayout]}>
+                {mockQuickAmounts.slice(row * 3, row * 3 + 3).map((amount) => (
+                  <TouchableOpacity
+                    key={amount}
+                    style={[
+                      styles.quickAmountButton,
+                      dynamicStyles.quickAmountButton || {},
+                      styles.quickAmountButtonLarge,
+                      dynamicStyles.quickAmountButtonLarge || {},
+                    ]}
+                    onPress={() => { handleTopUp(amount); }}
+                  >
+                    <Text style={[styles.quickAmountText, styles.quickAmountTextLarge, quickAmountTextWithTheme]}>{amount}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ))}
+          </Animated.View>
         </View>
 
-        {/* Удалена секция кешбека */}
+        {/* Удалена секция FixBack */}
       </ScrollView>
       {/* Модальное окно пополнения */}
       <Modal

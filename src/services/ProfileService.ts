@@ -28,7 +28,7 @@ export class ProfileService {
       const isServerAvailable = await ConfigUtils.checkServerHealth();
       
       if (!isServerAvailable) {
-        console.warn('Server unavailable, falling back to mock data');
+        // Server unavailable, falling back to mock data
         return this.mockChangePassword(data);
       }
 
@@ -49,7 +49,6 @@ export class ProfileService {
         };
       }
     } catch (error) {
-      console.error('Change password error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Change password failed',
@@ -76,11 +75,9 @@ export class ProfileService {
         throw new Error(response.error || 'Failed to delete account');
       }
     } catch (error) {
-      console.error('Delete account error:', error);
-      
       // В режиме разработки возвращаем успех для тестирования
       if (__DEV__) {
-        console.log('DEV MODE: Simulating successful account deletion');
+        // DEV MODE: Simulating successful account deletion
         return { success: true };
       }
       

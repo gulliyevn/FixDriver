@@ -71,12 +71,12 @@
     "pay": "Zahlen",
     "insufficientFunds": "Unzureichende Mittel",
     "minimumWithdrawal": "Mindestens 20 AFc für Auszahlung erforderlich",
-    "useCashback": "Cashback verwenden",
-    "useCashbackConfirm": "Sind Sie sicher, dass Sie Cashback verwenden möchten?",
+    "useCashback": "FixBack verwenden",
+    "useCashbackConfirm": "Sind Sie sicher, dass Sie FixBack verwenden möchten?",
     "cancel": "Abbrechen",
     "yes": "Ja",
     "success": "Erfolgreich",
-    "cashbackAdded": "Cashback %{0} AFc zum Guthaben hinzugefügt",
+    "cashbackAdded": "FixBack %{0} AFc zum Guthaben hinzugefügt",
     "error": "Fehler",
     "enterValidAmount": "Bitte geben Sie einen gültigen Betrag ein",
     "paymentSuccess": "Zahlung erfolgreich",
@@ -90,11 +90,11 @@
     "topUpBalance": "Aufladen",
     "payButton": "Zahlen",
     "cashback": {
-      "title": "Cashback",
+      "title": "FixBack",
       "available": "Verfügbar zur Nutzung",
       "use": "Verwenden",
       "history": "Verlauf",
-      "description": "Gesammeltes Cashback kann für Fahrten verwendet werden"
+      "description": "Gesammeltes FixBack kann für Fahrten verwendet werden"
     }
   },
   "debts": {

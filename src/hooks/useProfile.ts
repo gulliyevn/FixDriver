@@ -25,20 +25,15 @@ export const useProfile = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Загрузка профиля...');
-      
       // Сначала пытаемся загрузить сохраненные данные
       const savedProfile = await AsyncStorage.getItem('user_profile');
       
       if (savedProfile) {
         const parsedProfile = JSON.parse(savedProfile);
-        console.log('Загружен сохраненный профиль:', parsedProfile);
         setProfile(parsedProfile);
         setLoading(false);
         return;
       }
-      
-      console.log('Сохраненного профиля нет, создаем новый из моков');
       
       // Если сохраненных данных нет, загружаем из моков
       const user = mockUsers[0];
@@ -57,14 +52,10 @@ export const useProfile = () => {
         avatar: user.avatar,
       };
       
-      console.log('Создан новый профиль:', userProfile);
-      
       // Сохраняем начальные данные
       await AsyncStorage.setItem('user_profile', JSON.stringify(userProfile));
       setProfile(userProfile);
-      console.log('Начальный профиль сохранен');
     } catch (err) {
-      console.error('Error loading profile:', err);
       setError('Не удалось загрузить профиль');
     } finally {
       setLoading(false);
@@ -74,7 +65,6 @@ export const useProfile = () => {
   const updateProfile = async (updatedData: Partial<UserProfile>) => {
     try {
       setError(null);
-      console.log('updateProfile вызван с данными:', updatedData);
       
       // Обновляем локальное состояние
       if (profile) {
@@ -83,11 +73,8 @@ export const useProfile = () => {
           ...updatedData
         };
         
-        console.log('Обновленный профиль:', updatedProfile);
-        
         // Сохраняем в AsyncStorage
         await AsyncStorage.setItem('user_profile', JSON.stringify(updatedProfile));
-        console.log('Профиль сохранен в AsyncStorage');
         
         // Обновляем состояние
         setProfile(updatedProfile);
@@ -100,16 +87,13 @@ export const useProfile = () => {
         if (updatedData.email) user.email = updatedData.email;
         if (updatedData.birthDate) user.birthDate = updatedData.birthDate;
         if (updatedData.avatar) user.avatar = updatedData.avatar;
-        
-        console.log('Моки обновлены');
       } else {
-        console.log('Профиль не загружен, не могу обновить');
+        // Профиль не загружен, не могу обновить
       }
       
       return true;
     } catch (err) {
       setError('Не удалось обновить профиль');
-      console.error('Error updating profile:', err);
       return false;
     }
   };

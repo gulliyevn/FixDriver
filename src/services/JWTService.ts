@@ -209,10 +209,10 @@ export class JWTService {
     } catch (error) {
       // Log expired tokens as warnings instead of errors since this is expected behavior
       if (error.message.includes('Token expired')) {
-        console.warn('JWT token expired (expected behavior):', error.message);
-      } else {
-      console.error('JWT verification error:', error);
-      }
+              // JWT token expired (expected behavior)
+    } else {
+      // JWT verification error
+    }
       return null;
     }
   }
@@ -252,7 +252,6 @@ export class JWTService {
 
       return tokens.accessToken;
     } catch (error) {
-      console.error('Token refresh error:', error);
       await this.clearTokens();
       return null;
     }
@@ -268,7 +267,6 @@ export class JWTService {
         [this.REFRESH_TOKEN_KEY, tokens.refreshToken],
       ]);
     } catch (error) {
-      console.error('Error saving tokens:', error);
       throw error;
     }
   }
@@ -294,7 +292,6 @@ export class JWTService {
 
       return token;
     } catch (error) {
-      console.error('Error getting access token:', error);
       return null;
     }
   }
@@ -306,7 +303,6 @@ export class JWTService {
     try {
       return await AsyncStorage.getItem(this.REFRESH_TOKEN_KEY);
     } catch (error) {
-      console.error('Error getting refresh token:', error);
       return null;
     }
   }
@@ -322,7 +318,7 @@ export class JWTService {
       ]);
   
     } catch (error) {
-      console.error('Error clearing tokens:', error);
+      // Error clearing tokens
     }
   }
 
