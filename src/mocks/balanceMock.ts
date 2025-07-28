@@ -68,7 +68,7 @@ export const mockWithdrawalMethods: WithdrawalMethod[] = [
 export const mockBalance = '0';
 export const mockCashback = '1500';
 export const mockQuickAmounts = [
-  '10', '25', '100',
-  '15', '50', '200',
-  '20', '75', '500',
+  '10', '15', '20',
+  '25', '50', '75',
+  '100', '200', '500',
 ]; 

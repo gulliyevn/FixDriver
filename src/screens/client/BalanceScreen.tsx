@@ -398,56 +398,40 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
             <View style={cardSpacer} />
           </View>
         </View>
-        {/* Кнопки вынесены ниже карты */}
+
         {/* Быстрое пополнение - раскрывающаяся секция */}
-        <View style={[styles.quickTopUpCard, dynamicStyles.quickTopUpCard]}> 
+        <View style={[styles.quickTopUpCard, dynamicStyles.quickTopUpCard]}>
           <TouchableOpacity 
             style={styles.quickTopUpHeader} 
             onPress={handleToggleQuickTopUp}
             activeOpacity={0.7}
           >
             <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
-            <Animated.View style={{
-              transform: [{
-                rotate: quickTopUpHeight.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0deg', '180deg']
-                })
-              }]
-            }}>
-              <Ionicons 
-                name="chevron-down" 
-                size={24} 
-                color={currentColors.text} 
-              />
-            </Animated.View>
           </TouchableOpacity>
           
           <Animated.View style={{
             height: quickTopUpHeight.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 200] // Высота контента
+              outputRange: [0, 80]
             }),
             overflow: 'hidden'
           }}>
-            {[0, 1, 2].map(row => (
-              <View key={row} style={[styles.quickAmountsRow, quickAmountsRowWithLayout]}>
-                {mockQuickAmounts.slice(row * 3, row * 3 + 3).map((amount) => (
-                  <TouchableOpacity
-                    key={amount}
-                    style={[
-                      styles.quickAmountButton,
-                      dynamicStyles.quickAmountButton || {},
-                      styles.quickAmountButtonLarge,
-                      dynamicStyles.quickAmountButtonLarge || {},
-                    ]}
-                    onPress={() => { handleTopUp(amount); }}
-                  >
-                    <Text style={[styles.quickAmountText, styles.quickAmountTextLarge, quickAmountTextWithTheme]}>{amount}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ))}
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.quickAmountsScrollContainer}
+            >
+              {mockQuickAmounts.map((amount) => (
+                <TouchableOpacity
+                  key={amount}
+                  style={[styles.quickAmountButtonLarge, dynamicStyles.quickAmountButtonLarge]}
+                  onPress={() => handleTopUp(amount)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge]}>{amount}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </Animated.View>
         </View>
 
