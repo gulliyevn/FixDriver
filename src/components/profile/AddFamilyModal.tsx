@@ -25,29 +25,6 @@ interface AddFamilyModalProps {
   isVerifyingPhone?: boolean;
 }
 
-const familyTypes = [
-  { key: 'husband', label: 'Муж' },
-  { key: 'wife', label: 'Жена' },
-  { key: 'son', label: 'Сын' },
-  { key: 'daughter', label: 'Дочь' },
-  { key: 'mother', label: 'Мать' },
-  { key: 'father', label: 'Отец' },
-  { key: 'grandmother', label: 'Бабушка' },
-  { key: 'grandfather', label: 'Дедушка' },
-  { key: 'brother', label: 'Брат' },
-  { key: 'sister', label: 'Сестра' },
-  { key: 'uncle', label: 'Дядя' },
-  { key: 'aunt', label: 'Тетя' },
-  { key: 'cousin', label: 'Двоюродный брат/сестра' },
-  { key: 'nephew', label: 'Племянник' },
-  { key: 'niece', label: 'Племянница' },
-  { key: 'stepfather', label: 'Отчим' },
-  { key: 'stepmother', label: 'Мачеха' },
-  { key: 'stepson', label: 'Пасынок' },
-  { key: 'stepdaughter', label: 'Падчерица' },
-  { key: 'other', label: 'Другое' },
-];
-
 const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   visible,
   newFamilyMember,
@@ -64,6 +41,29 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
 
   if (!visible) return null;
+
+  const familyTypes = [
+    { key: 'husband', label: t('profile.familyTypes.husband') },
+    { key: 'wife', label: t('profile.familyTypes.wife') },
+    { key: 'son', label: t('profile.familyTypes.son') },
+    { key: 'daughter', label: t('profile.familyTypes.daughter') },
+    { key: 'mother', label: t('profile.familyTypes.mother') },
+    { key: 'father', label: t('profile.familyTypes.father') },
+    { key: 'grandmother', label: t('profile.familyTypes.grandmother') },
+    { key: 'grandfather', label: t('profile.familyTypes.grandfather') },
+    { key: 'brother', label: t('profile.familyTypes.brother') },
+    { key: 'sister', label: t('profile.familyTypes.sister') },
+    { key: 'uncle', label: t('profile.familyTypes.uncle') },
+    { key: 'aunt', label: t('profile.familyTypes.aunt') },
+    { key: 'cousin', label: t('profile.familyTypes.cousin') },
+    { key: 'nephew', label: t('profile.familyTypes.nephew') },
+    { key: 'niece', label: t('profile.familyTypes.niece') },
+    { key: 'stepfather', label: t('profile.familyTypes.stepfather') },
+    { key: 'stepmother', label: t('profile.familyTypes.stepmother') },
+    { key: 'stepson', label: t('profile.familyTypes.stepson') },
+    { key: 'stepdaughter', label: t('profile.familyTypes.stepdaughter') },
+    { key: 'other', label: t('profile.familyTypes.other') },
+  ];
 
   return (
     <View style={styles.modalOverlay}>
@@ -119,7 +119,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
               onPress={() => setShowTypeDropdown(!showTypeDropdown)}
             >
               <Text style={[styles.modalSelectText, dynamicStyles.modalSelectText]}>
-                {familyTypes.find(t => t.key === newFamilyMember.type)?.label || 'Выберите тип'}
+                {familyTypes.find(t => t.key === newFamilyMember.type)?.label || t('profile.familyTypePlaceholder')}
               </Text>
               <Ionicons 
                 name={showTypeDropdown ? "chevron-up" : "chevron-down"} 

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, Animated, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import * as ImagePicker from 'expo-image-picker';
 import { ProfileAvatarSectionStyles as styles, getProfileAvatarSectionColors } from '../../styles/components/profile/ProfileAvatarSection.styles';
 
@@ -24,7 +24,7 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
   rotateAnim,
 }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const dynamicStyles = getProfileAvatarSectionColors(isDark);
 
   const requestCameraPermissions = async () => {
@@ -111,7 +111,7 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
             <Ionicons 
               name="person-circle-outline" 
               size={60} 
-              color={isDark ? '#3B82F6' : '#083198'} 
+              color="#FFFFFF" 
             />
           )}
           <TouchableOpacity 

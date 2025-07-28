@@ -61,8 +61,8 @@ export const useVerification = () => {
     const codeSentMessage = t('profile.verifyEmail.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = 'Успешно';
-    const successMessage = 'Email успешно верифицирован';
+    const successTitle = t('common.success');
+    const successMessage = t('profile.verifyEmail.emailVerifiedSuccess');
     const errorTitle = t('profile.verifyEmail.error.title');
     const errorMessage = t('profile.verifyEmail.error.message');
 
@@ -111,8 +111,8 @@ export const useVerification = () => {
     const codeSentMessage = t('profile.verifyPhone.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = 'Успешно';
-    const successMessage = 'Телефон успешно верифицирован';
+    const successTitle = t('common.success');
+    const successMessage = t('profile.verifyPhone.phoneVerifiedSuccess');
     const errorTitle = t('profile.verifyPhone.error.title');
     const errorMessage = t('profile.verifyPhone.error.message');
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../hooks/useI18n';
@@ -85,15 +85,6 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
     avatar: '',
   };
 
-// Обработка загрузки
-if (loading) {
-  return (
-    <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[styles.profileName, dynamicStyles.profileName]}>{t('profile.loadingProfile')}</Text>
-    </View>
-  );
-}
-
 // Обработка ошибок
 if (error || !profile) {
   return (
@@ -110,7 +101,11 @@ if (error || !profile) {
         {/* Аватар, имя, телефон, колокол */}
         <View style={styles.profileRow}>
           <TouchableOpacity style={styles.avatar} onPress={() => navigation.navigate('EditClientProfile')}>
-            <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
+            {profile?.avatar ? (
+              <Image source={{ uri: profile.avatar }} style={styles.avatarImage} />
+            ) : (
+              <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
+            )}
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileText} onPress={() => navigation.navigate('EditClientProfile')}>
             <Text style={[styles.profileName, dynamicStyles.profileName]}>{profile?.name || ''} {profile?.surname || ''}</Text>

@@ -81,17 +81,17 @@ export const useProfile = () => {
         
         // Обновляем данные в моках для совместимости
         const user = mockUsers[0];
-        if (updatedData.name) user.name = updatedData.name;
-        if (updatedData.surname) user.surname = updatedData.surname;
-        if (updatedData.phone) user.phone = updatedData.phone;
-        if (updatedData.email) user.email = updatedData.email;
-        if (updatedData.birthDate) user.birthDate = updatedData.birthDate;
-        if (updatedData.avatar) user.avatar = updatedData.avatar;
+        if (updatedData.name !== undefined) user.name = updatedData.name;
+        if (updatedData.surname !== undefined) user.surname = updatedData.surname;
+        if (updatedData.phone !== undefined) user.phone = updatedData.phone;
+        if (updatedData.email !== undefined) user.email = updatedData.email;
+        if (updatedData.birthDate !== undefined) user.birthDate = updatedData.birthDate;
+        if (updatedData.avatar !== undefined) user.avatar = updatedData.avatar;
+        
+        return true;
       } else {
-        // Профиль не загружен, не могу обновить
+        return false;
       }
-      
-      return true;
     } catch (err) {
       setError('Не удалось обновить профиль');
       return false;
@@ -102,11 +102,21 @@ export const useProfile = () => {
     loadProfile();
   }, []);
 
+  const clearProfile = async () => {
+    try {
+      await AsyncStorage.removeItem('user_profile');
+      setProfile(null);
+    } catch (err) {
+      // Ошибка при очистке профиля
+    }
+  };
+
   return {
     profile,
     loading,
     error,
     loadProfile,
-    updateProfile
+    updateProfile,
+    clearProfile
   };
 };

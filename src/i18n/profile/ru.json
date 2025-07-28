@@ -118,11 +118,35 @@
   "birthDate": "Дата рождения",
   "birthDatePlaceholder": "ГГГГ-ММ-ДД",
   "familyInfo": "Семейная информация",
+  "familyType": "Категория",
+  "familyTypePlaceholder": "Выберите категорию",
+  "familyAge": "Возраст",
+  "familyAgePlaceholder": "Выберите возраст",
   "familyTypes": {
     "child": "Ребенок",
     "spouse": "Супруг",
     "parent": "Родитель",
-    "relative": "Родственник"
+    "relative": "Родственник",
+    "husband": "Муж",
+    "wife": "Жена",
+    "son": "Сын",
+    "daughter": "Дочь",
+    "mother": "Мать",
+    "father": "Отец",
+    "grandmother": "Бабушка",
+    "grandfather": "Дедушка",
+    "brother": "Брат",
+    "sister": "Сестра",
+    "uncle": "Дядя",
+    "aunt": "Тетя",
+    "cousin": "Двоюродный брат/сестра",
+    "nephew": "Племянник",
+    "niece": "Племянница",
+    "stepfather": "Отчим",
+    "stepmother": "Мачеха",
+    "stepson": "Пасынок",
+    "stepdaughter": "Падчерица",
+    "other": "Другое"
   },
   "years": "лет",
   "addFamilyMember": "Добавить члена семьи",
@@ -184,7 +208,8 @@
     "error": {
       "title": "Ошибка отправки",
       "message": "Не удалось отправить код подтверждения"
-    }
+    },
+    "emailVerifiedSuccess": "Email успешно верифицирован"
   },
   "verifyPhone": {
     "title": "Подтвердить телефон",
@@ -196,10 +221,30 @@
     "error": {
       "title": "Ошибка отправки",
       "message": "Не удалось отправить код подтверждения"
-    }
+    },
+    "phoneVerifiedSuccess": "Телефон успешно верифицирован"
   },
   "loadingProfile": "Загрузка профиля...",
   "failedToLoadProfile": "Не удалось загрузить профиль",
   "cancel": "Отмена",
-  "delete": "Удалить"
+  "delete": "Удалить",
+  "profileUpdateSuccess": {
+    "title": "Успех",
+    "message": "Профиль успешно обновлен"
+  },
+  "profileUpdateError": {
+    "title": "Ошибка",
+    "message": "Не удалось обновить профиль"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Ошибка",
+    "message": "Произошла ошибка при обновлении профиля"
+  },
+  "validation": {
+    "title": "Ошибка валидации",
+    "firstNameRequired": "Имя обязательно для заполнения",
+    "lastNameRequired": "Фамилия обязательна для заполнения",
+    "phoneRequired": "Номер телефона обязателен для заполнения",
+    "emailRequired": "E-mail обязателен для заполнения"
+  }
 } 

@@ -112,19 +112,51 @@
   "lastNamePlaceholder": "أدخل اسم العائلة",
   "phone": "الهاتف",
   "phonePlaceholder": "أدخل رقم الهاتف",
+  "noPhone": "غير محدد",
   "email": "البريد الإلكتروني",
   "emailPlaceholder": "أدخل البريد الإلكتروني",
   "birthDate": "تاريخ الميلاد",
   "birthDatePlaceholder": "YYYY-MM-DD",
   "familyInfo": "معلومات العائلة",
+  "familyType": "الفئة",
+  "familyTypePlaceholder": "اختر الفئة",
+  "familyAge": "العمر",
+  "familyAgePlaceholder": "اختر العمر",
   "familyTypes": {
     "child": "طفل",
     "spouse": "زوج",
     "parent": "أب",
-    "relative": "قريب"
+    "relative": "قريب",
+    "husband": "زوج",
+    "wife": "زوجة",
+    "son": "ابن",
+    "daughter": "ابنة",
+    "mother": "أم",
+    "father": "أب",
+    "grandmother": "جدة",
+    "grandfather": "جد",
+    "brother": "أخ",
+    "sister": "أخت",
+    "uncle": "عم",
+    "aunt": "عمة",
+    "cousin": "ابن عم/ابنة عم",
+    "nephew": "ابن أخ",
+    "niece": "ابنة أخ",
+    "stepfather": "زوج الأم",
+    "stepmother": "زوجة الأب",
+    "stepson": "ابن الزوج",
+    "stepdaughter": "ابنة الزوج",
+    "other": "آخر"
   },
   "years": "سنوات",
   "addFamilyMember": "إضافة عضو عائلة",
+  "editFamilyMember": "تحرير",
+  "saveChangesConfirm": {
+    "title": "حفظ التغييرات",
+    "message": "لديك تغييرات غير محفوظة. هل تريد حفظها قبل الخروج؟",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  },
   "vipStatus": "حالة VIP",
   "vipTitle": "اشتراك VIP",
   "vipDescription": "احصل على خدمة ذات أولوية وعروض حصرية وخصومات خاصة",
@@ -176,10 +208,11 @@
     "error": {
       "title": "خطأ",
       "message": "رمز غير صحيح"
-    }
+    },
+    "emailVerifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح"
   },
   "verifyPhone": {
-    "title": "التحقق من الهاتف",
+    "title": "التحقق من الهاتф",
     "message": "أدخل الرمز المرسل عبر الرسائل النصية",
     "success": {
       "title": "نجح",
@@ -188,10 +221,30 @@
     "error": {
       "title": "خطأ",
       "message": "رمز غير صحيح"
-    }
+    },
+    "phoneVerifiedSuccess": "تم التحقق من الهاتف بنجاح"
   },
   "loadingProfile": "جاري تحميل الملف الشخصي...",
-  "failedToLoadProfile": "فشл в تحميل الملف الشخصي",
+  "failedToLoadProfile": "فشل في تحميل الملف الشخصي",
   "cancel": "إلغاء",
-  "delete": "حذف"
+  "delete": "حذف",
+  "profileUpdateSuccess": {
+    "title": "نجح",
+    "message": "تم تحديث الملف الشخصي بنجاح"
+  },
+  "profileUpdateError": {
+    "title": "خطأ",
+    "message": "فشل في تحديث الملف الشخصي"
+  },
+  "profileUpdateGeneralError": {
+    "title": "خطأ",
+    "message": "حدث خطأ أثناء تحديث الملف الشخصي"
+  },
+  "validation": {
+    "title": "خطأ في التحقق",
+    "firstNameRequired": "الاسم الأول مطلوب",
+    "lastNameRequired": "اسم العائلة مطلوب",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب"
+  }
 } 

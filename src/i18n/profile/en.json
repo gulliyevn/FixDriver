@@ -118,11 +118,35 @@
   "birthDate": "Birth Date",
   "birthDatePlaceholder": "YYYY-MM-DD",
   "familyInfo": "Family Information",
+  "familyType": "Category",
+  "familyTypePlaceholder": "Select category",
+  "familyAge": "Age",
+  "familyAgePlaceholder": "Select age",
   "familyTypes": {
     "child": "Child",
     "spouse": "Spouse",
     "parent": "Parent",
-    "relative": "Relative"
+    "relative": "Relative",
+    "husband": "Husband",
+    "wife": "Wife",
+    "son": "Son",
+    "daughter": "Daughter",
+    "mother": "Mother",
+    "father": "Father",
+    "grandmother": "Grandmother",
+    "grandfather": "Grandfather",
+    "brother": "Brother",
+    "sister": "Sister",
+    "uncle": "Uncle",
+    "aunt": "Aunt",
+    "cousin": "Cousin",
+    "nephew": "Nephew",
+    "niece": "Niece",
+    "stepfather": "Stepfather",
+    "stepmother": "Stepmother",
+    "stepson": "Stepson",
+    "stepdaughter": "Stepdaughter",
+    "other": "Other"
   },
   "years": "years",
   "addFamilyMember": "Add Family Member",
@@ -184,7 +208,8 @@
     "error": {
       "title": "Send Error",
       "message": "Failed to send verification code"
-    }
+    },
+    "emailVerifiedSuccess": "Email successfully verified"
   },
   "verifyPhone": {
     "title": "Verify Phone",
@@ -196,10 +221,30 @@
     "error": {
       "title": "Send Error",
       "message": "Failed to send verification code"
-    }
+    },
+    "phoneVerifiedSuccess": "Phone successfully verified"
   },
   "loadingProfile": "Loading profile...",
   "failedToLoadProfile": "Failed to load profile",
   "cancel": "Cancel",
-  "delete": "Delete"
+  "delete": "Delete",
+  "profileUpdateSuccess": {
+    "title": "Success",
+    "message": "Profile updated successfully"
+  },
+  "profileUpdateError": {
+    "title": "Error",
+    "message": "Failed to update profile"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Error",
+    "message": "An error occurred while updating profile"
+  },
+  "validation": {
+    "title": "Validation Error",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "phoneRequired": "Phone number is required",
+    "emailRequired": "Email is required"
+  }
 } 

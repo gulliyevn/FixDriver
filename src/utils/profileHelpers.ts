@@ -1,10 +1,8 @@
 import { Alert } from 'react-native';
 
-// Функция для получения дефолтной даты (18 лет назад)
+// Функция для получения дефолтной даты (теперь всегда 06.11.2000)
 export const getDefaultDate = (): string => {
-  const today = new Date();
-  const defaultDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-  return defaultDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
+  return '2000-11-06';
 };
 
 // Функция для точного расчета возраста

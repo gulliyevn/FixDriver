@@ -31,6 +31,11 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  avatarImage: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+  },
   avatarIcon: {
     color: '#fff',
   },

@@ -112,19 +112,51 @@
   "lastNamePlaceholder": "Soyadınızı girin",
   "phone": "Telefon",
   "phonePlaceholder": "Telefon numaranızı girin",
+  "noPhone": "Belirtilmemiş",
   "email": "E-posta",
   "emailPlaceholder": "E-posta adresinizi girin",
   "birthDate": "Doğum tarihi",
   "birthDatePlaceholder": "YYYY-AA-GG",
   "familyInfo": "Aile bilgileri",
+  "familyType": "Kategori",
+  "familyTypePlaceholder": "Kategori seçin",
+  "familyAge": "Yaş",
+  "familyAgePlaceholder": "Yaş seçin",
   "familyTypes": {
     "child": "Çocuk",
     "spouse": "Eş",
     "parent": "Ebeveyn",
-    "relative": "Akraba"
+    "relative": "Akraba",
+    "husband": "Koca",
+    "wife": "Karı",
+    "son": "Oğul",
+    "daughter": "Kız",
+    "mother": "Anne",
+    "father": "Baba",
+    "grandmother": "Büyükanne",
+    "grandfather": "Büyükbaba",
+    "brother": "Erkek kardeş",
+    "sister": "Kız kardeş",
+    "uncle": "Amca",
+    "aunt": "Teyze",
+    "cousin": "Kuzen",
+    "nephew": "Yeğen",
+    "niece": "Yeğen",
+    "stepfather": "Üvey baba",
+    "stepmother": "Üvey anne",
+    "stepson": "Üvey oğul",
+    "stepdaughter": "Üvey kız",
+    "other": "Diğer"
   },
   "years": "yaş",
   "addFamilyMember": "Aile üyesi ekle",
+  "editFamilyMember": "Düzenle",
+  "saveChangesConfirm": {
+    "title": "Değişiklikleri kaydet",
+    "message": "Kaydedilmemiş değişiklikleriniz var. Çıkmadan önce kaydetmek istiyor musunuz?",
+    "cancel": "İptal",
+    "save": "Kaydet"
+  },
   "vipStatus": "VIP durumu",
   "vipTitle": "VIP abonelik",
   "vipDescription": "Öncelikli hizmet, özel teklifler ve indirimler alın",
@@ -176,7 +208,8 @@
     "error": {
       "title": "Gönderme Hatası",
       "message": "Doğrulama kodu gönderilemedi"
-    }
+    },
+    "emailVerifiedSuccess": "E-posta başarıyla doğrulandı"
   },
   "verifyPhone": {
     "title": "Telefon Doğrula",
@@ -188,10 +221,30 @@
     "error": {
       "title": "Gönderme Hatası",
       "message": "Doğrulama kodu gönderilemedi"
-    }
+    },
+    "phoneVerifiedSuccess": "Telefon başarıyla doğrulandı"
   },
   "loadingProfile": "Profil yükleniyor...",
   "failedToLoadProfile": "Profil yüklenemedi",
   "cancel": "İptal",
-  "delete": "Sil"
+  "delete": "Sil",
+  "profileUpdateSuccess": {
+    "title": "Başarılı",
+    "message": "Profil başarıyla güncellendi"
+  },
+  "profileUpdateError": {
+    "title": "Hata",
+    "message": "Profil güncellenemedi"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Hata",
+    "message": "Profil güncellenirken bir hata oluştu"
+  },
+  "validation": {
+    "title": "Doğrulama hatası",
+    "firstNameRequired": "Ad gereklidir",
+    "lastNameRequired": "Soyad gereklidir",
+    "phoneRequired": "Telefon numarası gereklidir",
+    "emailRequired": "E-posta gereklidir"
+  }
 } 

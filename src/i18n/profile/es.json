@@ -112,19 +112,51 @@
   "lastNamePlaceholder": "Ingresa el apellido",
   "phone": "Teléfono",
   "phonePlaceholder": "Ingresa el número de teléfono",
+  "noPhone": "No especificado",
   "email": "Correo electrónico",
   "emailPlaceholder": "Ingresa el correo electrónico",
   "birthDate": "Fecha de nacimiento",
   "birthDatePlaceholder": "AAAA-MM-DD",
   "familyInfo": "Información familiar",
+  "familyType": "Categoría",
+  "familyTypePlaceholder": "Seleccionar categoría",
+  "familyAge": "Edad",
+  "familyAgePlaceholder": "Seleccionar edad",
   "familyTypes": {
     "child": "Hijo",
     "spouse": "Cónyuge",
     "parent": "Padre",
-    "relative": "Familiar"
+    "relative": "Familiar",
+    "husband": "Esposo",
+    "wife": "Esposa",
+    "son": "Hijo",
+    "daughter": "Hija",
+    "mother": "Madre",
+    "father": "Padre",
+    "grandmother": "Abuela",
+    "grandfather": "Abuelo",
+    "brother": "Hermano",
+    "sister": "Hermana",
+    "uncle": "Tío",
+    "aunt": "Tía",
+    "cousin": "Primo/Prima",
+    "nephew": "Sobrino",
+    "niece": "Sobrina",
+    "stepfather": "Padrastro",
+    "stepmother": "Madrastra",
+    "stepson": "Hijastro",
+    "stepdaughter": "Hijastra",
+    "other": "Otro"
   },
   "years": "años",
   "addFamilyMember": "Agregar miembro familiar",
+  "editFamilyMember": "Editar",
+  "saveChangesConfirm": {
+    "title": "Guardar cambios",
+    "message": "Tienes cambios sin guardar. ¿Quieres guardarlos antes de salir?",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  },
   "vipStatus": "Estado VIP",
   "vipTitle": "Suscripción VIP",
   "vipDescription": "Obtén servicio prioritario, ofertas exclusivas y descuentos especiales",
@@ -176,7 +208,8 @@
     "error": {
       "title": "Error",
       "message": "Código inválido"
-    }
+    },
+    "emailVerifiedSuccess": "Correo electrónico verificado exitosamente"
   },
   "verifyPhone": {
     "title": "Verificación de teléfono",
@@ -188,10 +221,30 @@
     "error": {
       "title": "Error",
       "message": "Código inválido"
-    }
+    },
+    "phoneVerifiedSuccess": "Teléfono verificado exitosamente"
   },
   "loadingProfile": "Cargando perfil...",
   "failedToLoadProfile": "Error al cargar perfil",
   "cancel": "Cancelar",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+  "profileUpdateSuccess": {
+    "title": "Éxito",
+    "message": "Perfil actualizado correctamente"
+  },
+  "profileUpdateError": {
+    "title": "Error",
+    "message": "No se pudo actualizar el perfil"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Error",
+    "message": "Ocurrió un error al actualizar el perfil"
+  },
+  "validation": {
+    "title": "Error de validación",
+    "firstNameRequired": "El nombre es obligatorio",
+    "lastNameRequired": "El apellido es obligatorio",
+    "phoneRequired": "El número de teléfono es obligatorio",
+    "emailRequired": "El correo electrónico es obligatorio"
+  }
 } 

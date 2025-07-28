@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDefaultDate, calculateAge } from '../utils/profileHelpers';
-import { useLanguage } from '../context/LanguageContext';
+import { useI18n } from '../hooks/useI18n';
 
 interface FamilyMember {
   id: string;
@@ -23,29 +24,63 @@ interface NewFamilyMember {
 }
 
 export const useFamilyMembers = () => {
-  const { t } = useLanguage();
-  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([
-    { 
-      id: '1', 
-      name: 'Анна', 
-      surname: 'Петрова',
-      type: 'child', 
-      birthDate: '2015-03-15',
-      age: 8,
-      phone: '+7 999 123-45-67',
-      phoneVerified: true
-    },
-    { 
-      id: '2', 
-      name: 'Михаил', 
-      surname: 'Петров',
-      type: 'spouse', 
-      birthDate: '1988-07-22',
-      age: 35,
-      phone: undefined,
-      phoneVerified: false
-    },
-  ]);
+  const { t } = useI18n();
+  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Загружаем семейных членов из AsyncStorage
+  const loadFamilyMembers = useCallback(async () => {
+    try {
+      const savedMembers = await AsyncStorage.getItem('family_members');
+      if (savedMembers) {
+        setFamilyMembers(JSON.parse(savedMembers));
+      } else {
+        // Если сохраненных данных нет, устанавливаем начальные значения
+        const initialMembers: FamilyMember[] = [
+          { 
+            id: '1', 
+            name: 'Анна', 
+            surname: 'Петрова',
+            type: 'child', 
+            birthDate: '2015-03-15',
+            age: 8,
+            phone: '+7 999 123-45-67',
+            phoneVerified: true
+          },
+          { 
+            id: '2', 
+            name: 'Михаил', 
+            surname: 'Петров',
+            type: 'spouse', 
+            birthDate: '1988-07-22',
+            age: 35,
+            phone: undefined,
+            phoneVerified: false
+          },
+        ];
+        setFamilyMembers(initialMembers);
+        await AsyncStorage.setItem('family_members', JSON.stringify(initialMembers));
+      }
+    } catch (error) {
+      console.log('Error loading family members:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Сохраняем семейных членов в AsyncStorage
+  const saveFamilyMembers = useCallback(async (members: FamilyMember[]) => {
+    try {
+      await AsyncStorage.setItem('family_members', JSON.stringify(members));
+    } catch (error) {
+      console.log('Error saving family members:', error);
+    }
+  }, []);
+
+  // Загружаем данные при монтировании
+  useEffect(() => {
+    loadFamilyMembers();
+  }, [loadFamilyMembers]);
 
   const [expandedFamilyMember, setExpandedFamilyMember] = useState<string | null>(null);
   const [editingFamilyMember, setEditingFamilyMember] = useState<string | null>(null);
@@ -99,8 +134,10 @@ export const useFamilyMembers = () => {
       phoneVerified: false,
     };
 
-    // Добавляем в список
-    setFamilyMembers(prev => [...prev, newMember]);
+    // Добавляем в список и сохраняем
+    const updatedMembers = [...familyMembers, newMember];
+    setFamilyMembers(updatedMembers);
+    saveFamilyMembers(updatedMembers);
     
     // Закрываем модальное окно
     closeAddFamilyModal();
@@ -121,19 +158,23 @@ export const useFamilyMembers = () => {
   };
 
   const saveFamilyMember = (memberId: string, updatedData: Partial<FamilyMember>) => {
-    setFamilyMembers(prev => prev.map(member => 
+    const updatedMembers = familyMembers.map(member => 
       member.id === memberId ? { 
         ...member, 
         ...updatedData,
         // Сбрасываем верификацию телефона, если номер изменился
         phoneVerified: updatedData.phone !== member.phone ? false : member.phoneVerified
       } : member
-    ));
+    );
+    setFamilyMembers(updatedMembers);
+    saveFamilyMembers(updatedMembers);
     setEditingFamilyMember(null);
   };
 
   const deleteFamilyMember = (memberId: string) => {
-    setFamilyMembers(prev => prev.filter(member => member.id !== memberId));
+    const updatedMembers = familyMembers.filter(member => member.id !== memberId);
+    setFamilyMembers(updatedMembers);
+    saveFamilyMembers(updatedMembers);
     setExpandedFamilyMember(null);
     setEditingFamilyMember(null);
   };
@@ -141,11 +182,13 @@ export const useFamilyMembers = () => {
   const resetFamilyPhoneVerification = (memberId: string) => {
     setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: false }));
     // Также сбрасываем статус в данных члена семьи
-    setFamilyMembers(prev => prev.map(member => 
+    const updatedMembers = familyMembers.map(member => 
       member.id === memberId 
         ? { ...member, phoneVerified: false }
         : member
-    ));
+    );
+    setFamilyMembers(updatedMembers);
+    saveFamilyMembers(updatedMembers);
   };
 
   const verifyFamilyPhone = useCallback((memberId: string) => {
@@ -188,11 +231,13 @@ export const useFamilyMembers = () => {
                         setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
                         setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
                         // Обновляем статус в данных члена семьи
-                        setFamilyMembers(prev => prev.map(member => 
+                        const updatedMembers = familyMembers.map(member => 
                           member.id === memberId 
                             ? { ...member, phoneVerified: true }
                             : member
-                        ));
+                        );
+                        setFamilyMembers(updatedMembers);
+                        saveFamilyMembers(updatedMembers);
                         Alert.alert(successTitle, successMessage);
                       }, 1000);
                     } else {
@@ -218,6 +263,8 @@ export const useFamilyMembers = () => {
     setNewFamilyMember,
     familyPhoneVerification,
     familyPhoneVerifying,
+    loading,
+    loadFamilyMembers,
     toggleFamilyMember,
     openAddFamilyModal,
     closeAddFamilyModal,

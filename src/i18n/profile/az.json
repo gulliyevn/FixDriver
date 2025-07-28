@@ -112,19 +112,51 @@
   "lastNamePlaceholder": "Soyadınızı daxil edin",
   "phone": "Telefon",
   "phonePlaceholder": "Telefon nömrəsini daxil edin",
+  "noPhone": "Göstərilməyib",
   "email": "E-poçt",
   "emailPlaceholder": "E-poçt ünvanını daxil edin",
   "birthDate": "Doğum tarixi",
   "birthDatePlaceholder": "YYYY-AA-GG",
   "familyInfo": "Ailə məlumatı",
+  "familyType": "Kateqoriya",
+  "familyTypePlaceholder": "Kateqoriya seçin",
+  "familyAge": "Yaş",
+  "familyAgePlaceholder": "Yaş seçin",
   "familyTypes": {
     "child": "Uşaq",
     "spouse": "Həyat yoldaşı",
     "parent": "Valideyn",
-    "relative": "Qohum"
+    "relative": "Qohum",
+    "husband": "Ər",
+    "wife": "Arvad",
+    "son": "Oğul",
+    "daughter": "Qız",
+    "mother": "Ana",
+    "father": "Ata",
+    "grandmother": "Nənə",
+    "grandfather": "Baba",
+    "brother": "Qardaş",
+    "sister": "Bacı",
+    "uncle": "Dayı",
+    "aunt": "Xala",
+    "cousin": "Bibi oğlu/qızı",
+    "nephew": "Bacıoğlu",
+    "niece": "Bacıqızı",
+    "stepfather": "Ögey ata",
+    "stepmother": "Ögey ana",
+    "stepson": "Ögey oğul",
+    "stepdaughter": "Ögey qız",
+    "other": "Digər"
   },
   "years": "yaş",
   "addFamilyMember": "Ailə üzvü əlavə et",
+  "editFamilyMember": "Redaktə et",
+  "saveChangesConfirm": {
+    "title": "Dəyişiklikləri saxla",
+    "message": "Saxlanmamış dəyişiklikləriniz var. Çıxmazdan əvvəl onları saxlamaq istəyirsiniz?",
+    "cancel": "Ləğv et",
+    "save": "Saxla"
+  },
   "vipStatus": "VIP statusu",
   "vipTitle": "VIP abunəlik",
   "vipDescription": "Prioritetli xidmət, eksklüziv təkliflər və xüsusi endirimlər əldə edin",
@@ -176,7 +208,8 @@
     "error": {
       "title": "Xəta",
       "message": "Yanlış kod"
-    }
+    },
+    "emailVerifiedSuccess": "E-poçt uğurla təsdiqləndi"
   },
   "verifyPhone": {
     "title": "Telefon təsdiqi",
@@ -188,10 +221,30 @@
     "error": {
       "title": "Xəta",
       "message": "Yanlış kod"
-    }
+    },
+    "phoneVerifiedSuccess": "Telefon uğurla təsdiqləndi"
   },
   "loadingProfile": "Profil yüklənir...",
   "failedToLoadProfile": "Profil yüklənə bilmədi",
   "cancel": "Ləğv et",
-  "delete": "Sil"
+  "delete": "Sil",
+  "profileUpdateSuccess": {
+    "title": "Uğurlu",
+    "message": "Profil uğurla yeniləndi"
+  },
+  "profileUpdateError": {
+    "title": "Xəta",
+    "message": "Profil yenilənə bilmədi"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Xəta",
+    "message": "Profil yenilənərkən xəta baş verdi"
+  },
+  "validation": {
+    "title": "Doğrulama xətası",
+    "firstNameRequired": "Ad tələb olunur",
+    "lastNameRequired": "Soyad tələb olunur",
+    "phoneRequired": "Telefon nömrəsi tələb olunur",
+    "emailRequired": "E-poçt tələb olunur"
+  }
 } 

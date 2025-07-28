@@ -112,19 +112,51 @@
   "lastNamePlaceholder": "Entrez le nom de famille",
   "phone": "Téléphone",
   "phonePlaceholder": "Entrez le numéro de téléphone",
+  "noPhone": "Non spécifié",
   "email": "E-mail",
   "emailPlaceholder": "Entrez l'e-mail",
   "birthDate": "Date de naissance",
   "birthDatePlaceholder": "AAAA-MM-JJ",
   "familyInfo": "Informations familiales",
+  "familyType": "Catégorie",
+  "familyTypePlaceholder": "Sélectionner la catégorie",
+  "familyAge": "Âge",
+  "familyAgePlaceholder": "Sélectionner l'âge",
   "familyTypes": {
     "child": "Enfant",
     "spouse": "Conjoint",
     "parent": "Parent",
-    "relative": "Parent"
+    "relative": "Parent",
+    "husband": "Mari",
+    "wife": "Femme",
+    "son": "Fils",
+    "daughter": "Fille",
+    "mother": "Mère",
+    "father": "Père",
+    "grandmother": "Grand-mère",
+    "grandfather": "Grand-père",
+    "brother": "Frère",
+    "sister": "Sœur",
+    "uncle": "Oncle",
+    "aunt": "Tante",
+    "cousin": "Cousin/Cousine",
+    "nephew": "Neveu",
+    "niece": "Nièce",
+    "stepfather": "Beau-père",
+    "stepmother": "Belle-mère",
+    "stepson": "Beau-fils",
+    "stepdaughter": "Belle-fille",
+    "other": "Autre"
   },
   "years": "ans",
   "addFamilyMember": "Ajouter un membre de la famille",
+  "editFamilyMember": "Modifier",
+  "saveChangesConfirm": {
+    "title": "Enregistrer les modifications",
+    "message": "Vous avez des modifications non enregistrées. Voulez-vous les enregistrer avant de quitter?",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
+  },
   "vipStatus": "Statut VIP",
   "vipTitle": "Abonnement VIP",
   "vipDescription": "Obtenez un service prioritaire, des offres exclusives et des remises spéciales",
@@ -176,7 +208,8 @@
     "error": {
       "title": "Erreur",
       "message": "Code invalide"
-    }
+    },
+    "emailVerifiedSuccess": "E-mail vérifié avec succès"
   },
   "verifyPhone": {
     "title": "Vérification du téléphone",
@@ -188,10 +221,30 @@
     "error": {
       "title": "Erreur",
       "message": "Code invalide"
-    }
+    },
+    "phoneVerifiedSuccess": "Téléphone vérifié avec succès"
   },
   "loadingProfile": "Chargement du profil...",
   "failedToLoadProfile": "Échec du chargement du profil",
   "cancel": "Annuler",
-  "delete": "Supprimer"
+  "delete": "Supprimer",
+  "profileUpdateSuccess": {
+    "title": "Succès",
+    "message": "Profil mis à jour avec succès"
+  },
+  "profileUpdateError": {
+    "title": "Erreur",
+    "message": "Échec de la mise à jour du profil"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Erreur",
+    "message": "Une erreur est survenue lors de la mise à jour du profil"
+  },
+  "validation": {
+    "title": "Erreur de validation",
+    "firstNameRequired": "Le prénom est obligatoire",
+    "lastNameRequired": "Le nom de famille est obligatoire",
+    "phoneRequired": "Le numéro de téléphone est obligatoire",
+    "emailRequired": "L'e-mail est obligatoire"
+  }
 } 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Animated } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { EditClientProfileScreenStyles as styles, getEditClientProfileScreenColors } from '../../styles/screens/profile/EditClientProfileScreen.styles';
@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { mockUsers } from '../../mocks/users';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../../hooks/useProfile';
 import { useVerification } from '../../hooks/useVerification';
@@ -19,11 +19,11 @@ import AddFamilyModal from '../../components/profile/AddFamilyModal';
 import ProfileAvatarSection from '../../components/profile/ProfileAvatarSection';
 import VipSection from '../../components/profile/VipSection';
 import ProfileHeader from '../../components/profile/ProfileHeader';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const { logout, login } = useAuth();
   const rootNavigation = useNavigation();
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
@@ -53,7 +53,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   // Исходное фото для сравнения
   const originalPhotoRef = useRef<string | null>(user.avatar);
 
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(user.avatar);
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -91,54 +91,211 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   // Функция для проверки изменений
   const checkHasChanges = () => {
     const formChanges = hasChanges(formData, originalDataRef.current);
+    
+    // Проверяем изменения фото
+    // Если profilePhoto отличается от originalPhoto - есть изменения
+    // Включая случай, когда фото было удалено (profilePhoto = null, originalPhoto ≠ null)
     const photoChanges = profilePhoto !== originalPhotoRef.current;
+    
     return formChanges || photoChanges;
   };
 
+
+
   // Функция для проверки изменений в семейной секции
   const checkFamilyChanges = () => {
+    // Проверяем, есть ли активное редактирование семейного члена
     return editingFamilyMember !== null;
+  };
+
+  // Функция валидации полей личной информации
+  const validatePersonalInfo = (): { isValid: boolean; errors: string[] } => {
+    const errors: string[] = [];
+    
+    if (!formData.firstName.trim()) {
+      errors.push(t('profile.validation.firstNameRequired'));
+    }
+    
+    if (!formData.lastName.trim()) {
+      errors.push(t('profile.validation.lastNameRequired'));
+    }
+    
+    // Телефон не обязателен
+    // if (!formData.phone.trim()) {
+    //   errors.push(t('profile.validation.phoneRequired'));
+    // }
+    
+    if (!formData.email.trim()) {
+      errors.push(t('profile.validation.emailRequired'));
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
   };
 
   // Асинхронная функция сохранения профиля
   const saveProfile = async (): Promise<boolean> => {
     try {
-      // Проверяем, есть ли изменения в форме (кроме даты и фото, которые сохраняются автоматически)
+      // Проверяем, есть ли изменения в форме
       const hasFormChanges = formData.firstName !== originalDataRef.current.firstName ||
                             formData.lastName !== originalDataRef.current.lastName ||
                             formData.phone !== originalDataRef.current.phone ||
                             formData.email !== originalDataRef.current.email;
 
-      if (hasFormChanges) {
-        // Сохраняем только изменения в форме
-        const success = await updateProfile({
-          name: formData.firstName,
-          surname: formData.lastName,
-          phone: formData.phone,
-          email: formData.email,
-        });
+      // Проверяем, есть ли изменения в фото
+      const hasPhotoChanges = profilePhoto !== originalPhotoRef.current;
+
+      if (hasFormChanges || hasPhotoChanges) {
+        // Валидируем поля перед сохранением
+        const validation = validatePersonalInfo();
+        if (!validation.isValid) {
+          Alert.alert(
+            t('profile.validation.title'),
+            validation.errors.join('\n'),
+            [{ text: t('common.ok'), style: 'default' }]
+          );
+          return false;
+        }
+
+        // Сохраняем изменения в форме и фото
+        const updateData: any = {};
+        
+        if (hasFormChanges) {
+          updateData.name = formData.firstName.trim();
+          updateData.surname = formData.lastName.trim();
+          updateData.phone = formData.phone.trim();
+          updateData.email = formData.email.trim();
+        }
+        
+        if (hasPhotoChanges) {
+          updateData.avatar = profilePhoto;
+        }
+
+        const success = await updateProfile(updateData);
 
         if (success) {
-          Alert.alert('Успех', 'Профиль успешно обновлен');
+          Alert.alert(
+            t('profile.profileUpdateSuccess.title'),
+            t('profile.profileUpdateSuccess.message')
+          );
           setIsEditingPersonalInfo(false);
           // Обновляем исходные данные
           originalDataRef.current = { ...formData };
           originalPhotoRef.current = profilePhoto;
           return true;
         } else {
-          Alert.alert('Ошибка', 'Не удалось обновить профиль');
+          Alert.alert(
+            t('profile.profileUpdateError.title'),
+            t('profile.profileUpdateError.message')
+          );
           return false;
         }
       } else {
-        // Если изменений в форме нет, просто закрываем режим редактирования
+        // Если изменений нет, просто закрываем режим редактирования
         setIsEditingPersonalInfo(false);
         return true;
       }
     } catch (error) {
-      Alert.alert('Ошибка', 'Произошла ошибка при обновлении профиля');
+      Alert.alert(
+        t('profile.profileUpdateGeneralError.title'),
+        t('profile.profileUpdateGeneralError.message')
+      );
       return false;
     }
   };
+
+  // Обработчик для перехвата swipe-back жеста
+  const handleBackPress = useCallback(() => {
+    const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
+    const hasFamilyChanges = checkFamilyChanges();
+    
+    if (hasPersonalChanges || hasFamilyChanges) {
+      Alert.alert(
+        t('profile.saveChangesConfirm.title'),
+        t('profile.saveChangesConfirm.message'),
+        [
+          { 
+            text: t('profile.saveChangesConfirm.cancel'), 
+            style: 'cancel',
+            onPress: () => navigation.goBack()
+          },
+          { 
+            text: t('profile.saveChangesConfirm.save'), 
+            onPress: async () => {
+              let success = true;
+              
+              // Сохраняем изменения профиля
+              if (hasPersonalChanges) {
+                success = await saveProfile();
+              }
+              
+              // Отменяем редактирование семейной секции
+              if (hasFamilyChanges) {
+                cancelEditingFamilyMember();
+              }
+              
+              if (success) {
+                navigation.goBack();
+              }
+            }
+          }
+        ]
+      );
+    } else {
+      navigation.goBack();
+    }
+  }, [isEditingPersonalInfo, checkHasChanges, checkFamilyChanges, saveProfile, cancelEditingFamilyMember, navigation, t]);
+
+  // Перехватываем swipe-back жест
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+        const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
+        const hasFamilyChanges = checkFamilyChanges();
+        
+        if (hasPersonalChanges || hasFamilyChanges) {
+          // Предотвращаем переход назад
+          e.preventDefault();
+          
+          Alert.alert(
+            t('profile.saveChangesConfirm.title'),
+            t('profile.saveChangesConfirm.message'),
+            [
+              { 
+                text: t('profile.saveChangesConfirm.cancel'), 
+                style: 'cancel',
+                onPress: () => navigation.dispatch(e.data.action)
+              },
+              { 
+                text: t('profile.saveChangesConfirm.save'), 
+                onPress: async () => {
+                  let success = true;
+                  
+                  // Сохраняем изменения профиля
+                  if (hasPersonalChanges) {
+                    success = await saveProfile();
+                  }
+                  
+                  // Отменяем редактирование семейной секции
+                  if (hasFamilyChanges) {
+                    cancelEditingFamilyMember();
+                  }
+                  
+                  if (success) {
+                    navigation.dispatch(e.data.action);
+                  }
+                }
+              }
+            ]
+          );
+        }
+      });
+
+      return unsubscribe;
+    }, [navigation, isEditingPersonalInfo, checkHasChanges, checkFamilyChanges, saveProfile, cancelEditingFamilyMember, t])
+  );
 
   const handleCirclePressAction = () => {
     // Анимация вращения
@@ -162,8 +319,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
 
   // Обновляем форму при изменении профиля
   useEffect(() => {
-    if (profile && !formData.firstName) {
-      console.log('Загружаем данные из профиля:', profile);
+    if (profile) {
       setFormData({
         firstName: profile.name,
         lastName: profile.surname,
@@ -171,7 +327,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         email: profile.email,
         birthDate: profile.birthDate || '1990-01-01',
       });
+      
+      // Устанавливаем profilePhoto равным profile.avatar
+      // Если profile.avatar пустой или null, то устанавливаем null
       setProfilePhoto(profile.avatar || null);
+      
       // Обновляем исходные данные
       originalDataRef.current = {
         firstName: profile.name,
@@ -180,26 +340,11 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         email: profile.email,
         birthDate: profile.birthDate || '1990-01-01',
       };
-      originalPhotoRef.current = profile.avatar;
-      console.log('Исходное фото установлено:', originalPhotoRef.current);
+      originalPhotoRef.current = profile.avatar || null;
     }
   }, [profile]);
 
-  // Автоматически сохраняем фото при его изменении
-  useEffect(() => {
-    console.log('useEffect фото сработал:', {
-      profile: !!profile,
-      profilePhoto,
-      profileAvatar: profile?.avatar,
-      originalPhoto: originalPhotoRef.current
-    });
-    
-    if (profile && profilePhoto !== null && profilePhoto !== profile.avatar && profilePhoto !== originalPhotoRef.current) {
-      console.log('Автосохранение фото:', profilePhoto);
-      // Сохраняем только фото, не трогая остальные данные
-      updateProfile({ avatar: profilePhoto });
-    }
-  }, [profilePhoto, profile]);
+  // Убираем автоматическое сохранение фото - теперь фото сохраняется только при явном сохранении
 
   // Автоматически сохраняем дату при её изменении
   useEffect(() => {
@@ -214,44 +359,13 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
       <ProfileHeader
-        onBackPress={() => {
-          // Проверяем, есть ли несохраненные изменения
-          if (checkHasChanges() || checkFamilyChanges()) {
-            Alert.alert(
-              t('profile.saveChangesConfirm.title'),
-              t('profile.saveChangesConfirm.message'),
-              [
-                { 
-                  text: t('profile.saveChangesConfirm.cancel'), 
-                  style: 'cancel',
-                  onPress: () => {
-                    // При отмене НЕ делаем ничего - остаемся на странице с текущими изменениями
-                  }
-                },
-                { 
-                  text: t('profile.saveChangesConfirm.save'), 
-                  onPress: async () => {
-                    // Сохраняем изменения профиля
-                    if (checkHasChanges()) {
-                      await saveProfile();
-                    }
-                    // Отменяем редактирование семейной секции
-                    if (checkFamilyChanges()) {
-                      cancelEditingFamilyMember();
-                    }
-                    navigation.goBack();
-                  }
-                }
-              ]
-            );
-          } else {
-            navigation.goBack();
-          }
-        }}
+        onBackPress={handleBackPress}
                   onEditPress={() => {
            if (isEditingPersonalInfo) {
              // Если в режиме редактирования, проверяем изменения
-             if (checkHasChanges()) {
+             const hasChanges = checkHasChanges();
+             
+             if (hasChanges) {
               // Если есть изменения, показываем подтверждение
               Alert.alert(
                 t('profile.saveProfileConfirm.title'),
