@@ -2,6 +2,7 @@
   "title": "Notificaciones",
   "noNotifications": "Aún no tienes notificaciones",
   "noNotificationsSubtitle": "Las nuevas notificaciones aparecerán aquí",
+  "allNotificationsHere": "Todas las notificaciones se mostrarán aquí",
   "markAllAsRead": "Marcar todo como leído",
   "clearAll": "Limpiar todo",
   "delete": "Eliminar",
@@ -15,11 +16,19 @@
   "yesterday": "Ayer",
   "thisWeek": "Esta semana",
   "earlier": "Antes",
+  "selectedCount": "Seleccionado",
+  "selectAll": "Seleccionar todo",
+  "unselectAll": "Deseleccionar todo",
+  "cancel": "Cancelar",
+  "now": "ahora",
+  "min": "min",
+  "hour": "h",
+  "day": "d",
   "notificationTypes": {
     "order": "Pedido",
     "payment": "Pago",
     "system": "Sistema",
-    "promo": "Promoción",
+    "promo": "Promo",
     "support": "Soporte"
   },
   "messages": {
@@ -33,6 +42,12 @@
     "driverNearby": "El conductor {driverName} se acerca",
     "tripStarted": "Viaje iniciado",
     "tripEnded": "Viaje terminado",
+    "tripCompleted": "Viaje completado",
+    "tripCompletedDesc": "Su viaje ha sido completado exitosamente",
+    "routeChanged": "Ruta cambiada",
+    "routeChangedDesc": "Han ocurrido cambios en la ruta. Verifique los detalles.",
+    "newDriver": "Nuevo conductor",
+    "driverJoined": "El conductor se ha unido a su ruta",
     "promoCode": "Nuevo código promocional: {code}",
     "supportResponse": "Respuesta del soporte",
     "systemUpdate": "Actualización del sistema",
@@ -42,7 +57,7 @@
     "viewOrder": "Ver pedido",
     "viewPayment": "Ver pago",
     "contactSupport": "Contactar soporte",
-    "dismiss": "Descartar",
+    "dismiss": "Cerrar",
     "reply": "Responder"
   },
   "settings": {
@@ -75,6 +90,8 @@
   },
   "readAll": "Leer Todo",
   "showAll": "Mostrar Todas las Notificaciones",
+  "centerTitle": "Centro de Notificaciones",
+  "newNotificationsHere": "Todas las nuevas notificaciones aparecerán aquí",
   "online": "En línea",
   "offline": "Sin conexión"
 } 

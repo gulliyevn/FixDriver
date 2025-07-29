@@ -115,6 +115,7 @@
   "noPhone": "Belirtilmemiş",
   "email": "E-posta",
   "emailPlaceholder": "E-posta adresinizi girin",
+  "emailRequired": "E-posta zorunludur",
   "birthDate": "Doğum tarihi",
   "birthDatePlaceholder": "YYYY-AA-GG",
   "familyInfo": "Aile bilgileri",
@@ -212,8 +213,8 @@
     "emailVerifiedSuccess": "E-posta başarıyla doğrulandı"
   },
   "verifyPhone": {
-    "title": "Telefon Doğrula",
-    "message": "Telefona doğrulama kodu gönder?",
+    "title": "Telefonu Doğrula",
+    "message": "Doğrulama kodunu telefona gönder?",
     "success": {
       "title": "Kod Gönderildi",
       "message": "Doğrulama kodu telefonunuza gönderildi"
@@ -224,10 +225,9 @@
     },
     "phoneVerifiedSuccess": "Telefon başarıyla doğrulandı"
   },
+  "validationError": "Lütfen tüm zorunlu alanları doldurun",
   "loadingProfile": "Profil yükleniyor...",
   "failedToLoadProfile": "Profil yüklenemedi",
-  "cancel": "İptal",
-  "delete": "Sil",
   "profileUpdateSuccess": {
     "title": "Başarılı",
     "message": "Profil başarıyla güncellendi"
@@ -241,11 +241,37 @@
     "message": "Profil güncellenirken bir hata oluştu"
   },
   "validation": {
-    "title": "Doğrulama hatası",
-    "firstNameRequired": "Ad gereklidir",
-    "lastNameRequired": "Soyad gereklidir",
-    "phoneRequired": "Telefon numarası gereklidir",
-    "emailRequired": "E-posta gereklidir"
+    "title": "Doğrulama Hatası",
+    "firstNameRequired": "Ad zorunludur",
+    "lastNameRequired": "Soyad zorunludur",
+    "familyTypeRequired": "Lütfen aile üyesi türünü seçin",
+    "familyAgeRequired": "Lütfen doğum tarihini seçin",
+    "phoneRequired": "Telefon numarası zorunludur",
+    "emailRequired": "E-posta zorunludur"
+  },
+  "verificationModal": {
+    "enterCode": "Kodu girin",
+    "enterSmsCode": "SMS'ten doğrulama kodunu girin",
+    "enterEmailCode": "E-postadan doğrulama kodunu girin",
+    "phoneNotSpecified": "Telefon numarası belirtilmemiş"
+  },
+  "family": {
+    "addMemberSuccess": "Aile üyesi eklendi",
+    "fillNameSurname": "Lütfen ad ve soyadı doldurun",
+    "confirmDelete": "Bu aile üyesini silmek istediğinizden emin misiniz?",
+    "confirmSave": "Değişiklikleri kaydetmek istediğinizden emin misiniz?",
+    "deleteSuccess": "Aile üyesi silindi",
+    "saveSuccess": "Değişiklikler kaydedildi",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Başarılı",
   "photoTakeSuccess": "Fotoğraf başarıyla eklendi",

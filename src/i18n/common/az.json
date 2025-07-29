@@ -1,5 +1,5 @@
 {
-  "ok": "OK",
+  "ok": "Tamam",
   "cancel": "Ləğv et",
   "yes": "Bəli",
   "no": "Xeyr",
@@ -7,6 +7,7 @@
   "save": "Yadda saxla",
   "edit": "Redaktə et",
   "delete": "Sil",
+  "confirmation": "Təsdiq",
   "confirm": "Təsdiqlə",
   "back": "Geri",
   "next": "İrəli",

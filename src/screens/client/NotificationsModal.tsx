@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { NotificationsModalStyles, NotificationsModalDarkStyles } from '../../styles/screens/drivers/NotificationsModal.styles';
 import { useTheme } from '../../context/ThemeContext';
+import { useI18n } from '../../hooks/useI18n';
 
 interface Notification {
   id: string;
@@ -32,19 +33,20 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
   notifications = [],
 }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const styles = isDark ? { ...NotificationsModalStyles, ...NotificationsModalDarkStyles } : NotificationsModalStyles;
 
   const handleMarkAsRead = () => {
-    Alert.alert('Уведомление', 'Отметить как прочитанное');
+    Alert.alert(t('notifications.title'), t('notifications.markAsRead'));
   };
 
   const handleDelete = (notificationId: string) => {
     Alert.alert(
-      'Удалить уведомление',
-      'Вы уверены, что хотите удалить это уведомление?',
+      t('notifications.alerts.deleteTitle'),
+      t('notifications.alerts.deleteMessage'),
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', style: 'destructive', onPress: () => {} },
+        { text: t('notifications.buttons.cancel'), style: 'cancel' },
+        { text: t('notifications.delete'), style: 'destructive', onPress: () => {} },
       ]
     );
   };
@@ -70,34 +72,34 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (minutes < 1) return 'сейчас';
-    if (minutes < 60) return `${minutes}м`;
-    if (hours < 24) return `${hours}ч`;
-    if (days < 7) return `${days}д`;
+    if (minutes < 1) return t('notifications.now');
+    if (minutes < 60) return `${minutes}${t('notifications.min')}`;
+    if (hours < 24) return `${hours}${t('notifications.hour')}`;
+    if (days < 7) return `${days}${t('notifications.day')}`;
     return date.toLocaleDateString('ru-RU');
   };
 
   const mockNotifications: Notification[] = [
     {
       id: '1',
-      title: 'Новый водитель',
-      message: 'Дмитрий Петров присоединился к вашему маршруту',
+      title: t('notifications.messages.newDriver'),
+      message: t('notifications.messages.driverJoined'),
       timestamp: new Date().toISOString(),
       isRead: false,
       type: 'info',
     },
     {
       id: '2',
-      title: 'Поездка завершена',
-      message: 'Ваша поездка с Алексеем Сидоровым успешно завершена',
+      title: t('notifications.messages.tripCompleted'),
+      message: t('notifications.messages.tripCompletedDesc'),
       timestamp: new Date(Date.now() - 3600000).toISOString(),
       isRead: true,
       type: 'success',
     },
     {
       id: '3',
-      title: 'Изменение маршрута',
-      message: 'В маршруте произошли изменения. Проверьте детали.',
+      title: t('notifications.messages.routeChanged'),
+      message: t('notifications.messages.routeChangedDesc'),
       timestamp: new Date(Date.now() - 7200000).toISOString(),
       isRead: false,
       type: 'warning',
@@ -116,7 +118,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Уведомления</Text>
+            <Text style={styles.modalTitle}>{t('notifications.title')}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
@@ -127,7 +129,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
               <View style={styles.emptyState}>
                 <Ionicons name="notifications-off" size={48} color={isDark ? '#6B7280' : '#9CA3AF'} />
                 <Text style={styles.emptyStateText}>
-                  У вас пока нет уведомлений
+                  {t('notifications.noNotifications')}
                 </Text>
               </View>
             ) : (
@@ -167,14 +169,14 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
                         style={[styles.actionButton, styles.markReadButton]}
                         onPress={handleMarkAsRead}
                       >
-                        <Text style={styles.actionButtonText}>Прочитано</Text>
+                        <Text style={styles.actionButtonText}>{t('notifications.markAsRead')}</Text>
                       </TouchableOpacity>
                     )}
                     <TouchableOpacity
                       style={[styles.actionButton, styles.deleteButton]}
                       onPress={() => handleDelete(notification.id)}
                     >
-                      <Text style={styles.actionButtonText}>Удалить</Text>
+                      <Text style={styles.actionButtonText}>{t('notifications.delete')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>

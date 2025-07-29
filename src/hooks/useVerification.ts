@@ -77,8 +77,8 @@ export const useVerification = () => {
           onPress: () => {
             // Затем показываем поле ввода кода
             Alert.prompt(
-              'Введите код',
-              'Введите код подтверждения из email',
+              t('profile.verificationModal.enterCode'),
+              t('profile.verificationModal.enterEmailCode'),
               [
                 { text: cancelText, style: 'cancel' },
                 {
@@ -127,8 +127,8 @@ export const useVerification = () => {
           onPress: () => {
             // Затем показываем поле ввода кода
             Alert.prompt(
-              'Введите код',
-              'Введите код подтверждения из SMS',
+              t('profile.verificationModal.enterCode'),
+              t('profile.verificationModal.enterSmsCode'),
               [
                 { text: cancelText, style: 'cancel' },
                 {

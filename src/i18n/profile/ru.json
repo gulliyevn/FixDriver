@@ -115,6 +115,7 @@
   "noPhone": "Не указан",
   "email": "Почта",
   "emailPlaceholder": "Введите почту",
+  "emailRequired": "Почта обязательна для заполнения",
   "birthDate": "Дата рождения",
   "birthDatePlaceholder": "ГГГГ-ММ-ДД",
   "familyInfo": "Семейная информация",
@@ -224,6 +225,7 @@
     },
     "phoneVerifiedSuccess": "Телефон успешно верифицирован"
   },
+  "validationError": "Пожалуйста, заполните все обязательные поля",
   "loadingProfile": "Загрузка профиля...",
   "failedToLoadProfile": "Не удалось загрузить профиль",
   "profileUpdateSuccess": {
@@ -242,8 +244,34 @@
     "title": "Ошибка валидации",
     "firstNameRequired": "Имя обязательно для заполнения",
     "lastNameRequired": "Фамилия обязательна для заполнения",
+    "familyTypeRequired": "Выберите категорию члена семьи",
+    "familyAgeRequired": "Выберите дату рождения",
     "phoneRequired": "Номер телефона обязателен для заполнения",
     "emailRequired": "E-mail обязателен для заполнения"
+  },
+  "verificationModal": {
+    "enterCode": "Введите код",
+    "enterSmsCode": "Введите код подтверждения из SMS",
+    "enterEmailCode": "Введите код подтверждения из email",
+    "phoneNotSpecified": "Номер телефона не указан"
+  },
+  "family": {
+    "addMemberSuccess": "Член семьи добавлен",
+    "fillNameSurname": "Пожалуйста, заполните имя и фамилию",
+    "confirmDelete": "Вы уверены, что хотите удалить этого члена семьи?",
+    "confirmSave": "Вы уверены, что хотите сохранить изменения?",
+    "deleteSuccess": "Член семьи удален",
+    "saveSuccess": "Изменения сохранены",
+    "defaultMembers": {
+      "child": {
+        "name": "Анна",
+        "surname": "Петрова"
+      },
+      "spouse": {
+        "name": "Михаил",
+        "surname": "Петров"
+      }
+    }
   },
   "photoSuccess": "Успешно",
   "photoTakeSuccess": "Фото успешно добавлено",

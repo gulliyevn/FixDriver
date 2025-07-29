@@ -14,12 +14,12 @@ export interface FamilyMemberItemProps {
   isExpanded: boolean;
   isEditing: boolean;
   phoneVerified: boolean;
-  isVerifyingPhone: boolean;
   onToggle: () => void;
   onStartEditing: () => void;
   onCancelEditing: () => void;
   onSave: (updatedData: Partial<FamilyMember>) => void;
   onDelete: () => void;
-  onVerifyPhone: () => void;
   onResetPhoneVerification: () => void;
+  onVerifyPhone?: () => void;
+  saveRef?: React.RefObject<(() => void) | null>;
 } 

@@ -115,6 +115,7 @@
   "noPhone": "Göstərilməyib",
   "email": "E-poçt",
   "emailPlaceholder": "E-poçt ünvanını daxil edin",
+  "emailRequired": "E-poçt məcburidir",
   "birthDate": "Doğum tarixi",
   "birthDatePlaceholder": "YYYY-AA-GG",
   "familyInfo": "Ailə məlumatı",
@@ -212,22 +213,21 @@
     "emailVerifiedSuccess": "E-poçt uğurla təsdiqləndi"
   },
   "verifyPhone": {
-    "title": "Telefon təsdiqi",
-    "message": "SMS ilə göndərilən kodu daxil edin",
+    "title": "Telefonu Təsdiqlə",
+    "message": "Təsdiq kodunu telefona göndər?",
     "success": {
-      "title": "Uğurlu",
-      "message": "Telefon uğurla təsdiqləndi"
+      "title": "Kod Göndərildi",
+      "message": "Təsdiq kodu telefonunuza göndərildi"
     },
     "error": {
-      "title": "Xəta",
-      "message": "Yanlış kod"
+      "title": "Göndərmə Xətası",
+      "message": "Təsdiq kodu göndərilə bilmədi"
     },
     "phoneVerifiedSuccess": "Telefon uğurla təsdiqləndi"
   },
+  "validationError": "Zəhmət olmasa bütün məcburi sahələri doldurun",
   "loadingProfile": "Profil yüklənir...",
   "failedToLoadProfile": "Profil yüklənə bilmədi",
-  "cancel": "Ləğv et",
-  "delete": "Sil",
   "profileUpdateSuccess": {
     "title": "Uğurlu",
     "message": "Profil uğurla yeniləndi"
@@ -241,11 +241,37 @@
     "message": "Profil yenilənərkən xəta baş verdi"
   },
   "validation": {
-    "title": "Doğrulama xətası",
-    "firstNameRequired": "Ad tələb olunur",
-    "lastNameRequired": "Soyad tələb olunur",
-    "phoneRequired": "Telefon nömrəsi tələb olunur",
-    "emailRequired": "E-poçt tələb olunur"
+    "title": "Doğrulama Xətası",
+    "firstNameRequired": "Ad məcburidir",
+    "lastNameRequired": "Soyad məcburidir",
+    "familyTypeRequired": "Zəhmət olmasa ailə üzvü növünü seçin",
+    "familyAgeRequired": "Zəhmət olmasa doğum tarixini seçin",
+    "phoneRequired": "Telefon nömrəsi məcburidir",
+    "emailRequired": "E-poçt məcburidir"
+  },
+  "verificationModal": {
+    "enterCode": "Kodu daxil edin",
+    "enterSmsCode": "SMS-dən təsdiq kodunu daxil edin",
+    "enterEmailCode": "E-poçtdan təsdiq kodunu daxil edin",
+    "phoneNotSpecified": "Telefon nömrəsi göstərilməyib"
+  },
+  "family": {
+    "addMemberSuccess": "Ailə üzvü əlavə edildi",
+    "fillNameSurname": "Zəhmət olmasa ad və soyadı doldurun",
+    "confirmDelete": "Bu ailə üzvünü silmək istədiyinizdən əminsiniz?",
+    "confirmSave": "Dəyişiklikləri saxlamaq istədiyinizdən əminsiniz?",
+    "deleteSuccess": "Ailə üzvü silindi",
+    "saveSuccess": "Dəyişikliklər saxlanıldı",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Uğurlu",
   "photoTakeSuccess": "Şəkil uğurla əlavə edildi",

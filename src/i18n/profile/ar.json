@@ -113,8 +113,9 @@
   "phone": "الهاتف",
   "phonePlaceholder": "أدخل رقم الهاتف",
   "noPhone": "غير محدد",
-  "email": "البريد الإلكتروني",
+  "email": "بريد إلكتروني",
   "emailPlaceholder": "أدخل البريد الإلكتروني",
+  "emailRequired": "البريد الإلكتروني مطلوب",
   "birthDate": "تاريخ الميلاد",
   "birthDatePlaceholder": "YYYY-MM-DD",
   "familyInfo": "معلومات العائلة",
@@ -212,22 +213,21 @@
     "emailVerifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح"
   },
   "verifyPhone": {
-    "title": "التحقق من الهاتف",
-    "message": "أدخل الرمز المرسل عبر الرسائل النصية",
+    "title": "تحقق من الهاتف",
+    "message": "إرسال رمز التحقق إلى الهاتف؟",
     "success": {
-      "title": "نجح",
-      "message": "تم التحقق من الهاتف بنجاح"
+      "title": "تم إرسال الرمز",
+      "message": "تم إرسال رمز التحقق إلى هاتفك"
     },
     "error": {
-      "title": "خطأ",
-      "message": "رمز غير صحيح"
+      "title": "خطأ في الإرسال",
+      "message": "فشل في إرسال رمز التحقق"
     },
     "phoneVerifiedSuccess": "تم التحقق من الهاتف بنجاح"
   },
+  "validationError": "يرجى ملء جميع الحقول المطلوبة",
   "loadingProfile": "جاري تحميل الملف الشخصي...",
   "failedToLoadProfile": "فشل في تحميل الملف الشخصي",
-  "cancel": "إلغاء",
-  "delete": "حذف",
   "profileUpdateSuccess": {
     "title": "نجح",
     "message": "تم تحديث الملف الشخصي بنجاح"
@@ -244,8 +244,34 @@
     "title": "خطأ في التحقق",
     "firstNameRequired": "الاسم الأول مطلوب",
     "lastNameRequired": "اسم العائلة مطلوب",
+    "familyTypeRequired": "يرجى اختيار نوع عضو العائلة",
+    "familyAgeRequired": "يرجى اختيار تاريخ الميلاد",
     "phoneRequired": "رقم الهاتف مطلوب",
     "emailRequired": "البريد الإلكتروني مطلوب"
+  },
+  "verificationModal": {
+    "enterCode": "أدخل الرمز",
+    "enterSmsCode": "أدخل رمز التحقق من الرسالة النصية",
+    "enterEmailCode": "أدخل رمز التحقق من البريد الإلكتروني",
+    "phoneNotSpecified": "رقم الهاتف غير محدد"
+  },
+  "family": {
+    "addMemberSuccess": "تم إضافة عضو العائلة",
+    "fillNameSurname": "يرجى ملء الاسم واللقب",
+    "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا العضو من العائلة؟",
+    "confirmSave": "هل أنت متأكد من أنك تريد حفظ التغييرات؟",
+    "deleteSuccess": "تم حذف عضو العائلة",
+    "saveSuccess": "تم حفظ التغييرات",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "نجح",
   "photoTakeSuccess": "تم إضافة الصورة بنجاح",

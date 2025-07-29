@@ -16,14 +16,14 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   isExpanded,
   isEditing,
   phoneVerified,
-  isVerifyingPhone,
   onToggle,
   onStartEditing,
   onCancelEditing,
   onSave,
   onDelete,
-  onVerifyPhone,
   onResetPhoneVerification,
+  onVerifyPhone,
+  saveRef,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
@@ -46,6 +46,23 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         birthDate: member.birthDate,
         phone: member.phone ?? '',
       });
+      
+      // Устанавливаем функцию сохранения в ref
+      if (saveRef?.current) {
+        saveRef.current = () => {
+          const updatedData = {
+            ...editingData,
+            age: calculateAge(editingData.birthDate || member.birthDate),
+            phone: editingData.phone?.trim() || undefined,
+          };
+          onSave(updatedData);
+        };
+      }
+    } else {
+      // Очищаем функцию сохранения
+      if (saveRef?.current) {
+        saveRef.current = null;
+      }
     }
   }, [isEditing, member.id]); // Изменили зависимость с member на member.id
 
@@ -64,11 +81,11 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
     if (isEditing && hasChanges()) {
       // Показываем диалог подтверждения сохранения изменений
       Alert.alert(
-        t('profile.saveChangesConfirm.title'),
-        t('profile.saveChangesConfirm.message'),
+        t('common.confirmation'),
+        t('profile.family.confirmSave'),
         [
           { 
-            text: t('profile.saveChangesConfirm.cancel'), 
+            text: t('common.cancel'), 
             style: 'cancel',
             onPress: () => {
               // При отмене НЕ делаем ничего - остаемся в режиме редактирования
@@ -76,7 +93,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
             }
           },
           { 
-            text: t('profile.saveChangesConfirm.save'), 
+            text: t('common.save'), 
             onPress: () => {
               // Сохраняем изменения и закрываем
               const updatedData = {
@@ -132,11 +149,9 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
               member={member}
               editingData={editingData}
               phoneVerified={phoneVerified}
-              isVerifyingPhone={isVerifyingPhone}
               onSave={onSave}
               onCancel={onCancelEditing}
               onDelete={onDelete}
-              onVerifyPhone={onVerifyPhone}
               onResetPhoneVerification={onResetPhoneVerification}
               setEditingData={setEditingData}
             />
@@ -145,6 +160,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
               member={member}
               phoneVerified={phoneVerified}
               onStartEditing={onStartEditing}
+              onVerifyPhone={onVerifyPhone}
             />
           )}
         </View>

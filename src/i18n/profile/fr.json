@@ -115,6 +115,7 @@
   "noPhone": "Non spécifié",
   "email": "E-mail",
   "emailPlaceholder": "Entrez l'e-mail",
+  "emailRequired": "L'e-mail est obligatoire",
   "birthDate": "Date de naissance",
   "birthDatePlaceholder": "AAAA-MM-JJ",
   "familyInfo": "Informations familiales",
@@ -212,40 +213,65 @@
     "emailVerifiedSuccess": "E-mail vérifié avec succès"
   },
   "verifyPhone": {
-    "title": "Vérification du téléphone",
-    "message": "Entrez le code envoyé par SMS",
+    "title": "Vérifier le téléphone",
+    "message": "Envoyer le code de vérification au téléphone?",
     "success": {
-      "title": "Succès",
-      "message": "Téléphone vérifié avec succès"
+      "title": "Code envoyé",
+      "message": "Code de vérification envoyé à votre téléphone"
     },
     "error": {
-      "title": "Erreur",
-      "message": "Code invalide"
+      "title": "Erreur d'envoi",
+      "message": "Impossible d'envoyer le code de vérification"
     },
     "phoneVerifiedSuccess": "Téléphone vérifié avec succès"
   },
+  "validationError": "Veuillez remplir tous les champs obligatoires",
   "loadingProfile": "Chargement du profil...",
-  "failedToLoadProfile": "Échec du chargement du profil",
-  "cancel": "Annuler",
-  "delete": "Supprimer",
+  "failedToLoadProfile": "Impossible de charger le profil",
   "profileUpdateSuccess": {
     "title": "Succès",
     "message": "Profil mis à jour avec succès"
   },
   "profileUpdateError": {
     "title": "Erreur",
-    "message": "Échec de la mise à jour du profil"
+    "message": "Impossible de mettre à jour le profil"
   },
   "profileUpdateGeneralError": {
     "title": "Erreur",
-    "message": "Une erreur est survenue lors de la mise à jour du profil"
+    "message": "Une erreur s'est produite lors de la mise à jour du profil"
   },
   "validation": {
     "title": "Erreur de validation",
-    "firstNameRequired": "Le prénom est obligatoire",
-    "lastNameRequired": "Le nom de famille est obligatoire",
-    "phoneRequired": "Le numéro de téléphone est obligatoire",
+    "firstNameRequired": "Le prénom est requis",
+    "lastNameRequired": "Le nom de famille est requis",
+    "familyTypeRequired": "Veuillez sélectionner le type de membre de la famille",
+    "familyAgeRequired": "Veuillez sélectionner la date de naissance",
+    "phoneRequired": "Le numéro de téléphone est requis",
     "emailRequired": "L'e-mail est obligatoire"
+  },
+  "verificationModal": {
+    "enterCode": "Entrez le code",
+    "enterSmsCode": "Entrez le code de vérification du SMS",
+    "enterEmailCode": "Entrez le code de vérification de l'e-mail",
+    "phoneNotSpecified": "Le numéro de téléphone n'est pas spécifié"
+  },
+  "family": {
+    "addMemberSuccess": "Membre de la famille ajouté",
+    "fillNameSurname": "Veuillez remplir le nom et le prénom",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce membre de la famille?",
+    "confirmSave": "Êtes-vous sûr de vouloir enregistrer les modifications?",
+    "deleteSuccess": "Membre de la famille supprimé",
+    "saveSuccess": "Modifications enregistrées",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Succès",
   "photoTakeSuccess": "Photo ajoutée avec succès",

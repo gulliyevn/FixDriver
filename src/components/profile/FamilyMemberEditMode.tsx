@@ -5,7 +5,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import DatePicker from '../DatePicker';
 import { calculateAge } from '../../utils/profileHelpers';
-import { familyTypes } from '../../constants/familyTypes';
 import { createFamilyMemberItemStyles } from '../../styles/components/profile/FamilyMemberItem.styles';
 import { FamilyMember } from '../../types/family';
 
@@ -13,11 +12,9 @@ interface FamilyMemberEditModeProps {
   member: FamilyMember;
   editingData: Partial<FamilyMember>;
   phoneVerified: boolean;
-  isVerifyingPhone: boolean;
   onSave: (updatedData: Partial<FamilyMember>) => void;
   onCancel: () => void;
   onDelete: () => void;
-  onVerifyPhone: () => void;
   onResetPhoneVerification: () => void;
   setEditingData: (data: Partial<FamilyMember>) => void;
 }
@@ -26,11 +23,9 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
   member,
   editingData,
   phoneVerified,
-  isVerifyingPhone,
   onSave,
   onCancel,
   onDelete,
-  onVerifyPhone,
   onResetPhoneVerification,
   setEditingData,
 }) => {
@@ -38,6 +33,30 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
   const { t } = useLanguage();
   const styles = createFamilyMemberItemStyles(isDark);
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+
+  // Локальное определение типов семьи с переводами
+  const familyTypes = [
+    { key: 'husband', label: t('profile.familyTypes.husband') },
+    { key: 'wife', label: t('profile.familyTypes.wife') },
+    { key: 'son', label: t('profile.familyTypes.son') },
+    { key: 'daughter', label: t('profile.familyTypes.daughter') },
+    { key: 'mother', label: t('profile.familyTypes.mother') },
+    { key: 'father', label: t('profile.familyTypes.father') },
+    { key: 'grandmother', label: t('profile.familyTypes.grandmother') },
+    { key: 'grandfather', label: t('profile.familyTypes.grandfather') },
+    { key: 'brother', label: t('profile.familyTypes.brother') },
+    { key: 'sister', label: t('profile.familyTypes.sister') },
+    { key: 'uncle', label: t('profile.familyTypes.uncle') },
+    { key: 'aunt', label: t('profile.familyTypes.aunt') },
+    { key: 'cousin', label: t('profile.familyTypes.cousin') },
+    { key: 'nephew', label: t('profile.familyTypes.nephew') },
+    { key: 'niece', label: t('profile.familyTypes.niece') },
+    { key: 'stepfather', label: t('profile.familyTypes.stepfather') },
+    { key: 'stepmother', label: t('profile.familyTypes.stepmother') },
+    { key: 'stepson', label: t('profile.familyTypes.stepson') },
+    { key: 'stepdaughter', label: t('profile.familyTypes.stepdaughter') },
+    { key: 'other', label: t('profile.familyTypes.other') },
+  ];
 
   const hasChanges = () => {
     return (
@@ -52,12 +71,12 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
   const handleSave = () => {
     if (hasChanges()) {
       Alert.alert(
-        'Подтверждение',
-        'Вы уверены, что хотите сохранить изменения?',
+        t('common.confirmation'),
+        t('profile.family.confirmSave'),
         [
-          { text: 'Отмена', style: 'cancel' },
+          { text: t('common.cancel'), style: 'cancel' },
           { 
-            text: 'Сохранить', 
+            text: t('common.save'), 
             onPress: () => {
               const updatedData = {
                 ...editingData,
@@ -74,15 +93,13 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
     }
   };
 
-
-
   const handleDelete = () => {
     Alert.alert(
-      'Подтверждение',
-      'Вы уверены, что хотите удалить этого члена семьи?',
+      t('common.confirmation'),
+      t('profile.family.confirmDelete'),
       [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', style: 'destructive', onPress: onDelete }
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.delete'), style: 'destructive', onPress: onDelete }
       ]
     );
   };
@@ -128,7 +145,7 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
             onPress={() => setShowTypeDropdown(!showTypeDropdown)}
           >
             <Text style={styles.typeDropdownText}>
-              {familyTypes.find(t => t.key === (editingData.type || member.type))?.label || 'Выберите тип'}
+              {editingData.type ? familyTypes.find(t => t.key === editingData.type)?.label : t('profile.familyTypePlaceholder')}
             </Text>
             <Ionicons 
               name={showTypeDropdown ? "chevron-up" : "chevron-down"} 
@@ -219,20 +236,6 @@ const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
               <Ionicons name="close-circle" size={16} color={isDark ? '#9CA3AF' : '#666666'} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            style={[
-              styles.verifyButton,
-              !editingData.phone?.trim() && styles.verifyButtonDisabled
-            ]}
-            onPress={onVerifyPhone}
-            disabled={isVerifyingPhone || !editingData.phone?.trim()}
-          >
-            <Ionicons 
-              name={phoneVerified ? "checkmark-circle" : "shield-checkmark-outline"} 
-              size={20} 
-              color={phoneVerified ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
-            />
-          </TouchableOpacity>
         </View>
       </View>
 

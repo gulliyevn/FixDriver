@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -32,15 +32,130 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   onClose,
   onAdd,
   onVerifyPhone,
-  phoneVerificationStatus = false,
   isVerifyingPhone = false,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const dynamicStyles = getAddFamilyModalColors(isDark);
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  const [datePickerTouched, setDatePickerTouched] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: boolean}>({});
+  const [localPhoneVerificationStatus, setLocalPhoneVerificationStatus] = useState(false);
+
+  // Сбрасываем локальный статус верификации при открытии модального окна
+  useEffect(() => {
+    if (visible) {
+      setLocalPhoneVerificationStatus(false);
+    }
+  }, [visible]);
 
   if (!visible) return null;
+
+  // Функция валидации
+  const validateForm = () => {
+    const errors: {[key: string]: boolean} = {};
+    
+    // Проверяем обязательные поля
+    if (!newFamilyMember.name.trim()) {
+      errors.name = true;
+    }
+    if (!newFamilyMember.surname.trim()) {
+      errors.surname = true;
+    }
+    if (!newFamilyMember.type || !newFamilyMember.type.trim()) {
+      errors.type = true;
+    }
+    if (!datePickerTouched) {
+      errors.age = true;
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Функция проверки валидности формы для стилизации кнопки
+  const isFormValid = () => {
+    return newFamilyMember.name.trim() && 
+           newFamilyMember.surname.trim() && 
+           (newFamilyMember.type && newFamilyMember.type.trim()) && 
+           datePickerTouched;
+  };
+
+  // Обработчик добавления члена семьи
+  const handleAdd = () => {
+    if (validateForm()) {
+      onAdd();
+    }
+  };
+
+  // Обработчик изменения даты
+  const handleDateChange = (date: string) => {
+    setNewFamilyMember({...newFamilyMember, age: date});
+    setDatePickerTouched(true);
+    // Убираем ошибку валидации для даты
+    if (validationErrors.age) {
+      setValidationErrors(prev => ({...prev, age: false}));
+    }
+  };
+
+  // Обработчики изменения текстовых полей
+  const handleNameChange = (text: string) => {
+    setNewFamilyMember({...newFamilyMember, name: text});
+    if (validationErrors.name && text.trim()) {
+      setValidationErrors(prev => ({...prev, name: false}));
+    }
+  };
+
+  const handleSurnameChange = (text: string) => {
+    setNewFamilyMember({...newFamilyMember, surname: text});
+    if (validationErrors.surname && text.trim()) {
+      setValidationErrors(prev => ({...prev, surname: false}));
+    }
+  };
+
+  const handleTypeChange = (type: string) => {
+    setNewFamilyMember({...newFamilyMember, type});
+    setShowTypeDropdown(false);
+    if (validationErrors.type) {
+      setValidationErrors(prev => ({...prev, type: false}));
+    }
+  };
+
+  // Обработчик изменения телефона
+  const handlePhoneChange = (text: string) => {
+    setNewFamilyMember({...newFamilyMember, phone: text});
+    // Сбрасываем локальный статус верификации при изменении телефона
+    if (localPhoneVerificationStatus) {
+      setLocalPhoneVerificationStatus(false);
+    }
+  };
+
+  // Обработчик верификации телефона
+  const handleVerifyPhone = () => {
+    if (onVerifyPhone) {
+      onVerifyPhone();
+      // Устанавливаем локальный статус верификации
+      setLocalPhoneVerificationStatus(true);
+    }
+  };
+
+  // Определяем, какую иконку показывать
+  const getPhoneVerificationIcon = () => {
+    // Если есть локальный статус верификации, показываем галочку
+    if (localPhoneVerificationStatus) {
+      return "checkmark-circle";
+    }
+    // Иначе показываем щит (по умолчанию)
+    return "shield-checkmark-outline";
+  };
+
+  // Определяем цвет иконки
+  const getPhoneVerificationColor = () => {
+    if (localPhoneVerificationStatus) {
+      return '#4CAF50'; // Зеленый для верифицированного
+    }
+    return isDark ? '#3B82F6' : '#083198'; // Синий для неверифицированного
+  };
 
   const familyTypes = [
     { key: 'husband', label: t('profile.familyTypes.husband') },
@@ -89,7 +204,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
             <TextInput
               style={[styles.modalInput, dynamicStyles.modalInput]}
               value={newFamilyMember.name}
-              onChangeText={(text) => setNewFamilyMember({...newFamilyMember, name: text})}
+              onChangeText={handleNameChange}
               placeholder={t('profile.firstNamePlaceholder')}
               placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
             />
@@ -103,7 +218,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
             <TextInput
               style={[styles.modalInput, dynamicStyles.modalInput]}
               value={newFamilyMember.surname}
-              onChangeText={(text) => setNewFamilyMember({...newFamilyMember, surname: text})}
+              onChangeText={handleSurnameChange}
               placeholder={t('profile.lastNamePlaceholder')}
               placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
             />
@@ -119,7 +234,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
               onPress={() => setShowTypeDropdown(!showTypeDropdown)}
             >
               <Text style={[styles.modalSelectText, dynamicStyles.modalSelectText]}>
-                {familyTypes.find(t => t.key === newFamilyMember.type)?.label || t('profile.familyTypePlaceholder')}
+                {newFamilyMember.type ? familyTypes.find(t => t.key === newFamilyMember.type)?.label : t('profile.familyTypePlaceholder')}
               </Text>
               <Ionicons 
                 name={showTypeDropdown ? "chevron-up" : "chevron-down"} 
@@ -141,10 +256,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
                         newFamilyMember.type === type.key && styles.typeOptionSelected,
                         type.key === 'other' && styles.typeOptionLast
                       ]}
-                      onPress={() => {
-                        setNewFamilyMember({...newFamilyMember, type: type.key});
-                        setShowTypeDropdown(false);
-                      }}
+                      onPress={() => handleTypeChange(type.key)}
                     >
                       <Text style={[
                         styles.typeOptionText, 
@@ -171,9 +283,7 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
             <View style={[styles.modalInput, dynamicStyles.modalInput, { alignItems: 'flex-start' }]}>
               <DatePicker
                 value={newFamilyMember.age}
-                onChange={(date) => {
-                  setNewFamilyMember({...newFamilyMember, age: date});
-                }}
+                onChange={handleDateChange}
                 placeholder={t('profile.familyAgePlaceholder')}
                 inline={true}
                 readOnly={false}
@@ -190,29 +300,11 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
               <TextInput
                 style={[dynamicStyles.modalInput, { flex: 1, borderWidth: 0, backgroundColor: 'transparent', padding: 0, margin: 0 }]}
                 value={newFamilyMember.phone}
-                onChangeText={(text) => setNewFamilyMember({...newFamilyMember, phone: text})}
+                onChangeText={handlePhoneChange}
                 placeholder={t('profile.phonePlaceholder')}
                 placeholderTextColor={isDark ? '#9CA3AF' : '#666666'}
                 keyboardType="phone-pad"
               />
-              {onVerifyPhone && (
-                <TouchableOpacity
-                  style={{ 
-                    paddingHorizontal: 2, 
-                    paddingVertical: 6, 
-                    marginLeft: 4,
-                    opacity: newFamilyMember.phone.trim() ? 1 : 0.5
-                  }}
-                  onPress={onVerifyPhone}
-                  disabled={isVerifyingPhone || !newFamilyMember.phone.trim()}
-                >
-                  <Ionicons 
-                    name={phoneVerificationStatus ? "checkmark-circle" : "shield-checkmark-outline"} 
-                    size={20} 
-                    color={phoneVerificationStatus ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
-                  />
-                </TouchableOpacity>
-              )}
             </View>
           </View>
 
@@ -227,10 +319,19 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.modalSaveButton, dynamicStyles.modalSaveButton]}
-              onPress={onAdd}
+              style={[
+                styles.modalSaveButton, 
+                dynamicStyles.modalSaveButton,
+                !isFormValid() && styles.modalSaveButtonDisabled
+              ]}
+              onPress={handleAdd}
+              disabled={!isFormValid()}
             >
-              <Text style={[styles.modalSaveButtonText, dynamicStyles.modalSaveButtonText]}>
+              <Text style={[
+                styles.modalSaveButtonText, 
+                dynamicStyles.modalSaveButtonText,
+                !isFormValid() && styles.modalSaveButtonTextDisabled
+              ]}>
                 {t('common.add')}
               </Text>
             </TouchableOpacity>

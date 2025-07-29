@@ -39,5 +39,6 @@
     "login": "Giriş yap",
     "language": "Dil"
   },
-  "verify": "Doğrula"
+  "verify": "Doğrula",
+  "confirmation": "Onay"
 } 

@@ -10,12 +10,14 @@ interface FamilyMemberViewModeProps {
   member: FamilyMember;
   phoneVerified: boolean;
   onStartEditing: () => void;
+  onVerifyPhone?: () => void;
 }
 
 const FamilyMemberViewMode: React.FC<FamilyMemberViewModeProps> = ({
   member,
   phoneVerified,
   onStartEditing,
+  onVerifyPhone,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
@@ -85,11 +87,17 @@ const FamilyMemberViewMode: React.FC<FamilyMemberViewModeProps> = ({
             {member.phone || t('profile.noPhone')}
           </Text>
           {member.phone && (
-            <Ionicons 
-              name={phoneVerified ? "checkmark-circle" : "shield-checkmark-outline"} 
-              size={20} 
-              color={phoneVerified ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
-            />
+            <TouchableOpacity
+              style={{ padding: 4 }}
+              onPress={onVerifyPhone}
+              disabled={!onVerifyPhone}
+            >
+              <Ionicons 
+                name={phoneVerified ? "checkmark-circle" : "shield-checkmark-outline"} 
+                size={20} 
+                color={phoneVerified ? '#4CAF50' : (isDark ? '#3B82F6' : '#083198')} 
+              />
+            </TouchableOpacity>
           )}
         </View>
       </View>

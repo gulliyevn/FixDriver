@@ -1,4 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const isTablet = screenWidth >= 768;
+const isSmallScreen = screenWidth < 375;
 
 export const AddFamilyModalStyles = StyleSheet.create({
   modalOverlay: {
@@ -12,21 +16,26 @@ export const AddFamilyModalStyles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1000,
     elevation: 5,
-    paddingTop: 80,
+    paddingTop: isTablet ? 60 : 80, // Меньший отступ сверху для планшетов
   },
   modalScrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: isTablet ? 10 : 20, // Меньший отступ для планшетов
   },
   modalContent: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 20,
-    margin: 40,
-    width: '98%',
-    maxHeight: '120%',
+    padding: isTablet ? 24 : 20, // Больше padding для планшетов
+    margin: isTablet ? 20 : 40, // Меньше margin для планшетов
+    // Адаптивная ширина: на 30px шире и адаптивная к устройствам
+    width: isTablet 
+      ? Math.min(screenWidth - 80, 500) // Для планшетов: максимум 500px, но не больше экрана минус отступы
+      : isSmallScreen 
+        ? screenWidth - 20 // Для маленьких экранов: почти на всю ширину
+        : screenWidth - 40, // Для средних экранов: стандартная ширина
+    maxHeight: screenHeight * 0.8, // Максимум 80% высоты экрана
     elevation: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -37,7 +46,7 @@ export const AddFamilyModalStyles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: isTablet ? 20 : 18, // Больше для планшетов
     fontWeight: '600',
     color: '#003366',
     marginBottom: 20,
@@ -50,7 +59,7 @@ export const AddFamilyModalStyles = StyleSheet.create({
     position: 'relative',
   },
   modalInputLabel: {
-    fontSize: 14,
+    fontSize: isTablet ? 16 : 14, // Больше для планшетов
     fontWeight: '500',
     color: '#003366',
     marginBottom: 8,
@@ -59,8 +68,8 @@ export const AddFamilyModalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    padding: isTablet ? 16 : 12, // Больше padding для планшетов
+    fontSize: isTablet ? 18 : 16, // Больше для планшетов
     backgroundColor: '#fff',
   },
   modalSelectButton: {
@@ -70,44 +79,50 @@ export const AddFamilyModalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 8,
-    padding: 12,
+    padding: isTablet ? 16 : 12, // Больше padding для планшетов
     backgroundColor: '#fff',
   },
   modalSelectText: {
-    fontSize: 16,
+    fontSize: isTablet ? 18 : 16, // Больше для планшетов
     color: '#003366',
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 0,
-    gap: 12,
+    gap: isTablet ? 16 : 12, // Больше gap для планшетов
   },
   modalCancelButton: {
     flex: 1,
     backgroundColor: '#f0f0f0',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: isTablet ? 16 : 12, // Больше padding для планшетов
+    paddingHorizontal: isTablet ? 20 : 16, // Больше padding для планшетов
     borderRadius: 8,
     alignItems: 'center',
   },
   modalCancelButtonText: {
-    fontSize: 16,
+    fontSize: isTablet ? 18 : 16, // Больше для планшетов
     color: '#666',
     fontWeight: '500',
   },
   modalSaveButton: {
     flex: 1,
     backgroundColor: '#003366',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: isTablet ? 16 : 12, // Больше padding для планшетов
+    paddingHorizontal: isTablet ? 20 : 16, // Больше padding для планшетов
     borderRadius: 8,
     alignItems: 'center',
   },
   modalSaveButtonText: {
-    fontSize: 16,
+    fontSize: isTablet ? 18 : 16, // Больше для планшетов
     color: '#fff',
     fontWeight: '500',
+  },
+  modalSaveButtonDisabled: {
+    backgroundColor: '#cccccc',
+  },
+  modalSaveButtonTextDisabled: {
+    color: '#999999',
   },
   typeDropdown: {
     position: 'absolute',
@@ -119,7 +134,7 @@ export const AddFamilyModalStyles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 8,
     marginTop: 4,
-    maxHeight: 200,
+    maxHeight: isTablet ? 250 : 200, // Больше высота для планшетов
     elevation: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -131,14 +146,14 @@ export const AddFamilyModalStyles = StyleSheet.create({
     zIndex: 1000,
   },
   typeDropdownScroll: {
-    maxHeight: 200,
+    maxHeight: isTablet ? 250 : 200, // Больше высота для планшетов
   },
   typeOption: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: isTablet ? 16 : 12, // Больше padding для планшетов
+    paddingHorizontal: isTablet ? 20 : 16, // Больше padding для планшетов
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -149,11 +164,17 @@ export const AddFamilyModalStyles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   typeOptionText: {
-    fontSize: 16,
+    fontSize: isTablet ? 18 : 16, // Больше для планшетов
     color: '#003366',
   },
   typeOptionTextSelected: {
     fontWeight: '600',
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#FF3B30',
+    marginTop: 4,
+    marginLeft: 4,
   },
 });
 
@@ -192,6 +213,8 @@ export const getAddFamilyModalColors = (isDark: boolean) => {
     modalCancelButtonText: { color: colors.textSecondary },
     modalSaveButton: { backgroundColor: colors.primary },
     modalSaveButtonText: { color: colors.background },
+    modalSaveButtonDisabled: { backgroundColor: '#cccccc' },
+    modalSaveButtonTextDisabled: { color: '#999999' },
     typeDropdown: { 
       backgroundColor: colors.background,
       borderColor: colors.border 
@@ -200,5 +223,6 @@ export const getAddFamilyModalColors = (isDark: boolean) => {
     typeOptionSelected: { backgroundColor: colors.surface },
     typeOptionText: { color: colors.text },
     typeOptionTextSelected: { color: colors.primary },
+    errorText: { color: '#FF3B30' }, // Красный цвет для ошибок в обеих темах
   };
 }; 

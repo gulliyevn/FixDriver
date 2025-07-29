@@ -115,6 +115,7 @@
   "noPhone": "No especificado",
   "email": "Correo electrónico",
   "emailPlaceholder": "Ingresa el correo electrónico",
+  "emailRequired": "El correo electrónico es obligatorio",
   "birthDate": "Fecha de nacimiento",
   "birthDatePlaceholder": "AAAA-MM-DD",
   "familyInfo": "Información familiar",
@@ -212,25 +213,24 @@
     "emailVerifiedSuccess": "Correo electrónico verificado exitosamente"
   },
   "verifyPhone": {
-    "title": "Verificación de teléfono",
-    "message": "Ingresa el código enviado por SMS",
+    "title": "Verificar teléfono",
+    "message": "¿Enviar código de verificación al teléfono?",
     "success": {
-      "title": "Éxito",
-      "message": "Teléfono verificado exitosamente"
+      "title": "Código enviado",
+      "message": "Código de verificación enviado a su teléfono"
     },
     "error": {
-      "title": "Error",
-      "message": "Código inválido"
+      "title": "Error de envío",
+      "message": "No se pudo enviar el código de verificación"
     },
     "phoneVerifiedSuccess": "Teléfono verificado exitosamente"
   },
+  "validationError": "Por favor complete todos los campos obligatorios",
   "loadingProfile": "Cargando perfil...",
   "failedToLoadProfile": "Error al cargar perfil",
-  "cancel": "Cancelar",
-  "delete": "Eliminar",
   "profileUpdateSuccess": {
     "title": "Éxito",
-    "message": "Perfil actualizado correctamente"
+    "message": "Perfil actualizado exitosamente"
   },
   "profileUpdateError": {
     "title": "Error",
@@ -244,8 +244,34 @@
     "title": "Error de validación",
     "firstNameRequired": "El nombre es obligatorio",
     "lastNameRequired": "El apellido es obligatorio",
+    "familyTypeRequired": "Por favor seleccione el tipo de miembro de la familia",
+    "familyAgeRequired": "Por favor seleccione la fecha de nacimiento",
     "phoneRequired": "El número de teléfono es obligatorio",
     "emailRequired": "El correo electrónico es obligatorio"
+  },
+  "verificationModal": {
+    "enterCode": "Ingresa el código",
+    "enterSmsCode": "Ingresa el código de verificación del SMS",
+    "enterEmailCode": "Ingresa el código de verificación del email",
+    "phoneNotSpecified": "El número de teléfono no está especificado"
+  },
+  "family": {
+    "addMemberSuccess": "Miembro de la familia agregado",
+    "fillNameSurname": "Por favor complete el nombre y apellido",
+    "confirmDelete": "¿Está seguro de que desea eliminar este miembro de la familia?",
+    "confirmSave": "¿Está seguro de que desea guardar los cambios?",
+    "deleteSuccess": "Miembro de la familia eliminado",
+    "saveSuccess": "Cambios guardados",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Éxito",
   "photoTakeSuccess": "Foto agregada exitosamente",

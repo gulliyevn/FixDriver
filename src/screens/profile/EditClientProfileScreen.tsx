@@ -19,6 +19,7 @@ import ProfileAvatarSection from '../../components/profile/ProfileAvatarSection'
 import VipSection from '../../components/profile/VipSection';
 import ProfileHeader from '../../components/profile/ProfileHeader';
 import { useI18n } from '../../hooks/useI18n';
+import { FamilyMember } from '../../types/family';
 
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -83,18 +84,57 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     resetFamilyPhoneVerification,
   } = useFamilyMembers();
 
+  const saveFamilyRef = useRef<(() => void) | null>(null);
+
   // Функция для проверки изменений
   const checkHasChanges = () => {
-    const formChanges = hasChanges(formData, originalDataRef.current);
-    return formChanges;
+    return formData.firstName !== originalDataRef.current.firstName ||
+           formData.lastName !== originalDataRef.current.lastName ||
+           formData.phone !== originalDataRef.current.phone ||
+           formData.email !== originalDataRef.current.email;
   };
 
+  const handleFamilyExit = () => {
+    // Если есть активное редактирование семейного члена, показываем диалог
+    if (editingFamilyMember !== null) {
+      Alert.alert(
+        t('common.confirmation'),
+        t('profile.family.confirmSave'),
+        [
+          { 
+            text: t('common.cancel'), 
+            style: 'cancel',
+            onPress: () => {
+              // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+            }
+          },
+          { 
+            text: t('common.save'), 
+            onPress: () => {
+              // Сохраняем изменения и отменяем редактирование
+              handleFamilySave();
+            }
+          }
+        ]
+      );
+    } else {
+      // Если нет активного редактирования, просто отменяем и уходим назад
+      cancelEditingFamilyMember();
+      navigation.goBack();
+    }
+  };
 
-
-  // Функция для проверки изменений в семейной секции
-  const checkFamilyChanges = () => {
-    // Проверяем, есть ли активное редактирование семейного члена
-    return editingFamilyMember !== null;
+  const handleFamilySave = () => {
+    // Вызываем функцию сохранения из ref, если она есть
+    if (saveFamilyRef.current) {
+      saveFamilyRef.current();
+    }
+    
+    // Отменяем редактирование
+    cancelEditingFamilyMember();
+    
+    // Уходим назад
+    navigation.goBack();
   };
 
   // Функция валидации полей личной информации
@@ -190,9 +230,9 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   // Обработчик для перехвата swipe-back жеста
   const handleBackPress = useCallback(() => {
     const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
-    const hasFamilyChanges = checkFamilyChanges();
+    const hasFamilyEditing = editingFamilyMember !== null;
     
-    if (hasPersonalChanges || hasFamilyChanges) {
+    if (hasPersonalChanges) {
       Alert.alert(
         t('profile.saveChangesConfirm.title'),
         t('profile.saveChangesConfirm.message'),
@@ -205,18 +245,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           { 
             text: t('profile.saveChangesConfirm.save'), 
             onPress: async () => {
-              let success = true;
-              
-              // Сохраняем изменения профиля
-              if (hasPersonalChanges) {
-                success = await saveProfile();
-              }
-              
-              // Отменяем редактирование семейной секции
-              if (hasFamilyChanges) {
-                cancelEditingFamilyMember();
-              }
-              
+              const success = await saveProfile();
               if (success) {
                 navigation.goBack();
               }
@@ -224,19 +253,22 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           }
         ]
       );
+    } else if (hasFamilyEditing) {
+      // Если есть редактирование семейной секции, используем специальную обработку
+      handleFamilyExit();
     } else {
       navigation.goBack();
     }
-  }, [isEditingPersonalInfo, checkHasChanges, checkFamilyChanges, saveProfile, cancelEditingFamilyMember, navigation, t]);
+  }, [isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, handleFamilyExit, navigation, t]);
 
   // Перехватываем swipe-back жест
   useFocusEffect(
     useCallback(() => {
       const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
         const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
-        const hasFamilyChanges = checkFamilyChanges();
+        const hasFamilyEditing = editingFamilyMember !== null;
         
-        if (hasPersonalChanges || hasFamilyChanges) {
+        if (hasPersonalChanges) {
           // Предотвращаем переход назад
           e.preventDefault();
           
@@ -252,18 +284,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
               { 
                 text: t('profile.saveChangesConfirm.save'), 
                 onPress: async () => {
-                  let success = true;
-                  
-                  // Сохраняем изменения профиля
-                  if (hasPersonalChanges) {
-                    success = await saveProfile();
-                  }
-                  
-                  // Отменяем редактирование семейной секции
-                  if (hasFamilyChanges) {
-                    cancelEditingFamilyMember();
-                  }
-                  
+                  const success = await saveProfile();
                   if (success) {
                     navigation.dispatch(e.data.action);
                   }
@@ -271,11 +292,16 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
               }
             ]
           );
+        } else if (hasFamilyEditing) {
+          // Если есть редактирование семейной секции, используем специальную обработку
+          e.preventDefault();
+          handleFamilyExit();
+          // После handleFamilyExit навигация будет обработана внутри функции
         }
       });
 
       return unsubscribe;
-    }, [navigation, isEditingPersonalInfo, checkHasChanges, checkFamilyChanges, saveProfile, cancelEditingFamilyMember, t])
+    }, [navigation, isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, handleFamilyExit, t])
   );
 
   const handleCirclePressAction = () => {
@@ -398,15 +424,15 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           expandedFamilyMember={expandedFamilyMember}
           editingFamilyMember={editingFamilyMember}
           familyPhoneVerification={familyPhoneVerification}
-          familyPhoneVerifying={familyPhoneVerifying}
           onToggleFamilyMember={toggleFamilyMember}
           onOpenAddFamilyModal={openAddFamilyModal}
           onStartEditing={startEditingFamilyMember}
           onCancelEditing={cancelEditingFamilyMember}
           onSaveMember={saveFamilyMember}
           onDeleteMember={deleteFamilyMember}
-          onVerifyPhone={verifyFamilyPhone}
           onResetPhoneVerification={resetFamilyPhoneVerification}
+          onVerifyPhone={verifyFamilyPhone}
+          saveFamilyRef={saveFamilyRef}
         />
 
         <VipSection 

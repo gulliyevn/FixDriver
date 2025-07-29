@@ -2,6 +2,7 @@
   "title": "Bildirimler",
   "noNotifications": "Henüz bildiriminiz yok",
   "noNotificationsSubtitle": "Yeni bildirimler burada görünecek",
+  "allNotificationsHere": "Tüm bildirimler burada gösterilecek",
   "markAllAsRead": "Tümünü okundu olarak işaretle",
   "clearAll": "Tümünü temizle",
   "delete": "Sil",
@@ -15,11 +16,19 @@
   "yesterday": "Dün",
   "thisWeek": "Bu hafta",
   "earlier": "Daha önce",
+  "selectedCount": "Seçili",
+  "selectAll": "Tümünü seç",
+  "unselectAll": "Seçimi kaldır",
+  "cancel": "İptal",
+  "now": "şimdi",
+  "min": "dk",
+  "hour": "sa",
+  "day": "gün",
   "notificationTypes": {
     "order": "Sipariş",
     "payment": "Ödeme",
     "system": "Sistem",
-    "promo": "Promosyon",
+    "promo": "Promo",
     "support": "Destek"
   },
   "messages": {
@@ -29,11 +38,17 @@
     "orderCompleted": "Sipariş #{orderId} tamamlandı",
     "orderCancelled": "Sipariş #{orderId} iptal edildi",
     "paymentReceived": "{amount} tutarında ödeme alındı",
-    "paymentFailed": "{amount} tutarında ödeme başarısız",
+    "paymentFailed": "{amount} tutarında ödeme başarısız oldu",
     "driverNearby": "Sürücü {driverName} yaklaşıyor",
     "tripStarted": "Yolculuk başladı",
     "tripEnded": "Yolculuk bitti",
-    "promoCode": "Yeni promosyon kodu: {code}",
+    "tripCompleted": "Yolculuk tamamlandı",
+    "tripCompletedDesc": "Yolculuğunuz başarıyla tamamlandı",
+    "routeChanged": "Rota değişti",
+    "routeChangedDesc": "Rota değişiklikleri oldu. Detayları kontrol edin.",
+    "newDriver": "Yeni sürücü",
+    "driverJoined": "Sürücü rotanıza katıldı",
+    "promoCode": "Yeni promo kod: {code}",
     "supportResponse": "Destekten yanıt",
     "systemUpdate": "Sistem güncellemesi",
     "maintenance": "Bakım"
@@ -41,7 +56,7 @@
   "actions": {
     "viewOrder": "Siparişi görüntüle",
     "viewPayment": "Ödemeyi görüntüle",
-    "contactSupport": "Destekle iletişime geç",
+    "contactSupport": "Destekle iletişim",
     "dismiss": "Kapat",
     "reply": "Yanıtla"
   },
@@ -75,6 +90,8 @@
   },
   "readAll": "Tümünü Oku",
   "showAll": "Tüm Bildirimleri Göster",
+  "centerTitle": "Bildirim Merkezi",
+  "newNotificationsHere": "Tüm yeni bildirimler burada görünecek",
   "online": "Çevrimiçi",
   "offline": "Çevrimdışı"
 } 

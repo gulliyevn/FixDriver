@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { mockNotifications } from '../../mocks';
+import { useI18n } from '../../hooks/useI18n';
+import { mockNotifications } from '../../mocks/notificationsMock';
 import { NotificationsScreenStyles } from '../../styles/screens/NotificationsScreen.styles';
 
 interface Notification {
@@ -26,6 +27,7 @@ interface Notification {
 
 const NotificationsScreen: React.FC = () => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [refreshing, setRefreshing] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -96,12 +98,12 @@ const NotificationsScreen: React.FC = () => {
 
   const handleDeleteSelected = () => {
     Alert.alert(
-      'Удалить уведомления',
-      `Удалить ${selectedNotifications.size} выбранных уведомлений?`,
+      t('notifications.alerts.deleteTitle'),
+      t('notifications.alerts.deleteMessage'),
       [
-        { text: 'Отмена', style: 'cancel' },
+        { text: t('notifications.buttons.cancel'), style: 'cancel' },
         {
-          text: 'Удалить',
+          text: t('notifications.delete'),
           style: 'destructive',
           onPress: () => {
             setNotifications(prev => prev.filter(n => !selectedNotifications.has(n.id)));
@@ -115,12 +117,12 @@ const NotificationsScreen: React.FC = () => {
 
   const handleDeleteNotification = (notificationId: string) => {
     Alert.alert(
-      'Удалить уведомление',
-      'Вы уверены, что хотите удалить это уведомление?',
+      t('notifications.alerts.deleteTitle'),
+      t('notifications.alerts.deleteMessage'),
       [
-        { text: 'Отмена', style: 'cancel' },
+        { text: t('notifications.buttons.cancel'), style: 'cancel' },
         {
-          text: 'Удалить',
+          text: t('notifications.delete'),
           style: 'destructive',
           onPress: () => {
             setNotifications(prev => prev.filter(n => n.id !== notificationId));
@@ -251,14 +253,14 @@ const NotificationsScreen: React.FC = () => {
           // Режим выбора
           <View style={NotificationsScreenStyles.selectionHeader} testID="selection-header">
             <TouchableOpacity onPress={handleCancelSelection}>
-              <Text style={NotificationsScreenStyles.cancelButton}>Отмена</Text>
+              <Text style={NotificationsScreenStyles.cancelButton}>{t('notifications.cancel')}</Text>
             </TouchableOpacity>
             <Text style={NotificationsScreenStyles.selectionTitle}>
-              Выбрано: {selectedNotifications.size}
+              {t('notifications.selectedCount')}: {selectedNotifications.size}
             </Text>
             <TouchableOpacity onPress={handleSelectAll}>
               <Text style={NotificationsScreenStyles.selectAllButton}>
-                {selectedNotifications.size === notifications.length ? 'Снять выбор' : 'Выбрать все'}
+                {selectedNotifications.size === notifications.length ? t('notifications.unselectAll') : t('notifications.selectAll')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -268,7 +270,7 @@ const NotificationsScreen: React.FC = () => {
             <View style={NotificationsScreenStyles.headerLeft}>
               <Ionicons name="notifications" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
               <Text style={[NotificationsScreenStyles.headerTitle, isDark && NotificationsScreenStyles.headerTitleDark]}>
-                Уведомления
+                {t('notifications.title')}
               </Text>
             </View>
             <View style={NotificationsScreenStyles.headerRight}>
@@ -278,7 +280,7 @@ const NotificationsScreen: React.FC = () => {
                   onPress={handleMarkAllAsRead}
                 >
                   <Text style={NotificationsScreenStyles.markAllButtonText}>
-                    Прочитать все ({unreadCount})
+                    {t('notifications.readAll')} ({unreadCount})
                   </Text>
                 </TouchableOpacity>
               )}
@@ -302,7 +304,7 @@ const NotificationsScreen: React.FC = () => {
             onPress={handleMarkSelectedAsRead}
           >
             <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-            <Text style={NotificationsScreenStyles.actionButtonText}>Прочитано</Text>
+            <Text style={NotificationsScreenStyles.actionButtonText}>{t('notifications.markRead')}</Text>
           </TouchableOpacity>
           
                       <TouchableOpacity 
@@ -311,7 +313,7 @@ const NotificationsScreen: React.FC = () => {
             >
               <Ionicons name="trash" size={20} color="#EF4444" />
               <Text style={[NotificationsScreenStyles.actionButtonText, NotificationsScreenStyles.deleteButtonText]}>
-                Удалить
+                {t('notifications.delete')}
               </Text>
             </TouchableOpacity>
         </View>
@@ -333,10 +335,10 @@ const NotificationsScreen: React.FC = () => {
               color={isDark ? '#6B7280' : '#9CA3AF'} 
             />
             <Text style={[NotificationsScreenStyles.emptyStateText, isDark && NotificationsScreenStyles.emptyStateTextDark]}>
-              Нет уведомлений
+              {t('notifications.noNotifications')}
             </Text>
             <Text style={[NotificationsScreenStyles.emptyStateSubtext, isDark && NotificationsScreenStyles.emptyStateSubtextDark]}>
-              Все уведомления будут отображаться здесь
+              {t('notifications.allNotificationsHere')}
             </Text>
           </View>
         ) : (

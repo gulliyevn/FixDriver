@@ -115,6 +115,7 @@
   "noPhone": "Nicht angegeben",
   "email": "E-Mail",
   "emailPlaceholder": "E-Mail eingeben",
+  "emailRequired": "E-Mail ist erforderlich",
   "birthDate": "Geburtsdatum",
   "birthDatePlaceholder": "JJJJ-MM-TT",
   "familyInfo": "Familieninformationen",
@@ -212,22 +213,21 @@
     "emailVerifiedSuccess": "E-Mail erfolgreich verifiziert"
   },
   "verifyPhone": {
-    "title": "Telefonverifizierung",
-    "message": "Geben Sie den Code ein, der per SMS gesendet wurde",
+    "title": "Telefon verifizieren",
+    "message": "Verifizierungscode an Telefon senden?",
     "success": {
-      "title": "Erfolg",
-      "message": "Telefon erfolgreich verifiziert"
+      "title": "Code gesendet",
+      "message": "Verifizierungscode an Ihr Telefon gesendet"
     },
     "error": {
-      "title": "Fehler",
-      "message": "Ungültiger Code"
+      "title": "Sendefehler",
+      "message": "Verifizierungscode konnte nicht gesendet werden"
     },
     "phoneVerifiedSuccess": "Telefon erfolgreich verifiziert"
   },
+  "validationError": "Bitte füllen Sie alle erforderlichen Felder aus",
   "loadingProfile": "Profil wird geladen...",
-  "failedToLoadProfile": "Fehler beim Laden des Profils",
-  "cancel": "Abbrechen",
-  "delete": "Löschen",
+  "failedToLoadProfile": "Profil konnte nicht geladen werden",
   "profileUpdateSuccess": {
     "title": "Erfolg",
     "message": "Profil erfolgreich aktualisiert"
@@ -244,8 +244,34 @@
     "title": "Validierungsfehler",
     "firstNameRequired": "Vorname ist erforderlich",
     "lastNameRequired": "Nachname ist erforderlich",
+    "familyTypeRequired": "Bitte wählen Sie den Familientyp aus",
+    "familyAgeRequired": "Bitte wählen Sie das Geburtsdatum aus",
     "phoneRequired": "Telefonnummer ist erforderlich",
     "emailRequired": "E-Mail ist erforderlich"
+  },
+  "verificationModal": {
+    "enterCode": "Code eingeben",
+    "enterSmsCode": "Bestätigungscode aus SMS eingeben",
+    "enterEmailCode": "Bestätigungscode aus E-Mail eingeben",
+    "phoneNotSpecified": "Telefonnummer ist nicht angegeben"
+  },
+  "family": {
+    "addMemberSuccess": "Familienmitglied hinzugefügt",
+    "fillNameSurname": "Bitte füllen Sie Vor- und Nachname aus",
+    "confirmDelete": "Sind Sie sicher, dass Sie dieses Familienmitglied löschen möchten?",
+    "confirmSave": "Sind Sie sicher, dass Sie die Änderungen speichern möchten?",
+    "deleteSuccess": "Familienmitglied gelöscht",
+    "saveSuccess": "Änderungen gespeichert",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Erfolg",
   "photoTakeSuccess": "Foto erfolgreich hinzugefügt",

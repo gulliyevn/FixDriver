@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 import { notificationService, Notification } from '../services/NotificationService';
 import { NotificationDropdownStyles } from '../styles/components/NotificationDropdown.styles';
 
@@ -30,6 +31,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
   position,
 }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(-50));
@@ -160,7 +162,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
               color={isDark ? '#F9FAFB' : '#1F2937'} 
             />
             <Text style={[NotificationDropdownStyles.headerTitle, isDark && NotificationDropdownStyles.headerTitleDark]}>
-              Центр уведомлений
+              {t('notifications.centerTitle')}
             </Text>
           </View>
           <View style={NotificationDropdownStyles.headerRight}>
@@ -192,7 +194,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
             onPress={() => notificationService.markAllAsRead()}
           >
             <Ionicons name="checkmark-done" size={16} color="#3B82F6" />
-            <Text style={NotificationDropdownStyles.quickActionText}>Прочитать все</Text>
+            <Text style={NotificationDropdownStyles.quickActionText}>{t('notifications.markAllAsRead')}</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={[NotificationDropdownStyles.quickActionButton, isDark && NotificationDropdownStyles.quickActionButtonDark]}
@@ -201,7 +203,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                 }}
           >
             <Ionicons name="filter" size={16} color="#3B82F6" />
-            <Text style={NotificationDropdownStyles.quickActionText}>Фильтр</Text>
+            <Text style={NotificationDropdownStyles.quickActionText}>{t('notifications.filter')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -214,10 +216,10 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
               color={isDark ? '#6B7280' : '#9CA3AF'} 
             />
             <Text style={[NotificationDropdownStyles.emptyStateText, isDark && NotificationDropdownStyles.emptyStateTextDark]}>
-              Нет уведомлений
+              {t('notifications.noNotifications')}
             </Text>
             <Text style={[NotificationDropdownStyles.emptyStateSubtext, isDark && NotificationDropdownStyles.emptyStateSubtextDark]}>
-              Все новые уведомления появятся здесь
+              {t('notifications.newNotificationsHere')}
             </Text>
           </View>
         ) : (
@@ -293,7 +295,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                           onPress={() => notificationService.markAsRead(notification.id)}
                         >
                           <Ionicons name="checkmark" size={14} color="#10B981" />
-                          <Text style={NotificationDropdownStyles.actionButtonText}>Прочитано</Text>
+                          <Text style={NotificationDropdownStyles.actionButtonText}>{t('notifications.markAsRead')}</Text>
                         </TouchableOpacity>
                       </View>
                     )}
@@ -315,7 +317,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
               // TODO: Navigate to all notifications screen
             }}
           >
-            <Text style={NotificationDropdownStyles.footerText}>Показать все уведомления</Text>
+            <Text style={NotificationDropdownStyles.footerText}>{t('notifications.showAll')}</Text>
             <Ionicons name="chevron-forward" size={16} color="#3B82F6" />
           </TouchableOpacity>
         </View>

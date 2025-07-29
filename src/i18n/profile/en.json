@@ -115,6 +115,7 @@
   "noPhone": "Not specified",
   "email": "E-mail",
   "emailPlaceholder": "Enter e-mail",
+  "emailRequired": "E-mail is required",
   "birthDate": "Birth Date",
   "birthDatePlaceholder": "YYYY-MM-DD",
   "familyInfo": "Family Information",
@@ -224,6 +225,7 @@
     },
     "phoneVerifiedSuccess": "Phone successfully verified"
   },
+  "validationError": "Please fill in all required fields",
   "loadingProfile": "Loading profile...",
   "failedToLoadProfile": "Failed to load profile",
   "profileUpdateSuccess": {
@@ -242,8 +244,34 @@
     "title": "Validation Error",
     "firstNameRequired": "First name is required",
     "lastNameRequired": "Last name is required",
+    "familyTypeRequired": "Please select family member type",
+    "familyAgeRequired": "Please select birth date",
     "phoneRequired": "Phone number is required",
     "emailRequired": "Email is required"
+  },
+  "verificationModal": {
+    "enterCode": "Enter code",
+    "enterSmsCode": "Enter verification code from SMS",
+    "enterEmailCode": "Enter verification code from email",
+    "phoneNotSpecified": "Phone number is not specified"
+  },
+  "family": {
+    "addMemberSuccess": "Family member added",
+    "fillNameSurname": "Please fill in name and surname",
+    "confirmDelete": "Are you sure you want to delete this family member?",
+    "confirmSave": "Are you sure you want to save changes?",
+    "deleteSuccess": "Family member deleted",
+    "saveSuccess": "Changes saved",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
   },
   "photoSuccess": "Success",
   "photoTakeSuccess": "Photo successfully added",

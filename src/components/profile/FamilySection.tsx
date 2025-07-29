@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -22,15 +22,15 @@ interface FamilySectionProps {
   expandedFamilyMember: string | null;
   editingFamilyMember: string | null;
   familyPhoneVerification: {[key: string]: boolean};
-  familyPhoneVerifying: {[key: string]: boolean};
   onToggleFamilyMember: (memberId: string) => void;
   onOpenAddFamilyModal: () => void;
   onStartEditing: (memberId: string) => void;
   onCancelEditing: () => void;
   onSaveMember: (memberId: string, updatedData: Partial<FamilyMember>) => void;
   onDeleteMember: (memberId: string) => void;
-  onVerifyPhone: (memberId: string) => void;
   onResetPhoneVerification: (memberId: string) => void;
+  onVerifyPhone: (memberId: string) => void;
+  saveFamilyRef?: React.RefObject<(() => void) | null>;
 }
 
 const FamilySection: React.FC<FamilySectionProps> = ({
@@ -38,15 +38,14 @@ const FamilySection: React.FC<FamilySectionProps> = ({
   expandedFamilyMember,
   editingFamilyMember,
   familyPhoneVerification,
-  familyPhoneVerifying,
   onToggleFamilyMember,
   onOpenAddFamilyModal,
   onStartEditing,
   onCancelEditing,
   onSaveMember,
   onDeleteMember,
-  onVerifyPhone,
   onResetPhoneVerification,
+  onVerifyPhone,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
@@ -54,6 +53,9 @@ const FamilySection: React.FC<FamilySectionProps> = ({
   
   // Состояние для редактируемых данных
   const [editingData, setEditingData] = useState<{[key: string]: Partial<FamilyMember>}>({});
+  
+  // Ref для хранения функции сохранения
+  const saveRef = useRef<(() => void) | null>(null);
 
   return (
     <View style={styles.familySection}>
@@ -76,14 +78,14 @@ const FamilySection: React.FC<FamilySectionProps> = ({
           isExpanded={expandedFamilyMember === member.id}
           isEditing={editingFamilyMember === member.id}
           phoneVerified={familyPhoneVerification[member.id] || member.phoneVerified || false}
-          isVerifyingPhone={familyPhoneVerifying[member.id] || false}
           onToggle={() => onToggleFamilyMember(member.id)}
           onStartEditing={() => onStartEditing(member.id)}
           onCancelEditing={onCancelEditing}
           onSave={(updatedData) => onSaveMember(member.id, updatedData)}
           onDelete={() => onDeleteMember(member.id)}
-          onVerifyPhone={() => onVerifyPhone(member.id)}
           onResetPhoneVerification={() => onResetPhoneVerification(member.id)}
+          onVerifyPhone={() => onVerifyPhone(member.id)}
+          saveRef={saveRef}
         />
       ))}
     </View>

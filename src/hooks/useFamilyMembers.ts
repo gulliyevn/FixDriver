@@ -39,8 +39,8 @@ export const useFamilyMembers = () => {
         const initialMembers: FamilyMember[] = [
           { 
             id: '1', 
-            name: 'Анна', 
-            surname: 'Петрова',
+            name: t('profile.family.defaultMembers.child.name'), 
+            surname: t('profile.family.defaultMembers.child.surname'),
             type: 'child', 
             birthDate: '2015-03-15',
             age: 8,
@@ -49,8 +49,8 @@ export const useFamilyMembers = () => {
           },
           { 
             id: '2', 
-            name: 'Михаил', 
-            surname: 'Петров',
+            name: t('profile.family.defaultMembers.spouse.name'), 
+            surname: t('profile.family.defaultMembers.spouse.surname'),
             type: 'spouse', 
             birthDate: '1988-07-22',
             age: 35,
@@ -66,7 +66,7 @@ export const useFamilyMembers = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   // Сохраняем семейных членов в AsyncStorage
   const saveFamilyMembers = useCallback(async (members: FamilyMember[]) => {
@@ -91,10 +91,15 @@ export const useFamilyMembers = () => {
   const [newFamilyMember, setNewFamilyMember] = useState<NewFamilyMember>({
     name: '',
     surname: '',
-    type: 'child',
+    type: '',
     age: getDefaultDate(),
     phone: '',
   });
+
+  // Обработчик изменения телефона с сбросом верификации
+  const handlePhoneChange = (phone: string) => {
+    setNewFamilyMember(prev => ({ ...prev, phone }));
+  };
 
   const toggleFamilyMember = (memberId: string) => {
     setExpandedFamilyMember(expandedFamilyMember === memberId ? null : memberId);
@@ -109,7 +114,7 @@ export const useFamilyMembers = () => {
     setNewFamilyMember({
       name: '',
       surname: '',
-      type: 'child',
+      type: '',
       age: getDefaultDate(),
       phone: '',
     });
@@ -118,7 +123,7 @@ export const useFamilyMembers = () => {
   const addFamilyMember = () => {
     // Проверяем, что обязательные поля заполнены
     if (!newFamilyMember.name.trim() || !newFamilyMember.surname.trim()) {
-      Alert.alert('Ошибка', 'Пожалуйста, заполните имя и фамилию');
+      Alert.alert(t('common.error'), t('profile.family.fillNameSurname'));
       return;
     }
 
@@ -143,9 +148,9 @@ export const useFamilyMembers = () => {
     closeAddFamilyModal();
     
     Alert.alert(
-      'Успешно',
-      'Член семьи добавлен',
-      [{ text: 'OK' }]
+      t('common.success'),
+      t('profile.family.addMemberSuccess'),
+      [{ text: t('common.ok') }]
     );
   };
 
@@ -194,7 +199,7 @@ export const useFamilyMembers = () => {
   const verifyFamilyPhone = useCallback((memberId: string) => {
     const member = familyMembers.find(m => m.id === memberId);
     if (!member || !member.phone) {
-      Alert.alert('Ошибка', 'Номер телефона не указан');
+      Alert.alert(t('common.error'), t('profile.verificationModal.phoneNotSpecified'));
       return;
     }
 
@@ -202,8 +207,8 @@ export const useFamilyMembers = () => {
     const codeSentMessage = t('profile.verifyPhone.success.message');
     const cancelText = t('common.cancel');
     const verifyText = t('common.verify');
-    const successTitle = 'Успешно';
-    const successMessage = 'Телефон успешно верифицирован';
+    const successTitle = t('common.success');
+    const successMessage = t('profile.verifyPhone.phoneVerifiedSuccess');
     const errorTitle = t('profile.verifyPhone.error.title');
     const errorMessage = t('profile.verifyPhone.error.message');
 
@@ -218,8 +223,8 @@ export const useFamilyMembers = () => {
           onPress: () => {
             // Затем показываем поле ввода кода
             Alert.prompt(
-              'Введите код',
-              'Введите код подтверждения из SMS',
+              t('profile.verificationModal.enterCode'),
+              t('profile.verificationModal.enterSmsCode'),
               [
                 { text: cancelText, style: 'cancel' },
                 {
@@ -261,6 +266,7 @@ export const useFamilyMembers = () => {
     showAddFamilyModal,
     newFamilyMember,
     setNewFamilyMember,
+    handlePhoneChange,
     familyPhoneVerification,
     familyPhoneVerifying,
     loading,
