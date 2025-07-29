@@ -212,7 +212,7 @@
     "emailVerifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح"
   },
   "verifyPhone": {
-    "title": "التحقق من الهاتф",
+    "title": "التحقق من الهاتف",
     "message": "أدخل الرمز المرسل عبر الرسائل النصية",
     "success": {
       "title": "نجح",
@@ -246,5 +246,11 @@
     "lastNameRequired": "اسم العائلة مطلوب",
     "phoneRequired": "رقم الهاتف مطلوب",
     "emailRequired": "البريد الإلكتروني مطلوب"
-  }
+  },
+  "photoSuccess": "نجح",
+  "photoTakeSuccess": "تم إضافة الصورة بنجاح",
+  "photoPickSuccess": "تم اختيار الصورة من المعرض بنجاح",
+  "photoDeleteSuccess": "تم حذف الصورة بنجاح",
+  "photoSaveError": "فشل في حفظ الصورة",
+  "photoDeleteError": "فشل في حذف الصورة"
 } 

@@ -93,7 +93,7 @@
   "editProfile": "Edit Profile",
   "editProfileDesc": "Change personal data",
   "paymentMethods": "Payment Methods",
-  "paymentMethodsDesc": "Card management",
+  "paymentMethodsDesc": "Manage cards",
   "security": "Security",
   "securityDesc": "Security settings",
   "support": "Support",
@@ -226,8 +226,6 @@
   },
   "loadingProfile": "Loading profile...",
   "failedToLoadProfile": "Failed to load profile",
-  "cancel": "Cancel",
-  "delete": "Delete",
   "profileUpdateSuccess": {
     "title": "Success",
     "message": "Profile updated successfully"
@@ -246,5 +244,11 @@
     "lastNameRequired": "Last name is required",
     "phoneRequired": "Phone number is required",
     "emailRequired": "Email is required"
-  }
+  },
+  "photoSuccess": "Success",
+  "photoTakeSuccess": "Photo successfully added",
+  "photoPickSuccess": "Photo successfully selected from gallery",
+  "photoDeleteSuccess": "Photo successfully deleted",
+  "photoSaveError": "Failed to save photo",
+  "photoDeleteError": "Failed to delete photo"
 } 

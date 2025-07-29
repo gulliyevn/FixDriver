@@ -226,8 +226,6 @@
   },
   "loadingProfile": "Загрузка профиля...",
   "failedToLoadProfile": "Не удалось загрузить профиль",
-  "cancel": "Отмена",
-  "delete": "Удалить",
   "profileUpdateSuccess": {
     "title": "Успех",
     "message": "Профиль успешно обновлен"
@@ -246,5 +244,11 @@
     "lastNameRequired": "Фамилия обязательна для заполнения",
     "phoneRequired": "Номер телефона обязателен для заполнения",
     "emailRequired": "E-mail обязателен для заполнения"
-  }
+  },
+  "photoSuccess": "Успешно",
+  "photoTakeSuccess": "Фото успешно добавлено",
+  "photoPickSuccess": "Фото успешно выбрано из галереи",
+  "photoDeleteSuccess": "Фото успешно удалено",
+  "photoSaveError": "Не удалось сохранить фото",
+  "photoDeleteError": "Не удалось удалить фото"
 } 

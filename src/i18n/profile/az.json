@@ -246,5 +246,11 @@
     "lastNameRequired": "Soyad tələb olunur",
     "phoneRequired": "Telefon nömrəsi tələb olunur",
     "emailRequired": "E-poçt tələb olunur"
-  }
+  },
+  "photoSuccess": "Uğurlu",
+  "photoTakeSuccess": "Şəkil uğurla əlavə edildi",
+  "photoPickSuccess": "Şəkil qalereyadan uğurla seçildi",
+  "photoDeleteSuccess": "Şəkil uğurla silindi",
+  "photoSaveError": "Şəkil saxlanıla bilmədi",
+  "photoDeleteError": "Şəkil silinə bilmədi"
 } 

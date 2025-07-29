@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
-import { getMockPaymentHistory } from '../../mocks/paymentHistoryMock';
+import { mockPaymentHistory } from '../../mocks/paymentHistoryMock';
 import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
 import { colors } from '../../constants/colors';
 
@@ -34,7 +34,7 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
     dateRange: 'all'
   });
   
-  const allPayments = useMemo(() => getMockPaymentHistory(t), [t]);
+  const allPayments = useMemo(() => mockPaymentHistory, []);
   
   const filteredPayments = useMemo(() => {
     let filtered = allPayments;

@@ -246,5 +246,11 @@
     "lastNameRequired": "Soyad gereklidir",
     "phoneRequired": "Telefon numarası gereklidir",
     "emailRequired": "E-posta gereklidir"
-  }
+  },
+  "photoSuccess": "Başarılı",
+  "photoTakeSuccess": "Fotoğraf başarıyla eklendi",
+  "photoPickSuccess": "Fotoğraf galeriden başarıyla seçildi",
+  "photoDeleteSuccess": "Fotoğraf başarıyla silindi",
+  "photoSaveError": "Fotoğraf kaydedilemedi",
+  "photoDeleteError": "Fotoğraf silinemedi"
 } 

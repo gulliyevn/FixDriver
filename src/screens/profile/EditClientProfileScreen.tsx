@@ -7,7 +7,6 @@ import { ClientScreenProps } from '../../types/navigation';
 import { mockUsers } from '../../mocks/users';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../../hooks/useProfile';
 import { useVerification } from '../../hooks/useVerification';
 import { useFamilyMembers } from '../../hooks/useFamilyMembers';
@@ -50,10 +49,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     birthDate: user.birthDate || '1990-01-01',
   });
 
-  // Исходное фото для сравнения
-  const originalPhotoRef = useRef<string | null>(user.avatar);
-
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(user.avatar);
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -91,13 +86,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   // Функция для проверки изменений
   const checkHasChanges = () => {
     const formChanges = hasChanges(formData, originalDataRef.current);
-    
-    // Проверяем изменения фото
-    // Если profilePhoto отличается от originalPhoto - есть изменения
-    // Включая случай, когда фото было удалено (profilePhoto = null, originalPhoto ≠ null)
-    const photoChanges = profilePhoto !== originalPhotoRef.current;
-    
-    return formChanges || photoChanges;
+    return formChanges;
   };
 
 
@@ -144,10 +133,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
                             formData.phone !== originalDataRef.current.phone ||
                             formData.email !== originalDataRef.current.email;
 
-      // Проверяем, есть ли изменения в фото
-      const hasPhotoChanges = profilePhoto !== originalPhotoRef.current;
-
-      if (hasFormChanges || hasPhotoChanges) {
+      if (hasFormChanges) {
         // Валидируем поля перед сохранением
         const validation = validatePersonalInfo();
         if (!validation.isValid) {
@@ -159,7 +145,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           return false;
         }
 
-        // Сохраняем изменения в форме и фото
+        // Сохраняем изменения в форме
         const updateData: any = {};
         
         if (hasFormChanges) {
@@ -167,10 +153,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           updateData.surname = formData.lastName.trim();
           updateData.phone = formData.phone.trim();
           updateData.email = formData.email.trim();
-        }
-        
-        if (hasPhotoChanges) {
-          updateData.avatar = profilePhoto;
         }
 
         const success = await updateProfile(updateData);
@@ -183,7 +165,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
           setIsEditingPersonalInfo(false);
           // Обновляем исходные данные
           originalDataRef.current = { ...formData };
-          originalPhotoRef.current = profilePhoto;
           return true;
         } else {
           Alert.alert(
@@ -328,10 +309,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         birthDate: profile.birthDate || '1990-01-01',
       });
       
-      // Устанавливаем profilePhoto равным profile.avatar
-      // Если profile.avatar пустой или null, то устанавливаем null
-      setProfilePhoto(profile.avatar || null);
-      
       // Обновляем исходные данные
       originalDataRef.current = {
         firstName: profile.name,
@@ -340,7 +317,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         email: profile.email,
         birthDate: profile.birthDate || '1990-01-01',
       };
-      originalPhotoRef.current = profile.avatar || null;
     }
   }, [profile]);
 
@@ -402,8 +378,6 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         <ProfileAvatarSection
           userName={user.name}
           userSurname={user.surname}
-          profilePhoto={profilePhoto}
-          setProfilePhoto={setProfilePhoto}
           onCirclePress={handleCirclePressAction}
           rotateAnim={rotateAnim}
         />

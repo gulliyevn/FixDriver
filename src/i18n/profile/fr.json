@@ -246,5 +246,11 @@
     "lastNameRequired": "Le nom de famille est obligatoire",
     "phoneRequired": "Le numéro de téléphone est obligatoire",
     "emailRequired": "L'e-mail est obligatoire"
-  }
+  },
+  "photoSuccess": "Succès",
+  "photoTakeSuccess": "Photo ajoutée avec succès",
+  "photoPickSuccess": "Photo sélectionnée de la galerie avec succès",
+  "photoDeleteSuccess": "Photo supprimée avec succès",
+  "photoSaveError": "Échec de l'enregistrement de la photo",
+  "photoDeleteError": "Échec de la suppression de la photo"
 } 

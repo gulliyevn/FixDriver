@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockUsers } from '../mocks/users';
+import { AvatarService } from '../services/AvatarService';
 
 export interface UserProfile {
   id: string;
@@ -25,11 +26,19 @@ export const useProfile = () => {
     try {
       setLoading(true);
       setError(null);
+      
       // Сначала пытаемся загрузить сохраненные данные
       const savedProfile = await AsyncStorage.getItem('user_profile');
       
       if (savedProfile) {
         const parsedProfile = JSON.parse(savedProfile);
+        
+        // Загружаем аватар из нового сервиса
+        const avatarUri = await AvatarService.loadAvatar();
+        if (avatarUri) {
+          parsedProfile.avatar = avatarUri;
+        }
+        
         setProfile(parsedProfile);
         setLoading(false);
         return;
@@ -37,6 +46,9 @@ export const useProfile = () => {
       
       // Если сохраненных данных нет, загружаем из моков
       const user = mockUsers[0];
+      
+      // Загружаем аватар из нового сервиса
+      const avatarUri = await AvatarService.loadAvatar();
       
       const userProfile: UserProfile = {
         id: user.id,
@@ -49,7 +61,7 @@ export const useProfile = () => {
         address: user.address,
         createdAt: user.createdAt,
         role: user.role,
-        avatar: user.avatar,
+        avatar: avatarUri || user.avatar,
       };
       
       // Сохраняем начальные данные
@@ -105,6 +117,7 @@ export const useProfile = () => {
   const clearProfile = async () => {
     try {
       await AsyncStorage.removeItem('user_profile');
+      await AvatarService.deleteAvatar();
       setProfile(null);
     } catch (err) {
       // Ошибка при очистке профиля
