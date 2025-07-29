@@ -8,7 +8,7 @@ import { DriverProfileScreenStyles as styles, getDriverProfileStyles } from '../
 import { mockUsers, mockDrivers } from '../../mocks/users';
 import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
-import { Driver } from '../../types/user';
+import { UserDriver } from '../../types/user';
 
 // TODO: Для подключения бэкенда заменить на:
 // import { useProfile } from '../../hooks/useProfile';

@@ -1,4 +1,4 @@
-import { TravelPackage, ActivePackage, BookingRequest, RoutePoint, Passenger } from '../types/package';
+import { TravelPackage, ActivePackage, BookingRequest, PackageRoutePoint, Passenger } from '../types/package';
 
 export class PackageService {
   // Получить все доступные пакеты
@@ -96,7 +96,7 @@ export class PackageService {
   }
 
   // Рассчитать цену маршрута
-  static async calculateRoutePrice(route: RoutePoint[]): Promise<{
+  static async calculateRoutePrice(route: PackageRoutePoint[]): Promise<{
     distance: number;
     duration: number;
     basePrice: number;

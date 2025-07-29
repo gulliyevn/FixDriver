@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Driver, UserRole } from '../types/user';
+import { UserDriver, UserRole } from '../types/user';
 
 export interface MapLocation {
   latitude: number;
@@ -10,7 +10,7 @@ export interface MapLocation {
 }
 
 export interface DriverLocation extends MapLocation {
-  driver: Driver;
+  driver: UserDriver;
   isAvailable: boolean;
   rating: number;
 }

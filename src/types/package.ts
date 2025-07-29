@@ -13,7 +13,7 @@ export interface TravelPackage {
   expiresAt?: Date;
 }
 
-export interface RoutePoint {
+export interface PackageRoutePoint {
   id: string;
   address: string;
   latitude: number;
@@ -35,7 +35,7 @@ export interface BookingRequest {
   id: string;
   packageId?: string; // ID активного пакета
   passenger: Passenger;
-  route: RoutePoint[];
+  route: PackageRoutePoint[];
   departureTime: Date;
   returnTime?: Date; // для обратных поездок
   driverNotes?: string;

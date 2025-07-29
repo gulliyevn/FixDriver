@@ -1,7 +1,7 @@
-import { User, UserRole, Client, Driver } from '../types/user';
+import { User, UserRole, Client, UserDriver } from '../types/user';
 
 // Моки пользователей для входа
-export const mockUsers: (Client | Driver)[] = [
+export const mockUsers: (Client | UserDriver)[] = [
   {
     id: 'client_1',
     email: 'client@example.com',
@@ -58,7 +58,7 @@ export const mockUsers: (Client | Driver)[] = [
     car: 'Toyota Camry 2020',
     carInfo: 'Комфортный седан для перевозки детей',
     clientsPerDay: 15,
-  } as Driver,
+  } as UserDriver,
 ];
 
 // Простые пароли для моков (в реальном приложении не должно быть)
@@ -68,7 +68,7 @@ const mockPasswords: Record<string, string> = {
 };
 
 // Функция для поиска пользователя по email и паролю
-export const findAuthUserByCredentials = (email: string, password: string): (Client | Driver) | null => {
+export const findAuthUserByCredentials = (email: string, password: string): (Client | UserDriver) | null => {
 
   
   const user = mockUsers.find(user => user.email === email);
@@ -84,12 +84,12 @@ export const findAuthUserByCredentials = (email: string, password: string): (Cli
 };
 
 // Функция для поиска пользователя по email
-export const findAuthUserByEmail = (email: string): (Client | Driver) | null => {
+export const findAuthUserByEmail = (email: string): (Client | UserDriver) | null => {
   return mockUsers.find(user => user.email === email) || null;
 };
 
 // Функция для создания мок пользователя для аутентификации
-export const createAuthMockUser = (data: Partial<User>): (Client | Driver) => {
+export const createAuthMockUser = (data: Partial<User>): (Client | UserDriver) => {
   const id = `user_${Date.now()}`;
   const now = new Date().toISOString();
   
@@ -116,7 +116,7 @@ export const createAuthMockUser = (data: Partial<User>): (Client | Driver) => {
       car: 'Toyota Camry 2020',
       carInfo: 'Комфортный седан',
       clientsPerDay: 10,
-    } as Driver;
+    } as UserDriver;
   } else {
     return {
       id,

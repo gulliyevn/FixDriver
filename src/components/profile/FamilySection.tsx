@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import FamilyMemberItem from './FamilyMemberItem';
 import { FamilySectionStyles as styles, getFamilySectionColors } from '../../styles/components/profile/FamilySection.styles';
 
@@ -46,9 +46,10 @@ const FamilySection: React.FC<FamilySectionProps> = ({
   onDeleteMember,
   onResetPhoneVerification,
   onVerifyPhone,
+  saveFamilyRef,
 }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const dynamicStyles = getFamilySectionColors(isDark);
   
   // Состояние для редактируемых данных
@@ -85,7 +86,7 @@ const FamilySection: React.FC<FamilySectionProps> = ({
           onDelete={() => onDeleteMember(member.id)}
           onResetPhoneVerification={() => onResetPhoneVerification(member.id)}
           onVerifyPhone={() => onVerifyPhone(member.id)}
-          saveRef={saveRef}
+          saveRef={saveFamilyRef}
         />
       ))}
     </View>

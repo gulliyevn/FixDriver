@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useI18n } from '../../hooks/useI18n';
 import { createFamilyMemberItemStyles } from '../../styles/components/profile/FamilyMemberItem.styles';
 import { FamilyMemberItemProps, FamilyMember } from '../../types/family';
 import { calculateAge } from '../../utils/profileHelpers';
@@ -26,7 +26,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   saveRef,
 }) => {
   const { isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t } = useI18n();
   const styles = createFamilyMemberItemStyles(isDark);
   
   const [editingData, setEditingData] = useState<Partial<FamilyMember>>({
@@ -46,18 +46,6 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         birthDate: member.birthDate,
         phone: member.phone ?? '',
       });
-      
-      // Устанавливаем функцию сохранения в ref
-      if (saveRef?.current) {
-        saveRef.current = () => {
-          const updatedData = {
-            ...editingData,
-            age: calculateAge(editingData.birthDate || member.birthDate),
-            phone: editingData.phone?.trim() || undefined,
-          };
-          onSave(updatedData);
-        };
-      }
     } else {
       // Очищаем функцию сохранения
       if (saveRef?.current) {
@@ -65,6 +53,20 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
       }
     }
   }, [isEditing, member.id]); // Изменили зависимость с member на member.id
+
+  // Отдельный useEffect для установки функции сохранения с актуальными данными
+  React.useEffect(() => {
+    if (isEditing && saveRef?.current) {
+      saveRef.current = () => {
+        const updatedData = {
+          ...editingData,
+          age: calculateAge(editingData.birthDate || member.birthDate),
+          phone: editingData.phone?.trim() || undefined,
+        };
+        onSave(updatedData);
+      };
+    }
+  }, [isEditing, editingData, member.birthDate, onSave]); // Добавили editingData в зависимости
 
   const hasChanges = () => {
     const phoneChanged = (editingData.phone ?? '') !== (member.phone ?? '');

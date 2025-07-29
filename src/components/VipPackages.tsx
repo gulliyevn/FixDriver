@@ -11,6 +11,15 @@ interface VipPackagesProps {
   selectedPackage?: string;
 }
 
+// Интерфейс для функций пакета
+interface PackageFeature {
+  name: string;
+  free: string | boolean;
+  plus: string | boolean;
+  premium: string | boolean;
+  premiumPlus: string | boolean;
+}
+
 const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPackage }) => {
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
@@ -18,7 +27,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
   const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'year'>('month');
 
   // Один Animated.Value для плавного перехода
-  const periodAnim = useRef(new Animated.Value(0)).current; // 0 - месяц, 1 - год
+  const periodAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(periodAnim, {
@@ -30,6 +39,144 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
   }, [selectedPeriod]);
 
   const packages = getPremiumPackages(selectedPeriod, currentColors);
+
+  // Функции для каждого пакета
+  const packageFeatures: PackageFeature[] = [
+    {
+      name: 'Комиссия с клиента',
+      free: '5%',
+      plus: '3%',
+      premium: '1%',
+      premiumPlus: '0%'
+    },
+    {
+      name: 'Кэшбэк FixCash за поездку',
+      free: false,
+      plus: '2%',
+      premium: '5%',
+      premiumPlus: '10%'
+    },
+    {
+      name: 'Приоритет при выборе водителя',
+      free: false,
+      plus: true,
+      premium: 'Высокий',
+      premiumPlus: 'Максимум'
+    },
+    {
+      name: 'Служба поддержки',
+      free: 'Стандартная',
+      plus: 'Быстрая',
+      premium: 'VIP',
+      premiumPlus: 'Персональный'
+    },
+    {
+      name: 'Гарантия ожидания',
+      free: false,
+      plus: '5 мин',
+      premium: '3 мин',
+      premiumPlus: '2 мин'
+    },
+    {
+      name: 'Бесплатная отмена поездки',
+      free: false,
+      plus: '1/мес',
+      premium: '2/мес',
+      premiumPlus: '5/мес'
+    },
+    {
+      name: 'Мульти-точки маршрута',
+      free: false,
+      plus: true,
+      premium: true,
+      premiumPlus: true
+    },
+    {
+      name: 'Интеграция с календарём',
+      free: false,
+      plus: false,
+      premium: true,
+      premiumPlus: true
+    },
+    {
+      name: 'Ранний доступ к акциям',
+      free: false,
+      plus: false,
+      premium: true,
+      premiumPlus: true
+    }
+  ];
+
+  // Функция для отображения значения функции
+  const renderFeatureValue = (value: string | boolean, isHighlighted: boolean = false) => {
+    if (typeof value === 'boolean') {
+      return value ? (
+        <View style={VipPackagesStyles.iconContainer}>
+          <Ionicons 
+            name="checkmark-circle" 
+            size={16} 
+            color={isHighlighted ? currentColors.primary : '#10B981'} 
+          />
+        </View>
+      ) : (
+        <View style={[VipPackagesStyles.iconContainer, VipPackagesStyles.crossContainer]}>
+          <View style={VipPackagesStyles.crossCircle}>
+            <Ionicons 
+              name="close" 
+              size={12} 
+              color="#EF4444" 
+            />
+          </View>
+        </View>
+      );
+    }
+    
+    return (
+      <Text style={[
+        VipPackagesStyles.featureValue,
+        { color: isHighlighted ? currentColors.primary : currentColors.textSecondary }
+      ]}>
+        {value}
+      </Text>
+    );
+  };
+
+  // Функция для получения иконки функции
+  const getFeatureIcon = (featureName: string) => {
+    switch (featureName) {
+      case 'Комиссия с клиента':
+        return { name: 'card-outline', color: '#F59E0B' };
+      case 'Кэшбэк FixCash за поездку':
+        return { name: 'cash-outline', color: '#10B981' };
+      case 'Приоритет при выборе водителя':
+        return { name: 'star-outline', color: '#3B82F6' };
+      case 'Служба поддержки':
+        return { name: 'headset-outline', color: '#8B5CF6' };
+      case 'Гарантия ожидания':
+        return { name: 'time-outline', color: '#EF4444' };
+      case 'Бесплатная отмена поездки':
+        return { name: 'refresh-outline', color: '#06B6D4' };
+      case 'Мульти-точки маршрута':
+        return { name: 'map-outline', color: '#84CC16' };
+      case 'Интеграция с календарём':
+        return { name: 'calendar-outline', color: '#F97316' };
+      case 'Ранний доступ к акциям':
+        return { name: 'gift-outline', color: '#EC4899' };
+      default:
+        return { name: 'ellipse-outline', color: '#6B7280' };
+    }
+  };
+
+  // Функция для получения значения функции по ID пакета
+  const getFeatureValue = (feature: PackageFeature, packageId: string) => {
+    switch (packageId) {
+      case 'free': return feature.free;
+      case 'basic': return feature.plus;
+      case 'premium': return feature.premium;
+      case 'family': return feature.premiumPlus;
+      default: return feature.free;
+    }
+  };
 
   return (
     <View style={VipPackagesStyles.container}>
@@ -90,14 +237,22 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
         horizontal 
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={VipPackagesStyles.packagesScrollContent}
-        snapToInterval={320}
+        snapToInterval={416}
         decelerationRate="fast"
         snapToAlignment="center"
+        contentInsetAdjustmentBehavior="automatic"
+        pagingEnabled={false}
       >
-        {packages.map((pkg) => (
+        {/* Отступ слева для центрирования первого элемента */}
+        <View style={{ width: 32 }} />
+        
+        {packages.map((pkg, index) => (
           <View
             key={pkg.id}
-            style={[VipPackagesStyles.packageCard, dynamicStyles.packageCard]}
+            style={[
+              VipPackagesStyles.packageCard, 
+              dynamicStyles.packageCard,
+            ]}
           >
             <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
               {pkg.name}
@@ -107,17 +262,55 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
               {pkg.description}
             </Text>
 
+            {/* Таблица функций */}
+            <View style={VipPackagesStyles.featuresContainer}>
+              {packageFeatures.map((feature, featureIndex) => {
+                const featureIcon = getFeatureIcon(feature.name);
+                const isLastRow = featureIndex === packageFeatures.length - 1;
+                return (
+                  <View key={featureIndex} style={[
+                    VipPackagesStyles.featureRow,
+                    isLastRow && { borderBottomWidth: 0 }
+                  ]}>
+                    <View style={VipPackagesStyles.featureNameContainer}>
+                      <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: featureIcon.color + '15' }]}>
+                        <Ionicons 
+                          name={featureIcon.name as any} 
+                          size={14} 
+                          color={featureIcon.color} 
+                        />
+                      </View>
+                      <Text style={[VipPackagesStyles.featureName, { color: currentColors.textSecondary }]}>
+                        {feature.name}
+                      </Text>
+                    </View>
+                    <View style={VipPackagesStyles.featureValueContainer}>
+                      {renderFeatureValue(
+                        getFeatureValue(feature, pkg.id), 
+                        pkg.id !== 'free'
+                      )}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+
             <TouchableOpacity
               style={[VipPackagesStyles.priceButton, dynamicStyles.priceButton]}
               onPress={() => onSelectPackage(pkg.id, pkg.price)}
               activeOpacity={0.7}
             >
-              <Text style={VipPackagesStyles.priceText}>
-                {pkg.price} AFC
-              </Text>
+              <View style={VipPackagesStyles.priceContainer}>
+                <Text style={VipPackagesStyles.priceText}>
+                  {pkg.price} AFC
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         ))}
+        
+        {/* Отступ справа для центрирования последнего элемента */}
+        <View style={{ width: 32 }} />
       </ScrollView>
     </View>
   );

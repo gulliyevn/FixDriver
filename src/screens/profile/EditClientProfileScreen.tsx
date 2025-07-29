@@ -106,6 +106,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
             style: 'cancel',
             onPress: () => {
               // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+              // Пользователь остается на экране и может продолжить редактирование
             }
           },
           { 

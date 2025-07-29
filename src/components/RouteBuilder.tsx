@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView, TextInput } from 'react-native';
-import { RoutePoint } from '../types/package';
+import { PackageRoutePoint } from '../types/package';
 import { useTheme } from '../context/ThemeContext';
 import Button from './Button';
 import { RouteBuilderStyles } from '../styles/components/RouteBuilder.styles';
 
 interface RouteBuilderProps {
-  route: RoutePoint[];
-  onRouteChange: (route: RoutePoint[]) => void;
+  route: PackageRoutePoint[];
+  onRouteChange: (route: PackageRoutePoint[]) => void;
   onRouteCalculated?: (distance: number, duration: number, price: number) => void;
 }
 
@@ -21,7 +21,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
 
   // Добавить новую точку маршрута
   const addRoutePoint = () => {
-    const newPoint: RoutePoint = {
+    const newPoint: PackageRoutePoint = {
       id: Date.now().toString(),
       address: '',
       latitude: 0,
@@ -130,7 +130,7 @@ const RouteBuilder: React.FC<RouteBuilderProps> = ({
   // Инициализация с двумя точками, если маршрут пустой
   useEffect(() => {
     if (route.length === 0) {
-      const initialRoute: RoutePoint[] = [
+      const initialRoute: PackageRoutePoint[] = [
         {
           id: '1',
           address: '',

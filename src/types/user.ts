@@ -17,7 +17,7 @@ export interface User {
   birthDate?: string;
 }
 
-export interface Driver extends User {
+export interface UserDriver extends User {
   role: UserRole.DRIVER;
   vehicle: {
     make: string;
