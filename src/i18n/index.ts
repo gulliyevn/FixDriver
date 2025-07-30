@@ -17,7 +17,7 @@ const client = require('./client');
 const cards = require('./components/cards');
 const about = require('./client/about');
 const theme = require('./profile/theme');
-const premium = require('./premium');
+const premium = require('./premium').default;
 
 // Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
