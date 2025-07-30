@@ -19,7 +19,8 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
     const userBalance = 50; // Мок баланса пользователя
 
     if (userBalance >= price) {
-      const packageName = packageId === 'basic' ? t('premium.packages.plus') : 
+      const packageName = packageId === 'free' ? t('premium.packages.free') :
+                         packageId === 'basic' ? t('premium.packages.plus') : 
                          packageId === 'premium' ? t('premium.packages.premium') : 
                          t('premium.packages.premiumPlus');
       

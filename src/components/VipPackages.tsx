@@ -28,6 +28,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getVipPackagesColors(isDark);
   const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'year'>('month');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Один Animated.Value для плавного перехода
   const periodAnim = useRef(new Animated.Value(0)).current;
@@ -258,36 +259,33 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
       </View>
 
       {/* Пакеты */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={VipPackagesStyles.packagesScrollContent}
-        snapToInterval={384}
-        decelerationRate="normal"
-        snapToAlignment="center"
-        contentInsetAdjustmentBehavior="automatic"
-        pagingEnabled={false}
-        onMomentumScrollEnd={(event) => {
-          const offsetX = event.nativeEvent.contentOffset.x;
-          const cardWidth = 384; // ширина карточки + отступы
-          const centerIndex = Math.round(offsetX / cardWidth);
-          const targetOffset = centerIndex * cardWidth;
+      <View style={VipPackagesStyles.carouselContainer}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={VipPackagesStyles.carouselContent}
+          snapToInterval={420}
+          decelerationRate="fast"
+          snapToAlignment="center"
+          pagingEnabled={false}
+          onMomentumScrollEnd={(event) => {
+            const offsetX = event.nativeEvent.contentOffset.x;
+            const cardWidth = 420; // ширина карточки + отступы
+            const index = Math.round(offsetX / cardWidth);
+            setCurrentIndex(index);
+          }}
+        >
+          {/* Отступ слева для центрирования первого элемента */}
+          <View style={{ width: 40 }} />
           
-          // Плавно прокручиваем к центру
-          event.target.scrollTo({ x: targetOffset, animated: true });
-        }}
-      >
-        {/* Отступ слева для центрирования первого элемента */}
-        <View style={{ width: 32 }} />
-        
-        {packages.map((pkg) => (
-          <View
-            key={pkg.id}
-            style={[
-              VipPackagesStyles.packageCard, 
-              dynamicStyles.packageCard,
-            ]}
-          >
+          {packages.map((pkg) => (
+            <View
+              key={pkg.id}
+              style={[
+                VipPackagesStyles.packageCard, 
+                dynamicStyles.packageCard,
+              ]}
+            >
             <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
               {pkg.name}
             </Text>
@@ -332,7 +330,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
             <TouchableOpacity
               style={[VipPackagesStyles.priceButton, dynamicStyles.priceButton]}
               onPress={() => onSelectPackage(pkg.id, pkg.price)}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
               <View style={VipPackagesStyles.priceContainer}>
                 <Text style={VipPackagesStyles.priceText}>
@@ -344,8 +342,12 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
         ))}
         
         {/* Отступ справа для центрирования последнего элемента */}
-        <View style={{ width: 32 }} />
-      </ScrollView>
+        <View style={{ width: 40 }} />
+        
+        </ScrollView>
+        
+
+      </View>
     </View>
   );
 };
