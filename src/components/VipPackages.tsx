@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import { useI18n } from '../hooks/useI18n';
 import { colors } from '../constants/colors';
 import { VipPackagesStyles, getVipPackagesColors } from '../styles/components/VipPackages.styles';
-import { getPremiumPackages, VipPackage } from '../mocks/premiumPackagesMock';
+import { getPremiumPackages } from '../mocks/premiumPackagesMock';
 
 interface VipPackagesProps {
   onSelectPackage: (packageId: string, price: number) => void;
@@ -20,8 +21,9 @@ interface PackageFeature {
   premiumPlus: string | boolean;
 }
 
-const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPackage }) => {
+const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getVipPackagesColors(isDark);
   const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'year'>('month');
@@ -38,68 +40,68 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
     }).start();
   }, [selectedPeriod]);
 
-  const packages = getPremiumPackages(selectedPeriod, currentColors);
+  const packages = getPremiumPackages(selectedPeriod, currentColors, t);
 
   // Функции для каждого пакета
   const packageFeatures: PackageFeature[] = [
     {
-      name: 'Комиссия с клиента',
+      name: t('premium.features.commission'),
       free: '5%',
       plus: '3%',
       premium: '1%',
       premiumPlus: '0%'
     },
     {
-      name: 'Кэшбэк FixCash за поездку',
+      name: t('premium.features.cashback'),
       free: false,
       plus: '2%',
       premium: '5%',
       premiumPlus: '10%'
     },
     {
-      name: 'Приоритет при выборе водителя',
+      name: t('premium.features.priority'),
       free: false,
       plus: true,
-      premium: 'Высокий',
-      premiumPlus: 'Максимум'
+      premium: t('premium.values.high'),
+      premiumPlus: t('premium.values.maximum')
     },
     {
-      name: 'Служба поддержки',
-      free: 'Стандартная',
-      plus: 'Быстрая',
-      premium: 'VIP',
-      premiumPlus: 'Персональный'
+      name: t('premium.features.support'),
+      free: t('premium.values.standard'),
+      plus: t('premium.values.fast'),
+      premium: t('premium.values.vip'),
+      premiumPlus: t('premium.values.personal')
     },
     {
-      name: 'Гарантия ожидания',
+      name: t('premium.features.waitGuarantee'),
       free: false,
       plus: '5 мин',
       premium: '3 мин',
       premiumPlus: '2 мин'
     },
     {
-      name: 'Бесплатная отмена поездки',
+      name: t('premium.features.freeCancellation'),
       free: false,
       plus: '1/мес',
       premium: '2/мес',
       premiumPlus: '5/мес'
     },
     {
-      name: 'Мульти-точки маршрута',
+      name: t('premium.features.multiRoute'),
       free: false,
       plus: true,
       premium: true,
       premiumPlus: true
     },
     {
-      name: 'Интеграция с календарём',
+      name: t('premium.features.calendarIntegration'),
       free: false,
       plus: false,
       premium: true,
       premiumPlus: true
     },
     {
-      name: 'Ранний доступ к акциям',
+      name: t('premium.features.earlyAccess'),
       free: false,
       plus: false,
       premium: true,
@@ -202,7 +204,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
               VipPackagesStyles.periodButtonText,
               { color: selectedPeriod === 'month' ? '#fff' : currentColors.text },
             ]}>
-              Месяц
+              {t('premium.periods.month')}
             </Text>
           </Animated.View>
         </TouchableOpacity>
@@ -226,7 +228,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
               VipPackagesStyles.periodButtonText,
               { color: selectedPeriod === 'year' ? '#fff' : currentColors.text },
             ]}>
-              Год
+              {t('premium.periods.year')}
             </Text>
           </Animated.View>
         </TouchableOpacity>
@@ -246,7 +248,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
         {/* Отступ слева для центрирования первого элемента */}
         <View style={{ width: 32 }} />
         
-        {packages.map((pkg, index) => (
+        {packages.map((pkg) => (
           <View
             key={pkg.id}
             style={[
@@ -275,7 +277,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, selectedPack
                     <View style={VipPackagesStyles.featureNameContainer}>
                       <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: featureIcon.color + '15' }]}>
                         <Ionicons 
-                          name={featureIcon.name as any} 
+                          name={featureIcon.name as keyof typeof Ionicons.glyphMap} 
                           size={14} 
                           color={featureIcon.color} 
                         />

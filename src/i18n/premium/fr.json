@@ -1,0 +1,47 @@
+{
+  "title": "Statut Premium",
+  "periods": {
+    "month": "Mois",
+    "year": "Année"
+  },
+  "packages": {
+    "free": "Gratuit",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Fonctions de base sans fonctionnalités supplémentaires.",
+    "plus": "Priorité, meilleurs chauffeurs, 2% de cashback.",
+    "premium": "Tout de Plus, chauffeurs exclusifs, 5% de cashback, support VIP.",
+    "premiumPlus": "Tout de Premium, privilèges maximum, 10% de cashback, gestionnaire personnel."
+  },
+  "features": {
+    "commission": "Commission Client",
+    "cashback": "Cashback FixCash par Trajet",
+    "priority": "Priorité de Sélection de Chauffeur",
+    "support": "Service de Support",
+    "waitGuarantee": "Garantie d'Attente",
+    "freeCancellation": "Annulation Gratuite de Trajet",
+    "multiRoute": "Route Multi-Points",
+    "calendarIntegration": "Intégration Calendrier",
+    "earlyAccess": "Accès Anticipé aux Promotions"
+  },
+  "values": {
+    "standard": "Standard",
+    "fast": "Rapide",
+    "vip": "VIP",
+    "personal": "Personnel",
+    "high": "Élevé",
+    "maximum": "Maximum"
+  },
+  "purchase": {
+    "confirmTitle": "Confirmation d'Achat",
+    "confirmMessage": "Êtes-vous sûr de vouloir acheter le plan \"{{packageName}}\" pour {{price}} AFC?\n\n{{price}} AFC seront déduits de votre solde.",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "insufficientFunds": "Fonds Insuffisants",
+    "insufficientMessage": "Vous n'avez pas assez de fonds pour acheter ce plan.\n\nRequis: {{price}} AFC\nVotre solde: {{balance}} AFC",
+    "topUpBalance": "Recharger le Solde"
+  }
+} 

@@ -1,0 +1,47 @@
+{
+  "title": "Premium Durum",
+  "periods": {
+    "month": "Ay",
+    "year": "Yıl"
+  },
+  "packages": {
+    "free": "Ücretsiz",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Ek özellikler olmadan temel işlevler.",
+    "plus": "Öncelik, en iyi sürücüler, %2 nakit iade.",
+    "premium": "Plus'tan her şey, özel sürücüler, %5 nakit iade, VIP destek.",
+    "premiumPlus": "Premium'dan her şey, maksimum ayrıcalıklar, %10 nakit iade, kişisel yönetici."
+  },
+  "features": {
+    "commission": "Müşteri Komisyonu",
+    "cashback": "Yolculuk Başına FixCash Nakit İade",
+    "priority": "Sürücü Seçimi Önceliği",
+    "support": "Destek Hizmeti",
+    "waitGuarantee": "Bekleme Garantisi",
+    "freeCancellation": "Ücretsiz Yolculuk İptali",
+    "multiRoute": "Çok Noktalı Rota",
+    "calendarIntegration": "Takvim Entegrasyonu",
+    "earlyAccess": "Promosyonlara Erken Erişim"
+  },
+  "values": {
+    "standard": "Standart",
+    "fast": "Hızlı",
+    "vip": "VIP",
+    "personal": "Kişisel",
+    "high": "Yüksek",
+    "maximum": "Maksimum"
+  },
+  "purchase": {
+    "confirmTitle": "Satın Alma Onayı",
+    "confirmMessage": "\"{{packageName}}\" planını {{price}} AFC karşılığında satın almak istediğinizden emin misiniz?\n\n{{price}} AFC bakiyenizden düşülecektir.",
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "insufficientFunds": "Yetersiz Bakiye",
+    "insufficientMessage": "Bu planı satın almak için yeterli bakiyeniz yok.\n\nGerekli: {{price}} AFC\nBakiyeniz: {{balance}} AFC",
+    "topUpBalance": "Bakiyeyi Yükle"
+  }
+} 

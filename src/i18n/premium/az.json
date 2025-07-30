@@ -1,0 +1,47 @@
+{
+  "title": "Premium Status",
+  "periods": {
+    "month": "Ay",
+    "year": "İl"
+  },
+  "packages": {
+    "free": "Pulsuz",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Əlavə imkanlar olmadan əsas funksiyalar.",
+    "plus": "Prioritet, ən yaxşı sürücülər, 2% keşbek.",
+    "premium": "Plus-dan hər şey, eksklüziv sürücülər, 5% keşbek, VIP dəstək.",
+    "premiumPlus": "Premium-dan hər şey, maksimum imtiyazlar, 10% keşbek, şəxsi menecer."
+  },
+  "features": {
+    "commission": "Müştəri Komissiyası",
+    "cashback": "Səyahət üçün FixCash Keşbek",
+    "priority": "Sürücü Seçimi Prioriteti",
+    "support": "Dəstək Xidməti",
+    "waitGuarantee": "Gözləmə Zəmanəti",
+    "freeCancellation": "Pulsuz Səyahət Ləğvi",
+    "multiRoute": "Çoxnöqtəli Marşrut",
+    "calendarIntegration": "Təqvim İnteqrasiyası",
+    "earlyAccess": "Təşviqatlar üçün Erkən Giriş"
+  },
+  "values": {
+    "standard": "Standart",
+    "fast": "Sürətli",
+    "vip": "VIP",
+    "personal": "Şəxsi",
+    "high": "Yüksək",
+    "maximum": "Maksimum"
+  },
+  "purchase": {
+    "confirmTitle": "Alış Təsdiqi",
+    "confirmMessage": "\"{{packageName}}\" planını {{price}} AFC-yə almaq istədiyinizə əminsiniz?\n\n{{price}} AFC hesabınızdan çıxarılacaq.",
+    "cancel": "Ləğv et",
+    "confirm": "Təsdiq et",
+    "insufficientFunds": "Kifayət qədər vəsait yoxdur",
+    "insufficientMessage": "Bu planı almaq üçün kifayət qədər vəsaitiniz yoxdur.\n\nTələb olunan: {{price}} AFC\nSizin balansınız: {{balance}} AFC",
+    "topUpBalance": "Balansı Doldur"
+  }
+} 

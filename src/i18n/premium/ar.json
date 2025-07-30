@@ -1,0 +1,47 @@
+{
+  "title": "الحالة المميزة",
+  "periods": {
+    "month": "شهر",
+    "year": "سنة"
+  },
+  "packages": {
+    "free": "مجاني",
+    "plus": "بلس",
+    "premium": "بريميوم",
+    "premiumPlus": "بريميوم+"
+  },
+  "descriptions": {
+    "free": "وظائف أساسية بدون ميزات إضافية.",
+    "plus": "أولوية، أفضل السائقين، استرداد نقدي 2%.",
+    "premium": "كل شيء من بلس، سائقون حصريون، استرداد نقدي 5%، دعم VIP.",
+    "premiumPlus": "كل شيء من بريميوم، امتيازات قصوى، استرداد نقدي 10%، مدير شخصي."
+  },
+  "features": {
+    "commission": "عمولة العميل",
+    "cashback": "استرداد نقدي FixCash لكل رحلة",
+    "priority": "أولوية اختيار السائق",
+    "support": "خدمة الدعم",
+    "waitGuarantee": "ضمان الانتظار",
+    "freeCancellation": "إلغاء مجاني للرحلة",
+    "multiRoute": "مسار متعدد النقاط",
+    "calendarIntegration": "تكامل التقويم",
+    "earlyAccess": "وصول مبكر للعروض الترويجية"
+  },
+  "values": {
+    "standard": "قياسي",
+    "fast": "سريع",
+    "vip": "VIP",
+    "personal": "شخصي",
+    "high": "عالي",
+    "maximum": "أقصى"
+  },
+  "purchase": {
+    "confirmTitle": "تأكيد الشراء",
+    "confirmMessage": "هل أنت متأكد من أنك تريد شراء الخطة \"{{packageName}}\" مقابل {{price}} AFC؟\n\nسيتم خصم {{price}} AFC من رصيدك.",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "insufficientFunds": "أموال غير كافية",
+    "insufficientMessage": "ليس لديك أموال كافية لشراء هذه الخطة.\n\nالمطلوب: {{price}} AFC\nرصيدك: {{balance}} AFC",
+    "topUpBalance": "إعادة شحن الرصيد"
+  }
+} 

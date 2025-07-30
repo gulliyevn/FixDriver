@@ -1,0 +1,47 @@
+{
+  "title": "Premium Status",
+  "periods": {
+    "month": "Month",
+    "year": "Year"
+  },
+  "packages": {
+    "free": "Free",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Basic functions without additional features.",
+    "plus": "Priority, best drivers, 2% cashback.",
+    "premium": "Everything from Plus, exclusive drivers, 5% cashback, VIP support.",
+    "premiumPlus": "Everything from Premium, maximum privileges, 10% cashback, personal manager."
+  },
+  "features": {
+    "commission": "Client Commission",
+    "cashback": "FixCash Cashback per Trip",
+    "priority": "Driver Selection Priority",
+    "support": "Support Service",
+    "waitGuarantee": "Wait Guarantee",
+    "freeCancellation": "Free Trip Cancellation",
+    "multiRoute": "Multi-Point Route",
+    "calendarIntegration": "Calendar Integration",
+    "earlyAccess": "Early Access to Promotions"
+  },
+  "values": {
+    "standard": "Standard",
+    "fast": "Fast",
+    "vip": "VIP",
+    "personal": "Personal",
+    "high": "High",
+    "maximum": "Maximum"
+  },
+  "purchase": {
+    "confirmTitle": "Purchase Confirmation",
+    "confirmMessage": "Are you sure you want to purchase the \"{{packageName}}\" plan for {{price}} AFC?\n\n{{price}} AFC will be deducted from your balance.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "insufficientFunds": "Insufficient Funds",
+    "insufficientMessage": "You don't have enough funds to purchase this plan.\n\nRequired: {{price}} AFC\nYour balance: {{balance}} AFC",
+    "topUpBalance": "Top Up Balance"
+  }
+} 

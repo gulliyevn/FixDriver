@@ -1,0 +1,47 @@
+{
+  "title": "Premium Status",
+  "periods": {
+    "month": "Monat",
+    "year": "Jahr"
+  },
+  "packages": {
+    "free": "Kostenlos",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Grundfunktionen ohne zusätzliche Features.",
+    "plus": "Priorität, beste Fahrer, 2% Cashback.",
+    "premium": "Alles von Plus, exklusive Fahrer, 5% Cashback, VIP-Support.",
+    "premiumPlus": "Alles von Premium, maximale Privilegien, 10% Cashback, persönlicher Manager."
+  },
+  "features": {
+    "commission": "Kundenkommission",
+    "cashback": "FixCash Cashback pro Fahrt",
+    "priority": "Fahrerauswahl-Priorität",
+    "support": "Support-Service",
+    "waitGuarantee": "Wartezeit-Garantie",
+    "freeCancellation": "Kostenlose Fahrtstornierung",
+    "multiRoute": "Mehrpunkt-Route",
+    "calendarIntegration": "Kalender-Integration",
+    "earlyAccess": "Früher Zugang zu Aktionen"
+  },
+  "values": {
+    "standard": "Standard",
+    "fast": "Schnell",
+    "vip": "VIP",
+    "personal": "Persönlich",
+    "high": "Hoch",
+    "maximum": "Maximum"
+  },
+  "purchase": {
+    "confirmTitle": "Kaufbestätigung",
+    "confirmMessage": "Sind Sie sicher, dass Sie den \"{{packageName}}\"-Plan für {{price}} AFC kaufen möchten?\n\n{{price}} AFC werden von Ihrem Guthaben abgebucht.",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "insufficientFunds": "Unzureichende Mittel",
+    "insufficientMessage": "Sie haben nicht genügend Mittel, um diesen Plan zu kaufen.\n\nBenötigt: {{price}} AFC\nIhr Guthaben: {{balance}} AFC",
+    "topUpBalance": "Guthaben aufladen"
+  }
+} 
