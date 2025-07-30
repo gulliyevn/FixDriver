@@ -189,7 +189,7 @@
     "default": "Varsayılan"
   },
   "paymentHistory": {
-    "title": "İşlem geçmişi",
+    "title": "Ödeme geçmişi",
     "noPayments": "İşlem yok",
     "emptyDescription": "İşlem geçmişi boş",
     "today": "Bugün",
@@ -208,7 +208,12 @@
       "tripToAirport": "Havaalanına yolculuk",
       "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
       "refund": "İade",
-      "refundForCancelledTrip": "İptal edilen yolculuk için iade"
+      "refundForCancelledTrip": "İptal edilen yolculuk için iade",
+      "balanceTopUpTitle": "Bakiye yükleme",
+      "tripToCityCenterTitle": "Şehir merkezine yolculuk",
+      "tripToAirportTitle": "Havaalanına yolculuk",
+      "refundTitle": "İade",
+      "refundDescription": "İptal edilen yolculuk için iade"
     },
     "filter": {
       "title": "Filtre",

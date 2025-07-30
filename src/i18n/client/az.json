@@ -189,7 +189,7 @@
     "default": "Varsayılan"
   },
   "paymentHistory": {
-    "title": "Tranzaksiya tarixçəsi",
+    "title": "Ödəniş tarixçəsi",
     "noPayments": "Tranzaksiya yoxdur",
     "emptyDescription": "Tranzaksiya tarixçəsi boşdur",
     "today": "Bu gün",
@@ -208,7 +208,12 @@
       "tripToAirport": "Hava limanına səyahət",
       "routeCenterAirport": "Marşrut: mərkəz - Heydər Əliyev hava limanı",
       "refund": "Vəsait qaytarma",
-      "refundForCancelledTrip": "Ləğv edilmiş səyahət üçün qaytarma"
+      "refundForCancelledTrip": "Ləğv edilmiş səyahət üçün qaytarma",
+      "balanceTopUpTitle": "Balans yükləmə",
+      "tripToCityCenterTitle": "Şəhər mərkəzinə səyahət",
+      "tripToAirportTitle": "Hava limanına səyahət",
+      "refundTitle": "Vəsait qaytarma",
+      "refundDescription": "Ləğv edilmiş səyahət üçün qaytarma"
     },
     "filter": {
       "title": "Filter",

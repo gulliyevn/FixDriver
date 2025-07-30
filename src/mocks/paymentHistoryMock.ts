@@ -148,6 +148,49 @@ export const getMockTopUpHistory = (t: (key: string) => string): PaymentHistory[
   }
 ];
 
+// Функция для получения переведенных мок данных истории платежей
+export const getMockPaymentHistory = (t: (key: string) => string): PaymentHistory[] => [
+  {
+    id: '1',
+    title: t('client.paymentHistory.mock.tripToCityCenterTitle'),
+    description: t('client.paymentHistory.mock.routeLeninGagarin'),
+    amount: '-15.50 AFc',
+    type: 'trip',
+    status: 'completed',
+    date: '2024-01-15',
+    time: '14:30'
+  },
+  {
+    id: '2',
+    title: t('client.paymentHistory.mock.balanceTopUpTitle'),
+    amount: '+100 AFc',
+    type: 'topup',
+    status: 'completed',
+    date: '2024-01-14',
+    time: '10:15'
+  },
+  {
+    id: '3',
+    title: t('client.paymentHistory.mock.tripToAirportTitle'),
+    description: t('client.paymentHistory.mock.routeCenterAirport'),
+    amount: '-8.75 AFc',
+    type: 'trip',
+    status: 'completed',
+    date: '2024-01-13',
+    time: '09:45'
+  },
+  {
+    id: '4',
+    title: t('client.paymentHistory.mock.refundTitle'),
+    description: t('client.paymentHistory.mock.refundDescription'),
+    amount: '+12.00 AFc',
+    type: 'refund',
+    status: 'completed',
+    date: '2024-01-12',
+    time: '16:20'
+  }
+];
+
 // Оставляем старые данные для обратной совместимости
 export const mockPaymentHistory: PaymentHistory[] = [
   {

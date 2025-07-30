@@ -189,7 +189,7 @@
     "default": "Default"
   },
   "paymentHistory": {
-    "title": "Transaction history",
+    "title": "Payment history",
     "noPayments": "No transactions",
     "emptyDescription": "Transaction history is empty",
     "today": "Today",
@@ -208,7 +208,12 @@
       "tripToAirport": "Trip to airport",
       "routeCenterAirport": "Route: center - Heydar Aliyev airport",
       "refund": "Refund",
-      "refundForCancelledTrip": "Refund for cancelled trip"
+      "refundForCancelledTrip": "Refund for cancelled trip",
+      "balanceTopUpTitle": "Balance top-up",
+      "tripToCityCenterTitle": "Trip to city center",
+      "tripToAirportTitle": "Trip to airport",
+      "refundTitle": "Refund",
+      "refundDescription": "Refund for cancelled trip"
     },
     "filter": {
       "title": "Filter",

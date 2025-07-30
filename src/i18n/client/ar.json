@@ -190,7 +190,7 @@
     "default": "افتراضي"
   },
   "paymentHistory": {
-    "title": "سجل المعاملات",
+    "title": "تاريخ المدفوعات",
     "noPayments": "لا توجد معاملات",
     "emptyDescription": "سجل المعاملات فارغ",
     "today": "اليوم",
@@ -209,7 +209,12 @@
       "tripToAirport": "رحلة إلى المطار",
       "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
       "refund": "استرداد",
-      "refundForCancelledTrip": "استرداد للرحلة الملغاة"
+      "refundForCancelledTrip": "استرداد للرحلة الملغاة",
+      "balanceTopUpTitle": "إعادة شحن الرصيد",
+      "tripToCityCenterTitle": "رحلة إلى مركز المدينة",
+      "tripToAirportTitle": "رحلة إلى المطار",
+      "refundTitle": "استرداد",
+      "refundDescription": "استرداد للرحلة الملغاة"
     },
     "filter": {
       "title": "مرشح",

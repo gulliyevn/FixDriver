@@ -189,7 +189,7 @@
     "default": "Standard"
   },
   "paymentHistory": {
-    "title": "Transaktionshistorie",
+    "title": "Zahlungshistorie",
     "noPayments": "Keine Transaktionen",
     "emptyDescription": "Transaktionshistorie ist leer",
     "today": "Heute",
@@ -208,7 +208,12 @@
       "tripToAirport": "Fahrt zum Flughafen",
       "routeCenterAirport": "Route: Zentrum - Heydar Aliyev Flughafen",
       "refund": "Rückerstattung",
-      "refundForCancelledTrip": "Rückerstattung für stornierte Fahrt"
+      "refundForCancelledTrip": "Rückerstattung für stornierte Fahrt",
+      "balanceTopUpTitle": "Kontostand aufladen",
+      "tripToCityCenterTitle": "Fahrt ins Stadtzentrum",
+      "tripToAirportTitle": "Fahrt zum Flughafen",
+      "refundTitle": "Rückerstattung",
+      "refundDescription": "Rückerstattung für stornierte Fahrt"
     },
     "filter": {
       "title": "Filter",

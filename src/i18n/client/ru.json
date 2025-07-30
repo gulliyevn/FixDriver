@@ -177,7 +177,7 @@
     "default": "По умолчанию"
   },
   "paymentHistory": {
-    "title": "История транзакций",
+    "title": "История платежей",
     "noPayments": "Нет транзакций",
     "emptyDescription": "История транзакций пуста",
     "today": "Сегодня",
@@ -196,7 +196,12 @@
       "tripToAirport": "Поездка в аэропорт",
       "routeCenterAirport": "Маршрут: центр - аэропорт Гейдар Алиев",
       "refund": "Возврат средств",
-      "refundForCancelledTrip": "Возврат за отмененную поездку"
+      "refundForCancelledTrip": "Возврат за отмененную поездку",
+      "balanceTopUpTitle": "Пополнение баланса",
+      "tripToCityCenterTitle": "Поездка в центр города",
+      "tripToAirportTitle": "Поездка в аэропорт",
+      "refundTitle": "Возврат средств",
+      "refundDescription": "Возврат за отмененную поездку"
     },
     "filter": {
       "title": "Фильтр",
