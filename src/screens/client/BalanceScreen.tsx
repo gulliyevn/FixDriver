@@ -17,6 +17,7 @@ import { createCVVStickAnimation } from '../../styles/animations';
 import BalanceCardDecoration from '../../components/BalanceCardDecoration';
 import PaymentHistorySection from '../../components/PaymentHistorySection';
 import { usePackage } from '../../context/PackageContext';
+import { useBalance } from '../../context/BalanceContext';
 
 
 import {
@@ -78,31 +79,17 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const flipIconColorValue = flipIconColor(isDark);
   const backIconColorValue = backIconColor(isDark);
 
-  const BALANCE_KEY = 'user_balance';
   const CASHBACK_KEY = 'user_cashback';
-  const TOPUP_HISTORY_KEY = 'topup_history';
-  const [balance, setBalance] = useState('0');
   const [cashback, setCashback] = useState('0');
-  const [topUpHistory, setTopUpHistory] = useState<PaymentHistory[]>([]);
   const { currentPackage } = usePackage();
+  const { balance: userBalance, transactions, topUpBalance } = useBalance();
   
 
   
   React.useEffect(() => {
     (async () => {
-      const storedBalance = await AsyncStorage.getItem(BALANCE_KEY);
       const storedCashback = await AsyncStorage.getItem(CASHBACK_KEY);
-      const storedHistory = await AsyncStorage.getItem(TOPUP_HISTORY_KEY);
-      
-      if (storedBalance !== null) setBalance(storedBalance);
       if (storedCashback !== null) setCashback(storedCashback);
-      if (storedHistory !== null) {
-        try {
-          setTopUpHistory(JSON.parse(storedHistory));
-        } catch (error) {
-          console.log('Error parsing topup history:', error);
-        }
-      }
     })();
     // Инициализируем анимацию быстрого пополнения в свернутом состоянии
     quickTopUpHeight.setValue(0);
@@ -172,13 +159,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         {
           text: t('client.balance.yes'),
           onPress: () => {
-            setBalance((prev: string) => {
-              const cleanPrev = String(prev).replace(/AFc/gi, '').replace(/\s+/g, '');
-              const prevNum = parseFloat(cleanPrev);
-              const newBalance = (isNaN(prevNum) ? 0 : prevNum) + cashbackNum + '';
-              AsyncStorage.setItem(BALANCE_KEY, newBalance);
-              return newBalance;
-            });
+            topUpBalance(cashbackNum);
             setCashback('0');
             AsyncStorage.setItem(CASHBACK_KEY, '0');
             Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
@@ -194,27 +175,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
 
   const screenWidth = Dimensions.get('window').width;
 
-  const addToTopUpHistory = async (amount: number) => {
-    const now = new Date();
-    const newRecord: PaymentHistory = {
-      id: Date.now().toString(),
-      title: t('client.paymentHistory.mock.balanceTopUp'),
-      amount: `+${amount} AFc`,
-      type: 'topup',
-      status: 'completed',
-      date: now.toISOString().split('T')[0],
-      time: now.toTimeString().split(' ')[0].substring(0, 5)
-    };
-
-    const updatedHistory = [newRecord, ...topUpHistory];
-    setTopUpHistory(updatedHistory);
-    
-    try {
-      await AsyncStorage.setItem(TOPUP_HISTORY_KEY, JSON.stringify(updatedHistory));
-    } catch (error) {
-      console.log('Error saving topup history:', error);
-    }
-  };
+  // История транзакций теперь управляется через BalanceContext
 
 
 
@@ -224,16 +185,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
       Alert.alert(t('client.balance.error'), t('client.balance.enterValidAmount'));
       return;
     }
-    setBalance((prev: string) => {
-      const cleanPrev = String(prev).replace(/AFc/gi, '').replace(/\s+/g, '');
-      const prevNum = parseFloat(cleanPrev);
-      const newBalance = (isNaN(prevNum) ? 0 : prevNum) + amountNum + '';
-      AsyncStorage.setItem(BALANCE_KEY, newBalance);
-      return newBalance;
-    });
-    
-    // Добавляем запись в историю пополнений
-    addToTopUpHistory(amountNum);
+    topUpBalance(amountNum);
     
     setTopUpModalVisible(false);
     Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
@@ -331,8 +283,8 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 <View>
                   <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
                   <View style={styles.balanceRow}>
-                    <Text style={styles.balanceAmount}>{balance}</Text>
-                    {!String(balance).includes('AFc') && (
+                    <Text style={styles.balanceAmount}>{userBalance}</Text>
+                    {!String(userBalance).includes('AFc') && (
                       <Text style={styles.balanceCurrency}>AFc</Text>
                     )}
                   </View>
@@ -476,7 +428,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         </View>
 
         {/* История транзакций */}
-        <PaymentHistorySection customHistory={topUpHistory} />
+        <PaymentHistorySection navigation={navigation} />
       </ScrollView>
       {/* Модальное окно пополнения */}
       <Modal

@@ -196,11 +196,18 @@
     "yesterday": "Dün",
     "viewAll": "Tümünü göster",
     "showLess": "Daha az göster",
+    "empty": "Geçmiş boş",
     "status": {
       "completed": "Tamamlandı",
       "pending": "Beklemede",
       "failed": "Başarısız"
     },
+    "transactions": {
+      "topUp": "Bakiye yükleme {{amount}} AFC",
+      "packagePurchase": "Paket satın alma \"{{packageName}}\"",
+      "subscriptionRenewal": "Abonelik yenileme \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "Şehir merkezine yolculuk",
       "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",

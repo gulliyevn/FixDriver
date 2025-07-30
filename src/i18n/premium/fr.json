@@ -47,5 +47,21 @@
   "success": {
     "title": "Succès!",
     "message": "Vous avez sélectionné le package \"{{packageName}}\""
+  },
+  "subscription": {
+    "cancelTitle": "Annuler l'abonnement",
+    "cancelMessage": "Êtes-vous sûr de vouloir annuler votre abonnement au package \"{{packageName}}\" ?",
+    "cancel": "Annuler",
+    "keep": "Conserver",
+    "autoRenew": "Renouvellement automatique",
+    "autoRenewDescription": "Renouveler automatiquement l'abonnement chaque mois",
+    "disableAutoRenewTitle": "Désactiver le renouvellement automatique",
+    "disableAutoRenewMessage": "Êtes-vous sûr de vouloir désactiver le renouvellement automatique ? Votre abonnement ne sera pas automatiquement renouvelé.",
+    "disable": "Désactiver"
+  },
+  "insufficient": {
+    "title": "Fonds insuffisants",
+    "message": "Pour acheter le package \"{{packageName}}\", vous avez besoin de {{price}} AFC. Votre solde : {{balance}} AFC",
+    "topUp": "Recharger le solde"
   }
 } 

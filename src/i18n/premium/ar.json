@@ -47,5 +47,21 @@
   "success": {
     "title": "نجح!",
     "message": "لقد اخترت الحزمة \"{{packageName}}\""
+  },
+  "subscription": {
+    "cancelTitle": "إلغاء الاشتراك",
+    "cancelMessage": "هل أنت متأكد من أنك تريد إلغاء اشتراكك في الحزمة \"{{packageName}}\"؟",
+    "cancel": "إلغاء",
+    "keep": "احتفظ",
+    "autoRenew": "التجديد التلقائي",
+    "autoRenewDescription": "تجديد الاشتراك تلقائياً كل شهر",
+    "disableAutoRenewTitle": "إلغاء التجديد التلقائي",
+    "disableAutoRenewMessage": "هل أنت متأكد من أنك تريد إلغاء التجديد التلقائي؟ لن يتم تجديد اشتراكك تلقائياً.",
+    "disable": "إلغاء"
+  },
+  "insufficient": {
+    "title": "أموال غير كافية",
+    "message": "لشراء الحزمة \"{{packageName}}\" تحتاج إلى {{price}} AFC. رصيدك: {{balance}} AFC",
+    "topUp": "إعادة شحن الرصيد"
   }
 } 

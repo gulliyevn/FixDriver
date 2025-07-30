@@ -47,5 +47,21 @@
   "success": {
     "title": "Uğurlu!",
     "message": "\"{{packageName}}\" paketini seçdiniz"
+  },
+  "subscription": {
+    "cancelTitle": "Abunəliyi ləğv et",
+    "cancelMessage": "\"{{packageName}}\" paketinin abunəliyini ləğv etmək istədiyinizə əminsiniz?",
+    "cancel": "Ləğv et",
+    "keep": "Saxla",
+    "autoRenew": "Avtomatik yeniləmə",
+    "autoRenewDescription": "Abunəliyi hər ay avtomatik olaraq yenilə",
+    "disableAutoRenewTitle": "Avtomatik yeniləməni deaktiv et",
+    "disableAutoRenewMessage": "Avtomatik yeniləməni deaktiv etmək istədiyinizə əminsiniz? Abunəliyiniz avtomatik olaraq yenilənməyəcək.",
+    "disable": "Deaktiv et"
+  },
+  "insufficient": {
+    "title": "Kifayət qədər vəsait yoxdur",
+    "message": "\"{{packageName}}\" paketini almaq üçün {{price}} AFC lazımdır. Balansınız: {{balance}} AFC",
+    "topUp": "Balansı doldur"
   }
 } 

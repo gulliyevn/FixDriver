@@ -196,11 +196,18 @@
     "yesterday": "Hier",
     "viewAll": "Voir tout",
     "showLess": "Afficher moins",
+    "empty": "L'historique est vide",
     "status": {
       "completed": "Terminé",
       "pending": "En attente",
       "failed": "Échoué"
     },
+    "transactions": {
+      "topUp": "Rechargement du solde {{amount}} AFC",
+      "packagePurchase": "Achat de forfait \"{{packageName}}\"",
+      "subscriptionRenewal": "Renouvellement d'abonnement \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "Trajet vers le centre-ville",
       "routeLeninGagarin": "Itinéraire: Rue Lénine - Rue Gagarine",

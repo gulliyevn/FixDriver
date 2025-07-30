@@ -4,6 +4,7 @@ import ClientProfileScreen from '../screens/profile/ClientProfileScreen';
 import CardsScreen from '../screens/client/CardsScreen';
 import TripsScreen from '../screens/client/TripsScreen';
 import PaymentHistoryScreen from '../screens/client/PaymentHistoryScreen';
+import TransactionHistoryScreen from '../screens/client/TransactionHistoryScreen';
 import SettingsScreen from '../screens/client/SettingsScreen';
 import ResidenceScreen from '../screens/client/ResidenceScreen';
 import HelpScreen from '../screens/client/HelpScreen';
@@ -33,6 +34,7 @@ const ClientProfileStack: React.FC = () => {
       <Stack.Screen name="Cards" component={CardsScreen} />
       <Stack.Screen name="Trips" component={TripsScreen} />
       <Stack.Screen name="PaymentHistory" component={PaymentHistoryScreen} />
+      <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Residence" component={ResidenceScreen} />
       <Stack.Screen name="Help" component={HelpScreen} />

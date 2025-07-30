@@ -196,11 +196,18 @@
     "yesterday": "Dünən",
     "viewAll": "Hamısını göstər",
     "showLess": "Az göstər",
+    "empty": "Tarixçə boşdur",
     "status": {
       "completed": "Tamamlandı",
       "pending": "Gözləyir",
       "failed": "Xəta"
     },
+    "transactions": {
+      "topUp": "Balans doldurma {{amount}} AFC",
+      "packagePurchase": "Paket alışı \"{{packageName}}\"",
+      "subscriptionRenewal": "Abunəlik yeniləmə \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "Şəhər mərkəzinə səyahət",
       "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",

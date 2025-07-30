@@ -6,6 +6,7 @@ import { ThemeProvider } from '../src/context/ThemeContext';
 import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import { PackageProvider } from '../src/context/PackageContext';
+import { BalanceProvider } from '../src/context/BalanceContext';
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
 import DynamicStatusBar from '../src/components/DynamicStatusBar';
@@ -36,10 +37,12 @@ function App() {
           <AuthProvider>
             <ProfileProvider>
               <PackageProvider>
-                <NavigationContainer>
-                  <RootNavigator />
-                  <DynamicStatusBar />
-                </NavigationContainer>
+                <BalanceProvider>
+                  <NavigationContainer>
+                    <RootNavigator />
+                    <DynamicStatusBar />
+                  </NavigationContainer>
+                </BalanceProvider>
               </PackageProvider>
             </ProfileProvider>
           </AuthProvider>

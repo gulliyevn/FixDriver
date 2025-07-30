@@ -196,11 +196,18 @@
     "yesterday": "Yesterday",
     "viewAll": "View all",
     "showLess": "Show less",
+    "empty": "History is empty",
     "status": {
       "completed": "Completed",
       "pending": "Pending",
       "failed": "Failed"
     },
+    "transactions": {
+      "topUp": "Balance top-up {{amount}} AFC",
+      "packagePurchase": "Package purchase \"{{packageName}}\"",
+      "subscriptionRenewal": "Subscription renewal \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "Trip to city center",
       "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",

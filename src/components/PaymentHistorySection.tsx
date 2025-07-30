@@ -3,24 +3,37 @@ import { View, Text, TouchableOpacity, ScrollView, Animated } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
+import { useBalance } from '../context/BalanceContext';
 import { PaymentHistory, getMockTopUpHistory } from '../mocks/paymentHistoryMock';
 import { PaymentHistorySectionStyles as styles, getPaymentHistorySectionColors } from '../styles/components/PaymentHistorySection.styles';
 
 interface PaymentHistorySectionProps {
   onViewAll?: () => void;
   customHistory?: PaymentHistory[];
+  navigation?: any;
 }
 
-const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll, customHistory }) => {
+const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll, customHistory, navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { transactions } = useBalance();
   const dynamicStyles = getPaymentHistorySectionColors(isDark);
   
   const [displayedCount, setDisplayedCount] = useState(5);
   
-  // Используем кастомную историю или пустой массив
-  const transactions = customHistory || [];
-  const displayedTransactions = transactions.slice(0, displayedCount);
+  // Используем кастомную историю или реальные транзакции из контекста
+  const allTransactions = customHistory || transactions.map(transaction => ({
+    id: transaction.id,
+    title: transaction.description,
+    amount: `${transaction.amount > 0 ? '+' : ''}${transaction.amount} AFC`,
+    type: transaction.type === 'package_purchase' ? 'fee' : 
+          transaction.type === 'balance_topup' ? 'topup' : 'trip',
+    status: 'completed',
+    date: transaction.date.split('T')[0],
+    time: new Date(transaction.date).toTimeString().split(' ')[0].substring(0, 5)
+  }));
+  
+  const displayedTransactions = allTransactions.slice(0, displayedCount);
 
 
 
@@ -153,16 +166,22 @@ const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll
           </Text>
         </View>
         
-        {transactions.length > 5 && (
+        {transactions.length > 0 && (
           <TouchableOpacity 
             style={styles.viewAllButton}
-            onPress={() => setDisplayedCount(displayedCount === 5 ? transactions.length : 5)}
+            onPress={() => {
+              if (navigation) {
+                navigation.navigate('TransactionHistory');
+              } else if (onViewAll) {
+                onViewAll();
+              }
+            }}
           >
             <Text style={[styles.viewAllText, dynamicStyles.viewAllText]}>
-              {displayedCount === 5 ? t('client.paymentHistory.viewAll') : t('client.paymentHistory.showLess')}
+              {t('client.paymentHistory.viewAll')}
             </Text>
             <Ionicons 
-              name={displayedCount === 5 ? "chevron-down" : "chevron-up"} 
+              name="chevron-forward" 
               size={16} 
               color={dynamicStyles.viewAllText.color} 
             />

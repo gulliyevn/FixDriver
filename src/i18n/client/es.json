@@ -196,11 +196,18 @@
     "yesterday": "Ayer",
     "viewAll": "Ver todo",
     "showLess": "Mostrar menos",
+    "empty": "El historial está vacío",
     "status": {
       "completed": "Completado",
       "pending": "Pendiente",
       "failed": "Fallido"
     },
+    "transactions": {
+      "topUp": "Recarga de saldo {{amount}} AFC",
+      "packagePurchase": "Compra de paquete \"{{packageName}}\"",
+      "subscriptionRenewal": "Renovación de suscripción \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "Viaje al centro de la ciudad",
       "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",

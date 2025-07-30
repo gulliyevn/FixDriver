@@ -47,5 +47,21 @@
   "success": {
     "title": "Success!",
     "message": "You have selected the \"{{packageName}}\" package"
+  },
+  "subscription": {
+    "cancelTitle": "Cancel Subscription",
+    "cancelMessage": "Are you sure you want to cancel your subscription to the \"{{packageName}}\" package?",
+    "cancel": "Cancel",
+    "keep": "Keep",
+    "autoRenew": "Auto-renewal",
+    "autoRenewDescription": "Automatically renew subscription every month",
+    "disableAutoRenewTitle": "Disable Auto-renewal",
+    "disableAutoRenewMessage": "Are you sure you want to disable auto-renewal? Your subscription will not be automatically renewed.",
+    "disable": "Disable"
+  },
+  "insufficient": {
+    "title": "Insufficient Funds",
+    "message": "To purchase the \"{{packageName}}\" package, you need {{price}} AFC. Your balance: {{balance}} AFC",
+    "topUp": "Top Up Balance"
   }
 } 

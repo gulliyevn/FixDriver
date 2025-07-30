@@ -47,5 +47,21 @@
   "success": {
     "title": "Успешно!",
     "message": "Вы выбрали пакет \"{{packageName}}\""
+  },
+  "subscription": {
+    "cancelTitle": "Отменить подписку",
+    "cancelMessage": "Вы уверены, что хотите отменить подписку на пакет \"{{packageName}}\"?",
+    "cancel": "Отменить",
+    "keep": "Оставить",
+    "autoRenew": "Автообновление",
+    "autoRenewDescription": "Автоматически продлевать подписку каждый месяц",
+    "disableAutoRenewTitle": "Отключить автообновление",
+    "disableAutoRenewMessage": "Вы уверены, что хотите отключить автообновление? Подписка не будет продлеваться автоматически.",
+    "disable": "Отключить"
+  },
+  "insufficient": {
+    "title": "Недостаточно средств",
+    "message": "Для покупки пакета \"{{packageName}}\" необходимо {{price}} AFC. Ваш баланс: {{balance}} AFC",
+    "topUp": "Пополнить баланс"
   }
 } 

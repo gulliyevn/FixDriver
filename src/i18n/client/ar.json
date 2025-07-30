@@ -197,11 +197,18 @@
     "yesterday": "أمس",
     "viewAll": "عرض الكل",
     "showLess": "عرض أقل",
+    "empty": "السجل فارغ",
     "status": {
       "completed": "مكتمل",
       "pending": "قيد الانتظار",
       "failed": "فشل"
     },
+    "transactions": {
+      "topUp": "إعادة شحن الرصيد {{amount}} AFC",
+      "packagePurchase": "شراء الحزمة \"{{packageName}}\"",
+      "subscriptionRenewal": "تجديد الاشتراك \"{{packageName}}\""
+    }
+  },
     "mock": {
       "tripToCityCenter": "رحلة إلى مركز المدينة",
       "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
