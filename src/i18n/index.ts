@@ -17,7 +17,7 @@ const client = require('./client');
 const cards = require('./components/cards');
 const about = require('./client/about');
 const theme = require('./profile/theme');
-const premium = require('./premium').default;
+const premium = require('./premium');
 
 // Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
@@ -145,10 +145,6 @@ export const initializeLanguage = async (): Promise<void> => {
 export const t = (key: string, params?: Record<string, string | number>): string => {
   try {
     const result = i18n.t(key, params);
-    // Debug: проверяем только ключи профиля
-    if (key.startsWith('profile.') && result === key) {
-      console.log(`Missing profile translation: ${key}, locale: ${i18n.locale}`);
-    }
     return result;
   } catch (error) {
     console.error('Translation error:', error, 'for key:', key);

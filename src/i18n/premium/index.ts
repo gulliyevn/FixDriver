@@ -1,13 +1,13 @@
-import ru from './ru.json';
-import en from './en.json';
-import az from './az.json';
-import de from './de.json';
-import es from './es.json';
-import fr from './fr.json';
-import tr from './tr.json';
-import ar from './ar.json';
+const ru = require('./ru.json');
+const en = require('./en.json');
+const az = require('./az.json');
+const de = require('./de.json');
+const es = require('./es.json');
+const fr = require('./fr.json');
+const tr = require('./tr.json');
+const ar = require('./ar.json');
 
-export const premiumTranslations = {
+module.exports = {
   ru,
   en,
   az,
@@ -16,6 +16,4 @@ export const premiumTranslations = {
   fr,
   tr,
   ar,
-};
-
-export default premiumTranslations; 
+}; 
