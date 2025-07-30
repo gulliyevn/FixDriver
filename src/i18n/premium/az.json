@@ -43,5 +43,9 @@
     "insufficientFunds": "Kifayət qədər vəsait yoxdur",
     "insufficientMessage": "Bu planı almaq üçün kifayət qədər vəsaitiniz yoxdur.\n\nTələb olunan: {{price}} AFC\nSizin balansınız: {{balance}} AFC",
     "topUpBalance": "Balansı Doldur"
+  },
+  "success": {
+    "title": "Uğurlu!",
+    "message": "\"{{packageName}}\" paketini seçdiniz"
   }
 } 

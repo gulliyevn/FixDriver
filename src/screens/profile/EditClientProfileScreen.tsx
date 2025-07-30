@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { usePackage } from '../../context/PackageContext';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Animated } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { EditClientProfileScreenStyles as styles, getEditClientProfileScreenColors } from '../../styles/screens/profile/EditClientProfileScreen.styles';
@@ -30,7 +31,10 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
   
   const { profile, updateProfile, loadProfile } = useProfile();
+  const { currentPackage } = usePackage();
   const user = profile || mockUsers[0];
+  
+
   
   // Состояние формы
   const [formData, setFormData] = useState({
@@ -473,6 +477,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
         <ProfileAvatarSection
+          key={`avatar-${currentPackage}`}
           userName={user.name}
           userSurname={user.surname}
           onCirclePress={handleCirclePressAction}

@@ -11,6 +11,7 @@ import { getPremiumPackages } from '../mocks/premiumPackagesMock';
 interface VipPackagesProps {
   onSelectPackage: (packageId: string, price: number) => void;
   selectedPackage?: string;
+  currentPackage?: string;
 }
 
 // Интерфейс для функций пакета
@@ -22,7 +23,7 @@ interface PackageFeature {
   premiumPlus: string | boolean;
 }
 
-const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
+const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage, currentPackage }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
@@ -145,38 +146,21 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
     );
   };
 
-  // Функция для получения иконки функции
-  const getFeatureIcon = (featureName: string) => {
-    // Определяем иконку по ключевым словам в названии
-    if (featureName.toLowerCase().includes('комиссия') || featureName.toLowerCase().includes('commission')) {
-      return { name: 'card-outline', color: '#F59E0B' };
-    }
-    if (featureName.toLowerCase().includes('кэшбэк') || featureName.toLowerCase().includes('cashback')) {
-      return { name: 'cash-outline', color: '#10B981' };
-    }
-    if (featureName.toLowerCase().includes('приоритет') || featureName.toLowerCase().includes('priority')) {
-      return { name: 'star-outline', color: '#3B82F6' };
-    }
-    if (featureName.toLowerCase().includes('поддержка') || featureName.toLowerCase().includes('support')) {
-      return { name: 'headset-outline', color: '#8B5CF6' };
-    }
-    if (featureName.toLowerCase().includes('гарантия') || featureName.toLowerCase().includes('guarantee')) {
-      return { name: 'time-outline', color: '#EF4444' };
-    }
-    if (featureName.toLowerCase().includes('отмена') || featureName.toLowerCase().includes('cancellation')) {
-      return { name: 'refresh-outline', color: '#06B6D4' };
-    }
-    if (featureName.toLowerCase().includes('маршрут') || featureName.toLowerCase().includes('route')) {
-      return { name: 'map-outline', color: '#84CC16' };
-    }
-    if (featureName.toLowerCase().includes('календар') || featureName.toLowerCase().includes('calendar')) {
-      return { name: 'calendar-outline', color: '#F97316' };
-    }
-    if (featureName.toLowerCase().includes('акция') || featureName.toLowerCase().includes('access')) {
-      return { name: 'gift-outline', color: '#EC4899' };
-    }
+  // Функция для получения иконки функции по индексу
+  const getFeatureIcon = (featureIndex: number) => {
+    const icons = [
+      { name: 'card-outline', color: '#F59E0B' },      // Комиссия
+      { name: 'cash-outline', color: '#10B981' },      // Кэшбэк
+      { name: 'star-outline', color: '#3B82F6' },      // Приоритет
+      { name: 'headset-outline', color: '#8B5CF6' },   // Поддержка
+      { name: 'time-outline', color: '#EF4444' },      // Гарантия ожидания
+      { name: 'refresh-outline', color: '#06B6D4' },   // Отмена
+      { name: 'map-outline', color: '#84CC16' },       // Маршрут
+      { name: 'calendar-outline', color: '#F97316' },  // Календарь
+      { name: 'gift-outline', color: '#EC4899' },      // Акции
+    ];
     
-    return { name: 'ellipse-outline', color: '#6B7280' };
+    return icons[featureIndex] || { name: 'ellipse-outline', color: '#6B7280' };
   };
 
   // Функция для получения значения функции по ID пакета
@@ -286,9 +270,16 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
                 dynamicStyles.packageCard,
               ]}
             >
-            <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
-              {pkg.name}
-            </Text>
+            <View style={VipPackagesStyles.packageHeader}>
+              <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
+                {pkg.name}
+              </Text>
+              {currentPackage === pkg.id && (
+                <View style={VipPackagesStyles.selectedIndicator}>
+                  <Ionicons name="checkmark-circle" size={24} color="#3B82F6" />
+                </View>
+              )}
+            </View>
 
             <Text style={[VipPackagesStyles.packageDescription, dynamicStyles.packageDescription]}>
               {pkg.description}
@@ -297,7 +288,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
             {/* Таблица функций */}
             <View style={VipPackagesStyles.featuresContainer}>
               {packageFeatures.map((feature, featureIndex) => {
-                const featureIcon = getFeatureIcon(feature.name);
+                const featureIcon = getFeatureIcon(featureIndex);
                 const isLastRow = featureIndex === packageFeatures.length - 1;
                 return (
                   <View key={featureIndex} style={[

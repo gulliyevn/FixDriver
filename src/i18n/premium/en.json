@@ -43,5 +43,9 @@
     "insufficientFunds": "Insufficient Funds",
     "insufficientMessage": "You don't have enough funds to purchase this plan.\n\nRequired: {{price}} AFC\nYour balance: {{balance}} AFC",
     "topUpBalance": "Top Up Balance"
+  },
+  "success": {
+    "title": "Success!",
+    "message": "You have selected the \"{{packageName}}\" package"
   }
 } 

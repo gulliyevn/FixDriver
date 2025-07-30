@@ -43,5 +43,9 @@
     "insufficientFunds": "أموال غير كافية",
     "insufficientMessage": "ليس لديك أموال كافية لشراء هذه الخطة.\n\nالمطلوب: {{price}} AFC\nرصيدك: {{balance}} AFC",
     "topUpBalance": "إعادة شحن الرصيد"
+  },
+  "success": {
+    "title": "نجح!",
+    "message": "لقد اخترت الحزمة \"{{packageName}}\""
   }
 } 

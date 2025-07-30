@@ -43,5 +43,9 @@
     "insufficientFunds": "Unzureichende Mittel",
     "insufficientMessage": "Sie haben nicht genügend Mittel, um diesen Plan zu kaufen.\n\nBenötigt: {{price}} AFC\nIhr Guthaben: {{balance}} AFC",
     "topUpBalance": "Guthaben aufladen"
+  },
+  "success": {
+    "title": "Erfolg!",
+    "message": "Sie haben das \"{{packageName}}\" Paket ausgewählt"
   }
 } 

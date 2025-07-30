@@ -22,6 +22,12 @@ export const ProfileAvatarSectionStyles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
   },
+  nameAndIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 50,
+  },
   profileName: {
     fontSize: 24,
     fontWeight: '700',
@@ -31,7 +37,12 @@ export const ProfileAvatarSectionStyles = StyleSheet.create({
     marginHorizontal: 16,
     flex: 1,
     marginLeft: 0,
-    marginRight: 50,
+    marginRight: 8,
+  },
+  packageIconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -4,
   },
   rightCircle: {
     width: 32,
@@ -147,5 +158,6 @@ export const getProfileAvatarSectionColors = (isDark: boolean) => {
     rightCircle: { 
       backgroundColor: colors.border 
     },
+
   };
 }; 

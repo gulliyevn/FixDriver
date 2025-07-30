@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from '../src/context/ThemeContext';
 import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
+import { PackageProvider } from '../src/context/PackageContext';
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
 import DynamicStatusBar from '../src/components/DynamicStatusBar';
@@ -34,10 +35,12 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             <ProfileProvider>
-              <NavigationContainer>
-                <RootNavigator />
-                <DynamicStatusBar />
-              </NavigationContainer>
+              <PackageProvider>
+                <NavigationContainer>
+                  <RootNavigator />
+                  <DynamicStatusBar />
+                </NavigationContainer>
+              </PackageProvider>
             </ProfileProvider>
           </AuthProvider>
         </ThemeProvider>

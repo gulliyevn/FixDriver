@@ -20,7 +20,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
       t ? `${t('premium.features.commission')}: 5%` : 'Комиссия с клиента: 5%',
       t ? t('premium.values.standard') + ' ' + t('premium.features.support').toLowerCase() : 'Стандартная поддержка'
     ],
-    icon: 'remove-circle',
+    icon: 'leaf',
     color: '#6B7280',
     description: t ? t('premium.descriptions.free') : 'Базовые функции без дополнительных возможностей.'
   },
@@ -38,7 +38,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
       t ? `${t('premium.features.freeCancellation')}: 1/мес` : 'Бесплатная отмена: 1/мес',
       t ? t('premium.features.multiRoute') : 'Мульти-точки маршрута'
     ],
-    icon: 'star',
+    icon: 'shield',
     color: currentColors.primary,
     description: t ? t('premium.descriptions.plus') : 'Приоритет, лучшие водители, кэшбэк 2%.'
   },
@@ -59,7 +59,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
       t ? t('premium.features.calendarIntegration') : 'Интеграция с календарём',
       t ? t('premium.features.earlyAccess') : 'Ранний доступ к акциям'
     ],
-    icon: 'diamond',
+    icon: 'heart',
     color: currentColors.secondary,
     description: t ? t('premium.descriptions.premium') : 'Всё из Плюс, эксклюзивные водители, кэшбэк 5%, VIP поддержка.'
   },
@@ -79,7 +79,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
       t ? t('premium.features.calendarIntegration') : 'Интеграция с календарём',
       t ? t('premium.features.earlyAccess') : 'Ранний доступ к акциям'
     ],
-    icon: 'people',
+    icon: 'diamond',
     color: currentColors.accent,
     description: t ? t('premium.descriptions.premiumPlus') : 'Всё из Премиум, максимальные привилегии, кэшбэк 10%, персональный менеджер.'
   }

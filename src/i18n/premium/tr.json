@@ -43,5 +43,9 @@
     "insufficientFunds": "Yetersiz Bakiye",
     "insufficientMessage": "Bu planı satın almak için yeterli bakiyeniz yok.\n\nGerekli: {{price}} AFC\nBakiyeniz: {{balance}} AFC",
     "topUpBalance": "Bakiyeyi Yükle"
+  },
+  "success": {
+    "title": "Başarılı!",
+    "message": "\"{{packageName}}\" paketini seçtiniz"
   }
 } 

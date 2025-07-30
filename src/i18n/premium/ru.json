@@ -43,5 +43,9 @@
     "insufficientFunds": "Недостаточно средств",
     "insufficientMessage": "У вас недостаточно средств для покупки этого плана.\n\nНеобходимо: {{price}} AFC\nВаш баланс: {{balance}} AFC",
     "topUpBalance": "Пополнить баланс"
+  },
+  "success": {
+    "title": "Успешно!",
+    "message": "Вы выбрали пакет \"{{packageName}}\""
   }
 } 

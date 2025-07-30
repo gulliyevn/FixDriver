@@ -103,12 +103,21 @@ export const VipPackagesStyles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
+  packageHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   packageTitle: {
     fontSize: 24,
     fontWeight: '800',
-    marginBottom: 12,
-    textAlign: 'center',
+    textAlign: 'left',
+    flex: 1,
     letterSpacing: -0.5,
+  },
+  selectedIndicator: {
+    marginLeft: 8,
   },
   packageDescription: {
     fontSize: 14,

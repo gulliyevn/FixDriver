@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, Animated, Alert, Modal, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { useAvatar } from '../../hooks/useAvatar';
+import { usePackage } from '../../context/PackageContext';
 import { ProfileAvatarSectionStyles as styles, getProfileAvatarSectionColors } from '../../styles/components/profile/ProfileAvatarSection.styles';
 
 interface ProfileAvatarSectionProps {
@@ -22,8 +23,15 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { avatarUri, loading, showAvatarOptions } = useAvatar();
+  const { currentPackage, getPackageIcon, getPackageColor } = usePackage();
   const dynamicStyles = getProfileAvatarSectionColors(isDark);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
+
+  // Принудительно перерендериваем компонент при изменении пакета
+  useEffect(() => {
+    setForceUpdate(prev => prev + 1);
+  }, [currentPackage]);
 
   const handleAvatarPress = () => {
     if (avatarUri) {
@@ -34,6 +42,8 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
   const closeAvatarModal = () => {
     setShowAvatarModal(false);
   };
+
+
 
   return (
     <View style={styles.avatarSection}>
@@ -65,13 +75,22 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
             )}
           </TouchableOpacity>
         </TouchableOpacity>
-        <Text 
-          style={[styles.profileName, dynamicStyles.profileName]}
-          numberOfLines={1}
-          ellipsizeMode="tail"
-        >
-          {userName} {userSurname}
-        </Text>
+        <View style={styles.nameAndIconContainer}>
+          <Text 
+            style={[styles.profileName, dynamicStyles.profileName]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {userName} {userSurname}
+          </Text>
+          <View style={styles.packageIconContainer}>
+            <Ionicons 
+              name={getPackageIcon() as any} 
+              size={20} 
+              color={getPackageColor()} 
+            />
+          </View>
+        </View>
         <TouchableOpacity 
           style={[styles.rightCircle, dynamicStyles.rightCircle]}
           onPress={onCirclePress}
