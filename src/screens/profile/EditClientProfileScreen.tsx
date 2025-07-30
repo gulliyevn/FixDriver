@@ -95,32 +95,39 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
   };
 
   const handleFamilyExit = () => {
-    // Если есть активное редактирование семейного члена, показываем диалог
+    // Если есть активное редактирование семейного члена
     if (editingFamilyMember !== null) {
-      Alert.alert(
-        t('common.confirmation'),
-        t('profile.family.confirmSave'),
-        [
-          { 
-            text: t('common.cancel'), 
-            style: 'cancel',
-            onPress: () => {
-              // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-              // Пользователь остается на экране и может продолжить редактирование
+      // Проверяем, есть ли изменения через функцию сохранения
+      if (saveFamilyRef.current) {
+        // Если есть функция сохранения, значит есть изменения - показываем диалог
+        Alert.alert(
+          t('common.confirmation'),
+          t('profile.family.confirmSave'),
+          [
+            { 
+              text: t('common.cancel'), 
+              style: 'cancel',
+              onPress: () => {
+                // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+                // Пользователь остается на экране и может продолжить редактирование
+              }
+            },
+            { 
+              text: t('common.save'), 
+              onPress: () => {
+                // Сохраняем изменения и отменяем редактирование
+                handleFamilySave();
+              }
             }
-          },
-          { 
-            text: t('common.save'), 
-            onPress: () => {
-              // Сохраняем изменения и отменяем редактирование
-              handleFamilySave();
-            }
-          }
-        ]
-      );
+          ]
+        );
+      } else {
+        // Если нет функции сохранения, значит изменений нет - сразу выходим
+        cancelEditingFamilyMember();
+        navigation.goBack();
+      }
     } else {
-      // Если нет активного редактирования, просто отменяем и уходим назад
-      cancelEditingFamilyMember();
+      // Если нет активного редактирования, просто уходим назад
       navigation.goBack();
     }
   };
@@ -134,7 +141,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
     // Отменяем редактирование
     cancelEditingFamilyMember();
     
-    // Уходим назад
+    // Уходим назад напрямую, без вызова handleFamilyExit
     navigation.goBack();
   };
 
@@ -256,11 +263,43 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       );
     } else if (hasFamilyEditing) {
       // Если есть редактирование семейной секции, используем специальную обработку
-      handleFamilyExit();
+      
+      // Проверяем, есть ли изменения через функцию сохранения
+      if (saveFamilyRef.current) {
+        // Если есть изменения - показываем диалог
+        Alert.alert(
+          t('common.confirmation'),
+          t('profile.family.confirmSave'),
+          [
+            { 
+              text: t('common.cancel'), 
+              style: 'cancel',
+              onPress: () => {
+                // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+              }
+            },
+            { 
+              text: t('common.save'), 
+              onPress: () => {
+                // Сохраняем изменения и отменяем редактирование
+                if (saveFamilyRef.current) {
+                  saveFamilyRef.current();
+                }
+                cancelEditingFamilyMember();
+                navigation.goBack();
+              }
+            }
+          ]
+        );
+      } else {
+        // Если нет изменений - сразу выходим
+        cancelEditingFamilyMember();
+        navigation.goBack();
+      }
     } else {
       navigation.goBack();
     }
-  }, [isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, handleFamilyExit, navigation, t]);
+  }, [isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, saveFamilyRef, cancelEditingFamilyMember, navigation, t]);
 
   // Перехватываем swipe-back жест
   useFocusEffect(
@@ -296,13 +335,44 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
         } else if (hasFamilyEditing) {
           // Если есть редактирование семейной секции, используем специальную обработку
           e.preventDefault();
-          handleFamilyExit();
-          // После handleFamilyExit навигация будет обработана внутри функции
+          
+          // Проверяем, есть ли изменения через функцию сохранения
+          if (saveFamilyRef.current) {
+            // Если есть изменения - показываем диалог
+            Alert.alert(
+              t('common.confirmation'),
+              t('profile.family.confirmSave'),
+              [
+                { 
+                  text: t('common.cancel'), 
+                  style: 'cancel',
+                  onPress: () => {
+                    // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+                  }
+                },
+                { 
+                  text: t('common.save'), 
+                  onPress: () => {
+                    // Сохраняем изменения и отменяем редактирование
+                    if (saveFamilyRef.current) {
+                      saveFamilyRef.current();
+                    }
+                    cancelEditingFamilyMember();
+                    navigation.dispatch(e.data.action);
+                  }
+                }
+              ]
+            );
+          } else {
+            // Если нет изменений - сразу выходим
+            cancelEditingFamilyMember();
+            navigation.dispatch(e.data.action);
+          }
         }
       });
 
       return unsubscribe;
-    }, [navigation, isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, handleFamilyExit, t])
+    }, [navigation, isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, saveFamilyRef, cancelEditingFamilyMember, t])
   );
 
   const handleCirclePressAction = () => {
