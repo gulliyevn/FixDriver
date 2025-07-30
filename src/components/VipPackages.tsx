@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 import { colors } from '../constants/colors';
@@ -145,28 +146,36 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
 
   // Функция для получения иконки функции
   const getFeatureIcon = (featureName: string) => {
-    switch (featureName) {
-      case 'Комиссия с клиента':
-        return { name: 'card-outline', color: '#F59E0B' };
-      case 'Кэшбэк FixCash за поездку':
-        return { name: 'cash-outline', color: '#10B981' };
-      case 'Приоритет при выборе водителя':
-        return { name: 'star-outline', color: '#3B82F6' };
-      case 'Служба поддержки':
-        return { name: 'headset-outline', color: '#8B5CF6' };
-      case 'Гарантия ожидания':
-        return { name: 'time-outline', color: '#EF4444' };
-      case 'Бесплатная отмена поездки':
-        return { name: 'refresh-outline', color: '#06B6D4' };
-      case 'Мульти-точки маршрута':
-        return { name: 'map-outline', color: '#84CC16' };
-      case 'Интеграция с календарём':
-        return { name: 'calendar-outline', color: '#F97316' };
-      case 'Ранний доступ к акциям':
-        return { name: 'gift-outline', color: '#EC4899' };
-      default:
-        return { name: 'ellipse-outline', color: '#6B7280' };
+    // Определяем иконку по ключевым словам в названии
+    if (featureName.toLowerCase().includes('комиссия') || featureName.toLowerCase().includes('commission')) {
+      return { name: 'card-outline', color: '#F59E0B' };
     }
+    if (featureName.toLowerCase().includes('кэшбэк') || featureName.toLowerCase().includes('cashback')) {
+      return { name: 'cash-outline', color: '#10B981' };
+    }
+    if (featureName.toLowerCase().includes('приоритет') || featureName.toLowerCase().includes('priority')) {
+      return { name: 'star-outline', color: '#3B82F6' };
+    }
+    if (featureName.toLowerCase().includes('поддержка') || featureName.toLowerCase().includes('support')) {
+      return { name: 'headset-outline', color: '#8B5CF6' };
+    }
+    if (featureName.toLowerCase().includes('гарантия') || featureName.toLowerCase().includes('guarantee')) {
+      return { name: 'time-outline', color: '#EF4444' };
+    }
+    if (featureName.toLowerCase().includes('отмена') || featureName.toLowerCase().includes('cancellation')) {
+      return { name: 'refresh-outline', color: '#06B6D4' };
+    }
+    if (featureName.toLowerCase().includes('маршрут') || featureName.toLowerCase().includes('route')) {
+      return { name: 'map-outline', color: '#84CC16' };
+    }
+    if (featureName.toLowerCase().includes('календар') || featureName.toLowerCase().includes('calendar')) {
+      return { name: 'calendar-outline', color: '#F97316' };
+    }
+    if (featureName.toLowerCase().includes('акция') || featureName.toLowerCase().includes('access')) {
+      return { name: 'gift-outline', color: '#EC4899' };
+    }
+    
+    return { name: 'ellipse-outline', color: '#6B7280' };
   };
 
   // Функция для получения значения функции по ID пакета
@@ -224,12 +233,26 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
               },
             ]}
           >
-            <Text style={[
-              VipPackagesStyles.periodButtonText,
-              { color: selectedPeriod === 'year' ? '#fff' : currentColors.text },
-            ]}>
-              {t('premium.periods.year')}
-            </Text>
+            <View style={VipPackagesStyles.yearButtonContent}>
+              <Text style={[
+                VipPackagesStyles.periodButtonText,
+                { color: selectedPeriod === 'year' ? '#fff' : currentColors.text },
+              ]}>
+                {t('premium.periods.year')}
+              </Text>
+              {selectedPeriod === 'year' && (
+                <LinearGradient
+                  colors={['#00FFFF', '#FF00FF', '#FFFF00']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={VipPackagesStyles.yearDiscountBadge}
+                >
+                  <Text style={VipPackagesStyles.yearDiscountText}>
+                    -25%
+                  </Text>
+                </LinearGradient>
+              )}
+            </View>
           </Animated.View>
         </TouchableOpacity>
       </View>
@@ -239,11 +262,20 @@ const VipPackages: React.FC<VipPackagesProps> = ({ onSelectPackage }) => {
         horizontal 
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={VipPackagesStyles.packagesScrollContent}
-        snapToInterval={416}
-        decelerationRate="fast"
+        snapToInterval={384}
+        decelerationRate="normal"
         snapToAlignment="center"
         contentInsetAdjustmentBehavior="automatic"
         pagingEnabled={false}
+        onMomentumScrollEnd={(event) => {
+          const offsetX = event.nativeEvent.contentOffset.x;
+          const cardWidth = 384; // ширина карточки + отступы
+          const centerIndex = Math.round(offsetX / cardWidth);
+          const targetOffset = centerIndex * cardWidth;
+          
+          // Плавно прокручиваем к центру
+          event.target.scrollTo({ x: targetOffset, animated: true });
+        }}
       >
         {/* Отступ слева для центрирования первого элемента */}
         <View style={{ width: 32 }} />

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, Animated, Alert } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, Animated, Alert, Modal, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
@@ -23,11 +23,26 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
   const { t } = useI18n();
   const { avatarUri, loading, showAvatarOptions } = useAvatar();
   const dynamicStyles = getProfileAvatarSectionColors(isDark);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+
+  const handleAvatarPress = () => {
+    if (avatarUri) {
+      setShowAvatarModal(true);
+    }
+  };
+
+  const closeAvatarModal = () => {
+    setShowAvatarModal(false);
+  };
 
   return (
     <View style={styles.avatarSection}>
       <View style={[styles.profileNameBox, dynamicStyles.profileNameBox]}>
-        <View style={styles.avatar}>
+        <TouchableOpacity 
+          style={styles.avatar}
+          onPress={handleAvatarPress}
+          disabled={!avatarUri}
+        >
           {avatarUri ? (
             <Image source={{ uri: avatarUri }} style={styles.avatarImage} />
           ) : (
@@ -44,12 +59,12 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
             accessibilityLabel={avatarUri ? t('profile.changePhoto') : t('profile.addPhoto')}
           >
             {loading ? (
-              <Ionicons name="hourglass-outline" size={10} color="#083198" />
+              <Ionicons name="hourglass-outline" size={12} color="#083198" />
             ) : (
-              <Ionicons name={avatarUri ? "camera" : "add"} size={10} color="#083198" />
+              <Ionicons name={avatarUri ? "camera" : "add"} size={12} color="#083198" />
             )}
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
         <Text 
           style={[styles.profileName, dynamicStyles.profileName]}
           numberOfLines={1}
@@ -78,6 +93,34 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
           </Animated.View>
         </TouchableOpacity>
       </View>
+
+      {/* Модальное окно для просмотра аватара */}
+      <Modal
+        visible={showAvatarModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeAvatarModal}
+      >
+        <View style={styles.avatarModalOverlay}>
+          <TouchableOpacity 
+            style={styles.avatarModalBackground} 
+            onPress={closeAvatarModal}
+            activeOpacity={1}
+          >
+            <TouchableOpacity 
+              style={styles.avatarModalContent}
+              onPress={() => {}} // Предотвращаем закрытие при нажатии на фото
+              activeOpacity={1}
+            >
+              <Image 
+                source={{ uri: avatarUri }} 
+                style={styles.avatarModalImage}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
