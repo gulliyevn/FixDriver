@@ -63,5 +63,17 @@
     "title": "Unzureichende Mittel",
     "message": "Für den Kauf des Pakets \"{{packageName}}\" benötigen Sie {{price}} AFC. Ihr Guthaben: {{balance}} AFC",
     "topUp": "Guthaben aufladen"
+  },
+  "extension": {
+    "title": "Abonnement-Verlängerung",
+    "message": "Ihr \"{{packageName}}\" Paket wird ab {{activationDate}} verlängert.\n\n{{price}} AFC werden von Ihrem Guthaben abgebucht.",
+    "confirm": "Verlängern",
+    "cancel": "Abbrechen"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Kostenloses Paket",
+      "message": "Kostenloses Paket ist bereits aktiv. Sie können zu einem kostenpflichtigen Paket wechseln, um zusätzliche Funktionen zu erhalten."
+    }
   }
 } 

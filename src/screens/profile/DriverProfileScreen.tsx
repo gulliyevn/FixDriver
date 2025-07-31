@@ -9,6 +9,7 @@ import { mockUsers, mockDrivers } from '../../mocks/users';
 import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
 import { UserDriver } from '../../types/user';
+import { formatBalance } from '../../utils/formatters';
 
 // TODO: Для подключения бэкенда заменить на:
 // import { useProfile } from '../../hooks/useProfile';
@@ -46,7 +47,7 @@ const DriverProfileScreen: React.FC<ClientScreenProps<'DriverProfile'>> = ({ nav
       trips: 89,
       earnings: '8 750 AFc',
       rating: driver.rating,
-      balance: '1 250 AFc',
+      balance: formatBalance(1250) + ' AFc',
       address: 'ул. Низами, 23, Баку', // Заглушка
       email: driver.email,
       memberSince: new Date(driver.created_at).getFullYear(),

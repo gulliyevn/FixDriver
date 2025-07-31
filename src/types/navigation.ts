@@ -83,7 +83,7 @@ export type ClientStackParamList = {
   Debts: undefined;
   Trips: undefined;
   PaymentHistory: undefined;
-  TransactionHistory: undefined;
+
   Settings: undefined;
   Residence: undefined;
   Help: undefined;

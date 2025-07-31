@@ -66,7 +66,7 @@
     "topUp": "Recharger",
     "withdraw": "Retirer",
     "quickTopUp": "Recharge rapide",
-    "transactionHistory": "Historique des transactions",
+
     "showAll": "Afficher tout",
     "pay": "Payer",
     "insufficientFunds": "Fonds insuffisants",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Êtes-vous sûr de vouloir recharger votre solde de {0} AFc?",
     "topUpBalance": "Recharger",
     "payButton": "Payer",
+    "recentTopUps": "Recharges récentes",
     "cashback": {
       "title": "FixBack",
       "available": "Disponible à utiliser",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Rechargement du solde {{amount}} AFC",
       "packagePurchase": "Achat de forfait \"{{packageName}}\"",
+      "packageExtension": "Extension de forfait \"{{packageName}}\"",
       "subscriptionRenewal": "Renouvellement d'abonnement \"{{packageName}}\""
     },
     "mock": {

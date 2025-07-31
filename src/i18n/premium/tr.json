@@ -63,5 +63,17 @@
     "title": "Yetersiz bakiye",
     "message": "\"{{packageName}}\" paketini satın almak için {{price}} AFC gereklidir. Bakiyeniz: {{balance}} AFC",
     "topUp": "Bakiyeyi yükle"
+  },
+  "extension": {
+    "title": "Abonelik uzatma",
+    "message": "\"{{packageName}}\" paketiniz {{activationDate}} tarihinden itibaren uzatılacaktır.\n\nBakiyenizden {{price}} AFC düşülecektir.",
+    "confirm": "Uzat",
+    "cancel": "İptal"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Ücretsiz Paket",
+      "message": "Ücretsiz paket zaten aktif. Ek özellikler için ücretli pakete geçebilirsiniz."
+    }
   }
 } 

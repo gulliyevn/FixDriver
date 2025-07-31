@@ -66,7 +66,7 @@
     "topUp": "Внести",
     "withdraw": "Вывести",
     "quickTopUp": "Быстрое пополнение",
-    "transactionHistory": "История операций",
+
     "showAll": "Показать все",
     "pay": "Погасить",
     "insufficientFunds": "Недостаточно средств",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Вы уверены, что хотите пополнить баланс на %{0} AFc?",
     "topUpBalance": "Пополнить",
     "payButton": "Оплатить",
+    "recentTopUps": "Последние пополнения",
     "cashback": {
       "title": "FixBack",
       "available": "Доступно для использования",
@@ -193,6 +194,7 @@
     "transactions": {
       "topUp": "Пополнение баланса на {{amount}} AFC",
       "packagePurchase": "Покупка пакета \"{{packageName}}\"",
+      "packageExtension": "Продление пакета \"{{packageName}}\"",
       "subscriptionRenewal": "Автообновление подписки \"{{packageName}}\""
     },
     "mock": {

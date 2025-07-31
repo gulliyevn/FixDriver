@@ -16,7 +16,7 @@ export const VipPackagesStyles = StyleSheet.create({
     backgroundColor: 'rgba(59, 130, 246, 0.1)',
     borderRadius: 12,
   },
-  discountText: {
+  discountHeaderText: {
     fontSize: 13,
     fontWeight: '600',
     marginLeft: 6,
@@ -102,6 +102,15 @@ export const VipPackagesStyles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 6,
+  },
+  selectedPackageCard: {
+    borderWidth: 2,
+    borderColor: '#3B82F6',
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   packageHeader: {
     flexDirection: 'row',
@@ -216,7 +225,7 @@ export const VipPackagesStyles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
-  discountText: {
+  discountLabelText: {
     fontSize: 12,
     fontWeight: '600',
     color: '#10B981',
@@ -250,7 +259,7 @@ export const VipPackagesStyles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
-  yearDiscountText: {
+  yearDiscountLabelText: {
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '800',

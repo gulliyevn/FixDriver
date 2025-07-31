@@ -25,7 +25,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
     description: t ? t('premium.descriptions.free') : 'Базовые функции без дополнительных возможностей.'
   },
   {
-    id: 'basic',
+    id: 'plus',
     name: t ? t('premium.packages.plus') : 'Плюс',
     price: selectedPeriod === 'month' ? 6.99 : 62.90,
     period: selectedPeriod === 'month' ? (t ? t('premium.periods.month') : 'месяц') : (t ? t('premium.periods.year') : 'год'),
@@ -64,7 +64,7 @@ export const getPremiumPackages = (selectedPeriod: 'month' | 'year', currentColo
     description: t ? t('premium.descriptions.premium') : 'Всё из Плюс, эксклюзивные водители, кэшбэк 5%, VIP поддержка.'
   },
   {
-    id: 'family',
+    id: 'premiumPlus',
     name: t ? t('premium.packages.premiumPlus') : 'Премиум+',
     price: selectedPeriod === 'month' ? 29.99 : 269.90,
     period: selectedPeriod === 'month' ? (t ? t('premium.periods.month') : 'месяц') : (t ? t('premium.periods.year') : 'год'),

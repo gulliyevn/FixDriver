@@ -7,6 +7,8 @@ export interface Transaction {
   type: 'package_purchase' | 'balance_topup' | 'subscription_renewal';
   amount: number;
   description: string;
+  translationKey?: string;
+  translationParams?: Record<string, string>;
   date: string;
   packageType?: string;
 }
@@ -25,7 +27,7 @@ const BALANCE_KEY = 'user_balance';
 const TRANSACTIONS_KEY = 'user_transactions';
 
 export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { t } = useI18n();
+
   const [balance, setBalance] = useState<number>(50); // Начальный баланс
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -50,7 +52,21 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       const storedTransactions = await AsyncStorage.getItem(TRANSACTIONS_KEY);
       if (storedTransactions) {
-        setTransactions(JSON.parse(storedTransactions));
+        const parsedTransactions = JSON.parse(storedTransactions);
+        
+        // Миграция: добавляем translationKey для старых транзакций пополнения
+        const migratedTransactions = parsedTransactions.map((transaction: any) => {
+          if (transaction.type === 'balance_topup' && !transaction.translationKey) {
+            return {
+              ...transaction,
+              translationKey: 'client.paymentHistory.transactions.topUp',
+              translationParams: { amount: Math.abs(transaction.amount).toString() }
+            };
+          }
+          return transaction;
+        });
+        
+        setTransactions(migratedTransactions);
       }
     } catch (error) {
       console.log('Error loading transactions:', error);
@@ -83,13 +99,15 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
     await addTransaction({
       type: 'balance_topup',
       amount: amount,
-      description: t('client.paymentHistory.transactions.topUp', { amount: amount.toString() }),
+      description: `Balance top-up ${amount} AFC`, // Английский текст как fallback
+      translationKey: 'client.paymentHistory.transactions.topUp',
+      translationParams: { amount: amount.toString() },
     });
   };
 
   const deductBalance = async (amount: number, description: string, packageType?: string): Promise<boolean> => {
     if (balance < amount) {
-      return false; // Недостаточно средств
+      return false; // Insufficient funds
     }
 
     const newBalance = balance - amount;
@@ -112,6 +130,17 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       id: Date.now().toString(),
       date: new Date().toISOString(),
     };
+
+    // Если это транзакция покупки пакета, добавляем ключи переводов
+    if (transaction.type === 'package_purchase' && transaction.packageType) {
+      const packageNameForTranslation = transaction.packageType === 'plus' ? 'plus' : transaction.packageType;
+      newTransaction.translationKey = 'client.paymentHistory.transactions.packagePurchase';
+      newTransaction.translationParams = { packageName: packageNameForTranslation };
+    } else if (transaction.type === 'subscription_renewal' && transaction.packageType) {
+      const packageNameForTranslation = transaction.packageType === 'plus' ? 'plus' : transaction.packageType;
+      newTransaction.translationKey = 'client.paymentHistory.transactions.subscriptionRenewal';
+      newTransaction.translationParams = { packageName: packageNameForTranslation };
+    }
 
     const newTransactions = [newTransaction, ...transactions];
     await saveTransactions(newTransactions);

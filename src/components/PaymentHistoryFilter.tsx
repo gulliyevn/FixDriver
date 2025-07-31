@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { PaymentHistoryFilterStyles as styles, getPaymentHistoryFilterStyles } from '../styles/components/PaymentHistoryFilter.styles';
 
 export interface PaymentFilter {
-  type: 'all' | 'trip' | 'topup' | 'refund' | 'fee';
+  type: 'all' | 'trip' | 'refund' | 'fee';
   status: 'all' | 'completed' | 'pending' | 'failed';
   dateRange: 'all' | 'today' | 'week' | 'month' | 'year';
 }
@@ -35,7 +35,6 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
   const paymentTypes = [
     { key: 'all', label: t('client.paymentHistory.filter.allTypes'), icon: 'list' },
     { key: 'trip', label: t('client.paymentHistory.filter.trips'), icon: 'car' },
-    { key: 'topup', label: t('client.paymentHistory.filter.topUps'), icon: 'add-circle' },
     { key: 'refund', label: t('client.paymentHistory.filter.refunds'), icon: 'refresh-circle' },
     { key: 'fee', label: t('client.paymentHistory.filter.fees'), icon: 'card' }
   ];

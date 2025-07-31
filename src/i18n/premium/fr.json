@@ -63,5 +63,17 @@
     "title": "Fonds insuffisants",
     "message": "Pour acheter le package \"{{packageName}}\", vous avez besoin de {{price}} AFC. Votre solde : {{balance}} AFC",
     "topUp": "Recharger le solde"
+  },
+  "extension": {
+    "title": "Extension d'abonnement",
+    "message": "Votre package \"{{packageName}}\" sera étendu à partir de {{activationDate}}.\n\n{{price}} AFC seront déduits de votre solde.",
+    "confirm": "Étendre",
+    "cancel": "Annuler"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Package Gratuit",
+      "message": "Le package gratuit est déjà actif. Vous pouvez passer à un package payant pour des fonctionnalités supplémentaires."
+    }
   }
 } 

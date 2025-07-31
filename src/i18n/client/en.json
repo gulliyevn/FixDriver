@@ -66,7 +66,7 @@
     "topUp": "Top up",
     "withdraw": "Withdraw",
     "quickTopUp": "Quick top up",
-    "transactionHistory": "Transaction history",
+
     "showAll": "Show all",
     "pay": "Pay",
     "insufficientFunds": "Insufficient funds",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Are you sure you want to top up your balance by %{0} AFc?",
     "topUpBalance": "Top up balance",
     "payButton": "Pay",
+    "recentTopUps": "Recent top-ups",
     "cashback": {
       "title": "FixBack",
       "available": "Available to use",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Balance top-up {{amount}} AFC",
       "packagePurchase": "Package purchase \"{{packageName}}\"",
+      "packageExtension": "Package extension \"{{packageName}}\"",
       "subscriptionRenewal": "Subscription renewal \"{{packageName}}\""
     },
     "mock": {

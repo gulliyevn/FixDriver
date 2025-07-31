@@ -36,14 +36,14 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             <ProfileProvider>
-              <PackageProvider>
-                <BalanceProvider>
+              <BalanceProvider>
+                <PackageProvider>
                   <NavigationContainer>
                     <RootNavigator />
                     <DynamicStatusBar />
                   </NavigationContainer>
-                </BalanceProvider>
-              </PackageProvider>
+                </PackageProvider>
+              </BalanceProvider>
             </ProfileProvider>
           </AuthProvider>
         </ThemeProvider>

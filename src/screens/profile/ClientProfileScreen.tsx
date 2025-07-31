@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import NotificationsScreen from '../common/NotificationsScreen';
 import { useProfile } from '../../hooks/useProfile';
+import { formatBalance } from '../../utils/formatters';
 
 // TODO: Для подключения бэкенда заменить на:
 // import { useNotifications } from '../../hooks/useNotifications';
@@ -62,7 +63,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
       trips: 127,
       spent: '12 450 AFc',
       rating: profile.rating,
-      balance: balance + ' AFc',
+      balance: formatBalance(parseFloat(balance)) + ' AFc',
       address: profile.address,
       email: profile.email,
       memberSince: new Date(profile.createdAt).getFullYear(),

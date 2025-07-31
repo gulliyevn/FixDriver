@@ -63,5 +63,17 @@
     "title": "Insufficient Funds",
     "message": "To purchase the \"{{packageName}}\" package, you need {{price}} AFC. Your balance: {{balance}} AFC",
     "topUp": "Top Up Balance"
+  },
+  "extension": {
+    "title": "Subscription Extension",
+    "message": "Your \"{{packageName}}\" package will be extended from {{activationDate}}.\n\n{{price}} AFC will be deducted from your balance.",
+    "confirm": "Extend",
+    "cancel": "Cancel"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Free Package",
+      "message": "Free package is already active. You can upgrade to a paid package for additional features."
+    }
   }
 } 

@@ -8,16 +8,18 @@ import {
   mockCashback,
   mockQuickAmounts 
 } from '../../mocks/balanceMock';
-import { PaymentHistory } from '../../mocks/paymentHistoryMock';
+
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createCVVStickAnimation } from '../../styles/animations';
 import BalanceCardDecoration from '../../components/BalanceCardDecoration';
-import PaymentHistorySection from '../../components/PaymentHistorySection';
+import BalanceTopUpHistory from '../../components/BalanceTopUpHistory';
+
 import { usePackage } from '../../context/PackageContext';
 import { useBalance } from '../../context/BalanceContext';
+import { formatBalance } from '../../utils/formatters';
 
 
 import {
@@ -82,7 +84,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const CASHBACK_KEY = 'user_cashback';
   const [cashback, setCashback] = useState('0');
   const { currentPackage } = usePackage();
-  const { balance: userBalance, transactions, topUpBalance } = useBalance();
+  const { balance: userBalance, topUpBalance } = useBalance();
   
 
   
@@ -283,7 +285,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
                 <View>
                   <Text style={styles.balanceLabel}>{t('client.balance.currentBalance')}</Text>
                   <View style={styles.balanceRow}>
-                    <Text style={styles.balanceAmount}>{userBalance}</Text>
+                    <Text style={styles.balanceAmount}>{formatBalance(userBalance)}</Text>
                     {!String(userBalance).includes('AFc') && (
                       <Text style={styles.balanceCurrency}>AFc</Text>
                     )}
@@ -427,8 +429,9 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           </Animated.View>
         </View>
 
-        {/* История транзакций */}
-        <PaymentHistorySection navigation={navigation} />
+        {/* История пополнений */}
+        <BalanceTopUpHistory maxItems={5} />
+
       </ScrollView>
       {/* Модальное окно пополнения */}
       <Modal

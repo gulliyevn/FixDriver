@@ -83,4 +83,24 @@ export const capitalize = (str: string): string => {
 export const truncate = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + '...';
+};
+
+/**
+ * Format balance to show exactly 2 decimal places, removing trailing zeros
+ */
+export const formatBalance = (balance: number): string => {
+  // Округляем до 2 знаков после запятой и убираем лишние нули
+  const formatted = balance.toFixed(2);
+  
+  // Если есть десятичная часть и она заканчивается на .00, убираем её
+  if (formatted.endsWith('.00')) {
+    return formatted.slice(0, -3); // Убираем .00
+  }
+  
+  // Если заканчивается на .0, убираем один ноль
+  if (formatted.endsWith('.0')) {
+    return formatted.slice(0, -1); // Убираем .0
+  }
+  
+  return formatted;
 }; 

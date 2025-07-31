@@ -5,22 +5,27 @@ import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
 import VipPackages from '../../components/VipPackages';
-import { usePackage } from '../../context/PackageContext';
+import { usePackage, PackageType } from '../../context/PackageContext';
 import { useBalance } from '../../context/BalanceContext';
+import { PremiumPackagesScreenStyles, getPremiumPackagesScreenColors } from '../../styles/screens/profile/PremiumPackagesScreen.styles';
 
 interface PremiumPackagesScreenProps {
-  navigation: any;
+  navigation: {
+    goBack: () => void;
+    navigate: (screen: string) => void;
+  };
 }
 
 const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
-  const { currentPackage, subscription, updatePackage, cancelSubscription, toggleAutoRenew, getPackagePrice } = usePackage();
+  const { currentPackage, subscription, updatePackage, extendSubscription, cancelSubscription, toggleAutoRenew } = usePackage();
   const { balance, deductBalance } = useBalance();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [selectedPackageInfo, setSelectedPackageInfo] = useState<{name: string, id: string} | null>(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState<'month' | 'year'>('month');
   
   // Анимация для свитчера
   const switchAnimation = useRef(new Animated.Value(0)).current;
@@ -30,7 +35,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
     if (subscription?.autoRenew) {
       switchAnimation.setValue(1);
     }
-  }, [subscription?.autoRenew]);
+  }, [subscription?.autoRenew, switchAnimation]);
 
   // Функция анимации свитчера
   const animateSwitch = (toValue: number) => {
@@ -41,11 +46,89 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
     }).start();
   };
 
-  const handlePackageSelect = (packageId: string, price: number) => {
-    // Если выбран уже активный пакет, показываем диалог отмены
+  const handlePackageSelect = (packageId: string, price: number, selectedPeriod: 'month' | 'year') => {
+    // Если выбран уже активный пакет, проверяем период
     if (currentPackage === packageId) {
+      const currentPeriod = subscription?.period || 'month';
+      
+      // Если период отличается - это продление
+      if (currentPeriod !== selectedPeriod) {
+        const packageName = packageId === 'free' ? t('premium.packages.free') :
+                           packageId === 'plus' ? t('premium.packages.plus') : 
+                           packageId === 'premium' ? t('premium.packages.premium') : 
+                           t('premium.packages.premiumPlus');
+        
+        // Рассчитываем дату активации
+        const currentEndDate = new Date(subscription?.nextBillingDate || new Date());
+        const activationDate = new Date(currentEndDate.getTime() + 24 * 60 * 60 * 1000);
+        const formattedDate = activationDate.toLocaleDateString('ru-RU', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        
+        Alert.alert(
+          t('premium.extension.title'),
+          t('premium.extension.message', { 
+            packageName, 
+            activationDate: formattedDate,
+            price: price.toString() 
+          }),
+          [
+            {
+              text: t('premium.extension.cancel'),
+              style: 'cancel'
+            },
+            {
+              text: t('premium.extension.confirm'),
+              onPress: async () => {
+                console.log(`Package extension ${packageId} for ${selectedPeriod} at ${price} AFC`);
+                
+                const success = await deductBalance(price, t('client.paymentHistory.transactions.packageExtension', { packageName }), packageId as string);
+                
+                if (success) {
+                  await extendSubscription(packageId as PackageType, selectedPeriod, price);
+                  setSelectedPackageInfo({ name: packageName, id: packageId });
+                  setSuccessModalVisible(true);
+                }
+              }
+            }
+          ]
+        );
+        return;
+      } else {
+        // Если тот же пакет и тот же период
+        if (packageId === 'free') {
+          // Для бесплатного пакета просто показываем уведомление о том, что уже активен
+          Alert.alert(
+            t('premium.free.alreadyActive.title'),
+            t('premium.free.alreadyActive.message'),
+            [{ text: t('common.ok') }]
+          );
+          return;
+        } else {
+          // Для платных пакетов показываем диалог отмены
+          const packageName = packageId === 'plus' ? t('premium.packages.plus') : 
+                             packageId === 'premium' ? t('premium.packages.premium') : 
+                             t('premium.packages.premiumPlus');
+          
+          setSelectedPackageInfo({ name: packageName, id: packageId });
+          setCancelModalVisible(true);
+          return;
+        }
+      }
+    }
+
+    // Проверка: если у пользователя есть активная подписка и он выбирает другой пакет или период
+    if (subscription?.isActive && (subscription.packageType !== packageId || subscription.period !== selectedPeriod)) {
+      // Если это тот же пакет, но другой период - это продление (уже обработано выше)
+      if (subscription.packageType === packageId && subscription.period !== selectedPeriod) {
+        return; // Уже обработано в блоке выше
+      }
+      
+      // Если это другой пакет или тот же пакет с тем же периодом - показываем диалог отмены
       const packageName = packageId === 'free' ? t('premium.packages.free') :
-                         packageId === 'basic' ? t('premium.packages.plus') : 
+                         packageId === 'plus' ? t('premium.packages.plus') : 
                          packageId === 'premium' ? t('premium.packages.premium') : 
                          t('premium.packages.premiumPlus');
       
@@ -56,7 +139,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
 
     if (balance >= price) {
       const packageName = packageId === 'free' ? t('premium.packages.free') :
-                         packageId === 'basic' ? t('premium.packages.plus') : 
+                         packageId === 'plus' ? t('premium.packages.plus') : 
                          packageId === 'premium' ? t('premium.packages.premium') : 
                          t('premium.packages.premiumPlus');
       
@@ -71,18 +154,18 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           {
             text: t('premium.purchase.confirm'),
             onPress: async () => {
-              console.log(`Покупка пакета ${packageId} за ${price} AFC`);
+              console.log(`Package purchase ${packageId} for ${price} AFC`);
               
               // Списываем средства с баланса
-              const packageName = packageId === 'free' ? t('premium.packages.free') :
-                                packageId === 'basic' ? t('premium.packages.plus') : 
+              const packageName = packageId === 'free' ? t('premium.packages.plus') :
+                                packageId === 'plus' ? t('premium.packages.plus') : 
                                 packageId === 'premium' ? t('premium.packages.premium') : 
                                 t('premium.packages.premiumPlus');
               
-              const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }), packageId);
+              const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }), packageId as string);
               
               if (success) {
-                await updatePackage(packageId as any);
+                await updatePackage(packageId as PackageType, selectedPeriod);
                 setSelectedPackageInfo({ name: packageName, id: packageId });
                 setSuccessModalVisible(true);
               }
@@ -92,7 +175,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
       );
     } else {
       const packageName = packageId === 'free' ? t('premium.packages.free') :
-                         packageId === 'basic' ? t('premium.packages.plus') : 
+                         packageId === 'plus' ? t('premium.packages.plus') : 
                          packageId === 'premium' ? t('premium.packages.premium') : 
                          t('premium.packages.premiumPlus');
       
@@ -111,8 +194,8 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           {
             text: t('premium.insufficient.topUp'),
             onPress: () => {
-              console.log('Переход на страницу баланса');
-              navigation.goBack();
+              console.log('Navigate to balance page');
+              navigation.navigate('Balance');
             }
           }
         ]
@@ -120,28 +203,15 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
     }
   };
 
+  const dynamicStyles = getPremiumPackagesScreenColors(isDark);
+
   return (
-    <View style={{ 
-      flex: 1, 
-      backgroundColor: currentColors.background 
-    }}>
+    <View style={[PremiumPackagesScreenStyles.container, dynamicStyles.container]}>
       {/* Header */}
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingTop: 45,
-        paddingBottom: 6,
-        borderBottomWidth: 1,
-        borderBottomColor: currentColors.border,
-        backgroundColor: currentColors.background,
-      }}>
+      <View style={[PremiumPackagesScreenStyles.header, dynamicStyles.header]}>
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
-          style={{
-            padding: 8,
-          }}
+          style={PremiumPackagesScreenStyles.backButton}
         >
           <Ionicons 
             name="arrow-back" 
@@ -150,25 +220,14 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           />
         </TouchableOpacity>
         
-        <Text style={{
-          fontSize: 18,
-          fontWeight: '600',
-          color: currentColors.text,
-        }}>
+        <Text style={[PremiumPackagesScreenStyles.headerTitle, dynamicStyles.headerTitle]}>
           {t('premium.title')}
         </Text>
 
         {/* Свитчер автообновления в хедере */}
         {subscription && subscription.isActive && subscription.packageType !== 'free' ? (
           <TouchableOpacity
-            style={{
-              width: 51,
-              height: 31,
-              borderRadius: 16,
-              backgroundColor: currentColors.border,
-              justifyContent: 'center',
-              paddingHorizontal: 2,
-            }}
+            style={[PremiumPackagesScreenStyles.autoRenewSwitch, dynamicStyles.autoRenewSwitch]}
             onPress={async () => {
               // Если включаем автообновление - сразу включаем с анимацией
               if (!subscription.autoRenew) {
@@ -209,73 +268,65 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           >
             {/* Анимированный фон */}
             <Animated.View
-              style={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
-                borderRadius: 16,
-                backgroundColor: '#10B981',
-                opacity: switchAnimation,
-              }}
+              style={[
+                PremiumPackagesScreenStyles.autoRenewBackground,
+                { opacity: switchAnimation }
+              ]}
             />
             
             {/* Анимированный индикатор */}
             <Animated.View
-              style={{
-                position: 'absolute',
-                left: switchAnimation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [4, 22],
-                }),
-                top: 2,
-                width: 27,
-                height: 27,
-                borderRadius: 14,
-                backgroundColor: '#FFFFFF',
-                alignItems: 'center',
-                justifyContent: 'center',
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.2,
-                shadowRadius: 4,
-                elevation: 4,
-              }}
+              style={[
+                PremiumPackagesScreenStyles.autoRenewIndicator,
+                {
+                  left: switchAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [4, 22],
+                  }),
+                }
+              ]}
             >
               <Animated.View
-                style={{
-                  opacity: switchAnimation.interpolate({
-                    inputRange: [0, 0.5, 1],
-                    outputRange: [1, 0, 0],
-                  }),
-                }}
+                style={[
+                  PremiumPackagesScreenStyles.autoRenewIcon,
+                  {
+                    opacity: switchAnimation.interpolate({
+                      inputRange: [0, 0.5, 1],
+                      outputRange: [1, 0, 0],
+                    }),
+                  }
+                ]}
               >
                 <Ionicons name="close" size={16} color="#EF4444" />
               </Animated.View>
               <Animated.View
-                style={{
-                  position: 'absolute',
-                  opacity: switchAnimation.interpolate({
-                    inputRange: [0, 0.5, 1],
-                    outputRange: [0, 0, 1],
-                  }),
-                }}
+                style={[
+                  PremiumPackagesScreenStyles.autoRenewIcon,
+                  {
+                    opacity: switchAnimation.interpolate({
+                      inputRange: [0, 0.5, 1],
+                      outputRange: [0, 0, 1],
+                    }),
+                  }
+                ]}
               >
                 <Ionicons name="refresh" size={16} color="#10B981" />
               </Animated.View>
             </Animated.View>
           </TouchableOpacity>
         ) : (
-          <View style={{ width: 51 }} />
+          <View style={PremiumPackagesScreenStyles.placeholder} />
         )}
       </View>
 
       {/* Content */}
-      <View style={{ flex: 1 }}>
+      <View style={PremiumPackagesScreenStyles.content}>
         <VipPackages
           onSelectPackage={handlePackageSelect}
           currentPackage={currentPackage}
+          currentPeriod={subscription?.period}
+          selectedPeriod={selectedPeriod}
+          onPeriodChange={setSelectedPeriod}
         />
       </View>
 
@@ -286,84 +337,29 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
         animationType="fade"
         onRequestClose={() => setSuccessModalVisible(false)}
       >
-        <View style={{
-          flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <View style={{
-            backgroundColor: currentColors.background,
-            borderRadius: 20,
-            padding: 24,
-            marginHorizontal: 40,
-            width: 320,
-            minHeight: 280,
-            alignItems: 'center',
-            justifyContent: 'center',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.25,
-            shadowRadius: 12,
-            elevation: 8,
-          }}>
-            <View style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: '#10B981',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 16,
-            }}>
+        <View style={PremiumPackagesScreenStyles.modalOverlay}>
+          <View style={[PremiumPackagesScreenStyles.modalContainer, dynamicStyles.modalContainer]}>
+            <View style={[PremiumPackagesScreenStyles.modalIconContainer, PremiumPackagesScreenStyles.successIconContainer]}>
               <Ionicons name="checkmark" size={32} color="#FFFFFF" />
             </View>
             
-            <Text style={{
-              fontSize: 20,
-              fontWeight: '700',
-              color: currentColors.text,
-              textAlign: 'center',
-              marginBottom: 8,
-              width: '100%',
-            }}>
+            <Text style={[PremiumPackagesScreenStyles.modalTitle, dynamicStyles.modalTitle]}>
               {t('premium.success.title')}
             </Text>
             
-            <Text style={{
-              fontSize: 16,
-              color: currentColors.textSecondary,
-              textAlign: 'center',
-              marginBottom: 24,
-              lineHeight: 22,
-              width: '100%',
-              paddingHorizontal: 16,
-            }}>
+            <Text style={[PremiumPackagesScreenStyles.modalMessage, dynamicStyles.modalMessage]}>
               {t('premium.success.message', { packageName: selectedPackageInfo?.name || '' })}
             </Text>
             
             <TouchableOpacity
-              style={{
-                backgroundColor: currentColors.primary,
-                paddingVertical: 12,
-                paddingHorizontal: 32,
-                borderRadius: 12,
-                minWidth: 120,
-                width: '100%',
-                maxWidth: 200,
-              }}
+              style={[PremiumPackagesScreenStyles.modalButton, PremiumPackagesScreenStyles.primaryButton]}
               onPress={() => {
                 setSuccessModalVisible(false);
                 navigation.goBack();
               }}
               activeOpacity={0.8}
             >
-              <Text style={{
-                color: '#FFFFFF',
-                fontSize: 16,
-                fontWeight: '600',
-                textAlign: 'center',
-              }}>
+              <Text style={[PremiumPackagesScreenStyles.modalButtonText, PremiumPackagesScreenStyles.whiteText]}>
                 {t('common.ok')}
               </Text>
             </TouchableOpacity>
@@ -378,96 +374,33 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
         animationType="fade"
         onRequestClose={() => setCancelModalVisible(false)}
       >
-        <View style={{
-          flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <View style={{
-            backgroundColor: currentColors.background,
-            borderRadius: 20,
-            padding: 24,
-            marginHorizontal: 40,
-            width: 320,
-            minHeight: 200,
-            alignItems: 'center',
-            justifyContent: 'center',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.25,
-            shadowRadius: 12,
-            elevation: 8,
-          }}>
-            <View style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: '#EF4444',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 16,
-            }}>
+        <View style={PremiumPackagesScreenStyles.modalOverlay}>
+          <View style={[PremiumPackagesScreenStyles.modalContainer, PremiumPackagesScreenStyles.cancelModalContainer, dynamicStyles.modalContainer]}>
+            <View style={[PremiumPackagesScreenStyles.modalIconContainer, PremiumPackagesScreenStyles.errorIconContainer]}>
               <Ionicons name="warning" size={32} color="#FFFFFF" />
             </View>
             
-            <Text style={{
-              fontSize: 20,
-              fontWeight: '700',
-              color: currentColors.text,
-              textAlign: 'center',
-              marginBottom: 8,
-              width: '100%',
-            }}>
+            <Text style={[PremiumPackagesScreenStyles.modalTitle, dynamicStyles.modalTitle]}>
               {t('premium.subscription.cancelTitle')}
             </Text>
             
-            <Text style={{
-              fontSize: 16,
-              color: currentColors.textSecondary,
-              textAlign: 'center',
-              marginBottom: 24,
-              lineHeight: 22,
-              width: '100%',
-              paddingHorizontal: 16,
-            }}>
+            <Text style={[PremiumPackagesScreenStyles.modalMessage, dynamicStyles.modalMessage]}>
               {t('premium.subscription.cancelMessage', { packageName: selectedPackageInfo?.name || '' })}
             </Text>
             
-            <View style={{
-              flexDirection: 'row',
-              gap: 12,
-              width: '100%',
-            }}>
+            <View style={PremiumPackagesScreenStyles.buttonRow}>
               <TouchableOpacity
-                style={{
-                  backgroundColor: currentColors.border,
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  borderRadius: 12,
-                  flex: 1,
-                }}
+                style={[PremiumPackagesScreenStyles.secondaryButton, dynamicStyles.secondaryButton]}
                 onPress={() => setCancelModalVisible(false)}
                 activeOpacity={0.8}
               >
-                <Text style={{
-                  color: currentColors.text,
-                  fontSize: 16,
-                  fontWeight: '600',
-                  textAlign: 'center',
-                }}>
+                <Text style={[PremiumPackagesScreenStyles.modalButtonText, dynamicStyles.secondaryButtonText]}>
                   {t('premium.subscription.keep')}
                 </Text>
               </TouchableOpacity>
               
               <TouchableOpacity
-                style={{
-                  backgroundColor: '#EF4444',
-                  paddingVertical: 12,
-                  paddingHorizontal: 24,
-                  borderRadius: 12,
-                  flex: 1,
-                }}
+                style={[PremiumPackagesScreenStyles.dangerButton]}
                 onPress={async () => {
                   await cancelSubscription();
                   setCancelModalVisible(false);
@@ -475,12 +408,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
                 }}
                 activeOpacity={0.8}
               >
-                <Text style={{
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: '600',
-                  textAlign: 'center',
-                }}>
+                <Text style={[PremiumPackagesScreenStyles.modalButtonText, PremiumPackagesScreenStyles.whiteText]}>
                   {t('premium.subscription.cancel')}
                 </Text>
               </TouchableOpacity>

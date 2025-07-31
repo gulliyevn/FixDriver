@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 import { useBalance } from '../context/BalanceContext';
-import { PaymentHistory, getMockTopUpHistory } from '../mocks/paymentHistoryMock';
+import { PaymentHistory } from '../mocks/paymentHistoryMock';
 import { PaymentHistorySectionStyles as styles, getPaymentHistorySectionColors } from '../styles/components/PaymentHistorySection.styles';
 
 interface PaymentHistorySectionProps {
-  onViewAll?: () => void;
   customHistory?: PaymentHistory[];
-  navigation?: any;
 }
 
-const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll, customHistory, navigation }) => {
+const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ customHistory }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { transactions } = useBalance();
   const dynamicStyles = getPaymentHistorySectionColors(isDark);
   
-  const [displayedCount, setDisplayedCount] = useState(5);
+  const [displayedCount] = useState(5);
   
   // Используем кастомную историю или реальные транзакции из контекста
   const allTransactions = customHistory || transactions.map(transaction => ({
@@ -50,7 +48,7 @@ const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type: string): string => {
     switch (type) {
       case 'trip':
         return 'car';
@@ -106,7 +104,7 @@ const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll
           { backgroundColor: getTypeColor(transaction.type) + '20' }
         ]}>
           <Ionicons 
-            name={getTypeIcon(transaction.type) as any} 
+            name={getTypeIcon(transaction.type) as keyof typeof Ionicons.glyphMap} 
             size={20} 
             color={getTypeColor(transaction.type)} 
           />
@@ -166,27 +164,7 @@ const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ onViewAll
           </Text>
         </View>
         
-        {transactions.length > 0 && (
-          <TouchableOpacity 
-            style={styles.viewAllButton}
-            onPress={() => {
-              if (navigation) {
-                navigation.navigate('TransactionHistory');
-              } else if (onViewAll) {
-                onViewAll();
-              }
-            }}
-          >
-            <Text style={[styles.viewAllText, dynamicStyles.viewAllText]}>
-              {t('client.paymentHistory.viewAll')}
-            </Text>
-            <Ionicons 
-              name="chevron-forward" 
-              size={16} 
-              color={dynamicStyles.viewAllText.color} 
-            />
-          </TouchableOpacity>
-        )}
+
       </View>
 
       {transactions.length === 0 ? (

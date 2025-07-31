@@ -66,7 +66,7 @@
     "topUp": "Recargar",
     "withdraw": "Retirar",
     "quickTopUp": "Recarga rápida",
-    "transactionHistory": "Historial de transacciones",
+
     "showAll": "Mostrar todo",
     "pay": "Pagar",
     "insufficientFunds": "Fondos insuficientes",
@@ -91,6 +91,7 @@
     "confirmTopUp": "¿Está seguro de que quiere recargar su saldo por {0} AFc?",
     "topUpBalance": "Recargar",
     "payButton": "Pagar",
+    "recentTopUps": "Recargas recientes",
     "cashback": {
       "title": "FixBack",
       "available": "Disponible para usar",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Recarga de saldo {{amount}} AFC",
       "packagePurchase": "Compra de paquete \"{{packageName}}\"",
+      "packageExtension": "Extensión de paquete \"{{packageName}}\"",
       "subscriptionRenewal": "Renovación de suscripción \"{{packageName}}\""
     },
     "mock": {

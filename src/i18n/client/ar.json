@@ -66,7 +66,7 @@
     "topUp": "شحن",
     "withdraw": "سحب",
     "quickTopUp": "شحن سريع",
-    "transactionHistory": "تاريخ المعاملات",
+
     "showAll": "عرض الكل",
     "pay": "دفع",
     "insufficientFunds": "أموال غير كافية",
@@ -91,6 +91,7 @@
     "confirmTopUp": "هل أنت متأكد من أنك تريد إعادة شحن رصيدك بمبلغ {0} AFc؟",
     "topUpBalance": "إعادة شحن",
     "payButton": "دفع",
+    "recentTopUps": "آخر الإيداعات",
     "cashback": {
       "title": "استرداد نقدي",
       "available": "متاح للاستخدام",

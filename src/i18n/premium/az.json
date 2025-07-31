@@ -63,5 +63,17 @@
     "title": "Kifayət qədər vəsait yoxdur",
     "message": "\"{{packageName}}\" paketini almaq üçün {{price}} AFC lazımdır. Balansınız: {{balance}} AFC",
     "topUp": "Balansı doldur"
+  },
+  "extension": {
+    "title": "Abunəliyin uzadılması",
+    "message": "\"{{packageName}}\" paketiniz {{activationDate}}-dən uzadılacaq.\n\nBalansınızdan {{price}} AFC çıxılacaq.",
+    "confirm": "Uzat",
+    "cancel": "Ləğv et"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Pulsuz Paket",
+      "message": "Pulsuz paket artıq aktivdir. Əlavə funksiyalar üçün ödənişli paketə keçə bilərsiniz."
+    }
   }
 } 

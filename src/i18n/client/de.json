@@ -66,7 +66,7 @@
     "topUp": "Aufladen",
     "withdraw": "Auszahlen",
     "quickTopUp": "Schnell aufladen",
-    "transactionHistory": "Transaktionshistorie",
+
     "showAll": "Alle anzeigen",
     "pay": "Zahlen",
     "insufficientFunds": "Unzureichende Mittel",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Sind Sie sicher, dass Sie Ihr Guthaben um %{0} AFc aufladen möchten?",
     "topUpBalance": "Aufladen",
     "payButton": "Zahlen",
+    "recentTopUps": "Letzte Aufladungen",
     "cashback": {
       "title": "FixBack",
       "available": "Verfügbar zur Nutzung",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Guthaben aufladen {{amount}} AFC",
       "packagePurchase": "Paket kaufen \"{{packageName}}\"",
+      "packageExtension": "Paket verlängern \"{{packageName}}\"",
       "subscriptionRenewal": "Abonnement erneuern \"{{packageName}}\""
     },
     "mock": {

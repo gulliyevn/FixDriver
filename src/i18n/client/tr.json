@@ -66,7 +66,7 @@
     "topUp": "Yükle",
     "withdraw": "Çek",
     "quickTopUp": "Hızlı yükleme",
-    "transactionHistory": "İşlem geçmişi",
+
     "showAll": "Tümünü göster",
     "pay": "Öde",
     "insufficientFunds": "Yetersiz bakiye",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Bakiyenizi %{0} AFc ile yüklemek istediğinizden emin misiniz?",
     "topUpBalance": "Yükle",
     "payButton": "Öde",
+    "recentTopUps": "Son yüklemeler",
     "cashback": {
       "title": "Nakit iade",
       "available": "Kullanım için mevcut",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Bakiye yükleme {{amount}} AFC",
       "packagePurchase": "Paket satın alma \"{{packageName}}\"",
+      "packageExtension": "Paket uzatma \"{{packageName}}\"",
       "subscriptionRenewal": "Abonelik yenileme \"{{packageName}}\""
     },
     "mock": {

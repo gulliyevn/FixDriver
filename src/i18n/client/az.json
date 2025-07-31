@@ -66,7 +66,7 @@
     "topUp": "Yüklə",
     "withdraw": "Çıxar",
     "quickTopUp": "Tez yüklə",
-    "transactionHistory": "Əməliyyat tarixçəsi",
+
     "showAll": "Hamısını göstər",
     "pay": "Ödə",
     "insufficientFunds": "Kifayət qədər vəsait yoxdur",
@@ -91,6 +91,7 @@
     "confirmTopUp": "Balansınızı %{0} AFc ilə yükləmək istədiyinizə əminsiniz?",
     "topUpBalance": "Yüklə",
     "payButton": "Ödə",
+    "recentTopUps": "Son yükləmələr",
     "cashback": {
       "title": "Keşbek",
       "available": "İstifadə üçün mövcud",
@@ -205,6 +206,7 @@
     "transactions": {
       "topUp": "Balans doldurma {{amount}} AFC",
       "packagePurchase": "Paket alışı \"{{packageName}}\"",
+      "packageExtension": "Paket uzadılması \"{{packageName}}\"",
       "subscriptionRenewal": "Abunəlik yeniləmə \"{{packageName}}\""
     },
     "mock": {

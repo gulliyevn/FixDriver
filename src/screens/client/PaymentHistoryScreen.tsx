@@ -5,9 +5,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
-import { getMockPaymentHistory } from '../../mocks/paymentHistoryMock';
 import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
 import { colors } from '../../constants/colors';
+import { useBalance } from '../../context/BalanceContext';
 
 /**
  * Экран истории платежей
@@ -34,7 +34,28 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
     dateRange: 'all'
   });
   
-  const allPayments = useMemo(() => getMockPaymentHistory(t), [t]);
+  const { transactions } = useBalance();
+  
+  const allPayments = useMemo(() => {
+    return transactions
+      .filter(transaction => transaction.type !== 'balance_topup') // Исключаем пополнения
+      .map(transaction => ({
+        id: transaction.id,
+        title: transaction.translationKey 
+        ? t(transaction.translationKey, transaction.translationParams)
+        : transaction.description,
+        description: transaction.packageType ? `Пакет: ${transaction.packageType}` : undefined,
+        amount: `${transaction.amount > 0 ? '+' : ''}${transaction.amount} AFc`,
+        type: transaction.type === 'package_purchase' ? 'fee' : 
+              transaction.type === 'subscription_renewal' ? 'fee' : 'trip',
+        status: 'completed' as const,
+        date: new Date(transaction.date).toLocaleDateString('ru-RU'),
+        time: new Date(transaction.date).toLocaleTimeString('ru-RU', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })
+      }));
+  }, [transactions]);
   
   const filteredPayments = useMemo(() => {
     let filtered = allPayments;
@@ -49,10 +70,8 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
       filtered = filtered.filter(payment => payment.status === currentFilter.status);
     }
     
-    // Фильтр по дате (упрощенная логика для мок данных)
+    // Фильтр по дате (упрощенная логика для реальных данных)
     if (currentFilter.dateRange !== 'all') {
-      const today = new Date();
-      const paymentDate = new Date('2024-01-15'); // Используем дату из мок данных
       
       switch (currentFilter.dateRange) {
         case 'today':
@@ -154,7 +173,7 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
                 <View style={styles.paymentHeader}>
                   <View style={styles.paymentInfo}>
                     <Ionicons 
-                      name={getPaymentIcon(payment.type) as any} 
+                      name={getPaymentIcon(payment.type) as keyof typeof Ionicons.glyphMap} 
                       size={24} 
                       color={getPaymentColor(payment.type)} 
                     />
