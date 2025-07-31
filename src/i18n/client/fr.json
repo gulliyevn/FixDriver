@@ -206,8 +206,7 @@
       "topUp": "Rechargement du solde {{amount}} AFC",
       "packagePurchase": "Achat de forfait \"{{packageName}}\"",
       "subscriptionRenewal": "Renouvellement d'abonnement \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "Trajet vers le centre-ville",
       "routeLeninGagarin": "Itinéraire: Rue Lénine - Rue Gagarine",
@@ -250,7 +249,7 @@
     "status": {
       "completed": "Terminé",
       "cancelled": "Annulé",
-      "scheduled": "Programmé"
+      "scheduled": "Planifié"
     },
     "filter": {
       "title": "Filtre",
@@ -258,9 +257,9 @@
       "status": "Statut",
       "period": "Période",
       "allTypes": "Tous les types",
-      "completed": "Terminés",
-      "cancelled": "Annulés",
-      "scheduled": "Programmés",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "scheduled": "Planifié",
       "allStatuses": "Tous les statuts",
       "allTime": "Tout le temps",
       "today": "Aujourd'hui",

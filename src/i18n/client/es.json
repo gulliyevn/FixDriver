@@ -206,8 +206,7 @@
       "topUp": "Recarga de saldo {{amount}} AFC",
       "packagePurchase": "Compra de paquete \"{{packageName}}\"",
       "subscriptionRenewal": "Renovación de suscripción \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "Viaje al centro de la ciudad",
       "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",
@@ -258,9 +257,9 @@
       "status": "Estado",
       "period": "Período",
       "allTypes": "Todos los tipos",
-      "completed": "Completados",
-      "cancelled": "Cancelados",
-      "scheduled": "Programados",
+      "completed": "Completado",
+      "cancelled": "Cancelado",
+      "scheduled": "Programado",
       "allStatuses": "Todos los estados",
       "allTime": "Todo el tiempo",
       "today": "Hoy",

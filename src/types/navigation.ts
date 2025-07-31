@@ -71,7 +71,6 @@ export type ClientStackParamList = {
   Progress: undefined;
   SupportChat: undefined;
   // Профильные экраны
-  ClientProfile: undefined;
   EditClientProfile: undefined;
   DriverProfile: undefined;
   PaymentPackage: undefined;

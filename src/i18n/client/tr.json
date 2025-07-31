@@ -206,8 +206,7 @@
       "topUp": "Bakiye yükleme {{amount}} AFC",
       "packagePurchase": "Paket satın alma \"{{packageName}}\"",
       "subscriptionRenewal": "Abonelik yenileme \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "Şehir merkezine yolculuk",
       "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
@@ -258,9 +257,9 @@
       "status": "Durum",
       "period": "Dönem",
       "allTypes": "Tüm türler",
-      "completed": "Tamamlanan",
-      "cancelled": "İptal edilen",
-      "scheduled": "Planlanan",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi",
+      "scheduled": "Planlandı",
       "allStatuses": "Tüm durumlar",
       "allTime": "Tüm zaman",
       "today": "Bugün",

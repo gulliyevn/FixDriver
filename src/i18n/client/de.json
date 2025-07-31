@@ -206,8 +206,7 @@
       "topUp": "Guthaben aufladen {{amount}} AFC",
       "packagePurchase": "Paket kaufen \"{{packageName}}\"",
       "subscriptionRenewal": "Abonnement erneuern \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "Fahrt ins Stadtzentrum",
       "routeLeninGagarin": "Route: Lenin-Straße - Gagarin-Straße",

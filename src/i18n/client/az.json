@@ -206,8 +206,7 @@
       "topUp": "Balans doldurma {{amount}} AFC",
       "packagePurchase": "Paket alışı \"{{packageName}}\"",
       "subscriptionRenewal": "Abunəlik yeniləmə \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "Şəhər mərkəzinə səyahət",
       "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",
@@ -243,14 +242,14 @@
     }
   },
   "trips": {
-    "title": "Səfərlər",
+    "title": "Səyahətlər",
     "noTrips": "Səyahət yoxdur",
     "emptyDescription": "Səyahət tarixçəsi boşdur",
     "driver": "Sürücü",
     "status": {
       "completed": "Tamamlandı",
       "cancelled": "Ləğv edildi",
-      "scheduled": "Planlaşdırılıb"
+      "scheduled": "Planlaşdırıldı"
     },
     "filter": {
       "title": "Filter",

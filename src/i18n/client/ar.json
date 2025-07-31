@@ -207,8 +207,7 @@
       "topUp": "إعادة شحن الرصيد {{amount}} AFC",
       "packagePurchase": "شراء الحزمة \"{{packageName}}\"",
       "subscriptionRenewal": "تجديد الاشتراك \"{{packageName}}\""
-    }
-  },
+    },
     "mock": {
       "tripToCityCenter": "رحلة إلى مركز المدينة",
       "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
@@ -246,7 +245,7 @@
   "trips": {
     "title": "الرحلات",
     "noTrips": "لا توجد رحلات",
-    "emptyDescription": "تاريخ الرحلات فارغ",
+    "emptyDescription": "سجل الرحلات فارغ",
     "driver": "السائق",
     "status": {
       "completed": "مكتمل",
@@ -259,9 +258,9 @@
       "status": "الحالة",
       "period": "الفترة",
       "allTypes": "جميع الأنواع",
-      "completed": "مكتملة",
-      "cancelled": "ملغية",
-      "scheduled": "مجدولة",
+      "completed": "مكتمل",
+      "cancelled": "ملغي",
+      "scheduled": "مجدول",
       "allStatuses": "جميع الحالات",
       "allTime": "كل الوقت",
       "today": "اليوم",
@@ -276,8 +275,8 @@
       "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
       "tripToAirport": "رحلة إلى المطار",
       "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
-      "tripToMall": "رحلة إلى المركز التجاري",
-      "routeToMall": "المسار: المنزل - المركز التجاري",
+      "tripToMall": "رحلة إلى مركز التسوق",
+      "routeToMall": "المسار: المنزل - مركز التسوق",
       "tripToWork": "رحلة إلى العمل",
       "routeToWork": "المسار: المنزل - المكتب"
     }
