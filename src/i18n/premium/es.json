@@ -24,7 +24,7 @@
     "waitGuarantee": "Garantía de Espera",
     "freeCancellation": "Cancelación Gratuita de Viaje",
     "multiRoute": "Ruta Multi-Punto",
-    "calendarIntegration": "Integración con Calendario",
+    "calendarIntegration": "Integración de Calendario",
     "earlyAccess": "Acceso Temprano a Promociones"
   },
   "values": {
@@ -37,43 +37,72 @@
   },
   "purchase": {
     "confirmTitle": "Confirmación de Compra",
-    "confirmMessage": "¿Está seguro de que desea comprar el plan \"{{packageName}}\" por {{price}} AFC?\n\n{{price}} AFC se deducirán de su saldo.",
+    "confirmMessage": "¿Estás seguro de que quieres comprar el plan \"{{packageName}}\" por {{price}} AFC?\n\n{{price}} AFC se deducirá de tu saldo.",
     "cancel": "Cancelar",
-    "confirm": "Confirmar",
+    "cancelButton": "Cancelar",
+    "confirmButton": "Confirmar",
     "insufficientFunds": "Fondos Insuficientes",
-    "insufficientMessage": "No tiene suficientes fondos para comprar este plan.\n\nRequerido: {{price}} AFC\nSu saldo: {{balance}} AFC",
+    "insufficientMessage": "No tienes suficientes fondos para comprar este plan.\n\nRequerido: {{price}} AFC\nTu saldo: {{balance}} AFC",
     "topUpBalance": "Recargar Saldo"
   },
   "success": {
     "title": "¡Éxito!",
-    "message": "Ha seleccionado el paquete \"{{packageName}}\""
+    "message": "Has seleccionado el paquete \"{{packageName}}\""
   },
   "subscription": {
     "cancelTitle": "Cancelar Suscripción",
     "cancelMessage": "¿Estás seguro de que quieres cancelar tu suscripción al paquete \"{{packageName}}\"?",
-    "cancel": "Cancelar",
-    "keep": "Mantener",
+    "cancelButton": "Cancelar",
+    "keepButton": "Mantener",
     "autoRenew": "Renovación automática",
     "autoRenewDescription": "Renovar suscripción automáticamente cada mes",
     "disableAutoRenewTitle": "Desactivar renovación automática",
     "disableAutoRenewMessage": "¿Estás seguro de que quieres desactivar la renovación automática? Tu suscripción no se renovará automáticamente.",
-    "disable": "Desactivar"
+    "disableButton": "Desactivar"
   },
   "insufficient": {
-    "title": "Fondos insuficientes",
+    "title": "Fondos Insuficientes",
     "message": "Para comprar el paquete \"{{packageName}}\" necesitas {{price}} AFC. Tu saldo: {{balance}} AFC",
-    "topUp": "Recargar saldo"
+    "topUp": "Recargar Saldo"
   },
   "extension": {
-    "title": "Extensión de suscripción",
-    "message": "Tu paquete \"{{packageName}}\" se extenderá desde {{activationDate}}.\n\n{{price}} AFC se deducirán de tu saldo.",
-    "confirm": "Extender",
-    "cancel": "Cancelar"
+    "title": "Extensión de Suscripción",
+    "message": "Tu paquete \"{{packageName}}\" se extenderá desde {{activationDate}}.\n\n{{price}} AFC se deducirá de tu saldo.\n\n{{autoRenewStatus}}",
+    "confirmButton": "Extender",
+    "cancelButton": "Cancelar",
+    "autoRenew": {
+      "enabled": "La renovación automática está habilitada - la suscripción se renovará automáticamente.",
+      "disabled": "La renovación automática está deshabilitada - la suscripción no se renovará automáticamente."
+    }
+  },
+  "cancelToFree": {
+    "title": "Cambiar a Paquete Gratis",
+    "message": "¿Quieres cancelar tu suscripción actual y cambiar al paquete gratis?\n\nDespués de la cancelación, perderás todas las funciones premium.",
+    "confirmButton": "Cancelar Suscripción",
+    "keepButton": "Mantener Paquete Actual"
   },
   "free": {
     "alreadyActive": {
-      "title": "Paquete Gratuito",
-      "message": "El paquete gratuito ya está activo. Puedes actualizar a un paquete de pago para funciones adicionales."
+      "title": "Paquete Gratis",
+      "message": "El paquete gratis ya está activo. Puedes actualizar a un paquete de pago para obtener funciones adicionales."
+    }
+  },
+  "autoRenewal": {
+    "transactionDescription": "Renovación automática suscripción \"%{packageName}\"",
+    "insufficientFunds": {
+      "title": "Fondos Insuficientes",
+      "message": "Para renovar automáticamente la suscripción \"%{packageName}\" necesitas %{price} AFc. Renovación automática deshabilitada.",
+      "topUp": "Recargar Saldo"
+    },
+    "success": {
+      "title": "Renovación Automática",
+      "message": "Suscripción \"%{packageName}\" renovada exitosamente"
+    },
+    "dailyReminder": {
+      "title": "Recordatorio de Suscripción",
+      "message": "Para renovar la suscripción \"%{packageName}\" necesitas %{price} AFc. Recarga tu saldo para renovación automática.",
+      "topUp": "Recargar Saldo",
+      "remindLater": "Recordar Más Tarde"
     }
   }
 } 

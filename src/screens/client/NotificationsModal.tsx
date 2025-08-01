@@ -11,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { NotificationsModalStyles, NotificationsModalDarkStyles } from '../../styles/screens/drivers/NotificationsModal.styles';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
+import { useLanguage } from '../../context/LanguageContext';
+import { formatDateWithLanguage } from '../../utils/formatters';
 
 interface Notification {
   id: string;
@@ -34,6 +36,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { language } = useLanguage();
   const styles = isDark ? { ...NotificationsModalStyles, ...NotificationsModalDarkStyles } : NotificationsModalStyles;
 
   const handleMarkAsRead = () => {
@@ -76,7 +79,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
     if (minutes < 60) return `${minutes}${t('notifications.min')}`;
     if (hours < 24) return `${hours}${t('notifications.hour')}`;
     if (days < 7) return `${days}${t('notifications.day')}`;
-    return date.toLocaleDateString('ru-RU');
+    return formatDateWithLanguage(date, language, 'short');
   };
 
   const mockNotifications: Notification[] = [

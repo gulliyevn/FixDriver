@@ -146,7 +146,7 @@ class NotificationService {
   }
 
   // Форматирование времени для отображения
-  formatTime(dateString: string): string {
+  formatTime(dateString: string, language: string = 'ru'): string {
     const date = new Date(dateString);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -163,7 +163,21 @@ class NotificationService {
     } else if (diffDays === 1) {
       return 'Вчера';
     } else {
-      return date.toLocaleDateString('ru-RU', {
+      // Map language to locale
+      const localeMap: Record<string, string> = {
+        'ru': 'ru-RU',
+        'en': 'en-US',
+        'az': 'az-AZ',
+        'de': 'de-DE',
+        'es': 'es-ES',
+        'fr': 'fr-FR',
+        'tr': 'tr-TR',
+        'ar': 'ar-SA'
+      };
+      
+      const locale = localeMap[language] || 'ru-RU';
+      
+      return date.toLocaleDateString(locale, {
         day: '2-digit',
         month: '2-digit',
         hour: '2-digit',

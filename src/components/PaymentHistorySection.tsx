@@ -3,9 +3,11 @@ import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
+import { useLanguage } from '../context/LanguageContext';
 import { useBalance } from '../context/BalanceContext';
 import { PaymentHistory } from '../mocks/paymentHistoryMock';
 import { PaymentHistorySectionStyles as styles, getPaymentHistorySectionColors } from '../styles/components/PaymentHistorySection.styles';
+import { formatDateWithLanguage } from '../utils/formatters';
 
 interface PaymentHistorySectionProps {
   customHistory?: PaymentHistory[];
@@ -14,6 +16,7 @@ interface PaymentHistorySectionProps {
 const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ customHistory }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { language } = useLanguage();
   const { transactions } = useBalance();
   const dynamicStyles = getPaymentHistorySectionColors(isDark);
   
@@ -89,10 +92,7 @@ const PaymentHistorySection: React.FC<PaymentHistorySectionProps> = ({ customHis
     } else if (date.toDateString() === yesterday.toDateString()) {
       return t('client.paymentHistory.yesterday');
     } else {
-      return date.toLocaleDateString('ru-RU', { 
-        day: 'numeric', 
-        month: 'short' 
-      });
+      return formatDateWithLanguage(date, language, 'short');
     }
   };
 

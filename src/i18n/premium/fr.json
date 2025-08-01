@@ -23,7 +23,7 @@
     "support": "Service de Support",
     "waitGuarantee": "Garantie d'Attente",
     "freeCancellation": "Annulation Gratuite de Trajet",
-    "multiRoute": "Route Multi-Points",
+    "multiRoute": "Itinéraire Multi-Points",
     "calendarIntegration": "Intégration Calendrier",
     "earlyAccess": "Accès Anticipé aux Promotions"
   },
@@ -37,43 +37,72 @@
   },
   "purchase": {
     "confirmTitle": "Confirmation d'Achat",
-    "confirmMessage": "Êtes-vous sûr de vouloir acheter le plan \"{{packageName}}\" pour {{price}} AFC?\n\n{{price}} AFC seront déduits de votre solde.",
+    "confirmMessage": "Êtes-vous sûr de vouloir acheter le forfait \"{{packageName}}\" pour {{price}} AFC?\n\n{{price}} AFC sera déduit de votre solde.",
     "cancel": "Annuler",
-    "confirm": "Confirmer",
+    "cancelButton": "Annuler",
+    "confirmButton": "Confirmer",
     "insufficientFunds": "Fonds Insuffisants",
-    "insufficientMessage": "Vous n'avez pas assez de fonds pour acheter ce plan.\n\nRequis: {{price}} AFC\nVotre solde: {{balance}} AFC",
+    "insufficientMessage": "Vous n'avez pas assez de fonds pour acheter ce forfait.\n\nRequis : {{price}} AFC\nVotre solde : {{balance}} AFC",
     "topUpBalance": "Recharger le Solde"
   },
   "success": {
-    "title": "Succès!",
-    "message": "Vous avez sélectionné le package \"{{packageName}}\""
+    "title": "Succès !",
+    "message": "Vous avez sélectionné le forfait \"{{packageName}}\""
   },
   "subscription": {
-    "cancelTitle": "Annuler l'abonnement",
-    "cancelMessage": "Êtes-vous sûr de vouloir annuler votre abonnement au package \"{{packageName}}\" ?",
-    "cancel": "Annuler",
-    "keep": "Conserver",
+    "cancelTitle": "Annuler l'Abonnement",
+    "cancelMessage": "Êtes-vous sûr de vouloir annuler votre abonnement au forfait \"{{packageName}}\" ?",
+    "cancelButton": "Annuler",
+    "keepButton": "Conserver",
     "autoRenew": "Renouvellement automatique",
     "autoRenewDescription": "Renouveler automatiquement l'abonnement chaque mois",
     "disableAutoRenewTitle": "Désactiver le renouvellement automatique",
     "disableAutoRenewMessage": "Êtes-vous sûr de vouloir désactiver le renouvellement automatique ? Votre abonnement ne sera pas automatiquement renouvelé.",
-    "disable": "Désactiver"
+    "disableButton": "Désactiver"
   },
   "insufficient": {
-    "title": "Fonds insuffisants",
-    "message": "Pour acheter le package \"{{packageName}}\", vous avez besoin de {{price}} AFC. Votre solde : {{balance}} AFC",
-    "topUp": "Recharger le solde"
+    "title": "Fonds Insuffisants",
+    "message": "Pour acheter le forfait \"{{packageName}}\", vous avez besoin de {{price}} AFC. Votre solde : {{balance}} AFC",
+    "topUp": "Recharger le Solde"
   },
   "extension": {
-    "title": "Extension d'abonnement",
-    "message": "Votre package \"{{packageName}}\" sera étendu à partir de {{activationDate}}.\n\n{{price}} AFC seront déduits de votre solde.",
-    "confirm": "Étendre",
-    "cancel": "Annuler"
+    "title": "Extension d'Abonnement",
+    "message": "Votre forfait \"{{packageName}}\" sera prolongé à partir du {{activationDate}}.\n\n{{price}} AFC sera déduit de votre solde.\n\n{{autoRenewStatus}}",
+    "confirmButton": "Prolonger",
+    "cancelButton": "Annuler",
+    "autoRenew": {
+      "enabled": "Le renouvellement automatique est activé - l'abonnement sera renouvelé automatiquement.",
+      "disabled": "Le renouvellement automatique est désactivé - l'abonnement ne sera pas renouvelé automatiquement."
+    }
+  },
+  "cancelToFree": {
+    "title": "Passer au Forfait Gratuit",
+    "message": "Voulez-vous annuler votre abonnement actuel et passer au forfait gratuit ?\n\nAprès l'annulation, vous perdrez toutes les fonctionnalités premium.",
+    "confirmButton": "Annuler l'Abonnement",
+    "keepButton": "Conserver le Forfait Actuel"
   },
   "free": {
     "alreadyActive": {
-      "title": "Package Gratuit",
-      "message": "Le package gratuit est déjà actif. Vous pouvez passer à un package payant pour des fonctionnalités supplémentaires."
+      "title": "Forfait Gratuit",
+      "message": "Le forfait gratuit est déjà actif. Vous pouvez passer à un forfait payant pour obtenir des fonctionnalités supplémentaires."
+    }
+  },
+  "autoRenewal": {
+    "transactionDescription": "Renouvellement automatique abonnement \"%{packageName}\"",
+    "insufficientFunds": {
+      "title": "Fonds Insuffisants",
+      "message": "Pour renouveler automatiquement l'abonnement \"%{packageName}\" vous avez besoin de %{price} AFc. Renouvellement automatique désactivé.",
+      "topUp": "Recharger le Solde"
+    },
+    "success": {
+      "title": "Renouvellement Automatique",
+      "message": "Abonnement \"%{packageName}\" renouvelé avec succès"
+    },
+    "dailyReminder": {
+      "title": "Rappel d'Abonnement",
+      "message": "Pour renouveler l'abonnement \"%{packageName}\" vous avez besoin de %{price} AFc. Rechargez votre solde pour le renouvellement automatique.",
+      "topUp": "Recharger le Solde",
+      "remindLater": "Rappeler Plus Tard"
     }
   }
 } 

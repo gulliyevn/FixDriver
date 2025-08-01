@@ -9,6 +9,13 @@
       "section": "Language",
       "current": "Current language",
       "title": "Language selection",
+      "syncWithSystem": "Sync with system",
+      "systemLanguage": "System language: %{language}",
+      "alreadySynced": "Already synced",
+      "syncSuccess": {
+        "title": "Sync",
+        "message": "Language changed to %{language}"
+      },
       "error": {
         "title": "Language error",
         "message": "Failed to change language"

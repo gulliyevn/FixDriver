@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Path, Defs, LinearGradient, Stop, G, Image as SvgImage } from 'react-native-svg';
 import { BalanceCardDecorationStyles } from '../styles/components/BalanceCardDecoration.styles';
 
@@ -8,12 +8,11 @@ const worldMapImage = require('../../assets/Daco_822024.png');
 
 interface BalanceCardDecorationProps {
   isDark?: boolean;
-  packageType?: 'basic' | 'premium' | 'family' | 'free';
+  packageType?: 'free' | 'plus' | 'premium' | 'premiumPlus';
   isBackSide?: boolean;
 }
 
 const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({ 
-  isDark = false, 
   packageType = 'basic',
   isBackSide = false
 }) => {
@@ -28,14 +27,13 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
 
   // Определяем стиль декорации в зависимости от пакета
   const getDecorationStyle = () => {
-    if (packageType === 'basic') {
-      return 'lead'; // Свинцовый металл для Basic
-    } else if (packageType === 'premium') {
-      return 'platinum'; // Платиновый металл для Premium
-    } else if (packageType === 'family') {
-      return 'gold'; // Золотой металл для Premium+
+    switch (packageType) {
+      case 'free': return 'leaf'; // Без декорации для Free
+      case 'plus': return 'lead'; // Свинцовый металл для Plus
+      case 'premium': return 'platinum'; // Платиновый металл для Premium
+      case 'premiumPlus': return 'gold'; // Золотой металл для Premium+
+      default: return 'lead'; // По умолчанию
     }
-    return 'lead'; // По умолчанию
   };
 
   const decorationStyle = getDecorationStyle();

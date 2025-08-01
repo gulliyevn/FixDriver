@@ -1,8 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { TravelPackage, ActivePackage } from '../types/package';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { PackageCardStyles } from '../styles/components/PackageCard.styles';
+import { getPackageIcon, getPackageColor, formatPackagePrice, isPremiumPackage } from '../utils/packageVisuals';
+import { formatDateWithLanguage } from '../utils/formatters';
 
 interface PackageCardProps {
   package: TravelPackage | ActivePackage;
@@ -18,26 +22,9 @@ const PackageCard: React.FC<PackageCardProps> = ({
   disabled = false 
 }) => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
 
-  const getPackageIcon = (type: string) => {
-    switch (type) {
-      case 'single': return '🎫';
-      case 'weekly': return '📅';
-      case 'monthly': return '📆';
-      case 'yearly': return '🗓️';
-      default: return '📦';
-    }
-  };
 
-  const getPackageColor = (type: string) => {
-    switch (type) {
-      case 'single': return '#FF6B6B';
-      case 'weekly': return '#4ECDC4';
-      case 'monthly': return '#45B7D1';
-      case 'yearly': return '#96CEB4';
-      default: return '#95A5A6';
-    }
-  };
 
   const isActivePackage = (pkg: TravelPackage | ActivePackage): pkg is ActivePackage => {
     return 'tripsUsed' in pkg;
@@ -59,7 +46,15 @@ const PackageCard: React.FC<PackageCardProps> = ({
     >
       {/* Заголовок пакета */}
       <View style={PackageCardStyles.header}>
-        <Text style={PackageCardStyles.icon}>{getPackageIcon(pkg.type)}</Text>
+        {isPremiumPackage(pkg.type) ? (
+          <Ionicons 
+            name={getPackageIcon(pkg.type) as any} 
+            size={24} 
+            color={getPackageColor(pkg.type)} 
+          />
+        ) : (
+          <Text style={PackageCardStyles.icon}>{getPackageIcon(pkg.type)}</Text>
+        )}
         <View style={PackageCardStyles.titleContainer}>
           <Text style={[
             PackageCardStyles.title,
@@ -77,7 +72,7 @@ const PackageCard: React.FC<PackageCardProps> = ({
           PackageCardStyles.price,
           { color: getPackageColor(pkg.type) }
         ]}>
-          {pkg.price} ₼
+          {formatPackagePrice(pkg.price)}
         </Text>
       </View>
 
@@ -134,7 +129,7 @@ const PackageCard: React.FC<PackageCardProps> = ({
       {isActivePackage(pkg) && pkg.expiresAt && (
         <View style={PackageCardStyles.expiry}>
           <Text style={[PackageCardStyles.expiryText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
-            Действует до: {new Date(pkg.expiresAt).toLocaleDateString('ru-RU')}
+            Действует до: {formatDateWithLanguage(new Date(pkg.expiresAt), language, 'short')}
           </Text>
         </View>
       )}

@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
+import { useLanguage } from '../../context/LanguageContext';
+import { formatDateWithLanguage, formatTime } from '../../utils/formatters';
 import { ClientScreenProps } from '../../types/navigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
 import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
@@ -24,6 +26,7 @@ import { useBalance } from '../../context/BalanceContext';
 const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { language } = useLanguage();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getPaymentHistoryScreenStyles(isDark);
   
@@ -49,11 +52,8 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
         type: transaction.type === 'package_purchase' ? 'fee' : 
               transaction.type === 'subscription_renewal' ? 'fee' : 'trip',
         status: 'completed' as const,
-        date: new Date(transaction.date).toLocaleDateString('ru-RU'),
-        time: new Date(transaction.date).toLocaleTimeString('ru-RU', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        })
+        date: formatDateWithLanguage(new Date(transaction.date), language, 'short'),
+        time: formatTime(new Date(transaction.date), language)
       }));
   }, [transactions]);
   

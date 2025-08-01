@@ -4,7 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 import { useBalance } from '../context/BalanceContext';
+import { useLanguage } from '../context/LanguageContext';
 import { BalanceTopUpHistoryStyles as styles, getBalanceTopUpHistoryStyles } from '../styles/components/BalanceTopUpHistory.styles';
+import { formatDateWithLanguage } from '../utils/formatters';
 
 interface BalanceTopUpHistoryProps {
   maxItems?: number;
@@ -13,6 +15,7 @@ interface BalanceTopUpHistoryProps {
 const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { language } = useLanguage();
   const { transactions } = useBalance();
   const dynamicStyles = getBalanceTopUpHistoryStyles(isDark);
 
@@ -22,9 +25,7 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
     .slice(0, maxItems);
 
   // Отладочная информация
-  console.log('BalanceTopUpHistory - all transactions:', transactions.length);
-  console.log('BalanceTopUpHistory - topUp transactions:', topUpTransactions.length);
-  console.log('BalanceTopUpHistory - transactions types:', transactions.map(t => t.type));
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -37,12 +38,8 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
     } else if (date.toDateString() === yesterday.toDateString()) {
       return t('client.paymentHistory.yesterday');
     } else {
-      // Используем локализованное форматирование даты
-      const currentLanguage = t('common.language', { defaultValue: 'ru' });
-      return date.toLocaleDateString(currentLanguage === 'ru' ? 'ru-RU' : 'en-US', {
-        day: 'numeric',
-        month: 'long'
-      });
+      // Используем язык приложения для форматирования даты
+      return formatDateWithLanguage(date, language, 'short');
     }
   };
 
@@ -71,23 +68,10 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
               />
               <View style={styles.transactionDetails}>
                 <Text style={[styles.transactionTitle, dynamicStyles.transactionTitle]}>
-                  {(() => {
-                    console.log('Transaction:', {
-                      id: transaction.id,
-                      translationKey: transaction.translationKey,
-                      translationParams: transaction.translationParams,
-                      description: transaction.description
-                    });
-                    
-                    if (transaction.translationKey) {
-                      const translated = t(transaction.translationKey, transaction.translationParams);
-                      console.log('Translated text:', translated);
-                      return translated;
-                    } else {
-                      console.log('Using description:', transaction.description);
-                      return transaction.description;
-                    }
-                  })()}
+                  {transaction.translationKey 
+                    ? t(transaction.translationKey, transaction.translationParams)
+                    : transaction.description
+                  }
                 </Text>
                 <Text style={[styles.transactionDate, dynamicStyles.transactionDate]}>
                   {formatDate(transaction.date)}

@@ -9,6 +9,13 @@
       "section": "اللغة",
       "current": "اللغة الحالية",
       "title": "اختيار اللغة",
+      "syncWithSystem": "مزامنة مع النظام",
+      "systemLanguage": "لغة النظام: %{language}",
+      "alreadySynced": "مزامن بالفعل",
+      "syncSuccess": {
+        "title": "المزامنة",
+        "message": "تم تغيير اللغة إلى %{language}"
+      },
       "error": {
         "title": "خطأ في اللغة",
         "message": "تعذر تغيير اللغة"

@@ -4,8 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { BalanceScreenStyles as styles, getBalanceScreenStyles, getBalanceScreenColors } from '../../styles/screens/profile/BalanceScreen.styles';
 import { 
-  mockBalance, 
-  mockCashback,
   mockQuickAmounts 
 } from '../../mocks/balanceMock';
 
@@ -20,6 +18,7 @@ import BalanceTopUpHistory from '../../components/BalanceTopUpHistory';
 import { usePackage } from '../../context/PackageContext';
 import { useBalance } from '../../context/BalanceContext';
 import { formatBalance } from '../../utils/formatters';
+import { getPackageIcon, getPackageColor } from '../../utils/packageVisuals';
 
 
 import {
@@ -40,8 +39,6 @@ import {
   cardFrontButtonWithTheme,
   cardFrontButton2WithTheme,
   cardFrontBtnTextWithColor,
-  quickAmountsRowWithLayout,
-  quickAmountTextWithTheme,
   modalContainerWithTheme,
   modalTitleWithTheme,
   modalLabelWithTheme,
@@ -242,19 +239,9 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
         <Text style={[styles.title, balanceColors.title]}>{t('client.balance.title')}</Text>
         <View style={styles.backButton}>
           <Ionicons 
-            name={
-              currentPackage === 'free' ? 'leaf' : 
-              currentPackage === 'basic' ? 'shield' : 
-              currentPackage === 'premium' ? 'heart' : 
-              'diamond'
-            } 
+            name={getPackageIcon(currentPackage) as any}
             size={24} 
-            color={
-              currentPackage === 'free' ? '#10B981' : 
-              currentPackage === 'basic' ? '#3B82F6' : 
-              currentPackage === 'premium' ? '#8B5CF6' : 
-              '#F59E0B'
-            } 
+            color={getPackageColor(currentPackage)}
           />
         </View>
       </View>

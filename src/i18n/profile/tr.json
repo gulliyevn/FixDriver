@@ -9,6 +9,13 @@
       "section": "Dil",
       "current": "Mevcut dil",
       "title": "Dil seçimi",
+      "syncWithSystem": "Sistemle senkronize et",
+      "systemLanguage": "Sistem dili: %{language}",
+      "alreadySynced": "Zaten senkronize",
+      "syncSuccess": {
+        "title": "Senkronizasyon",
+        "message": "Dil %{language} olarak değiştirildi"
+      },
       "error": {
         "title": "Dil hatası",
         "message": "Dil değiştirilemedi"

@@ -89,11 +89,25 @@ export const formatCurrency = (amount: number, currency: string = 'RUB') => {
 /**
  * Format date for production
  */
-export const formatDate = (date: Date | string, format: 'short' | 'long' = 'short') => {
+export const formatDate = (date: Date | string, format: 'short' | 'long' = 'short', language: string = 'ru') => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   
+  // Map language to locale
+  const localeMap: Record<string, string> = {
+    'ru': 'ru-RU',
+    'en': 'en-US',
+    'az': 'az-AZ',
+    'de': 'de-DE',
+    'es': 'es-ES',
+    'fr': 'fr-FR',
+    'tr': 'tr-TR',
+    'ar': 'ar-SA'
+  };
+  
+  const locale = localeMap[language] || 'ru-RU';
+  
   if (format === 'long') {
-    return dateObj.toLocaleDateString('ru-RU', {
+    return dateObj.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -102,7 +116,7 @@ export const formatDate = (date: Date | string, format: 'short' | 'long' = 'shor
     });
   }
   
-  return dateObj.toLocaleDateString('ru-RU', {
+  return dateObj.toLocaleDateString(locale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'

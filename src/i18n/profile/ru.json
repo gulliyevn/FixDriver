@@ -9,6 +9,13 @@
       "section": "Язык",
       "current": "Текущий язык",
       "title": "Выбор языка",
+      "syncWithSystem": "Синхронизировать с системой",
+      "systemLanguage": "Системный язык: %{language}",
+      "alreadySynced": "Уже синхронизировано",
+      "syncSuccess": {
+        "title": "Синхронизация",
+        "message": "Язык изменен на %{language}"
+      },
       "error": {
         "title": "Ошибка языка",
         "message": "Не удалось изменить язык"

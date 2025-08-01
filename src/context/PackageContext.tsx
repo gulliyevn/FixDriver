@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBalance } from './BalanceContext';
 import { useI18n } from '../hooks/useI18n';
+import { Alert } from 'react-native';
 
 export type PackageType = 'free' | 'plus' | 'premium' | 'premiumPlus';
 
@@ -18,6 +19,11 @@ interface Subscription {
     activationDate: string;
     price: number;
   };
+  pendingAutoRenewal?: {
+    price: number;
+    packageName: string;
+    lastNotificationDate?: string; // Дата последнего уведомления
+  };
 }
 
 interface PackageContextType {
@@ -28,6 +34,7 @@ interface PackageContextType {
   cancelSubscription: () => Promise<void>;
   toggleAutoRenew: () => Promise<void>;
   processAutoRenewal: () => Promise<boolean>;
+  checkPendingAutoRenewal: () => Promise<boolean>;
   getPackageIcon: (packageType?: PackageType) => string;
   getPackageColor: (packageType?: PackageType) => string;
   getPackagePrice: (packageType: PackageType, period?: 'month' | 'year') => number;
@@ -41,7 +48,7 @@ const SUBSCRIPTION_KEY = 'user_subscription';
 export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentPackage, setCurrentPackage] = useState<PackageType>('free');
   const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const { deductBalance } = useBalance();
+  const { t } = useI18n();
 
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -49,6 +56,25 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
     loadPackage();
     loadSubscription();
   }, []);
+
+  // Автоматическое слежение за датой истечения подписки
+  useEffect(() => {
+    if (!subscription || subscription.packageType === 'free') {
+      return;
+    }
+
+    // Проверяем сразу при загрузке
+    processAutoRenewal();
+    checkDailyNotification();
+
+    // Устанавливаем интервал для проверки каждые 6 часов
+    const interval = setInterval(() => {
+      processAutoRenewal();
+      checkDailyNotification();
+    }, 6 * 60 * 60 * 1000); // 6 часов
+
+    return () => clearInterval(interval);
+  }, [subscription]);
 
   const loadPackage = async () => {
     try {
@@ -99,6 +125,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         await AsyncStorage.removeItem(SUBSCRIPTION_KEY);
         setSubscription(null);
       }
+      
+      // Принудительно обновляем UI
+
     } catch (error) {
       console.log('Error saving package:', error);
     }
@@ -173,17 +202,18 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         const price = getPackagePrice(subscription.packageType, subscription.period);
         
         // Получаем название пакета для истории транзакций
-        const packageNameForTranslation = subscription.packageType === 'plus' ? 'plus' : subscription.packageType;
+        const packageName = t(`premium.packages.${subscription.packageType}`);
         
-        // Списываем средства с баланса
-        const success = await deductBalance(
-          price, 
-          `Автообновление подписки "${packageNameForTranslation}"`, 
-          subscription.packageType
-        );
+        // Списываем средства с баланса - временно отключено для избежания циклической зависимости
+        // const success = await deductBalance(
+        //   price, 
+        //   t('premium.autoRenewal.transactionDescription', { packageName }), 
+        //   subscription.packageType
+        // );
+        const success = false; // Временно всегда false
         
         if (success) {
-          console.log(`Auto-renewal subscription ${subscription.packageType} for ${price} AFC`);
+  
           
           // Рассчитываем новую дату биллинга
           const daysInPeriod = subscription.period === 'year' ? 365 : 30;
@@ -197,10 +227,51 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
           await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(updatedSubscription));
           setSubscription(updatedSubscription);
           
+          // Показываем уведомление об успешном автообновлении
+          Alert.alert(
+            t('premium.autoRenewal.success.title'),
+            t('premium.autoRenewal.success.message', { 
+              packageName: t(`premium.packages.${subscription.packageType}`)
+            }),
+            [{ text: t('common.ok') }]
+          );
+          
           return true;
         } else {
-          console.log('Insufficient funds for auto-renewal subscription');
-          // Можно добавить логику для отключения автообновления при недостатке средств
+          // Недостаточно средств - сохраняем информацию о pending автообновлении
+          const updatedSubscription = {
+            ...subscription,
+            pendingAutoRenewal: {
+              price,
+              packageName: t(`premium.packages.${subscription.packageType}`),
+              lastNotificationDate: new Date().toISOString() // Сохраняем дату первого уведомления
+            }
+          };
+          
+          await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(updatedSubscription));
+          setSubscription(updatedSubscription);
+          
+          // Показываем уведомление пользователю
+          Alert.alert(
+            t('premium.autoRenewal.insufficientFunds.title'),
+            t('premium.autoRenewal.insufficientFunds.message', { 
+              packageName: t(`premium.packages.${subscription.packageType}`),
+              price: price.toFixed(2)
+            }),
+            [
+              {
+                text: t('premium.autoRenewal.insufficientFunds.topUp'),
+                onPress: () => {
+                  // Здесь можно добавить навигацию к экрану пополнения баланса
+                }
+              },
+              {
+                text: t('common.ok'),
+                style: 'cancel'
+              }
+            ]
+          );
+          
           return false;
         }
       }
@@ -209,6 +280,112 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
     } catch (error) {
       console.log('Error processing auto renewal:', error);
       return false;
+    }
+  };
+
+  // Проверка pending автообновления при пополнении баланса
+  const checkPendingAutoRenewal = async (): Promise<boolean> => {
+    try {
+      if (!subscription || !subscription.pendingAutoRenewal) {
+        return false;
+      }
+
+      const { price, packageName } = subscription.pendingAutoRenewal;
+      
+      // Списываем средства с баланса - временно отключено для избежания циклической зависимости
+      // const success = await deductBalance(
+      //   price, 
+      //   t('premium.autoRenewal.transactionDescription', { packageName }), 
+      //   subscription.packageType
+      // );
+      const success = false; // Временно всегда false
+      
+      if (success) {
+        // Рассчитываем новую дату биллинга
+        const daysInPeriod = subscription.period === 'year' ? 365 : 30;
+        const nextBillingDate = new Date(subscription.nextBillingDate);
+        const newNextBillingDate = new Date(nextBillingDate.getTime() + daysInPeriod * 24 * 60 * 60 * 1000);
+        
+        const updatedSubscription: Subscription = {
+          ...subscription,
+          nextBillingDate: newNextBillingDate.toISOString(),
+          pendingAutoRenewal: undefined, // Убираем pending
+        };
+        
+        await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(updatedSubscription));
+        setSubscription(updatedSubscription);
+        
+        // Показываем уведомление об успешном автообновлении
+        Alert.alert(
+          t('premium.autoRenewal.success.title'),
+          t('premium.autoRenewal.success.message', { packageName }),
+          [{ text: t('common.ok') }]
+        );
+        
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.log('Error checking pending auto renewal:', error);
+      return false;
+    }
+  };
+
+  // Проверка ежедневных уведомлений о недостатке средств
+  const checkDailyNotification = async () => {
+    try {
+      if (!subscription || !subscription.pendingAutoRenewal) {
+        return;
+      }
+
+      const now = new Date();
+      const lastNotification = subscription.pendingAutoRenewal.lastNotificationDate 
+        ? new Date(subscription.pendingAutoRenewal.lastNotificationDate)
+        : null;
+
+      // Проверяем, прошло ли 24 часа с последнего уведомления
+      const shouldShowNotification = !lastNotification || 
+        (now.getTime() - lastNotification.getTime()) >= 24 * 60 * 60 * 1000;
+
+      if (shouldShowNotification) {
+        const { price, packageName } = subscription.pendingAutoRenewal;
+        
+        // Обновляем дату последнего уведомления
+        const updatedSubscription: Subscription = {
+          ...subscription,
+          pendingAutoRenewal: {
+            ...subscription.pendingAutoRenewal,
+            lastNotificationDate: now.toISOString(),
+          }
+        };
+        
+        await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(updatedSubscription));
+        setSubscription(updatedSubscription);
+
+        // Показываем ежедневное уведомление
+        Alert.alert(
+          t('premium.autoRenewal.dailyReminder.title'),
+          t('premium.autoRenewal.dailyReminder.message', { 
+            packageName,
+            price: price.toFixed(2)
+          }),
+          [
+            {
+              text: t('premium.autoRenewal.dailyReminder.topUp'),
+              onPress: () => {
+                // Здесь можно добавить навигацию к экрану пополнения баланса
+              }
+            },
+            {
+              text: t('premium.autoRenewal.dailyReminder.remindLater'),
+              style: 'cancel'
+            }
+          ]
+        );
+      }
+    } catch (error) {
+      console.log('Error checking daily notification:', error);
     }
   };
 
@@ -267,6 +444,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       cancelSubscription,
       toggleAutoRenew,
       processAutoRenewal,
+      checkPendingAutoRenewal,
       getPackageIcon,
       getPackageColor,
       getPackagePrice,

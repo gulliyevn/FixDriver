@@ -3,11 +3,26 @@
  */
 
 /**
- * Format time in HH:MM format
+ * Format time in HH:MM format with app language
  */
-export const formatTime = (date: Date | string): string => {
+export const formatTime = (date: Date | string, language: string = 'ru'): string => {
   const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toLocaleTimeString('en-US', {
+  
+  // Map language to locale
+  const localeMap: Record<string, string> = {
+    'ru': 'ru-RU',
+    'en': 'en-US',
+    'az': 'az-AZ',
+    'de': 'de-DE',
+    'es': 'es-ES',
+    'fr': 'fr-FR',
+    'tr': 'tr-TR',
+    'ar': 'ar-SA'
+  };
+  
+  const locale = localeMap[language] || 'en-US';
+  
+  return d.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
@@ -86,21 +101,46 @@ export const truncate = (text: string, maxLength: number): string => {
 };
 
 /**
- * Format balance to show exactly 2 decimal places, removing trailing zeros
+ * Format balance to show exactly 2 decimal places
  */
 export const formatBalance = (balance: number): string => {
-  // Округляем до 2 знаков после запятой и убираем лишние нули
-  const formatted = balance.toFixed(2);
+  // Строго 2 цифры после запятой
+  return Number(balance || 0).toFixed(2);
+}; 
+
+/**
+ * Format date with app language instead of system locale
+ */
+export const formatDateWithLanguage = (date: Date | string, language: string = 'ru', format: 'short' | 'long' = 'short'): string => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
   
-  // Если есть десятичная часть и она заканчивается на .00, убираем её
-  if (formatted.endsWith('.00')) {
-    return formatted.slice(0, -3); // Убираем .00
+  // Map app language to locale
+  const localeMap: Record<string, string> = {
+    'ru': 'ru-RU',
+    'en': 'en-US',
+    'az': 'az-AZ',
+    'de': 'de-DE',
+    'es': 'es-ES',
+    'fr': 'fr-FR',
+    'tr': 'tr-TR',
+    'ar': 'ar-SA'
+  };
+  
+  const locale = localeMap[language] || 'en-US';
+  
+  if (format === 'long') {
+    return dateObj.toLocaleDateString(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
   
-  // Если заканчивается на .0, убираем один ноль
-  if (formatted.endsWith('.0')) {
-    return formatted.slice(0, -1); // Убираем .0
-  }
-  
-  return formatted;
+  return dateObj.toLocaleDateString(locale, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
 }; 

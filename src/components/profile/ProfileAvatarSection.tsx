@@ -1,11 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Animated, Alert, Modal, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, Animated, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { useAvatar } from '../../hooks/useAvatar';
 import { usePackage } from '../../context/PackageContext';
 import { ProfileAvatarSectionStyles as styles, getProfileAvatarSectionColors } from '../../styles/components/profile/ProfileAvatarSection.styles';
+import { getPackageIcon, getPackageColor } from '../../utils/packageVisuals';
 
 interface ProfileAvatarSectionProps {
   userName: string;
@@ -23,7 +24,7 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { avatarUri, loading, showAvatarOptions } = useAvatar();
-  const { currentPackage, getPackageIcon, getPackageColor } = usePackage();
+  const { currentPackage } = usePackage();
   const dynamicStyles = getProfileAvatarSectionColors(isDark);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -85,9 +86,11 @@ const ProfileAvatarSection: React.FC<ProfileAvatarSectionProps> = ({
           </Text>
           <View style={styles.packageIconContainer}>
             <Ionicons 
-              name={getPackageIcon() as any} 
+              name={getPackageIcon(currentPackage) as any} 
               size={20} 
-              color={getPackageColor()} 
+              color={getPackageColor(currentPackage)} 
+              key={`package-icon-${currentPackage}-${forceUpdate}`}
+              style={{ opacity: getPackageIcon(currentPackage) ? 1 : 0.5 }}
             />
           </View>
         </View>

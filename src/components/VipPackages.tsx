@@ -17,6 +17,7 @@ import {
   PackageFeature,
   getPackageFeatures
 } from '../constants/vipPackages';
+import { formatPackagePrice } from '../utils/packageVisuals';
 
 interface VipPackagesProps {
   onSelectPackage: (packageId: string, price: number, period: 'month' | 'year') => void;
@@ -25,6 +26,7 @@ interface VipPackagesProps {
   currentPeriod?: 'month' | 'year';
   selectedPeriod?: 'month' | 'year';
   onPeriodChange?: (period: 'month' | 'year') => void;
+  isSubscriptionActive?: boolean;
 }
 
 const VipPackages: React.FC<VipPackagesProps> = ({ 
@@ -32,7 +34,8 @@ const VipPackages: React.FC<VipPackagesProps> = ({
   currentPackage, 
   currentPeriod,
   selectedPeriod: externalSelectedPeriod, 
-  onPeriodChange 
+  onPeriodChange,
+  isSubscriptionActive = true
 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
@@ -71,7 +74,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
           <Ionicons 
             name="checkmark-circle" 
             size={ICON_SIZES.CHECKMARK} 
-            color={isHighlighted ? currentColors.primary : COLORS.SUCCESS} 
+            color={isHighlighted ? (currentColors.primary || '#3B82F6') : (COLORS.SUCCESS || '#10B981')} 
           />
         </View>
       ) : (
@@ -80,7 +83,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
             <Ionicons 
               name="close" 
               size={ICON_SIZES.CLOSE} 
-              color={COLORS.ERROR} 
+              color={COLORS.ERROR || '#EF4444'} 
             />
           </View>
         </View>
@@ -90,7 +93,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
     return (
       <Text style={[
         VipPackagesStyles.featureValue,
-        { color: isHighlighted ? currentColors.primary : currentColors.textSecondary }
+        { color: isHighlighted ? (currentColors.primary || '#3B82F6') : (currentColors.textSecondary || '#6B7280') }
       ]}>
         {value}
       </Text>
@@ -109,8 +112,20 @@ const VipPackages: React.FC<VipPackagesProps> = ({
       case 'plus': return feature.plus;
       case 'premium': return feature.premium;
       case 'premiumPlus': return feature.premiumPlus;
-      default: return feature.free;
+      default: return feature.free || false;
     }
+  };
+
+  // Функция для определения активного пакета с учетом периода
+  const isPackageActive = (packageId: string) => {
+    // Для бесплатного пакета не учитываем период
+    if (packageId === 'free') {
+      return currentPackage === 'free';
+    }
+    
+    // Для платных пакетов проверяем тип пакета и активность подписки
+    // Период проверяем отдельно - галочка должна быть видна всегда для активного пакета
+    return currentPackage === packageId && isSubscriptionActive;
   };
 
   return (
@@ -205,7 +220,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               style={[
                 VipPackagesStyles.packageCard, 
                 dynamicStyles.packageCard,
-                currentPackage === pkg.id && currentPeriod === selectedPeriod && VipPackagesStyles.selectedPackageCard,
+                isPackageActive(pkg.id) && VipPackagesStyles.selectedPackageCard,
               ]}
               onPress={() => onSelectPackage(pkg.id, pkg.price, selectedPeriod)}
               activeOpacity={0.8}
@@ -214,9 +229,9 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
                 {pkg.name}
               </Text>
-              {currentPackage === pkg.id && currentPeriod === selectedPeriod && (
+              {isPackageActive(pkg.id) && (
                 <View style={VipPackagesStyles.selectedIndicator}>
-                  <Ionicons name="checkmark-circle" size={ICON_SIZES.SELECTED_INDICATOR} color={COLORS.PRIMARY} />
+                  <Ionicons name="checkmark-circle" size={ICON_SIZES.SELECTED_INDICATOR} color={COLORS.PRIMARY || '#3B82F6'} />
                 </View>
               )}
             </View>
@@ -236,14 +251,14 @@ const VipPackages: React.FC<VipPackagesProps> = ({
                     isLastRow && { borderBottomWidth: 0 }
                   ]}>
                     <View style={VipPackagesStyles.featureNameContainer}>
-                      <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: featureIcon.color + '15' }]}>
+                      <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: (featureIcon.color || '#6B7280') + '15' }]}>
                         <Ionicons 
-                          name={featureIcon.name as keyof typeof Ionicons.glyphMap} 
+                          name={(featureIcon.name as keyof typeof Ionicons.glyphMap) || 'ellipse-outline'} 
                           size={ICON_SIZES.FEATURE_ICON} 
-                          color={featureIcon.color} 
+                          color={featureIcon.color || '#6B7280'} 
                         />
                       </View>
-                      <Text style={[VipPackagesStyles.featureName, { color: currentColors.textSecondary }]}>
+                      <Text style={[VipPackagesStyles.featureName, { color: currentColors.textSecondary || '#6B7280' }]}>
                         {feature.name}
                       </Text>
                     </View>
@@ -261,7 +276,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
             <View style={[VipPackagesStyles.priceButton, dynamicStyles.priceButton]}>
               <View style={VipPackagesStyles.priceContainer}>
                 <Text style={VipPackagesStyles.priceText}>
-                  {pkg.price} AFC
+                  {pkg.price === 0 ? t('premium.packages.free') : formatPackagePrice(pkg.price)}
                 </Text>
               </View>
             </View>

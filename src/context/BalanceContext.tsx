@@ -103,6 +103,11 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       translationKey: 'client.paymentHistory.transactions.topUp',
       translationParams: { amount: amount.toString() },
     });
+
+    // Проверяем pending автообновление после пополнения баланса - временно отключено
+    // setTimeout(() => {
+    //   checkPendingAutoRenewal();
+    // }, 1000); // Небольшая задержка для завершения пополнения
   };
 
   const deductBalance = async (amount: number, description: string, packageType?: string): Promise<boolean> => {

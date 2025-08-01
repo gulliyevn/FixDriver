@@ -9,7 +9,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Notification } from '../services/NotificationService';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ProfileNotificationsModalStyles } from '../styles/components/ProfileNotificationsModal.styles';
+import { formatDateWithLanguage } from '../utils/formatters';
 
 interface ProfileNotificationsModalProps {
   visible: boolean;
@@ -27,6 +29,7 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
   onMarkAllAsRead,
 }) => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -87,12 +90,7 @@ const ProfileNotificationsModal: React.FC<ProfileNotificationsModalProps> = ({
           ...ProfileNotificationsModalStyles.notificationTime,
           ...(isDark ? ProfileNotificationsModalStyles.notificationTimeDark : ProfileNotificationsModalStyles.notificationTimeLight),
         }}>
-          {new Date(item.createdAt).toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
+          {formatDateWithLanguage(new Date(item.createdAt), language, 'long')}
         </Text>
       </View>
       

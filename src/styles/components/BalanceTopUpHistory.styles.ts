@@ -73,6 +73,7 @@ export const getBalanceTopUpHistoryStyles = (isDark: boolean) => {
   };
 
   return {
+    container: { backgroundColor: colors.background },
     title: { color: colors.text },
     transactionItem: { 
       backgroundColor: colors.surface,

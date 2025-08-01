@@ -39,7 +39,8 @@
     "confirmTitle": "Purchase Confirmation",
     "confirmMessage": "Are you sure you want to purchase the \"{{packageName}}\" plan for {{price}} AFC?\n\n{{price}} AFC will be deducted from your balance.",
     "cancel": "Cancel",
-    "confirm": "Confirm",
+    "cancelButton": "Cancel",
+    "confirmButton": "Confirm",
     "insufficientFunds": "Insufficient Funds",
     "insufficientMessage": "You don't have enough funds to purchase this plan.\n\nRequired: {{price}} AFC\nYour balance: {{balance}} AFC",
     "topUpBalance": "Top Up Balance"
@@ -51,13 +52,13 @@
   "subscription": {
     "cancelTitle": "Cancel Subscription",
     "cancelMessage": "Are you sure you want to cancel your subscription to the \"{{packageName}}\" package?",
-    "cancel": "Cancel",
-    "keep": "Keep",
+    "cancelButton": "Cancel",
+    "keepButton": "Keep",
     "autoRenew": "Auto-renewal",
     "autoRenewDescription": "Automatically renew subscription every month",
     "disableAutoRenewTitle": "Disable Auto-renewal",
     "disableAutoRenewMessage": "Are you sure you want to disable auto-renewal? Your subscription will not be automatically renewed.",
-    "disable": "Disable"
+    "disableButton": "Disable"
   },
   "insufficient": {
     "title": "Insufficient Funds",
@@ -66,14 +67,42 @@
   },
   "extension": {
     "title": "Subscription Extension",
-    "message": "Your \"{{packageName}}\" package will be extended from {{activationDate}}.\n\n{{price}} AFC will be deducted from your balance.",
-    "confirm": "Extend",
-    "cancel": "Cancel"
+    "message": "Your \"{{packageName}}\" package will be extended from {{activationDate}}.\n\n{{price}} AFC will be deducted from your balance.\n\n{{autoRenewStatus}}",
+    "confirmButton": "Extend",
+    "cancelButton": "Cancel",
+    "autoRenew": {
+      "enabled": "Auto-renewal is enabled - subscription will be renewed automatically.",
+      "disabled": "Auto-renewal is disabled - subscription will not be renewed automatically."
+    }
+  },
+  "cancelToFree": {
+    "title": "Switch to Free Package",
+    "message": "Do you want to cancel your current subscription and switch to the free package?\n\nAfter cancellation, you will lose all premium features.",
+    "confirmButton": "Cancel Subscription",
+    "keepButton": "Keep Current Package"
   },
   "free": {
     "alreadyActive": {
       "title": "Free Package",
-      "message": "Free package is already active. You can upgrade to a paid package for additional features."
+      "message": "The free package is already active. You can upgrade to a paid package to get additional features."
+    }
+  },
+  "autoRenewal": {
+    "transactionDescription": "Auto-renewal subscription \"%{packageName}\"",
+    "insufficientFunds": {
+      "title": "Insufficient Funds",
+      "message": "To auto-renew subscription \"%{packageName}\" you need %{price} AFc. Auto-renewal will be processed when balance is topped up.",
+      "topUp": "Top Up Balance"
+    },
+    "success": {
+      "title": "Auto-renewal",
+      "message": "Subscription \"%{packageName}\" successfully renewed"
+    },
+    "dailyReminder": {
+      "title": "Subscription Reminder",
+      "message": "To renew subscription \"%{packageName}\" you need %{price} AFc. Top up your balance for automatic renewal.",
+      "topUp": "Top Up Balance",
+      "remindLater": "Remind Later"
     }
   }
 } 

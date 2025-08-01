@@ -9,6 +9,13 @@
       "section": "Sprache",
       "current": "Aktuelle Sprache",
       "title": "Sprachauswahl",
+      "syncWithSystem": "Mit System synchronisieren",
+      "systemLanguage": "Systemsprache: %{language}",
+      "alreadySynced": "Bereits synchronisiert",
+      "syncSuccess": {
+        "title": "Synchronisation",
+        "message": "Sprache zu %{language} geändert"
+      },
       "error": {
         "title": "Sprachfehler",
         "message": "Sprache konnte nicht geändert werden"

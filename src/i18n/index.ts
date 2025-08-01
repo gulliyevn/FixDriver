@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { I18n } from 'i18n-js';
+import * as Localization from 'expo-localization';
 
 // Import all translation files using require for better JSON compatibility
 const login = require('./login');
@@ -117,16 +118,27 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
   }
 };
 
+// Get system language and map to supported language
+export const getSystemLanguage = (): SupportedLanguage => {
+  try {
+    const systemLocale = Localization.locale.split('-')[0];
+    return SUPPORTED_LANGUAGES[systemLocale] ? systemLocale as SupportedLanguage : DEFAULT_LANGUAGE;
+  } catch (error) {
+    return DEFAULT_LANGUAGE;
+  }
+};
+
 export const getLanguage = async (): Promise<SupportedLanguage> => {
   try {
     const storedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (storedLanguage && storedLanguage in SUPPORTED_LANGUAGES) {
       return storedLanguage as SupportedLanguage;
     }
+    // Если нет сохраненного языка, используем системный
+    return getSystemLanguage();
   } catch (error) {
-
+    return getSystemLanguage();
   }
-  return DEFAULT_LANGUAGE;
 };
 
 export const initializeLanguage = async (): Promise<void> => {
@@ -156,6 +168,8 @@ export const t = (key: string, params?: Record<string, string | number>): string
 export const getCurrentLanguage = (): SupportedLanguage => {
   return i18n.locale as SupportedLanguage;
 };
+
+
 
 // Check if RTL language
 export const isRTL = (): boolean => {
