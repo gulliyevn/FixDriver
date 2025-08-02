@@ -30,7 +30,7 @@ const ClientProfileStack: React.FC = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="ProfileMain" component={ClientProfileScreen} />
+      <Stack.Screen name="ClientProfile" component={ClientProfileScreen} />
       <Stack.Screen name="Cards" component={CardsScreen} />
       <Stack.Screen name="Trips" component={TripsScreen} />
       <Stack.Screen name="PaymentHistory" component={PaymentHistoryScreen} />

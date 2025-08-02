@@ -192,11 +192,12 @@
       "failed": "Ошибка"
     },
     "transactions": {
-      "topUp": "Пополнение баланса на {{amount}} AFC",
+      "topUp": "Пополнение",
       "packagePurchase": "Покупка пакета \"{{packageName}}\"",
       "packageExtension": "Продление пакета \"{{packageName}}\"",
       "subscriptionRenewal": "Автообновление подписки \"{{packageName}}\""
     },
+    "package": "Пакет: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Поездка в центр города",
       "routeLeninGagarin": "Маршрут: ул. Ленина - ул. Гагарина",
@@ -205,7 +206,7 @@
       "routeCenterAirport": "Маршрут: центр - аэропорт Гейдар Алиев",
       "refund": "Возврат средств",
       "refundForCancelledTrip": "Возврат за отмененную поездку",
-      "balanceTopUpTitle": "Пополнение баланса",
+      "balanceTopUpTitle": "Пополнение",
       "tripToCityCenterTitle": "Поездка в центр города",
       "tripToAirportTitle": "Поездка в аэропорт",
       "refundTitle": "Возврат средств",

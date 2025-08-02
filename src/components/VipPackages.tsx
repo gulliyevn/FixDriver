@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 import { colors } from '../constants/colors';
-import { VipPackagesStyles, getVipPackagesColors } from '../styles/components/VipPackages.styles';
+import { VipPackagesStyles, getVipPackagesColors, getPackageCardColors } from '../styles/components/VipPackages.styles';
 import { getPremiumPackages } from '../mocks/premiumPackagesMock';
 import { 
   PACKAGE_FEATURE_ICONS, 
@@ -107,7 +107,10 @@ const VipPackages: React.FC<VipPackagesProps> = ({
 
   // Функция для получения значения функции по ID пакета
   const getFeatureValue = (feature: PackageFeature, packageId: string) => {
-    switch (packageId) {
+    // Убираем суффикс периода из ID
+    const basePackageId = packageId.replace(/_month$|_year$/, '');
+    
+    switch (basePackageId) {
       case 'free': return feature.free;
       case 'plus': return feature.plus;
       case 'premium': return feature.premium;
@@ -118,13 +121,13 @@ const VipPackages: React.FC<VipPackagesProps> = ({
 
   // Функция для определения активного пакета с учетом периода
   const isPackageActive = (packageId: string) => {
-    // Для бесплатного пакета не учитываем период
+    // Бесплатный пакет активен всегда (и в месячном, и в годовом периоде)
     if (packageId === 'free') {
       return currentPackage === 'free';
     }
     
-    // Для платных пакетов проверяем тип пакета и активность подписки
-    // Период проверяем отдельно - галочка должна быть видна всегда для активного пакета
+    // Для платных пакетов проверяем точное совпадение ID (включая период)
+    // Галочка и бордер только для конкретного периода и пакета
     return currentPackage === packageId && isSubscriptionActive;
   };
 
@@ -219,7 +222,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               key={pkg.id}
               style={[
                 VipPackagesStyles.packageCard, 
-                dynamicStyles.packageCard,
+                getPackageCardColors(pkg.id, isDark),
                 isPackageActive(pkg.id) && VipPackagesStyles.selectedPackageCard,
               ]}
               onPress={() => onSelectPackage(pkg.id, pkg.price, selectedPeriod)}

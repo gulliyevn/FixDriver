@@ -74,13 +74,20 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
                   }
                 </Text>
                 <Text style={[styles.transactionDate, dynamicStyles.transactionDate]}>
-                  {formatDate(transaction.date)}
+                  {formatDate(transaction.date)} • {new Date(transaction.date).toTimeString().split(' ')[0].substring(0, 5)}
                 </Text>
               </View>
             </View>
-            <Text style={[styles.transactionAmount, { color: '#10B981' }]}>
-              +{transaction.amount} AFc
-            </Text>
+            <View style={styles.transactionRight}>
+              <Text style={[styles.transactionAmount, { color: '#10B981' }]}>
+                +{transaction.amount} AFc
+              </Text>
+              <View style={styles.statusBadge}>
+                <Text style={styles.statusText}>
+                  {t('client.paymentHistory.status.completed')}
+                </Text>
+              </View>
+            </View>
           </View>
         ))}
       </ScrollView>

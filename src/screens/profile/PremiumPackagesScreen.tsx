@@ -50,8 +50,11 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
   };
 
   const handlePackageSelect = (packageId: string, price: number, selectedPeriod: 'month' | 'year') => {
-    // 1. СНАЧАЛА проверяем баланс (если это не бесплатный пакет)
-    if (packageId !== 'free' && balance < price) {
+    // 1. СНАЧАЛА определяем сценарий действия
+    const scenario = determineScenario(packageId, selectedPeriod);
+    
+    // 2. Проверяем баланс только для новых покупок
+    if (scenario === 'PURCHASE_NEW_PACKAGE' && packageId !== 'free' && balance < price) {
       const packageName = getPackageName(packageId);
       Alert.alert(
         t('premium.insufficient.title'),
@@ -67,17 +70,14 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           },
           {
             text: t('premium.insufficient.topUp'),
-                             onPress: () => {
-                   navigation.navigate('Balance');
-                 }
+            onPress: () => {
+              navigation.navigate('Balance');
+            }
           }
         ]
       );
       return;
     }
-
-    // 2. Определяем сценарий действия
-    const scenario = determineScenario(packageId, selectedPeriod);
     
     switch (scenario) {
       case 'FREE_ALREADY_ACTIVE':
@@ -86,10 +86,6 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
         
       case 'CANCEL_TO_FREE':
         showCancelToFreeDialog();
-        break;
-        
-      case 'EXTEND_SAME_PACKAGE':
-        showExtensionDialog(packageId, selectedPeriod, price);
         break;
         
       case 'PURCHASE_NEW_PACKAGE':
@@ -112,13 +108,8 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
       return 'CANCEL_TO_FREE';
     }
     
-    // Тот же пакет, другой период = продление
-    if (currentPackage === packageId && currentPeriod !== selectedPeriod) {
-      return 'EXTEND_SAME_PACKAGE';
-    }
-    
     // Тот же пакет, тот же период = отмена (только для активных подписок)
-    if (currentPackage === packageId && currentPeriod === selectedPeriod && subscription?.isActive) {
+    if (currentPackage === packageId && subscription?.isActive) {
       return 'CANCEL_CURRENT';
     }
     
@@ -127,13 +118,16 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
       return 'PURCHASE_NEW_PACKAGE';
     }
     
-    // Другой пакет = покупка нового
+    // Другой пакет или другой период = покупка нового
     return 'PURCHASE_NEW_PACKAGE';
   };
 
   // Вспомогательная функция для получения названия пакета
   const getPackageName = (packageId: string) => {
-    switch (packageId) {
+    // Убираем суффикс периода из ID
+    const basePackageId = packageId.replace(/_month$|_year$/, '');
+    
+    switch (basePackageId) {
       case 'free': return t('premium.packages.free');
       case 'plus': return t('premium.packages.plus');
       case 'premium': return t('premium.packages.premium');
@@ -174,46 +168,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
     );
   };
 
-  // Сценарий: Продление того же пакета
-  const showExtensionDialog = (packageId: string, selectedPeriod: 'month' | 'year', price: number) => {
-    const packageName = getPackageName(packageId);
-    const currentEndDate = new Date(subscription?.nextBillingDate || new Date());
-    const activationDate = new Date(currentEndDate.getTime() + 24 * 60 * 60 * 1000);
-    const formattedDate = formatDateWithLanguage(activationDate, language, 'long');
 
-    // Проверяем автообновление
-    const autoRenewStatus = subscription?.autoRenew ? 'enabled' : 'disabled';
-    
-    Alert.alert(
-      t('premium.extension.title'),
-      t('premium.extension.message', { 
-        packageName, 
-        activationDate: formattedDate,
-        price: formatBalance(price),
-        autoRenewStatus: t(`premium.extension.autoRenew.${autoRenewStatus}`)
-      }),
-      [
-        {
-          text: t('premium.extension.cancelButton'),
-          style: 'cancel'
-        },
-        {
-          text: t('premium.extension.confirmButton'),
-          onPress: async () => {
-      
-            
-            const success = await deductBalance(price, t('client.paymentHistory.transactions.packageExtension', { packageName }), packageId as string);
-            
-            if (success) {
-              await extendSubscription(packageId as PackageType, selectedPeriod, price);
-              setSelectedPackageInfo({ name: packageName, id: packageId });
-              setSuccessModalVisible(true);
-            }
-          }
-        }
-      ]
-    );
-  };
 
   // Сценарий: Покупка нового пакета
   const showPurchaseDialog = (packageId: string, selectedPeriod: 'month' | 'year', price: number) => {

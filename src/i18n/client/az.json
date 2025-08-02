@@ -204,11 +204,12 @@
       "failed": "Xəta"
     },
     "transactions": {
-      "topUp": "Balans doldurma {{amount}} AFC",
+      "topUp": "Yükləmə",
       "packagePurchase": "Paket alışı \"{{packageName}}\"",
       "packageExtension": "Paket uzadılması \"{{packageName}}\"",
       "subscriptionRenewal": "Abunəlik yeniləmə \"{{packageName}}\""
     },
+    "package": "Paket: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Şəhər mərkəzinə səyahət",
       "routeLeninGagarin": "Marşrut: Lenin küçəsi - Qaqarin küçəsi",

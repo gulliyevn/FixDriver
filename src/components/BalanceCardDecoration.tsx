@@ -8,7 +8,7 @@ const worldMapImage = require('../../assets/Daco_822024.png');
 
 interface BalanceCardDecorationProps {
   isDark?: boolean;
-  packageType?: 'free' | 'plus' | 'premium' | 'premiumPlus';
+  packageType?: 'free' | 'plus' | 'premium' | 'premiumPlus' | 'plus_month' | 'plus_year' | 'premium_month' | 'premium_year' | 'premiumPlus_month' | 'premiumPlus_year';
   isBackSide?: boolean;
 }
 
@@ -16,8 +16,11 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
   packageType = 'basic',
   isBackSide = false
 }) => {
+  // Убираем суффикс периода для определения базового типа пакета
+  const basePackageType = packageType.replace(/_month$|_year$/, '');
+  
   // Если free пакет - показываем пустой контейнер
-  if (packageType === 'free') {
+  if (basePackageType === 'free') {
     return (
       <View style={BalanceCardDecorationStyles.container}>
         {/* Free пакет без декораций */}
@@ -27,7 +30,7 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
 
   // Определяем стиль декорации в зависимости от пакета
   const getDecorationStyle = () => {
-    switch (packageType) {
+    switch (basePackageType) {
       case 'free': return 'leaf'; // Без декорации для Free
       case 'plus': return 'lead'; // Свинцовый металл для Plus
       case 'premium': return 'platinum'; // Платиновый металл для Premium

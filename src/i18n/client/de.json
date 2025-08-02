@@ -204,11 +204,12 @@
       "failed": "Fehlgeschlagen"
     },
     "transactions": {
-      "topUp": "Guthaben aufladen {{amount}} AFC",
+      "topUp": "Aufladen",
       "packagePurchase": "Paket kaufen \"{{packageName}}\"",
       "packageExtension": "Paket verlängern \"{{packageName}}\"",
       "subscriptionRenewal": "Abonnement erneuern \"{{packageName}}\""
     },
+    "package": "Paket: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Fahrt ins Stadtzentrum",
       "routeLeninGagarin": "Route: Lenin-Straße - Gagarin-Straße",

@@ -205,10 +205,11 @@
       "failed": "فشل"
     },
     "transactions": {
-      "topUp": "إعادة شحن الرصيد {{amount}} AFC",
+      "topUp": "إعادة شحن",
       "packagePurchase": "شراء الحزمة \"{{packageName}}\"",
       "subscriptionRenewal": "تجديد الاشتراك \"{{packageName}}\""
     },
+    "package": "الحزمة: {{packageType}}",
     "mock": {
       "tripToCityCenter": "رحلة إلى مركز المدينة",
       "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",

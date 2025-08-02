@@ -42,20 +42,39 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
   const allPayments = useMemo(() => {
     return transactions
       .filter(transaction => transaction.type !== 'balance_topup') // Исключаем пополнения
-      .map(transaction => ({
-        id: transaction.id,
-        title: transaction.translationKey 
-        ? t(transaction.translationKey, transaction.translationParams)
-        : transaction.description,
-        description: transaction.packageType ? `Пакет: ${transaction.packageType}` : undefined,
-        amount: `${transaction.amount > 0 ? '+' : ''}${transaction.amount} AFc`,
-        type: transaction.type === 'package_purchase' ? 'fee' : 
-              transaction.type === 'subscription_renewal' ? 'fee' : 'trip',
-        status: 'completed' as const,
-        date: formatDateWithLanguage(new Date(transaction.date), language, 'short'),
-        time: formatTime(new Date(transaction.date), language)
-      }));
-  }, [transactions]);
+      .map(transaction => {
+        const title = transaction.translationKey 
+          ? (() => {
+              if (transaction.translationParams?.packageName) {
+                // Для транзакций с пакетами используем переведенные названия
+                const translatedPackageName = t(`premium.packages.${transaction.translationParams.packageName}`, { defaultValue: transaction.translationParams.packageName });
+                return t(transaction.translationKey, { ...transaction.translationParams, packageName: translatedPackageName });
+              }
+              return t(transaction.translationKey, transaction.translationParams);
+            })()
+          : transaction.description;
+        const description = transaction.packageType 
+          ? (() => {
+              const packageName = transaction.translationParams?.packageName || transaction.packageType;
+              // Используем перевод названия пакета из premium модуля
+              const translatedPackageName = t(`premium.packages.${packageName}`, { defaultValue: packageName });
+              const translationKey = 'client.paymentHistory.package';
+              return t(translationKey, { packageType: translatedPackageName });
+            })()
+          : undefined;
+        return {
+          id: transaction.id,
+          title,
+          description,
+          amount: `${transaction.amount > 0 ? '+' : ''}${transaction.amount} AFc`,
+          type: transaction.type === 'package_purchase' ? 'fee' : 
+                transaction.type === 'subscription_renewal' ? 'fee' : 'trip',
+          status: 'completed' as const,
+          date: formatDateWithLanguage(new Date(transaction.date), language, 'short'),
+          time: formatTime(new Date(transaction.date), language)
+        };
+      });
+  }, [transactions, t, language]);
   
   const filteredPayments = useMemo(() => {
     let filtered = allPayments;

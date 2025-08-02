@@ -204,11 +204,12 @@
       "failed": "Başarısız"
     },
     "transactions": {
-      "topUp": "Bakiye yükleme {{amount}} AFC",
+      "topUp": "Yükleme",
       "packagePurchase": "Paket satın alma \"{{packageName}}\"",
       "packageExtension": "Paket uzatma \"{{packageName}}\"",
       "subscriptionRenewal": "Abonelik yenileme \"{{packageName}}\""
     },
+    "package": "Paket: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Şehir merkezine yolculuk",
       "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",

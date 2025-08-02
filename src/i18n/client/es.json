@@ -204,11 +204,12 @@
       "failed": "Fallido"
     },
     "transactions": {
-      "topUp": "Recarga de saldo {{amount}} AFC",
+      "topUp": "Recarga",
       "packagePurchase": "Compra de paquete \"{{packageName}}\"",
       "packageExtension": "Extensión de paquete \"{{packageName}}\"",
       "subscriptionRenewal": "Renovación de suscripción \"{{packageName}}\""
     },
+    "package": "Paquete: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Viaje al centro de la ciudad",
       "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",

@@ -204,11 +204,12 @@
       "failed": "Échoué"
     },
     "transactions": {
-      "topUp": "Rechargement du solde {{amount}} AFC",
+      "topUp": "Rechargement",
       "packagePurchase": "Achat de forfait \"{{packageName}}\"",
       "packageExtension": "Extension de forfait \"{{packageName}}\"",
       "subscriptionRenewal": "Renouvellement d'abonnement \"{{packageName}}\""
     },
+    "package": "Forfait: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Trajet vers le centre-ville",
       "routeLeninGagarin": "Itinéraire: Rue Lénine - Rue Gagarine",

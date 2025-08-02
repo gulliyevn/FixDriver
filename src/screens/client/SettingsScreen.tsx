@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Switch, Alert, ActivityIndicator, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
@@ -45,7 +45,16 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
   
   const [autoLocation, setAutoLocation] = useState(true);
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
-  const [syncWithSystem, setSyncWithSystem] = useState(false);
+
+  // Автоматическая синхронизация с системным языком при загрузке
+  useEffect(() => {
+    const systemLang = getSystemLanguage();
+    if (systemLang !== language) {
+      setLanguage(systemLang).catch(() => {
+        // Игнорируем ошибки при автоматической синхронизации
+      });
+    }
+  }, []); // Запускаем только при монтировании компонента
 
   const handleLanguageChange = () => {
     setLanguageModalVisible(true);
@@ -63,22 +72,7 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
     }
   };
 
-  const handleSyncWithSystem = async () => {
-    try {
-      const systemLang = getSystemLanguage();
-      await setLanguage(systemLang);
-      setSyncWithSystem(true);
-      Alert.alert(
-        t('profile.settings.language.syncSuccess.title'),
-        t('profile.settings.language.syncSuccess.message', { language: languageOptions.find(lang => lang.code === systemLang)?.name })
-      );
-    } catch (error) {
-      Alert.alert(
-        t('profile.settings.language.error.title'),
-        t('profile.settings.language.error.message')
-      );
-    }
-  };
+
 
   return (
     <View style={[styles.container, settingsColors.container]}>
@@ -142,21 +136,6 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
             <View style={styles.languageValue}>
               <Text style={[styles.settingLabel, { color: currentColors.textSecondary, fontWeight: '600' }]}>
                 {languageOptions.find(lang => lang.code === language)?.flag} {languageOptions.find(lang => lang.code === language)?.name}
-              </Text>
-              <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={[styles.settingItem, settingsColors.settingItem]} onPress={handleSyncWithSystem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="sync" size={24} color={currentColors.primary} />
-              <Text style={[styles.settingLabel, settingsColors.settingLabel]}>{t('profile.settings.language.syncWithSystem')}</Text>
-            </View>
-            <View style={styles.languageValue}>
-              <Text style={[styles.settingLabel, { color: currentColors.textSecondary, fontSize: 12 }]}>
-                {getSystemLanguage() !== language ? t('profile.settings.language.systemLanguage', { 
-                  language: languageOptions.find(lang => lang.code === getSystemLanguage())?.name 
-                }) : t('profile.settings.language.alreadySynced')}
               </Text>
               <Ionicons name="chevron-forward" size={20} color={currentColors.textSecondary} />
             </View>

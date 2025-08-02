@@ -754,7 +754,7 @@ export const animatedCardBack: ViewStyle = {
 };
 
 export const cardSpacer: ViewStyle = {
-  height: 180,
+  height: 0,
 }; 
 
 export const flipButtonBack: ViewStyle = {
@@ -876,7 +876,6 @@ export const flipIconColor = (isDark: boolean): string => {
 export const backIconColor = (isDark: boolean): string => {
   return isDark ? '#3B82F6' : '#083198';
 };
-
 
 
  

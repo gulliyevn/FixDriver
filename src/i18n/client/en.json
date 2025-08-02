@@ -204,11 +204,12 @@
       "failed": "Failed"
     },
     "transactions": {
-      "topUp": "Balance top-up {{amount}} AFC",
+      "topUp": "Top-up",
       "packagePurchase": "Package purchase \"{{packageName}}\"",
       "packageExtension": "Package extension \"{{packageName}}\"",
       "subscriptionRenewal": "Subscription renewal \"{{packageName}}\""
     },
+    "package": "Package: {{packageType}}",
     "mock": {
       "tripToCityCenter": "Trip to city center",
       "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",

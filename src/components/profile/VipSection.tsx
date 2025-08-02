@@ -16,36 +16,20 @@ const VipSection: React.FC<VipSectionProps> = ({ onVipPress }) => {
   const dynamicStyles = getVipSectionColors(isDark);
 
   return (
-    <View style={[styles.container, dynamicStyles.container]}>
-      <View style={styles.header}>
-        <Ionicons name="diamond" size={24} color="#6366f1" style={styles.icon} />
-        <View style={styles.titleContainer}>
-          <Text style={[styles.title, dynamicStyles.title]}>
-            {t('profile.premiumStatus')}
-          </Text>
-          <Text style={[styles.subtitle, dynamicStyles.subtitle]}>
-            {t('profile.premiumSubscription')}
-          </Text>
-        </View>
-      </View>
-      
-      <Text style={[styles.description, dynamicStyles.description]}>
-        {t('profile.premiumDescription')}
-      </Text>
-      
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.vipButtonContainer}
         onPress={onVipPress}
         activeOpacity={0.8}
       >
         <LinearGradient
-          colors={isDark ? ['#6366f1', '#4f46e5', '#3730a3'] : ['#6366f1', '#4f46e5', '#3730a3']}
+          colors={['#FFD700', '#FFA500', '#FF8C00', '#FFD700']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.vipButton}
         >
-          <Text style={styles.vipButtonText}>{t('profile.becomePremium')}</Text>
-          <Ionicons name="arrow-forward" size={16} color="#fff" style={styles.buttonIcon} />
+          <Ionicons name="diamond" size={16} color="#fff" style={styles.buttonIcon} />
+          <Text style={[styles.vipButtonText, { color: '#fff' }]}>{t('profile.becomePremium')}</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>

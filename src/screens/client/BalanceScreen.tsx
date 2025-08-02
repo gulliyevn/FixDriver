@@ -99,6 +99,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
   const flipAnim = useRef(new Animated.Value(0)).current;
   const isFlippedRef = useRef(false);
   const [topUpModalVisible, setTopUpModalVisible] = useState(false);
+  const [quickTopUpModalVisible, setQuickTopUpModalVisible] = useState(false);
   const [topUpAmount, setTopUpAmount] = useState('');
 
   const handleFlip = () => {
@@ -237,7 +238,15 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           <Ionicons name="arrow-back" size={24} color={backIconColorValue} />
         </TouchableOpacity>
         <Text style={[styles.title, balanceColors.title]}>{t('client.balance.title')}</Text>
-        <View style={styles.backButton}>
+        <View style={[styles.backButton, { flexDirection: 'row', alignItems: 'center' }]}>
+          <TouchableOpacity onPress={() => setQuickTopUpModalVisible(true)}>
+            <Ionicons 
+              name="flash" 
+              size={24} 
+              color={currentColors.primary}
+              style={{ marginRight: 8 }}
+            />
+          </TouchableOpacity>
           <Ionicons 
             name={getPackageIcon(currentPackage) as any}
             size={24} 
@@ -380,41 +389,7 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
           </View>
         </View>
 
-        {/* Быстрое пополнение - раскрывающаяся секция */}
-        <View style={[styles.quickTopUpCard, dynamicStyles.quickTopUpCard]}>
-          <TouchableOpacity 
-            style={styles.quickTopUpHeader} 
-            onPress={handleToggleQuickTopUp}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>{t('client.balance.quickTopUp')}</Text>
-          </TouchableOpacity>
-          
-          <Animated.View style={{
-            height: quickTopUpHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 80]
-            }),
-            overflow: 'hidden'
-          }}>
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.quickAmountsScrollContainer}
-            >
-              {mockQuickAmounts.map((amount) => (
-                <TouchableOpacity
-                  key={amount}
-                  style={[styles.quickAmountButtonLarge, dynamicStyles.quickAmountButtonLarge]}
-                  onPress={() => handleTopUp(amount)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge]}>{amount}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </Animated.View>
-        </View>
+
 
         {/* История пополнений */}
         <BalanceTopUpHistory maxItems={5} />
@@ -455,6 +430,45 @@ const BalanceScreen: React.FC<ClientScreenProps<'Balance'>> = ({ navigation }) =
               <Text style={styles.modalPayBtnText}>{t('client.balance.payButton')}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setTopUpModalVisible(false)} style={styles.modalCancelBtn}>
+              <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>{t('client.balance.cancel')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Модальное окно быстрого пополнения */}
+      <Modal
+        visible={quickTopUpModalVisible}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setQuickTopUpModalVisible(false)}
+      >
+        <View style={[styles.modalOverlay, isDark && styles.modalOverlayDark]}>
+          <View style={[styles.modalContainer, modalContainerWithTheme(currentColors)]}> 
+            <Text style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}>{t('client.balance.quickTopUp')}</Text>
+            
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 20 }}>
+              {mockQuickAmounts.map((amount) => (
+                <TouchableOpacity
+                  key={amount}
+                  style={[
+                    styles.quickAmountButtonLarge, 
+                    dynamicStyles.quickAmountButtonLarge,
+                    { width: '48%', marginBottom: 12 }
+                  ]}
+                  onPress={() => {
+                    setTopUpAmount(amount);
+                    setQuickTopUpModalVisible(false);
+                    setTopUpModalVisible(true);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge]}>{amount}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity onPress={() => setQuickTopUpModalVisible(false)} style={styles.modalCancelBtn}>
               <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>{t('client.balance.cancel')}</Text>
             </TouchableOpacity>
           </View>

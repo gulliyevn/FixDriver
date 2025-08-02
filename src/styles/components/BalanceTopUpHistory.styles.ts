@@ -12,7 +12,7 @@ export const BalanceTopUpHistoryStyles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   transactionsList: {
-    maxHeight: 200,
+    maxHeight: 400,
   },
   transactionItem: {
     flexDirection: 'row',
@@ -50,30 +50,40 @@ export const BalanceTopUpHistoryStyles = StyleSheet.create({
     fontWeight: '700',
     minWidth: 80,
     textAlign: 'right',
+    marginBottom: 4,
+  },
+  transactionRight: {
+    alignItems: 'flex-end',
+  },
+  statusBadge: {
+    backgroundColor: '#10B981',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  statusText: {
+    fontSize: 11,
+    color: '#fff',
+    fontWeight: '500',
   },
 });
 
 export const getBalanceTopUpHistoryStyles = (isDark: boolean) => {
   const colors = isDark ? {
-    background: '#1F2937',
-    surface: '#374151',
     text: '#F9FAFB',
     textSecondary: '#9CA3AF',
     textTertiary: '#6B7280',
     border: '#4B5563',
-    card: '#374151',
+    surface: '#374151',
   } : {
-    background: '#ffffff',
-    surface: '#F9FAFB',
     text: '#1F2937',
     textSecondary: '#6B7280',
     textTertiary: '#9CA3AF',
     border: '#F3F4F6',
-    card: '#ffffff',
+    surface: '#F9FAFB',
   };
 
   return {
-    container: { backgroundColor: colors.background },
     title: { color: colors.text },
     transactionItem: { 
       backgroundColor: colors.surface,

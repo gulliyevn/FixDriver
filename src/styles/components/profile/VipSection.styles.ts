@@ -3,19 +3,6 @@ import { StyleSheet } from 'react-native';
 export const VipSectionStyles = StyleSheet.create({
   container: {
     marginBottom: 24,
-    backgroundColor: '#f8f9ff',
-    borderWidth: 1,
-    borderColor: '#6366f1',
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#6366f1',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
   },
   header: {
     flexDirection: 'row',
@@ -48,14 +35,14 @@ export const VipSectionStyles = StyleSheet.create({
   },
   vipButtonContainer: {
     borderRadius: 12,
-    shadowColor: '#4f46e5',
+    shadowColor: '#FFD700',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 0,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOpacity: 0.8,
+    shadowRadius: 15,
+    elevation: 10,
   },
   vipButton: {
     paddingVertical: 16,
@@ -66,13 +53,12 @@ export const VipSectionStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   vipButtonText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '700',
     marginRight: 8,
   },
   buttonIcon: {
-    marginLeft: 4,
+    marginRight: 8,
   },
 });
 

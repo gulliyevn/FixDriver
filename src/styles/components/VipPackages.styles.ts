@@ -327,4 +327,41 @@ export const getVipPackagesColors = (isDark: boolean) => {
       borderColor: colors.priceButton,
     },
   };
+};
+
+// Функция для получения металлических цветов карт
+export const getPackageCardColors = (packageId: string, isDark: boolean) => {
+  // Бесплатный пакет - обычный цвет
+  if (packageId === 'free') {
+    return {
+      backgroundColor: isDark ? '#1F2937' : '#ffffff',
+      borderColor: isDark ? '#374151' : '#f0f0f0',
+    };
+  }
+  
+  // Платные пакеты - металлические цвета
+  const baseType = packageId.replace(/_month$|_year$/, '');
+  
+  switch (baseType) {
+    case 'plus':
+      return {
+        backgroundColor: isDark ? '#1E3A8A' : '#EFF6FF',
+        borderColor: isDark ? '#3B82F6' : '#3B82F6',
+      };
+    case 'premium':
+      return {
+        backgroundColor: isDark ? '#581C87' : '#F3E8FF',
+        borderColor: isDark ? '#8B5CF6' : '#8B5CF6',
+      };
+    case 'premiumPlus':
+      return {
+        backgroundColor: isDark ? '#92400E' : '#FEF3C7',
+        borderColor: isDark ? '#F59E0B' : '#F59E0B',
+      };
+    default:
+      return {
+        backgroundColor: isDark ? '#1F2937' : '#ffffff',
+        borderColor: isDark ? '#374151' : '#f0f0f0',
+      };
+  }
 }; 

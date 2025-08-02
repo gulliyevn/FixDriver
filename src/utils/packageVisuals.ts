@@ -1,5 +1,8 @@
 export const getPackageIcon = (type: string): string => {
-  switch (type) {
+  // Убираем суффикс периода для определения базового типа пакета
+  const baseType = type.replace(/_month$|_year$/, '');
+  
+  switch (baseType) {
     case 'free': return 'leaf';
     case 'plus': return 'shield';
     case 'premium': return 'heart';
@@ -13,7 +16,10 @@ export const getPackageIcon = (type: string): string => {
 };
 
 export const getPackageColor = (type: string): string => {
-  switch (type) {
+  // Убираем суффикс периода для определения базового типа пакета
+  const baseType = type.replace(/_month$|_year$/, '');
+  
+  switch (baseType) {
     case 'free': return '#10B981';
     case 'plus': return '#3B82F6';
     case 'premium': return '#8B5CF6';
@@ -27,7 +33,10 @@ export const getPackageColor = (type: string): string => {
 };
 
 export const getPackageLabel = (type: string): string => {
-  switch (type) {
+  // Убираем суффикс периода для определения базового типа пакета
+  const baseType = type.replace(/_month$|_year$/, '');
+  
+  switch (baseType) {
     case 'free': return 'БЕСПЛАТНО';
     case 'plus': return 'ПЛЮС';
     case 'premium': return 'ПРЕМИУМ';
@@ -41,7 +50,10 @@ export const getPackageLabel = (type: string): string => {
 };
 
 export const getPackageDecoration = (type: string): string => {
-  switch (type) {
+  // Убираем суффикс периода для определения базового типа пакета
+  const baseType = type.replace(/_month$|_year$/, '');
+  
+  switch (baseType) {
     case 'free': return 'leaf';
     case 'plus': return 'lead';
     case 'premium': return 'platinum';
@@ -56,5 +68,7 @@ export const formatPackagePrice = (price: number): string => {
 };
 
 export const isPremiumPackage = (type: string): boolean => {
-  return ['free', 'plus', 'premium', 'premiumPlus'].includes(type);
+  // Убираем суффикс периода для определения базового типа пакета
+  const baseType = type.replace(/_month$|_year$/, '');
+  return ['free', 'plus', 'premium', 'premiumPlus'].includes(baseType);
 }; 
