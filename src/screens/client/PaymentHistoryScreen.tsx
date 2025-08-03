@@ -47,21 +47,16 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
           ? (() => {
               if (transaction.translationParams?.packageName) {
                 // Для транзакций с пакетами используем переведенные названия
-                const translatedPackageName = t(`premium.packages.${transaction.translationParams.packageName}`, { defaultValue: transaction.translationParams.packageName });
+                // Убеждаемся, что используем только название пакета без периода
+                const packageName = transaction.translationParams.packageName.split('_')[0];
+                const translatedPackageName = t(`premium.packages.${packageName}`, { defaultValue: packageName });
                 return t(transaction.translationKey, { ...transaction.translationParams, packageName: translatedPackageName });
               }
               return t(transaction.translationKey, transaction.translationParams);
             })()
           : transaction.description;
-        const description = transaction.packageType 
-          ? (() => {
-              const packageName = transaction.translationParams?.packageName || transaction.packageType;
-              // Используем перевод названия пакета из premium модуля
-              const translatedPackageName = t(`premium.packages.${packageName}`, { defaultValue: packageName });
-              const translationKey = 'client.paymentHistory.package';
-              return t(translationKey, { packageType: translatedPackageName });
-            })()
-          : undefined;
+        // Убираем описание для транзакций с пакетами, так как название уже содержит информацию о пакете
+        const description = undefined;
         return {
           id: transaction.id,
           title,

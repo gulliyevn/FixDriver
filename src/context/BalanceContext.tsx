@@ -138,13 +138,15 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     // Если это транзакция покупки пакета, добавляем ключи переводов
     if (transaction.type === 'package_purchase' && transaction.packageType) {
-      const packageNameForTranslation = transaction.packageType === 'plus' ? 'plus' : transaction.packageType;
+      // Извлекаем только название пакета без периода (например, "plus_month" -> "plus")
+      const packageName = transaction.packageType.split('_')[0];
       newTransaction.translationKey = 'client.paymentHistory.transactions.packagePurchase';
-      newTransaction.translationParams = { packageName: packageNameForTranslation };
+      newTransaction.translationParams = { packageName };
     } else if (transaction.type === 'subscription_renewal' && transaction.packageType) {
-      const packageNameForTranslation = transaction.packageType === 'plus' ? 'plus' : transaction.packageType;
+      // Извлекаем только название пакета без периода (например, "premium_year" -> "premium")
+      const packageName = transaction.packageType.split('_')[0];
       newTransaction.translationKey = 'client.paymentHistory.transactions.subscriptionRenewal';
-      newTransaction.translationParams = { packageName: packageNameForTranslation };
+      newTransaction.translationParams = { packageName };
     }
 
     const newTransactions = [newTransaction, ...transactions];

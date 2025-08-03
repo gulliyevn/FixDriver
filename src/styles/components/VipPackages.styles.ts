@@ -93,7 +93,7 @@ export const VipPackagesStyles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 24,
     marginHorizontal: 16,
-    borderWidth: 0,
+    borderWidth: 1,
     width: 340,
     height: 580,
     justifyContent: 'space-between',
@@ -119,11 +119,12 @@ export const VipPackagesStyles = StyleSheet.create({
     marginBottom: 12,
   },
   packageTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '800',
     textAlign: 'left',
     flex: 1,
     letterSpacing: -0.5,
+    color: '#FFFFFF',
   },
   selectedIndicator: {
     marginLeft: 8,
@@ -134,6 +135,7 @@ export const VipPackagesStyles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
     opacity: 0.8,
+    color: '#FFFFFF',
   },
   // Стили для таблицы функций
   featuresContainer: {
@@ -168,6 +170,7 @@ export const VipPackagesStyles = StyleSheet.create({
     fontWeight: '500',
     flex: 1,
     lineHeight: 16,
+    color: '#FFFFFF',
   },
   featureValueContainer: {
     alignItems: 'flex-end',
@@ -196,6 +199,7 @@ export const VipPackagesStyles = StyleSheet.create({
   featureValue: {
     fontSize: 11,
     fontWeight: '600',
+    color: '#FFFFFF',
   },
   priceButton: {
     paddingVertical: 18,
@@ -329,39 +333,11 @@ export const getVipPackagesColors = (isDark: boolean) => {
   };
 };
 
-// Функция для получения металлических цветов карт
+// Функция для получения цветов карт (как бесплатная версия)
 export const getPackageCardColors = (packageId: string, isDark: boolean) => {
-  // Бесплатный пакет - обычный цвет
-  if (packageId === 'free') {
-    return {
-      backgroundColor: isDark ? '#1F2937' : '#ffffff',
-      borderColor: isDark ? '#374151' : '#f0f0f0',
-    };
-  }
-  
-  // Платные пакеты - металлические цвета
-  const baseType = packageId.replace(/_month$|_year$/, '');
-  
-  switch (baseType) {
-    case 'plus':
-      return {
-        backgroundColor: isDark ? '#1E3A8A' : '#EFF6FF',
-        borderColor: isDark ? '#3B82F6' : '#3B82F6',
-      };
-    case 'premium':
-      return {
-        backgroundColor: isDark ? '#581C87' : '#F3E8FF',
-        borderColor: isDark ? '#8B5CF6' : '#8B5CF6',
-      };
-    case 'premiumPlus':
-      return {
-        backgroundColor: isDark ? '#92400E' : '#FEF3C7',
-        borderColor: isDark ? '#F59E0B' : '#F59E0B',
-      };
-    default:
-      return {
-        backgroundColor: isDark ? '#1F2937' : '#ffffff',
-        borderColor: isDark ? '#374151' : '#f0f0f0',
-      };
-  }
+  // Все пакеты используют одинаковые цвета как бесплатный
+  return {
+    backgroundColor: isDark ? '#1F2937' : '#ffffff',
+    borderColor: isDark ? '#FFFFFF' : '#000000',
+  };
 }; 

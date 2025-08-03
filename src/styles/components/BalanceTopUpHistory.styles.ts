@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const BalanceTopUpHistoryStyles = StyleSheet.create({
   container: {
-    marginTop: 16,
+    marginTop: -8,
     marginBottom: 16,
   },
   title: {

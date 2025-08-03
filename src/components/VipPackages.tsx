@@ -17,7 +17,7 @@ import {
   PackageFeature,
   getPackageFeatures
 } from '../constants/vipPackages';
-import { formatPackagePrice } from '../utils/packageVisuals';
+import { formatPackagePrice, getPackageColor } from '../utils/packageVisuals';
 
 interface VipPackagesProps {
   onSelectPackage: (packageId: string, price: number, period: 'month' | 'year') => void;
@@ -229,9 +229,17 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               activeOpacity={0.8}
             >
             <View style={VipPackagesStyles.packageHeader}>
-              <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
-                {pkg.name}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                <Ionicons 
+                  name={pkg.icon as keyof typeof Ionicons.glyphMap} 
+                  size={28} 
+                  color={getPackageColor(pkg.id)} 
+                  style={{ marginRight: 10 }}
+                />
+                <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
+                  {pkg.name}
+                </Text>
+              </View>
               {isPackageActive(pkg.id) && (
                 <View style={VipPackagesStyles.selectedIndicator}>
                   <Ionicons name="checkmark-circle" size={ICON_SIZES.SELECTED_INDICATOR} color={COLORS.PRIMARY || '#3B82F6'} />
@@ -239,9 +247,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               )}
             </View>
 
-            <Text style={[VipPackagesStyles.packageDescription, dynamicStyles.packageDescription]}>
-              {pkg.description}
-            </Text>
+
 
             {/* Таблица функций */}
             <View style={VipPackagesStyles.featuresContainer}>
