@@ -1,295 +1,474 @@
-import { AuthService } from '../AuthService';
+import { AuthService, AuthResponse } from '../AuthService';
+import { JWTService } from '../JWTService';
+import { UserRole } from '../../types/user';
+import { ENV_CONFIG, ConfigUtils } from '../../config/environment';
 
-// Mock fetch
+// Мокаем все зависимости
+jest.mock('../JWTService');
+jest.mock('../../config/environment');
+jest.mock('../../mocks/auth');
+
+const mockJWTService = JWTService as jest.Mocked<typeof JWTService>;
+const mockConfigUtils = ConfigUtils as jest.Mocked<typeof ConfigUtils>;
+const mockEnvConfig = ENV_CONFIG as jest.Mocked<typeof ENV_CONFIG>;
+
+// Мокаем fetch
 global.fetch = jest.fn();
 
-// Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  setItem: jest.fn(),
-  getItem: jest.fn(),
-  removeItem: jest.fn(),
-}));
-
-// Mock JWTService
-jest.mock('../JWTService', () => ({
-  generateTokens: jest.fn().mockResolvedValue({
-    accessToken: 'mock-access-token',
-    refreshToken: 'mock-refresh-token',
-    expiresIn: 3600,
-    tokenType: 'Bearer',
-  }),
-  verifyToken: jest.fn().mockResolvedValue({
-    userId: 'mock-user-id',
-    email: 'test@example.com',
-    role: 'client',
-    phone: '+1234567890',
-  }),
-  getCurrentUser: jest.fn().mockResolvedValue({
-    userId: 'mock-user-id',
-    email: 'test@example.com',
-    role: 'client',
-    phone: '+1234567890',
-  }),
-}));
+// Мокаем __DEV__
+const originalDev = (global as any).__DEV__;
+(global as any).__DEV__ = false;
 
 describe('AuthService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (fetch as jest.Mock).mockClear();
+    (global.fetch as jest.Mock).mockClear();
+  });
+
+  afterAll(() => {
+    (global as any).__DEV__ = originalDev;
   });
 
   describe('login', () => {
-    it('successfully logs in user', async () => {
+    const mockUser = {
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test',
+      surname: 'User',
+      phone: '+1234567890',
+      role: UserRole.CLIENT,
+      avatar: null,
+      rating: 0,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      address: '',
+    };
+
+    const mockTokens = {
+      accessToken: 'mock-access-token',
+      refreshToken: 'mock-refresh-token',
+      expiresIn: 3600,
+      tokenType: 'Bearer',
+    };
+
+    it('successfully logs in with valid credentials', async () => {
       const mockResponse = {
         ok: true,
         json: jest.fn().mockResolvedValue({
-          user: {
-            id: '123',
+          access_token: 'mock-access-token',
+          refresh_token: 'mock-refresh-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          expires_at: '2024-01-01T01:00:00.000Z',
+          user_info: {
+            id: 1,
             email: 'test@example.com',
-            name: 'Test User',
-            role: 'client',
-          },
-          tokens: {
-            accessToken: 'mock-access-token',
-            refreshToken: 'mock-refresh-token',
+            phone_number: '+1234567890',
+            first_name: 'Test',
+            last_name: 'User',
+            status: 'active',
           },
         }),
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json', 'Accept': 'application/json' } };
 
-      const result = await AuthService.login('test@example.com', 'password');
+      const result = await AuthService.login('test@example.com', 'password123');
 
       expect(result.success).toBe(true);
-      expect(result.user).toEqual({
-        id: '123',
-        email: 'test@example.com',
-        name: 'Test User',
-        role: 'client',
-      });
-      expect(fetch).toHaveBeenCalledWith('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'test@example.com',
-          password: 'password',
-        }),
-      });
+      expect(result.user).toEqual(mockUser);
+      expect(result.tokens).toEqual(mockTokens);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/auth/client/login'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password123',
+          }),
+        })
+      );
     });
 
-    it('handles login failure', async () => {
+    it('falls back to mock login when server is unavailable', async () => {
+      mockConfigUtils.checkServerHealth.mockResolvedValue(false);
+      mockJWTService.forceRefreshTokens.mockResolvedValue(mockTokens);
+
+      const result = await AuthService.login('test@example.com', 'password123');
+
+      expect(result.success).toBe(true);
+      expect(mockConfigUtils.checkServerHealth).toHaveBeenCalled();
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('handles server error response', async () => {
       const mockResponse = {
         ok: false,
         status: 401,
-        json: jest.fn().mockResolvedValue({
-          error: 'Invalid credentials',
-        }),
+        statusText: 'Unauthorized',
+        json: jest.fn().mockResolvedValue({ message: 'Invalid credentials' }),
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
 
-      const result = await AuthService.login('test@example.com', 'wrong-password');
+      const result = await AuthService.login('test@example.com', 'wrongpassword');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid credentials');
+      expect(result.message).toBe('Invalid credentials');
     });
 
     it('handles network error', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+      (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
 
-      const result = await AuthService.login('test@example.com', 'password');
+      const result = await AuthService.login('test@example.com', 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Network error');
+      expect(result.message).toBe('Network error');
     });
   });
 
   describe('register', () => {
-    it('successfully registers user', async () => {
+    const mockUserData = {
+      name: 'Test',
+      surname: 'User',
+      email: 'test@example.com',
+      phone: '+1234567890',
+      country: 'US',
+      role: UserRole.CLIENT,
+    };
+
+    const mockTokens = {
+      accessToken: 'mock-access-token',
+      refreshToken: 'mock-refresh-token',
+      expiresIn: 3600,
+      tokenType: 'Bearer',
+    };
+
+    it('successfully registers new user', async () => {
       const mockResponse = {
         ok: true,
         json: jest.fn().mockResolvedValue({
-          user: {
-            id: '123',
-            email: 'new@example.com',
-            name: 'New User',
-            role: 'client',
-          },
-          tokens: {
-            accessToken: 'mock-access-token',
-            refreshToken: 'mock-refresh-token',
+          access_token: 'mock-access-token',
+          refresh_token: 'mock-refresh-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          expires_at: '2024-01-01T01:00:00.000Z',
+          user_info: {
+            id: 1,
+            email: 'test@example.com',
+            phone_number: '+1234567890',
+            first_name: 'Test',
+            last_name: 'User',
+            status: 'active',
           },
         }),
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
 
-      const userData = {
-        name: 'New User',
-        surname: 'Test',
-        email: 'new@example.com',
-        phone: '+1234567890',
-        country: 'US',
-        role: 'client',
-      };
-
-      const result = await AuthService.register(userData, 'password123');
+      const result = await AuthService.register(mockUserData, 'password123');
 
       expect(result.success).toBe(true);
-      expect(result.user).toEqual({
-        id: '123',
-        email: 'new@example.com',
-        name: 'New User',
-        role: 'client',
-      });
+      expect(result.user).toBeDefined();
+      expect(result.tokens).toEqual(mockTokens);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/auth/client/register'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password123',
+            phone_number: '+1234567890',
+            first_name: 'Test',
+            last_name: 'User',
+          }),
+        })
+      );
     });
 
-    it('handles registration failure', async () => {
+    it('falls back to mock register when server is unavailable', async () => {
+      mockConfigUtils.checkServerHealth.mockResolvedValue(false);
+      mockJWTService.forceRefreshTokens.mockResolvedValue(mockTokens);
+
+      const result = await AuthService.register(mockUserData, 'password123');
+
+      expect(result.success).toBe(true);
+      expect(mockConfigUtils.checkServerHealth).toHaveBeenCalled();
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('handles registration error', async () => {
       const mockResponse = {
         ok: false,
         status: 400,
-        json: jest.fn().mockResolvedValue({
-          error: 'Email already exists',
-        }),
+        statusText: 'Bad Request',
+        json: jest.fn().mockResolvedValue({ message: 'Email already exists' }),
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
 
-      const userData = {
-        name: 'New User',
-        surname: 'Test',
-        email: 'existing@example.com',
-        phone: '+1234567890',
-        country: 'US',
-        role: 'client',
-      };
-
-      const result = await AuthService.register(userData, 'password123');
+      const result = await AuthService.register(mockUserData, 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Email already exists');
+      expect(result.message).toBe('Email already exists');
     });
   });
 
   describe('logout', () => {
-    it('successfully logs out user', async () => {
-      const mockResponse = {
-        ok: true,
-        json: jest.fn().mockResolvedValue({
-          message: 'Logged out successfully',
-        }),
-      };
+    it('successfully logs out with refresh token', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue('mock-refresh-token');
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockJWTService.clearTokens.mockResolvedValue();
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      const mockResponse = { ok: true };
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
+
+      const result = await AuthService.logout();
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Logged out successfully');
+      expect(mockJWTService.clearTokens).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/auth/client/logout'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: 'mock-refresh-token' }),
+        })
+      );
+    });
+
+    it('logs out without refresh token', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue(null);
+      mockJWTService.clearTokens.mockResolvedValue();
 
       const result = await AuthService.logout();
 
       expect(result.success).toBe(true);
-      expect(fetch).toHaveBeenCalledWith('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer mock-access-token',
-        },
-      });
+      expect(result.message).toBe('Logged out successfully');
+      expect(mockJWTService.clearTokens).toHaveBeenCalled();
+      expect(global.fetch).not.toHaveBeenCalled();
     });
 
-    it('handles logout failure gracefully', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+    it('continues logout even if server logout fails', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue('mock-refresh-token');
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+      mockJWTService.clearTokens.mockResolvedValue();
+
+      const mockResponse = { ok: false };
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
+
+      const result = await AuthService.logout();
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Logged out successfully');
+      expect(mockJWTService.clearTokens).toHaveBeenCalled();
+    });
+
+    it('handles logout error', async () => {
+      mockJWTService.getRefreshToken.mockRejectedValue(new Error('Storage error'));
 
       const result = await AuthService.logout();
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Network error');
+      expect(result.message).toBe('Storage error');
     });
   });
 
-  describe('forgotPassword', () => {
-    it('successfully sends reset email', async () => {
+  describe('refreshToken', () => {
+    const mockTokens = {
+      accessToken: 'new-access-token',
+      refreshToken: 'new-refresh-token',
+      expiresIn: 3600,
+      tokenType: 'Bearer',
+    };
+
+    it('successfully refreshes token', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue('old-refresh-token');
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+
       const mockResponse = {
         ok: true,
         json: jest.fn().mockResolvedValue({
-          message: 'Reset email sent',
+          access_token: 'new-access-token',
+          refresh_token: 'new-refresh-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          expires_at: '2024-01-01T01:00:00.000Z',
+          user_info: {
+            id: 1,
+            email: 'test@example.com',
+            phone_number: '+1234567890',
+            first_name: 'Test',
+            last_name: 'User',
+            status: 'active',
+          },
         }),
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
 
-      const result = await AuthService.forgotPassword('test@example.com');
+      const result = await AuthService.refreshToken();
 
       expect(result.success).toBe(true);
-      expect(fetch).toHaveBeenCalledWith('/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'test@example.com',
-        }),
-      });
+      expect(result.message).toBe('Token refreshed successfully');
+      expect(result.tokens).toEqual(mockTokens);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/auth/client/refresh'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: 'old-refresh-token' }),
+        })
+      );
     });
 
-    it('handles forgot password failure', async () => {
-      const mockResponse = {
-        ok: false,
-        status: 404,
-        json: jest.fn().mockResolvedValue({
-          error: 'User not found',
-        }),
-      };
+    it('returns error when no refresh token available', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue(null);
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
-
-      const result = await AuthService.forgotPassword('nonexistent@example.com');
+      const result = await AuthService.refreshToken();
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('User not found');
+      expect(result.message).toBe('No refresh token available');
+    });
+
+    it('falls back to mock refresh when server is unavailable', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue('old-refresh-token');
+      mockConfigUtils.checkServerHealth.mockResolvedValue(false);
+      mockJWTService.getCurrentUser.mockResolvedValue({
+        userId: '1',
+        email: 'test@example.com',
+        role: UserRole.CLIENT,
+        phone: '+1234567890',
+      });
+      mockJWTService.forceRefreshTokens.mockResolvedValue(mockTokens);
+
+      const result = await AuthService.refreshToken();
+
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Token refreshed successfully');
+      expect(mockConfigUtils.checkServerHealth).toHaveBeenCalled();
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
+
+    it('handles refresh token error', async () => {
+      mockJWTService.getRefreshToken.mockResolvedValue('old-refresh-token');
+      mockConfigUtils.checkServerHealth.mockResolvedValue(true);
+
+      const mockResponse = {
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        json: jest.fn().mockResolvedValue({ message: 'Invalid refresh token' }),
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      mockEnvConfig.API = { DEFAULT_HEADERS: { 'Content-Type': 'application/json' } };
+
+      const result = await AuthService.refreshToken();
+
+      expect(result.success).toBe(false);
+      expect(result.message).toBe('Invalid refresh token');
     });
   });
 
-  describe('resetPassword', () => {
-    it('successfully resets password', async () => {
-      const mockResponse = {
-        ok: true,
-        json: jest.fn().mockResolvedValue({
-          message: 'Password reset successfully',
-        }),
-      };
+  describe('mock methods', () => {
+    it('mockLogin creates new user when not found', async () => {
+      // Временно включаем __DEV__ для тестирования mock методов
+      global.__DEV__ = true;
+      
+      const { createAuthMockUser, findAuthUserByCredentials } = require('../../mocks/auth');
+      createAuthMockUser.mockReturnValue({
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test',
+        surname: 'User',
+        phone: '+1234567890',
+        role: UserRole.CLIENT,
+        avatar: null,
+        rating: 0,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        address: '',
+      });
+      findAuthUserByCredentials.mockReturnValue(null);
+      
+      mockJWTService.forceRefreshTokens.mockResolvedValue({
+        accessToken: 'mock-access-token',
+        refreshToken: 'mock-refresh-token',
+        expiresIn: 3600,
+        tokenType: 'Bearer',
+      });
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
-
-      const result = await AuthService.resetPassword('token123', 'newpassword123');
+      const result = await AuthService.login('test@example.com', 'password123');
 
       expect(result.success).toBe(true);
-      expect(fetch).toHaveBeenCalledWith('/api/auth/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: 'token123',
-          password: 'newpassword123',
-        }),
-      });
+      expect(createAuthMockUser).toHaveBeenCalled();
+      expect(mockJWTService.forceRefreshTokens).toHaveBeenCalled();
+
+      global.__DEV__ = false;
     });
 
-    it('handles reset password failure', async () => {
-      const mockResponse = {
-        ok: false,
-        status: 400,
-        json: jest.fn().mockResolvedValue({
-          error: 'Invalid token',
-        }),
+    it('mockRegister creates new user', async () => {
+      global.__DEV__ = true;
+      
+      const { createAuthMockUser } = require('../../mocks/auth');
+      const mockUser = {
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test',
+        surname: 'User',
+        phone: '+1234567890',
+        role: UserRole.CLIENT,
+        avatar: null,
+        rating: 0,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        address: '',
+      };
+      createAuthMockUser.mockReturnValue(mockUser);
+      
+      mockJWTService.forceRefreshTokens.mockResolvedValue({
+        accessToken: 'mock-access-token',
+        refreshToken: 'mock-refresh-token',
+        expiresIn: 3600,
+        tokenType: 'Bearer',
+      });
+
+      const userData = {
+        name: 'Test',
+        surname: 'User',
+        email: 'test@example.com',
+        phone: '+1234567890',
+        country: 'US',
+        role: UserRole.CLIENT,
       };
 
-      (fetch as jest.Mock).mockResolvedValue(mockResponse);
+      const result = await AuthService.register(userData, 'password123');
 
-      const result = await AuthService.resetPassword('invalid-token', 'newpassword123');
+      expect(result.success).toBe(true);
+      expect(result.user).toEqual(mockUser);
+      expect(createAuthMockUser).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        role: UserRole.CLIENT,
+        name: 'Test',
+        surname: 'User',
+        phone: '+1234567890',
+      });
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid token');
+      global.__DEV__ = false;
     });
   });
 }); 

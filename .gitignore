@@ -182,6 +182,11 @@ GoogleService-Info.plist
 src/config/secrets.ts
 src/config/api-keys.ts
 
+# Файлы с секретами
+AUTH_TESTING.md
+*_SECRETS.md
+*_KEYS.md
+
 # ===== ВРЕМЕННЫЕ ФАЙЛЫ =====
 
 # Temporary folders

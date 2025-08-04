@@ -57,7 +57,7 @@ npx expo start --clear
 // Go API формат
 {
   "email": "test@fixdrive.com",
-  "password": "Test123!",
+  "password": "***REMOVED***",
   "phone_number": "+1234567890",
   "first_name": "Test",
   "last_name": "User"
@@ -65,8 +65,8 @@ npx expo start --clear
 
 // Ответ сервера
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIs...",
-  "refresh_token": "149a7b30fa34a3d1...",
+  "access_token": "***REMOVED***",
+  "refresh_token": "***REMOVED***",
   "token_type": "Bearer",
   "expires_in": 1800,
   "user_info": {
@@ -113,7 +113,7 @@ AuthService автоматически преобразует данные ме�
 ```typescript
 // src/config/environment.ts
 BASE_URL: __DEV__ 
-  ? 'http://31.97.76.106:8080'  // Разработка
+  ? 'http://***REMOVED***'  // Разработка
   : 'https://api.fixdrive.com', // Продакшен
 ```
 

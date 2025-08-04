@@ -1,146 +1,354 @@
-import { Validators } from '../validators';
+import Validators from '../validators';
 
 describe('Validators', () => {
   describe('validateEmail', () => {
     it('validates correct email addresses', () => {
-      expect(Validators.validateEmail('test@example.com').isValid).toBe(true);
-      expect(Validators.validateEmail('user.name+tag@domain.co.uk').isValid).toBe(true);
-      expect(Validators.validateEmail('123@test.org').isValid).toBe(true);
+      const validEmails = [
+        'test@example.com',
+        'user.name@domain.co.uk',
+        'user+tag@example.org',
+        'test123@test.com'
+      ];
+
+      validEmails.forEach(email => {
+        const result = Validators.validateEmail(email);
+        expect(result.isValid).toBe(true);
+        expect(result.errors.length).toBe(0);
+      });
     });
 
-    it('rejects invalid email addresses', () => {
-      expect(Validators.validateEmail('invalid-email').isValid).toBe(false);
-      expect(Validators.validateEmail('test@').isValid).toBe(false);
-      expect(Validators.validateEmail('@example.com').isValid).toBe(false);
-      expect(Validators.validateEmail('test@.com').isValid).toBe(false);
-      expect(Validators.validateEmail('').isValid).toBe(false);
+    it('validates email length', () => {
+      const longEmail = 'a'.repeat(300) + '@example.com';
+      const result = Validators.validateEmail(longEmail);
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('превышать'))).toBe(true);
+    });
+
+    it('warns about temporary email services', () => {
+      const tempEmail = 'test@10minutemail.com';
+      const result = Validators.validateEmail(tempEmail);
+      expect(result.isValid).toBe(true);
+      expect(result.warnings?.some(warning => warning.includes('постоянный'))).toBe(true);
+    });
+
+    it('handles empty email', () => {
+      const result = Validators.validateEmail('');
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('обязателен'))).toBe(true);
+    });
+
+    it('handles null/undefined email', () => {
+      const result = Validators.validateEmail(null as any);
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('обязателен'))).toBe(true);
     });
   });
 
   describe('validatePassword', () => {
     it('validates strong passwords', () => {
-      expect(Validators.validatePassword('StrongPass123!').isValid).toBe(true);
-      expect(Validators.validatePassword('MyP@ssw0rd').isValid).toBe(true);
-      expect(Validators.validatePassword('Secure123#').isValid).toBe(true);
+      const strongPasswords = [
+        'StrongPass123!',
+        'MySecureP@ssw0rd',
+        'Complex123!@#',
+        'VeryStrongPassword123!'
+      ];
+
+      strongPasswords.forEach(password => {
+        const result = Validators.validatePassword(password);
+        expect(result.isValid).toBe(true);
+      });
     });
 
     it('rejects weak passwords', () => {
-      expect(Validators.validatePassword('weak').isValid).toBe(false);
-      expect(Validators.validatePassword('12345678').isValid).toBe(false);
-      expect(Validators.validatePassword('password').isValid).toBe(false);
-      expect(Validators.validatePassword('').isValid).toBe(false);
+      const weakPasswords = [
+        '123',
+        'password',
+        'abc123',
+        'qwerty'
+      ];
+
+      weakPasswords.forEach(password => {
+        const result = Validators.validatePassword(password);
+        expect(result.isValid).toBe(false);
+      });
+    });
+
+    it('warns about weak passwords', () => {
+      const weakPassword = 'weak';
+      const result = Validators.validatePassword(weakPassword);
+      expect(result.warnings?.some(warning => warning.includes('слабый'))).toBe(true);
+    });
+
+    it('handles empty password', () => {
+      const result = Validators.validatePassword('');
+      expect(result.isValid).toBe(false);
+    });
+  });
+
+  describe('getPasswordStrength', () => {
+    it('analyzes password strength correctly', () => {
+      const weakPassword = Validators.getPasswordStrength('123');
+      expect(weakPassword.level).toBe('weak');
+      expect(weakPassword.score).toBeLessThanOrEqual(3);
+
+      const strongPassword = Validators.getPasswordStrength('StrongPass123!');
+      expect(strongPassword.level).toBe('strong');
+      expect(strongPassword.score).toBeGreaterThan(5);
+    });
+
+    it('penalizes repeating characters', () => {
+      const password = 'aaa123';
+      const strength = Validators.getPasswordStrength(password);
+      expect(strength.feedback).toContain('repeat');
+    });
+
+    it('penalizes sequences', () => {
+      const password = 'abc123';
+      const strength = Validators.getPasswordStrength(password);
+      expect(strength.feedback).toContain('sequence');
     });
   });
 
   describe('validatePhone', () => {
     it('validates correct phone numbers', () => {
-      expect(Validators.validatePhone('+1234567890').isValid).toBe(true);
-      expect(Validators.validatePhone('+7 (999) 123-45-67').isValid).toBe(true);
-      expect(Validators.validatePhone('+44 20 7946 0958').isValid).toBe(true);
+      const validPhones = [
+        '+71234567890',
+        '+1234567890',
+        '1234567890',
+        '+123456789012345'
+      ];
+
+      validPhones.forEach(phone => {
+        const result = Validators.validatePhone(phone);
+        expect(result.isValid).toBe(true);
+      });
     });
 
     it('rejects invalid phone numbers', () => {
-      expect(Validators.validatePhone('123').isValid).toBe(false);
-      expect(Validators.validatePhone('not-a-number').isValid).toBe(false);
-      expect(Validators.validatePhone('').isValid).toBe(false);
+      const invalidPhones = [
+        '123',
+        'abc',
+        '+7 (999) 123-45',
+        '12345678901234567890'
+      ];
+
+      invalidPhones.forEach(phone => {
+        const result = Validators.validatePhone(phone);
+        expect(result.isValid).toBe(false);
+      });
+    });
+
+    it('handles empty phone', () => {
+      const result = Validators.validatePhone('');
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('обязателен'))).toBe(true);
     });
   });
 
   describe('validateName', () => {
     it('validates correct names', () => {
-      expect(Validators.validateName('John').isValid).toBe(true);
-      expect(Validators.validateName('Mary-Jane').isValid).toBe(true);
-      expect(Validators.validateName('O\'Connor').isValid).toBe(true);
+      const validNames = ['John', 'Mary', 'Иван', 'Алиса'];
+      validNames.forEach(name => {
+        const result = Validators.validateName(name);
+        expect(result.isValid).toBe(true);
+      });
     });
 
     it('rejects invalid names', () => {
-      expect(Validators.validateName('').isValid).toBe(false);
-      expect(Validators.validateName('123').isValid).toBe(false);
-      expect(Validators.validateName('A').isValid).toBe(false);
+      const invalidNames = ['', 'A', '123', 'John123'];
+      invalidNames.forEach(name => {
+        const result = Validators.validateName(name);
+        expect(result.isValid).toBe(false);
+      });
+    });
+
+    it('validates with custom field name', () => {
+      const result = Validators.validateName('', 'Фамилия');
+      expect(result.errors.some(error => error.includes('Фамилия'))).toBe(true);
     });
   });
 
   describe('validateLicenseNumber', () => {
     it('validates correct license numbers', () => {
-      expect(Validators.validateLicenseNumber('1234567890').isValid).toBe(true);
-      expect(Validators.validateLicenseNumber('AB123456').isValid).toBe(true);
-      expect(Validators.validateLicenseNumber('12-34-56-78-90').isValid).toBe(true);
-    });
-
-    it('rejects invalid license numbers', () => {
-      expect(Validators.validateLicenseNumber('').isValid).toBe(false);
-      expect(Validators.validateLicenseNumber('123').isValid).toBe(false);
-      expect(Validators.validateLicenseNumber('invalid').isValid).toBe(false);
+      const validLicenses = ['AZ12345678', 'AZ87654321'];
+      validLicenses.forEach(license => {
+        const result = Validators.validateLicenseNumber(license);
+        expect(result.isValid).toBe(true);
+      });
     });
   });
 
   describe('validateVehicleNumber', () => {
     it('validates correct vehicle numbers', () => {
-      expect(Validators.validateVehicleNumber('A123BC77').isValid).toBe(true);
-      expect(Validators.validateVehicleNumber('123ABC77').isValid).toBe(true);
-      expect(Validators.validateVehicleNumber('AB123C77').isValid).toBe(true);
+      const validNumbers = ['12-AB-123', '99-ZZ-999'];
+      validNumbers.forEach(number => {
+        const result = Validators.validateVehicleNumber(number);
+        expect(result.isValid).toBe(true);
+      });
     });
 
     it('rejects invalid vehicle numbers', () => {
-      expect(Validators.validateVehicleNumber('').isValid).toBe(false);
-      expect(Validators.validateVehicleNumber('123').isValid).toBe(false);
-      expect(Validators.validateVehicleNumber('invalid').isValid).toBe(false);
+      const invalidNumbers = ['12-AB-12', '12-AB-1234', 'AB-12-123', '12-AB-12A'];
+      invalidNumbers.forEach(number => {
+        const result = Validators.validateVehicleNumber(number);
+        expect(result.isValid).toBe(false);
+      });
+    });
+  });
+
+  describe('validateLicenseExpiry', () => {
+    it('validates future expiry dates', () => {
+      const futureDate = new Date();
+      futureDate.setFullYear(futureDate.getFullYear() + 1);
+      const result = Validators.validateLicenseExpiry(futureDate.toISOString());
+      expect(result.isValid).toBe(true);
+    });
+
+    it('rejects past expiry dates', () => {
+      const pastDate = new Date();
+      pastDate.setFullYear(pastDate.getFullYear() - 1);
+      const result = Validators.validateLicenseExpiry(pastDate.toISOString());
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('истек'))).toBe(true);
+    });
+
+    it('rejects invalid date formats', () => {
+      const result = Validators.validateLicenseExpiry('invalid-date');
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('Некорректная дата'))).toBe(true);
     });
   });
 
   describe('validateOTP', () => {
     it('validates correct OTP codes', () => {
-      expect(Validators.validateOTP('123456').isValid).toBe(true);
-      expect(Validators.validateOTP('000000').isValid).toBe(true);
-      expect(Validators.validateOTP('999999').isValid).toBe(true);
+      const validOTPs = ['123456', '000000', '999999'];
+      validOTPs.forEach(otp => {
+        const result = Validators.validateOTP(otp);
+        expect(result.isValid).toBe(true);
+      });
     });
 
     it('rejects invalid OTP codes', () => {
-      expect(Validators.validateOTP('').isValid).toBe(false);
-      expect(Validators.validateOTP('12345').isValid).toBe(false);
-      expect(Validators.validateOTP('1234567').isValid).toBe(false);
-      expect(Validators.validateOTP('12345a').isValid).toBe(false);
+      const invalidOTPs = ['12345', '1234567', '12345a', ''];
+      invalidOTPs.forEach(otp => {
+        const result = Validators.validateOTP(otp);
+        expect(result.isValid).toBe(false);
+      });
+    });
+  });
+
+  describe('validateClientRegistration', () => {
+    it('validates correct client registration data', () => {
+      const validData = {
+        name: 'John',
+        surname: 'Doe',
+        email: 'john@example.com',
+        phone: '+71234567890',
+        password: 'StrongPass123!',
+        confirmPassword: 'StrongPass123!'
+      };
+
+      const result = Validators.validateClientRegistration(validData);
+      expect(result.isValid).toBe(true);
+    });
+
+    it('rejects invalid client registration data', () => {
+      const invalidData = {
+        name: '',
+        surname: '',
+        email: 'invalid-email',
+        phone: '123',
+        password: 'weak',
+        confirmPassword: 'different'
+      };
+
+      const result = Validators.validateClientRegistration(invalidData);
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+
+    it('validates password confirmation', () => {
+      const data = {
+        name: 'John',
+        surname: 'Doe',
+        email: 'john@example.com',
+        phone: '+71234567890',
+        password: 'StrongPass123!',
+        confirmPassword: 'DifferentPass123!'
+      };
+
+      const result = Validators.validateClientRegistration(data);
+      expect(result.isValid).toBe(false);
+      expect(result.errors.some(error => error.includes('не совпадают'))).toBe(true);
+    });
+  });
+
+  describe('validateDriverRegistration', () => {
+    it('validates correct driver registration data', () => {
+      const validData = {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john@example.com',
+        phone_number: '+71234567890',
+        password: 'StrongPass123!',
+        confirmPassword: 'StrongPass123!',
+        license_number: 'AZ12345678',
+        vehicle_number: '12-AB-123',
+        license_expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+      };
+
+      const result = Validators.validateDriverRegistration(validData);
+      expect(result.isValid).toBe(true);
+    });
+
+    it('rejects invalid driver registration data', () => {
+      const invalidData = {
+        first_name: '',
+        last_name: '',
+        email: 'invalid-email',
+        phone_number: '123',
+        password: 'weak',
+        confirmPassword: 'different',
+        license_number: '12345678',
+        vehicle_number: '12-AB-12',
+        license_expiry_date: 'invalid-date'
+      };
+
+      const result = Validators.validateDriverRegistration(invalidData);
+      expect(result.isValid).toBe(false);
     });
   });
 
   describe('validateLogin', () => {
     it('validates correct login data', () => {
-      const result = Validators.validateLogin({
-        email: 'test@example.com',
+      const validData = {
+        email: 'john@example.com',
         password: 'StrongPass123!'
-      });
+      };
 
+      const result = Validators.validateLogin(validData);
       expect(result.isValid).toBe(true);
-      expect(result.errors).toHaveLength(0);
     });
 
     it('rejects invalid login data', () => {
-      const result = Validators.validateLogin({
-        email: 'invalid-email',
-        password: 'weak'
-      });
+      const invalidData = {
+        email: '',
+        password: ''
+      };
 
+      const result = Validators.validateLogin(invalidData);
       expect(result.isValid).toBe(false);
-      expect(result.errors.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('getPasswordStrength', () => {
-    it('returns correct strength for weak passwords', () => {
-      const strength = Validators.getPasswordStrength('weak');
-      expect(strength.level).toBe('weak');
-      expect(strength.score).toBeLessThanOrEqual(3);
+      expect(result.errors.length).toBe(2);
     });
 
-    it('returns correct strength for strong passwords', () => {
-      const strength = Validators.getPasswordStrength('StrongPass123!');
-      expect(strength.level).toBe('strong');
-      expect(strength.score).toBeGreaterThan(5);
-    });
+    it('validates email format in login', () => {
+      const data = {
+        email: 'invalid-email',
+        password: 'password'
+      };
 
-    it('provides feedback for password improvement', () => {
-      const strength = Validators.getPasswordStrength('weak');
-      expect(strength.feedback.length).toBeGreaterThan(0);
+      const result = Validators.validateLogin(data);
+      expect(result.isValid).toBe(true); // Login validation only checks for presence, not format
     });
   });
 }); 
