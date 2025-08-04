@@ -53,6 +53,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   // Загружаем сохраненный пакет и подписку при инициализации
   useEffect(() => {
+    console.log('🚀 PackageContext: Initializing...');
     loadPackage();
     loadSubscription();
   }, []);
@@ -78,30 +79,82 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const loadPackage = async () => {
     try {
+      console.log('🔄 Loading package from AsyncStorage...');
       const storedPackage = await AsyncStorage.getItem(PACKAGE_KEY);
-      if (storedPackage && ['free', 'plus', 'premium', 'premiumPlus'].includes(storedPackage)) {
-        setCurrentPackage(storedPackage as PackageType);
+      console.log('📦 Stored package:', storedPackage);
+      
+      if (storedPackage) {
+        // Обрабатываем пакеты с суффиксами (_month, _year)
+        const basePackage = storedPackage.replace(/_month$|_year$/, '');
+        
+        if (['free', 'plus', 'premium', 'premiumPlus'].includes(basePackage)) {
+          setCurrentPackage(basePackage as PackageType);
+          console.log('✅ Package loaded successfully:', basePackage, 'from:', storedPackage);
+          
+          // Если сохраненный пакет содержит суффикс, исправляем его
+          if (storedPackage !== basePackage) {
+            console.log('🔄 Fixing package format in AsyncStorage...');
+            await AsyncStorage.setItem(PACKAGE_KEY, basePackage);
+            console.log('✅ Package format fixed in AsyncStorage');
+          }
+        } else {
+          console.log('⚠️ Invalid package format:', storedPackage, 'using default: free');
+          setCurrentPackage('free');
+          // Очищаем неправильные данные
+          await AsyncStorage.removeItem(PACKAGE_KEY);
+          console.log('✅ Invalid package data cleared');
+        }
+      } else {
+        console.log('⚠️ No package found, using default: free');
+        setCurrentPackage('free');
       }
     } catch (error) {
-      console.log('Error loading package:', error);
+      console.error('❌ Error loading package:', error);
     }
   };
 
   const loadSubscription = async () => {
     try {
+      console.log('🔄 Loading subscription from AsyncStorage...');
       const storedSubscription = await AsyncStorage.getItem(SUBSCRIPTION_KEY);
+      console.log('📦 Stored subscription:', storedSubscription);
+      
       if (storedSubscription) {
-        setSubscription(JSON.parse(storedSubscription));
+        const parsedSubscription = JSON.parse(storedSubscription);
+        
+        // Исправляем формат packageType если он содержит суффикс
+        if (parsedSubscription.packageType && parsedSubscription.packageType.includes('_')) {
+          const basePackageType = parsedSubscription.packageType.replace(/_month$|_year$/, '');
+          if (['free', 'plus', 'premium', 'premiumPlus'].includes(basePackageType)) {
+            parsedSubscription.packageType = basePackageType;
+            console.log('🔄 Fixed subscription packageType:', basePackageType);
+            
+            // Сохраняем исправленную подписку
+            await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(parsedSubscription));
+            console.log('✅ Fixed subscription saved to AsyncStorage');
+          }
+        }
+        
+        setSubscription(parsedSubscription);
+        console.log('✅ Subscription loaded successfully:', parsedSubscription);
+      } else {
+        console.log('⚠️ No subscription found');
       }
     } catch (error) {
-      console.log('Error loading subscription:', error);
+      console.error('❌ Error loading subscription:', error);
     }
   };
 
   const updatePackage = async (newPackage: PackageType, period: 'month' | 'year' = 'month') => {
     try {
+      console.log('🔄 Updating package to:', newPackage, 'period:', period);
+      
+      // Сохраняем только базовое название пакета без суффикса
       await AsyncStorage.setItem(PACKAGE_KEY, newPackage);
+      console.log('✅ Package saved to AsyncStorage:', newPackage);
+      
       setCurrentPackage(newPackage);
+      console.log('✅ Current package state updated:', newPackage);
       
       // Если это платный пакет, создаем подписку
       if (newPackage !== 'free') {
@@ -119,17 +172,23 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         };
         
         await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(newSubscription));
+        console.log('✅ Subscription saved to AsyncStorage:', newSubscription);
+        
         setSubscription(newSubscription);
+        console.log('✅ Subscription state updated');
       } else {
         // Если выбран бесплатный пакет, отменяем подписку
         await AsyncStorage.removeItem(SUBSCRIPTION_KEY);
+        console.log('✅ Subscription removed from AsyncStorage');
+        
         setSubscription(null);
+        console.log('✅ Subscription state cleared');
       }
       
-      // Принудительно обновляем UI
+      console.log('🎉 Package update completed successfully!');
 
     } catch (error) {
-      console.log('Error saving package:', error);
+      console.error('❌ Error saving package:', error);
     }
   };
 

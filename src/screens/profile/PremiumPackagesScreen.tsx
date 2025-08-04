@@ -185,14 +185,20 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
         {
           text: t('premium.purchase.confirmButton'),
           onPress: async () => {
+            console.log('🔄 Starting package purchase process...');
+            console.log('💰 Package ID:', packageId, 'Price:', price, 'Period:', selectedPeriod);
       
-            
             const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }), packageId as string);
+            console.log('💳 Balance deduction result:', success);
             
             if (success) {
+              console.log('✅ Balance deducted successfully, updating package...');
               await updatePackage(packageId as PackageType, selectedPeriod);
+              console.log('✅ Package updated successfully');
               setSelectedPackageInfo({ name: packageName, id: packageId });
               setSuccessModalVisible(true);
+            } else {
+              console.log('❌ Balance deduction failed');
             }
           }
         }
@@ -326,6 +332,12 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
 
       {/* Content */}
       <View style={PremiumPackagesScreenStyles.content}>
+        {console.log('🎯 VipPackages props:', { 
+          currentPackage, 
+          currentPeriod: subscription?.period, 
+          selectedPeriod, 
+          isSubscriptionActive: subscription?.isActive || false 
+        })}
         <VipPackages
           onSelectPackage={handlePackageSelect}
           currentPackage={currentPackage}
