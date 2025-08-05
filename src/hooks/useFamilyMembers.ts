@@ -62,7 +62,7 @@ export const useFamilyMembers = () => {
         await AsyncStorage.setItem('family_members', JSON.stringify(initialMembers));
       }
     } catch (error) {
-      console.log('Error loading family members:', error);
+      console.error('Error loading family members:', error);
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export const useFamilyMembers = () => {
     try {
       await AsyncStorage.setItem('family_members', JSON.stringify(members));
     } catch (error) {
-      console.log('Error saving family members:', error);
+      console.error('Error saving family members:', error);
     }
   }, []);
 

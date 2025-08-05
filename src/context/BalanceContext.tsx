@@ -44,7 +44,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
         setBalance(parseFloat(storedBalance));
       }
     } catch (error) {
-      console.log('Error loading balance:', error);
+      console.error('Error loading balance:', error);
     }
   };
 
@@ -69,7 +69,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
         setTransactions(migratedTransactions);
       }
     } catch (error) {
-      console.log('Error loading transactions:', error);
+      console.error('Error loading transactions:', error);
     }
   };
 
@@ -78,7 +78,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       await AsyncStorage.setItem(BALANCE_KEY, newBalance.toString());
       setBalance(newBalance);
     } catch (error) {
-      console.log('Error saving balance:', error);
+      console.error('Error saving balance:', error);
     }
   };
 
@@ -87,7 +87,7 @@ export const BalanceProvider: React.FC<{ children: ReactNode }> = ({ children })
       await AsyncStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
-      console.log('Error saving transactions:', error);
+      console.error('Error saving transactions:', error);
     }
   };
 

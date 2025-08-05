@@ -53,7 +53,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   // Загружаем сохраненный пакет и подписку при инициализации
   useEffect(() => {
-    console.log('🚀 PackageContext: Initializing...');
+
     loadPackage();
     loadSubscription();
   }, []);
@@ -79,9 +79,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const loadPackage = async () => {
     try {
-      console.log('🔄 Loading package from AsyncStorage...');
       const storedPackage = await AsyncStorage.getItem(PACKAGE_KEY);
-      console.log('📦 Stored package:', storedPackage);
       
       if (storedPackage) {
         // Обрабатываем пакеты с суффиксами (_month, _year)
@@ -89,23 +87,17 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         if (['free', 'plus', 'premium', 'premiumPlus'].includes(basePackage)) {
           setCurrentPackage(basePackage as PackageType);
-          console.log('✅ Package loaded successfully:', basePackage, 'from:', storedPackage);
           
           // Если сохраненный пакет содержит суффикс, исправляем его
           if (storedPackage !== basePackage) {
-            console.log('🔄 Fixing package format in AsyncStorage...');
             await AsyncStorage.setItem(PACKAGE_KEY, basePackage);
-            console.log('✅ Package format fixed in AsyncStorage');
           }
         } else {
-          console.log('⚠️ Invalid package format:', storedPackage, 'using default: free');
           setCurrentPackage('free');
           // Очищаем неправильные данные
           await AsyncStorage.removeItem(PACKAGE_KEY);
-          console.log('✅ Invalid package data cleared');
         }
       } else {
-        console.log('⚠️ No package found, using default: free');
         setCurrentPackage('free');
       }
     } catch (error) {
@@ -115,9 +107,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const loadSubscription = async () => {
     try {
-      console.log('🔄 Loading subscription from AsyncStorage...');
       const storedSubscription = await AsyncStorage.getItem(SUBSCRIPTION_KEY);
-      console.log('📦 Stored subscription:', storedSubscription);
       
       if (storedSubscription) {
         const parsedSubscription = JSON.parse(storedSubscription);
@@ -127,18 +117,13 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
           const basePackageType = parsedSubscription.packageType.replace(/_month$|_year$/, '');
           if (['free', 'plus', 'premium', 'premiumPlus'].includes(basePackageType)) {
             parsedSubscription.packageType = basePackageType;
-            console.log('🔄 Fixed subscription packageType:', basePackageType);
-            
             // Сохраняем исправленную подписку
             await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(parsedSubscription));
-            console.log('✅ Fixed subscription saved to AsyncStorage');
           }
         }
         
         setSubscription(parsedSubscription);
-        console.log('✅ Subscription loaded successfully:', parsedSubscription);
       } else {
-        console.log('⚠️ No subscription found');
       }
     } catch (error) {
       console.error('❌ Error loading subscription:', error);
@@ -147,14 +132,10 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const updatePackage = async (newPackage: PackageType, period: 'month' | 'year' = 'month') => {
     try {
-      console.log('🔄 Updating package to:', newPackage, 'period:', period);
-      
       // Сохраняем только базовое название пакета без суффикса
       await AsyncStorage.setItem(PACKAGE_KEY, newPackage);
-      console.log('✅ Package saved to AsyncStorage:', newPackage);
       
       setCurrentPackage(newPackage);
-      console.log('✅ Current package state updated:', newPackage);
       
       // Если это платный пакет, создаем подписку
       if (newPackage !== 'free') {
@@ -213,7 +194,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         setSubscription(updatedSubscription);
       }
     } catch (error) {
-      console.log('Error extending subscription:', error);
+      console.error('Error extending subscription:', error);
     }
   };
 
@@ -227,7 +208,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       await AsyncStorage.setItem(PACKAGE_KEY, 'free');
       setCurrentPackage('free');
     } catch (error) {
-      console.log('Error canceling subscription:', error);
+      console.error('Error canceling subscription:', error);
     }
   };
 
@@ -243,7 +224,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         setSubscription(updatedSubscription);
       }
     } catch (error) {
-      console.log('Error toggling auto renew:', error);
+      console.error('Error toggling auto renew:', error);
     }
   };
 

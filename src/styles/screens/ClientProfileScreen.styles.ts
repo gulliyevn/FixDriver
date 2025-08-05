@@ -19,8 +19,8 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 80,
-    marginBottom: 12,
+    marginTop: 60,
+    marginBottom: -2,
     paddingHorizontal: 20,
   },
   avatar: {
@@ -46,19 +46,54 @@ export const ClientProfileScreenStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   profileName: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
     color: '#003366',
   },
   profilePhone: {
-    fontSize: 15,
+    fontSize: 18,
     color: '#888',
-    marginTop: 2,
+    marginTop: 4,
   },
   profileEmail: {
     fontSize: 13,
     color: '#aaa',
     marginTop: 1,
+  },
+  premiumButtonContainer: {
+    marginLeft: 8,
+    borderRadius: 20,
+    shadowColor: '#0066CC',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 20,
+    elevation: 15,
+  },
+  premiumButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#0066CC',
+    shadowColor: '#0066CC',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  premiumButtonText: {
+    color: '#FFD700',
+    fontSize: 12,
+    fontWeight: '700',
+    marginLeft: 4,
   },
   bell: {
     marginLeft: 12,
@@ -229,6 +264,9 @@ export const getClientProfileStyles = (isDark: boolean) => {
     },
     profileEmail: {
       color: currentColors.textSecondary,
+    },
+    premiumButton: {
+      borderColor: '#0066CC',
     },
     bell: {
       backgroundColor: currentColors.surface,

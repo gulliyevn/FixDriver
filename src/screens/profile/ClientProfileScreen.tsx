@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../hooks/useI18n';
 import { useTheme } from '../../context/ThemeContext';
@@ -10,7 +11,6 @@ import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import NotificationsScreen from '../common/NotificationsScreen';
 import { useProfile } from '../../hooks/useProfile';
 import { formatBalance } from '../../utils/formatters';
 
@@ -24,8 +24,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getClientProfileStyles(isDark);
-  const [notificationsCount] = useState(Math.floor(Math.random() * 10) + 1); // Случайное количество уведомлений 1-10
-  const [notificationsModalVisible, setNotificationsModalVisible] = useState(false);
+
 
   // Используем хук для работы с профилем
   const { profile, loading, error, loadProfile } = useProfile();
@@ -99,7 +98,7 @@ if (error || !profile) {
     <>
       {/* Фиксированная секция с аватаром и статистикой */}
       <View style={[styles.fixedSection, dynamicStyles.fixedSection]}>
-        {/* Аватар, имя, телефон, колокол */}
+        {/* Аватар, имя, телефон, премиум кнопка */}
         <View style={styles.profileRow}>
           <TouchableOpacity style={styles.avatar} onPress={() => navigation.navigate('EditClientProfile' as any)}>
             {profile?.avatar ? (
@@ -108,18 +107,23 @@ if (error || !profile) {
               <Ionicons name="person" size={48} color={styles.avatarIcon.color} />
             )}
           </TouchableOpacity>
-                      <TouchableOpacity style={styles.profileText} onPress={() => navigation.navigate('EditClientProfile' as any)}>
+          <TouchableOpacity style={styles.profileText} onPress={() => navigation.navigate('EditClientProfile' as any)}>
             <Text style={[styles.profileName, dynamicStyles.profileName]}>{profile?.name || ''} {profile?.surname || ''}</Text>
             <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{profile?.phone || ''}</Text>
-            <Text style={[styles.profileEmail, dynamicStyles.profileEmail]}>{profile?.email || ''}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.bell, dynamicStyles.bell]} onPress={() => setNotificationsModalVisible(true)}>
-            <Ionicons name="notifications-outline" size={24} color={currentColors.primary} />
-            {notificationsCount > 0 && (
-              <View style={styles.bellBadge}>
-                <Text style={styles.bellBadgeText}>{notificationsCount}</Text>
-              </View>
-            )}
+          <TouchableOpacity 
+            style={styles.premiumButtonContainer} 
+            onPress={() => navigation.navigate('PremiumPackages' as any)}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={['#FFFFFF', '#E6F3FF', '#B3D9FF', '#80BFFF', '#FFFFFF']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.premiumButton, dynamicStyles.premiumButton]}
+            >
+              <Ionicons name="diamond" size={24} color="#0066CC" />
+            </LinearGradient>
           </TouchableOpacity>
         </View>
         {/* Блок статистики */}
@@ -209,16 +213,6 @@ if (error || !profile) {
           <Text style={styles.logoutText}>{t('client.profile.logout')}</Text>
         </TouchableOpacity>
       </ScrollView>
-      
-      {/* Модальное окно уведомлений */}
-      <Modal
-        visible={notificationsModalVisible}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setNotificationsModalVisible(false)}
-      >
-        <NotificationsScreen />
-      </Modal>
     </>
   );
 };

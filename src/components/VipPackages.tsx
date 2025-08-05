@@ -124,7 +124,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
     // Бесплатный пакет активен всегда (и в месячном, и в годовом периоде)
     if (packageId === 'free') {
       const isActive = currentPackage === 'free';
-      console.log('🔍 Package check - free:', isActive, 'currentPackage:', currentPackage);
+      
       return isActive;
     }
     
@@ -134,7 +134,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
     // Для платных пакетов проверяем базовое название пакета
     // Галочка и бордер для активного пакета независимо от периода
     const isActive = currentPackage === basePackageId && isSubscriptionActive;
-    console.log('🔍 Package check -', packageId, 'base:', basePackageId, 'current:', currentPackage, 'active:', isActive, 'subscription:', isSubscriptionActive);
+    
     return isActive;
   };
 
