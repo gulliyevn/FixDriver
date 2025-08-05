@@ -212,8 +212,8 @@ const VipPackages: React.FC<VipPackagesProps> = ({
           horizontal 
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={VipPackagesStyles.carouselContent}
-          snapToInterval={CAROUSEL_CONFIG.CARD_WIDTH}
-          decelerationRate="fast"
+          snapToInterval={CAROUSEL_CONFIG.CARD_WIDTH + 20}
+          decelerationRate={0}
           snapToAlignment="center"
           pagingEnabled={false}
           onMomentumScrollEnd={() => {
@@ -222,85 +222,86 @@ const VipPackages: React.FC<VipPackagesProps> = ({
           }}
         >
           {/* Отступ слева для центрирования первого элемента */}
-          <View style={{ width: CAROUSEL_CONFIG.LEFT_PADDING }} />
+          <View style={{ width: 10 }} />
           
-          {packages.map((pkg) => (
-            <TouchableOpacity
-              key={pkg.id}
-              style={[
-                VipPackagesStyles.packageCard, 
-                getPackageCardColors(pkg.id, isDark),
-                isPackageActive(pkg.id) && VipPackagesStyles.selectedPackageCard,
-              ]}
-              onPress={() => onSelectPackage(pkg.id, pkg.price, selectedPeriod)}
-              activeOpacity={0.8}
-            >
-            <View style={VipPackagesStyles.packageHeader}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                <Ionicons 
-                  name={pkg.icon as keyof typeof Ionicons.glyphMap} 
-                  size={28} 
-                  color={getPackageColor(pkg.id)} 
-                  style={{ marginRight: 10 }}
-                />
-                <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
-                  {pkg.name}
-                </Text>
-              </View>
-              {isPackageActive(pkg.id) && (
-                <View style={VipPackagesStyles.selectedIndicator}>
-                  <Ionicons name="checkmark-circle" size={ICON_SIZES.SELECTED_INDICATOR} color={COLORS.PRIMARY || '#3B82F6'} />
-                </View>
-              )}
-            </View>
-
-
-
-            {/* Таблица функций */}
-            <View style={VipPackagesStyles.featuresContainer}>
-              {packageFeatures.map((feature, featureIndex) => {
-                const featureIcon = getFeatureIcon(featureIndex);
-                const isLastRow = featureIndex === packageFeatures.length - 1;
-                return (
-                  <View key={featureIndex} style={[
-                    VipPackagesStyles.featureRow,
-                    isLastRow && { borderBottomWidth: 0 }
-                  ]}>
-                    <View style={VipPackagesStyles.featureNameContainer}>
-                      <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: (featureIcon.color || '#6B7280') + '15' }]}>
-                        <Ionicons 
-                          name={(featureIcon.name as keyof typeof Ionicons.glyphMap) || 'ellipse-outline'} 
-                          size={ICON_SIZES.FEATURE_ICON} 
-                          color={featureIcon.color || '#6B7280'} 
-                        />
-                      </View>
-                      <Text style={[VipPackagesStyles.featureName, { color: currentColors.textSecondary || '#6B7280' }]}>
-                        {feature.name}
-                      </Text>
-                    </View>
-                    <View style={VipPackagesStyles.featureValueContainer}>
-                      {renderFeatureValue(
-                        getFeatureValue(feature, pkg.id), 
-                        pkg.id !== 'free'
-                      )}
-                    </View>
+          {packages.map((pkg, index) => (
+            <React.Fragment key={pkg.id}>
+              <TouchableOpacity
+                style={[
+                  VipPackagesStyles.packageCard, 
+                  getPackageCardColors(pkg.id, isDark),
+                  isPackageActive(pkg.id) && VipPackagesStyles.selectedPackageCard,
+                ]}
+                onPress={() => onSelectPackage(pkg.id, pkg.price, selectedPeriod)}
+                activeOpacity={0.8}
+              >
+                <View style={VipPackagesStyles.packageHeader}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                    <Ionicons 
+                      name={pkg.icon as keyof typeof Ionicons.glyphMap} 
+                      size={28} 
+                      color={getPackageColor(pkg.id)} 
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text style={[VipPackagesStyles.packageTitle, dynamicStyles.packageTitle]}>
+                      {pkg.name}
+                    </Text>
                   </View>
-                );
-              })}
-            </View>
+                  {isPackageActive(pkg.id) && (
+                    <View style={VipPackagesStyles.selectedIndicator}>
+                      <Ionicons name="checkmark-circle" size={ICON_SIZES.SELECTED_INDICATOR} color={COLORS.PRIMARY || '#3B82F6'} />
+                    </View>
+                  )}
+                </View>
 
-            <View style={[VipPackagesStyles.priceButton, dynamicStyles.priceButton]}>
-              <View style={VipPackagesStyles.priceContainer}>
-                <Text style={VipPackagesStyles.priceText}>
-                  {pkg.price === 0 ? t('premium.packages.free') : formatPackagePrice(pkg.price)}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+                <View style={VipPackagesStyles.featuresContainer}>
+                  {packageFeatures.map((feature, featureIndex) => {
+                    const featureIcon = getFeatureIcon(featureIndex);
+                    const isLastRow = featureIndex === packageFeatures.length - 1;
+                    return (
+                      <View key={featureIndex} style={[
+                        VipPackagesStyles.featureRow,
+                        isLastRow && { borderBottomWidth: 0 }
+                      ]}>
+                        <View style={VipPackagesStyles.featureNameContainer}>
+                          <View style={[VipPackagesStyles.iconWrapper, { backgroundColor: (featureIcon.color || '#6B7280') + '15' }]}>
+                            <Ionicons 
+                              name={(featureIcon.name as keyof typeof Ionicons.glyphMap) || 'ellipse-outline'} 
+                              size={ICON_SIZES.FEATURE_ICON} 
+                              color={featureIcon.color || '#6B7280'} 
+                            />
+                          </View>
+                          <Text style={[VipPackagesStyles.featureName, { color: currentColors.textSecondary || '#6B7280' }]}>
+                            {feature.name}
+                          </Text>
+                        </View>
+                        <View style={VipPackagesStyles.featureValueContainer}>
+                          {renderFeatureValue(
+                            getFeatureValue(feature, pkg.id), 
+                            pkg.id !== 'free'
+                          )}
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+
+                <View style={[VipPackagesStyles.priceButton, dynamicStyles.priceButton]}>
+                  <View style={VipPackagesStyles.priceContainer}>
+                    <Text style={VipPackagesStyles.priceText}>
+                      {pkg.price === 0 ? t('premium.packages.free') : formatPackagePrice(pkg.price)}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              
+              {/* Отступ между пакетами */}
+              {index < packages.length - 1 && <View style={{ width: 22 }} />}
+            </React.Fragment>
+          ))}
         
         {/* Отступ справа для центрирования последнего элемента */}
-        <View style={{ width: CAROUSEL_CONFIG.RIGHT_PADDING }} />
+        <View style={{ width: 10 }} />
         
         </ScrollView>
         

@@ -92,9 +92,8 @@ export const VipPackagesStyles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 24,
     paddingBottom: 24,
-    marginHorizontal: 16,
     borderWidth: 1,
-    width: 340,
+    width: 370,
     height: 580,
     justifyContent: 'space-between',
     shadowColor: '#000',
@@ -275,6 +274,7 @@ export const VipPackagesStyles = StyleSheet.create({
   carouselContainer: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   carouselContent: {
     alignItems: 'center',

@@ -13,9 +13,10 @@ export const PACKAGE_FEATURE_ICONS = [
 
 // Константы для карусели
 export const CAROUSEL_CONFIG = {
-  CARD_WIDTH: 420, // ширина карточки + отступы
-  LEFT_PADDING: 40,
-  RIGHT_PADDING: 40,
+  CARD_WIDTH: 372, // ширина карточки (340) + отступы (16*2)
+  LEFT_PADDING: 20,
+  RIGHT_PADDING: 20,
+  CARD_SPACING: 16,
 } as const;
 
 // Константы для анимации
