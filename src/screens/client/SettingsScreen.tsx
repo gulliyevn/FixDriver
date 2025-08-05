@@ -10,7 +10,7 @@ import { useNotifications } from '../../hooks/useNotifications';
 import { useAuth } from '../../context/AuthContext';
 import { ProfileService } from '../../services/ProfileService';
 import { getCurrentColors } from '../../constants/colors';
-import { getSystemLanguage } from '../../i18n';
+
 
 /**
  * Экран настроек
@@ -46,15 +46,8 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
   const [autoLocation, setAutoLocation] = useState(true);
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
-  // Автоматическая синхронизация с системным языком при загрузке
-  useEffect(() => {
-    const systemLang = getSystemLanguage();
-    if (systemLang !== language) {
-      setLanguage(systemLang).catch(() => {
-        // Игнорируем ошибки при автоматической синхронизации
-      });
-    }
-  }, []); // Запускаем только при монтировании компонента
+  // Убираем автоматическую синхронизацию с системным языком
+  // Теперь язык будет сохраняться как выбрал пользователь
 
   const handleLanguageChange = () => {
     setLanguageModalVisible(true);
