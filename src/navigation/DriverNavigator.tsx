@@ -10,7 +10,7 @@ import MapScreen from '../screens/driver/MapScreen';
 import OrdersScreen from '../screens/driver/OrdersScreen';
 import EarningsScreen from '../screens/driver/EarningsScreen';
 import ChatScreen from '../screens/driver/ChatScreen';
-import DriverProfileScreen from '../screens/driver/DriverProfileScreen';
+import DriverProfileStack from './driver/DriverProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -77,7 +77,7 @@ const DriverNavigator: React.FC = () => {
       />
       <Tab.Screen 
         name="Profile" 
-        component={DriverProfileScreen}
+        component={DriverProfileStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => (

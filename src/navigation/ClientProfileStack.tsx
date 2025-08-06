@@ -14,7 +14,7 @@ import AddressPickerScreen from '../screens/client/AddressPickerScreen';
 import ChangePasswordScreen from '../screens/client/ChangePasswordScreen';
 import SupportChatScreen from '../screens/common/SupportChatScreen';
 import EditClientProfileScreen from '../screens/profile/EditClientProfileScreen';
-import DriverProfileScreen from '../screens/profile/DriverProfileScreen';
+import DriverProfileScreen from '../screens/driver/DriverProfileScreen';
 import PremiumPackagesScreen from '../screens/profile/PremiumPackagesScreen';
 
 import NotificationsScreen from '../screens/common/NotificationsScreen';
