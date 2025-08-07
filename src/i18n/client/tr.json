@@ -66,6 +66,9 @@
     "topUp": "Yükle",
     "withdraw": "Çek",
     "quickTopUp": "Hızlı yükleme",
+    "pending": "Bekliyor",
+    "enterWithdrawAmount": "Çekmek için miktar girin:",
+    "withdrawRequestSent": "%{0} AFc çekme talebi gönderildi",
 
     "showAll": "Tümünü göster",
     "pay": "Öde",
@@ -82,7 +85,7 @@
     "paymentSuccess": "Ödeme başarılı",
     "balanceToppedUp": "Bakiye %{0} AFc ile yüklendi",
     "copied": "Kopyalandı",
-    "balanceTopUp": "Yükle",
+    "balanceTopUp": "Yükleme",
     "topUpHistory": "Yükleme geçmişi",
     "loadingMore": "Yükleniyor...",
     "amountInAFc": "AFc cinsinden miktar",
@@ -92,6 +95,8 @@
     "topUpBalance": "Yükle",
     "payButton": "Öde",
     "recentTopUps": "Son yüklemeler",
+    "recentTransactions": "Son işlemler",
+    "withdrawal": "Para çekme",
     "cashback": {
       "title": "Nakit iade",
       "available": "Kullanım için mevcut",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserStorageKey, STORAGE_KEYS } from '../../utils/storageKeys';
 
 export interface ClientTransaction {
   id: string;
@@ -22,14 +23,15 @@ export interface ClientBalanceContextType {
   getCashback: () => Promise<number>;
 }
 
-const CLIENT_BALANCE_KEY = 'client_balance';
-const CLIENT_TRANSACTIONS_KEY = 'client_transactions';
-const CLIENT_CASHBACK_KEY = 'client_cashback';
-
 export const useClientBalance = (): ClientBalanceContextType => {
   const [balance, setBalance] = useState<number>(50); // Начальный баланс
   const [transactions, setTransactions] = useState<ClientTransaction[]>([]);
   const [cashback, setCashback] = useState<number>(0);
+  
+  // Получаем ключи с изоляцией по пользователю
+  const balanceKey = useUserStorageKey(STORAGE_KEYS.CLIENT_BALANCE);
+  const transactionsKey = useUserStorageKey(STORAGE_KEYS.CLIENT_TRANSACTIONS);
+  const cashbackKey = useUserStorageKey(STORAGE_KEYS.CLIENT_CASHBACK);
 
   useEffect(() => {
     loadBalance();
@@ -39,7 +41,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const loadBalance = async () => {
     try {
-      const storedBalance = await AsyncStorage.getItem(CLIENT_BALANCE_KEY);
+      const storedBalance = await AsyncStorage.getItem(balanceKey);
       if (storedBalance) {
         setBalance(parseFloat(storedBalance));
       }
@@ -50,7 +52,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const loadTransactions = async () => {
     try {
-      const storedTransactions = await AsyncStorage.getItem(CLIENT_TRANSACTIONS_KEY);
+      const storedTransactions = await AsyncStorage.getItem(transactionsKey);
       if (storedTransactions) {
         const parsedTransactions = JSON.parse(storedTransactions);
         
@@ -75,7 +77,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const loadCashback = async () => {
     try {
-      const storedCashback = await AsyncStorage.getItem(CLIENT_CASHBACK_KEY);
+      const storedCashback = await AsyncStorage.getItem(cashbackKey);
       if (storedCashback) {
         setCashback(parseFloat(storedCashback));
       }
@@ -86,7 +88,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const saveBalance = async (newBalance: number) => {
     try {
-      await AsyncStorage.setItem(CLIENT_BALANCE_KEY, newBalance.toString());
+      await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
     } catch (error) {
       console.error('Error saving client balance:', error);
@@ -95,7 +97,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const saveTransactions = async (newTransactions: ClientTransaction[]) => {
     try {
-      await AsyncStorage.setItem(CLIENT_TRANSACTIONS_KEY, JSON.stringify(newTransactions));
+      await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
       console.error('Error saving client transactions:', error);
@@ -104,7 +106,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const saveCashback = async (newCashback: number) => {
     try {
-      await AsyncStorage.setItem(CLIENT_CASHBACK_KEY, newCashback.toString());
+      await AsyncStorage.setItem(cashbackKey, newCashback.toString());
       setCashback(newCashback);
     } catch (error) {
       console.error('Error saving client cashback:', error);

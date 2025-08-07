@@ -66,6 +66,9 @@
     "topUp": "Внести",
     "withdraw": "Вывести",
     "quickTopUp": "Быстрое пополнение",
+    "pending": "Ожидает",
+    "enterWithdrawAmount": "Введите сумму для снятия:",
+    "withdrawRequestSent": "Заявка на снятие %{0} AFc отправлена",
 
     "showAll": "Показать все",
     "pay": "Погасить",
@@ -92,6 +95,8 @@
     "topUpBalance": "Пополнить",
     "payButton": "Оплатить",
     "recentTopUps": "Последние пополнения",
+    "recentTransactions": "Последние операции",
+    "withdrawal": "Снятие",
     "cashback": {
       "title": "FixBack",
       "available": "Доступно для использования",

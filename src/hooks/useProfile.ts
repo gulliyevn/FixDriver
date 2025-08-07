@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockUsers } from '../mocks/users';
 import { AvatarService } from '../services/AvatarService';
+import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
 
 export interface UserProfile {
   id: string;
@@ -21,6 +22,9 @@ export const useProfile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Получаем ключ с изоляцией по пользователю
+  const profileKey = useUserStorageKey(STORAGE_KEYS.USER_PROFILE);
 
   const loadProfile = async () => {
     try {
@@ -28,7 +32,7 @@ export const useProfile = () => {
       setError(null);
       
       // Сначала пытаемся загрузить сохраненные данные
-      const savedProfile = await AsyncStorage.getItem('user_profile');
+      const savedProfile = await AsyncStorage.getItem(profileKey);
       
       if (savedProfile) {
         const parsedProfile = JSON.parse(savedProfile);
@@ -65,7 +69,7 @@ export const useProfile = () => {
       };
       
       // Сохраняем начальные данные
-      await AsyncStorage.setItem('user_profile', JSON.stringify(userProfile));
+      await AsyncStorage.setItem(profileKey, JSON.stringify(userProfile));
       setProfile(userProfile);
     } catch (err) {
       setError('Не удалось загрузить профиль');
@@ -86,7 +90,7 @@ export const useProfile = () => {
         };
         
         // Сохраняем в AsyncStorage
-        await AsyncStorage.setItem('user_profile', JSON.stringify(updatedProfile));
+        await AsyncStorage.setItem(profileKey, JSON.stringify(updatedProfile));
         
         // Обновляем состояние
         setProfile(updatedProfile);
@@ -116,7 +120,7 @@ export const useProfile = () => {
 
   const clearProfile = async () => {
     try {
-      await AsyncStorage.removeItem('user_profile');
+      await AsyncStorage.removeItem(profileKey);
       await AvatarService.deleteAvatar();
       setProfile(null);
     } catch (err) {

@@ -66,6 +66,9 @@
     "topUp": "Top up",
     "withdraw": "Withdraw",
     "quickTopUp": "Quick top up",
+    "pending": "Pending",
+    "enterWithdrawAmount": "Enter amount to withdraw:",
+    "withdrawRequestSent": "Withdrawal request for %{0} AFc sent",
 
     "showAll": "Show all",
     "pay": "Pay",
@@ -92,6 +95,8 @@
     "topUpBalance": "Top up balance",
     "payButton": "Pay",
     "recentTopUps": "Recent top-ups",
+    "recentTransactions": "Recent transactions",
+    "withdrawal": "Withdrawal",
     "cashback": {
       "title": "FixBack",
       "available": "Available to use",

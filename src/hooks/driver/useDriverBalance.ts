@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserStorageKey, STORAGE_KEYS } from '../../utils/storageKeys';
 
 export interface DriverTransaction {
   id: string;
-  type: 'earnings' | 'withdrawal' | 'bonus' | 'commission';
+  type: 'payment' | 'topup' | 'refund' | 'withdrawal';
   amount: number;
   description: string;
   date: string;
@@ -21,14 +22,15 @@ export interface DriverBalanceContextType {
   getEarnings: () => Promise<number>;
 }
 
-const DRIVER_BALANCE_KEY = 'driver_balance';
-const DRIVER_TRANSACTIONS_KEY = 'driver_transactions';
-const DRIVER_EARNINGS_KEY = 'driver_earnings';
-
 export const useDriverBalance = (): DriverBalanceContextType => {
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<DriverTransaction[]>([]);
   const [earnings, setEarnings] = useState<number>(0);
+  
+  // Получаем ключи с изоляцией по пользователю
+  const balanceKey = useUserStorageKey(STORAGE_KEYS.DRIVER_BALANCE);
+  const transactionsKey = useUserStorageKey(STORAGE_KEYS.DRIVER_TRANSACTIONS);
+  const earningsKey = useUserStorageKey(STORAGE_KEYS.DRIVER_EARNINGS);
 
   useEffect(() => {
     loadBalance();
@@ -38,7 +40,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const loadBalance = async () => {
     try {
-      const storedBalance = await AsyncStorage.getItem(DRIVER_BALANCE_KEY);
+      const storedBalance = await AsyncStorage.getItem(balanceKey);
       if (storedBalance) {
         setBalance(parseFloat(storedBalance));
       }
@@ -49,7 +51,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const loadTransactions = async () => {
     try {
-      const storedTransactions = await AsyncStorage.getItem(DRIVER_TRANSACTIONS_KEY);
+      const storedTransactions = await AsyncStorage.getItem(transactionsKey);
       if (storedTransactions) {
         const parsedTransactions = JSON.parse(storedTransactions);
         setTransactions(parsedTransactions);
@@ -61,7 +63,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const loadEarnings = async () => {
     try {
-      const storedEarnings = await AsyncStorage.getItem(DRIVER_EARNINGS_KEY);
+      const storedEarnings = await AsyncStorage.getItem(earningsKey);
       if (storedEarnings) {
         setEarnings(parseFloat(storedEarnings));
       }
@@ -72,7 +74,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const saveBalance = async (newBalance: number) => {
     try {
-      await AsyncStorage.setItem(DRIVER_BALANCE_KEY, newBalance.toString());
+      await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
     } catch (error) {
       console.error('Error saving driver balance:', error);
@@ -81,7 +83,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const saveTransactions = async (newTransactions: DriverTransaction[]) => {
     try {
-      await AsyncStorage.setItem(DRIVER_TRANSACTIONS_KEY, JSON.stringify(newTransactions));
+      await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
       console.error('Error saving driver transactions:', error);
@@ -90,7 +92,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const saveEarnings = async (newEarnings: number) => {
     try {
-      await AsyncStorage.setItem(DRIVER_EARNINGS_KEY, newEarnings.toString());
+      await AsyncStorage.setItem(earningsKey, newEarnings.toString());
       setEarnings(newEarnings);
     } catch (error) {
       console.error('Error saving driver earnings:', error);
@@ -102,7 +104,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
     await saveBalance(newBalance);
     
     await addTransaction({
-      type: 'earnings',
+      type: 'topup',
       amount: amount,
       description: `Earnings ${amount} AFc`,
       translationKey: 'driver.balance.transactions.earnings',

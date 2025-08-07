@@ -1,5 +1,10 @@
 import { StyleSheet } from 'react-native';
 
+export const SWITCH_COLORS = {
+  active: '#3B82F6',
+  inactive: '#10B981'
+};
+
 export const BalanceTopUpHistoryStyles = StyleSheet.create({
   container: {
     marginTop: -8,
@@ -65,6 +70,44 @@ export const BalanceTopUpHistoryStyles = StyleSheet.create({
     fontSize: 11,
     color: '#fff',
     fontWeight: '500',
+  },
+  switchContainer: {
+    width: 56,
+    height: 32,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 2,
+    position: 'relative'
+  },
+  switchThumb: {
+    width: 28,
+    height: 28,
+    backgroundColor: 'white',
+    borderRadius: 14,
+    position: 'absolute',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  switchIcon: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  switchIconImage: {
+    color: '#ffffff',
+    fontSize: 16,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 20
   },
 });
 

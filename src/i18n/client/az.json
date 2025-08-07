@@ -66,6 +66,9 @@
     "topUp": "Yüklə",
     "withdraw": "Çıxar",
     "quickTopUp": "Tez yüklə",
+    "pending": "Gözləyir",
+    "enterWithdrawAmount": "Çıxarmaq üçün məbləğ daxil edin:",
+    "withdrawRequestSent": "%{0} AFc çıxarma tələbi göndərildi",
 
     "showAll": "Hamısını göstər",
     "pay": "Ödə",
@@ -82,7 +85,7 @@
     "paymentSuccess": "Ödəniş uğurla tamamlandı",
     "balanceToppedUp": "Balans %{0} AFc ilə yükləndi",
     "copied": "Kopyalandı",
-    "balanceTopUp": "Yüklə",
+    "balanceTopUp": "Yükləmə",
     "topUpHistory": "Yükləmə tarixçəsi",
     "loadingMore": "Yüklənir...",
     "amountInAFc": "AFc ilə məbləğ",
@@ -92,6 +95,8 @@
     "topUpBalance": "Yüklə",
     "payButton": "Ödə",
     "recentTopUps": "Son yükləmələr",
+    "recentTransactions": "Son əməliyyatlar",
+    "withdrawal": "Çıxarış",
     "cashback": {
       "title": "Keşbek",
       "available": "İstifadə üçün mövcud",

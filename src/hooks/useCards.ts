@@ -3,11 +3,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoleKeys } from './useRole';
 import { Card, mockCards } from '../mocks/cardsMock';
 import { CardService } from '../services/cardService';
+import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
 
 export const useCards = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const { getStorageKey, getApiEndpoint, isDriver } = useRoleKeys();
+  
+  // Получаем ключ с изоляцией по пользователю
+  const cardsKey = useUserStorageKey(STORAGE_KEYS.USER_CARDS);
 
   // Загружаем карты при инициализации
   useEffect(() => {
@@ -18,9 +22,8 @@ export const useCards = () => {
     try {
       setLoading(true);
       
-      // Используем разные ключи для driver и client
-      const storageKey = getStorageKey('cards');
-      const savedCards = await AsyncStorage.getItem(storageKey);
+      // Используем ключ с изоляцией по пользователю
+      const savedCards = await AsyncStorage.getItem(cardsKey);
       
       if (savedCards) {
         setCards(JSON.parse(savedCards));
@@ -31,7 +34,7 @@ export const useCards = () => {
           : mockCards;
         
         setCards(initialCards);
-        await AsyncStorage.setItem(storageKey, JSON.stringify(initialCards));
+        await AsyncStorage.setItem(cardsKey, JSON.stringify(initialCards));
       }
     } catch (error) {
       console.error('Error loading cards:', error);
@@ -50,9 +53,8 @@ export const useCards = () => {
       const updatedCards = [...cards, newCard];
       setCards(updatedCards);
       
-      // Сохраняем с правильным ключом роли
-      const storageKey = getStorageKey('cards');
-      await AsyncStorage.setItem(storageKey, JSON.stringify(updatedCards));
+      // Сохраняем с ключом изоляции по пользователю
+      await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
       
       // API вызов с правильным endpoint
       const apiEndpoint = getApiEndpoint('/cards');
@@ -70,8 +72,7 @@ export const useCards = () => {
       const updatedCards = cards.filter(card => card.id !== cardId);
       setCards(updatedCards);
       
-      const storageKey = getStorageKey('cards');
-      await AsyncStorage.setItem(storageKey, JSON.stringify(updatedCards));
+      await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
       
       const apiEndpoint = getApiEndpoint('/cards');
       await CardService.deleteCard(apiEndpoint, cardId);

@@ -66,6 +66,9 @@
     "topUp": "شحن",
     "withdraw": "سحب",
     "quickTopUp": "شحن سريع",
+    "pending": "في الانتظار",
+    "enterWithdrawAmount": "أدخل المبلغ للسحب:",
+    "withdrawRequestSent": "تم إرسال طلب السحب لـ %{0} AFc",
 
     "showAll": "عرض الكل",
     "pay": "دفع",
@@ -92,6 +95,8 @@
     "topUpBalance": "إعادة شحن",
     "payButton": "دفع",
     "recentTopUps": "آخر الإيداعات",
+    "recentTransactions": "آخر المعاملات",
+    "withdrawal": "سحب",
     "cashback": {
       "title": "استرداد نقدي",
       "available": "متاح للاستخدام",

@@ -66,6 +66,9 @@
     "topUp": "Aufladen",
     "withdraw": "Auszahlen",
     "quickTopUp": "Schnell aufladen",
+    "pending": "Ausstehend",
+    "enterWithdrawAmount": "Betrag zum Abheben eingeben:",
+    "withdrawRequestSent": "Auszahlungsanfrage für %{0} AFc gesendet",
 
     "showAll": "Alle anzeigen",
     "pay": "Zahlen",
@@ -92,6 +95,9 @@
     "topUpBalance": "Aufladen",
     "payButton": "Zahlen",
     "recentTopUps": "Letzte Aufladungen",
+    "recentTransactions": "Letzte Transaktionen",
+    "topUpBalance": "Aufladen",
+    "withdrawal": "Auszahlung",
     "cashback": {
       "title": "FixBack",
       "available": "Verfügbar zur Nutzung",

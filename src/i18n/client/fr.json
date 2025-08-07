@@ -66,6 +66,9 @@
     "topUp": "Recharger",
     "withdraw": "Retirer",
     "quickTopUp": "Recharge rapide",
+    "pending": "En attente",
+    "enterWithdrawAmount": "Entrez le montant à retirer:",
+    "withdrawRequestSent": "Demande de retrait de %{0} AFc envoyée",
 
     "showAll": "Afficher tout",
     "pay": "Payer",
@@ -92,6 +95,8 @@
     "topUpBalance": "Recharger",
     "payButton": "Payer",
     "recentTopUps": "Recharges récentes",
+    "recentTransactions": "Transactions récentes",
+    "withdrawal": "Retrait",
     "cashback": {
       "title": "FixBack",
       "available": "Disponible à utiliser",
