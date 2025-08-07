@@ -3,13 +3,16 @@ import { View, Text, TouchableOpacity, ScrollView, Alert, Modal, TextInput, Plat
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { CardsScreenStyles as styles, getCardsScreenStyles } from '../../styles/screens/profile/CardsScreen.styles';
 import { colors } from '../../constants/colors';
 import { mockCards, Card } from '../../mocks/cardsMock';
 import VisaIcon from '../../components/VisaIcon';
 import MastercardIcon from '../../components/MastercardIcon';
 import { useI18n } from '../../hooks/useI18n';
+import { useCards } from '../../hooks/useCards';
 import { CardService } from '../../services/cardService';
 // import { startScanner } from 'react-native-card-scanner';
 // import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
@@ -49,12 +52,17 @@ const handleScanCard = async () => {
   // }
 };
 
-const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
+// Универсальный тип для навигации
+type CardsScreenProps = ClientScreenProps<'Cards'> | { navigation: any };
+
+const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { user } = useAuth();
   const { t } = useI18n();
   const dynamicStyles = getCardsScreenStyles(isDark);
   const currentColors = isDark ? colors.dark : colors.light;
-  const [cards, setCards] = useState<Card[]>([]);
+  // const [cards, setCards] = useState<Card[]>([]); // Заменено на useCards
+  const { cards, loading: cardsLoading, addCard: addCardToHook, deleteCard: deleteCardFromHook } = useCards();
   const [defaultCardId, setDefaultCardId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCard, setNewCard] = useState({
@@ -68,20 +76,32 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
   // Валидация
   const [errors, setErrors] = useState({ holderName: '', number: '', expiry: '', cvv: '' });
 
+  // Определяем роль пользователя
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Карты для выплат' : t('components.cards.title');
+  };
+  
+  const getEmptyStateText = () => {
+    return isDriver 
+      ? 'Добавьте карту для получения выплат' 
+      : t('components.cards.emptyDescription');
+  };
+  
+  const getAddCardButtonText = () => {
+    return isDriver ? 'Добавить карту для выплат' : t('components.cards.add');
+  };
+
   useEffect(() => {
     (async () => {
-      // Инициализируем моковые данные только при первом запуске приложения
-      // (когда в AsyncStorage вообще нет ключа cards)
-      const hasCardsKey = await AsyncStorage.getItem('cards');
-      if (!hasCardsKey) {
-        await CardService.initMockIfEmpty(mockCards);
-      }
-      const loaded = await CardService.getCards();
-      setCards(loaded);
-      const def = loaded.find(c => c.isDefault);
+      // Теперь карты загружает useCards автоматически
+      // Осталось только загрузить карту по умолчанию
+      const def = cards.find(c => c.isDefault);
       setDefaultCardId(def ? def.id : null);
     })();
-  }, []);
+  }, [cards]); // Зависимость от cards из useCards
 
   useEffect(() => {
     if (showAddModal) {
@@ -154,15 +174,17 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
       expiry: newCard.expiry,
       isDefault: cards.length === 0, // Если это первая карта, делаем её по умолчанию
     };
-    await CardService.addCard(newCardData);
-    
-    // Если это первая карта, устанавливаем её как карту по умолчанию
-    if (cards.length === 0) {
-      await CardService.setDefault(id);
+    // Используем универсальный хук
+    const success = await addCardToHook(newCardData);
+    if (!success) {
+      Alert.alert(t('common.error'), t('cards.addError'));
+      return;
     }
     
-    const loaded = await CardService.getCards();
-    setCards(loaded);
+    // Если это первая карта, устанавливаем её как карту по умолчанию
+    if (cards.length === 1) { // Теперь карта уже добавлена
+      await CardService.setDefault(id);
+    }
     setDefaultCardId(newCardData.isDefault ? id : defaultCardId);
     setShowAddModal(false);
     setNewCard({ holderName: '', number: '', expiry: '', type: 'visa', cvv: '' });
@@ -181,16 +203,18 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
       [
         { text: t('components.cards.cancel'), style: 'cancel' },
         { text: t('components.cards.delete'), style: 'destructive', onPress: async () => {
-          await CardService.deleteCard(cardId);
-          let loaded = await CardService.getCards();
-          setCards(loaded);
+          const success = await deleteCardFromHook(cardId);
+          if (!success) {
+            Alert.alert(t('common.error'), t('cards.deleteError'));
+            return;
+          }
           if (defaultCardId === cardId) {
-            if (loaded.length > 0) {
-              const newDefaultId = loaded[0].id;
-              await CardService.setDefault(newDefaultId);
-              setDefaultCardId(newDefaultId);
-              loaded = await CardService.getCards();
-              setCards(loaded);
+            if (cards.length > 1) {
+              const newDefaultId = cards.find(c => c.id !== cardId)?.id;
+              if (newDefaultId) {
+                await CardService.setDefault(newDefaultId);
+                setDefaultCardId(newDefaultId);
+              }
             } else {
               setDefaultCardId(null);
             }
@@ -202,8 +226,6 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
 
   const handleSetDefault = async (cardId: string) => {
     await CardService.setDefault(cardId);
-    const loaded = await CardService.getCards();
-    setCards(loaded);
     setDefaultCardId(cardId);
   };
 
@@ -268,7 +290,7 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('components.cards.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <TouchableOpacity onPress={handleAddCard} style={styles.addButton}>
           <Ionicons name="add" size={24} color={currentColors.primary} />
         </TouchableOpacity>
@@ -377,10 +399,10 @@ const CardsScreen: React.FC<ClientScreenProps<'Cards'>> = ({ navigation }) => {
             <Ionicons name="card-outline" size={64} color="#ccc" />
             <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('components.cards.empty')}</Text>
             <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
-              {t('components.cards.emptyDescription')}
+              {getEmptyStateText()}
             </Text>
             <TouchableOpacity style={styles.addCardButton} onPress={handleAddCard}>
-              <Text style={styles.addCardButtonText}>{t('components.cards.add')}</Text>
+              <Text style={styles.addCardButtonText}>{getAddCardButtonText()}</Text>
             </TouchableOpacity>
           </View>
         ) : (

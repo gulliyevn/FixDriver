@@ -31,7 +31,7 @@ const DriverFamilyMemberEditMode: React.FC<DriverFamilyMemberEditModeProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
-  const styles = createFamilyMemberItemStyles(isDark);
+  const styles = createDriverFamilyMemberItemStyles(isDark);
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
 
   // Локальное определение типов семьи с переводами

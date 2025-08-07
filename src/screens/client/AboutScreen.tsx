@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Linking, Modal, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { AboutScreenStyles as styles, getAboutScreenStyles } from '../../styles/screens/profile/AboutScreen.styles';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { colors } from '../../constants/colors';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Экран информации о приложении
@@ -18,11 +20,21 @@ import { colors } from '../../constants/colors';
  * 5. Подключить аналитику
  */
 
-const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
+type AboutScreenProps = ClientScreenProps<'About'> | { navigation: any };
+
+const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { user } = useAuth();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getAboutScreenStyles(isDark);
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'О приложении' : t('client.about.title');
+  };
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   
@@ -42,7 +54,7 @@ const AboutScreen: React.FC<ClientScreenProps<'About'>> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('client.about.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <View style={styles.placeholder} />
       </View>
       

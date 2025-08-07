@@ -196,6 +196,13 @@
     "cancel": "Cancel",
     "proceed": "Proceed"
   },
+  "becomeClientModal": {
+    "title": "Become Client",
+    "message": "Open client page?",
+    "cancel": "Cancel",
+    "proceed": "Proceed",
+    "loginError": "Failed to login as client"
+  },
   "saveProfileConfirm": {
     "title": "Save Changes?",
     "message": "Are you sure you want to save changes?",

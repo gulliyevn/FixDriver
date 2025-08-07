@@ -25,7 +25,7 @@ import { FamilyMember } from '../../types/family';
 const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { logout, login } = useAuth();
+  const { logout, login, changeRole } = useAuth();
   const rootNavigation = useNavigation();
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
   const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
@@ -389,7 +389,7 @@ const EditClientProfileScreen: React.FC<ClientScreenProps<'EditClientProfile'>> 
       rotateAnim.setValue(0);
       
       // После завершения анимации вызываем функцию из утилит
-      handleCirclePress(navigation, login, t);
+      handleCirclePress(navigation, login, t, changeRole);
     });
   };
 

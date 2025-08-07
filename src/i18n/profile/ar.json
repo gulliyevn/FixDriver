@@ -196,6 +196,13 @@
     "cancel": "إلغاء",
     "proceed": "المتابعة"
   },
+  "becomeClientModal": {
+    "title": "أن تصبح عميلاً",
+    "message": "فتح صفحة العميل؟",
+    "cancel": "إلغاء",
+    "proceed": "المتابعة",
+    "loginError": "فشل تسجيل الدخول كعميل"
+  },
   "saveProfileConfirm": {
     "title": "حفظ التغييرات",
     "message": "هل أنت متأكد من أنك تريد حفظ التغييرات في ملفك الشخصي؟",

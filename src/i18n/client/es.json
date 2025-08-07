@@ -95,6 +95,7 @@
     "cashback": {
       "title": "FixBack",
       "available": "Disponible para usar",
+      "pending": "Pendiente",
       "use": "Usar",
       "history": "Historial",
       "description": "El FixBack acumulado se puede usar para pagar viajes"

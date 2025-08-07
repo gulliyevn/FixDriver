@@ -196,6 +196,13 @@
     "cancel": "İptal",
     "proceed": "Git"
   },
+  "becomeClientModal": {
+    "title": "Müşteri ol",
+    "message": "Müşteri sayfasını aç?",
+    "cancel": "İptal",
+    "proceed": "Git",
+    "loginError": "Müşteri olarak giriş başarısız"
+  },
   "saveProfileConfirm": {
     "title": "Değişiklikleri Kaydet?",
     "message": "Değişiklikleri kaydetmek istediğinizden emin misiniz?",

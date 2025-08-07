@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Switch, Alert, ActivityIndicator, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { SettingsScreenStyles as styles, getSettingsScreenColors } from '../../styles/screens/profile/SettingsScreen.styles';
 import { LanguageModalStyles as languageModalStyles, getLanguageModalColors } from '../../styles/components/LanguageModal.styles';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,6 +10,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useAuth } from '../../context/AuthContext';
 import { ProfileService } from '../../services/ProfileService';
+import { DriverProfileService } from '../../services/driver/DriverProfileService';
 import { getCurrentColors } from '../../constants/colors';
 
 
@@ -24,10 +26,19 @@ import { getCurrentColors } from '../../constants/colors';
  * 6. Добавить синхронизацию
  */
 
-const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation }) => {
+type SettingsScreenProps = ClientScreenProps<'Settings'> | { navigation: any };
+
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const { isDark, theme, toggleTheme } = useTheme();
   const { language, languageOptions, setLanguage, t } = useI18n();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? t('driver.settings') : t('profile.settings.title');
+  };
 
   const currentColors = getCurrentColors(isDark);
   const languageModalColors = getLanguageModalColors(isDark);
@@ -73,7 +84,7 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, settingsColors.title]}>{t('profile.settings.title')}</Text>
+        <Text style={[styles.title, settingsColors.title]}>{getScreenTitle()}</Text>
         <View style={styles.placeholder} />
       </View>
       
@@ -193,7 +204,10 @@ const SettingsScreen: React.FC<ClientScreenProps<'Settings'>> = ({ navigation })
                                          onPress: async () => {
                        try {
                          // Вызываем API для удаления аккаунта
-                         const result = await ProfileService.deleteAccount();
+                         // Вызываем API для удаления аккаунта в зависимости от роли
+                         const result = isDriver 
+                           ? await DriverProfileService.deleteAccount()
+                           : await ProfileService.deleteAccount();
                          
                          if (!result.success) {
                            throw new Error(result.message || 'Failed to delete account');

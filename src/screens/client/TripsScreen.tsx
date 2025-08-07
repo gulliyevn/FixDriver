@@ -2,12 +2,17 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { TripsScreenStyles as styles, getTripsScreenStyles } from '../../styles/screens/profile/TripsScreen.styles';
 import { getMockTrips } from '../../mocks/tripsMock';
 import TripsFilter, { TripFilter } from '../../components/TripsFilter';
 import { colors } from '../../constants/colors';
+
+// Универсальный тип для навигации
+type TripsScreenProps = ClientScreenProps<'Trips'> | { navigation: any };
 
 /**
  * Экран истории поездок
@@ -21,14 +26,35 @@ import { colors } from '../../constants/colors';
  * 6. Подключить пагинацию
  */
 
-const TripsScreen: React.FC<ClientScreenProps<'Trips'>> = ({ navigation }) => {
+const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
+  const { user } = useAuth();
   const { t } = useI18n();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getTripsScreenStyles(isDark);
   
-
+  // Определяем роль пользователя
+  const isDriver = user?.role === 'driver';
   
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Мои поездки' : t('client.trips.title');
+  };
+  
+  const getEmptyStateText = () => {
+    return isDriver 
+      ? 'История выполненных поездок пуста' 
+      : t('client.trips.emptyDescription');
+  };
+  
+  const getEmptyStateTitle = () => {
+    return isDriver ? 'Нет поездок' : t('client.trips.noTrips');
+  };
+  
+  const getDriverLabel = () => {
+    return isDriver ? 'Клиент' : t('client.trips.driver');
+  };
+
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentFilter, setCurrentFilter] = useState<TripFilter>({
     status: 'all',
@@ -110,7 +136,7 @@ const TripsScreen: React.FC<ClientScreenProps<'Trips'>> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('client.trips.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <TouchableOpacity 
           style={styles.filterButton}
           onPress={() => setFilterVisible(true)}
@@ -128,9 +154,9 @@ const TripsScreen: React.FC<ClientScreenProps<'Trips'>> = ({ navigation }) => {
         {filteredTrips.length === 0 ? (
           <View style={[styles.emptyState, { alignItems: 'center', justifyContent: 'center' }]}>
             <Ionicons name="car-outline" size={64} color={currentColors.textSecondary} />
-            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('client.trips.noTrips')}</Text>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{getEmptyStateTitle()}</Text>
             <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
-              {t('client.trips.emptyDescription')}
+              {getEmptyStateText()}
             </Text>
           </View>
         ) : (
@@ -166,7 +192,7 @@ const TripsScreen: React.FC<ClientScreenProps<'Trips'>> = ({ navigation }) => {
                 )}
                 {trip.driver && (
                   <Text style={[styles.carPlate, dynamicStyles.carPlate]}>
-                    {t('client.trips.driver')}: {trip.driver}
+                    {getDriverLabel()}: {trip.driver}
                   </Text>
                 )}
               </View>

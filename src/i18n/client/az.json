@@ -95,6 +95,7 @@
     "cashback": {
       "title": "Keşbek",
       "available": "İstifadə üçün mövcud",
+      "pending": "Gözlənilir",
       "use": "İstifadə et",
       "history": "Tarixçə",
       "description": "Yığılmış keşbek səyahətlər üçün ödəniş etmək üçün istifadə edilə bilər"

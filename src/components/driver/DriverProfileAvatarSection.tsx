@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, Animated, Modal } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
-import { useAvatar } from '../../hooks/useAvatar';
+import { useDriverAvatar } from '../../hooks/driver/DriverUseAvatar';
 import { usePackage } from '../../context/PackageContext';
 import { DriverProfileAvatarSectionStyles as styles, getDriverProfileAvatarSectionColors } from '../../styles/components/driver/DriverProfileAvatarSection.styles';
 import { getPackageIcon, getPackageColor } from '../../utils/packageVisuals';
@@ -23,7 +23,7 @@ const DriverProfileAvatarSection: React.FC<DriverProfileAvatarSectionProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { avatarUri, loading, showAvatarOptions } = useAvatar();
+  const { avatarUri, loading, showAvatarOptions } = useDriverAvatar();
   const { currentPackage } = usePackage();
   const dynamicStyles = getDriverProfileAvatarSectionColors(isDark);
   const [showAvatarModal, setShowAvatarModal] = useState(false);

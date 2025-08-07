@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
+import { useAuth } from '../../context/AuthContext';
 import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
 import { supportService, SupportMessage, SupportTicket } from '../../services/SupportService';
 
@@ -46,6 +47,14 @@ interface SupportChatScreenProps {
 const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { user } = useAuth();
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Поддержка' : t('support.title');
+  };
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [currentTicket, setCurrentTicket] = useState<SupportTicket | null>(null);
@@ -437,12 +446,12 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
           </TouchableOpacity>
           
           <View style={SupportChatScreenStyles.headerInfo}>
-            <Text style={[
-              SupportChatScreenStyles.headerTitle,
-              isDark && SupportChatScreenStyles.headerTitleDark
-            ]}>
-              {t('support.title')}
-            </Text>
+                    <Text style={[
+          SupportChatScreenStyles.headerTitle,
+          isDark && SupportChatScreenStyles.headerTitleDark
+        ]}>
+          {getScreenTitle()}
+        </Text>
             <View style={SupportChatScreenStyles.statusContainer}>
               <View style={SupportChatScreenStyles.onlineIndicator} />
               <Text style={[

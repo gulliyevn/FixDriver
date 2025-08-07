@@ -95,6 +95,7 @@
     "cashback": {
       "title": "FixBack",
       "available": "Disponible à utiliser",
+      "pending": "En attente",
       "use": "Utiliser",
       "history": "Historique",
       "description": "Le FixBack accumulé peut être utilisé pour payer les trajets"

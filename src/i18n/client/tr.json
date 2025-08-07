@@ -95,6 +95,7 @@
     "cashback": {
       "title": "Nakit iade",
       "available": "Kullanım için mevcut",
+      "pending": "Bekleniyor",
       "use": "Kullan",
       "history": "Geçmiş",
       "description": "Biriken nakit iade seyahatler için ödeme yapmak için kullanılabilir"

@@ -4,11 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { getCurrentColors } from '../../constants/colors';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { ResidenceScreenStyles as styles, getResidenceScreenStyles } from '../../styles/screens/profile/ResidenceScreen.styles';
 import { Address, getAddressCategoryOptions } from '../../mocks/residenceMock';
 import AddressModal from '../../components/AddressModal';
 import { useAddresses } from '../../hooks/useAddresses';
 import { useI18n } from '../../hooks/useI18n';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Экран резиденции
@@ -21,11 +23,21 @@ import { useI18n } from '../../hooks/useI18n';
  * 5. Подключить геолокацию
  */
 
-const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation, route }) => {
+type ResidenceScreenProps = ClientScreenProps<'Residence'> | { navigation: any; route?: any };
+
+const ResidenceScreen: React.FC<ResidenceScreenProps> = ({ navigation, route }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { user } = useAuth();
   const dynamicStyles = getResidenceScreenStyles(isDark);
   const currentColors = getCurrentColors(isDark);
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Мои адреса' : t('profile.residence.title');
+  };
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
@@ -125,7 +137,7 @@ const ResidenceScreen: React.FC<ClientScreenProps<'Residence'>> = ({ navigation,
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('profile.residence.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <View style={styles.headerSpacer} />
       </View>
       

@@ -196,6 +196,13 @@
     "cancel": "Cancelar",
     "proceed": "Continuar"
   },
+  "becomeClientModal": {
+    "title": "Convertirse en cliente",
+    "message": "¿Abrir página de cliente?",
+    "cancel": "Cancelar",
+    "proceed": "Continuar",
+    "loginError": "Error al iniciar sesión como cliente"
+  },
   "saveProfileConfirm": {
     "title": "Guardar cambios",
     "message": "¿Estás seguro de que quieres guardar los cambios en tu perfil?",

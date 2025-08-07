@@ -95,6 +95,7 @@
     "cashback": {
       "title": "FixBack",
       "available": "Доступно для использования",
+      "pending": "Ожидается",
       "use": "Снять",
       "history": "История",
       "description": "Накопленный FixBack можно использовать для оплаты поездок"

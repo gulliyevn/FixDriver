@@ -12,6 +12,7 @@ import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { useProfile } from '../../hooks/useProfile';
+import { useBalance } from '../../hooks/useBalance';
 import { formatBalance } from '../../utils/formatters';
 
 // TODO: Для подключения бэкенда заменить на:
@@ -31,21 +32,13 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
   
 
 
-  // Баланс из AsyncStorage
-  const [balance, setBalance] = React.useState<string>('0');
+  // Используем умный хук для баланса
+  const balanceHook = useBalance();
   
   useFocusEffect(
     React.useCallback(() => {
-      let isActive = true;
-      (async () => {
-        const stored = await AsyncStorage.getItem('user_balance');
-        if (isActive) {
-          setBalance(stored ?? '0');
-          // Перезагружаем профиль при фокусе экрана
-          loadProfile();
-        }
-      })();
-      return () => { isActive = false; };
+      // Перезагружаем профиль при фокусе экрана
+      loadProfile();
     }, []) // Убираем loadProfile из зависимостей
   );
   
@@ -62,7 +55,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
       trips: 127,
       spent: '12 450 AFc',
       rating: profile.rating,
-      balance: formatBalance(parseFloat(balance)) + ' AFc',
+      balance: formatBalance(balanceHook.balance) + ' AFc',
       address: profile.address,
       email: profile.email,
       memberSince: new Date(profile.createdAt).getFullYear(),

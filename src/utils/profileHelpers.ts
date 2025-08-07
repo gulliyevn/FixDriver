@@ -51,7 +51,8 @@ export const hasChanges = (
 export const handleCirclePress = (
   navigation: any,
   login: (email: string, password: string) => Promise<boolean>,
-  t: (key: string) => string
+  t: (key: string) => string,
+  changeRole?: (role: 'client' | 'driver') => void
 ): void => {
   // После завершения анимации проверяем, есть ли уже аккаунт водителя
   // TODO: Здесь должна быть проверка статуса водителя
@@ -59,7 +60,17 @@ export const handleCirclePress = (
   
   if (hasDriverAccount) {
     // Если уже есть аккаунт водителя, переключаемся на профиль водителя
-    navigation.navigate('DriverProfile' as any);
+    console.log('Переключаемся к водительскому профилю...');
+    try {
+      // Просто меняем роль - RootNavigator автоматически переключится
+      if (changeRole) {
+        changeRole('driver');
+      }
+      console.log('Роль изменена на водитель');
+    } catch (error) {
+      console.error('Ошибка смены роли:', error);
+      Alert.alert('Ошибка', 'Не удалось переключиться к водительскому профилю');
+    }
   } else {
     // Если нет аккаунта водителя, показываем уведомление
     Alert.alert(
@@ -74,6 +85,52 @@ export const handleCirclePress = (
             const success = await login('driver@example.com', 'password123');
             if (!success) {
               Alert.alert('Ошибка', 'Не удалось войти как водитель');
+            }
+          }
+        }
+      ]
+    );
+  }
+};
+
+// Функция для обработки нажатия на круг в профиле водителя (переключение к клиенту)
+export const handleDriverCirclePress = (
+  navigation: any,
+  login: (email: string, password: string) => Promise<boolean>,
+  t: (key: string) => string,
+  changeRole?: (role: 'client' | 'driver') => void
+): void => {
+  // После завершения анимации проверяем, есть ли уже аккаунт клиента
+  // TODO: Здесь должна быть проверка статуса клиента
+  const hasClientAccount = false; // Заглушка, нужно заменить на реальную проверку
+  
+  if (hasClientAccount) {
+    // Если уже есть аккаунт клиента, переключаемся на профиль клиента
+    console.log('Переключаемся к клиентскому профилю...');
+    try {
+      // Просто меняем роль - RootNavigator автоматически переключится
+      if (changeRole) {
+        changeRole('client');
+      }
+      console.log('Роль изменена на клиент');
+    } catch (error) {
+      console.error('Ошибка смены роли:', error);
+      Alert.alert('Ошибка', 'Не удалось переключиться к клиентскому профилю');
+    }
+  } else {
+    // Если нет аккаунта клиента, показываем уведомление
+    Alert.alert(
+      t('profile.becomeClientModal.title') || 'Стать клиентом',
+      t('profile.becomeClientModal.message') || 'Открыть страницу клиента?',
+      [
+        { text: t('profile.becomeClientModal.cancel') || 'Отмена', style: 'cancel' },
+        { 
+          text: t('profile.becomeClientModal.proceed') || 'Перейти',
+          onPress: async () => {
+            // Автоматически входим как клиент
+            const success = await login('client@example.com', 'password123');
+            if (!success) {
+              Alert.alert(t('errors.error'), t('profile.becomeClientModal.loginError') || 'Не удалось войти как клиент');
             }
           }
         }

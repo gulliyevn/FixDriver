@@ -6,10 +6,12 @@ import { useI18n } from '../../hooks/useI18n';
 import { useLanguage } from '../../context/LanguageContext';
 import { formatDateWithLanguage, formatTime } from '../../utils/formatters';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
 import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
 import { colors } from '../../constants/colors';
 import { useBalance } from '../../context/BalanceContext';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Экран истории платежей
@@ -23,12 +25,30 @@ import { useBalance } from '../../context/BalanceContext';
  * 6. Подключить пагинацию
  */
 
-const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ navigation }) => {
+type PaymentHistoryScreenProps = ClientScreenProps<'PaymentHistory'> | { navigation: any };
+
+const PaymentHistoryScreen: React.FC<PaymentHistoryScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { language } = useLanguage();
+  const { user } = useAuth();
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getPaymentHistoryScreenStyles(isDark);
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'История выплат' : t('client.paymentHistory.title');
+  };
+  
+  const getEmptyStateTitle = () => {
+    return isDriver ? 'Нет выплат' : t('client.paymentHistory.noPayments');
+  };
+  
+  const getEmptyStateDescription = () => {
+    return isDriver ? 'История выплат пуста' : t('client.paymentHistory.emptyDescription');
+  };
   
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentFilter, setCurrentFilter] = useState<PaymentFilter>({
@@ -158,7 +178,7 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('client.paymentHistory.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <TouchableOpacity 
           style={styles.filterButton}
           onPress={() => setFilterVisible(true)}
@@ -175,9 +195,9 @@ const PaymentHistoryScreen: React.FC<ClientScreenProps<'PaymentHistory'>> = ({ n
         {filteredPayments.length === 0 ? (
           <View style={[styles.emptyState, { alignItems: 'center', justifyContent: 'center' }]}>
             <Ionicons name="document-outline" size={64} color={currentColors.textSecondary} />
-            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('client.paymentHistory.noPayments')}</Text>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{getEmptyStateTitle()}</Text>
             <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
-              {t('client.paymentHistory.emptyDescription')}
+              {getEmptyStateDescription()}
             </Text>
           </View>
         ) : (

@@ -8,6 +8,7 @@ import { colors } from '../../constants/colors';
 import VipPackages from '../../components/VipPackages';
 import { usePackage, PackageType } from '../../context/PackageContext';
 import { useBalance } from '../../context/BalanceContext';
+import { useAuth } from '../../context/AuthContext';
 import { PremiumPackagesScreenStyles, getPremiumPackagesScreenColors } from '../../styles/screens/profile/PremiumPackagesScreen.styles';
 import { formatBalance, formatDateWithLanguage } from '../../utils/formatters';
 
@@ -22,9 +23,18 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { language } = useLanguage();
+  const { user } = useAuth();
   const currentColors = isDark ? colors.dark : colors.light;
   const { currentPackage, subscription, updatePackage, extendSubscription, cancelSubscription, toggleAutoRenew } = usePackage();
   const { balance, deductBalance } = useBalance();
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Премиум статус' : t('premium.title');
+  };
+  
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [selectedPackageInfo, setSelectedPackageInfo] = useState<{name: string, id: string} | null>(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
@@ -227,7 +237,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
         </TouchableOpacity>
         
         <Text style={[PremiumPackagesScreenStyles.headerTitle, dynamicStyles.headerTitle]}>
-          {t('premium.title')}
+          {getScreenTitle()}
         </Text>
 
         {/* Свитчер автообновления в хедере */}
@@ -250,7 +260,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
                   t('premium.subscription.disableAutoRenewMessage'),
                   [
                     {
-                      text: t('premium.subscription.cancel'),
+                      text: t('premium.subscription.cancelButton'),
                       style: 'cancel',
                       onPress: async () => {
                         // Если отменили - возвращаем анимацию обратно

@@ -1,0 +1,171 @@
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export interface ClientTransaction {
+  id: string;
+  type: 'balance_topup' | 'package_purchase' | 'trip_payment' | 'cashback';
+  amount: number;
+  description: string;
+  date: string;
+  translationKey?: string;
+  translationParams?: Record<string, string>;
+  packageType?: string;
+}
+
+export interface ClientBalanceContextType {
+  balance: number;
+  transactions: ClientTransaction[];
+  cashback: number;
+  topUpBalance: (amount: number) => Promise<void>;
+  deductBalance: (amount: number, description: string, packageType?: string) => Promise<boolean>;
+  addTransaction: (transaction: Omit<ClientTransaction, 'id' | 'date'>) => Promise<void>;
+  getCashback: () => Promise<number>;
+}
+
+const CLIENT_BALANCE_KEY = 'client_balance';
+const CLIENT_TRANSACTIONS_KEY = 'client_transactions';
+const CLIENT_CASHBACK_KEY = 'client_cashback';
+
+export const useClientBalance = (): ClientBalanceContextType => {
+  const [balance, setBalance] = useState<number>(50); // Начальный баланс
+  const [transactions, setTransactions] = useState<ClientTransaction[]>([]);
+  const [cashback, setCashback] = useState<number>(0);
+
+  useEffect(() => {
+    loadBalance();
+    loadTransactions();
+    loadCashback();
+  }, []);
+
+  const loadBalance = async () => {
+    try {
+      const storedBalance = await AsyncStorage.getItem(CLIENT_BALANCE_KEY);
+      if (storedBalance) {
+        setBalance(parseFloat(storedBalance));
+      }
+    } catch (error) {
+      console.error('Error loading client balance:', error);
+    }
+  };
+
+  const loadTransactions = async () => {
+    try {
+      const storedTransactions = await AsyncStorage.getItem(CLIENT_TRANSACTIONS_KEY);
+      if (storedTransactions) {
+        const parsedTransactions = JSON.parse(storedTransactions);
+        
+        // Миграция: добавляем translationKey для старых транзакций пополнения
+        const migratedTransactions = parsedTransactions.map((transaction: any) => {
+          if (transaction.type === 'balance_topup' && !transaction.translationKey) {
+            return {
+              ...transaction,
+              translationKey: 'client.paymentHistory.transactions.topUp',
+              translationParams: { amount: Math.abs(transaction.amount).toString() }
+            };
+          }
+          return transaction;
+        });
+        
+        setTransactions(migratedTransactions);
+      }
+    } catch (error) {
+      console.error('Error loading client transactions:', error);
+    }
+  };
+
+  const loadCashback = async () => {
+    try {
+      const storedCashback = await AsyncStorage.getItem(CLIENT_CASHBACK_KEY);
+      if (storedCashback) {
+        setCashback(parseFloat(storedCashback));
+      }
+    } catch (error) {
+      console.error('Error loading client cashback:', error);
+    }
+  };
+
+  const saveBalance = async (newBalance: number) => {
+    try {
+      await AsyncStorage.setItem(CLIENT_BALANCE_KEY, newBalance.toString());
+      setBalance(newBalance);
+    } catch (error) {
+      console.error('Error saving client balance:', error);
+    }
+  };
+
+  const saveTransactions = async (newTransactions: ClientTransaction[]) => {
+    try {
+      await AsyncStorage.setItem(CLIENT_TRANSACTIONS_KEY, JSON.stringify(newTransactions));
+      setTransactions(newTransactions);
+    } catch (error) {
+      console.error('Error saving client transactions:', error);
+    }
+  };
+
+  const saveCashback = async (newCashback: number) => {
+    try {
+      await AsyncStorage.setItem(CLIENT_CASHBACK_KEY, newCashback.toString());
+      setCashback(newCashback);
+    } catch (error) {
+      console.error('Error saving client cashback:', error);
+    }
+  };
+
+  const topUpBalance = async (amount: number) => {
+    const newBalance = balance + amount;
+    await saveBalance(newBalance);
+    
+    await addTransaction({
+      type: 'balance_topup',
+      amount: amount,
+      description: `Balance top-up ${amount} AFc`,
+      translationKey: 'client.paymentHistory.transactions.topUp',
+      translationParams: { amount: amount.toString() },
+    });
+  };
+
+  const deductBalance = async (amount: number, description: string, packageType?: string): Promise<boolean> => {
+    if (balance < amount) {
+      return false; // Insufficient funds
+    }
+
+    const newBalance = balance - amount;
+    await saveBalance(newBalance);
+    
+    await addTransaction({
+      type: 'package_purchase',
+      amount: -amount,
+      description,
+      packageType,
+    });
+
+    return true;
+  };
+
+  const addTransaction = async (transaction: Omit<ClientTransaction, 'id' | 'date'>) => {
+    const newTransaction: ClientTransaction = {
+      ...transaction,
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+    };
+
+    const newTransactions = [newTransaction, ...transactions];
+    await saveTransactions(newTransactions);
+  };
+
+  const getCashback = async (): Promise<number> => {
+    // Здесь можно добавить логику расчета cashback
+    // Пока возвращаем сохраненный cashback
+    return cashback;
+  };
+
+  return {
+    balance,
+    transactions,
+    cashback,
+    topUpBalance,
+    deductBalance,
+    addTransaction,
+    getCashback,
+  };
+}; 

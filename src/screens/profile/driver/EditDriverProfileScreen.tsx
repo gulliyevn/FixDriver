@@ -11,7 +11,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDriverProfile as useProfile } from '../../../hooks/driver/DriverUseProfile';
 import { useVerification } from '../../../hooks/useVerification';
 import { useDriverFamilyMembers as useFamilyMembers } from '../../../hooks/driver/DriverUseFamilyMembers';
-import { getDefaultDate, hasChanges, handleCirclePress } from '../../../utils/profileHelpers';
+import { getDefaultDate, hasChanges, handleDriverCirclePress } from '../../../utils/profileHelpers';
 import DatePicker from '../../../components/DatePicker';
 import PersonalInfoSection from '../../../components/driver/DriverPersonalInfoSection';
 import FamilySection from '../../../components/driver/DriverFamilySection';
@@ -25,7 +25,7 @@ import { FamilyMember } from '../../../types/driver/DriverFamily';
 const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { logout, login } = useAuth();
+  const { logout, login, changeRole } = useAuth();
   const rootNavigation = useNavigation();
   const dynamicStyles = getEditDriverProfileScreenColors(isDark);
   const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
@@ -389,7 +389,7 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
       rotateAnim.setValue(0);
       
       // После завершения анимации вызываем функцию из утилит
-      handleCirclePress(navigation, login, t);
+      handleDriverCirclePress(rootNavigation, login, t, changeRole);
     });
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Pressable, ScrollView, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
+import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { HelpScreenStyles as styles, getHelpScreenStyles } from '../../styles/screens/profile/HelpScreen.styles';
 import { useI18n } from '../../hooks/useI18n';
 import RulesModal from '../../components/RulesModal';
@@ -10,6 +11,7 @@ import PaymentHelpModal from '../../components/PaymentHelpModal';
 import SafetyHelpModal from '../../components/SafetyHelpModal';
 import { useTheme } from '../../context/ThemeContext';
 import { getCurrentColors } from '../../constants/colors';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Экран помощи и правил
@@ -22,11 +24,21 @@ import { getCurrentColors } from '../../constants/colors';
  * 5. Подключить чат поддержки
  */
 
-const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
+type HelpScreenProps = ClientScreenProps<'Help'> | { navigation: any };
+
+const HelpScreen: React.FC<HelpScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { user } = useAuth();
   const dynamicStyles = getHelpScreenStyles(isDark);
   const currentColors = getCurrentColors(isDark);
+  
+  const isDriver = user?.role === 'driver';
+  
+  // Условная логика для разных ролей
+  const getScreenTitle = () => {
+    return isDriver ? 'Помощь и правила' : t('help.title');
+  };
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -89,7 +101,7 @@ const HelpScreen: React.FC<ClientScreenProps<'Help'>> = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{t('help.title')}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
         <View style={styles.placeholder} />
       </View>
       

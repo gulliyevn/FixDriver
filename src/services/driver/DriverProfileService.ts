@@ -1,6 +1,6 @@
-import APIClient from './APIClient';
-import { ENV_CONFIG, ConfigUtils } from '../config/environment';
-import JWTService from './JWTService';
+import APIClient from '../APIClient';
+import { ENV_CONFIG, ConfigUtils } from '../../config/environment';
+import JWTService from '../JWTService';
 
 export interface ChangePasswordRequest {
   currentPassword: string;

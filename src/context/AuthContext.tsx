@@ -13,6 +13,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
   getAuthHeader: () => Promise<{ Authorization: string } | null>;
+  changeRole: (role: UserRole) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -233,6 +234,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return await JWTService.getAuthHeader();
   };
 
+  /**
+   * Изменение роли пользователя
+   */
+  const changeRole = useCallback((role: UserRole) => {
+    if (user) {
+      const updatedUser = { ...user, role };
+      setUser(updatedUser);
+      // Сохраняем обновленного пользователя в AsyncStorage
+      AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  }, [user]);
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -242,6 +255,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     refreshAuth,
     getAuthHeader,
+    changeRole,
   };
 
   return (

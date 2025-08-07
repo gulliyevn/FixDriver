@@ -196,6 +196,13 @@
     "cancel": "Ləğv et",
     "proceed": "Get"
   },
+  "becomeClientModal": {
+    "title": "Müştəri ol",
+    "message": "Müştəri səhifəsini aç?",
+    "cancel": "Ləğv et",
+    "proceed": "Get",
+    "loginError": "Müştəri kimi daxil olmaq mümkün olmadı"
+  },
   "saveProfileConfirm": {
     "title": "Dəyişiklikləri saxla",
     "message": "Profilinizdəki dəyişiklikləri saxlamaq istədiyinizə əminsiniz?",

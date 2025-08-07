@@ -18,9 +18,9 @@ import DriverProfileScreen from '../../screens/driver/DriverProfileScreen';
 import PremiumPackagesScreen from '../../screens/profile/PremiumPackagesScreen';
 
 import NotificationsScreen from '../../screens/common/NotificationsScreen';
-import { ClientStackParamList } from '../types/navigation';
+import { DriverStackParamList } from '../types/driver/DriverNavigation';
 
-const Stack = createStackNavigator<ClientStackParamList>();
+const Stack = createStackNavigator<DriverStackParamList>();
 
 const DriverProfileStack: React.FC = () => {
   return (

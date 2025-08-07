@@ -95,6 +95,7 @@
     "cashback": {
       "title": "FixBack",
       "available": "Available to use",
+      "pending": "Pending",
       "use": "Use",
       "history": "History",
       "description": "Accumulated FixBack can be used to pay for trips"

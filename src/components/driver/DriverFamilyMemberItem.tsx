@@ -147,7 +147,7 @@ const DriverFamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
       {isExpanded && (
         <View style={styles.expandedContainer}>
           {isEditing ? (
-            <FamilyMemberEditMode
+            <DriverFamilyMemberEditMode
               member={member}
               editingData={editingData}
               phoneVerified={phoneVerified}
@@ -158,7 +158,7 @@ const DriverFamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
               setEditingData={setEditingData}
             />
           ) : (
-            <FamilyMemberViewMode
+            <DriverFamilyMemberViewMode
               member={member}
               phoneVerified={phoneVerified}
               onStartEditing={onStartEditing}
