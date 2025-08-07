@@ -1,13 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 
-export const SafeAreaProvider = ({ children, ...props }: any) => (
-  <View {...props}>{children}</View>
-);
+export const SafeAreaProvider = ({ children, ...props }: any) => {
+  return React.createElement(View, props, children);
+};
 
-export const SafeAreaView = ({ children, ...props }: any) => (
-  <View {...props}>{children}</View>
-);
+export const SafeAreaView = ({ children, ...props }: any) => {
+  return React.createElement(View, props, children);
+};
 
 export const useSafeAreaInsets = jest.fn(() => ({
   top: 0,

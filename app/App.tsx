@@ -35,16 +35,16 @@ function App() {
       <LanguageProvider>
         <ThemeProvider>
           <AuthProvider>
-            <ProfileProvider>
-              <PackageProvider>
-                <BalanceProvider>
+            <BalanceProvider>
+              <ProfileProvider>
+                <PackageProvider>
                   <NavigationContainer>
                     <RootNavigator />
                     <DynamicStatusBar />
                   </NavigationContainer>
-                </BalanceProvider>
-              </PackageProvider>
-            </ProfileProvider>
+                </PackageProvider>
+              </ProfileProvider>
+            </BalanceProvider>
           </AuthProvider>
         </ThemeProvider>
       </LanguageProvider>

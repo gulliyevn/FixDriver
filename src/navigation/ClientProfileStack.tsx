@@ -28,6 +28,7 @@ const ClientProfileStack: React.FC = () => {
       id={undefined}
       screenOptions={{
         headerShown: false,
+        tabBarStyle: { display: 'none' }, // Скрываем TabBar для всех экранов в стеке
       }}
     >
       <Stack.Screen name="ClientProfile" component={ClientProfileScreen} />

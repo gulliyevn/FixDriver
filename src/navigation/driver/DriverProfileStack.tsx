@@ -28,6 +28,7 @@ const DriverProfileStack: React.FC = () => {
       id={undefined}
       screenOptions={{
         headerShown: false,
+        tabBarStyle: { display: 'none' }, // Скрываем TabBar для всех экранов в стеке
       }}
     >
       <Stack.Screen name="DriverProfile" component={DriverProfileScreen} options={{ headerShown: false }} />

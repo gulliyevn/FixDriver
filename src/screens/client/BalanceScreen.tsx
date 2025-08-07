@@ -81,7 +81,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   
   // Условная логика для разных ролей
   const getScreenTitle = () => {
-    return isDriver ? 'Мой заработок' : t('client.balance.title');
+    return t('client.balance.title'); // Одинаковый заголовок для обеих ролей
   };
   
   const getTopUpButtonText = () => {
@@ -105,11 +105,9 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const balanceHook = useBalance();
   const userBalance = balanceHook.balance;
   const topUpBalance = balanceHook.topUpBalance;
+  const withdrawBalance = 'withdrawBalance' in balanceHook ? balanceHook.withdrawBalance : null;
   
-  // Для драйверов используем withdrawBalance, для клиентов - topUpBalance
-  const handleBalanceAction = isDriver && 'withdrawBalance' in balanceHook 
-    ? balanceHook.withdrawBalance 
-    : topUpBalance;
+
   
 
   
@@ -158,14 +156,14 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     outputRange: [0, 0, 1],
   });
 
-  const handleTopUp = (amount?: string) => {
+    const handleTopUp = (amount?: string) => {
     if (amount) {
       setTopUpAmount(amount);
     }
     // Не очищаем topUpAmount если amount не передан
     setTopUpModalVisible(true);
   };
-  
+
   const handleWithdraw = (amount?: string) => {
     if (amount) {
       setTopUpAmount(amount);
@@ -186,8 +184,8 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
       return;
     }
     
-    if (isDriver) {
-      // Для драйверов - вывод средств
+        if (isDriver && withdrawBalance) {
+      // Для водителей - снятие средств
       Alert.alert(
         t('client.balance.withdraw'),
         t('client.balance.useCashbackConfirm'),
@@ -196,7 +194,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
           {
             text: t('client.balance.yes'),
             onPress: async () => {
-              const success = await handleBalanceAction(cashbackNum);
+              const success = await withdrawBalance(cashbackNum);
               if (success) {
                 setCashback('0');
                 AsyncStorage.setItem(CASHBACK_KEY, '0');
@@ -217,11 +215,16 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
           { text: t('client.balance.cancel'), style: 'cancel' },
           {
             text: t('client.balance.yes'),
-            onPress: () => {
-              topUpBalance(cashbackNum);
-              setCashback('0');
-              AsyncStorage.setItem(CASHBACK_KEY, '0');
-              Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
+            onPress: async () => {
+              try {
+                await topUpBalance(cashbackNum);
+                setCashback('0');
+                AsyncStorage.setItem(CASHBACK_KEY, '0');
+                Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
+              } catch (error) {
+                console.error('Error using cashback:', error);
+                Alert.alert(t('client.balance.error'), 'Failed to use cashback');
+              }
             }
           }
         ]
@@ -246,9 +249,9 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
       return;
     }
     
-    if (isDriver) {
-      // Для водителей - вывод средств
-      const success = await handleBalanceAction(amountNum);
+    if (isDriver && withdrawBalance) {
+      // Для водителей - снятие средств
+      const success = await withdrawBalance(amountNum);
       if (success) {
         setTopUpModalVisible(false);
         Alert.alert('Успешно', `Заявка на снятие ${amountNum} AFc отправлена`);
@@ -257,9 +260,14 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
       }
     } else {
       // Для клиентов - пополнение
-      topUpBalance(amountNum);
-      setTopUpModalVisible(false);
-      Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
+      try {
+        await topUpBalance(amountNum);
+        setTopUpModalVisible(false);
+        Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
+      } catch (error) {
+        console.error('Error topping up balance:', error);
+        Alert.alert(t('client.balance.error'), 'Failed to top up balance');
+      }
     }
   };
 
@@ -363,7 +371,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                     )}
                   </View>
                   <Text style={cashbackText}>
-                    {isDriver ? t('driver.cashback.pending') + ': ' : t('client.balance.cashback.pending') + ': '}{cashback} AFc
+                    {isDriver ? 'PENDING: ' : 'FixCash: '}{cashback} AFc
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleFlip} style={flipButtonFront}>
@@ -390,7 +398,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                 >
                   <Ionicons name={isDriver ? "card" : "gift"} size={24} color={cashbackBtnColor} />
                   <Text style={[styles.cardFrontBtnText, cardFrontBtnTextWithColor(cashbackBtnColor)]}>
-                    {isDriver ? t('client.balance.withdraw') : t('client.balance.cashback.use')}
+                    {isDriver ? 'PENDING' : 'FixCash'}
                   </Text>
                 </TouchableOpacity>
               </View>

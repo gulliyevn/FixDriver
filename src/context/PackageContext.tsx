@@ -49,6 +49,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [currentPackage, setCurrentPackage] = useState<PackageType>('free');
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const { t } = useI18n();
+  const { deductBalance } = useBalance();
 
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -131,7 +132,36 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const updatePackage = async (newPackage: PackageType, period: 'month' | 'year' = 'month') => {
+    // Сохраняем текущий пакет для отката при ошибке
+    const previousPackage = currentPackage;
+    
     try {
+      // Проверяем валидность пакета
+      if (!['free', 'plus', 'premium', 'premiumPlus'].includes(newPackage)) {
+        console.error('❌ Invalid package type:', newPackage);
+        return; // Прерываем обновление пакета
+      }
+
+      // Если это платный пакет, проверяем баланс и списываем средства
+      if (newPackage !== 'free') {
+        const price = getPackagePrice(newPackage, period);
+        
+        // Пытаемся списать средства
+        const success = await deductBalance(price, `${newPackage} package purchase`, newPackage);
+        
+        if (!success) {
+          // Если списание не удалось, показываем ошибку
+          Alert.alert(
+            t('package.insufficientFunds.title'),
+            t('package.insufficientFunds.message'),
+            [{ text: t('common.ok'), style: 'default' }]
+          );
+          return; // Прерываем обновление пакета
+        }
+        
+        console.log('✅ Balance deducted successfully:', price);
+      }
+      
       // Сохраняем только базовое название пакета без суффикса
       await AsyncStorage.setItem(PACKAGE_KEY, newPackage);
       
@@ -170,11 +200,34 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     } catch (error) {
       console.error('❌ Error saving package:', error);
+      Alert.alert(
+        t('package.error.title'),
+        t('package.error.message'),
+        [{ text: t('common.ok'), style: 'default' }]
+      );
+      // При ошибке возвращаемся к предыдущему пакету
+      setCurrentPackage(previousPackage);
+      return;
     }
   };
 
   const extendSubscription = async (packageType: PackageType, period: 'month' | 'year', price: number) => {
     try {
+      // Сначала списываем средства
+      const success = await deductBalance(price, `${packageType} subscription extension`, packageType);
+      
+      if (!success) {
+        // Если списание не удалось, показываем ошибку
+        Alert.alert(
+          t('package.insufficientFunds.title'),
+          t('package.insufficientFunds.message'),
+          [{ text: t('common.ok'), style: 'default' }]
+        );
+        return; // Прерываем продление подписки
+      }
+      
+      console.log('✅ Balance deducted for subscription extension:', price);
+      
       if (subscription) {
         // Рассчитываем дату активации (следующий день после истечения текущей подписки)
         const currentEndDate = new Date(subscription.nextBillingDate);
@@ -195,6 +248,11 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       }
     } catch (error) {
       console.error('Error extending subscription:', error);
+      Alert.alert(
+        t('package.error.title'),
+        t('package.error.message'),
+        [{ text: t('common.ok'), style: 'default' }]
+      );
     }
   };
 
@@ -244,13 +302,12 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         // Получаем название пакета для истории транзакций
         const packageName = t(`premium.packages.${subscription.packageType}`);
         
-        // Списываем средства с баланса - временно отключено для избежания циклической зависимости
-        // const success = await deductBalance(
-        //   price, 
-        //   t('premium.autoRenewal.transactionDescription', { packageName }), 
-        //   subscription.packageType
-        // );
-        const success = false; // Временно всегда false
+        // Списываем средства с баланса
+        const success = await deductBalance(
+          price, 
+          t('premium.autoRenewal.transactionDescription', { packageName }), 
+          subscription.packageType
+        );
         
         if (success) {
   
@@ -326,28 +383,34 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   // Проверка pending автообновления при пополнении баланса
   const checkPendingAutoRenewal = async (): Promise<boolean> => {
     try {
-      if (!subscription || !subscription.pendingAutoRenewal) {
+      // Загружаем актуальные данные из AsyncStorage
+      const storedSubscription = await AsyncStorage.getItem(SUBSCRIPTION_KEY);
+      if (!storedSubscription) {
+        return false;
+      }
+      
+      const currentSubscription = JSON.parse(storedSubscription);
+      if (!currentSubscription || !currentSubscription.pendingAutoRenewal) {
         return false;
       }
 
-      const { price, packageName } = subscription.pendingAutoRenewal;
+      const { price, packageName } = currentSubscription.pendingAutoRenewal;
       
-      // Списываем средства с баланса - временно отключено для избежания циклической зависимости
-      // const success = await deductBalance(
-      //   price, 
-      //   t('premium.autoRenewal.transactionDescription', { packageName }), 
-      //   subscription.packageType
-      // );
-      const success = false; // Временно всегда false
+      // Списываем средства с баланса
+      const success = await deductBalance(
+        price, 
+        t('premium.autoRenewal.transactionDescription', { packageName }), 
+        currentSubscription.packageType
+      );
       
       if (success) {
         // Рассчитываем новую дату биллинга
-        const daysInPeriod = subscription.period === 'year' ? 365 : 30;
-        const nextBillingDate = new Date(subscription.nextBillingDate);
+        const daysInPeriod = currentSubscription.period === 'year' ? 365 : 30;
+        const nextBillingDate = new Date(currentSubscription.nextBillingDate);
         const newNextBillingDate = new Date(nextBillingDate.getTime() + daysInPeriod * 24 * 60 * 60 * 1000);
         
         const updatedSubscription: Subscription = {
-          ...subscription,
+          ...currentSubscription,
           nextBillingDate: newNextBillingDate.toISOString(),
           pendingAutoRenewal: undefined, // Убираем pending
         };
@@ -431,37 +494,37 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const getPackageIcon = (packageType: PackageType = currentPackage) => {
     switch (packageType) {
-      case 'free': return 'leaf';
-      case 'plus': return 'shield';
-      case 'premium': return 'heart';
-      case 'premiumPlus': return 'diamond';
-      default: return 'leaf';
+      case 'free': return 'person';
+      case 'plus': return 'add-circle';
+      case 'premium': return 'diamond';
+      case 'premiumPlus': return 'star';
+      default: return 'person';
     }
   };
 
   const getPackageColor = (packageType: PackageType = currentPackage) => {
     switch (packageType) {
-      case 'free': return '#10B981';
-      case 'plus': return '#3B82F6';
-      case 'premium': return '#8B5CF6';
-      case 'premiumPlus': return '#F59E0B';
-      default: return '#10B981';
+      case 'free': return '#666666';
+      case 'plus': return '#0066CC';
+      case 'premium': return '#FFD700';
+      case 'premiumPlus': return '#FF6B35';
+      default: return '#666666';
     }
   };
 
   const getPackagePrice = (packageType: PackageType, period: 'month' | 'year' = 'month') => {
     const monthlyPrices = {
       free: 0,
-      plus: 6.99,
-      premium: 14.99,
-      premiumPlus: 29.99,
+      plus: 99,
+      premium: 199,
+      premiumPlus: 299,
     };
     
     const yearlyPrices = {
       free: 0,
-      plus: 62.90,
-      premium: 134.90,
-      premiumPlus: 269.90,
+      plus: 999,
+      premium: 1999,
+      premiumPlus: 2999,
     };
     
     const prices = period === 'year' ? yearlyPrices : monthlyPrices;
