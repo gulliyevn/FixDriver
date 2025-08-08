@@ -6,10 +6,10 @@ import { useLanguage } from '../context/LanguageContext';
 import TabBar from './TabBar';
 
 // Импорт экранов
-import MapScreen from '../screens/driver/MapScreen';
+import OrdersMapScreen from '../screens/common/OrdersMapScreen';
 import OrdersScreen from '../screens/driver/OrdersScreen';
-import EarningsScreen from '../screens/driver/EarningsScreen';
-import ChatScreen from '../screens/driver/ChatScreen';
+import EarningsScreen from '../screens/common/EarningsScreen';
+import ChatListScreen from '../screens/common/chats/ChatListScreen';
 import DriverProfileStack from './driver/DriverProfileStack';
 
 const Tab = createBottomTabNavigator();
@@ -37,7 +37,7 @@ const DriverNavigator: React.FC = () => {
     >
       <Tab.Screen 
         name="Map" 
-        component={MapScreen}
+        component={OrdersMapScreen}
       />
       <Tab.Screen 
         name="Orders" 
@@ -49,7 +49,7 @@ const DriverNavigator: React.FC = () => {
       />
       <Tab.Screen 
         name="Chat" 
-        component={ChatScreen}
+        component={ChatListScreen}
       />
       <Tab.Screen 
         name="Profile" 

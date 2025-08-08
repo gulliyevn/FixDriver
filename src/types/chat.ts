@@ -8,6 +8,7 @@ export interface Message {
   timestamp: string;
   isRead: boolean;
   metadata?: {
+    tripId?: string;
     imageUrl?: string;
     fileUrl?: string;
     fileName?: string;

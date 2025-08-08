@@ -297,4 +297,4 @@ const ChatListScreen: React.FC = () => {
   );
 };
 
-export default ChatListScreen; 
+export { default } from '../common/chats/ChatListScreen';

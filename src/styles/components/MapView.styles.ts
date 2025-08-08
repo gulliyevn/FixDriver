@@ -1,62 +1,65 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { getCurrentColors, SHADOWS } from '../../constants/colors';
 
-export const MapViewStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-  markerAContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#222',
-    padding: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  markerBContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#10B981',
-    padding: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  driverMarkerContainer: {
-    backgroundColor: '#083198', // Основные кнопки FixDrive
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  durationMarkerContainer: {
-    backgroundColor: '#030304', // Тексты FixDrive
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderWidth: 2,
-    borderColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  durationMarkerText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-}); 
+export const createMapViewStyles = (isDark: boolean) => {
+  const palette = getCurrentColors(isDark);
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: palette.background,
+    },
+    map: {
+      flex: 1,
+      backgroundColor: palette.surface,
+    },
+    markerAContainer: {
+      backgroundColor: palette.card,
+      borderRadius: 16,
+      borderWidth: 2,
+      borderColor: isDark ? palette.borderLight : '#222',
+      padding: 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    markerBContainer: {
+      backgroundColor: palette.card,
+      borderRadius: 16,
+      borderWidth: 2,
+      borderColor: palette.success,
+      padding: 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    driverMarkerContainer: {
+      backgroundColor: palette.primary,
+      borderRadius: 20,
+      width: 40,
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 3,
+      borderColor: '#FFFFFF',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    durationMarkerContainer: {
+      backgroundColor: palette.text,
+      borderRadius: 12,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderWidth: 2,
+      borderColor: '#fff',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    durationMarkerText: {
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: '600',
+    },
+  });
+};
+
+// Backward-compatible default (light theme)
+export const MapViewStyles = createMapViewStyles(false);

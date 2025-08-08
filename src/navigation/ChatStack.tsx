@@ -6,10 +6,11 @@ import { ChatStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<ChatStackParamList>();
 
-const ChatNavigator: React.FC = () => {
+const ChatStack: React.FC = () => {
   return (
     <Stack.Navigator
-      id={undefined}
+      // @ts-ignore
+      id="ChatStack"
       initialRouteName="ChatList"
       screenOptions={{
         headerShown: false,
@@ -19,20 +20,13 @@ const ChatNavigator: React.FC = () => {
       <Stack.Screen 
         name="ChatList" 
         component={ChatListScreen}
-        options={{
-          title: 'Чаты',
-        }}
       />
       <Stack.Screen 
         name="ChatConversation" 
         component={ChatScreen}
-        options={{
-          title: 'Чат',
-          headerShown: false,
-        }}
       />
     </Stack.Navigator>
   );
 };
 
-export default ChatNavigator; 
+export default ChatStack;

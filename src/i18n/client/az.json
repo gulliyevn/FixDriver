@@ -17,7 +17,25 @@
     "cancel": "Ləğv et",
     "read": "Oxundu",
     "online": "Onlayn",
-    "offline": "Oflayn"
+    "offline": "Oflayn",
+    "unknownUser": "Naməlum istifadəçi",
+    "noMessages": "Mesaj yoxdur",
+    "loadingMessages": "Mesajlar yüklənir...",
+    "messageError": "Mesaj göndərmə xətası",
+    "typing": "yazır...",
+    "startConversation": "Söhbət başlat",
+    "startNewChat": "Yeni söhbət başlat",
+    "searchChats": "Söhbətləri axtar...",
+    "markAsRead": "Oxundu kimi qeyd et",
+    "markAsReadConfirm": "%{count} söhbəti oxundu kimi qeyd et?",
+    "deleteSelected": "Seçilmişləri sil",
+    "deleteSelectedConfirm": "Seçilmiş söhbətləri silmək istədiyinizə əminsiniz?",
+    "deleteChat": "Söhbəti sil",
+    "deleteChatConfirm": "Bu söhbəti silmək istədiyinizə əminsiniz?",
+    "camera": "Kamera",
+    "gallery": "Qalereya",
+    "document": "Sənəd",
+    "location": "Məkan"
   },
   "notifications": {
     "title": "Bildirişlər",
@@ -184,6 +202,12 @@
     "route": "Marşrut",
     "stops": "dayanacaq",
     "call": "Zəng et"
+  },
+
+  "orders": {
+    "addOrder": "Sifariş əlavə et",
+    "create": "Sifariş yarat",
+    "created": "Sifariş №{id} yaradıldı"
   },
 
   "help": {

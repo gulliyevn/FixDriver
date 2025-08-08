@@ -17,7 +17,25 @@
     "cancel": "Cancelar",
     "read": "Leído",
     "online": "En línea",
-    "offline": "Desconectado"
+    "offline": "Desconectado",
+    "unknownUser": "Usuario desconocido",
+    "noMessages": "No hay mensajes",
+    "loadingMessages": "Cargando mensajes...",
+    "messageError": "Error al enviar mensaje",
+    "typing": "escribiendo...",
+    "startConversation": "Iniciar conversación",
+    "startNewChat": "Iniciar nuevo chat",
+    "searchChats": "Buscar chats...",
+    "markAsRead": "Marcar como leído",
+    "markAsReadConfirm": "¿Marcar %{count} chats como leídos?",
+    "deleteSelected": "Eliminar seleccionados",
+    "deleteSelectedConfirm": "¿Está seguro de que quiere eliminar los chats seleccionados?",
+    "deleteChat": "Eliminar chat",
+    "deleteChatConfirm": "¿Está seguro de que quiere eliminar este chat?",
+    "camera": "Cámara",
+    "gallery": "Galería",
+    "document": "Documento",
+    "location": "Ubicación"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -184,6 +202,12 @@
     "route": "Ruta",
     "stops": "paradas",
     "call": "Llamar"
+  },
+
+  "orders": {
+    "addOrder": "Agregar pedido",
+    "create": "Crear pedido",
+    "created": "Pedido #{id} creado"
   },
 
   "help": {

@@ -17,7 +17,25 @@
     "cancel": "Abbrechen",
     "read": "Gelesen",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "unknownUser": "Unbekannter Benutzer",
+    "noMessages": "Keine Nachrichten",
+    "loadingMessages": "Nachrichten werden geladen...",
+    "messageError": "Fehler beim Senden der Nachricht",
+    "typing": "schreibt...",
+    "startConversation": "Gespräch beginnen",
+    "startNewChat": "Neuen Chat beginnen",
+    "searchChats": "Chats suchen...",
+    "markAsRead": "Als gelesen markieren",
+    "markAsReadConfirm": "%{count} Chats als gelesen markieren?",
+    "deleteSelected": "Ausgewählte löschen",
+    "deleteSelectedConfirm": "Sind Sie sicher, dass Sie die ausgewählten Chats löschen möchten?",
+    "deleteChat": "Chat löschen",
+    "deleteChatConfirm": "Sind Sie sicher, dass Sie diesen Chat löschen möchten?",
+    "camera": "Kamera",
+    "gallery": "Galerie",
+    "document": "Dokument",
+    "location": "Standort"
   },
   "notifications": {
     "title": "Benachrichtigungen",
@@ -185,6 +203,12 @@
     "route": "Route",
     "stops": "Stopps",
     "call": "Anrufen"
+  },
+
+  "orders": {
+    "addOrder": "Bestellung hinzufügen",
+    "create": "Bestellung erstellen",
+    "created": "Bestellung #{id} erstellt"
   },
 
   "help": {

@@ -17,7 +17,25 @@
     "cancel": "إلغاء",
     "read": "مقروء",
     "online": "متصل",
-    "offline": "غير متصل"
+    "offline": "غير متصل",
+    "unknownUser": "مستخدم غير معروف",
+    "noMessages": "لا توجد رسائل",
+    "loadingMessages": "تحميل الرسائل...",
+    "messageError": "خطأ في إرسال الرسالة",
+    "typing": "يكتب...",
+    "startConversation": "ابدأ محادثة",
+    "startNewChat": "ابدأ محادثة جديدة",
+    "searchChats": "البحث في المحادثات...",
+    "markAsRead": "تحديد كمقروء",
+    "markAsReadConfirm": "تحديد %{count} محادثة كمقروءة؟",
+    "deleteSelected": "حذف المحدد",
+    "deleteSelectedConfirm": "هل أنت متأكد من أنك تريد حذف المحادثات المحددة؟",
+    "deleteChat": "حذف المحادثة",
+    "deleteChatConfirm": "هل أنت متأكد من أنك تريد حذف هذه المحادثة؟",
+    "camera": "الكاميرا",
+    "gallery": "المعرض",
+    "document": "المستند",
+    "location": "الموقع"
   },
   "notifications": {
     "title": "الإشعارات",
@@ -185,6 +203,12 @@
     "route": "المسار",
     "stops": "محطات",
     "call": "اتصال"
+  },
+
+  "orders": {
+    "addOrder": "إضافة طلب",
+    "create": "إنشاء طلب",
+    "created": "تم إنشاء الطلب رقم {id}"
   },
 
   "help": {

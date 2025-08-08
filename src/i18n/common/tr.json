@@ -8,6 +8,7 @@
   "delete": "Sil",
   "edit": "Düzenle",
   "add": "Ekle",
+  "selected": "Seçildi",
   "back": "Geri",
   "next": "İleri",
   "previous": "Önceki",
@@ -22,6 +23,8 @@
   "tryAgain": "Tekrar dene",
   "notAvailable": "Kullanılamıyor",
   "featureSoon": "Özellik yakında kullanılabilir olacak",
+  "search": "Ara",
+  "permissionDenied": "İzin reddedildi",
   "roleSelect": {
     "chooseAccountType": "Hesap türünü seçin",
     "clientTitle": "Müşteri",

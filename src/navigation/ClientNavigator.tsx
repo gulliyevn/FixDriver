@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import MapScreen from '../screens/client/MapScreen';
+import OrdersMapScreen from '../screens/common/OrdersMapScreen';
 import DriversScreen from '../screens/client/DriversScreen';
-import ChatListScreen from '../screens/client/ChatListScreen';
-import ScheduleScreen from '../screens/client/ScheduleScreen';
+import ChatStack from './ChatStack';
+import AddOrderScreen from '../screens/common/AddOrderScreen';
 import ClientProfileStack from './ClientProfileStack';
 import { ClientStackParamList } from '../types/navigation';
 import { useLanguage } from '../context/LanguageContext';
@@ -34,10 +34,10 @@ const ClientNavigator: React.FC = () => {
         },
       }}
     >
-      <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="Map" component={OrdersMapScreen} />
       <Tab.Screen name="Drivers" component={DriversScreen} />
-      <Tab.Screen name="Schedule" component={ScheduleScreen} />
-      <Tab.Screen name="Chat" component={ChatListScreen} />
+      <Tab.Screen name="Schedule" component={AddOrderScreen} />
+      <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen 
         name="ClientProfile" 
         component={ClientProfileStack}

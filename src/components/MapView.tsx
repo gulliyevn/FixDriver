@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Alert } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { MapService } from '../services/MapService';
-import { MapViewStyles } from '../styles/components/MapView.styles';
+import { MapViewStyles, createMapViewStyles } from '../styles/components/MapView.styles';
+import { useTheme } from '../context/ThemeContext';
 
 interface MapLocation {
   latitude: number;
@@ -28,6 +29,8 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   markers = [],
 }) => {
   const mapRef = useRef<MapView>(null);
+  const { isDark } = useTheme();
+  const styles = createMapViewStyles(isDark);
   const [region, setRegion] = useState({
     latitude: initialLocation?.latitude || 40.3777,
     longitude: initialLocation?.longitude || 49.8920,
@@ -86,10 +89,10 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   };
 
   return (
-    <View style={MapViewStyles.container}>
+    <View style={styles.container}>
       <MapView
         ref={mapRef}
-        style={MapViewStyles.map}
+        style={styles.map}
         provider={PROVIDER_GOOGLE}
         region={region}
         onPress={handleMapPress}

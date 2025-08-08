@@ -17,7 +17,25 @@
     "cancel": "Отмена",
     "read": "Прочитано",
     "online": "В сети",
-    "offline": "Не в сети"
+    "offline": "Не в сети",
+    "unknownUser": "Неизвестный пользователь",
+    "noMessages": "Нет сообщений",
+    "loadingMessages": "Загрузка сообщений...",
+    "messageError": "Ошибка отправки сообщения",
+    "typing": "печатает...",
+    "startConversation": "Начните разговор",
+    "startNewChat": "Начать новый чат",
+    "searchChats": "Поиск чатов...",
+    "markAsRead": "Отметить как прочитанные",
+    "markAsReadConfirm": "Отметить %{count} чатов как прочитанные?",
+    "deleteSelected": "Удалить выбранные",
+    "deleteSelectedConfirm": "Вы уверены, что хотите удалить выбранные чаты?",
+    "deleteChat": "Удалить чат",
+    "deleteChatConfirm": "Вы уверены, что хотите удалить этот чат?",
+    "camera": "Камера",
+    "gallery": "Галерея",
+    "document": "Документ",
+    "location": "Местоположение"
   },
   "notifications": {
     "title": "Уведомления",
@@ -172,6 +190,12 @@
     "route": "Маршрут",
     "stops": "остановок",
     "call": "Позвонить"
+  },
+
+  "orders": {
+    "addOrder": "Добавить заказ",
+    "create": "Создать заказ",
+    "created": "Заказ №{id} создан"
   },
 
   "help": {

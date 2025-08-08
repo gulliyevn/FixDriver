@@ -47,7 +47,8 @@ export class ChatService {
   async sendMessage(
     chatId: string,
     content: string,
-    messageType: 'text' | 'image' | 'file' | 'location' = 'text'
+    messageType: 'text' | 'image' | 'file' | 'location' = 'text',
+    metadata?: Message['metadata']
   ): Promise<Message> {
     const newMessage: Message = {
       id: `msg_${Date.now()}`,
@@ -58,6 +59,7 @@ export class ChatService {
       timestamp: new Date().toISOString(),
       type: messageType,
       isRead: false,
+      metadata,
     };
 
     this.messages.push(newMessage);
@@ -193,9 +195,9 @@ export class ChatService {
     return instance.getMessages(chatId);
   }
 
-  static async sendMessage(chatId: string, text: string): Promise<Message> {
+  static async sendMessage(chatId: string, text: string, metadata?: Message['metadata']): Promise<Message> {
     const instance = ChatService.getInstance();
-    return instance.sendMessage(chatId, text, 'text');
+    return instance.sendMessage(chatId, text, 'text', metadata);
   }
 
   static async markMessagesAsRead(chatId: string): Promise<void> {

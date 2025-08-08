@@ -17,7 +17,25 @@
     "cancel": "İptal",
     "read": "Okundu",
     "online": "Çevrimiçi",
-    "offline": "Çevrimdışı"
+    "offline": "Çevrimdışı",
+    "unknownUser": "Bilinmeyen kullanıcı",
+    "noMessages": "Mesaj yok",
+    "loadingMessages": "Mesajlar yükleniyor...",
+    "messageError": "Mesaj gönderme hatası",
+    "typing": "yazıyor...",
+    "startConversation": "Konuşma başlat",
+    "startNewChat": "Yeni sohbet başlat",
+    "searchChats": "Sohbet ara...",
+    "markAsRead": "Okundu olarak işaretle",
+    "markAsReadConfirm": "%{count} sohbeti okundu olarak işaretle?",
+    "deleteSelected": "Seçilenleri sil",
+    "deleteSelectedConfirm": "Seçilen sohbetleri silmek istediğinizden emin misiniz?",
+    "deleteChat": "Sohbeti sil",
+    "deleteChatConfirm": "Bu sohbeti silmek istediğinizden emin misiniz?",
+    "camera": "Kamera",
+    "gallery": "Galeri",
+    "document": "Belge",
+    "location": "Konum"
   },
   "notifications": {
     "title": "Bildirimler",
@@ -184,6 +202,12 @@
     "route": "Rota",
     "stops": "duraklar",
     "call": "Ara"
+  },
+
+  "orders": {
+    "addOrder": "Sipariş ekle",
+    "create": "Sipariş oluştur",
+    "created": "Sipariş #{id} oluşturuldu"
   },
 
   "help": {

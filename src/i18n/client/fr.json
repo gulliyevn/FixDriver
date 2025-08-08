@@ -17,7 +17,25 @@
     "cancel": "Annuler",
     "read": "Lu",
     "online": "En ligne",
-    "offline": "Hors ligne"
+    "offline": "Hors ligne",
+    "unknownUser": "Utilisateur inconnu",
+    "noMessages": "Aucun message",
+    "loadingMessages": "Chargement des messages...",
+    "messageError": "Erreur d'envoi de message",
+    "typing": "écrit...",
+    "startConversation": "Commencer une conversation",
+    "startNewChat": "Commencer un nouveau chat",
+    "searchChats": "Rechercher des chats...",
+    "markAsRead": "Marquer comme lu",
+    "markAsReadConfirm": "Marquer %{count} chats comme lus?",
+    "deleteSelected": "Supprimer la sélection",
+    "deleteSelectedConfirm": "Êtes-vous sûr de vouloir supprimer les chats sélectionnés?",
+    "deleteChat": "Supprimer le chat",
+    "deleteChatConfirm": "Êtes-vous sûr de vouloir supprimer ce chat?",
+    "camera": "Caméra",
+    "gallery": "Galerie",
+    "document": "Document",
+    "location": "Emplacement"
   },
   "notifications": {
     "title": "Notifications",
@@ -184,6 +202,12 @@
     "route": "Itinéraire",
     "stops": "arrêts",
     "call": "Appeler"
+  },
+
+  "orders": {
+    "addOrder": "Ajouter une commande",
+    "create": "Créer une commande",
+    "created": "Commande n°{id} créée"
   },
 
   "help": {
