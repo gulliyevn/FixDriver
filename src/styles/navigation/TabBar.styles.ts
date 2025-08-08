@@ -50,4 +50,27 @@ export const TabBarStyles = StyleSheet.create({
     height: 3,
     borderRadius: 1.5,
   },
+  specialTabContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  specialTabCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -20, // Поднимаем выше таббара
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
+    borderWidth: 3,
+    borderColor: '#fff',
+  },
+  specialTabIcon: {
+    fontSize: 30,
+  },
 }); 

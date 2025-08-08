@@ -38,51 +38,24 @@ const DriverNavigator: React.FC = () => {
       <Tab.Screen 
         name="Map" 
         component={MapScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: () => (
-            <Ionicons name="map-outline" size={24} color="#666" />
-          ),
-        }}
       />
       <Tab.Screen 
         name="Orders" 
         component={OrdersScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: () => (
-            <Ionicons name="list-outline" size={24} color="#666" />
-          ),
-        }}
       />
       <Tab.Screen 
         name="Earnings" 
         component={EarningsScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: () => (
-            <Ionicons name="add-circle-outline" size={24} color="#666" />
-          ),
-        }}
       />
       <Tab.Screen 
         name="Chat" 
         component={ChatScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: () => (
-            <Ionicons name="chatbubbles-outline" size={24} color="#666" />
-          ),
-        }}
       />
       <Tab.Screen 
         name="Profile" 
         component={DriverProfileStack}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: () => (
-            <Ionicons name="person-outline" size={24} color="#666" />
-          ),
+          tabBarStyle: { display: 'none' }, // Скрываем таббар для экрана профиля
         }}
       />
     </Tab.Navigator>

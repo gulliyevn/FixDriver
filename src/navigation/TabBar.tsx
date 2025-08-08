@@ -24,62 +24,79 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
       drivers: 'Водители',
       schedule: 'Расписание',
       chats: 'Чаты',
-      profile: 'Профиль'
+      profile: 'Профиль',
+      orders: 'Заказы',
+      earnings: 'Заработок'
     },
     en: {
       map: 'Map',
       drivers: 'Drivers',
       schedule: 'Schedule',
       chats: 'Chats',
-      profile: 'Profile'
+      profile: 'Profile',
+      orders: 'Orders',
+      earnings: 'Earnings'
     },
     az: {
       map: 'Xəritə',
       drivers: 'Sürücülər',
       schedule: 'Cədvəl',
       chats: 'Söhbətlər',
-      profile: 'Profil'
+      profile: 'Profil',
+      orders: 'Sifarişlər',
+      earnings: 'Qazanc'
     },
     tr: {
       map: 'Harita',
       drivers: 'Sürücüler',
       schedule: 'Program',
       chats: 'Sohbetler',
-      profile: 'Profil'
+      profile: 'Profil',
+      orders: 'Siparişler',
+      earnings: 'Kazanç'
     },
     es: {
       map: 'Mapa',
       drivers: 'Conductores',
       schedule: 'Horario',
       chats: 'Chats',
-      profile: 'Perfil'
+      profile: 'Perfil',
+      orders: 'Pedidos',
+      earnings: 'Ganancias'
     },
     fr: {
       map: 'Carte',
       drivers: 'Chauffeurs',
       schedule: 'Planning',
       chats: 'Chats',
-      profile: 'Profil'
+      profile: 'Profil',
+      orders: 'Commandes',
+      earnings: 'Gains'
     },
     de: {
       map: 'Karte',
       drivers: 'Fahrer',
       schedule: 'Zeitplan',
       chats: 'Chats',
-      profile: 'Profil'
+      profile: 'Profil',
+      orders: 'Aufträge',
+      earnings: 'Verdienst'
     },
     ar: {
       map: 'الخريطة',
       drivers: 'السائقين',
       schedule: 'الجدول',
       chats: 'الدردشات',
-      profile: 'الملف الشخصي'
+      profile: 'الملف الشخصي',
+      orders: 'الطلبات',
+      earnings: 'الأرباح'
     }
   };
 
   const currentTranslations = staticTranslations[language] || staticTranslations.ru;
 
   const tabConfig = useMemo(() => [
+    // Клиентские табы
     {
       name: 'Map',
       icon: 'map-outline',
@@ -94,9 +111,10 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
     },
     {
       name: 'Schedule',
-      icon: 'calendar-outline',
-      activeIcon: 'calendar',
+      icon: 'add',
+      activeIcon: 'add',
       label: currentTranslations.schedule,
+      isSpecial: true, // Специальная кнопка в круге
     },
     {
       name: 'Chat',
@@ -106,6 +124,26 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
     },
     {
       name: 'ClientProfile',
+      icon: 'person-outline',
+      activeIcon: 'person',
+      label: currentTranslations.profile,
+    },
+    // Водительские табы
+    {
+      name: 'Orders',
+      icon: 'list-outline',
+      activeIcon: 'list',
+      label: currentTranslations.orders,
+    },
+    {
+      name: 'Earnings',
+      icon: 'wallet-outline',
+      activeIcon: 'wallet',
+      label: currentTranslations.earnings,
+      isSpecial: true, // Специальная кнопка в круге
+    },
+    {
+      name: 'Profile',
       icon: 'person-outline',
       activeIcon: 'person',
       label: currentTranslations.profile,
@@ -144,6 +182,9 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
           });
         };
 
+        // Проверяем, является ли это специальной кнопкой в круге
+        const isSpecialTab = tab?.isSpecial;
+
         return (
           <TouchableOpacity
             key={route.key}
@@ -153,20 +194,44 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.tabItem}
+            style={[styles.tabItem, isSpecialTab && styles.specialTabContainer]}
           >
-            <Ionicons
-              name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
-              size={24}
-              color={isFocused ? currentColors.primary : currentColors.textSecondary}
-            />
-            <Text style={[
-              styles.tabLabel,
-              { color: isFocused ? currentColors.primary : currentColors.textSecondary }
-            ]}>
-              {tab?.label}
-            </Text>
-            {isFocused && (
+            {isSpecialTab ? (
+              // Специальная кнопка в круге
+              <View style={[
+                styles.specialTabCircle,
+                {
+                  backgroundColor: isFocused ? currentColors.primary : currentColors.primary,
+                  shadowColor: isFocused ? currentColors.primary : currentColors.primary,
+                  borderColor: isFocused ? currentColors.primary : currentColors.primary,
+                }
+              ]}>
+                <Ionicons
+                  name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
+                  size={30}
+                  color="#fff"
+                  style={styles.specialTabIcon}
+                />
+              </View>
+            ) : (
+              // Обычная иконка
+              <Ionicons
+                name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
+                size={24}
+                color={isFocused ? currentColors.primary : currentColors.textSecondary}
+              />
+            )}
+            
+            {!isSpecialTab && (
+              <Text style={[
+                styles.tabLabel,
+                { color: isFocused ? currentColors.primary : currentColors.textSecondary }
+              ]}>
+                {tab?.label}
+              </Text>
+            )}
+            
+            {isFocused && !isSpecialTab && (
               <View style={[styles.tabIndicator, { backgroundColor: currentColors.primary }]} />
             )}
           </TouchableOpacity>
