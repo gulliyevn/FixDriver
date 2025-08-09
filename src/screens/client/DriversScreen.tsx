@@ -1,691 +1,494 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  TextInput,
-  Animated,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import { SafeAreaView, View, Text, FlatList, TouchableOpacity, Alert, TextInput, Animated, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import type { Swipeable as RNSwipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
+import { useI18n } from '../../hooks/useI18n';
+import { createDriversScreenStyles } from '../../styles/screens/drivers/DriversScreen.styles';
+import { mockDrivers } from '../../mocks';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList } from '../../types/navigation';
 import { Driver } from '../../types/driver';
-import { mockDrivers } from '../../mocks';
-import { colors } from '../../constants/colors';
-import { useTheme } from '../../context/ThemeContext';
-import { SIZES, SHADOWS } from '../../constants/colors';
+import NotificationsModal from '../../components/NotificationsModal';
 
-type NavigationProp = StackNavigationProp<ClientStackParamList, 'Drivers'>;
-
-interface DriverFilter {
-  id: string;
-  label: string;
-  icon: string;
-  active: boolean;
-}
+const ACTION_WIDTH = 100; // Keep in sync with styles.swipeAction.width
 
 const DriversScreen: React.FC = () => {
   const { isDark } = useTheme();
-  const navigation = useNavigation<NavigationProp>();
-  const currentColors = isDark ? colors.dark : colors.light;
-
-  const [drivers] = useState<Driver[]>(mockDrivers);
-  const [filteredDrivers, setFilteredDrivers] = useState<Driver[]>(mockDrivers);
+  const styles = useMemo(() => createDriversScreenStyles(isDark), [isDark]);
+  const { t } = useI18n();
+  const { user } = useAuth();
+  const navigation = useNavigation<StackNavigationProp<ClientStackParamList>>();
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [filteredDrivers, setFilteredDrivers] = useState<Driver[]>([]);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<DriverFilter[]>([
-    { id: 'all', label: 'Все', icon: 'people', active: true },
-    { id: 'available', label: 'Доступные', icon: 'checkmark-circle', active: false },
-    { id: 'high-rating', label: 'Топ рейтинг', icon: 'star', active: false },
-    { id: 'nearby', label: 'Рядом', icon: 'location', active: false },
-    { id: 'premium', label: 'Премиум', icon: 'diamond', active: false },
-  ]);
-  const [fadeAnim] = useState(new Animated.Value(0));
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [selectedDrivers, setSelectedDrivers] = useState<Set<string>>(new Set());
-  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [notificationsModalVisible, setNotificationsModalVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const filterDrivers = useCallback(() => {
-    let filtered = drivers;
-
-    // Фильтр по поиску
-    if (searchQuery) {
-      filtered = filtered.filter(
-        driver =>
-          driver.first_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          driver.last_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          driver.vehicle_brand?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          driver.vehicle_model?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Применяем активные фильтры
-    const activeFilters = filters.filter(f => f.active);
-    
-    if (activeFilters.length > 0 && !activeFilters.find(f => f.id === 'all')) {
-      activeFilters.forEach(filter => {
-        switch (filter.id) {
-          case 'available':
-            filtered = filtered.filter(driver => driver.isAvailable);
-            break;
-          case 'high-rating':
-            filtered = filtered.filter(driver => driver.rating >= 4.5);
-            break;
-          case 'nearby':
-            // Фильтр по расстоянию (в реальном приложении будет геолокация)
-            filtered = filtered.filter(driver => driver.isAvailable);
-            break;
-          case 'premium':
-            filtered = filtered.filter(driver => driver.package === 'premium');
-            break;
-        }
-      });
-    }
-
-    setFilteredDrivers(filtered);
-  }, [drivers, searchQuery, filters]);
+  // Keep refs to swipeable rows to close them programmatically
+  const swipeRefs = useRef<Record<string, RNSwipeable | null>>({});
+  const openSwipeRef = useRef<RNSwipeable | null>(null);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+    loadDrivers();
+  }, []);
+
+  // Debounce search input
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedQuery(searchQuery.trim().toLowerCase()), 200);
+    return () => clearTimeout(id);
+  }, [searchQuery]);
 
   useEffect(() => {
     filterDrivers();
-  }, [filterDrivers]);
+  }, [drivers, debouncedQuery, favorites]);
 
-  const handleFilterToggle = (filterId: string) => {
-    setFilters(prev => prev.map(filter => {
-      if (filter.id === filterId) {
-        return { ...filter, active: !filter.active };
-      }
-      if (filterId === 'all') {
-        return { ...filter, active: false };
-      }
-      if (filter.id === 'all') {
-        return { ...filter, active: false };
-      }
-      return filter;
-    }));
-  };
-
-  const handleDriverPress = (driver: Driver) => {
-    if (isSelectionMode) {
-      // В режиме выбора - переключаем выбор
-      const newSelected = new Set(selectedDrivers);
-      if (newSelected.has(driver.id)) {
-        newSelected.delete(driver.id);
-      } else {
-        newSelected.add(driver.id);
-      }
-      setSelectedDrivers(newSelected);
-    } else {
-      // Обычный режим - выбираем водителя
-      Alert.alert(
-        'Выбрать водителя',
-        `Выбрать ${driver.first_name} ${driver.last_name}?`,
-        [
-          { text: 'Отмена', style: 'cancel' },
-          { 
-            text: 'Выбрать', 
-            onPress: () => navigation.navigate('Map')
-          }
-        ]
-      );
+  const loadDrivers = async () => {
+    try {
+      setLoading(true);
+      // Имитируем загрузку из API
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setDrivers(mockDrivers);
+    } catch (error) {
+      console.error('Error loading drivers:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleBackPress = () => {
-    navigation.goBack();
+  const filterDrivers = () => {
+    const base = drivers.map(d => ({ ...d, isFavorite: favorites.has(d.id) }));
+    const list = !debouncedQuery
+      ? base
+      : base.filter(driver =>
+          driver.first_name?.toLowerCase().includes(debouncedQuery) ||
+          driver.last_name?.toLowerCase().includes(debouncedQuery) ||
+          driver.vehicle_brand?.toLowerCase().includes(debouncedQuery) ||
+          driver.vehicle_model?.toLowerCase().includes(debouncedQuery)
+        );
+    // Sort: favorites first, then by rating desc
+    const sorted = list.sort((a, b) => {
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      return b.rating - a.rating;
+    });
+    // Показываем только первый элемент
+    setFilteredDrivers(sorted.slice(0, 1));
   };
 
-  const handleAdvancedFilters = () => {
-    setShowAdvancedFilters(!showAdvancedFilters);
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
   };
 
-  const handleSelectionMode = () => {
-    setIsSelectionMode(!isSelectionMode);
-    setSelectedDrivers(new Set());
-  };
-
-  const handleSelectAll = () => {
-    if (selectedDrivers.size === filteredDrivers.length) {
-      setSelectedDrivers(new Set());
-    } else {
-      setSelectedDrivers(new Set(filteredDrivers.map(driver => driver.id)));
+  const openDriverDetails = (driver: Driver) => {
+    if (selectionMode) {
+      toggleSelect(driver.id);
+      return;
     }
-  };
 
-  const handleBookSelected = () => {
     Alert.alert(
-      'Забронировать водителей',
-      `Забронировать ${selectedDrivers.size} выбранных водителей?`,
+      'Выбрать водителя',
+      `Выбрать ${driver.first_name} ${driver.last_name}?`,
       [
         { text: 'Отмена', style: 'cancel' },
         { 
-          text: 'Забронировать', 
+          text: 'Выбрать', 
+          onPress: () => navigation.navigate('Map')
+        }
+      ]
+    );
+  };
+
+  const handleDriverPress = (driver: Driver) => {
+    if (selectionMode) {
+      toggleSelect(driver.id);
+    } else {
+      openDriverDetails(driver);
+    }
+  };
+
+  const closeOpenSwipe = useCallback(() => {
+    if (openSwipeRef.current) {
+      try { openSwipeRef.current.close(); } catch {}
+      openSwipeRef.current = null;
+    }
+  }, []);
+
+  const renderDriverItem = ({ item }: { item: Driver & { isFavorite?: boolean } }) => {
+    const renderLeftActions = (progress: any, dragX: any) => {
+      const scale = dragX.interpolate({
+        inputRange: [0, ACTION_WIDTH],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+      });
+      const opacity = dragX.interpolate({
+        inputRange: [0, ACTION_WIDTH * 0.6, ACTION_WIDTH],
+        outputRange: [0, 0.6, 1],
+        extrapolate: 'clamp',
+      });
+
+      return (
+        <View style={[styles.swipeActionsLeft]}>
+          <Animated.View style={{ transform: [{ scale }], opacity }}>
+            <TouchableOpacity
+              style={[styles.swipeAction, styles.favoriteAction, styles.swipeActionInnerLeft]}
+              onPress={() => {
+                toggleFavorite(item.id);
+                swipeRefs.current[item.id]?.close();
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="bookmark"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.85}
+            >
+              <Ionicons name="bookmark" size={28} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      );
+    };
+
+    const renderRightActions = (progress: any, dragX: any) => {
+      const scale = dragX.interpolate({
+        inputRange: [-ACTION_WIDTH, 0],
+        outputRange: [1, 0],
+        extrapolate: 'clamp',
+      });
+      const opacity = dragX.interpolate({
+        inputRange: [-ACTION_WIDTH, -ACTION_WIDTH * 0.6, 0],
+        outputRange: [1, 0.6, 0],
+        extrapolate: 'clamp',
+      });
+
+      return (
+        <View style={[styles.swipeActionsRight]}>
+          <Animated.View style={{ transform: [{ scale }], opacity }}>
+            <TouchableOpacity
+              style={[styles.swipeAction, styles.deleteAction, styles.swipeActionInnerRight]}
+              onPress={() => {
+                deleteDriver(item.id);
+                swipeRefs.current[item.id]?.close();
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="delete"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.85}
+            >
+              <Ionicons name="trash" size={28} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      );
+    };
+
+    return (
+      <Swipeable
+        ref={(ref) => { swipeRefs.current[item.id] = ref as RNSwipeable | null; }}
+        renderLeftActions={selectionMode ? undefined : renderLeftActions}
+        renderRightActions={selectionMode ? undefined : renderRightActions}
+        leftThreshold={60}
+        rightThreshold={60}
+        friction={2}
+        overshootLeft={false}
+        overshootRight={false}
+        onSwipeableWillOpen={() => {
+          if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[item.id]) {
+            try { openSwipeRef.current.close(); } catch {}
+          }
+          openSwipeRef.current = swipeRefs.current[item.id] ?? null;
+        }}
+        onSwipeableClose={() => {
+          if (openSwipeRef.current === swipeRefs.current[item.id]) {
+            openSwipeRef.current = null;
+          }
+        }}
+      >
+        <View style={styles.driverItem}>
+          {/* Хедер с водителем */}
+          <View style={styles.driverHeader}>
+            <View style={styles.avatarContainer}>
+              <View style={styles.avatar}>
+                <Ionicons name="person" size={32} color="#FFFFFF" />
+              </View>
+              <View style={styles.onlineIndicator} />
+            </View>
+            
+            <View style={styles.driverMainInfo}>
+              <View style={styles.nameRatingRow}>
+                <Text style={styles.driverName}>Дмитрий Петров</Text>
+                <Text style={styles.ratingText}>4.8</Text>
+              </View>
+              <View style={styles.vehicleExpandRow}>
+                <Text style={styles.vehicleInfo}>Toyota Camry • А123ББ777</Text>
+                <TouchableOpacity 
+                  style={styles.expandButton}
+                  onPress={() => setIsExpanded(!isExpanded)}
+                >
+                  <Ionicons 
+                    name={isExpanded ? "chevron-up" : "chevron-down"} 
+                    size={16} 
+                    color={isDark ? '#9CA3AF' : '#6B7280'} 
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* Панель с расписанием, премиум и остановками - всегда видна */}
+          <View style={styles.driverInfoBar}>
+            <View style={styles.scheduleInfo}>
+              <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
+              <Text style={styles.scheduleText}>пн, ср, пт</Text>
+            </View>
+            
+            <View style={styles.premiumInfo}>
+              <Ionicons name="diamond" size={16} color="#FFD700" />
+              <Text style={styles.premiumText}>Premium</Text>
+            </View>
+            
+            <Text style={styles.stopsText}>3 остановок</Text>
+          </View>
+
+          {isExpanded && (
+            <>
+              {/* Список поездок */}
+              <View style={styles.tripsContainer}>
+                <View style={styles.tripItem}>
+                  <View style={styles.tripDot} />
+                  <Text style={styles.tripText}>Trip to city center</Text>
+                  <Text style={styles.tripTime}>08:00</Text>
+                </View>
+                
+                <View style={styles.tripItem}>
+                  <View style={[styles.tripDot, styles.tripDotBlue]} />
+                  <Text style={styles.tripText}>Офис БЦ Port Baku</Text>
+                  <Text style={styles.tripTime}>09:15</Text>
+                </View>
+                
+                <View style={styles.tripItem}>
+                  <View style={[styles.tripDot, styles.tripDotLocation]} />
+                  <Text style={styles.tripText}>Торговый центр 28 Mall</Text>
+                  <Text style={styles.tripTime}>18:30</Text>
+                </View>
+              </View>
+
+              {/* Нижняя разделительная линия */}
+              <View style={styles.bottomBorder} />
+
+              {/* Кнопки под линией */}
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.leftButton}>
+                  <View style={styles.buttonContent}>
+                    <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
+                    <Text style={styles.leftButtonText}>Чат</Text>
+                  </View>
+                </TouchableOpacity>
+                
+                <TouchableOpacity style={styles.rightButton}>
+                  <View style={styles.rightButtonContent}>
+                    <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
+                    <Text style={styles.rightButtonText}>Звонок</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </View>
+      </Swipeable>
+    );
+  };
+
+  const selectAll = () => {
+    if (selectedIds.size === filteredDrivers.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredDrivers.map(d => d.id)));
+    }
+  };
+
+  const bookSelected = () => {
+    if (selectedIds.size === 0) return;
+
+    Alert.alert(
+      'Забронировать водителей',
+      `Забронировать ${selectedIds.size} выбранных водителей?`,
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Забронировать',
           onPress: () => {
             navigation.navigate('Map');
-            setIsSelectionMode(false);
-            setSelectedDrivers(new Set());
+            setSelectionMode(false);
+            setSelectedIds(new Set());
           }
         }
       ]
     );
   };
 
-  const renderDriverCard = ({ item }: { item: Driver }) => {
-    const isSelected = selectedDrivers.has(item.id);
-    
-    return (
-      <Animated.View style={[
-        styles.driverCard,
-        { backgroundColor: currentColors.card, opacity: fadeAnim },
-        isSelected && { borderColor: currentColors.primary, borderWidth: 2 }
-      ]}>
-        {/* Checkbox для режима выбора */}
-        {isSelectionMode && (
-          <TouchableOpacity
-            style={[
-              styles.selectionCheckbox,
-              isSelected && { backgroundColor: currentColors.primary }
-            ]}
-            onPress={() => handleDriverPress(item)}
-          >
-            {isSelected && (
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
-            )}
-          </TouchableOpacity>
-        )}
+  const deleteSelected = () => {
+    if (selectedIds.size === 0) return;
 
-        <View style={styles.driverHeader}>
-          <View style={styles.driverAvatar}>
-            {item.avatar ? (
-              <Text style={[styles.avatarText, { color: currentColors.primary }]}>
-                {item.first_name?.[0]}{item.last_name?.[0]}
-              </Text>
-            ) : (
-              <Ionicons name="person" size={24} color={currentColors.primary} />
-            )}
-          </View>
-          <View style={styles.driverInfo}>
-            <Text style={[styles.driverName, { color: currentColors.text }]}>
-              {item.first_name} {item.last_name}
-            </Text>
-            <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={16} color="#FFD700" />
-              <Text style={[styles.rating, { color: currentColors.textSecondary }]}>
-                {item.rating.toFixed(1)}
-              </Text>
-              {item.package === 'premium' && (
-                <View style={styles.premiumBadge}>
-                  <Ionicons name="diamond" size={12} color="#FFD700" />
-                  <Text style={styles.premiumText}>Премиум</Text>
-                </View>
-              )}
-            </View>
-          </View>
-          <View style={[
-            styles.statusIndicator,
-            { backgroundColor: item.isAvailable ? currentColors.success : currentColors.error }
-          ]} />
-        </View>
-
-        <View style={styles.vehicleInfo}>
-          <Ionicons name="car" size={16} color={currentColors.textSecondary} />
-          <Text style={[styles.vehicleText, { color: currentColors.textSecondary }]}>
-            {item.vehicle_brand} {item.vehicle_model} • {item.vehicle_number}
-          </Text>
-        </View>
-
-        <View style={styles.cardActions}>
-          <TouchableOpacity style={[styles.actionButton, { borderColor: currentColors.border }]}>
-            <Ionicons name="chatbubble-outline" size={16} color={currentColors.textSecondary} />
-            <Text style={[styles.actionText, { color: currentColors.textSecondary }]}>
-              Чат
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[
-              styles.orderButton,
-              { backgroundColor: item.isAvailable ? currentColors.primary : currentColors.textTertiary }
-            ]}
-            onPress={() => handleDriverPress(item)}
-            disabled={!item.isAvailable}
-          >
-            <Text style={[styles.orderButtonText, { color: currentColors.card }]}>
-              {item.isAvailable ? 'Заказать' : 'Недоступен'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
+    Alert.alert(
+      'Удалить водителей',
+      'Удалить выбранных водителей из списка?',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            setDrivers(prev => prev.filter(d => !selectedIds.has(d.id)));
+            setSelectionMode(false);
+            setSelectedIds(new Set());
+          }
+        }
+      ]
     );
   };
 
-  const renderFilterButton = (filter: DriverFilter) => (
-    <TouchableOpacity
-      key={filter.id}
-      style={[
-        styles.filterButton,
-        { 
-          backgroundColor: filter.active ? currentColors.primary : currentColors.surface,
-          borderColor: currentColors.border
+  const toggleFavorite = (driverId: string) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(driverId)) next.delete(driverId); else next.add(driverId);
+      return next;
+    });
+  };
+
+  const deleteDriver = (driverId: string) => {
+    Alert.alert(
+      'Удалить водителя',
+      'Удалить водителя из списка?',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: () => {
+            setDrivers(prev => prev.filter(driver => driver.id !== driverId));
+          }
         }
-      ]}
-      onPress={() => handleFilterToggle(filter.id)}
-    >
-      <Ionicons 
-        name={filter.icon as keyof typeof Ionicons.glyphMap} 
-        size={16} 
-        color={filter.active ? currentColors.card : currentColors.textSecondary} 
+      ]
+    );
+  };
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <Ionicons
+        name="people-outline"
+        size={64}
+        color={isDark ? '#6B7280' : '#9CA3AF'}
       />
-      <Text style={[
-        styles.filterText,
-        { color: filter.active ? currentColors.card : currentColors.textSecondary }
-      ]}>
-        {filter.label}
+      <Text style={styles.emptyStateTitle}>
+        {loading ? 'Загрузка водителей...' : 'Нет водителей'}
       </Text>
-    </TouchableOpacity>
+      {!loading && (
+        <Text style={styles.emptyStateSubtitle}>
+          Водители появятся здесь после загрузки
+        </Text>
+      )}
+    </View>
   );
 
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+  const onListScrollBegin = (_e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    closeOpenSwipe();
+  };
 
-      {/* Header */}
-      <Animated.View style={[
-        styles.header,
-        { backgroundColor: currentColors.card, opacity: fadeAnim }
-      ]}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Ionicons name="arrow-back" size={24} color={currentColors.text} />
-        </TouchableOpacity>
-        
-        <Text style={[styles.title, { color: currentColors.text }]}>
-          Водители ({filteredDrivers.length})
-        </Text>
-        
+
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Водители</Text>
         <View style={styles.headerActions}>
-          <TouchableOpacity 
-            style={styles.selectButton}
-            onPress={handleSelectionMode}
+          <TouchableOpacity
+            accessibilityLabel="Уведомления"
+            onPress={() => setNotificationsModalVisible(true)}
+            style={styles.filterButton}
           >
-            <Ionicons 
-              name={isSelectionMode ? "checkmark-circle" : "checkmark-circle-outline"} 
-              size={24} 
-              color={isSelectionMode ? currentColors.primary : currentColors.text} 
+            <Ionicons
+              name="notifications-outline"
+              size={22}
+              color={isDark ? '#F9FAFB' : '#111827'}
             />
           </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.menuButton} onPress={handleAdvancedFilters}>
-            <Ionicons name="options" size={24} color={currentColors.text} />
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-
-      {/* Selection Actions */}
-      {isSelectionMode && selectedDrivers.size > 0 && (
-        <View style={[styles.selectionActions, { backgroundColor: currentColors.card }]}>
-          <TouchableOpacity 
-            style={styles.selectAllButton}
-            onPress={handleSelectAll}
-          >
-            <Text style={[styles.selectAllText, { color: currentColors.primary }]}>
-              {selectedDrivers.size === filteredDrivers.length ? 'Снять выбор' : 'Выбрать все'}
-            </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.bookButton, { backgroundColor: currentColors.primary }]}
-            onPress={handleBookSelected}
-          >
-            <Text style={[styles.bookButtonText, { color: currentColors.card }]}>
-              Забронировать ({selectedDrivers.size})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Search */}
-      <View style={[styles.searchContainer, { backgroundColor: currentColors.card }]}>
-        <View style={[styles.searchInputContainer, { backgroundColor: currentColors.surface }]}>
-          <Ionicons name="search" size={20} color={currentColors.textSecondary} />
-          <TextInput
-            style={[styles.searchInput, { color: currentColors.text }]}
-            placeholder="Поиск водителей..."
-            placeholderTextColor={currentColors.textSecondary}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
         </View>
       </View>
 
-      {/* Filters */}
-      <View style={[styles.filtersContainer, { backgroundColor: currentColors.card }]}>
-        <FlatList
-          data={filters}
-          renderItem={({ item }) => renderFilterButton(item)}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filtersList}
+      <View style={styles.searchContainer}>
+        <Ionicons name="search" size={20} color={isDark ? '#9CA3AF' : '#6B7280'} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Поиск водителей..."
+          placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <Ionicons name="close-circle" size={20} color={isDark ? '#9CA3AF' : '#6B7280'} />
+          </TouchableOpacity>
+        )}
       </View>
 
-      {/* Advanced Filters */}
-      {showAdvancedFilters && (
-        <Animated.View style={[styles.advancedFilters, { backgroundColor: currentColors.card }]}>
-          <Text style={[styles.advancedFiltersTitle, { color: currentColors.text }]}>
-            Дополнительные фильтры
-          </Text>
-          <View style={styles.advancedFiltersContent}>
-            <TouchableOpacity style={styles.advancedFilterItem}>
-              <Ionicons name="star" size={16} color={currentColors.textSecondary} />
-              <Text style={[styles.advancedFilterText, { color: currentColors.textSecondary }]}>
-                Рейтинг от 4.0
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.advancedFilterItem}>
-              <Ionicons name="time" size={16} color={currentColors.textSecondary} />
-              <Text style={[styles.advancedFilterText, { color: currentColors.textSecondary }]}>
-                Время ожидания
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.advancedFilterItem}>
-              <Ionicons name="car-sport" size={16} color={currentColors.textSecondary} />
-              <Text style={[styles.advancedFilterText, { color: currentColors.textSecondary }]}>
-                Тип автомобиля
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      )}
-
-      {/* Drivers List */}
       <FlatList
         data={filteredDrivers}
-        renderItem={renderDriverCard}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="people-outline" size={64} color={currentColors.textSecondary} />
-            <Text style={[styles.emptyText, { color: currentColors.textSecondary }]}>
-              Водители не найдены
-            </Text>
-            <Text style={[styles.emptySubtext, { color: currentColors.textTertiary }]}>
-              Попробуйте изменить фильтры или поисковый запрос
-            </Text>
-          </View>
-        }
+        renderItem={renderDriverItem}
+        contentContainerStyle={styles.driversList}
+        ListEmptyComponent={renderEmptyState}
+        refreshing={loading}
+        onRefresh={loadDrivers}
+        initialNumToRender={10}
+        windowSize={10}
+        removeClippedSubviews
+        onScrollBeginDrag={onListScrollBegin}
       />
+
+      {selectionMode && (
+        <View style={styles.actionButtonsContainer}>
+          <View style={styles.actionButtonsRow}>
+            <TouchableOpacity
+              style={[styles.actionButton, styles.selectAllButton]}
+              onPress={selectAll}
+            >
+              <Text style={styles.selectAllButtonText}>
+                {selectedIds.size === filteredDrivers.length ? 'Снять выбор' : 'Выбрать все'}
+              </Text>
+            </TouchableOpacity>
+            {selectedIds.size > 0 && (
+              <TouchableOpacity
+                style={[styles.actionButton, styles.bookButton]}
+                onPress={bookSelected}
+              >
+                <Text style={styles.bookButtonText}>
+                  Забронировать ({selectedIds.size})
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      )}
+
+      <NotificationsModal
+        visible={notificationsModalVisible}
+        onClose={() => setNotificationsModalVisible(false)}
+      />
+
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.lg,
-    paddingVertical: SIZES.md,
-    ...SHADOWS.light.medium,
-  },
-  backButton: {
-    padding: SIZES.sm,
-  },
-  title: {
-    fontSize: SIZES.fontSize.xl,
-    fontWeight: '600',
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SIZES.sm,
-  },
-  selectButton: {
-    padding: SIZES.sm,
-  },
-  menuButton: {
-    padding: SIZES.sm,
-  },
-  selectionActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.lg,
-    paddingVertical: SIZES.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  selectAllButton: {
-    padding: SIZES.sm,
-  },
-  selectAllText: {
-    fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
-  },
-  bookButton: {
-    paddingHorizontal: SIZES.md,
-    paddingVertical: SIZES.sm,
-    borderRadius: SIZES.radius.md,
-  },
-  bookButtonText: {
-    fontSize: SIZES.fontSize.sm,
-    fontWeight: '600',
-  },
-  searchContainer: {
-    paddingHorizontal: SIZES.lg,
-    paddingVertical: SIZES.md,
-    ...SHADOWS.light.small,
-  },
-  searchInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: SIZES.radius.lg,
-    paddingHorizontal: SIZES.md,
-    paddingVertical: SIZES.sm,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: SIZES.sm,
-    fontSize: SIZES.fontSize.md,
-  },
-  filtersContainer: {
-    paddingHorizontal: SIZES.lg,
-    paddingVertical: SIZES.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  filtersList: {
-    gap: SIZES.sm,
-  },
-  filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: SIZES.md,
-    paddingVertical: SIZES.sm,
-    borderRadius: SIZES.radius.md,
-    borderWidth: 1,
-    marginRight: SIZES.sm,
-  },
-  filterText: {
-    fontSize: SIZES.fontSize.sm,
-    fontWeight: '500',
-    marginLeft: SIZES.xs,
-  },
-  advancedFilters: {
-    paddingHorizontal: SIZES.lg,
-    paddingVertical: SIZES.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.light.border,
-  },
-  advancedFiltersTitle: {
-    fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
-    marginBottom: SIZES.sm,
-  },
-  advancedFiltersContent: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: SIZES.sm,
-  },
-  advancedFilterItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: SIZES.sm,
-    paddingVertical: SIZES.xs,
-    borderRadius: SIZES.radius.sm,
-    backgroundColor: colors.light.background,
-    gap: SIZES.xs,
-  },
-  advancedFilterText: {
-    fontSize: SIZES.fontSize.sm,
-  },
-  listContainer: {
-    padding: SIZES.lg,
-  },
-  driverCard: {
-    borderRadius: SIZES.radius.lg,
-    padding: SIZES.lg,
-    marginBottom: SIZES.md,
-    ...SHADOWS.light.medium,
-  },
-  selectionCheckbox: {
-    position: 'absolute',
-    top: SIZES.sm,
-    right: SIZES.sm,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.light.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1,
-  },
-  driverHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: SIZES.md,
-  },
-  driverAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.light.primary + '20',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: SIZES.md,
-  },
-  avatarText: {
-    fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
-  },
-  driverInfo: {
-    flex: 1,
-  },
-  driverName: {
-    fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
-    marginBottom: SIZES.xs,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SIZES.xs,
-  },
-  rating: {
-    fontSize: SIZES.fontSize.sm,
-    fontWeight: '500',
-  },
-  premiumBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFD70020',
-    paddingHorizontal: SIZES.xs,
-    paddingVertical: 2,
-    borderRadius: SIZES.radius.xs,
-    gap: 2,
-  },
-  premiumText: {
-    fontSize: SIZES.fontSize.xs,
-    color: '#FFD700',
-    fontWeight: '600',
-  },
-  statusIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  vehicleInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: SIZES.md,
-    gap: SIZES.xs,
-  },
-  vehicleText: {
-    fontSize: SIZES.fontSize.sm,
-  },
-  cardActions: {
-    flexDirection: 'row',
-    gap: SIZES.sm,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: SIZES.sm,
-    borderRadius: SIZES.radius.md,
-    borderWidth: 1,
-    gap: SIZES.xs,
-  },
-  actionText: {
-    fontSize: SIZES.fontSize.sm,
-    fontWeight: '500',
-  },
-  orderButton: {
-    flex: 2,
-    alignItems: 'center',
-    paddingVertical: SIZES.sm,
-    borderRadius: SIZES.radius.md,
-  },
-  orderButtonText: {
-    fontSize: SIZES.fontSize.sm,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: SIZES.xl,
-  },
-  emptyText: {
-    fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
-    marginTop: SIZES.md,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: SIZES.fontSize.sm,
-    marginTop: SIZES.xs,
-    textAlign: 'center',
-  },
-});
 
 export default DriversScreen;
