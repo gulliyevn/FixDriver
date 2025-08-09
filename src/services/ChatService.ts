@@ -122,6 +122,24 @@ export class ChatService {
     return deleted;
   }
 
+  clearChat(chatId: string): void {
+    // Удаляем только сообщения внутри чата, сам чат сохраняем
+    this.messages = this.messages.filter(message => message.chatId !== chatId);
+    const chat = this.chats.find(c => c.id === chatId);
+    if (chat) {
+      chat.lastMessage = undefined;
+      chat.unreadCount = 0;
+      chat.updatedAt = new Date().toISOString();
+    }
+    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
+    if (chatPreview) {
+      chatPreview.lastMessage = '';
+      chatPreview.unreadCount = 0;
+      chatPreview.lastMessageTime = new Date();
+    }
+    this.notifySubscribers();
+  }
+
   subscribe(callback: (chats: ChatPreview[]) => void): () => void {
     this.subscribers.push(callback);
     return () => {
@@ -242,6 +260,11 @@ export class ChatService {
   static async deleteChat(chatId: string): Promise<boolean> {
     const instance = ChatService.getInstance();
     return instance.deleteChat(chatId);
+  }
+
+  static async clearChat(chatId: string): Promise<void> {
+    const instance = ChatService.getInstance();
+    instance.clearChat(chatId);
   }
 }
 

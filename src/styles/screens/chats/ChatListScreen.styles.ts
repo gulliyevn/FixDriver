@@ -332,9 +332,10 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     },
     swipeAction: {
       width: 100,
-      height: 72, // Высота точно как у чат-бокса
+      height: 70,
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: 8, // смещаем саму кнопку чуть вверх
       borderRadius: SIZES.radius.lg,
     },
     swipeActionText: {

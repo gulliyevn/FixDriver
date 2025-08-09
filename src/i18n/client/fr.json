@@ -35,7 +35,10 @@
     "camera": "Caméra",
     "gallery": "Galerie",
     "document": "Document",
-    "location": "Emplacement"
+    "location": "Emplacement",
+    "callOptions": "Choisir le type d'appel",
+    "internetCall": "Appel Internet",
+    "networkCall": "Appel via réseau"
   },
   "notifications": {
     "title": "Notifications",

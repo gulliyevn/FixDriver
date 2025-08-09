@@ -35,7 +35,10 @@
     "camera": "Camera",
     "gallery": "Gallery",
     "document": "Document",
-    "location": "Location"
+    "location": "Location",
+    "callOptions": "Choose call type",
+    "internetCall": "Internet call",
+    "networkCall": "Cellular call"
   },
   "notifications": {
     "title": "Notifications",

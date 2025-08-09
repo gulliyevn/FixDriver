@@ -35,7 +35,10 @@
     "camera": "Камера",
     "gallery": "Галерея",
     "document": "Документ",
-    "location": "Местоположение"
+    "location": "Местоположение",
+    "callOptions": "Выберите тип звонка",
+    "internetCall": "Звонок через интернет",
+    "networkCall": "Звонок по сети"
   },
   "notifications": {
     "title": "Уведомления",

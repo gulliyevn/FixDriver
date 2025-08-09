@@ -35,7 +35,10 @@
     "camera": "Kamera",
     "gallery": "Qalereya",
     "document": "Sənəd",
-    "location": "Məkan"
+    "location": "Məkan",
+    "callOptions": "Zəng növünü seçin",
+    "internetCall": "İnternet zəngi",
+    "networkCall": "Şəbəkə zəngi"
   },
   "notifications": {
     "title": "Bildirişlər",

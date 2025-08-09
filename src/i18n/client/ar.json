@@ -35,7 +35,10 @@
     "camera": "الكاميرا",
     "gallery": "المعرض",
     "document": "المستند",
-    "location": "الموقع"
+    "location": "الموقع",
+    "callOptions": "اختر نوع الاتصال",
+    "internetCall": "مكالمة عبر الإنترنت",
+    "networkCall": "مكالمة عبر الشبكة"
   },
   "notifications": {
     "title": "الإشعارات",

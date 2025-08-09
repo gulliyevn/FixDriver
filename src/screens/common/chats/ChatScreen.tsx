@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { SafeAreaView, View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { SafeAreaView, View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Animated, Easing, Pressable } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -12,11 +14,22 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const { t } = useLanguage();
   const chatId = route?.params?.driverId || 'chat_1';
   const chatName = route?.params?.driverName || t('client.chat.title');
+  const driverCar = route?.params?.driverCar as string | undefined;
+  const driverNumber = route?.params?.driverNumber as string | undefined;
+  const headerDetails = [driverCar, driverNumber].filter(Boolean).join(' · ');
   const [messages, setMessages] = useState<any[]>([]);
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(true);
   const [showAttachments, setShowAttachments] = useState(false);
+  const [attachmentMenuLeft, setAttachmentMenuLeft] = useState<number | null>(null);
+  const [showCallSheet, setShowCallSheet] = useState(false);
+  const callSheetAnim = useRef(new Animated.Value(0)).current; // 0 hidden, 1 shown
+  const [showProfileSheet, setShowProfileSheet] = useState(false);
+  const profileSheetAnim = useRef(new Animated.Value(0)).current;
+  const [showActionsSheet, setShowActionsSheet] = useState(false);
+  const actionsSheetAnim = useRef(new Animated.Value(0)).current;
   const listRef = useRef<FlatList>(null);
+  const toolbarRef = useRef<View>(null);
 
   useEffect(() => {
     loadMessages();
@@ -43,7 +56,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
       setText('');
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
     } catch (error) {
-      Alert.alert(t('chat.messageError'), t('chat.messageError'));
+      Alert.alert(t('client.chat.messageError'), t('client.chat.messageError'));
     }
   };
 
@@ -89,63 +102,260 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
         style={styles.emptyStateIcon}
       />
       <Text style={styles.emptyStateTitle}>
-        {loading ? t('chat.loadingMessages') : t('chat.noMessages')}
+        {loading ? t('client.chat.loadingMessages') : t('client.chat.noMessages')}
       </Text>
       {!loading && (
         <Text style={styles.emptyStateSubtitle}>
-          {t('chat.startConversation')}
+          {t('client.chat.startConversation')}
         </Text>
       )}
     </View>
   );
 
-  const renderTypingIndicator = () => (
-    <View style={styles.typingIndicator}>
-      <Text style={styles.typingText}>{t('chat.typing')}</Text>
+  // Typing indicator removed per design
+
+  const renderAttachmentMenu = () => (
+    <View style={[styles.attachmentMenu, attachmentMenuLeft != null ? { left: attachmentMenuLeft } : undefined]}>
+      <TouchableOpacity style={styles.attachmentOption} onPress={attachFromCamera}>
+        <Ionicons name="camera" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+        <Text style={styles.attachmentOptionText}>{t('client.chat.camera')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.attachmentOption} onPress={attachFromGallery}>
+        <Ionicons name="images" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+        <Text style={styles.attachmentOptionText}>{t('client.chat.gallery')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.attachmentOption} onPress={attachDocument}>
+        <Ionicons name="document" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+        <Text style={styles.attachmentOptionText}>{t('client.chat.document')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.attachmentOption} onPress={attachLocation}>
+        <Ionicons name="location" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+        <Text style={styles.attachmentOptionText}>{t('client.chat.location')}</Text>
+      </TouchableOpacity>
     </View>
   );
 
-  const renderAttachmentMenu = () => (
-    <View style={styles.attachmentMenu}>
-      <TouchableOpacity style={styles.attachmentOption}>
-        <Ionicons name="camera" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-        <Text style={styles.attachmentOptionText}>{t('chat.camera')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.attachmentOption}>
-        <Ionicons name="images" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-        <Text style={styles.attachmentOptionText}>{t('chat.gallery')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.attachmentOption}>
-        <Ionicons name="document" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-        <Text style={styles.attachmentOptionText}>{t('chat.document')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.attachmentOption}>
-        <Ionicons name="location" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-        <Text style={styles.attachmentOptionText}>{t('chat.location')}</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const pushMessageAndScroll = (msg: any) => {
+    setMessages((prev) => [...prev, msg]);
+    setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
+  };
+
+  const attachFromCamera = async () => {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(t('errors.permissionDenied'));
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const msg = await ChatService.getInstance().sendMessage(
+          chatId,
+          t('client.chat.camera'),
+          'image',
+          { imageUrl: asset.uri, fileSize: (asset as any).fileSize }
+        );
+        pushMessageAndScroll(msg);
+        setShowAttachments(false);
+      }
+    } catch (e) {
+      Alert.alert(t('errors.error'));
+    }
+  };
+
+  const attachFromGallery = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(t('errors.permissionDenied'));
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const msg = await ChatService.getInstance().sendMessage(
+          chatId,
+          t('client.chat.gallery'),
+          'image',
+          { imageUrl: asset.uri, fileSize: (asset as any).fileSize }
+        );
+        pushMessageAndScroll(msg);
+        setShowAttachments(false);
+      }
+    } catch (e) {
+      Alert.alert(t('errors.error'));
+    }
+  };
+
+  const attachDocument = async () => {
+    Alert.alert(t('common.featureSoon'));
+  };
+
+  const attachLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(t('errors.permissionDenied'));
+        return;
+      }
+      const pos = await Location.getCurrentPositionAsync({});
+      const msg = await ChatService.getInstance().sendMessage(
+        chatId,
+        t('client.chat.location'),
+        'location',
+        {
+          location: {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          },
+        }
+      );
+      pushMessageAndScroll(msg);
+      setShowAttachments(false);
+    } catch (e) {
+      Alert.alert(t('client.map.locationError'));
+    }
+  };
+
+  const openCallSheet = () => {
+    setShowCallSheet(true);
+    Animated.timing(callSheetAnim, {
+      toValue: 1,
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeCallSheet = () => {
+    Animated.timing(callSheetAnim, {
+      toValue: 0,
+      duration: 180,
+      easing: Easing.in(Easing.cubic),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) {
+        setShowCallSheet(false);
+      }
+    });
+  };
+
+  const openProfileSheet = () => {
+    setShowProfileSheet(true);
+    Animated.timing(profileSheetAnim, {
+      toValue: 1,
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeProfileSheet = () => {
+    Animated.timing(profileSheetAnim, {
+      toValue: 0,
+      duration: 180,
+      easing: Easing.in(Easing.cubic),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) setShowProfileSheet(false);
+    });
+  };
+
+  const openActionsSheet = () => {
+    setShowActionsSheet(true);
+    Animated.timing(actionsSheetAnim, {
+      toValue: 1,
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeActionsSheet = () => {
+    Animated.timing(actionsSheetAnim, {
+      toValue: 0,
+      duration: 180,
+      easing: Easing.in(Easing.cubic),
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) setShowActionsSheet(false);
+    });
+  };
+
+  const handleClearChat = async () => {
+    await ChatService.clearChat(chatId);
+    setMessages([]);
+    closeActionsSheet();
+  };
+
+  const handleExportChat = async () => {
+    try {
+      const msgs = await ChatService.getMessages(chatId);
+      const text = msgs.map(m => `${ChatService.formatMessageTime(m.timestamp)}: ${m.content}`).join('\n');
+      Alert.alert(t('client.chat.title'), t('common.success'));
+    } catch {
+      Alert.alert(t('errors.error'));
+    } finally {
+      closeActionsSheet();
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    await ChatService.deleteChat(chatId);
+    closeActionsSheet();
+  };
+
+  const handleReport = () => {
+    Alert.alert(t('client.chat.title'), t('common.success'));
+    closeActionsSheet();
+  };
+
+  const handleBlock = () => {
+    Alert.alert(t('client.chat.title'), t('common.success'));
+    closeActionsSheet();
+  };
+
+  const handleInternetCall = () => {
+    // TODO: integrate VoIP/Internet call provider here
+    Alert.alert(t('client.chat.internetCall'));
+    closeCallSheet();
+  };
+
+  const handleNetworkCall = () => {
+    // TODO: integrate native dialer here
+    Alert.alert(t('client.chat.networkCall'));
+    closeCallSheet();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerAvatar}>
+        <View style={styles.header}>
+        <TouchableOpacity style={styles.headerAvatar} onPress={openProfileSheet} activeOpacity={0.8}>
           <Ionicons name="person" size={20} color="#fff" />
-        </View>
-        <View style={styles.headerInfo}>
+          <View style={route?.params?.driverStatus === 'online' ? styles.headerOnlineIndicator : styles.headerOfflineIndicator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.headerInfo} onPress={openProfileSheet} activeOpacity={0.8}>
           <Text style={styles.headerName}>{chatName || t('client.chat.title')}</Text>
-          <Text style={styles.headerStatus}>
-            {route?.params?.driverStatus === 'online' ? t('chat.online') : t('chat.offline')}
-          </Text>
-        </View>
+          {headerDetails ? (
+            <Text style={styles.headerStatus}>{headerDetails}</Text>
+          ) : null}
+        </TouchableOpacity>
         <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.headerButton}>
+          <TouchableOpacity style={styles.headerButton} onPress={openCallSheet}>
             <Ionicons name="call" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton}>
-            <Ionicons name="videocam" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton}>
+          <TouchableOpacity style={styles.headerButton} onPress={openActionsSheet}>
             <Ionicons name="ellipsis-vertical" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
           </TouchableOpacity>
         </View>
@@ -158,41 +368,225 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.messagesContent}
         ListEmptyComponent={renderEmptyState}
-        ListFooterComponent={renderTypingIndicator}
         refreshing={loading}
         onRefresh={loadMessages}
       />
 
-      <View style={styles.inputContainer}>
-        <View style={styles.inputRow}>
-          <TouchableOpacity 
-            style={styles.toolbarButton}
-            onPress={() => setShowAttachments(!showAttachments)}
-          >
-            <Ionicons name="add" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
-          </TouchableOpacity>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        style={styles.inputAvoider}
+      >
+        <View style={styles.inputContainer}>
+          <View style={styles.inputRow}>
+            <TouchableOpacity 
+              ref={toolbarRef}
+              style={styles.toolbarButton}
+              onPress={() => {
+                if (!showAttachments) {
+                  // measure X to align menu vertically with the button
+                  requestAnimationFrame(() => {
+                    try {
+                      // @ts-ignore measureInWindow exists at runtime
+                      toolbarRef.current?.measure?.((x: number, y: number, width: number, height: number, pageX: number) => {
+                        // align left edge to match input container horizontal margin (SIZES.lg) plus button's offset inside container
+                        // Since container has marginHorizontal SIZES.lg and toolbar button is at the very left of the row,
+                        // we align menu to the same pageX as the button.
+                        setAttachmentMenuLeft(pageX);
+                      });
+                    } catch {}
+                  });
+                }
+                setShowAttachments(!showAttachments);
+              }}
+            >
+              <Ionicons name="add" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
+            </TouchableOpacity>
+            
+            <TextInput
+              style={styles.textInput}
+              value={text}
+              onChangeText={setText}
+              placeholder={t('components.input.message')}
+              placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
+              multiline
+              maxLength={1000}
+            />
+            
+            <TouchableOpacity 
+              style={[styles.sendButton, !text.trim() && { opacity: 0.5 }]} 
+              onPress={send} 
+              disabled={!text.trim()}
+            >
+              <Ionicons name="send" size={18} style={styles.sendIcon as any} />
+            </TouchableOpacity>
+          </View>
           
-          <TextInput
-            style={styles.textInput}
-            value={text}
-            onChangeText={setText}
-            placeholder={t('components.input.message')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
-            multiline
-            maxLength={1000}
-          />
-          
-          <TouchableOpacity 
-            style={[styles.sendButton, !text.trim() && { opacity: 0.5 }]} 
-            onPress={send} 
-            disabled={!text.trim()}
-          >
-            <Ionicons name="send" size={18} style={styles.sendIcon as any} />
-          </TouchableOpacity>
+          {showAttachments && renderAttachmentMenu()}
         </View>
-        
-        {showAttachments && renderAttachmentMenu()}
-      </View>
+      </KeyboardAvoidingView>
+
+      {showCallSheet && (
+        <View style={styles.callSheetOverlay}>
+          <Pressable style={styles.callSheetBackdrop} onPress={closeCallSheet} />
+          <Animated.View
+            style={[
+              styles.callSheetContainer,
+              {
+                transform: [
+                  {
+                    translateY: callSheetAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [300, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.callSheetClose} onPress={closeCallSheet} accessibilityLabel={t('common.close')}>
+              <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+            </TouchableOpacity>
+            <View style={styles.callSheetHandle} />
+            <Text style={styles.callSheetTitle}>{t('client.chat.callOptions')}</Text>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleInternetCall}>
+              <Ionicons name="wifi" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>{t('client.chat.internetCall')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleNetworkCall}>
+              <Ionicons name="call" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>{t('client.chat.networkCall')}</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      )}
+
+      {showProfileSheet && (
+        <View style={styles.callSheetOverlay}>
+          <Pressable style={styles.callSheetBackdrop} onPress={closeProfileSheet} />
+          <Animated.View
+            style={[
+              styles.callSheetContainer,
+              {
+                transform: [
+                  {
+                    translateY: profileSheetAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [300, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.callSheetClose} onPress={closeProfileSheet} accessibilityLabel={t('common.close')}>
+              <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+            </TouchableOpacity>
+            <View style={styles.callSheetHandle} />
+            <View style={styles.profileHeaderRow}>
+              <View style={styles.profileAvatarLarge}>
+                <Ionicons name="person" size={28} color="#fff" />
+                <View style={route?.params?.driverStatus === 'online' ? styles.headerOnlineIndicator : styles.headerOfflineIndicator} />
+              </View>
+              <View style={styles.profileInfo}>
+                <View style={styles.profileNameRow}>
+                  <Text style={styles.profileName}>{chatName}</Text>
+                  <View style={styles.profileRating}>
+                    <Text style={styles.profileRatingText}>{route?.params?.driverRating || '4.8'}</Text>
+                  </View>
+                </View>
+                <Text style={styles.profileSubline}>
+                  {[driverCar, driverNumber].filter(Boolean).join(' · ')}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.profileDivider} />
+            <View style={styles.routeList}>
+              <View style={styles.routeItem}>
+                <View style={styles.routeLeft}>
+                  <View style={styles.dotGreen} />
+                  <Text style={styles.routeText}>{t('client.paymentHistory.mock.tripToCityCenterTitle')}</Text>
+                </View>
+                <Text style={styles.routeTime}>08:00</Text>
+              </View>
+              <View style={styles.routeItem}>
+                <View style={styles.routeLeft}>
+                  <View style={styles.dotBlue} />
+                  <Text style={styles.routeText}>Офис БЦ Port Baku</Text>
+                </View>
+                <Text style={styles.routeTime}>09:15</Text>
+              </View>
+              <View style={styles.routeItem}>
+                <View style={styles.routeLeft}>
+                  <Ionicons name="location" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
+                  <Text style={styles.routeText}>Торговый центр 28 Mall</Text>
+                </View>
+                <Text style={styles.routeTime}>18:30</Text>
+              </View>
+            </View>
+            <View style={styles.bottomInfoRow}>
+              <View style={styles.infoItem}>
+                <Ionicons name="calendar" size={18} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                <Text style={styles.infoText}>пн, ср, пт</Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Ionicons name="diamond" size={18} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                <Text style={styles.infoText}>{t('premium.packages.premium')}</Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Text style={styles.infoText}>3 остановок</Text>
+              </View>
+            </View>
+          </Animated.View>
+        </View>
+      )}
+
+      {showActionsSheet && (
+        <View style={styles.callSheetOverlay}>
+          <Pressable style={styles.callSheetBackdrop} onPress={closeActionsSheet} />
+          <Animated.View
+            style={[
+              styles.callSheetContainer,
+              {
+                transform: [
+                  {
+                    translateY: actionsSheetAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [300, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.callSheetClose} onPress={closeActionsSheet} accessibilityLabel={t('common.close')}>
+              <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+            </TouchableOpacity>
+            <View style={styles.callSheetHandle} />
+            <Text style={styles.callSheetTitle}>{t('client.chat.title')}</Text>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleClearChat}>
+              <Ionicons name="trash-outline" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>Clear chat</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleExportChat}>
+              <Ionicons name="download-outline" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>Export chat</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleDeleteChat}>
+              <Ionicons name="trash" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>{t('client.chat.deleteChat')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleReport}>
+              <Ionicons name="alert-circle-outline" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>Report</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleBlock}>
+              <Ionicons name="hand-left-outline" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>Block</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
