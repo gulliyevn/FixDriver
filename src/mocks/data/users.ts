@@ -83,6 +83,26 @@ export const mockDrivers: Driver[] = [
     avatar: MOCK_AVATARS.DRIVER_3,
     location: MOCK_LOCATIONS.BAKU_EAST,
   },
+  {
+    id: 'driver_4',
+    email: 'artur.mamedov@example.com',
+    first_name: 'Артур',
+    last_name: 'Мамедов',
+    phone_number: '+994501122334',
+    license_number: 'GH901234',
+    license_expiry_date: '2026-09-20',
+    vehicle_brand: 'Hyundai',
+    vehicle_model: 'Elantra',
+    vehicle_number: '10-DD-012',
+    vehicle_year: 2022,
+    status: DriverStatus.ACTIVE,
+    rating: 4.7,
+    created_at: '2024-01-04T00:00:00Z',
+    updated_at: '2024-01-15T16:20:00Z',
+    isAvailable: true,
+    avatar: MOCK_AVATARS.DRIVER_1, // Переиспользуем аватар
+    location: MOCK_LOCATIONS.BAKU_SOUTH,
+  },
 ];
 
 // Статистика водителей
@@ -119,5 +139,16 @@ export const mockDriverStats: DriverStats[] = [
     online_hours_today: 10.1,
     online_hours_week: 58.7,
     online_hours_month: 245.3,
+  },
+  {
+    total_trips: 127,
+    completed_trips: 122,
+    cancelled_trips: 5,
+    total_earnings: 9800.40,
+    average_rating: 4.7,
+    total_ratings: 115,
+    online_hours_today: 7.8,
+    online_hours_week: 42.5,
+    online_hours_month: 165.2,
   },
 ]; 

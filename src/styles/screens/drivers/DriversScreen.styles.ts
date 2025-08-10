@@ -8,12 +8,17 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       flex: 1,
       backgroundColor: colors.background,
     },
+    safeAreaTop: {
+      backgroundColor: colors.background,
+      paddingTop: 0, // Убираем лишние отступы
+    },
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: SIZES.xl,
       paddingVertical: SIZES.lg,
+      paddingBottom: SIZES.lg + 6,
       backgroundColor: colors.background,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
@@ -23,8 +28,50 @@ export const createDriversScreenStyles = (isDark: boolean) => {
           alignItems: 'center',
           gap: SIZES.md,
         },
+        filterIconContainer: {
+          padding: SIZES.xs,
+        },
         filterButton: {
           padding: SIZES.xs,
+        },
+        headerTop: {
+          flexDirection: 'column',
+          width: '100%',
+        },
+        headerRow: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+        },
+        filtersWrapper: {
+          marginTop: SIZES.sm,
+          zIndex: 1,
+        },
+        filtersContainer: {
+          maxHeight: 40,
+        },
+        filtersContent: {
+          paddingHorizontal: SIZES.sm,
+          gap: SIZES.xs,
+        },
+        filterChip: {
+          backgroundColor: colors.primary + '20',
+          borderRadius: 20,
+          paddingHorizontal: SIZES.md,
+          paddingVertical: SIZES.xs,
+          marginHorizontal: SIZES.xs / 2,
+          borderWidth: 1,
+          borderColor: colors.primary + '40',
+        },
+        filterChipText: {
+          fontSize: SIZES.fontSize.sm,
+          color: colors.primary,
+          fontWeight: '600',
+        },
+        filtersSection: {
+          overflow: 'hidden',
+          backgroundColor: colors.background,
         },
     headerTitle: {
       fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
@@ -51,20 +98,39 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       fontSize: SIZES.fontSize.md,
       color: colors.text,
     },
-    driversList: {
+    flatListContainer: {
       flex: 1,
+    },
+    driversList: {
       paddingVertical: SIZES.sm,
+      paddingBottom: 20, // Уменьшаем отступ для infinite scroll
+    },
+    loadingFooter: {
+      paddingVertical: SIZES.lg,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    loadingText: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      fontStyle: 'italic',
     },
     driverItem: {
       flexDirection: 'column',
-      marginBottom: SIZES.sm,
+      marginBottom: SIZES.lg, // Увеличиваем отступ между элементами
       marginHorizontal: SIZES.xl,
-      padding: SIZES.lg,
-      borderRadius: SIZES.radius.lg,
+      paddingHorizontal: SIZES.lg,
+      paddingVertical: SIZES.lg + 4,
+      borderRadius: SIZES.radius.lg + 2,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium), // Увеличиваем тень
+      // Делаем каждый элемент отдельным
+      alignSelf: 'stretch',
+      flex: 0, // Важно: убираем flex чтобы элементы не растягивались
+      width: undefined,
+      height: undefined,
     },
     driverHeader: {
       flexDirection: 'row',
@@ -90,8 +156,13 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       marginTop: 2,
     },
     expandButton: {
-      padding: 4,
+      padding: 8,
       marginLeft: SIZES.xs,
+      borderRadius: SIZES.radius.sm,
+      backgroundColor: 'transparent',
+    },
+    expandableContent: {
+      overflow: 'hidden',
     },
     tripsContainer: {
       marginVertical: SIZES.xs + 6,
@@ -133,6 +204,7 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       marginTop: -SIZES.lg - 4,
       marginBottom: SIZES.xs + 6,
+      paddingHorizontal: SIZES.sm,
       paddingVertical: SIZES.xs + 6,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
@@ -207,7 +279,23 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       gap: SIZES.xs,
     },
+    stopsInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs / 2,
+    },
     stopsText: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      fontWeight: '500',
+    },
+    ballInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: SIZES.xs / 2,
+    },
+    ballText: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
       fontWeight: '500',
@@ -434,6 +522,74 @@ export const createDriversScreenStyles = (isDark: boolean) => {
     },
     deleteAction: {
       backgroundColor: '#EF4444', // Красный цвет для удаления
+    },
+    callSheetOverlay: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'flex-end',
+    },
+    callSheetBackdrop: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      backgroundColor: isDark ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.4)',
+    },
+    callSheetContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: SIZES.radius.xl,
+      borderTopRightRadius: SIZES.radius.xl,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingHorizontal: SIZES.lg,
+      paddingTop: SIZES.md,
+      paddingBottom: SIZES.xl,
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
+    callSheetClose: {
+      position: 'absolute',
+      top: SIZES.md,
+      right: SIZES.md,
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1,
+    },
+    callSheetHandle: {
+      width: 40,
+      height: 4,
+      backgroundColor: colors.border,
+      borderRadius: 2,
+      alignSelf: 'center',
+      marginBottom: SIZES.lg,
+    },
+    callSheetTitle: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: SIZES.lg,
+    },
+    callSheetOption: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: SIZES.md,
+      paddingHorizontal: SIZES.sm,
+      borderRadius: SIZES.radius.md,
+      marginBottom: SIZES.xs,
+    },
+    callSheetOptionText: {
+      marginLeft: SIZES.md,
+      fontSize: SIZES.fontSize.md,
+      fontWeight: '500',
+      color: colors.text,
     },
   });
 };

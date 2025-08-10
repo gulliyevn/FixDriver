@@ -13,6 +13,7 @@ export const MOCK_LOCATIONS = {
   BAKU_CENTER: { latitude: 40.3777, longitude: 49.8920 },
   BAKU_NORTH: { latitude: 40.3953, longitude: 49.8512 },
   BAKU_EAST: { latitude: 40.4093, longitude: 49.8671 },
+  BAKU_SOUTH: { latitude: 40.3601, longitude: 49.8350 },
 };
 
 // Цвета для статусов

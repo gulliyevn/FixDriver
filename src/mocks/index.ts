@@ -39,8 +39,7 @@ export * from './cardsMock';
 // Моки автомобилей
 export * from './carsMock';
 
-// Моки водителей
-export * from './driversMock';
+// Моки водителей удалены - используем данные из data/users.ts
 
 // Моки расписания
 export * from './scheduleMock';
