@@ -6,7 +6,7 @@ export { ChatListScreenStyles } from './screens/ChatListScreen.styles';
 export { DriversScreenStyles } from './screens/DriversScreen.styles';
 export { ChatScreenStyles } from './screens/ChatScreen.styles';
 export { ClientProfileScreenStyles } from './screens/ClientProfileScreen.styles';
-export { MapScreenStyles } from './screens/MapScreen.styles';
+
 
 // Component Styles
 export { ButtonStyles } from './components/Button.styles';

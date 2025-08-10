@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, TouchableOpacity, Animated, Easing } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Ionicons } from '@expo/vector-icons';
 import { MapService } from '../services/MapService';
 import { MapViewStyles, createMapViewStyles } from '../styles/components/MapView.styles';
 import { useTheme } from '../context/ThemeContext';
@@ -31,6 +32,17 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
   const styles = createMapViewStyles(isDark);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+  const buttonAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+  
   const [region, setRegion] = useState({
     latitude: initialLocation?.latitude || 40.3777,
     longitude: initialLocation?.longitude || 49.8920,
@@ -88,6 +100,55 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     }
   };
 
+  const handleExpandPress = () => {
+    const toValue = isExpanded ? 0 : 1;
+    setIsExpanded(!isExpanded);
+    
+    Animated.timing(rotateAnim, {
+      toValue,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    // Анимация появления/скрытия дополнительных кнопок
+    const animations = buttonAnimations.map((anim, index) => {
+      return Animated.timing(anim, {
+        toValue: isExpanded ? 0 : 1,
+        duration: 200,
+        delay: isExpanded ? 0 : index * 50, // Задержка для каскадного появления
+        useNativeDriver: true,
+      });
+    });
+
+    Animated.parallel(animations).start();
+  };
+
+  const handleZoomIn = () => {
+    if (mapRef.current) {
+      const newRegion = {
+        ...region,
+        latitudeDelta: region.latitudeDelta * 0.5,
+        longitudeDelta: region.longitudeDelta * 0.5,
+      };
+      
+      mapRef.current.animateToRegion(newRegion, 3500);
+      setRegion(newRegion);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapRef.current) {
+      const newRegion = {
+        ...region,
+        latitudeDelta: region.latitudeDelta * 2,
+        longitudeDelta: region.longitudeDelta * 2,
+      };
+      
+      mapRef.current.animateToRegion(newRegion, 3500);
+      setRegion(newRegion);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -97,7 +158,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         region={region}
         onPress={handleMapPress}
         showsUserLocation={true}
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
         showsCompass={true}
         showsScale={true}
         showsTraffic={true}
@@ -106,6 +167,167 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         showsIndoorLevelPicker={true}
         showsPointsOfInterest={true}
         mapType="standard"
+        customMapStyle={isDark ? [
+          {
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#242f3e"
+              }
+            ]
+          },
+          {
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#746855"
+              }
+            ]
+          },
+          {
+            "elementType": "labels.text.stroke",
+            "stylers": [
+              {
+                "color": "#242f3e"
+              }
+            ]
+          },
+          {
+            "featureType": "administrative.locality",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#d59563"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#d59563"
+              }
+            ]
+          },
+          {
+            "featureType": "poi.park",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#263c3f"
+              }
+            ]
+          },
+          {
+            "featureType": "poi.park",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#6b9a76"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#38414e"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "geometry.stroke",
+            "stylers": [
+              {
+                "color": "#212a37"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#9ca5b3"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#746855"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [
+              {
+                "color": "#1f2835"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#f3d19c"
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#2f3948"
+              }
+            ]
+          },
+          {
+            "featureType": "transit.station",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#d59563"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#17263c"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#515c6d"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+              {
+                "color": "#17263c"
+              }
+            ]
+          }
+        ] : undefined}
         userLocationPriority="high"
         userLocationUpdateInterval={5000}
         userLocationFastestInterval={2000}
@@ -139,6 +361,65 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
           />
         ))}
       </MapView>
+      
+      {/* Дополнительные кнопки */}
+      <View style={styles.additionalButtonsContainer}>
+        {buttonAnimations.map((anim, index) => (
+          <Animated.View
+            key={index}
+            style={{
+              opacity: anim,
+              transform: [{
+                translateY: anim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0]
+                })
+              }]
+            }}
+          >
+            <TouchableOpacity 
+              style={styles.additionalButton}
+              onPress={() => {
+                if (index === 4) handleZoomIn(); // add-outline
+                if (index === 5) handleZoomOut(); // remove-outline
+              }}
+            >
+              <Ionicons 
+                name={([
+                  "refresh-outline",
+                  "location-sharp",
+                  "locate-outline",
+                  "layers-outline",
+                  "add-outline",
+                  "remove-outline"
+                ] as const)[index]}
+                size={20} 
+                color={isDark ? '#F9FAFB' : '#111827'} 
+              />
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
+      </View>
+      
+      {/* Основная кнопка настроек */}
+      <View style={styles.expandButtonContainer}>
+        <TouchableOpacity style={styles.expandButton} onPress={handleExpandPress}>
+          <Animated.View style={{
+            transform: [{
+              rotate: rotateAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0deg', '180deg']
+              })
+            }]
+          }}>
+            <Ionicons 
+              name="settings-outline" 
+              size={24} 
+              color={isDark ? '#F9FAFB' : '#111827'} 
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
