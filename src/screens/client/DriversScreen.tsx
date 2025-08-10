@@ -435,7 +435,17 @@ const DriversScreen: React.FC = () => {
             
             <View style={styles.driverMainInfo}>
               <View style={styles.nameRatingRow}>
-                <Text style={styles.driverName}>{`${item.first_name} ${item.last_name}`}</Text>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.driverName}>{`${item.first_name} ${item.last_name}`}</Text>
+                  {favorites.has(item.id) && (
+                    <Ionicons 
+                      name="bookmark" 
+                      size={14} 
+                      color={isDark ? '#F9FAFB' : '#111827'} 
+                      style={styles.favoriteIcon}
+                    />
+                  )}
+                </View>
                 <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
               </View>
               <View style={styles.vehicleExpandRow}>
@@ -712,16 +722,16 @@ const DriversScreen: React.FC = () => {
           {
             paddingTop: filterExpandAnim.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 14]
+              outputRange: [8, 16] // 8 + 8
             }),
             paddingBottom: filterExpandAnim.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 6]
+              outputRange: [-2, 12] // -2 + 14
             })
           }
         ]}>
                     <View style={styles.headerTop}>
-            <View style={styles.headerRow}>
+            <View style={[styles.headerRow, { marginTop: 4 }]}>
               <Text style={styles.headerTitle}>Водители</Text>
               <View style={styles.headerActions}>
                 <TouchableOpacity 
@@ -750,40 +760,59 @@ const DriversScreen: React.FC = () => {
             </View>
             
             {/* Горизонтальный список фильтров внутри headerTop */}
-            {filterExpanded && (
-              <View style={styles.filtersWrapper}>
-                <ScrollView 
-                  horizontal 
-                  showsHorizontalScrollIndicator={false}
-                  style={styles.filtersContainer}
-                  contentContainerStyle={styles.filtersContent}
-                >
+            <Animated.View 
+              style={[
+                styles.filtersWrapper,
+                {
+                  maxHeight: filterExpandAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 60] // Высота для фильтров
+                  }),
+                  opacity: filterExpandAnim.interpolate({
+                    inputRange: [0, 0.3, 1],
+                    outputRange: [0, 0, 1]
+                  }),
+                  overflow: 'hidden'
+                }
+              ]}
+            >
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                style={styles.filtersContainer}
+                contentContainerStyle={styles.filtersContent}
+              >
                   <TouchableOpacity style={styles.filterChip}>
                     <Text style={styles.filterChipText}>Все</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="radio-button-on" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Онлайн</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="star" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Рейтинг 4.5+</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="diamond" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Премиум</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="location" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Близко</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="flash" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Быстрая подача</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.filterChip}>
+                    <Ionicons name="wallet" size={16} color={isDark ? '#3B82F6' : '#083198'} />
                     <Text style={styles.filterChipText}>Эконом</Text>
                   </TouchableOpacity>
-                </ScrollView>
-              </View>
-            )}
-          </View>
-        </Animated.View>
+                                  </ScrollView>
+                                </Animated.View>
+            </View>
+          </Animated.View>
 
 
 

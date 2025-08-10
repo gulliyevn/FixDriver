@@ -18,7 +18,6 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       paddingHorizontal: SIZES.xl,
       paddingVertical: SIZES.lg,
-      paddingBottom: SIZES.lg + 6,
       backgroundColor: colors.background,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
@@ -45,7 +44,7 @@ export const createDriversScreenStyles = (isDark: boolean) => {
           width: '100%',
         },
         filtersWrapper: {
-          marginTop: SIZES.sm,
+          marginTop: SIZES.xxl,
           zIndex: 1,
         },
         filtersContainer: {
@@ -56,16 +55,20 @@ export const createDriversScreenStyles = (isDark: boolean) => {
           gap: SIZES.xs,
         },
         filterChip: {
-          backgroundColor: colors.primary + '20',
-          borderRadius: 20,
-          paddingHorizontal: SIZES.md,
-          paddingVertical: SIZES.xs,
+          backgroundColor: colors.primary + '15',
+          borderRadius: 24,
+          paddingHorizontal: SIZES.lg,
+          paddingVertical: SIZES.sm,
           marginHorizontal: SIZES.xs / 2,
-          borderWidth: 1,
-          borderColor: colors.primary + '40',
+          borderWidth: 1.5,
+          borderColor: colors.primary + '30',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: SIZES.xs,
+          ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
         },
         filterChipText: {
-          fontSize: SIZES.fontSize.sm,
+          fontSize: SIZES.fontSize.md,
           color: colors.primary,
           fontWeight: '600',
         },
@@ -143,6 +146,14 @@ export const createDriversScreenStyles = (isDark: boolean) => {
     driverMainInfo: {
       flex: 1,
       marginLeft: SIZES.md,
+    },
+    nameContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs,
+    },
+    favoriteIcon: {
+      marginLeft: SIZES.xs,
     },
     nameRatingRow: {
       flexDirection: 'row',
