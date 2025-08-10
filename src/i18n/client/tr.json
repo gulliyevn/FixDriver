@@ -316,4 +316,53 @@
       "routeToWork": "Rota: ev - ofis"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Sürücüleri ara...",
+    "loadingMore": "Daha fazla sürücü yükleniyor...",
+    "empty": {
+      "loadingDrivers": "Sürücüler yükleniyor...",
+      "noDrivers": "Sürücü yok",
+      "willAppear": "Sürücüler yüklemeden sonra burada görünecek"
+    },
+    "filters": {
+      "all": "Tümü",
+      "rating45": "Puan 4.5+",
+      "premium": "Premium",
+      "nearby": "Yakında",
+      "fastDispatch": "Hızlı çağrı",
+      "economy": "Ekonomi"
+    },
+    "actions": {
+      "chat": "Sohbet",
+      "call": "Ara"
+    },
+    "labels": {
+      "son": "Oğul"
+    },
+    "call": {
+      "internetCall": "İnternet araması",
+      "internetCallLater": "İnternet araması özelliği daha sonra eklenecek.",
+      "callTitle": "%{firstName} %{lastName} araması",
+      "networkCallWithNumber": "Hücresel arama %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Sürücü seç",
+      "selectDriverMessage": "%{firstName} %{lastName} seçilsin mi?",
+      "bookDriversTitle": "Sürücüleri ayırt",
+      "bookDriversMessage": "%{count} seçili sürücü ayırılsın mı?",
+      "deleteDriversTitle": "Sürücüleri sil",
+      "deleteDriversMessage": "Seçili sürücüler listeden silinsin mi?",
+      "deleteOneDriverTitle": "Sürücüyü sil",
+      "deleteOneDriverMessage": "Sürücü listeden silinsin mi?"
+    },
+    "selection": {
+      "selectAll": "Tümünü seç",
+      "deselectAll": "Seçimi kaldır",
+      "bookCount": "Ayırt (%{count})"
+    },
+    "common": {
+      "book": "Ayırt"
+    }
+  }
 }

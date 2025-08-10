@@ -316,4 +316,53 @@
       "routeToWork": "Itinéraire: maison - bureau"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Rechercher des chauffeurs...",
+    "loadingMore": "Chargement de plus de chauffeurs...",
+    "empty": {
+      "loadingDrivers": "Chargement des chauffeurs...",
+      "noDrivers": "Aucun chauffeur",
+      "willAppear": "Les chauffeurs apparaîtront ici après le chargement"
+    },
+    "filters": {
+      "all": "Tous",
+      "rating45": "Note 4.5+",
+      "premium": "Premium",
+      "nearby": "À proximité",
+      "fastDispatch": "Envoi rapide",
+      "economy": "Économie"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Appel"
+    },
+    "labels": {
+      "son": "Fils"
+    },
+    "call": {
+      "internetCall": "Appel Internet",
+      "internetCallLater": "La fonction d'appel Internet sera ajoutée plus tard.",
+      "callTitle": "Appeler %{firstName} %{lastName}",
+      "networkCallWithNumber": "Appel via réseau %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Sélectionner un chauffeur",
+      "selectDriverMessage": "Sélectionner %{firstName} %{lastName} ?",
+      "bookDriversTitle": "Réserver des chauffeurs",
+      "bookDriversMessage": "Réserver %{count} chauffeur(s) sélectionné(s) ?",
+      "deleteDriversTitle": "Supprimer des chauffeurs",
+      "deleteDriversMessage": "Supprimer les chauffeurs sélectionnés de la liste ?",
+      "deleteOneDriverTitle": "Supprimer le chauffeur",
+      "deleteOneDriverMessage": "Supprimer le chauffeur de la liste ?"
+    },
+    "selection": {
+      "selectAll": "Tout sélectionner",
+      "deselectAll": "Tout désélectionner",
+      "bookCount": "Réserver (%{count})"
+    },
+    "common": {
+      "book": "Réserver"
+    }
+  }
 }

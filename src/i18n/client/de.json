@@ -317,4 +317,53 @@
       "routeToWork": "Route: Zuhause - Büro"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Fahrer suchen...",
+    "loadingMore": "Weitere Fahrer werden geladen...",
+    "empty": {
+      "loadingDrivers": "Fahrer werden geladen...",
+      "noDrivers": "Keine Fahrer",
+      "willAppear": "Fahrer erscheinen hier nach dem Laden"
+    },
+    "filters": {
+      "all": "Alle",
+      "rating45": "Bewertung 4.5+",
+      "premium": "Premium",
+      "nearby": "In der Nähe",
+      "fastDispatch": "Schnelle Bereitstellung",
+      "economy": "Economy"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Anrufen"
+    },
+    "labels": {
+      "son": "Sohn"
+    },
+    "call": {
+      "internetCall": "Internetanruf",
+      "internetCallLater": "Die Internetanruf-Funktion wird später implementiert.",
+      "callTitle": "%{firstName} %{lastName} anrufen",
+      "networkCallWithNumber": "Netzanruf %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Fahrer auswählen",
+      "selectDriverMessage": "%{firstName} %{lastName} auswählen?",
+      "bookDriversTitle": "Fahrer buchen",
+      "bookDriversMessage": "%{count} ausgewählte Fahrer buchen?",
+      "deleteDriversTitle": "Fahrer löschen",
+      "deleteDriversMessage": "Ausgewählte Fahrer aus der Liste löschen?",
+      "deleteOneDriverTitle": "Fahrer löschen",
+      "deleteOneDriverMessage": "Fahrer aus der Liste löschen?"
+    },
+    "selection": {
+      "selectAll": "Alle auswählen",
+      "deselectAll": "Auswahl aufheben",
+      "bookCount": "Buchen (%{count})"
+    },
+    "common": {
+      "book": "Buchen"
+    }
+  }
 }

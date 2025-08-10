@@ -1,3 +1,4 @@
+import apiClient, { APIResponse } from './APIClient';
 import { 
   Driver, 
   DriverRegistrationData, 
@@ -12,8 +13,28 @@ import {
 } from '../types/driver';
 import { ENV_CONFIG } from '../config/environment';
 
+export interface DriverListParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  favoritesOnly?: boolean;
+  onlineOnly?: boolean;
+}
+
+export interface DriverListDto {
+  items: Driver[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
 class DriverService {
   private static BASE_URL = ENV_CONFIG.API.BASE_URL;
+
+  // Пагинированный список водителей
+  static async getDriversPaged(params: DriverListParams): Promise<APIResponse<DriverListDto>> {
+    return apiClient.get<DriverListDto>('/drivers', params as Record<string, unknown>);
+  }
 
   // Регистрация водителя
   static async registerDriver(data: DriverRegistrationData): Promise<DriverRegistrationResponse> {

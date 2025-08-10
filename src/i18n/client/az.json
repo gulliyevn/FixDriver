@@ -316,4 +316,53 @@
       "routeToWork": "Marşrut: ev - ofis"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Sürücüləri axtarın...",
+    "loadingMore": "Daha çox sürücü yüklənir...",
+    "empty": {
+      "loadingDrivers": "Sürücülər yüklənir...",
+      "noDrivers": "Sürücü yoxdur",
+      "willAppear": "Sürücülər yükləndikdən sonra burada görünəcək"
+    },
+    "filters": {
+      "all": "Hamısı",
+      "rating45": "Reytinq 4.5+",
+      "premium": "Premium",
+      "nearby": "Yaxın",
+      "fastDispatch": "Sürətli çağırış",
+      "economy": "Ekonom"
+    },
+    "actions": {
+      "chat": "Söhbət",
+      "call": "Zəng"
+    },
+    "labels": {
+      "son": "Oğul"
+    },
+    "call": {
+      "internetCall": "İnternet zəngi",
+      "internetCallLater": "İnternet zəngi funksiyası sonra əlavə olunacaq.",
+      "callTitle": "%{firstName} %{lastName} zəngi",
+      "networkCallWithNumber": "Şəbəkə zəngi %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Sürücünü seç",
+      "selectDriverMessage": "%{firstName} %{lastName} seçilsin?",
+      "bookDriversTitle": "Sürücüləri bron et",
+      "bookDriversMessage": "%{count} seçilmiş sürücü bron edilsin?",
+      "deleteDriversTitle": "Sürücüləri sil",
+      "deleteDriversMessage": "Seçilmiş sürücülər siyahıdan silinsin?",
+      "deleteOneDriverTitle": "Sürücünü sil",
+      "deleteOneDriverMessage": "Sürücünü siyahıdan silək?"
+    },
+    "selection": {
+      "selectAll": "Hamısını seç",
+      "deselectAll": "Seçimi sil",
+      "bookCount": "Bron et (%{count})"
+    },
+    "common": {
+      "book": "Bron et"
+    }
+  }
 }

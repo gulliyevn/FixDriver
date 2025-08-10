@@ -316,4 +316,53 @@
       "routeToWork": "Ruta: casa - oficina"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Buscar conductores...",
+    "loadingMore": "Cargando más conductores...",
+    "empty": {
+      "loadingDrivers": "Cargando conductores...",
+      "noDrivers": "No hay conductores",
+      "willAppear": "Los conductores aparecerán aquí después de cargar"
+    },
+    "filters": {
+      "all": "Todos",
+      "rating45": "Calificación 4.5+",
+      "premium": "Premium",
+      "nearby": "Cerca",
+      "fastDispatch": "Despacho rápido",
+      "economy": "Económico"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Llamada"
+    },
+    "labels": {
+      "son": "Hijo"
+    },
+    "call": {
+      "internetCall": "Llamada por Internet",
+      "internetCallLater": "La función de llamada por Internet se implementará más tarde.",
+      "callTitle": "Llamar a %{firstName} %{lastName}",
+      "networkCallWithNumber": "Llamada por red %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Seleccionar conductor",
+      "selectDriverMessage": "¿Seleccionar a %{firstName} %{lastName}?",
+      "bookDriversTitle": "Reservar conductores",
+      "bookDriversMessage": "¿Reservar %{count} conductores seleccionados?",
+      "deleteDriversTitle": "Eliminar conductores",
+      "deleteDriversMessage": "¿Eliminar los conductores seleccionados de la lista?",
+      "deleteOneDriverTitle": "Eliminar conductor",
+      "deleteOneDriverMessage": "¿Eliminar el conductor de la lista?"
+    },
+    "selection": {
+      "selectAll": "Seleccionar todo",
+      "deselectAll": "Deseleccionar todo",
+      "bookCount": "Reservar (%{count})"
+    },
+    "common": {
+      "book": "Reservar"
+    }
+  }
 }

@@ -316,4 +316,53 @@
       "routeToWork": "Route: home - office"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Search drivers...",
+    "loadingMore": "Loading more drivers...",
+    "empty": {
+      "loadingDrivers": "Loading drivers...",
+      "noDrivers": "No drivers",
+      "willAppear": "Drivers will appear here after loading"
+    },
+    "filters": {
+      "all": "All",
+      "rating45": "Rating 4.5+",
+      "premium": "Premium",
+      "nearby": "Nearby",
+      "fastDispatch": "Fast dispatch",
+      "economy": "Economy"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Call"
+    },
+    "labels": {
+      "son": "Son"
+    },
+    "call": {
+      "internetCall": "Internet call",
+      "internetCallLater": "Internet call feature will be implemented later.",
+      "callTitle": "Call %{firstName} %{lastName}",
+      "networkCallWithNumber": "Cellular call %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Select driver",
+      "selectDriverMessage": "Select %{firstName} %{lastName}?",
+      "bookDriversTitle": "Book drivers",
+      "bookDriversMessage": "Book %{count} selected drivers?",
+      "deleteDriversTitle": "Delete drivers",
+      "deleteDriversMessage": "Delete selected drivers from the list?",
+      "deleteOneDriverTitle": "Delete driver",
+      "deleteOneDriverMessage": "Delete the driver from the list?"
+    },
+    "selection": {
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "bookCount": "Book (%{count})"
+    },
+    "common": {
+      "book": "Book"
+    }
+  }
 }

@@ -304,4 +304,53 @@
       "routeToWork": "Маршрут: дом - офис"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Поиск водителей...",
+    "loadingMore": "Загружаем еще водителей...",
+    "empty": {
+      "loadingDrivers": "Загрузка водителей...",
+      "noDrivers": "Нет водителей",
+      "willAppear": "Водители появятся здесь после загрузки"
+    },
+    "filters": {
+      "all": "Все",
+      "rating45": "Рейтинг 4.5+",
+      "premium": "Премиум",
+      "nearby": "Близко",
+      "fastDispatch": "Быстрая подача",
+      "economy": "Эконом"
+    },
+    "actions": {
+      "chat": "Чат",
+      "call": "Звонок"
+    },
+    "labels": {
+      "son": "Сын"
+    },
+    "call": {
+      "internetCall": "Интернет звонок",
+      "internetCallLater": "Функция интернет звонка будет реализована позже.",
+      "callTitle": "Звонок %{firstName} %{lastName}",
+      "networkCallWithNumber": "Обычный звонок %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Выбрать водителя",
+      "selectDriverMessage": "Выбрать %{firstName} %{lastName}?",
+      "bookDriversTitle": "Забронировать водителей",
+      "bookDriversMessage": "Забронировать %{count} выбранных водителей?",
+      "deleteDriversTitle": "Удалить водителей",
+      "deleteDriversMessage": "Удалить выбранных водителей из списка?",
+      "deleteOneDriverTitle": "Удалить водителя",
+      "deleteOneDriverMessage": "Удалить водителя из списка?"
+    },
+    "selection": {
+      "selectAll": "Выбрать все",
+      "deselectAll": "Снять выбор",
+      "bookCount": "Забронировать (%{count})"
+    },
+    "common": {
+      "book": "Забронировать"
+    }
+  }
 }

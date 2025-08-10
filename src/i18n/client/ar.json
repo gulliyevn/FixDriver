@@ -316,4 +316,53 @@
       "routeToWork": "المسار: المنزل - المكتب"
     }
   }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "ابحث عن السائقين...",
+    "loadingMore": "جارٍ تحميل المزيد من السائقين...",
+    "empty": {
+      "loadingDrivers": "جارٍ تحميل السائقين...",
+      "noDrivers": "لا يوجد سائقون",
+      "willAppear": "ستظهر السائقون هنا بعد التحميل"
+    },
+    "filters": {
+      "all": "الكل",
+      "rating45": "تقييم 4.5+",
+      "premium": "Premium",
+      "nearby": "قريب",
+      "fastDispatch": "إرسال سريع",
+      "economy": "اقتصادي"
+    },
+    "actions": {
+      "chat": "دردشة",
+      "call": "اتصال"
+    },
+    "labels": {
+      "son": "ابن"
+    },
+    "call": {
+      "internetCall": "مكالمة عبر الإنترنت",
+      "internetCallLater": "سيتم إضافة ميزة المكالمة عبر الإنترنت لاحقًا.",
+      "callTitle": "مكالمة %{firstName} %{lastName}",
+      "networkCallWithNumber": "مكالمة عبر الشبكة %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "اختر السائق",
+      "selectDriverMessage": "اختيار %{firstName} %{lastName}؟",
+      "bookDriversTitle": "حجز السائقين",
+      "bookDriversMessage": "حجز %{count} من السائقين المحددين؟",
+      "deleteDriversTitle": "حذف السائقين",
+      "deleteDriversMessage": "حذف السائقين المحددين من القائمة؟",
+      "deleteOneDriverTitle": "حذف السائق",
+      "deleteOneDriverMessage": "حذف السائق من القائمة؟"
+    },
+    "selection": {
+      "selectAll": "تحديد الكل",
+      "deselectAll": "إلغاء تحديد الكل",
+      "bookCount": "حجز (%{count})"
+    },
+    "common": {
+      "book": "حجز"
+    }
+  }
 }
