@@ -41,7 +41,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
         setProfile(JSON.parse(profileData));
       }
     } catch (error) {
-      
+      console.warn('Profile load error:', error);
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
       setProfile(newProfile);
       return true;
     } catch (error) {
-      
+      console.warn('Profile save error:', error);
       return false;
     }
   };

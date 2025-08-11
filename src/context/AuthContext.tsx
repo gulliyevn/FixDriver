@@ -209,7 +209,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             });
           }
         } catch (error) {
-  
+          console.warn('Logout API error:', error);
         }
       }
 
@@ -221,7 +221,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(null);
     } catch (error) {
-      
+      console.warn('Logout error:', error);
     } finally {
       setIsLoading(false);
     }

@@ -25,16 +25,22 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build for production
-      run: npm run build
+    - name: Install Expo CLI
+      run: npm install -g @expo/cli
+
+    - name: Build for web
+      run: npm run web:build
       env:
         NODE_ENV: production
 
-    - name: Deploy to staging
-      run: echo "Deploying to staging environment"
-      # Add your deployment commands here
-      # Example for Expo:
-      # run: npx expo publish --release-channel staging
+    - name: Deploy to Expo
+      run: |
+        echo "Deploying to Expo..."
+        # npx expo publish --release-channel production
+        # или для EAS:
+        # npx eas build --platform all --non-interactive
+      env:
+        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
     - name: Notify deployment
       run: echo "Deployment completed successfully" 

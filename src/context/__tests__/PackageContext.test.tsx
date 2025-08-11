@@ -1,12 +1,12 @@
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
 import { PackageProvider, usePackage } from '../PackageContext';
-import { BalanceProvider } from '../BalanceContext';
+
 import { LanguageProvider } from '../LanguageContext';
-import { useBalance } from '../BalanceContext';
+import { useBalance } from '../../hooks/useBalance';
 
 // Мокаем зависимости
-jest.mock('../BalanceContext', () => ({
+jest.mock('../../hooks/useBalance', () => ({
   useBalance: jest.fn(() => ({
     balance: 1000,
     transactions: [],
@@ -14,7 +14,6 @@ jest.mock('../BalanceContext', () => ({
     deductBalance: jest.fn().mockResolvedValue(true),
     addTransaction: jest.fn(),
   })),
-  BalanceProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn().mockResolvedValue(null),
@@ -28,11 +27,9 @@ const renderWithProviders = (hook: () => any) => {
   return renderHook(hook, {
     wrapper: ({ children }) => (
       <LanguageProvider>
-        <BalanceProvider>
-          <PackageProvider>
-            {children}
-          </PackageProvider>
-        </BalanceProvider>
+        <PackageProvider>
+          {children}
+        </PackageProvider>
       </LanguageProvider>
     ),
   });

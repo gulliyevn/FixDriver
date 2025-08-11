@@ -4,8 +4,10 @@
     "slug": "fixdrive",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/icon.png",
     "splash": {
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,7 +20,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
       },
       "package": "com.fixdrive.app"
     },
@@ -35,8 +38,9 @@
         }
       ]
     ],
-    "entryPoint": "./app/SuperSimpleApp.js",
+    "entryPoint": "./app/App.tsx",
     "jsEngine": "jsc",
+    "scheme": "fixdrive",
     "experiments": {
       "tsconfigPaths": false
     }

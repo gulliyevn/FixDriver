@@ -43,7 +43,7 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 // Mock Expo Vector Icons as React components
 jest.mock('@expo/vector-icons', () => {
   const React = require('react');
-  const createIcon = (name) => (props) => React.createElement('Icon', { ...props, name });
+  const createIcon = (iconName) => (props) => React.createElement('Icon', { ...props, name: props.name || iconName });
   return {
     Ionicons: createIcon('Ionicons'),
     MaterialIcons: createIcon('MaterialIcons'),

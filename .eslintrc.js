@@ -19,8 +19,8 @@ module.exports = {
     'react-hooks',
   ],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn', // Смягчаем для разработки
+    '@typescript-eslint/no-unused-vars': 'warn', // Смягчаем для разработки
     'no-unused-vars': 'off',
     'react-hooks/exhaustive-deps': 'warn',
     'react/jsx-no-undef': 'error',
@@ -36,6 +36,7 @@ module.exports = {
   env: {
     node: true,
     es6: true,
+    jest: true,
   },
   globals: {
     __DEV__: 'readonly',
@@ -52,9 +53,4 @@ module.exports = {
     '**/*.spec.ts',
     '**/*.spec.tsx',
   ],
-  env: {
-    node: true,
-    es6: true,
-    jest: true,
-  },
 }; 

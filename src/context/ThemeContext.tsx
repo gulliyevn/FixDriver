@@ -35,12 +35,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       const savedTheme = await AsyncStorage.getItem('theme');
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
         setTheme(savedTheme);
-
       } else {
-
+        // Use default theme
       }
     } catch (error) {
-      
+      console.warn('Theme load error:', error);
     }
   };
 
@@ -50,9 +49,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     
     try {
       await AsyncStorage.setItem('theme', newTheme);
-      
     } catch (error) {
-      
+      console.warn('Theme save error:', error);
     }
   };
 

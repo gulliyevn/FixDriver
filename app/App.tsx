@@ -6,14 +6,12 @@ import { ThemeProvider } from '../src/context/ThemeContext';
 import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import { PackageProvider } from '../src/context/PackageContext';
-import { BalanceProvider } from '../src/context/BalanceContext';
+
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
 import DynamicStatusBar from '../src/components/DynamicStatusBar';
 import PushNotificationService from '../src/services/PushNotificationService';
 import 'formdata-polyfill';
-
-
 
 function App() {
   useEffect(() => {
@@ -23,7 +21,7 @@ function App() {
         const notificationService = PushNotificationService.getInstance();
         await notificationService.requestPermissions();
       } catch (error) {
-  
+        console.warn('Failed to initialize notifications:', error);
       }
     };
 
@@ -35,16 +33,14 @@ function App() {
       <LanguageProvider>
         <ThemeProvider>
           <AuthProvider>
-            <BalanceProvider>
-              <ProfileProvider>
-                <PackageProvider>
-                  <NavigationContainer>
-                    <RootNavigator />
-                    <DynamicStatusBar />
-                  </NavigationContainer>
-                </PackageProvider>
-              </ProfileProvider>
-            </BalanceProvider>
+            <ProfileProvider>
+              <PackageProvider>
+                <NavigationContainer>
+                  <RootNavigator />
+                  <DynamicStatusBar />
+                </NavigationContainer>
+              </PackageProvider>
+            </ProfileProvider>
           </AuthProvider>
         </ThemeProvider>
       </LanguageProvider>

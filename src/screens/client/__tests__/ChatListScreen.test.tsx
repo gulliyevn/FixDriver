@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
-import ChatListScreen from '../ChatListScreen';
+import ChatListScreen from '../../common/chats/ChatListScreen';
 import { ChatService } from '../../../services/ChatService';
 import { useTheme } from '../../../context/ThemeContext';
 

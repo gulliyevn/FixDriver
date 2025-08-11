@@ -60,6 +60,21 @@
 - Нет хардкода — всё берётся из i18n
 - Тариф "Стандарт" (Standard) на всех языках
 
+## Переменные окружения
+
+Скопируйте `.env.example` в `.env` и заполните реальными значениями:
+
+```sh
+cp .env.example .env
+```
+
+Необходимые переменные:
+- `EXPO_PUBLIC_API_BASE_URL` - базовый URL API
+- `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` - ключ Google Maps
+- `EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY` - ключ Stripe
+- `EXPO_PUBLIC_TWILIO_ACCOUNT_SID` - Twilio для SMS
+- И другие (см. `.env.example`)
+
 ## Запуск
 
 ```sh

@@ -101,7 +101,7 @@ export const getAddresses = async (): Promise<Address[]> => {
       return mockAddresses;
     }
   } catch (error) {
-
+    console.warn('Address load error:', error);
   }
   
   // Если нет сохраненных адресов, возвращаем дефолтные
@@ -136,7 +136,7 @@ const saveAddressesToStorage = async () => {
   try {
     await AsyncStorage.setItem('user_addresses', JSON.stringify(mockAddresses));
   } catch (error) {
-
+    console.warn('Address save error:', error);
   }
 };
 

@@ -1,5 +1,5 @@
 /**
- * Утилита для проверки полноты переводов (JavaScript версия)
+ * Упрощенная JavaScript версия TranslationValidator для скриптов
  */
 
 const SUPPORTED_LANGUAGES = {
@@ -100,14 +100,15 @@ class TranslationValidator {
   }
 
   /**
-   * Проверяет наличие перевода для указанного ключа
+   * Проверяет наличие перевода для конкретного ключа
    */
   static hasTranslation(language, key) {
+    const [namespace, ...pathParts] = key.split('.');
+    
     try {
-      const [namespace, ...pathParts] = key.split('.');
       const translations = require(`../src/i18n/${namespace}/${language}.json`);
-      
       let current = translations;
+      
       for (const part of pathParts) {
         if (current && typeof current === 'object' && part in current) {
           current = current[part];
@@ -118,13 +119,12 @@ class TranslationValidator {
       
       return typeof current === 'string' && current.trim().length > 0;
     } catch (error) {
-      console.warn(`Error checking translation for ${language}.${key}:`, error.message);
       return false;
     }
   }
 
   /**
-   * Генерирует отчет о недостающих переводах
+   * Генерирует отчет о состоянии переводов
    */
   static generateReport() {
     const missingTranslations = this.validateTranslations();
@@ -133,13 +133,23 @@ class TranslationValidator {
       return '✅ Все переводы полные!';
     }
     
-    let report = `❌ Найдено ${missingTranslations.length} недостающих переводов:\n\n`;
+    let report = `⚠️  Найдено ${missingTranslations.length} недостающих переводов:\n\n`;
     
-    for (const missing of missingTranslations) {
-      report += `🔑 Ключ: ${missing.key}\n`;
-      report += `📁 Namespace: ${missing.namespace}\n`;
-      report += `🌍 Отсутствует в: ${missing.missingLanguages.join(', ')}\n\n`;
-    }
+    // Группируем по языкам
+    const missingByLanguage = {};
+    missingTranslations.forEach(missing => {
+      missing.missingLanguages.forEach(lang => {
+        if (!missingByLanguage[lang]) {
+          missingByLanguage[lang] = [];
+        }
+        missingByLanguage[lang].push(missing.key);
+      });
+    });
+    
+    Object.entries(missingByLanguage).forEach(([lang, keys]) => {
+      const flag = SUPPORTED_LANGUAGES[lang]?.flag || '🌐';
+      report += `${flag} ${lang.toUpperCase()}: ${keys.length} ключей\n`;
+    });
     
     return report;
   }
@@ -158,7 +168,7 @@ class TranslationValidator {
   }
 
   /**
-   * Получает статистику переводов
+   * Получает статистику переводов по языкам
    */
   static getTranslationStats() {
     const stats = {};
@@ -172,4 +182,4 @@ class TranslationValidator {
   }
 }
 
-module.exports = { TranslationValidator }; 
+module.exports = { TranslationValidator };

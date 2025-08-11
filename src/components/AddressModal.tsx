@@ -108,7 +108,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
               return;
             }
           } catch (yandexError) {
-
+            console.warn('Yandex geocoding error:', yandexError);
           }
         }
       }

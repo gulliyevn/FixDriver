@@ -7,7 +7,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { colors } from '../../constants/colors';
 import VipPackages from '../../components/VipPackages';
 import { usePackage, PackageType } from '../../context/PackageContext';
-import { useBalance } from '../../context/BalanceContext';
+import { useBalance } from '../../hooks/useBalance';
 import { useAuth } from '../../context/AuthContext';
 import { PremiumPackagesScreenStyles, getPremiumPackagesScreenColors } from '../../styles/screens/profile/PremiumPackagesScreen.styles';
 import { formatBalance, formatDateWithLanguage } from '../../utils/formatters';

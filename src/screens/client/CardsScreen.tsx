@@ -14,7 +14,7 @@ import MastercardIcon from '../../components/MastercardIcon';
 import { useI18n } from '../../hooks/useI18n';
 import { useCards } from '../../hooks/useCards';
 import { CardService } from '../../services/cardService';
-// import { startScanner } from 'react-native-card-scanner';
+
 // import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 // const requestCameraPermission = async () => {
@@ -43,10 +43,11 @@ const handleScanCard = async () => {
   //   return;
   // }
   // try {
-  //   const card = await startScanner();
-  //   if (card && card.cardNumber) {
-  //     setNewCard(prev => ({ ...prev, number: card.cardNumber }));
-  //   }
+  //   // Сканирование карты временно отключено
+  //   // const card = await startScanner();
+  //   // if (card && card.cardNumber) {
+  //   //   setNewCard(prev => ({ ...prev, number: card.cardNumber }));
+  //   // }
   // } catch (e) {
   //   // пользователь отменил или ошибка
   // }

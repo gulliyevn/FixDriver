@@ -169,6 +169,8 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+# НЕ игнорировать .env.example - он должен быть в репозитории
+!.env.example
 
 # Secrets
 *.pem
@@ -186,6 +188,7 @@ src/config/api-keys.ts
 AUTH_TESTING.md
 *_SECRETS.md
 *_KEYS.md
+CONCEPT.md
 
 # ===== ВРЕМЕННЫЕ ФАЙЛЫ =====
 
@@ -237,6 +240,7 @@ src/mocks/production.ts
 # Логи приложения
 logs/
 *.log
+lint-report-*.txt
 
 # Кэш карт
 .cache/maps/

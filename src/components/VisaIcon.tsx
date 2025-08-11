@@ -1,7 +1,12 @@
 import React from 'react';
 import Svg, { LinearGradient, Stop, Path, Defs } from 'react-native-svg';
 
-const VisaIcon = ({ width = 32, height = 32 }) => (
+interface VisaIconProps {
+  width?: number;
+  height?: number;
+}
+
+const VisaIcon: React.FC<VisaIconProps> = ({ width = 32, height = 32 }) => (
   <Svg width={width} height={height} viewBox="0 0 48 48">
     <Defs>
       <LinearGradient id="visa-gradient" x1="20.375" x2="28.748" y1="11.061" y2="40.946" gradientUnits="userSpaceOnUse">

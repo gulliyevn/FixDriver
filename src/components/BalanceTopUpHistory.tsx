@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Animated } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
-import { useBalance } from '../context/BalanceContext';
+import { useBalance } from '../hooks/useBalance';
 import { useDriverBalance } from '../hooks/driver/useDriverBalance';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';

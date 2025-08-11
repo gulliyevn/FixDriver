@@ -16,7 +16,7 @@ describe('ErrorDisplay Component', () => {
 
   const mockError: AppError = {
     code: 'NET_001',
-    message: 'Network timeout',
+    message: 'Нет подключения к интернету',
     details: 'Connection failed after 30 seconds',
     retryable: true,
     action: 'Check connection',
@@ -35,7 +35,7 @@ describe('ErrorDisplay Component', () => {
       />
     );
 
-    expect(getByText('Network timeout')).toBeTruthy();
+    expect(getByText('Нет подключения к интернету')).toBeTruthy();
   });
 
   it('does not render when error is null', () => {

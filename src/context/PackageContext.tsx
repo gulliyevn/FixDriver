@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useBalance } from './BalanceContext';
+import { useBalance } from '../hooks/useBalance';
 import { useI18n } from '../hooks/useI18n';
 import { Alert } from 'react-native';
 
@@ -49,7 +49,8 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [currentPackage, setCurrentPackage] = useState<PackageType>('free');
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const { t } = useI18n();
-  const { deductBalance } = useBalance();
+  const balanceHook = useBalance();
+  const deductBalance = 'deductBalance' in balanceHook ? balanceHook.deductBalance : balanceHook.withdrawBalance;
 
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -125,6 +126,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         setSubscription(parsedSubscription);
       } else {
+        // No subscription found
       }
     } catch (error) {
       console.error('❌ Error loading subscription:', error);

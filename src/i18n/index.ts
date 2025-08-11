@@ -113,7 +113,7 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     notifyLanguageChange(language);
   } catch (error) {
-
+    console.warn('Language set error:', error);
     throw error;
   }
 };

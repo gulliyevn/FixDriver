@@ -1,10 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import Svg, { Path, Defs, LinearGradient, Stop, G, Image as SvgImage } from 'react-native-svg';
+import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { BalanceCardDecorationStyles } from '../styles/components/BalanceCardDecoration.styles';
 
-// Предварительная загрузка PNG файла
-const worldMapImage = require('../../assets/Daco_822024.png');
+// Удалено использование временного изображения
 
 interface BalanceCardDecorationProps {
   isDark?: boolean;
@@ -155,17 +154,7 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
             {/* Свинцовая рамка */}
             <Path d="M-10 -10 L410 -10 L410 230 L-10 230 Z" stroke="url(#leadBorder)" strokeWidth="8" fill="none" />
             
-            {/* PNG карта мира поверх свинцового фона */}
-            <G opacity="1.0">
-              <SvgImage
-                href={worldMapImage}
-                x="0"
-                y="0"
-                width="400"
-                height="220"
-                opacity="0.8"
-              />
-            </G>
+            {/* Удалено использование временного изображения */}
           </>
         )}
         
@@ -196,17 +185,7 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
             {/* Золотая рамка */}
             <Path d="M-10 -10 L410 -10 L410 230 L-10 230 Z" stroke="url(#goldBorder)" strokeWidth="8" fill="none" />
             
-            {/* PNG карта мира поверх металлического фона */}
-            <G opacity="1.0">
-              <SvgImage
-                href={worldMapImage}
-                x="0"
-                y="0"
-                width="400"
-                height="220"
-                opacity="0.8"
-              />
-            </G>
+            {/* Удалено использование временного изображения */}
           </>
         )}
         
@@ -233,17 +212,7 @@ const BalanceCardDecoration: React.FC<BalanceCardDecorationProps> = ({
             {/* Платиновая рамка */}
             <Path d="M-10 -10 L410 -10 L410 230 L-10 230 Z" stroke="url(#platinumBorder)" strokeWidth="8" fill="none" />
             
-            {/* PNG карта мира поверх платинового фона */}
-            <G opacity="1.0">
-              <SvgImage
-                href={worldMapImage}
-                x="0"
-                y="0"
-                width="400"
-                height="220"
-                opacity="0.8"
-              />
-            </G>
+            {/* Удалено использование временного изображения */}
           </>
         )}
       </Svg>

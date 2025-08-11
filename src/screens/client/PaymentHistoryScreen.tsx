@@ -10,7 +10,7 @@ import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { PaymentHistoryScreenStyles as styles, getPaymentHistoryScreenStyles } from '../../styles/screens/profile/PaymentHistoryScreen.styles';
 import PaymentHistoryFilter, { PaymentFilter } from '../../components/PaymentHistoryFilter';
 import { colors } from '../../constants/colors';
-import { useBalance } from '../../context/BalanceContext';
+import { useBalance } from '../../hooks/useBalance';
 import { useAuth } from '../../context/AuthContext';
 
 /**
