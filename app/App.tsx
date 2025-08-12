@@ -2,6 +2,7 @@ import { registerRootComponent } from 'expo';
 import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from '../src/context/ThemeContext';
 import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
@@ -29,22 +30,24 @@ function App() {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <LanguageProvider>
-        <ThemeProvider>
-          <AuthProvider>
-            <ProfileProvider>
-              <PackageProvider>
-                <NavigationContainer>
-                  <RootNavigator />
-                  <DynamicStatusBar />
-                </NavigationContainer>
-              </PackageProvider>
-            </ProfileProvider>
-          </AuthProvider>
-        </ThemeProvider>
-      </LanguageProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <ProfileProvider>
+                <PackageProvider>
+                  <NavigationContainer>
+                    <RootNavigator />
+                    <DynamicStatusBar />
+                  </NavigationContainer>
+                </PackageProvider>
+              </ProfileProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </LanguageProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

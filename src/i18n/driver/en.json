@@ -1,10 +1,86 @@
 {
   "title": "Driver",
   "dashboard": "Dashboard",
-  "earnings": "Earnings",
-  "orders": "Orders",
-  "schedule": "Schedule",
-  "profile": "Profile",
+  "earnings": {
+    "title": "Earnings",
+    "today": "Today",
+    "week": "This Week",
+    "month": "This Month",
+    "total": "Total",
+    "perHour": "Per Hour",
+    "perOrder": "Per Order",
+    "bonus": "Bonus",
+    "tips": "Tips",
+    "commission": "Commission",
+    "tax": "Tax",
+    "net": "Net Income",
+    "withdraw": "Withdraw",
+    "withdrawMessage": "Withdrawal function will be available in the next update",
+    "viewDetails": "Details",
+    "detailsMessage": "Detailed statistics will be available in the next update"
+  },
+  "orders": {
+    "title": "Orders",
+    "active": "Active",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "new": "New",
+    "inProgress": "In Progress",
+    "pickup": "Pickup",
+    "delivery": "Delivery",
+    "searchOrders": "Search orders...",
+    "orderNumber": "Order #{id}",
+    "acceptOrderAction": "Accept Order",
+    "completeTrip": "Complete Trip",
+    "acceptOrderConfirm": "Accept order from {clientName}?",
+    "completeTripConfirm": "Complete trip with {clientName}?",
+    "orderAccepted": "Order accepted!",
+    "tripCompleted": "Trip completed!",
+    "cancelOrder": "Cancel",
+    "acceptOrder": "Accept",
+    "completeOrder": "Complete",
+    "all": "All",
+    "refresh": "Refresh"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "workHours": "Work Hours",
+    "break": "Break",
+    "start": "Start",
+    "end": "End",
+    "pause": "Pause",
+    "resume": "Resume",
+    "totalHours": "Total Hours",
+    "overtime": "Overtime",
+    "weekend": "Weekend",
+    "holiday": "Holiday",
+    "upcoming": "Upcoming",
+    "scheduleCompleted": "Completed",
+    "scheduleCancelled": "Cancelled",
+    "cancelScheduleTrip": "Cancel Trip",
+    "cancelScheduleTripConfirm": "Cancel trip {date} at {time}?",
+    "no": "No",
+    "yes": "Yes",
+    "totalEarnings": "Total earnings: {amount} ₽"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Info",
+    "vehicleInfo": "Vehicle Info",
+    "documents": "Documents",
+    "ratings": "Ratings",
+    "reviews": "Reviews",
+    "statistics": "Statistics",
+    "achievements": "Achievements",
+    "badges": "Badges",
+    "level": "Level",
+    "experience": "Experience",
+    "points": "Points",
+    "rank": "Rank"
+  },
   "map": {
     "title": "Map",
     "loadingMap": "Loading map...",
@@ -57,86 +133,6 @@
     "enterMessage": "Enter message...",
     "noActiveChats": "You don't have any active chats yet"
   },
-  "orders": {
-    "title": "Orders",
-    "active": "Active",
-    "completed": "Completed",
-    "cancelled": "Cancelled",
-    "pending": "Pending",
-    "accepted": "Accepted",
-    "rejected": "Rejected",
-    "new": "New",
-    "inProgress": "In Progress",
-    "pickup": "Pickup",
-    "delivery": "Delivery",
-    "searchOrders": "Search orders...",
-    "orderNumber": "Order #{id}",
-    "acceptOrder": "Accept Order",
-    "completeTrip": "Complete Trip",
-    "acceptOrderConfirm": "Accept order from {clientName}?",
-    "completeTripConfirm": "Complete trip with {clientName}?",
-    "orderAccepted": "Order accepted!",
-    "tripCompleted": "Trip completed!",
-    "cancel": "Cancel",
-    "accept": "Accept",
-    "complete": "Complete",
-    "all": "All",
-    "refresh": "Refresh"
-  },
-  "schedule": {
-    "title": "Schedule",
-    "workHours": "Work Hours",
-    "break": "Break",
-    "start": "Start",
-    "end": "End",
-    "pause": "Pause",
-    "resume": "Resume",
-    "totalHours": "Total Hours",
-    "overtime": "Overtime",
-    "weekend": "Weekend",
-    "holiday": "Holiday",
-    "upcoming": "Upcoming",
-    "completed": "Completed",
-    "cancelled": "Cancelled",
-    "cancelTrip": "Cancel Trip",
-    "cancelTripConfirm": "Cancel trip {date} at {time}?",
-    "no": "No",
-    "yes": "Yes",
-    "totalEarnings": "Total earnings: {amount} ₽"
-  },
-  "earnings": {
-    "title": "Earnings",
-    "today": "Today",
-    "week": "This Week",
-    "month": "This Month",
-    "total": "Total",
-    "perHour": "Per Hour",
-    "perOrder": "Per Order",
-    "bonus": "Bonus",
-    "tips": "Tips",
-    "commission": "Commission",
-    "tax": "Tax",
-    "net": "Net Income",
-    "withdraw": "Withdraw",
-    "withdrawMessage": "Withdrawal function will be available in the next update",
-    "viewDetails": "Details",
-    "detailsMessage": "Detailed statistics will be available in the next update"
-  },
-  "profile": {
-    "title": "Profile",
-    "personalInfo": "Personal Info",
-    "vehicleInfo": "Vehicle Info",
-    "documents": "Documents",
-    "ratings": "Ratings",
-    "reviews": "Reviews",
-    "statistics": "Statistics",
-    "achievements": "Achievements",
-    "badges": "Badges",
-    "level": "Level",
-    "experience": "Experience",
-    "points": "Points",
-    "rank": "Rank"
-  },
   "plus": {
     "title": "Additional",
     "subtitle": "Additional features",
@@ -149,7 +145,7 @@
     "understand": "Understand",
     "roadsideAssistance": "Roadside Assistance",
     "roadsideSubtitle": "Help on the road",
-    "delivery": "Delivery",
+    "deliveryService": "Delivery",
     "deliverySubtitle": "Fast delivery"
   },
   "startTrip": {
@@ -183,5 +179,41 @@
     "delete": "Delete",
     "showAll": "Show all notifications"
   },
-  "settings": "Settings"
+  "settings": "Settings",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Let's go?",
+      "message": "Are you starting a trip to {clientName}?"
+    },
+    "waiting": {
+      "title": "Waiting?",
+      "message": "Are you waiting for client {clientName}?"
+    },
+    "endTrip": {
+      "title": "Finish?",
+      "message": "Is the trip with {clientName} finished?"
+    },
+    "continueTrip": {
+      "title": "Continue?",
+      "message": "Continue the trip?"
+    },
+    "emergency": {
+      "title": "Emergency Actions",
+      "message": "Choose an emergency action",
+      "stop": "Stop",
+      "end": "End"
+    },
+    "stopTrip": {
+      "title": "Stop",
+      "message": "Trip has been forcibly stopped"
+    },
+    "forceEndTrip": {
+      "title": "End",
+      "message": "Trip has been forcibly ended"
+    },
+    "buttons": {
+      "cancelAction": "Cancel",
+      "okAction": "OK"
+    }
+  }
 }

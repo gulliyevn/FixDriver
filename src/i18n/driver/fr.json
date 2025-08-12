@@ -1,10 +1,86 @@
 {
   "title": "Chauffeur",
   "dashboard": "Tableau de bord",
-  "earnings": "Gains",
-  "orders": "Commandes",
-  "schedule": "Planning",
-  "profile": "Profil",
+  "earnings": {
+    "title": "Gains",
+    "today": "Aujourd'hui",
+    "week": "Cette semaine",
+    "month": "Ce mois",
+    "total": "Total",
+    "perHour": "Par heure",
+    "perOrder": "Par commande",
+    "bonus": "Bonus",
+    "tips": "Pourboires",
+    "commission": "Commission",
+    "tax": "Taxe",
+    "net": "Revenu net",
+    "withdraw": "Retirer",
+    "withdrawMessage": "La fonction de retrait sera disponible dans la prochaine mise à jour",
+    "viewDetails": "Détails",
+    "detailsMessage": "Les statistiques détaillées seront disponibles dans la prochaine mise à jour"
+  },
+  "orders": {
+    "title": "Commandes",
+    "active": "Actif",
+    "completed": "Terminé",
+    "cancelled": "Annulé",
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "rejected": "Rejeté",
+    "new": "Nouveau",
+    "inProgress": "En cours",
+    "pickup": "Prise en charge",
+    "delivery": "Livraison",
+    "searchOrders": "Rechercher des commandes...",
+    "orderNumber": "Commande #{id}",
+    "acceptOrder": "Accepter la commande",
+    "completeTrip": "Terminer le trajet",
+    "acceptOrderConfirm": "Accepter la commande de {clientName} ?",
+    "completeTripConfirm": "Terminer le trajet avec {clientName} ?",
+    "orderAccepted": "Commande acceptée !",
+    "tripCompleted": "Trajet terminé !",
+    "cancel": "Annuler",
+    "accept": "Accepter",
+    "complete": "Terminer",
+    "all": "Tous",
+    "refresh": "Actualiser"
+  },
+  "schedule": {
+    "title": "Planning",
+    "workHours": "Heures de travail",
+    "break": "Pause",
+    "start": "Démarrer",
+    "end": "Terminer",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "totalHours": "Heures totales",
+    "overtime": "Heures supplémentaires",
+    "weekend": "Week-end",
+    "holiday": "Vacances",
+    "upcoming": "À venir",
+    "completed": "Terminé",
+    "cancelled": "Annulé",
+    "cancelTrip": "Annuler le trajet",
+    "cancelTripConfirm": "Annuler le trajet {date} à {time} ?",
+    "no": "Non",
+    "yes": "Oui",
+    "totalEarnings": "Gains totaux : {amount} ₽"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Informations personnelles",
+    "vehicleInfo": "Informations du véhicule",
+    "documents": "Documents",
+    "ratings": "Évaluations",
+    "reviews": "Avis",
+    "statistics": "Statistiques",
+    "achievements": "Réalisations",
+    "badges": "Badges",
+    "level": "Niveau",
+    "experience": "Expérience",
+    "points": "Points",
+    "rank": "Rang"
+  },
   "map": {
     "title": "Carte",
     "loadingMap": "Chargement de la carte...",
@@ -57,86 +133,6 @@
     "enterMessage": "Entrez le message...",
     "noActiveChats": "Vous n'avez pas encore de chats actifs"
   },
-  "orders": {
-    "title": "Commandes",
-    "active": "Actif",
-    "completed": "Terminé",
-    "cancelled": "Annulé",
-    "pending": "En attente",
-    "accepted": "Accepté",
-    "rejected": "Rejeté",
-    "new": "Nouveau",
-    "inProgress": "En cours",
-    "pickup": "Prise en charge",
-    "delivery": "Livraison",
-    "searchOrders": "Rechercher des commandes...",
-    "orderNumber": "Commande #{id}",
-    "acceptOrder": "Accepter la commande",
-    "completeTrip": "Terminer le trajet",
-    "acceptOrderConfirm": "Accepter la commande de {clientName} ?",
-    "completeTripConfirm": "Terminer le trajet avec {clientName} ?",
-    "orderAccepted": "Commande acceptée !",
-    "tripCompleted": "Trajet terminé !",
-    "cancel": "Annuler",
-    "accept": "Accepter",
-    "complete": "Terminer",
-    "all": "Tous",
-    "refresh": "Actualiser"
-  },
-  "schedule": {
-    "title": "Planning",
-    "workHours": "Heures de travail",
-    "break": "Pause",
-    "start": "Démarrer",
-    "end": "Terminer",
-    "pause": "Pause",
-    "resume": "Reprendre",
-    "totalHours": "Heures totales",
-    "overtime": "Heures supplémentaires",
-    "weekend": "Week-end",
-    "holiday": "Vacances",
-    "upcoming": "À venir",
-    "completed": "Terminé",
-    "cancelled": "Annulé",
-    "cancelTrip": "Annuler le trajet",
-    "cancelTripConfirm": "Annuler le trajet {date} à {time} ?",
-    "no": "Non",
-    "yes": "Oui",
-    "totalEarnings": "Gains totaux : {amount} ₽"
-  },
-  "earnings": {
-    "title": "Gains",
-    "today": "Aujourd'hui",
-    "week": "Cette semaine",
-    "month": "Ce mois",
-    "total": "Total",
-    "perHour": "Par heure",
-    "perOrder": "Par commande",
-    "bonus": "Bonus",
-    "tips": "Pourboires",
-    "commission": "Commission",
-    "tax": "Taxe",
-    "net": "Revenu net",
-    "withdraw": "Retirer",
-    "withdrawMessage": "La fonction de retrait sera disponible dans la prochaine mise à jour",
-    "viewDetails": "Détails",
-    "detailsMessage": "Les statistiques détaillées seront disponibles dans la prochaine mise à jour"
-  },
-  "profile": {
-    "title": "Profil",
-    "personalInfo": "Informations personnelles",
-    "vehicleInfo": "Informations du véhicule",
-    "documents": "Documents",
-    "ratings": "Évaluations",
-    "reviews": "Avis",
-    "statistics": "Statistiques",
-    "achievements": "Réalisations",
-    "badges": "Badges",
-    "level": "Niveau",
-    "experience": "Expérience",
-    "points": "Points",
-    "rank": "Rang"
-  },
   "plus": {
     "title": "Supplémentaire",
     "subtitle": "Fonctionnalités supplémentaires",
@@ -183,5 +179,41 @@
     "delete": "Supprimer",
     "showAll": "Afficher toutes les notifications"
   },
-  "settings": "Paramètres"
+  "settings": "Paramètres",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Allons-y ?",
+      "message": "Vous commencez un voyage vers {clientName} ?"
+    },
+    "waiting": {
+      "title": "Attendre ?",
+      "message": "Vous attendez le client {clientName} ?"
+    },
+    "endTrip": {
+      "title": "Terminer ?",
+      "message": "Le voyage avec {clientName} est-il terminé ?"
+    },
+    "continueTrip": {
+      "title": "Continuer ?",
+      "message": "Continuer le voyage ?"
+    },
+    "emergency": {
+      "title": "Actions d'Urgence",
+      "message": "Choisissez une action d'urgence",
+      "stop": "Arrêter",
+      "end": "Terminer"
+    },
+    "stopTrip": {
+      "title": "Arrêter",
+      "message": "Le voyage a été forcément arrêté"
+    },
+    "forceEndTrip": {
+      "title": "Terminer",
+      "message": "Le voyage a été forcément terminé"
+    },
+    "buttons": {
+      "cancelAction": "Annuler",
+      "okAction": "OK"
+    }
+  }
 }

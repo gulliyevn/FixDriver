@@ -17,7 +17,6 @@ const OrdersMapScreen: React.FC = () => {
   const [currentLocation, setCurrentLocation] = useState<MapLocation | undefined>(undefined);
   const [isExpanded, setIsExpanded] = useState(false);
   const [driverVisibilityTrigger, setDriverVisibilityTrigger] = useState(0);
-  const rotateAnim = useRef(new Animated.Value(0)).current;
   const settingsRotateAnim = useRef(new Animated.Value(0)).current;
   const settingsPanelAnim = useRef(new Animated.Value(0)).current;
 
@@ -32,14 +31,6 @@ const OrdersMapScreen: React.FC = () => {
   }, []);
 
   const handleChevronPress = () => {
-    const toValue = isExpanded ? 0 : 1;
-
-    Animated.timing(rotateAnim, {
-      toValue,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-
     setIsExpanded(!isExpanded);
     
     // Триггерим изменение видимости карточки водителя
@@ -65,11 +56,6 @@ const OrdersMapScreen: React.FC = () => {
       })
     ]).start();
   };
-
-  const rotate = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
-  });
 
   const settingsRotate = settingsRotateAnim.interpolate({
     inputRange: [0, 1],
@@ -156,13 +142,11 @@ const OrdersMapScreen: React.FC = () => {
             onPress={handleChevronPress}
             accessibilityLabel={t('common.menu')}
           >
-            <Animated.View style={{ transform: [{ rotate }] }}>
-              <Ionicons
-                name="chevron-down"
-                size={22}
-                color={isDark ? '#F9FAFB' : '#111827'}
-              />
-            </Animated.View>
+            <Ionicons
+              name="chevron-down"
+              size={22}
+              color={isDark ? '#F9FAFB' : '#111827'}
+            />
           </TouchableOpacity>
         </View>
       </View>

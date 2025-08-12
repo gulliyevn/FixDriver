@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Animated, Easing, Pressable, Linking, Mod
 import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../hooks/useI18n';
 import { Driver } from '../../types/driver';
+import { getDriverInfo as getDriverInfoMock, getDriverTrips as getDriverTripsMock } from '../../mocks/driverModalMock';
 
 export type DriverListItemProps = {
   driver: Driver & { isFavorite?: boolean };
@@ -83,48 +84,9 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     // Сообщение реализовано в родителе ранее, здесь оставляем только закрытие
   }, [closeCallSheet]);
 
-  const getDriverInfo = useCallback((driverId: string) => {
-    const schedules = ['пн-пт', 'пн, ср, пт', 'вт, чт, сб', 'пн-сб'];
-    const prices = ['25.5', '18.75', '22.0', '30.0'];
-    const distances = ['5.2', '3.8', '4.5', '6.1'];
-    const times = ['30', '25', '28', '35'];
-    const childNames = ['Алиса', 'Михаил', 'Елена', 'Дмитрий'];
-    const childAges = ['8', '12', '10', '9'];
-    const childTypes = ['дочь', 'сын', 'дочь', 'сын'];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % schedules.length;
-    return { 
-      schedule: schedules[driverIndex],
-      price: prices[driverIndex], 
-      distance: distances[driverIndex], 
-      time: times[driverIndex],
-      childName: childNames[driverIndex],
-      childAge: childAges[driverIndex],
-      childType: childTypes[driverIndex]
-    };
-  }, []);
+  const getDriverInfo = useCallback((driverId: string) => getDriverInfoMock(driverId), []);
 
-  const getDriverTrips = useCallback((driverId: string) => {
-    const tripTemplates = [
-      ['Дом', 'Офис', 'Школа'],
-      ['Центр города', 'Аэропорт', 'Торговый центр'],
-      ['Больница', 'Университет', 'Парк'],
-      ['Вокзал', 'Рынок', 'Спортзал'],
-    ];
-    const timeTemplates = [
-      ['07:30', '08:15', '17:45'],
-      ['08:00', '09:30', '18:30'],
-      ['07:45', '12:00', '19:15'],
-      ['08:30', '14:20', '20:00'],
-    ];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % tripTemplates.length;
-    const trips = tripTemplates[driverIndex];
-    const times = timeTemplates[driverIndex];
-    return trips.map((trip, index) => ({
-      text: trip,
-      time: times[index],
-      dotStyle: index === 0 ? 'default' : index === 1 ? 'blue' : 'location',
-    }));
-  }, []);
+  const getDriverTrips = useCallback((driverId: string) => getDriverTripsMock(driverId), []);
 
   const renderLeftActions = (progress: any, dragX: any) => {
     const scale = dragX.interpolate({ inputRange: [0, actionWidth], outputRange: [0, 1], extrapolate: 'clamp' });

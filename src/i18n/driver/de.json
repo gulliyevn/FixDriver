@@ -1,10 +1,86 @@
 {
   "title": "Fahrer",
   "dashboard": "Dashboard",
-  "earnings": "Verdienst",
-  "orders": "Bestellungen",
-  "schedule": "Zeitplan",
-  "profile": "Profil",
+  "earnings": {
+    "title": "Verdienst",
+    "today": "Heute",
+    "week": "Diese Woche",
+    "month": "Diesen Monat",
+    "total": "Gesamt",
+    "perHour": "Pro Stunde",
+    "perOrder": "Pro Bestellung",
+    "bonus": "Bonus",
+    "tips": "Trinkgeld",
+    "commission": "Provision",
+    "tax": "Steuer",
+    "net": "Nettoeinkommen",
+    "withdraw": "Auszahlen",
+    "withdrawMessage": "Auszahlungsfunktion wird im nächsten Update verfügbar sein",
+    "viewDetails": "Details",
+    "detailsMessage": "Detaillierte Statistiken werden im nächsten Update verfügbar sein"
+  },
+  "orders": {
+    "title": "Bestellungen",
+    "active": "Aktiv",
+    "completed": "Abgeschlossen",
+    "cancelled": "Storniert",
+    "pending": "Ausstehend",
+    "accepted": "Angenommen",
+    "rejected": "Abgelehnt",
+    "new": "Neu",
+    "inProgress": "In Bearbeitung",
+    "pickup": "Abholung",
+    "delivery": "Lieferung",
+    "searchOrders": "Bestellungen suchen...",
+    "orderNumber": "Bestellung #{id}",
+    "acceptOrder": "Bestellung annehmen",
+    "completeTrip": "Fahrt abschließen",
+    "acceptOrderConfirm": "Bestellung von {clientName} annehmen?",
+    "completeTripConfirm": "Fahrt mit {clientName} abschließen?",
+    "orderAccepted": "Bestellung angenommen!",
+    "tripCompleted": "Fahrt abgeschlossen!",
+    "cancel": "Abbrechen",
+    "accept": "Annehmen",
+    "complete": "Abschließen",
+    "all": "Alle",
+    "refresh": "Aktualisieren"
+  },
+  "schedule": {
+    "title": "Zeitplan",
+    "workHours": "Arbeitszeiten",
+    "break": "Pause",
+    "start": "Start",
+    "end": "Ende",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "totalHours": "Gesamtstunden",
+    "overtime": "Überstunden",
+    "weekend": "Wochenende",
+    "holiday": "Feiertag",
+    "upcoming": "Anstehend",
+    "completed": "Abgeschlossen",
+    "cancelled": "Storniert",
+    "cancelTrip": "Fahrt stornieren",
+    "cancelTripConfirm": "Fahrt {date} um {time} stornieren?",
+    "no": "Nein",
+    "yes": "Ja",
+    "totalEarnings": "Gesamtverdienst: {amount} ₽"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Persönliche Info",
+    "vehicleInfo": "Fahrzeuginfo",
+    "documents": "Dokumente",
+    "ratings": "Bewertungen",
+    "reviews": "Bewertungen",
+    "statistics": "Statistiken",
+    "achievements": "Erfolge",
+    "badges": "Abzeichen",
+    "level": "Level",
+    "experience": "Erfahrung",
+    "points": "Punkte",
+    "rank": "Rang"
+  },
   "map": {
     "title": "Karte",
     "loadingMap": "Karte wird geladen...",
@@ -57,86 +133,6 @@
     "enterMessage": "Nachricht eingeben...",
     "noActiveChats": "Sie haben noch keine aktiven Chats"
   },
-  "orders": {
-    "title": "Bestellungen",
-    "active": "Aktiv",
-    "completed": "Abgeschlossen",
-    "cancelled": "Storniert",
-    "pending": "Ausstehend",
-    "accepted": "Angenommen",
-    "rejected": "Abgelehnt",
-    "new": "Neu",
-    "inProgress": "In Bearbeitung",
-    "pickup": "Abholung",
-    "delivery": "Lieferung",
-    "searchOrders": "Bestellungen suchen...",
-    "orderNumber": "Bestellung #{id}",
-    "acceptOrder": "Bestellung annehmen",
-    "completeTrip": "Fahrt abschließen",
-    "acceptOrderConfirm": "Bestellung von {clientName} annehmen?",
-    "completeTripConfirm": "Fahrt mit {clientName} abschließen?",
-    "orderAccepted": "Bestellung angenommen!",
-    "tripCompleted": "Fahrt abgeschlossen!",
-    "cancel": "Abbrechen",
-    "accept": "Annehmen",
-    "complete": "Abschließen",
-    "all": "Alle",
-    "refresh": "Aktualisieren"
-  },
-  "schedule": {
-    "title": "Zeitplan",
-    "workHours": "Arbeitszeiten",
-    "break": "Pause",
-    "start": "Start",
-    "end": "Ende",
-    "pause": "Pause",
-    "resume": "Fortsetzen",
-    "totalHours": "Gesamtstunden",
-    "overtime": "Überstunden",
-    "weekend": "Wochenende",
-    "holiday": "Feiertag",
-    "upcoming": "Anstehend",
-    "completed": "Abgeschlossen",
-    "cancelled": "Storniert",
-    "cancelTrip": "Fahrt stornieren",
-    "cancelTripConfirm": "Fahrt {date} um {time} stornieren?",
-    "no": "Nein",
-    "yes": "Ja",
-    "totalEarnings": "Gesamtverdienst: {amount} ₽"
-  },
-  "earnings": {
-    "title": "Verdienst",
-    "today": "Heute",
-    "week": "Diese Woche",
-    "month": "Diesen Monat",
-    "total": "Gesamt",
-    "perHour": "Pro Stunde",
-    "perOrder": "Pro Bestellung",
-    "bonus": "Bonus",
-    "tips": "Trinkgeld",
-    "commission": "Provision",
-    "tax": "Steuer",
-    "net": "Nettoeinkommen",
-    "withdraw": "Auszahlen",
-    "withdrawMessage": "Auszahlungsfunktion wird im nächsten Update verfügbar sein",
-    "viewDetails": "Details",
-    "detailsMessage": "Detaillierte Statistiken werden im nächsten Update verfügbar sein"
-  },
-  "profile": {
-    "title": "Profil",
-    "personalInfo": "Persönliche Info",
-    "vehicleInfo": "Fahrzeuginfo",
-    "documents": "Dokumente",
-    "ratings": "Bewertungen",
-    "reviews": "Bewertungen",
-    "statistics": "Statistiken",
-    "achievements": "Erfolge",
-    "badges": "Abzeichen",
-    "level": "Level",
-    "experience": "Erfahrung",
-    "points": "Punkte",
-    "rank": "Rang"
-  },
   "plus": {
     "title": "Zusätzlich",
     "subtitle": "Zusätzliche Funktionen",
@@ -183,5 +179,41 @@
     "delete": "Löschen",
     "showAll": "Alle Benachrichtigungen anzeigen"
   },
-  "settings": "Einstellungen"
+  "settings": "Einstellungen",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Los geht's?",
+      "message": "Beginnen Sie eine Fahrt zu {clientName}?"
+    },
+    "waiting": {
+      "title": "Warten?",
+      "message": "Warten Sie auf Kunde {clientName}?"
+    },
+    "endTrip": {
+      "title": "Beenden?",
+      "message": "Ist die Fahrt mit {clientName} beendet?"
+    },
+    "continueTrip": {
+      "title": "Fortsetzen?",
+      "message": "Fahrt fortsetzen?"
+    },
+    "emergency": {
+      "title": "Notfallaktionen",
+      "message": "Wählen Sie eine Notfallaktion",
+      "stop": "Stoppen",
+      "end": "Beenden"
+    },
+    "stopTrip": {
+      "title": "Stoppen",
+      "message": "Fahrt wurde zwangsweise gestoppt"
+    },
+    "forceEndTrip": {
+      "title": "Beenden",
+      "message": "Fahrt wurde zwangsweise beendet"
+    },
+    "buttons": {
+      "cancelAction": "Abbrechen",
+      "okAction": "OK"
+    }
+  }
 }

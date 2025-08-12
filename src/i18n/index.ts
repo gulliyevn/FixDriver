@@ -121,7 +121,7 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
 // Get system language and map to supported language
 export const getSystemLanguage = (): SupportedLanguage => {
   try {
-    const systemLocale = Localization.locale.split('-')[0];
+    const systemLocale = Localization.getLocales()[0]?.languageCode || 'en';
     return SUPPORTED_LANGUAGES[systemLocale] ? systemLocale as SupportedLanguage : DEFAULT_LANGUAGE;
   } catch (error) {
     return DEFAULT_LANGUAGE;
@@ -156,7 +156,15 @@ export const initializeLanguage = async (): Promise<void> => {
 // Main translation function using i18n-js
 export const t = (key: string, params?: Record<string, string | number>): string => {
   try {
-    const result = i18n.t(key, params);
+    let result = i18n.t(key, params);
+    
+    // Если интерполяция не сработала, делаем замену вручную
+    if (params && result.includes('{clientName}')) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        result = result.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+      });
+    }
+    
     return result;
   } catch (error) {
     console.error('Translation error:', error, 'for key:', key);

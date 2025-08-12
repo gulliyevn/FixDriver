@@ -1,10 +1,86 @@
 {
   "title": "Sürücü",
   "dashboard": "İdarəetmə Paneli",
-  "earnings": "Qazanc",
-  "orders": "Sifarişlər",
-  "schedule": "Cədvəl",
-  "profile": "Profil",
+  "earnings": {
+    "title": "Qazanc",
+    "today": "Bu gün",
+    "week": "Bu həftə",
+    "month": "Bu ay",
+    "total": "Ümumi",
+    "perHour": "Saatda",
+    "perOrder": "Sifarişə",
+    "bonus": "Bonus",
+    "tips": "Bəxşiş",
+    "commission": "Komissiya",
+    "tax": "Vergi",
+    "net": "Xalis gəlir",
+    "withdraw": "Çıxarış",
+    "withdrawMessage": "Çıxarış funksiyası növbəti yeniləmədə mövcud olacaq",
+    "viewDetails": "Detallar",
+    "detailsMessage": "Ətraflı statistikalar növbəti yeniləmədə mövcud olacaq"
+  },
+  "orders": {
+    "title": "Sifarişlər",
+    "active": "Aktiv",
+    "completed": "Tamamlanmış",
+    "cancelled": "Ləğv edilmiş",
+    "pending": "Gözləyən",
+    "accepted": "Qəbul edilmiş",
+    "rejected": "Rədd edilmiş",
+    "new": "Yeni",
+    "inProgress": "Davam edir",
+    "pickup": "Götürülmə",
+    "delivery": "Çatdırılma",
+    "searchOrders": "Sifariş axtar...",
+    "orderNumber": "Sifariş #{id}",
+    "acceptOrder": "Sifarişi qəbul et",
+    "completeTrip": "Səyahəti tamamla",
+    "acceptOrderConfirm": "{clientName}-dən sifarişi qəbul etmək?",
+    "completeTripConfirm": "{clientName} ilə səyahəti tamamlamaq?",
+    "orderAccepted": "Sifariş qəbul edildi!",
+    "tripCompleted": "Səyahət tamamlandı!",
+    "cancel": "Ləğv et",
+    "accept": "Qəbul et",
+    "complete": "Tamamla",
+    "all": "Hamısı",
+    "refresh": "Yenilə"
+  },
+  "schedule": {
+    "title": "Cədvəl",
+    "workHours": "İş saatları",
+    "break": "Fasilə",
+    "start": "Başla",
+    "end": "Bitir",
+    "pause": "Duraklat",
+    "resume": "Davam et",
+    "totalHours": "Ümumi saatlar",
+    "overtime": "Əlavə saatlar",
+    "weekend": "Həftə sonu",
+    "holiday": "Bayram",
+    "upcoming": "Gələcək",
+    "completed": "Tamamlanmış",
+    "cancelled": "Ləğv edilmiş",
+    "cancelTrip": "Səyahəti ləğv et",
+    "cancelTripConfirm": "{date} tarixində {time} səyahətini ləğv etmək?",
+    "no": "Xeyr",
+    "yes": "Bəli",
+    "totalEarnings": "Ümumi qazanc: {amount} ₽"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Şəxsi məlumat",
+    "vehicleInfo": "Nəqliyyat məlumatı",
+    "documents": "Sənədlər",
+    "ratings": "Reytinq",
+    "reviews": "Rəylər",
+    "statistics": "Statistika",
+    "achievements": "Uğurlar",
+    "badges": "Nişanlar",
+    "level": "Səviyyə",
+    "experience": "Təcrübə",
+    "points": "Xallar",
+    "rank": "Rütbə"
+  },
   "map": {
     "title": "Xəritə",
     "loadingMap": "Xəritə yüklənir...",
@@ -57,86 +133,6 @@
     "enterMessage": "Mesaj daxil edin...",
     "noActiveChats": "Hələ aktiv söhbətiniz yoxdur"
   },
-  "orders": {
-    "title": "Sifarişlər",
-    "active": "Aktiv",
-    "completed": "Tamamlanmış",
-    "cancelled": "Ləğv edilmiş",
-    "pending": "Gözləyən",
-    "accepted": "Qəbul edilmiş",
-    "rejected": "Rədd edilmiş",
-    "new": "Yeni",
-    "inProgress": "Davam edir",
-    "pickup": "Götürülmə",
-    "delivery": "Çatdırılma",
-    "searchOrders": "Sifariş axtar...",
-    "orderNumber": "Sifariş #{id}",
-    "acceptOrder": "Sifarişi qəbul et",
-    "completeTrip": "Səyahəti tamamla",
-    "acceptOrderConfirm": "{clientName}-dən sifarişi qəbul etmək?",
-    "completeTripConfirm": "{clientName} ilə səyahəti tamamlamaq?",
-    "orderAccepted": "Sifariş qəbul edildi!",
-    "tripCompleted": "Səyahət tamamlandı!",
-    "cancel": "Ləğv et",
-    "accept": "Qəbul et",
-    "complete": "Tamamla",
-    "all": "Hamısı",
-    "refresh": "Yenilə"
-  },
-  "schedule": {
-    "title": "Cədvəl",
-    "workHours": "İş saatları",
-    "break": "Fasilə",
-    "start": "Başla",
-    "end": "Bitir",
-    "pause": "Duraklat",
-    "resume": "Davam et",
-    "totalHours": "Ümumi saatlar",
-    "overtime": "Əlavə saatlar",
-    "weekend": "Həftə sonu",
-    "holiday": "Bayram",
-    "upcoming": "Gələcək",
-    "completed": "Tamamlanmış",
-    "cancelled": "Ləğv edilmiş",
-    "cancelTrip": "Səyahəti ləğv et",
-    "cancelTripConfirm": "{date} tarixində {time} səyahətini ləğv etmək?",
-    "no": "Xeyr",
-    "yes": "Bəli",
-    "totalEarnings": "Ümumi qazanc: {amount} ₽"
-  },
-  "earnings": {
-    "title": "Qazanc",
-    "today": "Bu gün",
-    "week": "Bu həftə",
-    "month": "Bu ay",
-    "total": "Ümumi",
-    "perHour": "Saatda",
-    "perOrder": "Sifarişə",
-    "bonus": "Bonus",
-    "tips": "Bəxşiş",
-    "commission": "Komissiya",
-    "tax": "Vergi",
-    "net": "Xalis gəlir",
-    "withdraw": "Çıxarış",
-    "withdrawMessage": "Çıxarış funksiyası növbəti yeniləmədə mövcud olacaq",
-    "viewDetails": "Detallar",
-    "detailsMessage": "Ətraflı statistikalar növbəti yeniləmədə mövcud olacaq"
-  },
-  "profile": {
-    "title": "Profil",
-    "personalInfo": "Şəxsi məlumat",
-    "vehicleInfo": "Nəqliyyat məlumatı",
-    "documents": "Sənədlər",
-    "ratings": "Reytinq",
-    "reviews": "Rəylər",
-    "statistics": "Statistika",
-    "achievements": "Uğurlar",
-    "badges": "Nişanlar",
-    "level": "Səviyyə",
-    "experience": "Təcrübə",
-    "points": "Xallar",
-    "rank": "Rütbə"
-  },
   "plus": {
     "title": "Əlavə",
     "subtitle": "Əlavə funksiyalar",
@@ -183,5 +179,41 @@
     "delete": "Sil",
     "showAll": "Bütün bildirişləri göstər"
   },
-  "settings": "Parametrlər"
+  "settings": "Parametrlər",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Gedək?",
+      "message": "{clientName} üçün səfərə başlayırsınız?"
+    },
+    "waiting": {
+      "title": "Gözləyirsiniz?",
+      "message": "{clientName} müştərisini gözləyirsiniz?"
+    },
+    "endTrip": {
+      "title": "Bitir?",
+      "message": "{clientName} ilə səfər bitdi?"
+    },
+    "continueTrip": {
+      "title": "Davam et?",
+      "message": "Səfərə davam et?"
+    },
+    "emergency": {
+      "title": "Təcili Tədbirlər",
+      "message": "Təcili tədbir seçin",
+      "stop": "Dayandır",
+      "end": "Bitir"
+    },
+    "stopTrip": {
+      "title": "Dayandır",
+      "message": "Səfər məcburi dayandırıldı"
+    },
+    "forceEndTrip": {
+      "title": "Bitir",
+      "message": "Səfər məcburi bitirildi"
+    },
+    "buttons": {
+      "cancelAction": "Ləğv et",
+      "okAction": "OK"
+    }
+  }
 }

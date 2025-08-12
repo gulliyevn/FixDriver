@@ -1,10 +1,85 @@
 {
   "title": "Sürücü",
   "dashboard": "Gösterge Paneli",
-  "earnings": "Kazanç",
-  "orders": "Siparişler",
-  "schedule": "Program",
-  "profile": "Profil",
+  "earnings": {
+    "title": "Kazanç",
+    "today": "Bugün",
+    "week": "Bu hafta",
+    "month": "Bu ay",
+    "total": "Toplam",
+    "perHour": "Saatlik",
+    "perOrder": "Sipariş başına",
+    "bonus": "Bonus",
+    "tips": "Bahşiş",
+    "commission": "Komisyon",
+    "tax": "Vergi",
+    "net": "Net gelir",
+    "withdraw": "Çek",
+    "withdrawMessage": "Çekme fonksiyonu bir sonraki güncellemede mevcut olacak",
+    "viewDetails": "Detaylar",
+    "detailsMessage": "Detaylı istatistikler bir sonraki güncellemede mevcut olacak"
+  },
+  "orders": {
+    "title": "Siparişler",
+    "active": "Aktif",
+    "completed": "Tamamlandı",
+    "cancelled": "İptal edildi",
+    "pending": "Beklemede",
+    "accepted": "Kabul edildi",
+    "rejected": "Reddedildi",
+    "new": "Yeni",
+    "inProgress": "Devam ediyor",
+    "pickup": "Alış",
+    "delivery": "Teslimat",
+    "searchOrders": "Sipariş ara...",
+    "orderNumber": "Sipariş #{id}",
+    "acceptOrder": "Kabul et",
+    "completeTrip": "Yolculuğu tamamla",
+    "acceptOrderConfirm": "{clientName} adından siparişi kabul etmek?",
+    "completeTripConfirm": "{clientName} ile yolculuğu tamamlamak?",
+    "orderAccepted": "Sipariş kabul edildi!",
+    "tripCompleted": "Yolculuk tamamlandı!",
+    "cancelOrder": "İptal",
+    "completeOrder": "Tamamla",
+    "all": "Tümü",
+    "refresh": "Yenile"
+  },
+  "schedule": {
+    "title": "Program",
+    "workHours": "Çalışma saatleri",
+    "break": "Mola",
+    "start": "Başla",
+    "end": "Bitir",
+    "pause": "Duraklat",
+    "resume": "Devam et",
+    "totalHours": "Toplam saatler",
+    "overtime": "Fazla mesai",
+    "weekend": "Hafta sonu",
+    "holiday": "Tatil",
+    "upcoming": "Yaklaşan",
+    "completed": "Tamamlandı",
+    "cancelled": "İptal edildi",
+    "cancelTrip": "Yolculuğu iptal et",
+    "cancelTripConfirm": "{date} tarihinde {time} yolculuğunu iptal etmek?",
+    "no": "Hayır",
+    "yes": "Evet",
+    "totalEarnings": "Toplam kazanç: {amount} ₽"
+  },
+  "profile": {
+    "title": "Profil",
+    "personalInfo": "Kişisel bilgi",
+    "vehicleInfo": "Araç bilgisi",
+    "documents": "Belgeler",
+    "ratings": "Değerlendirmeler",
+    "reviews": "Yorumlar",
+    "statistics": "İstatistikler",
+    "achievements": "Başarılar",
+    "badges": "Rozetler",
+    "level": "Seviye",
+    "experience": "Deneyim",
+    "points": "Puanlar",
+    "rank": "Rütbe"
+  },
   "map": {
     "title": "Harita",
     "loadingMap": "Harita yükleniyor...",
@@ -57,86 +132,6 @@
     "enterMessage": "Mesaj girin...",
     "noActiveChats": "Henüz aktif sohbetiniz yok"
   },
-  "orders": {
-    "title": "Siparişler",
-    "active": "Aktif",
-    "completed": "Tamamlandı",
-    "cancelled": "İptal edildi",
-    "pending": "Beklemede",
-    "accepted": "Kabul edildi",
-    "rejected": "Reddedildi",
-    "new": "Yeni",
-    "inProgress": "Devam ediyor",
-    "pickup": "Alış",
-    "delivery": "Teslimat",
-    "searchOrders": "Sipariş ara...",
-    "orderNumber": "Sipariş #{id}",
-    "acceptOrder": "Siparişi kabul et",
-    "completeTrip": "Yolculuğu tamamla",
-    "acceptOrderConfirm": "{clientName} adından siparişi kabul etmek?",
-    "completeTripConfirm": "{clientName} ile yolculuğu tamamlamak?",
-    "orderAccepted": "Sipariş kabul edildi!",
-    "tripCompleted": "Yolculuk tamamlandı!",
-    "cancel": "İptal",
-    "accept": "Kabul et",
-    "complete": "Tamamla",
-    "all": "Tümü",
-    "refresh": "Yenile"
-  },
-  "schedule": {
-    "title": "Program",
-    "workHours": "Çalışma saatleri",
-    "break": "Mola",
-    "start": "Başla",
-    "end": "Bitir",
-    "pause": "Duraklat",
-    "resume": "Devam et",
-    "totalHours": "Toplam saatler",
-    "overtime": "Fazla mesai",
-    "weekend": "Hafta sonu",
-    "holiday": "Tatil",
-    "upcoming": "Yaklaşan",
-    "completed": "Tamamlandı",
-    "cancelled": "İptal edildi",
-    "cancelTrip": "Yolculuğu iptal et",
-    "cancelTripConfirm": "{date} tarihinde {time} yolculuğunu iptal etmek?",
-    "no": "Hayır",
-    "yes": "Evet",
-    "totalEarnings": "Toplam kazanç: {amount} ₽"
-  },
-  "earnings": {
-    "title": "Kazanç",
-    "today": "Bugün",
-    "week": "Bu hafta",
-    "month": "Bu ay",
-    "total": "Toplam",
-    "perHour": "Saatlik",
-    "perOrder": "Sipariş başına",
-    "bonus": "Bonus",
-    "tips": "Bahşiş",
-    "commission": "Komisyon",
-    "tax": "Vergi",
-    "net": "Net gelir",
-    "withdraw": "Çek",
-    "withdrawMessage": "Çekme fonksiyonu bir sonraki güncellemede mevcut olacak",
-    "viewDetails": "Detaylar",
-    "detailsMessage": "Detaylı istatistikler bir sonraki güncellemede mevcut olacak"
-  },
-  "profile": {
-    "title": "Profil",
-    "personalInfo": "Kişisel bilgi",
-    "vehicleInfo": "Araç bilgisi",
-    "documents": "Belgeler",
-    "ratings": "Değerlendirmeler",
-    "reviews": "Yorumlar",
-    "statistics": "İstatistikler",
-    "achievements": "Başarılar",
-    "badges": "Rozetler",
-    "level": "Seviye",
-    "experience": "Deneyim",
-    "points": "Puanlar",
-    "rank": "Rütbe"
-  },
   "plus": {
     "title": "Ek",
     "subtitle": "Ek özellikler",
@@ -183,5 +178,41 @@
     "delete": "Sil",
     "showAll": "Tüm bildirimleri göster"
   },
-  "settings": "Ayarlar"
+  "settings": "Ayarlar",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Gidelim mi?",
+      "message": "{clientName} için yolculuğa başlıyor musunuz?"
+    },
+    "waiting": {
+      "title": "Bekliyor musunuz?",
+      "message": "{clientName} müşterisini bekliyor musunuz?"
+    },
+    "endTrip": {
+      "title": "Bitir?",
+      "message": "{clientName} ile yolculuk bitti mi?"
+    },
+    "continueTrip": {
+      "title": "Devam et?",
+      "message": "Yolculuğa devam et?"
+    },
+    "emergency": {
+      "title": "Acil Durum Eylemleri",
+      "message": "Acil durum eylemi seçin",
+      "stop": "Durdur",
+      "end": "Bitir"
+    },
+    "stopTrip": {
+      "title": "Durdur",
+      "message": "Yolculuk zorla durduruldu"
+    },
+    "forceEndTrip": {
+      "title": "Bitir",
+      "message": "Yolculuk zorla sonlandırıldı"
+    },
+    "buttons": {
+      "cancelAction": "İptal",
+      "okAction": "Tamam"
+    }
+  }
 }

@@ -1,10 +1,86 @@
 {
   "title": "سائق",
   "dashboard": "لوحة التحكم",
-  "earnings": "الأرباح",
-  "orders": "الطلبات",
-  "schedule": "الجدول",
-  "profile": "الملف الشخصي",
+  "earnings": {
+    "title": "الأرباح",
+    "today": "اليوم",
+    "week": "هذا الأسبوع",
+    "month": "هذا الشهر",
+    "total": "الإجمالي",
+    "perHour": "في الساعة",
+    "perOrder": "لكل طلب",
+    "bonus": "مكافأة",
+    "tips": "إكرامية",
+    "commission": "عمولة",
+    "tax": "ضريبة",
+    "net": "صافي الدخل",
+    "withdraw": "سحب",
+    "withdrawMessage": "ستكون وظيفة السحب متاحة في التحديث القادم",
+    "viewDetails": "التفاصيل",
+    "detailsMessage": "ستكون الإحصائيات التفصيلية متاحة في التحديث القادم"
+  },
+  "orders": {
+    "title": "الطلبات",
+    "active": "نشط",
+    "completed": "مكتمل",
+    "cancelled": "ملغي",
+    "pending": "في الانتظار",
+    "accepted": "مقبول",
+    "rejected": "مرفوض",
+    "new": "جديد",
+    "inProgress": "قيد التنفيذ",
+    "pickup": "استلام",
+    "delivery": "توصيل",
+    "searchOrders": "البحث في الطلبات...",
+    "orderNumber": "طلب #{id}",
+    "acceptOrder": "قبول الطلب",
+    "completeTrip": "إكمال الرحلة",
+    "acceptOrderConfirm": "قبول الطلب من {clientName}؟",
+    "completeTripConfirm": "إكمال الرحلة مع {clientName}؟",
+    "orderAccepted": "تم قبول الطلب!",
+    "tripCompleted": "تم إكمال الرحلة!",
+    "cancel": "إلغاء",
+    "accept": "قبول",
+    "complete": "إكمال",
+    "all": "الكل",
+    "refresh": "تحديث"
+  },
+  "schedule": {
+    "title": "الجدول",
+    "workHours": "ساعات العمل",
+    "break": "استراحة",
+    "start": "بدء",
+    "end": "إنهاء",
+    "pause": "إيقاف مؤقت",
+    "resume": "استئناف",
+    "totalHours": "إجمالي الساعات",
+    "overtime": "وقت إضافي",
+    "weekend": "عطلة نهاية الأسبوع",
+    "holiday": "عطلة",
+    "upcoming": "قادم",
+    "completed": "مكتمل",
+    "cancelled": "ملغي",
+    "cancelTrip": "إلغاء الرحلة",
+    "cancelTripConfirm": "إلغاء الرحلة {date} في {time}؟",
+    "no": "لا",
+    "yes": "نعم",
+    "totalEarnings": "إجمالي الأرباح: {amount} ₽"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "personalInfo": "المعلومات الشخصية",
+    "vehicleInfo": "معلومات المركبة",
+    "documents": "المستندات",
+    "ratings": "التقييمات",
+    "reviews": "المراجعات",
+    "statistics": "الإحصائيات",
+    "achievements": "الإنجازات",
+    "badges": "الشارات",
+    "level": "المستوى",
+    "experience": "الخبرة",
+    "points": "النقاط",
+    "rank": "الرتبة"
+  },
   "map": {
     "title": "الخريطة",
     "loadingMap": "جاري تحميل الخريطة...",
@@ -57,86 +133,6 @@
     "enterMessage": "أدخل الرسالة...",
     "noActiveChats": "ليس لديك محادثات نشطة بعد"
   },
-  "orders": {
-    "title": "الطلبات",
-    "active": "نشط",
-    "completed": "مكتمل",
-    "cancelled": "ملغي",
-    "pending": "في الانتظار",
-    "accepted": "مقبول",
-    "rejected": "مرفوض",
-    "new": "جديد",
-    "inProgress": "قيد التنفيذ",
-    "pickup": "استلام",
-    "delivery": "توصيل",
-    "searchOrders": "البحث في الطلبات...",
-    "orderNumber": "طلب #{id}",
-    "acceptOrder": "قبول الطلب",
-    "completeTrip": "إكمال الرحلة",
-    "acceptOrderConfirm": "قبول الطلب من {clientName}؟",
-    "completeTripConfirm": "إكمال الرحلة مع {clientName}؟",
-    "orderAccepted": "تم قبول الطلب!",
-    "tripCompleted": "تم إكمال الرحلة!",
-    "cancel": "إلغاء",
-    "accept": "قبول",
-    "complete": "إكمال",
-    "all": "الكل",
-    "refresh": "تحديث"
-  },
-  "schedule": {
-    "title": "الجدول",
-    "workHours": "ساعات العمل",
-    "break": "استراحة",
-    "start": "بدء",
-    "end": "إنهاء",
-    "pause": "إيقاف مؤقت",
-    "resume": "استئناف",
-    "totalHours": "إجمالي الساعات",
-    "overtime": "وقت إضافي",
-    "weekend": "عطلة نهاية الأسبوع",
-    "holiday": "عطلة",
-    "upcoming": "قادم",
-    "completed": "مكتمل",
-    "cancelled": "ملغي",
-    "cancelTrip": "إلغاء الرحلة",
-    "cancelTripConfirm": "إلغاء الرحلة {date} في {time}؟",
-    "no": "لا",
-    "yes": "نعم",
-    "totalEarnings": "إجمالي الأرباح: {amount} ₽"
-  },
-  "earnings": {
-    "title": "الأرباح",
-    "today": "اليوم",
-    "week": "هذا الأسبوع",
-    "month": "هذا الشهر",
-    "total": "الإجمالي",
-    "perHour": "في الساعة",
-    "perOrder": "لكل طلب",
-    "bonus": "مكافأة",
-    "tips": "إكرامية",
-    "commission": "عمولة",
-    "tax": "ضريبة",
-    "net": "صافي الدخل",
-    "withdraw": "سحب",
-    "withdrawMessage": "ستكون وظيفة السحب متاحة في التحديث القادم",
-    "viewDetails": "التفاصيل",
-    "detailsMessage": "ستكون الإحصائيات التفصيلية متاحة في التحديث القادم"
-  },
-  "profile": {
-    "title": "الملف الشخصي",
-    "personalInfo": "المعلومات الشخصية",
-    "vehicleInfo": "معلومات المركبة",
-    "documents": "المستندات",
-    "ratings": "التقييمات",
-    "reviews": "المراجعات",
-    "statistics": "الإحصائيات",
-    "achievements": "الإنجازات",
-    "badges": "الشارات",
-    "level": "المستوى",
-    "experience": "الخبرة",
-    "points": "النقاط",
-    "rank": "الرتبة"
-  },
   "plus": {
     "title": "إضافي",
     "subtitle": "ميزات إضافية",
@@ -183,5 +179,41 @@
     "delete": "حذف",
     "showAll": "عرض جميع الإشعارات"
   },
-  "settings": "الإعدادات"
+  "settings": "الإعدادات",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "نذهب؟",
+      "message": "هل تبدأ رحلة إلى {clientName}؟"
+    },
+    "waiting": {
+      "title": "ننتظر؟",
+      "message": "هل تنتظر العميل {clientName}؟"
+    },
+    "endTrip": {
+      "title": "تنهي؟",
+      "message": "هل انتهت الرحلة مع {clientName}؟"
+    },
+    "continueTrip": {
+      "title": "تستمر؟",
+      "message": "تستمر الرحلة؟"
+    },
+    "emergency": {
+      "title": "إجراءات الطوارئ",
+      "message": "اختر إجراء طوارئ",
+      "stop": "إيقاف",
+      "end": "إنهاء"
+    },
+    "stopTrip": {
+      "title": "إيقاف",
+      "message": "تم إيقاف الرحلة قسراً"
+    },
+    "forceEndTrip": {
+      "title": "إنهاء",
+      "message": "تم إنهاء الرحلة قسراً"
+    },
+    "buttons": {
+      "cancelAction": "إلغاء",
+      "okAction": "موافق"
+    }
+  }
 }

@@ -1,9 +1,21 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Animated, Easing, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Image, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
+import { t } from '../i18n';
 import { createDriverModalStyles } from '../styles/components/DriverModal.styles';
+import DriverTripDialogs from './driver/DriverTripDialogs';
+import DriverModalHeader from './driver/DriverModalHeader';
+import DriverInfoBar from './driver/DriverInfoBar';
+import DriverTrips from './driver/DriverTrips';
+import { mockDrivers } from '../mocks';
+import { 
+  getClientName as getClientNameMock,
+  getDriverInfo as getDriverInfoMock,
+  getDriverTrips as getDriverTripsMock,
+  getSampleClientId,
+  getSampleDriverId,
+} from '../mocks/driverModalMock';
 
 interface DriverModalProps {
   isVisible: boolean;
@@ -19,67 +31,26 @@ const DriverModal: React.FC<DriverModalProps> = ({
   role = 'client',
 }) => {
   const { isDark } = useTheme();
-  const { user } = useAuth();
   const styles = createDriverModalStyles(isDark);
   
   const [isDriverExpanded, setIsDriverExpanded] = useState(false);
+  const [buttonColorState, setButtonColorState] = useState(0); // 0: primary, 1: yellow, 2: green, 3: stopped
+  const [showDialog1, setShowDialog1] = useState(false);
+  const [showDialog2, setShowDialog2] = useState(false);
+  const [showDialog3, setShowDialog3] = useState(false);
+  const [showLongPressDialog, setShowLongPressDialog] = useState(false);
+  const [showStopDialog, setShowStopDialog] = useState(false);
+  const [showEndDialog, setShowEndDialog] = useState(false);
+  const [showContinueDialog, setShowContinueDialog] = useState(false);
   const driverExpandAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(0)).current;
 
-  // Mock data для водителя
-  const mockDriver = {
-    id: '1',
-    first_name: 'Алексей',
-    last_name: 'Петров',
-    rating: 4.8,
-    vehicle_brand: 'Toyota',
-    vehicle_model: 'Camry',
-    vehicle_number: 'A123БВ777',
-    isFavorite: true,
-    vehicle_photo: require('../../assets/vehicles/toyota-camry.jpg'),
-  };
-
-  const getDriverInfo = (driverId: string) => {
-    const schedules = ['пн-пт', 'пн, ср, пт', 'вт, чт, сб', 'пн-сб'];
-    const prices = ['25.5', '18.75', '22.0', '30.0'];
-    const distances = ['5.2', '3.8', '4.5', '6.1'];
-    const times = ['30', '25', '28', '35'];
-    const childNames = ['Алиса', 'Михаил', 'Елена', 'Дмитрий'];
-    const childAges = ['8', '12', '10', '9'];
-    const childTypes = ['дочь', 'сын', 'дочь', 'сын'];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % schedules.length;
-    return { 
-      schedule: schedules[driverIndex],
-      price: prices[driverIndex], 
-      distance: distances[driverIndex], 
-      time: times[driverIndex],
-      childName: childNames[driverIndex],
-      childAge: childAges[driverIndex],
-      childType: childTypes[driverIndex]
-    };
-  };
-
-  const getDriverTrips = (driverId: string) => {
-    const tripTemplates = [
-      ['Дом', 'Офис', 'Школа'],
-      ['Центр города', 'Аэропорт', 'Торговый центр'],
-      ['Больница', 'Университет', 'Парк'],
-      ['Вокзал', 'Рынок', 'Спортзал'],
-    ];
-    const timeTemplates = [
-      ['07:30', '08:15', '17:45'],
-      ['08:00', '09:30', '18:30'],
-      ['07:45', '12:00', '19:15'],
-      ['08:30', '14:20', '20:00'],
-    ];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % tripTemplates.length;
-    const trips = tripTemplates[driverIndex];
-    const times = timeTemplates[driverIndex];
-    return trips.map((trip, index) => ({
-      text: trip,
-      time: times[index],
-      dotStyle: index === 0 ? 'default' : index === 1 ? 'blue' : 'location',
-    }));
-  };
+  // Централизованные моки
+  const driverId = getSampleDriverId();
+  const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
+  const clientId = getSampleClientId();
+  const driverInfo = getDriverInfoMock(driver?.id ?? 'driver_1');
+  const driverTrips = getDriverTripsMock(driver?.id ?? 'driver_1');
 
   const handleDriverExpand = useCallback(() => {
     const toValue = isDriverExpanded ? 0 : 1;
@@ -92,6 +63,65 @@ const DriverModal: React.FC<DriverModalProps> = ({
     }).start();
   }, [isDriverExpanded, driverExpandAnim]);
 
+
+
+  const handleLongPress = useCallback(() => {
+    // Долгое нажатие работает только в зеленом состоянии
+    if (buttonColorState === 2) {
+      setShowLongPressDialog(true);
+    }
+  }, [buttonColorState]);
+
+  const handleStopPress = useCallback(() => {
+    setShowLongPressDialog(false);
+    setShowStopDialog(true);
+  }, []);
+
+  const handleEndPress = useCallback(() => {
+    setShowLongPressDialog(false);
+    setShowEndDialog(true);
+  }, []);
+
+  const handleStopOkPress = useCallback(() => {
+    setShowStopDialog(false);
+    setButtonColorState(3); // Переводим в остановленное состояние
+  }, []);
+
+  const handleEndOkPress = useCallback(() => {
+    setShowEndDialog(false);
+    setButtonColorState(0); // Возвращаем к дефолтному состоянию
+  }, []);
+
+  const handleOkPress = useCallback(() => {
+    // Меняем цвет только при нажатии OK
+    let newState;
+    if (buttonColorState === 3) {
+      // Если в сером состоянии, переходим к зеленому (продолжить)
+      newState = 2;
+    } else if (buttonColorState === 2) {
+      // Если в зеленом состоянии, переходим к синему (завершение)
+      newState = 0;
+    } else {
+      // Обычный цикл для синего и желтого
+      newState = (buttonColorState + 1) % 4;
+    }
+    setButtonColorState(newState);
+    
+    // Закрываем все диалоги
+    setShowDialog1(false);
+    setShowDialog2(false);
+    setShowDialog3(false);
+    setShowContinueDialog(false);
+  }, [buttonColorState]);
+
+  // Слайд-жест временно отключен, оставляем анимацию возврата
+  // при необходимости можно восстановить PanGestureHandler
+
+  const handleButtonPress = useCallback(() => {
+    // Простое тестирование - меняем состояние при нажатии
+    setButtonColorState((buttonColorState + 1) % 4);
+  }, [buttonColorState]);
+
   return (
     <Modal
       visible={isVisible}
@@ -103,80 +133,49 @@ const DriverModal: React.FC<DriverModalProps> = ({
         <TouchableOpacity style={styles.modalContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
           {/* Контент водителя */}
           <View style={styles.driverItem}>
-            <TouchableOpacity style={styles.driverHeader} onPress={handleDriverExpand} activeOpacity={0.7}>
-              <View style={styles.avatarContainer}>
-                <View style={styles.avatar}>
-                  <Ionicons name="person" size={32} color="#FFFFFF" />
-                </View>
-                <View style={styles.onlineIndicator} />
-              </View>
-              <View style={styles.driverMainInfo}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.driverName}>{`${mockDriver.first_name} ${mockDriver.last_name}`}</Text>
-                  <Ionicons name="diamond" size={16} color="#9CA3AF" style={styles.premiumIcon} />
-                </View>
-                <View style={styles.vehicleExpandRow}>
-                  <View style={styles.vehicleInfoContainer}>
-                    {role === 'driver' && (
-                      <Ionicons name="football" size={16} color="#9CA3AF" style={styles.childIcon} />
-                    )}
-                    <Text style={styles.vehicleInfo}>
-                      {role === 'driver'
-                        ? `${getDriverInfo(mockDriver.id).childName} • ${getDriverInfo(mockDriver.id).childAge} лет`
-                        : `${mockDriver.vehicle_brand} ${mockDriver.vehicle_model} • ${mockDriver.vehicle_number}`
-                      }
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              
-              {/* Фото авто */}
-              <View style={styles.vehiclePhotoContainer}>
-                {mockDriver.vehicle_photo ? (
-                  <Image 
-                    source={mockDriver.vehicle_photo} 
-                    style={styles.vehiclePhoto}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <View style={styles.vehiclePhotoPlaceholder}>
-                    <Ionicons name="car" size={24} color="#9CA3AF" />
+            <View style={styles.driverHeader}>
+              <View style={styles.driverHeaderContainer}>
+                {/* Слайдер-контейнер как фон */}
+                {role === 'driver' && (
+                  <View style={styles.sliderBackgroundContainer}>
+                    <TouchableOpacity 
+                      style={[
+                        styles.sliderButton,
+                        buttonColorState === 1 && { backgroundColor: '#FCD34D' },
+                        buttonColorState === 2 && { backgroundColor: '#10B981' },
+                        buttonColorState === 3 && { backgroundColor: '#6B7280' },
+                        {
+                          transform: [{ translateX: slideAnim }]
+                        }
+                      ]}
+                      onPress={handleButtonPress}
+                      activeOpacity={1}
+                    >
+                      <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+                    </TouchableOpacity>
                   </View>
                 )}
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.driverInfoBar}>
-              <View style={styles.scheduleInfo}>
-                <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
-                <Text style={styles.scheduleText}>{getDriverInfo(mockDriver.id).schedule}</Text>
-              </View>
-              <View style={styles.priceInfo}>
-                <Ionicons 
-                  name={role === 'driver' ? "wallet" : "pricetag-outline"} 
-                  size={16} 
-                  color="#9CA3AF" 
+                
+                {/* Аватар и тексты поверх слайдера */}
+                <DriverModalHeader
+                  styles={styles}
+                  role={role}
+                  driver={driver}
+                  childName={driverInfo.childName}
+                  childAge={driverInfo.childAge}
                 />
-                <Text style={styles.priceText}>{getDriverInfo(mockDriver.id).price}</Text>
-              </View>
-              <View style={styles.distanceInfo}>
-                <Ionicons name="location" size={16} color="#9CA3AF" />
-                <Text style={styles.distanceText}>{getDriverInfo(mockDriver.id).distance}</Text>
-              </View>
-              <View style={styles.timeInfo}>
-                <Ionicons
-                  name={role === 'driver' ? "time" : "football"}
-                  size={16}
-                  color="#9CA3AF"
-                />
-                <Text style={styles.timeText}>
-                  {role === 'driver'
-                    ? getDriverInfo(mockDriver.id).time
-                    : getDriverInfo(mockDriver.id).childType
-                  }
-                </Text>
               </View>
             </View>
+
+            <DriverInfoBar
+              styles={styles}
+              role={role}
+              schedule={driverInfo.schedule}
+              price={driverInfo.price}
+              distance={driverInfo.distance}
+              timeOrChildType={role === 'driver' ? driverInfo.time : driverInfo.childType}
+              onPress={handleDriverExpand}
+            />
 
             <Animated.View
               style={[
@@ -187,38 +186,22 @@ const DriverModal: React.FC<DriverModalProps> = ({
                 },
               ]}
             >
-              <View style={styles.tripsContainer}>
-                {getDriverTrips(mockDriver.id).map((trip, index) => (
-                  <React.Fragment key={`trip-${mockDriver.id}-${index}`}>
-                    <View style={styles.tripItem}>
-                      <View
-                        style={[
-                          styles.tripDot,
-                          trip.dotStyle === 'blue' && styles.tripDotBlue,
-                          trip.dotStyle === 'location' && styles.tripDotLocation,
-                        ]}
-                      />
-                      <Text style={styles.tripText}>{trip.text}</Text>
-                      <Text style={styles.tripTime}>{trip.time}</Text>
-                    </View>
-                  </React.Fragment>
-                ))}
-              </View>
+              <DriverTrips styles={styles} driverId={driver?.id} trips={driverTrips} />
 
               <View style={styles.bottomBorder} />
 
               <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.leftButton}>
+                 <TouchableOpacity style={styles.leftButton}>
                   <View style={styles.buttonContent}>
                     <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
-                    <Text style={styles.leftButtonText}>Чат</Text>
+                     <Text style={styles.leftButtonText}>{t('client.driversScreen.actions.chat')}</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.rightButton}>
+                 <TouchableOpacity style={styles.rightButton}>
                   <View style={styles.rightButtonContent}>
                     <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
-                    <Text style={styles.rightButtonText}>Звонок</Text>
+                     <Text style={styles.rightButtonText}>{t('client.driversScreen.actions.call')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -226,6 +209,33 @@ const DriverModal: React.FC<DriverModalProps> = ({
           </View>
         </TouchableOpacity>
       </TouchableOpacity>
+      
+      <DriverTripDialogs
+        styles={styles}
+        clientName={getClientNameMock(clientId)}
+        showStart={showDialog1}
+        onStartCancel={() => setShowDialog1(false)}
+        onStartOk={handleOkPress}
+        showWaiting={showDialog2}
+        onWaitingCancel={() => setShowDialog2(false)}
+        onWaitingOk={handleOkPress}
+        showEnd={showDialog3}
+        onEndCancel={() => setShowDialog3(false)}
+        onEndOk={handleOkPress}
+        showEmergency={showLongPressDialog}
+        onEmergencyStop={handleStopPress}
+        onEmergencyEnd={handleEndPress}
+        onEmergencyClose={() => setShowLongPressDialog(false)}
+        showStop={showStopDialog}
+        onStopCancel={() => setShowStopDialog(false)}
+        onStopOk={handleStopOkPress}
+        showForceEnd={showEndDialog}
+        onForceEndCancel={() => setShowEndDialog(false)}
+        onForceEndOk={handleEndOkPress}
+        showContinue={showContinueDialog}
+        onContinueCancel={() => setShowContinueDialog(false)}
+        onContinueOk={handleOkPress}
+      />
     </Modal>
   );
 };
