@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { MapService } from '../services/MapService';
 import { MapViewStyles, createMapViewStyles } from '../styles/components/MapView.styles';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
+import DriverModal from './DriverModal';
 
 interface MapLocation {
   latitude: number;
@@ -16,6 +18,7 @@ interface MapViewComponentProps {
   onLocationSelect?: (location: MapLocation) => void;
   showNearbyDrivers?: boolean;
   onDriverVisibilityToggle?: number;
+  role?: 'client' | 'driver';
   markers?: Array<{
     id: string;
     coordinate: MapLocation;
@@ -30,16 +33,15 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   onLocationSelect,
   onDriverVisibilityToggle,
   markers = [],
+  role = 'client',
 }) => {
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
+  const { user } = useAuth();
   const styles = createMapViewStyles(isDark);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isDriverExpanded, setIsDriverExpanded] = useState(false);
-  const [isDriverVisible, setIsDriverVisible] = useState(true);
+  const [isDriverModalVisible, setIsDriverModalVisible] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
-  const driverExpandAnim = useRef(new Animated.Value(0)).current;
-  const driverVisibilityAnim = useRef(new Animated.Value(1)).current;
   const buttonAnimations = useRef([
     new Animated.Value(0),
     new Animated.Value(0),
@@ -56,71 +58,33 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     longitudeDelta: 0.0421,
   });
 
-  // Mock data для водителя
-  const mockDriver = {
-    id: '1',
-    first_name: 'Алексей',
-    last_name: 'Петров',
-    rating: 4.8,
-    vehicle_brand: 'Toyota',
-    vehicle_model: 'Camry',
-    vehicle_number: 'A123БВ777',
-    isFavorite: true,
-    vehicle_photo: require('../../assets/vehicles/toyota-camry.jpg'), // Фото авто
+
+
+  const handleDriverModalOpen = () => {
+    setIsDriverModalVisible(true);
   };
 
-  const getDriverInfo = (driverId: string) => {
-    const schedules = ['пн-пт', 'пн, ср, пт', 'вт, чт, сб', 'пн-сб'];
-    const packages = ['Basic', 'Plus', 'Premium', 'VIP'];
-    const stops = [2, 3, 4, 5];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % schedules.length;
-    return { schedule: schedules[driverIndex], package: packages[driverIndex], stops: stops[driverIndex] };
-  };
-
-  const getDriverTrips = (driverId: string) => {
-    const tripTemplates = [
-      ['Дом', 'Офис', 'Школа'],
-      ['Центр города', 'Аэропорт', 'Торговый центр'],
-      ['Больница', 'Университет', 'Парк'],
-      ['Вокзал', 'Рынок', 'Спортзал'],
-    ];
-    const timeTemplates = [
-      ['07:30', '08:15', '17:45'],
-      ['08:00', '09:30', '18:30'],
-      ['07:45', '12:00', '19:15'],
-      ['08:30', '14:20', '20:00'],
-    ];
-    const driverIndex = parseInt(driverId.replace(/\D/g, '')) % tripTemplates.length;
-    const trips = tripTemplates[driverIndex];
-    const times = timeTemplates[driverIndex];
-    return trips.map((trip, index) => ({
-      text: trip,
-      time: times[index],
-      dotStyle: index === 0 ? 'default' : index === 1 ? 'blue' : 'location',
-    }));
-  };
-
-  const handleDriverExpand = () => {
-    const toValue = isDriverExpanded ? 0 : 1;
-    setIsDriverExpanded(!isDriverExpanded);
+  const handleDriverModalClose = () => {
+    setIsDriverModalVisible(false);
+    // Возвращаем шеврон в исходное состояние
+    setIsExpanded(false);
     
-    Animated.timing(driverExpandAnim, {
-      toValue,
+    Animated.timing(rotateAnim, {
+      toValue: 0,
       duration: 300,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const handleDriverVisibility = () => {
-    const toValue = isDriverVisible ? 0 : 1;
-    setIsDriverVisible(!isDriverVisible);
-    
-    Animated.timing(driverVisibilityAnim, {
-      toValue,
-      duration: 400,
-      easing: Easing.inOut(Easing.quad),
       useNativeDriver: true,
     }).start();
+
+    // Анимация скрытия дополнительных кнопок
+    const animations = buttonAnimations.map((anim) => {
+      return Animated.timing(anim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      });
+    });
+    
+    Animated.parallel(animations).start();
   };
 
   useEffect(() => {
@@ -145,10 +109,10 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     }
   }, [initialLocation]);
 
-  // Отслеживаем изменения пропса для управления видимостью карточки водителя
+  // Отслеживаем изменения пропса для открытия модального окна водителя
   useEffect(() => {
     if (onDriverVisibilityToggle) {
-      handleDriverVisibility();
+      handleDriverModalOpen();
     }
   }, [onDriverVisibilityToggle]);
 
@@ -442,125 +406,13 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         ))}
       </MapView>
 
-      {/* Полный элемент водителя с анимацией видимости */}
-      <Animated.View 
-                  style={[
-            styles.driverItem, 
-            { 
-              position: 'absolute', 
-              bottom: 10, 
-              left: 2, 
-              right: 2,
-              opacity: driverVisibilityAnim,
-              transform: [{
-                translateY: driverVisibilityAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [200, 0]
-                })
-              }]
-            }
-          ]}
-      >
-        <TouchableOpacity style={styles.driverHeader} onPress={handleDriverExpand} activeOpacity={0.7}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Ionicons name="person" size={32} color="#FFFFFF" />
-            </View>
-            <View style={styles.onlineIndicator} />
-          </View>
-          <View style={styles.driverMainInfo}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.driverName}>{`${mockDriver.first_name} ${mockDriver.last_name}`}</Text>
-            </View>
-            <View style={styles.vehicleExpandRow}>
-              <View style={styles.vehicleInfoContainer}>
-                <Text style={styles.vehicleInfo}>{`${mockDriver.vehicle_brand} ${mockDriver.vehicle_model}`}</Text>
-                <Text style={styles.vehicleNumber}>{mockDriver.vehicle_number}</Text>
-              </View>
-            </View>
-          </View>
-          
-          {/* Фото авто */}
-          <View style={styles.vehiclePhotoContainer}>
-            {mockDriver.vehicle_photo ? (
-              <Image 
-                source={mockDriver.vehicle_photo} 
-                style={styles.vehiclePhoto}
-                resizeMode="contain"
-              />
-            ) : (
-              <View style={styles.vehiclePhotoPlaceholder}>
-                <Ionicons name="car" size={24} color="#9CA3AF" />
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.driverInfoBar}>
-          <View style={styles.scheduleInfo}>
-            <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
-            <Text style={styles.scheduleText}>{getDriverInfo(mockDriver.id).schedule}</Text>
-          </View>
-          <View style={styles.premiumInfo}>
-            <Ionicons name="diamond" size={16} color="#FFD700" />
-            <Text style={styles.premiumText}>{getDriverInfo(mockDriver.id).package}</Text>
-          </View>
-          <View style={styles.stopsInfo}>
-            <Ionicons name="location" size={16} color="#9CA3AF" />
-            <Text style={styles.stopsText}>{getDriverInfo(mockDriver.id).stops}</Text>
-          </View>
-          <View style={styles.ballInfo}>
-            <Text style={styles.ballText}>Сын</Text>
-            <Ionicons name="football" size={16} color="#9CA3AF" />
-          </View>
-        </View>
-
-        <Animated.View
-          style={[
-            styles.expandableContent,
-            {
-              maxHeight: driverExpandAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 300] }),
-              opacity: driverExpandAnim.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0, 0, 1] }),
-            },
-          ]}
-        >
-          <View style={styles.tripsContainer}>
-            {getDriverTrips(mockDriver.id).map((trip, index) => (
-              <React.Fragment key={`trip-${mockDriver.id}-${index}`}>
-                <View style={styles.tripItem}>
-                  <View
-                    style={[
-                      styles.tripDot,
-                      trip.dotStyle === 'blue' && styles.tripDotBlue,
-                      trip.dotStyle === 'location' && styles.tripDotLocation,
-                    ]}
-                  />
-                  <Text style={styles.tripText}>{trip.text}</Text>
-                  <Text style={styles.tripTime}>{trip.time}</Text>
-                </View>
-              </React.Fragment>
-            ))}
-          </View>
-
-          <View style={styles.bottomBorder} />
-
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.leftButton}>
-              <View style={styles.buttonContent}>
-                <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
-                <Text style={styles.leftButtonText}>Чат</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.rightButton}>
-              <View style={styles.rightButtonContent}>
-                <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
-                <Text style={styles.rightButtonText}>Звонок</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </Animated.View>
+      {/* Модальное окно водителя */}
+      <DriverModal
+        isVisible={isDriverModalVisible}
+        onClose={handleDriverModalClose}
+        onOverlayClose={handleDriverModalClose}
+        role={role}
+      />
       
       {/* Дополнительные кнопки */}
       <View style={styles.additionalButtonsContainer}>

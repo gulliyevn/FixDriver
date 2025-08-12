@@ -152,6 +152,9 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       gap: SIZES.xs,
     },
+    premiumIcon: {
+      marginLeft: SIZES.xs,
+    },
     favoriteIcon: {
       marginLeft: SIZES.xs,
     },
@@ -285,28 +288,32 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       color: colors.textSecondary,
       fontWeight: '500',
     },
-    premiumInfo: {
+    priceInfo: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: SIZES.xs,
     },
-    stopsInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: SIZES.xs / 2,
-    },
-    stopsText: {
+    priceText: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
       fontWeight: '500',
     },
-    ballInfo: {
+    distanceInfo: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
-      gap: SIZES.xs / 2,
+      gap: SIZES.xs,
     },
-    ballText: {
+    distanceText: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      fontWeight: '500',
+    },
+    timeInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs,
+    },
+    timeText: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
       fontWeight: '500',
@@ -384,6 +391,14 @@ export const createDriversScreenStyles = (isDark: boolean) => {
     favoriteInlineIcon: {
       marginLeft: 4,
       opacity: 0.7,
+    },
+    vehicleInfoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs,
+    },
+    childIcon: {
+      marginRight: SIZES.xs,
     },
     vehicleInfo: {
       fontSize: SIZES.fontSize.sm,
@@ -541,6 +556,7 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       top: 0,
       bottom: 0,
       justifyContent: 'flex-end',
+      zIndex: 9999,
     },
     callSheetBackdrop: {
       position: 'absolute',
@@ -558,7 +574,8 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       borderColor: colors.border,
       paddingHorizontal: SIZES.lg,
       paddingTop: SIZES.md,
-      paddingBottom: SIZES.xl,
+      paddingBottom: SIZES.xl + 50, // Увеличиваем высоту на 50px
+      minHeight: 200, // Добавляем минимальную высоту
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
     callSheetClose: {
@@ -591,15 +608,16 @@ export const createDriversScreenStyles = (isDark: boolean) => {
     callSheetOption: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingVertical: SIZES.md,
-      paddingHorizontal: SIZES.sm,
+      paddingVertical: SIZES.lg, // Увеличиваем вертикальный отступ
+      paddingHorizontal: SIZES.md, // Увеличиваем горизонтальный отступ
       borderRadius: SIZES.radius.md,
-      marginBottom: SIZES.xs,
+      marginBottom: SIZES.sm, // Увеличиваем отступ между кнопками
+      minHeight: 60, // Добавляем минимальную высоту кнопки
     },
     callSheetOptionText: {
       marginLeft: SIZES.md,
-      fontSize: SIZES.fontSize.md,
-      fontWeight: '500',
+      fontSize: SIZES.fontSize.lg, // Увеличиваем размер текста
+      fontWeight: '600', // Делаем текст чуть жирнее
       color: colors.text,
     },
   });

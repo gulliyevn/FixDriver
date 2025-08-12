@@ -1,107 +1,29 @@
 import { StyleSheet } from 'react-native';
 import { getCurrentColors, SHADOWS, SIZES } from '../../constants/colors';
 
-export const createMapViewStyles = (isDark: boolean) => {
+export const createDriverModalStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);
 
   return StyleSheet.create({
-    container: {
+    // Modal styles
+    modalOverlay: {
       flex: 1,
+      backgroundColor: 'transparent',
+      justifyContent: 'flex-end',
+    },
+    modalContainer: {
+      width: '100%',
       backgroundColor: palette.background,
+      borderTopLeftRadius: SIZES.radius.lg,
+      borderTopRightRadius: SIZES.radius.lg,
+      paddingBottom: SIZES.xl,
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
-    map: {
-      flex: 1,
-      backgroundColor: palette.surface,
-    },
-    expandButton: {
-      position: 'absolute',
-      bottom: SIZES.lg,
-      right: SIZES.lg,
-      width: 48,
-      height: 48,
-      borderRadius: 24,
-      backgroundColor: palette.card,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: palette.border,
-      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
-    },
-    expandButtonContainer: {
-      position: 'absolute',
-      bottom: SIZES.lg,
-      right: SIZES.lg,
-      alignItems: 'flex-end',
-    },
-    additionalButtonsContainer: {
-      position: 'absolute',
-      bottom: SIZES.lg + 70,
-      right: SIZES.lg - 4,
-      alignItems: 'flex-end',
-    },
-    additionalButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: palette.card,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: palette.border,
-      marginBottom: SIZES.sm,
-      marginRight: SIZES.lg + 6,
-      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
-    },
-    markerAContainer: {
-      backgroundColor: palette.card,
-      borderRadius: 16,
-      borderWidth: 2,
-      borderColor: isDark ? palette.borderLight : '#222',
-      padding: 2,
-      alignItems: 'center',
-      justifyContent: 'center',
-      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
-    },
-    markerBContainer: {
-      backgroundColor: palette.card,
-      borderRadius: 16,
-      borderWidth: 2,
-      borderColor: palette.success,
-      padding: 2,
-      alignItems: 'center',
-      justifyContent: 'center',
-      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
-    },
-    driverMarkerContainer: {
-      backgroundColor: palette.primary,
-      borderRadius: 20,
-      width: 40,
-      height: 40,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 3,
-      borderColor: '#FFFFFF',
-      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
-    },
-    durationMarkerContainer: {
-      backgroundColor: palette.text,
-      borderRadius: 12,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderWidth: 2,
-      borderColor: '#fff',
-      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
-    },
-    durationMarkerText: {
-      color: '#fff',
-      fontSize: 12,
-      fontWeight: '600',
-    },
-    // Driver Item Styles
+
+
+    // Driver Item Styles (скопированы из MapView)
     driverItem: {
       flexDirection: 'column',
-      marginBottom: SIZES.lg,
-      marginHorizontal: -4,
       paddingHorizontal: SIZES.lg,
       paddingVertical: SIZES.lg + 4,
       borderRadius: SIZES.radius.lg + 2,
@@ -109,10 +31,6 @@ export const createMapViewStyles = (isDark: boolean) => {
       borderWidth: 1,
       borderColor: palette.border,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
-      alignSelf: 'stretch',
-      flex: 0,
-      width: undefined,
-      height: undefined,
     },
     driverHeader: {
       flexDirection: 'row',
@@ -153,24 +71,14 @@ export const createMapViewStyles = (isDark: boolean) => {
       alignItems: 'center',
       gap: SIZES.xs,
     },
-    favoriteIcon: {
-      marginLeft: SIZES.xs,
-    },
-    nameRatingRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
     driverName: {
       fontSize: SIZES.fontSize.md,
       fontWeight: '600',
       color: palette.text,
       flexShrink: 1,
     },
-    ratingText: {
-      fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
-      color: palette.primary,
+    premiumIcon: {
+      marginLeft: SIZES.xs,
     },
     vehicleExpandRow: {
       flexDirection: 'row',
@@ -178,20 +86,17 @@ export const createMapViewStyles = (isDark: boolean) => {
       alignItems: 'center',
       marginTop: 2,
     },
+    vehicleInfoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     vehicleInfo: {
       fontSize: SIZES.fontSize.sm,
       color: palette.textSecondary,
       fontWeight: '500',
     },
-    vehicleInfoContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    vehicleNumber: {
-      fontSize: SIZES.fontSize.sm,
-      color: palette.textSecondary,
-      fontWeight: '500',
-      marginTop: 2,
+    childIcon: {
+      marginRight: SIZES.xs,
     },
     vehiclePhotoContainer: {
       width: 120,
@@ -213,12 +118,8 @@ export const createMapViewStyles = (isDark: boolean) => {
       justifyContent: 'center',
       backgroundColor: palette.surface,
     },
-    driverExpandButton: {
-      padding: 8,
-      marginLeft: SIZES.xs,
-      borderRadius: SIZES.radius.sm,
-      backgroundColor: 'transparent',
-    },
+
+    // Driver Info Bar
     driverInfoBar: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -236,36 +137,6 @@ export const createMapViewStyles = (isDark: boolean) => {
       gap: SIZES.xs,
     },
     scheduleText: {
-      fontSize: SIZES.fontSize.sm,
-      color: palette.textSecondary,
-      fontWeight: '500',
-    },
-    premiumInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: SIZES.xs,
-    },
-    premiumText: {
-      fontSize: SIZES.fontSize.sm,
-      color: palette.textSecondary,
-      fontWeight: '500',
-    },
-    stopsInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: SIZES.xs / 2,
-    },
-    stopsText: {
-      fontSize: SIZES.fontSize.sm,
-      color: palette.textSecondary,
-      fontWeight: '500',
-    },
-    ballInfo: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: SIZES.xs,
-    },
-    ballText: {
       fontSize: SIZES.fontSize.sm,
       color: palette.textSecondary,
       fontWeight: '500',
@@ -300,12 +171,8 @@ export const createMapViewStyles = (isDark: boolean) => {
       color: palette.textSecondary,
       fontWeight: '500',
     },
-    premiumIcon: {
-      marginLeft: SIZES.xs,
-    },
-    childIcon: {
-      marginRight: SIZES.xs,
-    },
+
+    // Expandable Content
     expandableContent: {
       overflow: 'hidden',
     },
@@ -349,6 +216,8 @@ export const createMapViewStyles = (isDark: boolean) => {
       borderTopWidth: 1,
       borderTopColor: palette.border,
     },
+
+    // Buttons
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -400,6 +269,3 @@ export const createMapViewStyles = (isDark: boolean) => {
     },
   });
 };
-
-// Backward-compatible default (light theme)
-export const MapViewStyles = createMapViewStyles(false);

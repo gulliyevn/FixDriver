@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, Easing, Pressable, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Easing, Pressable, Linking, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../hooks/useI18n';
 import { Driver } from '../../types/driver';
@@ -85,10 +85,22 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
 
   const getDriverInfo = useCallback((driverId: string) => {
     const schedules = ['пн-пт', 'пн, ср, пт', 'вт, чт, сб', 'пн-сб'];
-    const packages = ['Basic', 'Plus', 'Premium', 'VIP'];
-    const stops = [2, 3, 4, 5];
+    const prices = ['25.5', '18.75', '22.0', '30.0'];
+    const distances = ['5.2', '3.8', '4.5', '6.1'];
+    const times = ['30', '25', '28', '35'];
+    const childNames = ['Алиса', 'Михаил', 'Елена', 'Дмитрий'];
+    const childAges = ['8', '12', '10', '9'];
+    const childTypes = ['дочь', 'сын', 'дочь', 'сын'];
     const driverIndex = parseInt(driverId.replace(/\D/g, '')) % schedules.length;
-    return { schedule: schedules[driverIndex], package: packages[driverIndex], stops: stops[driverIndex] };
+    return { 
+      schedule: schedules[driverIndex],
+      price: prices[driverIndex], 
+      distance: distances[driverIndex], 
+      time: times[driverIndex],
+      childName: childNames[driverIndex],
+      childAge: childAges[driverIndex],
+      childType: childTypes[driverIndex]
+    };
   }, []);
 
   const getDriverTrips = useCallback((driverId: string) => {
@@ -157,6 +169,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
   };
 
   return (
+    <>
     <SwipeableComponent
       ref={(ref: any) => swipeRefSetter?.(driver.id, ref)}
       renderLeftActions={renderLeftActions}
@@ -181,6 +194,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
             <View style={styles.nameRatingRow}>
               <View style={styles.nameContainer}>
                 <Text style={styles.driverName}>{`${driver.first_name} ${driver.last_name}`}</Text>
+                <Ionicons name="diamond" size={16} color="#9CA3AF" style={styles.premiumIcon} />
                 {driver.isFavorite && (
                   <Ionicons name="bookmark" size={14} color={isDark ? '#F9FAFB' : '#111827'} style={styles.favoriteIcon} />
                 )}
@@ -188,7 +202,17 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
               <Text style={styles.ratingText}>{driver.rating.toFixed(1)}</Text>
             </View>
             <View style={styles.vehicleExpandRow}>
-              <Text style={styles.vehicleInfo}>{`${driver.vehicle_brand} ${driver.vehicle_model} • ${driver.vehicle_number}`}</Text>
+              <View style={styles.vehicleInfoContainer}>
+                {role === 'driver' && (
+                  <Ionicons name="football" size={16} color="#9CA3AF" style={styles.childIcon} />
+                )}
+                <Text style={styles.vehicleInfo}>
+                  {role === 'driver' 
+                    ? `${getDriverInfo(driver.id).childName} • ${getDriverInfo(driver.id).childAge} лет`
+                    : `${driver.vehicle_brand} ${driver.vehicle_model} • ${driver.vehicle_number}`
+                  }
+                </Text>
+              </View>
               <Animated.View
                 style={{
                   transform: [
@@ -209,17 +233,30 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
             <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
             <Text style={styles.scheduleText}>{getDriverInfo(driver.id).schedule}</Text>
           </View>
-          <View style={styles.premiumInfo}>
-            <Ionicons name="diamond" size={16} color="#FFD700" />
-            <Text style={styles.premiumText}>{getDriverInfo(driver.id).package}</Text>
+          <View style={styles.priceInfo}>
+            <Ionicons 
+              name={role === 'driver' ? "wallet" : "pricetag-outline"} 
+              size={16} 
+              color="#9CA3AF" 
+            />
+            <Text style={styles.priceText}>{getDriverInfo(driver.id).price}</Text>
           </View>
-          <View style={styles.stopsInfo}>
+          <View style={styles.distanceInfo}>
             <Ionicons name="location" size={16} color="#9CA3AF" />
-            <Text style={styles.stopsText}>{getDriverInfo(driver.id).stops}</Text>
+            <Text style={styles.distanceText}>{getDriverInfo(driver.id).distance}</Text>
           </View>
-          <View style={styles.ballInfo}>
-            <Text style={styles.ballText}>{t('client.driversScreen.labels.son')}</Text>
-            <Ionicons name="football" size={16} color="#9CA3AF" />
+          <View style={styles.timeInfo}>
+            <Ionicons 
+              name={role === 'driver' ? "time" : "football"} 
+              size={16} 
+              color="#9CA3AF" 
+            />
+            <Text style={styles.timeText}>
+              {role === 'driver' 
+                ? getDriverInfo(driver.id).time 
+                : getDriverInfo(driver.id).childType
+              }
+            </Text>
           </View>
         </View>
 
@@ -257,7 +294,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
               <View style={styles.buttonContent}>
                 <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
                 <Text style={styles.leftButtonText}>
-                  {role === 'driver' ? t('driver.startTrip.startTrip') : t('client.driversScreen.actions.chat')}
+                  {t('client.driversScreen.actions.chat')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -274,42 +311,50 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
         </Animated.View>
       </View>
 
-      {isCallSheetOpen && (
-        <View style={styles.callSheetOverlay}>
-          <Pressable style={styles.callSheetBackdrop} onPress={closeCallSheet} />
-          <Animated.View
-            style={[
-              styles.callSheetContainer,
-              {
-                transform: [
-                  {
-                    translateY: callAnim.interpolate({ inputRange: [0, 1], outputRange: [300, 0] }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <TouchableOpacity style={styles.callSheetClose} onPress={closeCallSheet} accessibilityLabel={t('common.close')}>
-              <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
-            </TouchableOpacity>
-            <View style={styles.callSheetHandle} />
-            <Text style={styles.callSheetTitle}>
-              {t('client.driversScreen.call.callTitle', { firstName: driver.first_name, lastName: driver.last_name })}
-            </Text>
-            <TouchableOpacity style={styles.callSheetOption} onPress={handleInternetCall}>
-              <Ionicons name="wifi" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-              <Text style={styles.callSheetOptionText}>{t('client.driversScreen.call.internetCall')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.callSheetOption} onPress={handleNetworkCall}>
-              <Ionicons name="call" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
-              <Text style={styles.callSheetOptionText}>
-                {t('client.driversScreen.call.networkCallWithNumber', { phone: driver.phone_number })}
-              </Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
-      )}
     </SwipeableComponent>
+    
+    {/* Модалка как Modal для правильного позиционирования поверх всего экрана */}
+    <Modal
+      visible={isCallSheetOpen}
+      transparent={true}
+      animationType="none"
+      onRequestClose={closeCallSheet}
+    >
+      <View style={styles.callSheetOverlay}>
+        <Pressable style={styles.callSheetBackdrop} onPress={closeCallSheet} />
+        <Animated.View
+          style={[
+            styles.callSheetContainer,
+            {
+              transform: [
+                {
+                  translateY: callAnim.interpolate({ inputRange: [0, 1], outputRange: [300, 0] }),
+                },
+              ],
+            },
+          ]}
+        >
+          <TouchableOpacity style={styles.callSheetClose} onPress={closeCallSheet} accessibilityLabel={t('common.close')}>
+            <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+          </TouchableOpacity>
+          <View style={styles.callSheetHandle} />
+          <Text style={styles.callSheetTitle}>
+            {t('client.driversScreen.call.callTitle', { firstName: driver.first_name, lastName: driver.last_name })}
+          </Text>
+          <TouchableOpacity style={styles.callSheetOption} onPress={handleInternetCall}>
+            <Ionicons name="wifi" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+            <Text style={styles.callSheetOptionText}>{t('client.driversScreen.call.internetCall')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.callSheetOption} onPress={handleNetworkCall}>
+            <Ionicons name="call" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+            <Text style={styles.callSheetOptionText}>
+              {t('client.driversScreen.call.networkCallWithNumber', { phone: driver.phone_number })}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    </Modal>
+    </>
   );
 };
 

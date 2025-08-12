@@ -5,11 +5,13 @@ import MapViewComponent from '../../components/MapView';
 import { MapService, MapLocation } from '../../services/MapService';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
+import { useAuth } from '../../context/AuthContext';
 import { createOrdersMapScreenStyles } from '../../styles/screens/OrdersMapScreen.styles';
 
 const OrdersMapScreen: React.FC = () => {
   const { isDark } = useTheme();
   const { t } = useI18n();
+  const { user } = useAuth();
   const styles = useMemo(() => createOrdersMapScreenStyles(isDark), [isDark]);
 
   const [currentLocation, setCurrentLocation] = useState<MapLocation | undefined>(undefined);
@@ -169,6 +171,7 @@ const OrdersMapScreen: React.FC = () => {
         <MapViewComponent 
           initialLocation={currentLocation}
           onDriverVisibilityToggle={driverVisibilityTrigger}
+          role={user?.role === 'driver' ? 'driver' : 'client'}
         />
       </View>
     </SafeAreaView>

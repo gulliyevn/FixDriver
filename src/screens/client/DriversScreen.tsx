@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { SafeAreaView, View, Text, FlatList, TouchableOpacity, Alert, Animated, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import type { Swipeable as RNSwipeable } from 'react-native-gesture-handler';
@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { createDriversScreenStyles } from '../../styles/screens/drivers/DriversScreen.styles';
-import { mockDrivers } from '../../mocks';
+import { mockDrivers, mockClients } from '../../mocks/data/users';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,7 +15,6 @@ import { Driver } from '../../types/driver';
 import NotificationsModal from '../../components/NotificationsModal';
 import DriverListItem from '../../components/driver/DriverListItem';
 import DriversHeader from '../../components/DriversHeader';
-import useDriversList from '../../hooks/client/useDriversList';
 import EmptyDriversState from '../../components/EmptyDriversState';
 import LoadingFooter from '../../components/LoadingFooter';
 import DriversSearchBar from '../../components/DriversSearchBar';
@@ -29,21 +28,52 @@ const DriversScreen: React.FC = () => {
   const { t } = useI18n();
   const { user } = useAuth();
   const navigation = useNavigation<StackNavigationProp<ClientStackParamList | DriverStackParamList>>();
-  const {
-    drivers,
-    filteredDrivers,
-    favorites,
-    loading,
-    loadingMore,
-    hasMore,
-    searchQuery,
-    setSearchQuery,
-    loadMoreDrivers,
-    handleRefresh,
-    toggleFavorite,
-    removeDriver,
-    removeDrivers,
-  } = useDriversList();
+  // Используем моки в зависимости от роли
+  const [drivers] = useState<Driver[]>(user?.role === 'driver' ? mockClients : mockDrivers);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const loadingMore = false;
+  const hasMore = false;
+
+  // Фильтрация водителей
+  const filteredDrivers = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    const filtered = query 
+      ? drivers.filter(driver =>
+          driver.first_name?.toLowerCase().includes(query) ||
+          driver.last_name?.toLowerCase().includes(query) ||
+          driver.vehicle_brand?.toLowerCase().includes(query) ||
+          driver.vehicle_model?.toLowerCase().includes(query)
+        )
+      : drivers;
+    
+    return filtered.map(d => ({ ...d, isFavorite: favorites.has(d.id) }));
+  }, [drivers, searchQuery, favorites]);
+
+  const loadMoreDrivers = async () => {};
+  const handleRefresh = async () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 500);
+  };
+  
+  const toggleFavorite = useCallback((driverId: string) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(driverId)) next.delete(driverId); else next.add(driverId);
+      return next;
+    });
+  }, []);
+
+  const removeDriver = useCallback((driverId: string) => {
+    // В режиме моков просто скрываем
+    console.log('Remove driver:', driverId);
+  }, []);
+
+  const removeDrivers = useCallback((ids: Set<string>) => {
+    // В режиме моков просто скрываем
+    console.log('Remove drivers:', Array.from(ids));
+  }, []);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [notificationsModalVisible, setNotificationsModalVisible] = useState(false);
@@ -119,14 +149,12 @@ const DriversScreen: React.FC = () => {
 
 
   const handleChatWithDriver = useCallback((driver: Driver) => {
-    // Исправленная навигация для правильной работы свайпа
     try {
-      // Переходим к табу Chat сначала, чтобы установить правильный стек
+      // Для обеих ролей используем одинаковую навигацию к стеку чатов
       navigation.navigate('Chat' as any);
       
-      // Небольшая задержка для правильной инициализации навигатора
       setTimeout(() => {
-        // Теперь навигируем к конкретному чату с полным стеком ChatList -> ChatConversation
+        // Навигируем к конкретному чату внутри стека
         (navigation as any).navigate('Chat', {
           screen: 'ChatConversation',
           params: {
@@ -178,19 +206,7 @@ const DriversScreen: React.FC = () => {
         deleteDriver(driverId);
         try { swipeRefs.current[driverId]?.close?.(); } catch {}
       }}
-      onChat={(d) => {
-        if (user?.role === 'driver') {
-          // для водителя можно навигировать к старту поездки или профилю клиента
-          try {
-            (navigation as any).navigate('StartTrip' as any, { orderId: d.id });
-          } catch {
-            // fallback в чат
-            handleChatWithDriver(d);
-          }
-        } else {
-          handleChatWithDriver(d);
-        }
-      }}
+      onChat={handleChatWithDriver}
       role={user?.role === 'driver' ? 'driver' : 'client'}
     />
   );

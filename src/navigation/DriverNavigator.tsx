@@ -7,9 +7,9 @@ import TabBar from './TabBar';
 
 // Импорт экранов
 import OrdersMapScreen from '../screens/common/OrdersMapScreen';
-import OrdersScreen from '../screens/driver/OrdersScreen';
+import DriversScreen from '../screens/client/DriversScreen';
 import EarningsScreen from '../screens/common/EarningsScreen';
-import ChatListScreen from '../screens/common/chats/ChatListScreen';
+import ChatStack from './ChatStack';
 import DriverProfileStack from './driver/DriverProfileStack';
 
 const Tab = createBottomTabNavigator();
@@ -41,7 +41,7 @@ const DriverNavigator: React.FC = () => {
       />
       <Tab.Screen 
         name="Orders" 
-        component={OrdersScreen}
+        component={DriversScreen}
       />
       <Tab.Screen 
         name="Earnings" 
@@ -49,7 +49,7 @@ const DriverNavigator: React.FC = () => {
       />
       <Tab.Screen 
         name="Chat" 
-        component={ChatListScreen}
+        component={ChatStack}
       />
       <Tab.Screen 
         name="Profile" 
