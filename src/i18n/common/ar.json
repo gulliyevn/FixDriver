@@ -43,7 +43,13 @@
     "login": "تسجيل الدخول",
     "language": "اللغة"
   },
-  "verify": "تحقق"
-  ,
-  "select": "اختر"
+  "verify": "تحقق",
+  "select": "اختر",
+  "rating": {
+    "title": "قيّم رحلتك",
+    "message": "شارك تجربتك حول الرحلة",
+    "commentLabel": "تعليق (اختياري)",
+    "commentPlaceholder": "أخبرنا عن رحلتك...",
+    "submit": "إرسال"
+  }
 } 

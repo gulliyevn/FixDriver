@@ -402,10 +402,10 @@ export const createDriverModalStyles = (isDark: boolean, role: 'client' | 'drive
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
     dialogTitle: {
-      fontSize: SIZES.fontSize.lg + 4,
+      fontSize: SIZES.fontSize.lg + 2,
       fontWeight: '600',
       color: palette.text,
-      marginBottom: SIZES.md + 5,
+      marginBottom: SIZES.md,
       textAlign: 'center',
     },
     dialogText: {
@@ -431,6 +431,7 @@ export const createDriverModalStyles = (isDark: boolean, role: 'client' | 'drive
       flexDirection: 'row',
       justifyContent: 'space-between',
       gap: SIZES.md,
+      marginBottom: 0,
     },
     dialogCancelButton: {
       flex: 1,
@@ -483,6 +484,50 @@ export const createDriverModalStyles = (isDark: boolean, role: 'client' | 'drive
       fontSize: SIZES.fontSize.sm + 1,
       fontWeight: '600',
       textAlign: 'center',
+    },
+    // Rating dialog styles
+    ratingDialogContainer: {
+      backgroundColor: palette.background,
+      borderRadius: SIZES.radius.lg,
+      paddingTop: SIZES.lg + 10,
+      paddingBottom: 0,
+      paddingHorizontal: SIZES.md + 10,
+      marginHorizontal: SIZES.md,
+      marginVertical: 0,
+      minWidth: 320,
+      minHeight: 100,
+      maxHeight: 350,
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
+    ratingContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: SIZES.md,
+      gap: SIZES.sm,
+    },
+    starButton: {
+      padding: SIZES.xs,
+    },
+    commentContainer: {
+      marginBottom: SIZES.md,
+    },
+    commentLabel: {
+      fontSize: SIZES.fontSize.md,
+      fontWeight: '600',
+      color: palette.text,
+      marginBottom: SIZES.sm,
+    },
+    commentInput: {
+      borderWidth: 1,
+      borderColor: palette.border,
+      borderRadius: SIZES.radius.md,
+      padding: SIZES.sm,
+      fontSize: SIZES.fontSize.md,
+      color: palette.text,
+      backgroundColor: palette.surface,
+      minHeight: 80,
+      textAlignVertical: 'top',
     },
   });
 };

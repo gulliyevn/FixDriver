@@ -44,7 +44,16 @@
     "login": "Login",
     "language": "Language"
   },
-  "verify": "Verify"
-  ,
-  "select": "Select"
+  "verify": "Verify",
+  "select": "Select",
+  "rating": {
+    "title": "Rate your trip",
+    "message": "Share your experience about the trip",
+    "commentLabel": "Comment (optional)",
+    "commentRequired": "Comment (required)",
+    "commentPlaceholder": "Tell us about your trip...",
+    "commentStopPlaceholder": "Specify the reason for stopping...",
+    "commentEndPlaceholder": "Specify the reason for ending...",
+    "submit": "Submit"
+  }
 } 

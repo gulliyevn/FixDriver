@@ -44,7 +44,16 @@
     "login": "Daxil ol",
     "language": "Dil"
   },
-  "verify": "Təsdiqlə"
-  ,
-  "select": "Seç"
+  "verify": "Təsdiqlə",
+  "select": "Seç",
+  "rating": {
+    "title": "Səyahəti qiymətləndirin",
+    "message": "Səyahət haqqında təcrübənizi paylaşın",
+    "commentLabel": "Şərh (istəyə bağlı)",
+    "commentRequired": "Şərh (məcburi)",
+    "commentPlaceholder": "Səyahətiniz haqqında bizə deyin...",
+    "commentStopPlaceholder": "Dayandırma səbəbini göstərin...",
+    "commentEndPlaceholder": "Bitirmə səbəbini göstərin...",
+    "submit": "Təsdiqlə"
+  }
 } 

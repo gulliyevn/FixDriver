@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Animated, Image, Modal, Vibration, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
@@ -44,7 +44,11 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const [showStopDialog, setShowStopDialog] = useState(false);
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [showContinueDialog, setShowContinueDialog] = useState(false);
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [isPaused, setIsPaused] = useState(false); // для отслеживания паузы
+  const [emergencyActionsUsed, setEmergencyActionsUsed] = useState(false); // были ли использованы экстренные действия
+  const [emergencyActionType, setEmergencyActionType] = useState<'stop' | 'end' | null>(null); // тип экстренного действия
+  const [isEmergencyButtonActive, setIsEmergencyButtonActive] = useState(false); // активна ли кнопка экстренных действий
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null); // время начала паузы
   const [slideProgress, setSlideProgress] = useState(0); // для отслеживания прогресса свайпа
   const [showSwapIcon, setShowSwapIcon] = useState(false); // для показа иконки замены
@@ -75,7 +79,19 @@ const DriverModal: React.FC<DriverModalProps> = ({
     }).start();
   }, [isDriverExpanded, driverExpandAnim]);
 
-
+  // Асинхронная активация кнопки экстренных действий
+  useEffect(() => {
+    if (buttonColorState === 3 && !isPaused) {
+      // Активируем кнопку экстренных действий через 2 секунды
+      const timer = setTimeout(() => {
+        setIsEmergencyButtonActive(true);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    } else {
+      setIsEmergencyButtonActive(false);
+    }
+  }, [buttonColorState, isPaused]);
 
   const handleLongPress = useCallback(() => {
     // Долгое нажатие работает только в зеленом состоянии
@@ -111,14 +127,16 @@ const DriverModal: React.FC<DriverModalProps> = ({
     setShowStopDialog(false);
     setIsPaused(true); // включаем паузу
     setPauseStartTime(0); // начинаем с 00:00
+    setEmergencyActionsUsed(true); // отмечаем, что экстренные действия использованы
+    setEmergencyActionType('stop'); // тип действия - остановка
     // buttonColorState остается 3 (серый)
   }, []);
 
   const handleEndOkPress = useCallback(() => {
     setShowEndDialog(false);
-    setButtonColorState(0); // Возвращаем к дефолтному состоянию
-    setIsPaused(false); // сбрасываем паузу
-    setPauseStartTime(null); // сбрасываем таймер
+    setEmergencyActionsUsed(true); // отмечаем, что экстренные действия использованы
+    setEmergencyActionType('end'); // тип действия - завершение
+    setShowRatingDialog(true); // Показываем диалог рейтинга сразу после экстренного завершения
   }, []);
 
   // Обработчики для каждого диалога отдельно
@@ -153,9 +171,27 @@ const DriverModal: React.FC<DriverModalProps> = ({
 
   const handleEndTripOk = useCallback(() => {
     setShowDialog3(false);
-    setButtonColorState(0); // Зеленый -> Синий
+    setShowRatingDialog(true); // Показываем диалог рейтинга
+  }, []);
+
+  const handleRatingSubmit = useCallback((rating: number, comment: string) => {
+    setShowRatingDialog(false);
+    setButtonColorState(0); // Возвращаем к дефолтному состоянию
     setShowSwapIcon(false); // сбрасываем иконку замены
     setIconOpacity(1); // сбрасываем анимацию
+    setIsPaused(false); // сбрасываем паузу
+    setPauseStartTime(null); // сбрасываем таймер
+    // Здесь можно добавить логику отправки рейтинга на сервер
+    console.log('Rating submitted:', { rating, comment });
+  }, []);
+
+  const handleRatingCancel = useCallback(() => {
+    setShowRatingDialog(false);
+    setButtonColorState(0); // Возвращаем к дефолтному состоянию
+    setShowSwapIcon(false); // сбрасываем иконку замены
+    setIconOpacity(1); // сбрасываем анимацию
+    setIsPaused(false); // сбрасываем паузу
+    setPauseStartTime(null); // сбрасываем таймер
   }, []);
 
   // Обработчик диалога продолжения (из паузы)
@@ -174,14 +210,14 @@ const DriverModal: React.FC<DriverModalProps> = ({
       setPauseStartTime(null); // сбрасываем таймер
       setShowSwapIcon(false); // сбрасываем иконку замены
       setIconOpacity(1); // сбрасываем анимацию
-    } else if (buttonColorState === 3) { // серое состояние
+    } else if (buttonColorState === 3 && isEmergencyButtonActive) { // серое состояние и кнопка активна
       setButtonColorState(2); // возврат в зеленое
       setIsPaused(false); // сбрасываем паузу при возврате в зеленое
       setPauseStartTime(null); // сбрасываем таймер
       setShowSwapIcon(false); // сбрасываем иконку замены
       setIconOpacity(1); // сбрасываем анимацию
     }
-  }, [buttonColorState]);
+  }, [buttonColorState, isEmergencyButtonActive]);
 
   // Слайдер логика
   const maxSlideDistance = Math.max(0, sliderWidth - SLIDER_BUTTON_SIZE - SLIDER_PADDING * 2);
@@ -315,9 +351,9 @@ const DriverModal: React.FC<DriverModalProps> = ({
                             height: '100%', 
                             alignItems: 'center', 
                             justifyContent: 'center',
-                            opacity: (buttonColorState === 2 || (buttonColorState === 3 && !isPaused)) ? 1 : 0.6 // активна в зеленом и сером без паузы
+                            opacity: (buttonColorState === 2 || (buttonColorState === 3 && isEmergencyButtonActive)) ? 1 : 0.3 // активна в зеленом и сером только после активации
                           }}
-                          disabled={!(buttonColorState === 2 || (buttonColorState === 3 && !isPaused))} // активна в зеленом и сером без паузы
+                          disabled={!(buttonColorState === 2 || (buttonColorState === 3 && isEmergencyButtonActive))} // активна в зеленом и сером только после активации
                         >
                           <Animated.View style={{ opacity: iconOpacity }}>
                             <Ionicons 
@@ -421,6 +457,11 @@ const DriverModal: React.FC<DriverModalProps> = ({
         showContinue={showContinueDialog}
         onContinueCancel={() => setShowContinueDialog(false)}
         onContinueOk={handleContinueOk}
+        showRating={showRatingDialog}
+        onRatingCancel={handleRatingCancel}
+        onRatingSubmit={handleRatingSubmit}
+        emergencyActionsUsed={emergencyActionsUsed}
+        emergencyActionType={emergencyActionType}
       />
     </Modal>
   );

@@ -43,7 +43,13 @@
     "language": "Dil"
   },
   "verify": "Doğrula",
-  "confirmation": "Onay"
-  ,
-  "select": "Seç"
+  "confirmation": "Onay",
+  "select": "Seç",
+  "rating": {
+    "title": "Yolculuğunuzu değerlendirin",
+    "message": "Yolculuk hakkındaki deneyiminizi paylaşın",
+    "commentLabel": "Yorum (isteğe bağlı)",
+    "commentPlaceholder": "Yolculuğunuz hakkında bize anlatın...",
+    "submit": "Gönder"
+  }
 } 

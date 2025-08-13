@@ -44,7 +44,13 @@
     "login": "Anmelden",
     "language": "Sprache"
   },
-  "verify": "Bestätigen"
-  ,
-  "select": "Auswählen"
+  "verify": "Bestätigen",
+  "select": "Auswählen",
+  "rating": {
+    "title": "Bewerten Sie Ihre Fahrt",
+    "message": "Teilen Sie Ihre Erfahrungen über die Fahrt",
+    "commentLabel": "Kommentar (optional)",
+    "commentPlaceholder": "Erzählen Sie uns von Ihrer Fahrt...",
+    "submit": "Absenden"
+  }
 } 

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Modal, TouchableOpacity, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, TouchableOpacity, Text, View, TextInput, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { t } from '../../i18n';
 
 export type DriverTripDialogsProps = {
@@ -34,6 +35,12 @@ export type DriverTripDialogsProps = {
   showContinue: boolean;
   onContinueCancel: () => void;
   onContinueOk: () => void;
+  // Rating dialog
+  showRating: boolean;
+  onRatingCancel: () => void;
+  onRatingSubmit: (rating: number, comment: string) => void;
+  emergencyActionsUsed?: boolean;
+  emergencyActionType?: 'stop' | 'end' | null;
 };
 
 const DriverTripDialogs: React.FC<DriverTripDialogsProps> = ({
@@ -61,6 +68,11 @@ const DriverTripDialogs: React.FC<DriverTripDialogsProps> = ({
   showContinue,
   onContinueCancel,
   onContinueOk,
+  showRating,
+  onRatingCancel,
+  onRatingSubmit,
+  emergencyActionsUsed = false,
+  emergencyActionType = null,
 }) => {
   return (
     <>
@@ -189,7 +201,115 @@ const DriverTripDialogs: React.FC<DriverTripDialogsProps> = ({
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
+
+      {/* Rating dialog */}
+      <RatingDialog
+        visible={showRating}
+        onCancel={onRatingCancel}
+        onSubmit={onRatingSubmit}
+        styles={styles}
+        emergencyActionsUsed={emergencyActionsUsed}
+        emergencyActionType={emergencyActionType}
+      />
     </>
+  );
+};
+
+// Rating Dialog Component
+const RatingDialog: React.FC<{
+  visible: boolean;
+  onCancel: () => void;
+  onSubmit: (rating: number, comment: string) => void;
+  styles: any;
+  emergencyActionsUsed?: boolean;
+  emergencyActionType?: 'stop' | 'end' | null;
+}> = ({ visible, onCancel, onSubmit, styles, emergencyActionsUsed = false, emergencyActionType = null }) => {
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+
+  const handleSubmit = () => {
+    // Если были использованы экстренные действия, комментарий обязателен
+    if (emergencyActionsUsed && !comment.trim()) {
+      return; // Не отправляем, если комментарий пустой
+    }
+    onSubmit(rating, comment);
+    setRating(5);
+    setComment('');
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    setRating(5);
+    setComment('');
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="fade">
+      <TouchableOpacity style={styles.dialogOverlay} activeOpacity={1} onPress={() => {}}>
+        <TouchableOpacity style={styles.ratingDialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={styles.dialogTitle}>{t('common.rating.title')}</Text>
+            <Text style={styles.dialogText}>{t('common.rating.message')}</Text>
+            
+            {/* Rating Stars */}
+            <View style={styles.ratingContainer}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <TouchableOpacity
+                  key={star}
+                  style={styles.starButton}
+                  onPress={() => setRating(star)}
+                >
+                  <Ionicons
+                    name={star <= rating ? "star" : "star-outline"}
+                    size={28}
+                    color={star <= rating ? "#FFD700" : "#D1D5DB"}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            
+            {/* Comment Input */}
+            <View style={styles.commentContainer}>
+              <Text style={styles.commentLabel}>
+                {emergencyActionsUsed ? t('common.rating.commentRequired') : t('common.rating.commentLabel')}
+              </Text>
+              <TextInput
+                style={styles.commentInput}
+                value={comment}
+                onChangeText={setComment}
+                placeholder={
+                  emergencyActionsUsed 
+                    ? (emergencyActionType === 'stop' 
+                        ? t('common.rating.commentStopPlaceholder')
+                        : t('common.rating.commentEndPlaceholder'))
+                    : t('common.rating.commentPlaceholder')
+                }
+                placeholderTextColor="#9CA3AF"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+              />
+            </View>
+            
+            <View style={styles.dialogButtonsContainer}>
+              <TouchableOpacity style={styles.dialogCancelButton} onPress={handleCancel}>
+                <Text style={styles.dialogCancelButtonText}>{t('driver.tripDialogs.buttons.cancelAction')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[
+                  styles.dialogOkButton,
+                  emergencyActionsUsed && !comment.trim() && { opacity: 0.5 }
+                ]} 
+                onPress={handleSubmit}
+                disabled={emergencyActionsUsed && !comment.trim()}
+              >
+                <Text style={styles.dialogOkButtonText}>{t('common.rating.submit')}</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
   );
 };
 

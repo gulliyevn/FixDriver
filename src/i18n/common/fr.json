@@ -44,7 +44,13 @@
     "login": "Se connecter",
     "language": "Langue"
   },
-  "verify": "Vérifier"
-  ,
-  "select": "Choisir"
+  "verify": "Vérifier",
+  "select": "Choisir",
+  "rating": {
+    "title": "Évaluez votre trajet",
+    "message": "Partagez votre expérience sur le trajet",
+    "commentLabel": "Commentaire (optionnel)",
+    "commentPlaceholder": "Parlez-nous de votre trajet...",
+    "submit": "Soumettre"
+  }
 } 

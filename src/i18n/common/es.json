@@ -44,7 +44,13 @@
     "login": "Iniciar sesión",
     "language": "Idioma"
   },
-  "verify": "Verificar"
-  ,
-  "select": "Elegir"
+  "verify": "Verificar",
+  "select": "Elegir",
+  "rating": {
+    "title": "Califica tu viaje",
+    "message": "Comparte tu experiencia sobre el viaje",
+    "commentLabel": "Comentario (opcional)",
+    "commentPlaceholder": "Cuéntanos sobre tu viaje...",
+    "submit": "Enviar"
+  }
 } 
