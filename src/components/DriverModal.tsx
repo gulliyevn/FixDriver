@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Animated, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Image, Modal, Vibration, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 import { useTheme } from '../context/ThemeContext';
 import { t } from '../i18n';
 import { createDriverModalStyles } from '../styles/components/DriverModal.styles';
@@ -31,7 +33,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
   role = 'client',
 }) => {
   const { isDark } = useTheme();
-  const styles = createDriverModalStyles(isDark);
+  const styles = createDriverModalStyles(isDark, role);
   
   const [isDriverExpanded, setIsDriverExpanded] = useState(false);
   const [buttonColorState, setButtonColorState] = useState(0); // 0: primary, 1: yellow, 2: green, 3: stopped
@@ -42,8 +44,18 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const [showStopDialog, setShowStopDialog] = useState(false);
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [showContinueDialog, setShowContinueDialog] = useState(false);
+  const [isPaused, setIsPaused] = useState(false); // для отслеживания паузы
+  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null); // время начала паузы
+  const [slideProgress, setSlideProgress] = useState(0); // для отслеживания прогресса свайпа
+  const [showSwapIcon, setShowSwapIcon] = useState(false); // для показа иконки замены
+  const [iconOpacity, setIconOpacity] = useState(1); // для анимации смены иконок
   const driverExpandAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
+  
+  // Слайдер параметры
+  const [sliderWidth, setSliderWidth] = useState(0);
+  const SLIDER_BUTTON_SIZE = 60;
+  const SLIDER_PADDING = 4;
 
   // Централизованные моки
   const driverId = getSampleDriverId();
@@ -74,53 +86,182 @@ const DriverModal: React.FC<DriverModalProps> = ({
 
   const handleStopPress = useCallback(() => {
     setShowLongPressDialog(false);
-    setShowStopDialog(true);
+    setShowStopDialog(true); // открываем диалог подтверждения остановки
   }, []);
 
   const handleEndPress = useCallback(() => {
     setShowLongPressDialog(false);
-    setShowEndDialog(true);
+    setShowEndDialog(true); // открываем диалог подтверждения завершения
   }, []);
+
+  // Функция форматирования времени
+  const formatTime = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    } else {
+      return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+  };
 
   const handleStopOkPress = useCallback(() => {
     setShowStopDialog(false);
-    setButtonColorState(3); // Переводим в остановленное состояние
+    setIsPaused(true); // включаем паузу
+    setPauseStartTime(0); // начинаем с 00:00
+    // buttonColorState остается 3 (серый)
   }, []);
 
   const handleEndOkPress = useCallback(() => {
     setShowEndDialog(false);
     setButtonColorState(0); // Возвращаем к дефолтному состоянию
+    setIsPaused(false); // сбрасываем паузу
+    setPauseStartTime(null); // сбрасываем таймер
   }, []);
 
-  const handleOkPress = useCallback(() => {
-    // Меняем цвет только при нажатии OK
-    let newState;
-    if (buttonColorState === 3) {
-      // Если в сером состоянии, переходим к зеленому (продолжить)
-      newState = 2;
-    } else if (buttonColorState === 2) {
-      // Если в зеленом состоянии, переходим к синему (завершение)
-      newState = 0;
-    } else {
-      // Обычный цикл для синего и желтого
-      newState = (buttonColorState + 1) % 4;
-    }
-    setButtonColorState(newState);
-    
-    // Закрываем все диалоги
+  // Обработчики для каждого диалога отдельно
+  const handleStartOk = useCallback(() => {
     setShowDialog1(false);
+    setButtonColorState(1); // Синий -> Желтый
+  }, []);
+
+  const handleWaitingOk = useCallback(() => {
     setShowDialog2(false);
+    setButtonColorState(2); // Желтый -> Зеленый
+    
+    // Запускаем таймер иконки замены с плавной анимацией
+    setTimeout(() => {
+      // Плавно скрываем стрелку
+      setIconOpacity(0);
+      setTimeout(() => {
+        setShowSwapIcon(true); // меняем иконку
+        setIconOpacity(1); // плавно показываем замену
+      }, 150);
+    }, 2000);
+    
+    setTimeout(() => {
+      // Плавно скрываем замену
+      setIconOpacity(0);
+      setTimeout(() => {
+        setShowSwapIcon(false); // возвращаем стрелку
+        setIconOpacity(1); // плавно показываем стрелку
+      }, 150);
+    }, 5000);
+  }, []);
+
+  const handleEndTripOk = useCallback(() => {
     setShowDialog3(false);
+    setButtonColorState(0); // Зеленый -> Синий
+    setShowSwapIcon(false); // сбрасываем иконку замены
+    setIconOpacity(1); // сбрасываем анимацию
+  }, []);
+
+  // Обработчик диалога продолжения (из паузы)
+  const handleContinueOk = useCallback(() => {
     setShowContinueDialog(false);
+    setIsPaused(false); // сбрасываем паузу
+    setPauseStartTime(null); // сбрасываем таймер
+    setButtonColorState(2); // возвращаем в зеленое состояние
+  }, []);
+
+  // Обработчик клика на кнопку (зеленый ⇄ серый)
+  const handleButtonClick = useCallback(() => {
+    if (buttonColorState === 2) { // зеленое состояние
+      setButtonColorState(3); // переход в серое
+      setIsPaused(false); // сбрасываем паузу при переходе в серое
+      setPauseStartTime(null); // сбрасываем таймер
+      setShowSwapIcon(false); // сбрасываем иконку замены
+      setIconOpacity(1); // сбрасываем анимацию
+    } else if (buttonColorState === 3) { // серое состояние
+      setButtonColorState(2); // возврат в зеленое
+      setIsPaused(false); // сбрасываем паузу при возврате в зеленое
+      setPauseStartTime(null); // сбрасываем таймер
+      setShowSwapIcon(false); // сбрасываем иконку замены
+      setIconOpacity(1); // сбрасываем анимацию
+    }
   }, [buttonColorState]);
 
-  // Слайд-жест временно отключен, оставляем анимацию возврата
-  // при необходимости можно восстановить PanGestureHandler
+  // Слайдер логика
+  const maxSlideDistance = Math.max(0, sliderWidth - SLIDER_BUTTON_SIZE - SLIDER_PADDING * 2);
+  const completeThreshold = maxSlideDistance * 0.95; // почти до самого конца
 
-  const handleButtonPress = useCallback(() => {
-    // Простое тестирование - меняем состояние при нажатии
-    setButtonColorState((buttonColorState + 1) % 4);
-  }, [buttonColorState]);
+  // Слушатель для отслеживания прогресса свайпа
+  React.useEffect(() => {
+    const listener = slideAnim.addListener(({ value }) => {
+      setSlideProgress(value);
+    });
+    return () => slideAnim.removeListener(listener);
+  }, [slideAnim]);
+
+  const onGestureEvent = Animated.event(
+    [{ nativeEvent: { translationX: slideAnim } }],
+    { useNativeDriver: false }
+  );
+
+  const resetSlider = useCallback(() => {
+    Animated.spring(slideAnim, {
+      toValue: 0,
+      useNativeDriver: false,
+      tension: 100,
+      friction: 8,
+    }).start();
+  }, [slideAnim]);
+
+  const completeSwipe = useCallback(() => {
+    // Сильное тактильное биение
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    
+    // Анимация завершения
+    Animated.sequence([
+      Animated.timing(slideAnim, {
+        toValue: -maxSlideDistance,
+        duration: 150,
+        useNativeDriver: false,
+      }),
+      Animated.delay(100),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        useNativeDriver: false,
+        tension: 100,
+        friction: 8,
+      })
+    ]).start();
+
+    // Показываем диалог в зависимости от состояния (цвет меняется только после подтверждения)
+    if (buttonColorState === 0) {
+      // Синий -> Желтый: диалог начала поездки
+      setShowDialog1(true);
+    } else if (buttonColorState === 1) {
+      // Желтый -> Зеленый: диалог ожидания
+      setShowDialog2(true);
+    } else if (buttonColorState === 2) {
+      // Зеленый -> Синий: диалог завершения поездки
+      setShowDialog3(true);
+    } else if (buttonColorState === 3) {
+      // Серый: экстренный диалог или диалог продолжения при паузе
+      if (isPaused) {
+        setShowContinueDialog(true); // диалог продолжения при паузе
+      } else {
+        setShowLongPressDialog(true); // экстренный диалог
+      }
+    }
+  }, [slideAnim, maxSlideDistance, buttonColorState, isPaused]);
+
+  const onHandlerStateChange = useCallback((event) => {
+    const { state, translationX } = event.nativeEvent;
+    
+    if (state === State.END || state === State.CANCELLED || state === State.FAILED) {
+      const slideDistance = Math.abs(translationX);
+      
+      if (slideDistance >= completeThreshold && translationX < 0) { // только налево
+        completeSwipe();
+      } else {
+        resetSlider();
+      }
+    }
+  }, [completeThreshold, completeSwipe, resetSlider]);
 
   return (
     <Modal
@@ -137,44 +278,89 @@ const DriverModal: React.FC<DriverModalProps> = ({
               <View style={styles.driverHeaderContainer}>
                 {/* Слайдер-контейнер как фон */}
                 {role === 'driver' && (
-                  <View style={styles.sliderBackgroundContainer}>
-                    <TouchableOpacity 
-                      style={[
-                        styles.sliderButton,
-                        buttonColorState === 1 && { backgroundColor: '#FCD34D' },
-                        buttonColorState === 2 && { backgroundColor: '#10B981' },
-                        buttonColorState === 3 && { backgroundColor: '#6B7280' },
-                        {
-                          transform: [{ translateX: slideAnim }]
-                        }
-                      ]}
-                      onPress={handleButtonPress}
-                      activeOpacity={1}
+                  <View 
+                    style={styles.sliderBackgroundContainer}
+                    onLayout={(e) => setSliderWidth(e.nativeEvent.layout.width)}
+                  >
+                    <PanGestureHandler
+                      onGestureEvent={onGestureEvent}
+                      onHandlerStateChange={onHandlerStateChange}
+                      shouldCancelWhenOutside={false}
+                      activeOffsetX={[-10, 10]}
+                      failOffsetY={[-5, 5]}
                     >
-                      <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
-                    </TouchableOpacity>
+                      <Animated.View
+                        style={[
+                          styles.sliderButton,
+                          buttonColorState === 1 && { backgroundColor: '#FCD34D' },
+                          buttonColorState === 2 && { backgroundColor: '#10B981' },
+                          buttonColorState === 3 && { backgroundColor: '#6B7280' },
+                          {
+                            transform: [
+                              {
+                                translateX: slideAnim.interpolate({
+                                  inputRange: [-maxSlideDistance, 0, maxSlideDistance],
+                                  outputRange: [-maxSlideDistance, 0, 0],
+                                  extrapolate: 'clamp',
+                                }),
+                              },
+                            ],
+                          },
+                        ]}
+                      >
+                        <TouchableOpacity
+                          onPress={handleButtonClick}
+                          style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            opacity: (buttonColorState === 2 || (buttonColorState === 3 && !isPaused)) ? 1 : 0.6 // активна в зеленом и сером без паузы
+                          }}
+                          disabled={!(buttonColorState === 2 || (buttonColorState === 3 && !isPaused))} // активна в зеленом и сером без паузы
+                        >
+                          <Animated.View style={{ opacity: iconOpacity }}>
+                            <Ionicons 
+                              name={
+                                buttonColorState === 3 
+                                  ? (isPaused ? "pause" : "shield")
+                                  : (showSwapIcon && buttonColorState === 2 ? "swap-horizontal" : "chevron-back")
+                              } 
+                              size={24} 
+                              color="#FFFFFF" 
+                            />
+                          </Animated.View>
+                        </TouchableOpacity>
+                      </Animated.View>
+                    </PanGestureHandler>
                   </View>
                 )}
                 
                 {/* Аватар и тексты поверх слайдера */}
-                <DriverModalHeader
-                  styles={styles}
-                  role={role}
-                  driver={driver}
-                  childName={driverInfo.childName}
-                  childAge={driverInfo.childAge}
-                />
+                                  <DriverModalHeader
+                    styles={styles}
+                    role={role}
+                    driver={driver}
+                    childName={driverInfo.childName}
+                    childAge={driverInfo.childAge}
+                    slideProgress={slideProgress}
+                    isPaused={isPaused}
+                    pauseStartTime={pauseStartTime}
+                    formatTime={formatTime}
+                  />
               </View>
             </View>
 
             <DriverInfoBar
-              styles={styles}
               role={role}
               schedule={driverInfo.schedule}
               price={driverInfo.price}
               distance={driverInfo.distance}
               timeOrChildType={role === 'driver' ? driverInfo.time : driverInfo.childType}
               onPress={handleDriverExpand}
+              vehicleBrand={driver?.vehicle_brand}
+              vehicleModel={driver?.vehicle_model}
+              vehicleNumber={driver?.vehicle_number}
             />
 
             <Animated.View
@@ -215,13 +401,13 @@ const DriverModal: React.FC<DriverModalProps> = ({
         clientName={getClientNameMock(clientId)}
         showStart={showDialog1}
         onStartCancel={() => setShowDialog1(false)}
-        onStartOk={handleOkPress}
+        onStartOk={handleStartOk}
         showWaiting={showDialog2}
         onWaitingCancel={() => setShowDialog2(false)}
-        onWaitingOk={handleOkPress}
+        onWaitingOk={handleWaitingOk}
         showEnd={showDialog3}
         onEndCancel={() => setShowDialog3(false)}
-        onEndOk={handleOkPress}
+        onEndOk={handleEndTripOk}
         showEmergency={showLongPressDialog}
         onEmergencyStop={handleStopPress}
         onEmergencyEnd={handleEndPress}
@@ -234,7 +420,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
         onForceEndOk={handleEndOkPress}
         showContinue={showContinueDialog}
         onContinueCancel={() => setShowContinueDialog(false)}
-        onContinueOk={handleOkPress}
+        onContinueOk={handleContinueOk}
       />
     </Modal>
   );

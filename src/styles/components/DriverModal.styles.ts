@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { getCurrentColors, SHADOWS, SIZES } from '../../constants/colors';
 
-export const createDriverModalStyles = (isDark: boolean) => {
+export const createDriverModalStyles = (isDark: boolean, role: 'client' | 'driver' = 'client') => {
   const palette = getCurrentColors(isDark);
 
   return StyleSheet.create({
@@ -31,17 +31,17 @@ export const createDriverModalStyles = (isDark: boolean) => {
       paddingVertical: SIZES.lg + 4,
       borderRadius: SIZES.radius.lg + 2,
       backgroundColor: palette.surface,
-      borderWidth: 1,
-      borderColor: palette.border,
-      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+      ...(role === 'driver' && {
+        borderWidth: 1,
+        borderColor: palette.border,
+      }),
+      ...(role === 'driver' && (isDark ? SHADOWS.dark.medium : SHADOWS.light.medium)),
     },
     driverHeader: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: SIZES.lg + 6,
       paddingBottom: SIZES.md + 6,
-      borderBottomWidth: 1,
-      borderBottomColor: palette.border,
     },
     driverHeaderContainer: {
       position: 'relative',
@@ -51,10 +51,21 @@ export const createDriverModalStyles = (isDark: boolean) => {
       borderRadius: 50,
       paddingHorizontal: SIZES.md,
       paddingVertical: SIZES.sm,
-      borderWidth: 1,
-      borderColor: palette.border,
+      ...(role === 'driver' && {
+        borderWidth: 1,
+        borderColor: palette.border,
+      }),
+      ...(role === 'client' && {
+        width: '110%',
+        borderRadius: SIZES.radius.lg,
+        minHeight: 0,
+        paddingHorizontal: SIZES.xxl,
+        paddingVertical: 0,
+        marginVertical: -SIZES.sm,
+        alignSelf: 'center',
+      }),
       minHeight: 70,
-      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+      ...(role === 'driver' && (isDark ? SHADOWS.dark.small : SHADOWS.light.small)),
     },
     sliderBackgroundContainer: {
       position: 'absolute',
@@ -62,17 +73,22 @@ export const createDriverModalStyles = (isDark: boolean) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: palette.border,
+      backgroundColor: 'transparent',
       borderRadius: 50,
       justifyContent: 'center',
       alignItems: 'flex-end',
       paddingRight: 4,
+      zIndex: 2,
     },
     avatarAndInfoRow: {
       flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
       zIndex: 1,
+      ...(role === 'client' && {
+        justifyContent: 'flex-start',
+        marginLeft: -SIZES.md,
+      }),
     },
     avatarContainer: {
       position: 'relative',
@@ -84,6 +100,11 @@ export const createDriverModalStyles = (isDark: boolean) => {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: palette.primary,
+      ...(role === 'client' && {
+        width: 56,
+        height: 56,
+        borderRadius: 28,
+      }),
     },
     onlineIndicator: {
       position: 'absolute',
@@ -110,6 +131,9 @@ export const createDriverModalStyles = (isDark: boolean) => {
       fontWeight: '600',
       color: palette.text,
       flexShrink: 1,
+      ...(role === 'client' && {
+        fontSize: SIZES.fontSize.lg,
+      }),
     },
     premiumIcon: {
       marginLeft: SIZES.xs,
@@ -179,7 +203,35 @@ export const createDriverModalStyles = (isDark: boolean) => {
       backgroundColor: palette.primary,
       alignItems: 'center',
       justifyContent: 'center',
+      zIndex: 3,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    fixDriveContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1,
+    },
+    fixDriveText: {
+      fontSize: SIZES.fontSize.lg + 4,
+      fontWeight: '700',
+      color: palette.primary,
+      letterSpacing: 1,
+    },
+    timerContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    timerText: {
+      fontSize: SIZES.fontSize.xl + 8,
+      fontWeight: '700',
+      color: palette.primary,
+      fontFamily: 'monospace',
     },
 
     // Driver Info Bar
@@ -191,8 +243,6 @@ export const createDriverModalStyles = (isDark: boolean) => {
       marginBottom: SIZES.xs + 6,
       paddingHorizontal: SIZES.sm,
       paddingVertical: SIZES.xs + 6,
-      borderBottomWidth: 1,
-      borderBottomColor: palette.border,
     },
     scheduleInfo: {
       flexDirection: 'row',

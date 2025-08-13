@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../context/ThemeContext';
+import { createDriverInfoBarStyles } from '../../styles/components/driver/DriverInfoBar.styles';
 
 export type DriverInfoBarProps = {
-  styles: any;
   role?: 'client' | 'driver';
   schedule: string;
   price: string;
@@ -12,7 +13,9 @@ export type DriverInfoBarProps = {
   onPress: () => void;
 };
 
-const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ styles, role = 'client', schedule, price, distance, timeOrChildType, onPress }) => {
+const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ role = 'client', schedule, price, distance, timeOrChildType, onPress }) => {
+  const { isDark } = useTheme();
+  const styles = createDriverInfoBarStyles(isDark);
   return (
     <TouchableOpacity style={styles.driverInfoBar} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.scheduleInfo}>
@@ -20,7 +23,7 @@ const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ styles, role = 'client', 
         <Text style={styles.scheduleText}>{schedule}</Text>
       </View>
       <View style={styles.priceInfo}>
-        <Ionicons name={role === 'driver' ? 'wallet' : 'pricetag-outline'} size={16} color="#9CA3AF" />
+        <Ionicons name="pricetag-outline" size={16} color="#9CA3AF" />
         <Text style={styles.priceText}>{price}</Text>
       </View>
       <View style={styles.distanceInfo}>
@@ -28,7 +31,7 @@ const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ styles, role = 'client', 
         <Text style={styles.distanceText}>{distance}</Text>
       </View>
       <View style={styles.timeInfo}>
-        <Ionicons name={role === 'driver' ? 'time' : 'football'} size={16} color="#9CA3AF" />
+        <Ionicons name="football" size={16} color="#9CA3AF" />
         <Text style={styles.timeText}>{timeOrChildType}</Text>
       </View>
     </TouchableOpacity>
@@ -36,5 +39,3 @@ const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ styles, role = 'client', 
 };
 
 export default React.memo(DriverInfoBar);
-
-
