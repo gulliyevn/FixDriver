@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Animated, Image, Modal, Vibration, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Image, Modal, Vibration, Platform, Pressable, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
@@ -24,6 +24,7 @@ interface DriverModalProps {
   onClose: () => void;
   onOverlayClose: () => void;
   role?: 'client' | 'driver';
+  onChat?: (driver: any) => void; // Добавляем проп для чата
 }
 
 const DriverModal: React.FC<DriverModalProps> = ({
@@ -31,6 +32,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
   onClose,
   onOverlayClose,
   role = 'client',
+  onChat,
 }) => {
   const { isDark } = useTheme();
   const styles = createDriverModalStyles(isDark, role);
@@ -53,6 +55,11 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const [slideProgress, setSlideProgress] = useState(0); // для отслеживания прогресса свайпа
   const [showSwapIcon, setShowSwapIcon] = useState(false); // для показа иконки замены
   const [iconOpacity, setIconOpacity] = useState(1); // для анимации смены иконок
+  
+  // Состояние для модалки звонка
+  const [isCallSheetOpen, setCallSheetOpen] = useState(false);
+  const callAnim = useRef(new Animated.Value(0)).current;
+  
   const driverExpandAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
   
@@ -67,6 +74,43 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const clientId = getSampleClientId();
   const driverInfo = getDriverInfoMock(driver?.id ?? 'driver_1');
   const driverTrips = getDriverTripsMock(driver?.id ?? 'driver_1');
+
+  // Функции для модалки звонка
+  const openCallSheet = useCallback(() => {
+    setCallSheetOpen(true);
+    Animated.timing(callAnim, {
+      toValue: 1,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+  }, [callAnim]);
+
+  const closeCallSheet = useCallback(() => {
+    Animated.timing(callAnim, {
+      toValue: 0,
+      duration: 180,
+      useNativeDriver: true,
+    }).start(() => setCallSheetOpen(false));
+  }, [callAnim]);
+
+  const handleNetworkCall = useCallback(() => {
+    try {
+      Linking.openURL(`tel:${driver.phone_number}`);
+    } finally {
+      closeCallSheet();
+    }
+  }, [closeCallSheet, driver.phone_number]);
+
+  const handleInternetCall = useCallback(() => {
+    closeCallSheet();
+    // Здесь можно добавить логику для интернет-звонка
+  }, [closeCallSheet]);
+
+  const handleChatPress = useCallback(() => {
+    if (onChat) {
+      onChat(driver);
+    }
+  }, [onChat, driver]);
 
   const handleDriverExpand = useCallback(() => {
     const toValue = isDriverExpanded ? 0 : 1;
@@ -413,14 +457,14 @@ const DriverModal: React.FC<DriverModalProps> = ({
               <View style={styles.bottomBorder} />
 
               <View style={styles.buttonsContainer}>
-                 <TouchableOpacity style={styles.leftButton}>
+                 <TouchableOpacity style={styles.leftButton} onPress={handleChatPress}>
                   <View style={styles.buttonContent}>
                     <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
                      <Text style={styles.leftButtonText}>{t('client.driversScreen.actions.chat')}</Text>
                   </View>
                 </TouchableOpacity>
 
-                 <TouchableOpacity style={styles.rightButton}>
+                 <TouchableOpacity style={styles.rightButton} onPress={openCallSheet}>
                   <View style={styles.rightButtonContent}>
                     <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
                      <Text style={styles.rightButtonText}>{t('client.driversScreen.actions.call')}</Text>
@@ -463,6 +507,48 @@ const DriverModal: React.FC<DriverModalProps> = ({
         emergencyActionsUsed={emergencyActionsUsed}
         emergencyActionType={emergencyActionType}
       />
+      
+      {/* Модалка звонка */}
+      <Modal
+        visible={isCallSheetOpen}
+        transparent={true}
+        animationType="none"
+        onRequestClose={closeCallSheet}
+      >
+        <View style={styles.callSheetOverlay}>
+          <Pressable style={styles.callSheetBackdrop} onPress={closeCallSheet} />
+          <Animated.View
+            style={[
+              styles.callSheetContainer,
+              {
+                transform: [
+                  {
+                    translateY: callAnim.interpolate({ inputRange: [0, 1], outputRange: [300, 0] }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <TouchableOpacity style={styles.callSheetClose} onPress={closeCallSheet} accessibilityLabel={t('common.close')}>
+              <Ionicons name="close" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+            </TouchableOpacity>
+            <View style={styles.callSheetHandle} />
+            <Text style={styles.callSheetTitle}>
+              {t('client.driversScreen.call.callTitle', { firstName: driver.first_name, lastName: driver.last_name })}
+            </Text>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleInternetCall}>
+              <Ionicons name="wifi" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>{t('client.driversScreen.call.internetCall')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.callSheetOption} onPress={handleNetworkCall}>
+              <Ionicons name="call" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Text style={styles.callSheetOptionText}>
+                {t('client.driversScreen.call.networkCallWithNumber', { phone: driver.phone_number })}
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
     </Modal>
   );
 };

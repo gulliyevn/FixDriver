@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Alert, TouchableOpacity, Animated, Easing, Text, Image } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { MapService } from '../services/MapService';
 import { MapViewStyles, createMapViewStyles } from '../styles/components/MapView.styles';
 import { useTheme } from '../context/ThemeContext';
@@ -38,6 +39,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
   const { user } = useAuth();
+  const navigation = useNavigation();
   const styles = createMapViewStyles(isDark);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDriverModalVisible, setIsDriverModalVisible] = useState(false);
@@ -86,6 +88,34 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     
     Animated.parallel(animations).start();
   };
+
+  const handleChatPress = useCallback((driver: any) => {
+    try {
+      // Закрываем модалку водителя
+      handleDriverModalClose();
+      
+      // Для обеих ролей используем одинаковую навигацию к стеку чатов
+      navigation.navigate('Chat' as any);
+      
+      setTimeout(() => {
+        // Навигируем к конкретному чату внутри стека
+        (navigation as any).navigate('Chat', {
+          screen: 'ChatConversation',
+          params: {
+            driverId: driver.id,
+            driverName: `${driver.first_name} ${driver.last_name}`,
+            driverCar: `${driver.vehicle_brand} ${driver.vehicle_model}`,
+            driverNumber: driver.phone_number,
+            driverRating: driver.rating.toString(),
+            driverStatus: driver.isAvailable ? 'online' : 'offline'
+          }
+        });
+      }, 100);
+    } catch (error) {
+      console.warn('Chat navigation failed, falling back to Chat tab:', error);
+      navigation.navigate('Chat' as any);
+    }
+  }, [navigation, handleDriverModalClose]);
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -412,6 +442,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         onClose={handleDriverModalClose}
         onOverlayClose={handleDriverModalClose}
         role={role}
+        onChat={handleChatPress}
       />
       
       {/* Дополнительные кнопки */}
