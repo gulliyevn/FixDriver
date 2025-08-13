@@ -52,5 +52,12 @@
     "commentLabel": "Commentaire (optionnel)",
     "commentPlaceholder": "Parlez-nous de votre trajet...",
     "submit": "Soumettre"
+  },
+  "report": {
+    "title": "Envoyer un rapport",
+    "subtitle": "Décrivez le problème (optionnel)",
+    "commentPlaceholder": "Entrez un commentaire...",
+    "submit": "Envoyer",
+    "success": "Rapport envoyé"
   }
 } 

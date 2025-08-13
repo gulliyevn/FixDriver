@@ -52,6 +52,7 @@ export const createMapViewStyles = (isDark: boolean) => {
       marginRight: SIZES.lg + 6,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
+
     markerAContainer: {
       backgroundColor: palette.card,
       borderRadius: 16,

@@ -55,5 +55,12 @@
     "commentStopPlaceholder": "Dayandırma səbəbini göstərin...",
     "commentEndPlaceholder": "Bitirmə səbəbini göstərin...",
     "submit": "Təsdiqlə"
+  },
+  "report": {
+    "title": "Hesabat göndər",
+    "subtitle": "Problemi təsvir edin (istəyə bağlı)",
+    "commentPlaceholder": "Şərh daxil edin...",
+    "submit": "Göndər",
+    "success": "Hesabat göndərildi"
   }
 } 

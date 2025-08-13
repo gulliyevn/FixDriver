@@ -55,5 +55,12 @@
     "commentStopPlaceholder": "Указать причину остановки...",
     "commentEndPlaceholder": "Указать причину завершения...",
     "submit": "Отправить"
+  },
+  "report": {
+    "title": "Отправить репорт",
+    "subtitle": "Опишите проблему (необязательно)",
+    "commentPlaceholder": "Введите комментарий...",
+    "submit": "Отправить",
+    "success": "Репорт отправлен"
   }
 } 

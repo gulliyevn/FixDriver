@@ -55,5 +55,12 @@
     "commentStopPlaceholder": "Specify the reason for stopping...",
     "commentEndPlaceholder": "Specify the reason for ending...",
     "submit": "Submit"
+  },
+  "report": {
+    "title": "Send Report",
+    "subtitle": "Describe the problem (optional)",
+    "commentPlaceholder": "Enter comment...",
+    "submit": "Send",
+    "success": "Report sent"
   }
 } 

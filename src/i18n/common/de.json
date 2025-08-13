@@ -52,5 +52,12 @@
     "commentLabel": "Kommentar (optional)",
     "commentPlaceholder": "Erzählen Sie uns von Ihrer Fahrt...",
     "submit": "Absenden"
+  },
+  "report": {
+    "title": "Bericht senden",
+    "subtitle": "Beschreiben Sie das Problem (optional)",
+    "commentPlaceholder": "Kommentar eingeben...",
+    "submit": "Senden",
+    "success": "Bericht gesendet"
   }
 } 

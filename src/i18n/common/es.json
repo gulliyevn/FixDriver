@@ -52,5 +52,12 @@
     "commentLabel": "Comentario (opcional)",
     "commentPlaceholder": "Cuéntanos sobre tu viaje...",
     "submit": "Enviar"
+  },
+  "report": {
+    "title": "Enviar reporte",
+    "subtitle": "Describe el problema (opcional)",
+    "commentPlaceholder": "Ingresa un comentario...",
+    "submit": "Enviar",
+    "success": "Reporte enviado"
   }
 } 

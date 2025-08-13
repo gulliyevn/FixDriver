@@ -20,6 +20,9 @@ interface MapViewComponentProps {
   showNearbyDrivers?: boolean;
   onDriverVisibilityToggle?: number;
   role?: 'client' | 'driver';
+  clientLocationActive?: boolean; // Активна ли клиентская локация
+  isDriverModalVisible?: boolean; // Видимость модалки водителя
+  onDriverModalClose?: () => void; // Функция закрытия модалки
   markers?: Array<{
     id: string;
     coordinate: MapLocation;
@@ -35,14 +38,16 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   onDriverVisibilityToggle,
   markers = [],
   role = 'client',
+  clientLocationActive = false,
+  isDriverModalVisible = false,
+  onDriverModalClose,
 }) => {
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
   const { user } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const styles = createMapViewStyles(isDark);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isDriverModalVisible, setIsDriverModalVisible] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const buttonAnimations = useRef([
     new Animated.Value(0),
@@ -60,14 +65,23 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     longitudeDelta: 0.0421,
   });
 
+  // Состояние для маркеров водителей и клиентов
+  const [mapMarkers, setMapMarkers] = useState(markers);
+  
+  // Состояние для клиентского маркера (показывается водителям)
+  const [clientMarker, setClientMarker] = useState<{
+    id: string;
+    coordinate: MapLocation;
+    title: string;
+    description?: string;
+  } | null>(null);
 
 
-  const handleDriverModalOpen = () => {
-    setIsDriverModalVisible(true);
-  };
 
   const handleDriverModalClose = () => {
-    setIsDriverModalVisible(false);
+    if (onDriverModalClose) {
+      onDriverModalClose();
+    }
     // Возвращаем шеврон в исходное состояние
     setIsExpanded(false);
     
@@ -95,11 +109,11 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
       handleDriverModalClose();
       
       // Для обеих ролей используем одинаковую навигацию к стеку чатов
-      navigation.navigate('Chat' as any);
+      navigation.navigate('Chat');
       
       setTimeout(() => {
         // Навигируем к конкретному чату внутри стека
-        (navigation as any).navigate('Chat', {
+        navigation.navigate('Chat', {
           screen: 'ChatConversation',
           params: {
             driverId: driver.id,
@@ -113,9 +127,65 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
       }, 100);
     } catch (error) {
       console.warn('Chat navigation failed, falling back to Chat tab:', error);
-      navigation.navigate('Chat' as any);
+      navigation.navigate('Chat');
     }
   }, [navigation, handleDriverModalClose]);
+
+  // Обновление маркеров при изменении пропсов
+  useEffect(() => {
+    if (markers && markers.length > 0) {
+      setMapMarkers(markers);
+    }
+  }, [markers]);
+
+  // Обновление региона при изменении initialLocation
+  useEffect(() => {
+    if (initialLocation && initialLocation.latitude && initialLocation.longitude) {
+      setRegion(prevRegion => {
+        // Проверяем, действительно ли изменились координаты
+        if (prevRegion.latitude !== initialLocation.latitude || 
+            prevRegion.longitude !== initialLocation.longitude) {
+          return {
+            latitude: initialLocation.latitude,
+            longitude: initialLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+        }
+        return prevRegion;
+      });
+    }
+  }, [initialLocation]);
+
+  // Обработка клиентской локации для водителей
+  useEffect(() => {
+    if (role === 'driver' && clientLocationActive && initialLocation) {
+      // Показываем клиентский маркер водителям
+      setClientMarker({
+        id: 'active_client',
+        coordinate: initialLocation,
+        title: 'Активный клиент',
+        description: 'Клиент готов к поездке'
+      });
+    } else if (!clientLocationActive || role !== 'driver') {
+      // Скрываем клиентский маркер только при изменении состояния
+      setClientMarker(null);
+    }
+  }, [clientLocationActive, role]); // Убираем initialLocation из зависимостей
+
+  const refreshMapMarkers = async () => {
+    try {
+      // Здесь можно добавить логику загрузки актуальных маркеров
+      // Например, загрузка водителей и клиентов с сервера
+      console.log('Refreshing map markers...');
+      
+      // Не вызываем setState здесь, чтобы избежать бесконечного цикла
+      // Вместо этого можно загрузить данные с сервера и обновить маркеры через пропсы
+      
+    } catch (error) {
+      console.error('Error refreshing map markers:', error);
+    }
+  };
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -137,14 +207,9 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     if (!initialLocation) {
       initializeMap();
     }
-  }, [initialLocation]);
+  }, []); // Убираем зависимость initialLocation, чтобы избежать бесконечного цикла
 
-  // Отслеживаем изменения пропса для открытия модального окна водителя
-  useEffect(() => {
-    if (onDriverVisibilityToggle) {
-      handleDriverModalOpen();
-    }
-  }, [onDriverVisibilityToggle]);
+  // Убираем второй проблемный useEffect
 
   const handleMapPress = (event: { nativeEvent: { coordinate: { latitude: number; longitude: number } } }) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -420,7 +485,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         liteMode={false}
         mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
-        {markers.map((marker) => (
+        {mapMarkers.map((marker) => (
           <Marker
             key={marker.id}
             coordinate={marker.coordinate}
@@ -434,6 +499,18 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
             }
           />
         ))}
+        
+        {/* Клиентский маркер для водителей */}
+        {clientMarker && (
+          <Marker
+            key={clientMarker.id}
+            coordinate={clientMarker.coordinate}
+            title={clientMarker.title}
+            description={clientMarker.description}
+            onPress={() => handleMarkerPress(clientMarker)}
+            pinColor="green"
+          />
+        )}
       </MapView>
 
       {/* Модальное окно водителя */}
@@ -445,6 +522,8 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         onChat={handleChatPress}
       />
       
+
+
       {/* Дополнительные кнопки */}
       <View style={styles.additionalButtonsContainer}>
         {buttonAnimations.map((anim, index) => (
