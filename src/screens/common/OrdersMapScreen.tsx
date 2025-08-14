@@ -23,6 +23,7 @@ const OrdersMapScreen: React.FC = () => {
   const [isDriverModalVisible, setIsDriverModalVisible] = useState(false); // Видимость модалки водителя
   const [isReportModalVisible, setIsReportModalVisible] = useState(false); // Видимость модалки репорта
   const [reportComment, setReportComment] = useState(''); // Комментарий к репорту
+  const [isSimpleDialogVisible, setIsSimpleDialogVisible] = useState(false); // Простой диалог Да/Нет
   const [mapType, setMapType] = useState<'standard' | 'satellite' | 'hybrid'>('standard'); // Тип карты
   const mapRef = useRef<any>(null); // Ref для MapView
   const isZoomingRef = useRef(false); // Флаг для предотвращения множественных зумов
@@ -65,6 +66,17 @@ const OrdersMapScreen: React.FC = () => {
   const handleReportCancel = () => {
     setIsReportModalVisible(false);
     setReportComment('');
+  };
+
+  // Обработчики для простого диалога
+  const handleSimpleDialogYes = () => {
+    setIsSimpleDialogVisible(false);
+    console.log('Simple dialog: Yes clicked');
+  };
+
+  const handleSimpleDialogNo = () => {
+    setIsSimpleDialogVisible(false);
+    console.log('Simple dialog: No clicked');
   };
 
   const handleLayersPress = () => {
@@ -256,6 +268,19 @@ const OrdersMapScreen: React.FC = () => {
           onDriverModalClose={handleDriverModalClose}
           mapType={mapType}
         />
+
+        {/* Кнопка сверху слева */}
+        <TouchableOpacity
+          style={styles.topLeftButton}
+          onPress={() => setIsSimpleDialogVisible(true)}
+          accessibilityLabel="Simple dialog"
+        >
+          <Ionicons
+            name="warning"
+            size={20}
+            color="#DC2626"
+          />
+        </TouchableOpacity>
         
         {/* Кнопки управления вертикально внизу справа */}
         <View style={styles.bottomButtonsContainer}>
@@ -421,6 +446,35 @@ const OrdersMapScreen: React.FC = () => {
                 onPress={handleReportSubmit}
               >
                 <Text style={styles.reportSubmitButtonText}>{t('common.report.submit')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Простой диалог Да/Нет */}
+      <Modal
+        visible={isSimpleDialogVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsSimpleDialogVisible(false)}
+      >
+        <View style={styles.simpleDialogOverlay}>
+          <View style={styles.simpleDialogContainer}>
+            <Text style={styles.simpleDialogTitle}>Простой вопрос</Text>
+            <Text style={styles.simpleDialogMessage}>Вы согласны?</Text>
+            <View style={styles.simpleDialogButtons}>
+              <TouchableOpacity
+                style={styles.simpleDialogNoButton}
+                onPress={handleSimpleDialogNo}
+              >
+                <Text style={styles.simpleDialogNoButtonText}>Нет</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.simpleDialogYesButton}
+                onPress={handleSimpleDialogYes}
+              >
+                <Text style={styles.simpleDialogYesButtonText}>Да</Text>
               </TouchableOpacity>
             </View>
           </View>
