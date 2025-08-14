@@ -49,7 +49,10 @@
     "title": "Yolculuğunuzu değerlendirin",
     "message": "Yolculuk hakkındaki deneyiminizi paylaşın",
     "commentLabel": "Yorum (isteğe bağlı)",
+    "commentRequired": "Yorum (zorunlu)",
     "commentPlaceholder": "Yolculuğunuz hakkında bize anlatın...",
+    "commentStopPlaceholder": "Durdurma nedenini belirtin...",
+    "commentEndPlaceholder": "Bitirme nedenini belirtin...",
     "submit": "Gönder"
   },
   "report": {
@@ -58,5 +61,12 @@
     "commentPlaceholder": "Yorum girin...",
     "submit": "Gönder",
     "success": "Rapor gönderildi"
+  },
+  "emergency": {
+    "title": "Acil yardım",
+    "message": "Yardıma ihtiyacınız var mı? Sizi destek hizmeti ile bağlayabiliriz.",
+    "call": "Ara",
+    "cancel": "İptal",
+    "error": "Acil servise arama yapılamadı. Lütfen manuel olarak arayın."
   }
 } 

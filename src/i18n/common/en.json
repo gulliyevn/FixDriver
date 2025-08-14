@@ -62,5 +62,12 @@
     "commentPlaceholder": "Enter comment...",
     "submit": "Send",
     "success": "Report sent"
+  },
+  "emergency": {
+    "title": "Emergency Help",
+    "message": "Do you need help? We can connect you to support service.",
+    "call": "Call",
+    "cancel": "Cancel",
+    "error": "Failed to call emergency service. Please call manually."
   }
 } 

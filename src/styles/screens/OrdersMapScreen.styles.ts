@@ -15,7 +15,7 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
     },
     topLeftButton: {
       position: 'absolute',
-      top: SIZES.xl + 20,
+      top: SIZES.xl + 24,
       left: SIZES.lg,
       width: 48,
       height: 48,

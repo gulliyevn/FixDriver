@@ -50,7 +50,10 @@
     "title": "Évaluez votre trajet",
     "message": "Partagez votre expérience sur le trajet",
     "commentLabel": "Commentaire (optionnel)",
+    "commentRequired": "Commentaire (obligatoire)",
     "commentPlaceholder": "Parlez-nous de votre trajet...",
+    "commentStopPlaceholder": "Spécifiez la raison de l'arrêt...",
+    "commentEndPlaceholder": "Spécifiez la raison de la fin...",
     "submit": "Soumettre"
   },
   "report": {
@@ -59,5 +62,12 @@
     "commentPlaceholder": "Entrez un commentaire...",
     "submit": "Envoyer",
     "success": "Rapport envoyé"
+  },
+  "emergency": {
+    "title": "Aide d'urgence",
+    "message": "Avez-vous besoin d'aide ? Nous pouvons vous connecter au service de support.",
+    "call": "Appeler",
+    "cancel": "Annuler",
+    "error": "Impossible d'appeler les services d'urgence. Veuillez appeler manuellement."
   }
 } 

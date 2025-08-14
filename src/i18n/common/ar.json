@@ -49,7 +49,10 @@
     "title": "قيّم رحلتك",
     "message": "شارك تجربتك حول الرحلة",
     "commentLabel": "تعليق (اختياري)",
+    "commentRequired": "تعليق (مطلوب)",
     "commentPlaceholder": "أخبرنا عن رحلتك...",
+    "commentStopPlaceholder": "حدد سبب التوقف...",
+    "commentEndPlaceholder": "حدد سبب الانتهاء...",
     "submit": "إرسال"
   },
   "report": {
@@ -58,5 +61,12 @@
     "commentPlaceholder": "أدخل تعليقاً...",
     "submit": "إرسال",
     "success": "تم إرسال التقرير"
+  },
+  "emergency": {
+    "title": "مساعدة طارئة",
+    "message": "هل تحتاج مساعدة؟ يمكننا ربطك بخدمة الدعم.",
+    "call": "اتصل",
+    "cancel": "إلغاء",
+    "error": "فشل في الاتصال بخدمة الطوارئ. يرجى الاتصال يدوياً."
   }
 } 

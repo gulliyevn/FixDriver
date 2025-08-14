@@ -62,5 +62,12 @@
     "commentPlaceholder": "Şərh daxil edin...",
     "submit": "Göndər",
     "success": "Hesabat göndərildi"
+  },
+  "emergency": {
+    "title": "Təcili yardım",
+    "message": "Yardıma ehtiyacınız var? Sizi dəstək xidməti ilə əlaqələndirə bilərik.",
+    "call": "Zəng et",
+    "cancel": "Ləğv et",
+    "error": "Təcili xidmətə zəng etmək mümkün olmadı. Zəhmət olmasa əl ilə zəng edin."
   }
 } 

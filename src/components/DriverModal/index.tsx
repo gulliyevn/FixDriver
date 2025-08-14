@@ -1,0 +1,308 @@
+import React, { useMemo, useEffect } from 'react';
+import { View, TouchableOpacity, Animated, Text, Modal } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { PanGestureHandler } from 'react-native-gesture-handler';
+import { useTheme } from '../../context/ThemeContext';
+import { t } from '../../i18n';
+import { createDriverModalStyles } from '../../styles/components/DriverModal';
+import DriverTripDialogs from '../driver/DriverTripDialogs';
+import DriverModalHeader from '../driver/DriverModalHeader';
+import DriverInfoBar from '../driver/DriverInfoBar';
+import DriverTrips from '../driver/DriverTrips';
+import { 
+  getClientName as getClientNameMock,
+  getDriverInfo as getDriverInfoMock,
+  getDriverTrips as getDriverTripsMock,
+  getSampleClientId,
+  getSampleDriverId,
+} from '../../mocks/driverModalMock';
+
+// Импорты из новой структуры
+import { DriverModalProps } from './types/driver-modal.types';
+import { useDriverModalState } from './hooks/useDriverModalState';
+import { useDriverModalHandlers } from './hooks/useDriverModalHandlers';
+import { useCallSheet } from './hooks/useCallSheet';
+import { useSliderLogic } from './hooks/useSliderLogic';
+import DriverCallSheet from './components/DriverCallSheet';
+
+const DriverModal: React.FC<DriverModalProps> = ({
+  isVisible,
+  onClose,
+  onOverlayClose,
+  role = 'client',
+  onChat,
+}) => {
+  const { isDark } = useTheme();
+  const styles = createDriverModalStyles(isDark, role);
+
+  // Используем созданные хуки
+  const [state, actions] = useDriverModalState(driverId);
+  const handlers = useDriverModalHandlers(state, actions, onChat);
+  const callSheet = useCallSheet(actions);
+  const slider = useSliderLogic(state, actions);
+
+  // Централизованные моки
+  const driverId = getSampleDriverId();
+  const clientId = getSampleClientId();
+  const driverInfo = getDriverInfoMock(driverId);
+  const driverTrips = getDriverTripsMock(driverId);
+
+  // Анимации
+  const driverExpandHeight = slider.driverExpandAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 300],
+  });
+
+  const driverExpandOpacity = slider.driverExpandAnim.interpolate({
+    inputRange: [0, 0.3, 1],
+    outputRange: [0, 0, 1],
+  });
+
+  // Анимация раскрытия при изменении состояния
+  useEffect(() => {
+    Animated.spring(slider.driverExpandAnim, {
+      toValue: state.isDriverExpanded ? 1 : 0,
+      useNativeDriver: false,
+      tension: 100,
+      friction: 8,
+    }).start();
+  }, [state.isDriverExpanded, slider.driverExpandAnim]);
+
+  return (
+    <Modal
+      visible={isVisible}
+      transparent={true}
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={onOverlayClose}>
+        <TouchableOpacity style={styles.modalContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+          {/* Контент водителя */}
+          <View style={styles.driverItem}>
+            {/* Handle над контейнером с вертикальным свайпом */}
+            <PanGestureHandler
+              onGestureEvent={slider.onHandleGestureEvent}
+              onHandlerStateChange={slider.onHandleStateChange}
+              shouldCancelWhenOutside={false}
+              activeOffsetY={[-10, 10]}
+              failOffsetX={[-10, 10]}
+            >
+              <Animated.View
+                style={[
+                  styles.sliderHandleContainer,
+                  {
+                    transform: [
+                      {
+                        translateY: slider.handleSwipeAnim.interpolate({
+                          inputRange: [-100, 0, 100],
+                          outputRange: [-10, 0, 10],
+                          extrapolate: 'clamp',
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    actions.setIsDriverExpanded(!state.isDriverExpanded);
+                  }}
+                  style={{ width: '100%', height: '100%' }}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.sliderHandle} />
+                </TouchableOpacity>
+              </Animated.View>
+            </PanGestureHandler>
+            
+            <View style={styles.driverHeader}>
+              <View style={styles.driverHeaderContainer}>
+                {/* Слайдер-контейнер как фон */}
+                {role === 'driver' && (
+                  <View 
+                    style={styles.sliderBackgroundContainer}
+                    onLayout={(e) => actions.setSliderWidth(e.nativeEvent.layout.width)}
+                  >
+                    <PanGestureHandler
+                      onGestureEvent={slider.onGestureEvent}
+                      onHandlerStateChange={slider.onHandlerStateChange}
+                      shouldCancelWhenOutside={false}
+                      activeOffsetX={[-10, 10]}
+                      failOffsetY={[-5, 5]}
+                    >
+                      <Animated.View
+                        style={[
+                          styles.sliderButton,
+                          state.buttonColorState === 1 && { backgroundColor: '#06B6D4' },
+                          state.buttonColorState === 2 && { backgroundColor: '#10B981' },
+                          state.buttonColorState === 3 && { backgroundColor: '#6B7280' },
+                          {
+                            transform: [
+                              {
+                                translateX: slider.slideAnim.interpolate({
+                                  inputRange: [-slider.sliderConfig.maxSlideDistance, 0, slider.sliderConfig.maxSlideDistance],
+                                  outputRange: [-slider.sliderConfig.maxSlideDistance, 0, 0],
+                                  extrapolate: 'clamp',
+                                }),
+                              },
+                            ],
+                          },
+                        ]}
+                      >
+                        <TouchableOpacity
+                          onPress={handlers.handleButtonClick}
+                          style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            opacity: 1
+                          }}
+                          disabled={!(state.buttonColorState === 2 || (state.buttonColorState === 3 && state.isEmergencyButtonActive))}
+                        >
+                          <Animated.View style={{ opacity: state.iconOpacity }}>
+                            <Ionicons 
+                              name={
+                                state.buttonColorState === 3 
+                                  ? (state.isPaused ? "pause" : "shield")
+                                  : (state.showSwapIcon && state.buttonColorState === 2 ? "swap-horizontal" : "chevron-back")
+                              } 
+                              size={24} 
+                              color="#FFFFFF" 
+                            />
+                          </Animated.View>
+                        </TouchableOpacity>
+                      </Animated.View>
+                    </PanGestureHandler>
+                  </View>
+                )}
+                
+                {/* Маленький круг справа сверху */}
+                {role === 'driver' && (state.buttonColorState === 2 || state.buttonColorState === 3) && (
+                  <TouchableOpacity 
+                    style={[
+                      styles.smallCircle,
+                      state.buttonColorState === 2 && { backgroundColor: '#6B7280' },
+                      state.buttonColorState === 3 && { backgroundColor: '#10B981' }
+                    ]}
+                    onPress={handlers.handleButtonClick}
+                  >
+                    <View style={{ 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%'
+                    }}>
+                      <Ionicons 
+                        name="swap-horizontal" 
+                        size={16} 
+                        color="#FFFFFF" 
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+                
+                {/* Аватар и тексты поверх слайдера */}
+                <DriverModalHeader
+                  styles={styles}
+                  role={role}
+                  driver={callSheet.driver}
+                  childName={driverInfo.childName}
+                  childAge={driverInfo.childAge}
+                  slideProgress={state.slideProgress}
+                  isPaused={state.isPaused}
+                  pauseStartTime={state.pauseStartTime}
+                  formatTime={handlers.formatTime}
+                />
+              </View>
+            </View>
+
+            <DriverInfoBar
+              role={role}
+              schedule={driverInfo.schedule}
+              price={driverInfo.price}
+              distance={driverInfo.distance}
+              timeOrChildType={role === 'driver' ? driverInfo.time : driverInfo.childType}
+            />
+
+            <Animated.View
+              style={[
+                styles.expandableContent,
+                {
+                  maxHeight: driverExpandHeight,
+                  opacity: driverExpandOpacity,
+                },
+              ]}
+            >
+              <DriverTrips styles={styles} driverId={driverId} trips={driverTrips} />
+
+              <View style={styles.bottomBorder} />
+
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.leftButton} onPress={handlers.handleChatPress}>
+                  <View style={styles.buttonContent}>
+                    <Ionicons name="chatbubble-outline" size={18} color="#FFFFFF" />
+                    <Text style={styles.leftButtonText}>{t('client.driversScreen.actions.chat')}</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.rightButton} onPress={callSheet.openCallSheet}>
+                  <View style={styles.rightButtonContent}>
+                    <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
+                    <Text style={styles.rightButtonText}>{t('client.driversScreen.actions.call')}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
+          </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
+      
+      <DriverTripDialogs
+        styles={styles}
+        clientName={getClientNameMock(clientId)}
+        showStart={state.showDialog1}
+        onStartCancel={() => actions.setShowDialog1(false)}
+        onStartOk={handlers.handleStartOk}
+        showWaiting={state.showDialog2}
+        onWaitingCancel={() => actions.setShowDialog2(false)}
+        onWaitingOk={handlers.handleWaitingOk}
+        showEnd={state.showDialog3}
+        onEndCancel={() => actions.setShowDialog3(false)}
+        onEndOk={handlers.handleEndTripOk}
+        showEmergency={state.showLongPressDialog}
+        onEmergencyStop={handlers.handleStopPress}
+        onEmergencyEnd={handlers.handleEndPress}
+        onEmergencyClose={() => actions.setShowLongPressDialog(false)}
+        showStop={state.showStopDialog}
+        onStopCancel={() => actions.setShowStopDialog(false)}
+        onStopOk={handlers.handleStopOkPress}
+        showForceEnd={state.showEndDialog}
+        onForceEndCancel={() => actions.setShowEndDialog(false)}
+        onForceEndOk={handlers.handleEndOkPress}
+        showContinue={state.showContinueDialog}
+        onContinueCancel={() => actions.setShowContinueDialog(false)}
+        onContinueOk={handlers.handleContinueOk}
+        showRating={state.showRatingDialog}
+        onRatingCancel={handlers.handleRatingCancel}
+        onRatingSubmit={handlers.handleRatingSubmit}
+        emergencyActionsUsed={state.emergencyActionsUsed}
+        emergencyActionType={state.emergencyActionType}
+      />
+      
+      {/* Модалка звонка */}
+      <DriverCallSheet
+        isVisible={state.isCallSheetOpen}
+        isDark={isDark}
+        role={role}
+        callAnim={callSheet.callAnim}
+        driver={callSheet.driver}
+        onClose={callSheet.closeCallSheet}
+        onNetworkCall={callSheet.handleNetworkCall}
+        onInternetCall={callSheet.handleInternetCall}
+      />
+    </Modal>
+  );
+};
+
+export default DriverModal;

@@ -50,7 +50,10 @@
     "title": "Bewerten Sie Ihre Fahrt",
     "message": "Teilen Sie Ihre Erfahrungen über die Fahrt",
     "commentLabel": "Kommentar (optional)",
+    "commentRequired": "Kommentar (erforderlich)",
     "commentPlaceholder": "Erzählen Sie uns von Ihrer Fahrt...",
+    "commentStopPlaceholder": "Grund für den Stopp angeben...",
+    "commentEndPlaceholder": "Grund für das Beenden angeben...",
     "submit": "Absenden"
   },
   "report": {
@@ -59,5 +62,12 @@
     "commentPlaceholder": "Kommentar eingeben...",
     "submit": "Senden",
     "success": "Bericht gesendet"
+  },
+  "emergency": {
+    "title": "Notfallhilfe",
+    "message": "Benötigen Sie Hilfe? Wir können Sie mit dem Support-Service verbinden.",
+    "call": "Anrufen",
+    "cancel": "Abbrechen",
+    "error": "Notruf konnte nicht getätigt werden. Bitte rufen Sie manuell an."
   }
 } 

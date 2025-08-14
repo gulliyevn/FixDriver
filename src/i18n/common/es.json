@@ -50,7 +50,10 @@
     "title": "Califica tu viaje",
     "message": "Comparte tu experiencia sobre el viaje",
     "commentLabel": "Comentario (opcional)",
+    "commentRequired": "Comentario (requerido)",
     "commentPlaceholder": "Cuéntanos sobre tu viaje...",
+    "commentStopPlaceholder": "Especifica la razón de la parada...",
+    "commentEndPlaceholder": "Especifica la razón de la finalización...",
     "submit": "Enviar"
   },
   "report": {
@@ -59,5 +62,12 @@
     "commentPlaceholder": "Ingresa un comentario...",
     "submit": "Enviar",
     "success": "Reporte enviado"
+  },
+  "emergency": {
+    "title": "Ayuda de emergencia",
+    "message": "¿Necesitas ayuda? Podemos conectarte con el servicio de soporte.",
+    "call": "Llamar",
+    "cancel": "Cancelar",
+    "error": "No se pudo llamar a los servicios de emergencia. Por favor, llama manualmente."
   }
 } 
