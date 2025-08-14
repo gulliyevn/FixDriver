@@ -62,6 +62,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
   
   const driverExpandAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
+  const handleSwipeAnim = useRef(new Animated.Value(0)).current;
   
   // Слайдер параметры
   const [sliderWidth, setSliderWidth] = useState(0);
@@ -122,6 +123,35 @@ const DriverModal: React.FC<DriverModalProps> = ({
       useNativeDriver: false,
     }).start();
   }, [isDriverExpanded, driverExpandAnim]);
+
+  // Обработчик вертикального свайпа на handle
+  const onHandleGestureEvent = Animated.event(
+    [{ nativeEvent: { translationY: handleSwipeAnim } }],
+    { useNativeDriver: false }
+  );
+
+  const onHandleStateChange = useCallback((event: any) => {
+    if (event.nativeEvent.state === State.END) {
+      const { translationY } = event.nativeEvent;
+      
+      // Свайп вверх (отрицательное значение) - раскрыть
+      if (translationY < -50 && !isDriverExpanded) {
+        handleDriverExpand();
+      }
+      // Свайп вниз (положительное значение) - свернуть
+      else if (translationY > 50 && isDriverExpanded) {
+        handleDriverExpand();
+      }
+      
+      // Сбросить анимацию
+      Animated.spring(handleSwipeAnim, {
+        toValue: 0,
+        useNativeDriver: false,
+        tension: 100,
+        friction: 8,
+      }).start();
+    }
+  }, [isDriverExpanded, handleDriverExpand, handleSwipeAnim]);
 
   // Асинхронная активация кнопки экстренных действий
   useEffect(() => {
@@ -350,6 +380,34 @@ const DriverModal: React.FC<DriverModalProps> = ({
         <TouchableOpacity style={styles.modalContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
           {/* Контент водителя */}
           <View style={styles.driverItem}>
+            {/* Handle над контейнером с вертикальным свайпом */}
+            <PanGestureHandler
+              onGestureEvent={onHandleGestureEvent}
+              onHandlerStateChange={onHandleStateChange}
+              shouldCancelWhenOutside={false}
+              activeOffsetY={[-10, 10]}
+              failOffsetX={[-5, 5]}
+            >
+              <Animated.View
+                style={[
+                  styles.sliderHandleContainer,
+                  {
+                    transform: [
+                      {
+                        translateY: handleSwipeAnim.interpolate({
+                          inputRange: [-100, 0, 100],
+                          outputRange: [-10, 0, 10],
+                          extrapolate: 'clamp',
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <View style={styles.sliderHandle} />
+              </Animated.View>
+            </PanGestureHandler>
+            
             <View style={styles.driverHeader}>
               <View style={styles.driverHeaderContainer}>
                 {/* Слайдер-контейнер как фон */}
@@ -433,7 +491,6 @@ const DriverModal: React.FC<DriverModalProps> = ({
               price={driverInfo.price}
               distance={driverInfo.distance}
               timeOrChildType={role === 'driver' ? driverInfo.time : driverInfo.childType}
-              onPress={handleDriverExpand}
             />
 
             <Animated.View

@@ -9,46 +9,46 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
       paddingTop: 0, // Убираем верхний отступ SafeAreaView
     },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: SIZES.xl,
-      paddingVertical: SIZES.lg,
-      backgroundColor: colors.background,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
-    },
-    headerTitle: {
-      fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
-      fontWeight: '700',
-      color: colors.text,
-      textAlign: 'left',
-      marginLeft: SIZES.sm, // Сдвигаем правее
-    },
-    headerActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: SIZES.md,
-    },
-    headerButton: {
-      padding: SIZES.sm,
-      borderRadius: SIZES.radius.md,
-      backgroundColor: 'transparent',
-    },
     mapContainer: {
       flex: 1,
+      position: 'relative',
+    },
+    bottomButtonsContainer: {
+      position: 'absolute',
+      bottom: SIZES.xl,
+      right: SIZES.lg - 4,
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      gap: SIZES.md,
+    },
+    bottomButton: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 4,
     },
     settingsPanel: {
       position: 'absolute',
-      top: 0,
+      bottom: 60,
       right: 0,
-      backgroundColor: 'transparent', // Делаем прозрачным
+      backgroundColor: 'transparent',
       borderRadius: SIZES.radius.lg,
-      borderWidth: 0, // Убираем границу
+      borderWidth: 0,
       borderColor: 'transparent',
-      padding: 0, // Убираем padding
-      shadowColor: 'transparent', // Убираем тень
+      padding: 0,
+      shadowColor: 'transparent',
       shadowOffset: {
         width: 0,
         height: 0,
@@ -56,29 +56,33 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       shadowOpacity: 0,
       shadowRadius: 0,
       elevation: 0,
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
       gap: SIZES.xs,
+      width: 48, // Ограничиваем ширину панели
+      height: 300, // Ограничиваем высоту панели
+      pointerEvents: 'box-none', // Позволяет кликам проходить сквозь панель, но кнопки остаются кликабельными
     },
     settingsButton: {
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: SIZES.xs,
       paddingHorizontal: SIZES.xs,
-      borderRadius: 18, // Делаем круглую форму
-      width: 36,
-      height: 36,
+      borderRadius: 24, // Делаем круглую форму как у основных кнопок
+      width: 48,
+      height: 48,
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.border,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
-        height: 1,
+        height: 2,
       },
       shadowOpacity: 0.1,
-      shadowRadius: 2,
-      elevation: 2,
+      shadowRadius: 4,
+      elevation: 4,
+      pointerEvents: 'auto', // Кнопки остаются кликабельными
     },
     settingsButtonText: {
       fontSize: SIZES.fontSize.md,
@@ -178,6 +182,27 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       fontSize: SIZES.fontSize.md,
       fontWeight: '600',
       color: '#FFFFFF',
+    },
+    leftButton: {
+      position: 'absolute',
+      bottom: SIZES.xl,
+      left: SIZES.lg - 4,
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 4,
     },
   });
 };

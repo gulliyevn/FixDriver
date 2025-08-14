@@ -10,14 +10,14 @@ export type DriverInfoBarProps = {
   price: string;
   distance: string;
   timeOrChildType: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ role = 'client', schedule, price, distance, timeOrChildType, onPress }) => {
   const { isDark } = useTheme();
   const styles = createDriverInfoBarStyles(isDark);
   return (
-    <TouchableOpacity style={styles.driverInfoBar} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={styles.driverInfoBar} onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
       <View style={styles.scheduleInfo}>
         <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
         <Text style={styles.scheduleText}>{schedule}</Text>

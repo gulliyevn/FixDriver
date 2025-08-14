@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { View, Alert, TouchableOpacity, Animated, Easing, Text, Image } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,6 +23,7 @@ interface MapViewComponentProps {
   clientLocationActive?: boolean; // Активна ли клиентская локация
   isDriverModalVisible?: boolean; // Видимость модалки водителя
   onDriverModalClose?: () => void; // Функция закрытия модалки
+  mapType?: 'standard' | 'satellite' | 'hybrid'; // Тип карты
   markers?: Array<{
     id: string;
     coordinate: MapLocation;
@@ -32,7 +33,7 @@ interface MapViewComponentProps {
   }>;
 }
 
-const MapViewComponent: React.FC<MapViewComponentProps> = ({
+const MapViewComponent = forwardRef<any, MapViewComponentProps>(({
   initialLocation,
   onLocationSelect,
   onDriverVisibilityToggle,
@@ -41,13 +42,24 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   clientLocationActive = false,
   isDriverModalVisible = false,
   onDriverModalClose,
-}) => {
+  mapType = 'standard',
+}, ref) => {
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
   const { user } = useAuth();
   const navigation = useNavigation<any>();
   const styles = createMapViewStyles(isDark);
+
+  // Экспортируем методы карты через ref
+  useImperativeHandle(ref, () => ({
+    getCamera: () => mapRef.current?.getCamera(),
+    animateCamera: (camera: any) => mapRef.current?.animateCamera(camera),
+    animateToRegion: (region: any, duration?: number) => mapRef.current?.animateToRegion(region, duration),
+    zoomIn: handleZoomIn,
+    zoomOut: handleZoomOut,
+  }));
   const [isExpanded, setIsExpanded] = useState(false);
+  const isZoomingRef = useRef(false); // Флаг для предотвращения множественных зумов
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const buttonAnimations = useRef([
     new Animated.Value(0),
@@ -138,22 +150,25 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     }
   }, [markers]);
 
+  // Мемоизируем маркеры для оптимизации рендеринга
+  const memoizedMarkers = useMemo(() => mapMarkers, [mapMarkers]);
+
   // Обновление региона при изменении initialLocation
   useEffect(() => {
     if (initialLocation && initialLocation.latitude && initialLocation.longitude) {
-      setRegion(prevRegion => {
-        // Проверяем, действительно ли изменились координаты
-        if (prevRegion.latitude !== initialLocation.latitude || 
-            prevRegion.longitude !== initialLocation.longitude) {
-          return {
-            latitude: initialLocation.latitude,
-            longitude: initialLocation.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          };
-        }
-        return prevRegion;
-      });
+      const newRegion = {
+        latitude: initialLocation.latitude,
+        longitude: initialLocation.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+      
+      setRegion(newRegion);
+      
+      // Плавная анимация центрирования карты
+      if (mapRef.current) {
+        mapRef.current.animateToRegion(newRegion, 500); // Увеличиваем время анимации для плавности
+      }
     }
   }, [initialLocation]);
 
@@ -173,7 +188,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
     }
   }, [clientLocationActive, role]); // Убираем initialLocation из зависимостей
 
-  const refreshMapMarkers = async () => {
+  const refreshMapMarkers = useCallback(async () => {
     try {
       console.log('Refreshing map markers...');
       
@@ -193,14 +208,10 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         }));
       }
       
-      // Убеждаемся, что не влияем на состояние DriverModal
-      // DriverModal должен сохранять свое состояние независимо от обновления карты
-      // Все состояния кнопок (buttonColorState, isEmergencyButtonActive, etc.) остаются неизменными
-      
     } catch (error) {
       console.error('Error refreshing map markers:', error);
     }
-  };
+  }, [onDriverVisibilityToggle, initialLocation]);
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -278,28 +289,60 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
   };
 
   const handleZoomIn = () => {
+    console.log('MapViewComponent: handleZoomIn called');
+    if (isZoomingRef.current) {
+      console.log('MapViewComponent: zoom already in progress');
+      return;
+    }
+    
+    isZoomingRef.current = true;
+    
     if (mapRef.current) {
-      const newRegion = {
-        ...region,
-        latitudeDelta: region.latitudeDelta * 0.5,
-        longitudeDelta: region.longitudeDelta * 0.5,
-      };
-      
-      mapRef.current.animateToRegion(newRegion, 3500);
-      setRegion(newRegion);
+      // Плавный зум с animateCamera
+      mapRef.current.getCamera().then((camera) => {
+        const newZoom = Math.min(camera.zoom + 1, 20);
+        mapRef.current?.animateCamera({
+          ...camera,
+          zoom: newZoom,
+        }, { duration: 500 });
+        
+        setTimeout(() => {
+          isZoomingRef.current = false;
+        }, 600);
+      }).catch(() => {
+        isZoomingRef.current = false;
+      });
+    } else {
+      isZoomingRef.current = false;
     }
   };
 
   const handleZoomOut = () => {
+    console.log('MapViewComponent: handleZoomOut called');
+    if (isZoomingRef.current) {
+      console.log('MapViewComponent: zoom already in progress');
+      return;
+    }
+    
+    isZoomingRef.current = true;
+    
     if (mapRef.current) {
-      const newRegion = {
-        ...region,
-        latitudeDelta: region.latitudeDelta * 2,
-        longitudeDelta: region.longitudeDelta * 2,
-      };
-      
-      mapRef.current.animateToRegion(newRegion, 3500);
-      setRegion(newRegion);
+      // Плавный зум с animateCamera
+      mapRef.current.getCamera().then((camera) => {
+        const newZoom = Math.max(camera.zoom - 1, 5);
+        mapRef.current?.animateCamera({
+          ...camera,
+          zoom: newZoom,
+        }, { duration: 500 });
+        
+        setTimeout(() => {
+          isZoomingRef.current = false;
+        }, 600);
+      }).catch(() => {
+        isZoomingRef.current = false;
+      });
+    } else {
+      isZoomingRef.current = false;
     }
   };
 
@@ -313,15 +356,15 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         onPress={handleMapPress}
         showsUserLocation={true}
         showsMyLocationButton={false}
-        showsCompass={true}
-        showsScale={true}
-        showsTraffic={true}
-        showsBuildings={true}
-        showsIndoors={true}
-        showsIndoorLevelPicker={true}
-        showsPointsOfInterest={true}
-        mapType="standard"
-        customMapStyle={isDark ? [
+        showsCompass={false}
+        showsScale={false}
+        showsTraffic={false}
+        showsBuildings={false}
+        showsIndoors={false}
+        showsIndoorLevelPicker={false}
+        showsPointsOfInterest={false}
+        mapType={mapType}
+        customMapStyle={isDark && mapType === 'standard' ? [
           {
             "elementType": "geometry",
             "stylers": [
@@ -500,7 +543,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
         liteMode={false}
         mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
-        {mapMarkers.map((marker) => (
+        {memoizedMarkers.map((marker) => (
           <Marker
             key={marker.id}
             coordinate={marker.coordinate}
@@ -580,6 +623,6 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
       </View>
     </View>
   );
-};
+});
 
 export default MapViewComponent; 

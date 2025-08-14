@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity, Animated, Alert, Modal, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, Alert, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MapViewComponent from '../../components/MapView';
 import { MapService, MapLocation } from '../../services/MapService';
@@ -23,6 +23,9 @@ const OrdersMapScreen: React.FC = () => {
   const [isDriverModalVisible, setIsDriverModalVisible] = useState(false); // Видимость модалки водителя
   const [isReportModalVisible, setIsReportModalVisible] = useState(false); // Видимость модалки репорта
   const [reportComment, setReportComment] = useState(''); // Комментарий к репорту
+  const [mapType, setMapType] = useState<'standard' | 'satellite' | 'hybrid'>('standard'); // Тип карты
+  const mapRef = useRef<any>(null); // Ref для MapView
+  const isZoomingRef = useRef(false); // Флаг для предотвращения множественных зумов
   const settingsRotateAnim = useRef(new Animated.Value(0)).current;
   const settingsPanelAnim = useRef(new Animated.Value(0)).current;
 
@@ -62,6 +65,56 @@ const OrdersMapScreen: React.FC = () => {
   const handleReportCancel = () => {
     setIsReportModalVisible(false);
     setReportComment('');
+  };
+
+  const handleLayersPress = () => {
+    const mapTypes: Array<'standard' | 'satellite' | 'hybrid'> = ['standard', 'satellite', 'hybrid'];
+    const currentIndex = mapTypes.indexOf(mapType);
+    const nextIndex = (currentIndex + 1) % mapTypes.length;
+    setMapType(mapTypes[nextIndex]);
+    console.log('Map type changed to:', mapTypes[nextIndex]);
+  };
+
+  const handleZoomIn = () => {
+    if (isZoomingRef.current) {
+      return;
+    }
+    
+    console.log('Zoom in pressed');
+    isZoomingRef.current = true;
+    
+    // Вызываем зум через ref MapViewComponent
+    if (mapRef.current && mapRef.current.zoomIn) {
+      console.log('OrdersMapScreen: calling mapRef.current.zoomIn()');
+      mapRef.current.zoomIn();
+    } else {
+      console.log('OrdersMapScreen: mapRef.current.zoomIn not available');
+    }
+    
+    setTimeout(() => {
+      isZoomingRef.current = false;
+    }, 650);
+  };
+
+  const handleZoomOut = () => {
+    if (isZoomingRef.current) {
+      return;
+    }
+    
+    console.log('Zoom out pressed');
+    isZoomingRef.current = true;
+    
+    // Вызываем зум через ref MapViewComponent
+    if (mapRef.current && mapRef.current.zoomOut) {
+      console.log('OrdersMapScreen: calling mapRef.current.zoomOut()');
+      mapRef.current.zoomOut();
+    } else {
+      console.log('OrdersMapScreen: mapRef.current.zoomOut not available');
+    }
+    
+    setTimeout(() => {
+      isZoomingRef.current = false;
+    }, 650);
   };
 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
@@ -119,6 +172,22 @@ const OrdersMapScreen: React.FC = () => {
     setDriverVisibilityTrigger(timestamp);
   }, []);
 
+  const handleLocatePress = useCallback(async () => {
+    try {
+      // Получаем текущее местоположение
+      const location = await MapService.getCurrentLocationWithRetry(3);
+      if (location) {
+        // Обновляем текущую локацию - это вызовет плавную анимацию в MapView
+        setCurrentLocation(location);
+        
+        console.log('Map smoothly moving to current location:', location);
+      }
+    } catch (error) {
+      console.error('Error getting current location:', error);
+      Alert.alert('Ошибка', 'Не удалось получить текущее местоположение');
+    }
+  }, []);
+
   const handleClientLocationToggle = async () => {
     if (user?.role !== 'client') return; // Только для клиентов
     
@@ -173,15 +242,27 @@ const OrdersMapScreen: React.FC = () => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Animated.Text style={[styles.headerTitle, { opacity: headerTitleOpacity }]}>
-          {t('client.map.title')}
-        </Animated.Text>
-        <View style={styles.headerActions}>
+    <View style={styles.container}>
+
+      <View style={styles.mapContainer}>
+        <MapViewComponent 
+          ref={mapRef}
+          key={mapRefreshKey} // Ключ для перезагрузки компонента
+          initialLocation={currentLocation}
+          onDriverVisibilityToggle={handleDriverVisibilityToggle}
+          role={user?.role === 'driver' ? 'driver' : 'client'}
+          clientLocationActive={isClientLocationActive}
+          isDriverModalVisible={isDriverModalVisible}
+          onDriverModalClose={handleDriverModalClose}
+          mapType={mapType}
+        />
+        
+        {/* Кнопки управления вертикально внизу справа */}
+        <View style={styles.bottomButtonsContainer}>
+          {/* Кнопка настроек */}
           <View style={{ position: 'relative' }}>
             <TouchableOpacity
-              style={styles.headerButton}
+              style={styles.bottomButton}
               onPress={handleSettingsPress}
               accessibilityLabel={t('common.settings')}
             >
@@ -201,8 +282,8 @@ const OrdersMapScreen: React.FC = () => {
                 {
                   width: settingsPanelWidth,
                   opacity: settingsPanelOpacity,
-                  right: 16, // Сдвигаем налево
-                  top: 2, // Положительный отступ сверху
+                  right: 0,
+                  bottom: 60, // Позиционируем над кнопкой
                 }
               ]}
             >
@@ -249,48 +330,51 @@ const OrdersMapScreen: React.FC = () => {
                 </TouchableOpacity>
               )}
               
-              <TouchableOpacity style={styles.settingsButton}>
+              <TouchableOpacity 
+                style={styles.settingsButton}
+                onPress={handleLocatePress}
+              >
                 <Ionicons name="locate-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingsButton}>
+              <TouchableOpacity 
+                style={styles.settingsButton}
+                onPress={handleLayersPress}
+              >
                 <Ionicons name="layers-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingsButton}>
+              <TouchableOpacity 
+                style={styles.settingsButton}
+                onPress={handleZoomIn}
+              >
                 <Ionicons name="add-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingsButton}>
+              <TouchableOpacity 
+                style={styles.settingsButton}
+                onPress={handleZoomOut}
+              >
                 <Ionicons name="remove-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
               </TouchableOpacity>
             </Animated.View>
           </View>
           
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={handleChevronPress}
-            accessibilityLabel={t('common.menu')}
-          >
-            <Ionicons
-              name="chevron-down"
-              size={22}
-              color={isDark ? '#F9FAFB' : '#111827'}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
 
-      <View style={styles.mapContainer}>
-        <MapViewComponent 
-          key={mapRefreshKey} // Ключ для перезагрузки компонента
-          initialLocation={currentLocation}
-          onDriverVisibilityToggle={handleDriverVisibilityToggle}
-          role={user?.role === 'driver' ? 'driver' : 'client'}
-          clientLocationActive={isClientLocationActive}
-          isDriverModalVisible={isDriverModalVisible}
-          onDriverModalClose={handleDriverModalClose}
-        />
+        </View>
+        
+        {/* Кнопка меню слева */}
+        <TouchableOpacity
+          style={styles.leftButton}
+          onPress={handleChevronPress}
+          accessibilityLabel={t('common.menu')}
+        >
+          <Ionicons
+            name="chevron-up"
+            size={22}
+            color={isDark ? '#F9FAFB' : '#111827'}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Модалка репорта */}
@@ -342,7 +426,7 @@ const OrdersMapScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
