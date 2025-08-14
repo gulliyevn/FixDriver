@@ -18,7 +18,7 @@ interface MapViewComponentProps {
   initialLocation?: MapLocation;
   onLocationSelect?: (location: MapLocation) => void;
   showNearbyDrivers?: boolean;
-  onDriverVisibilityToggle?: number;
+  onDriverVisibilityToggle?: (timestamp: number) => void;
   role?: 'client' | 'driver';
   clientLocationActive?: boolean; // Активна ли клиентская локация
   isDriverModalVisible?: boolean; // Видимость модалки водителя
@@ -175,12 +175,27 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
 
   const refreshMapMarkers = async () => {
     try {
-      // Здесь можно добавить логику загрузки актуальных маркеров
-      // Например, загрузка водителей и клиентов с сервера
       console.log('Refreshing map markers...');
       
-      // Не вызываем setState здесь, чтобы избежать бесконечного цикла
-      // Вместо этого можно загрузить данные с сервера и обновить маркеры через пропсы
+      // Обновляем только маркеры карты, не трогая состояние DriverModal
+      if (typeof onDriverVisibilityToggle === 'function') {
+        // Вызываем колбэк для обновления видимости водителей
+        onDriverVisibilityToggle(Date.now());
+      }
+      
+      // Обновляем текущую локацию без влияния на другие состояния
+      const location = await MapService.getCurrentLocation();
+      if (location && !initialLocation) {
+        setRegion(prevRegion => ({
+          ...prevRegion,
+          latitude: location.latitude,
+          longitude: location.longitude,
+        }));
+      }
+      
+      // Убеждаемся, что не влияем на состояние DriverModal
+      // DriverModal должен сохранять свое состояние независимо от обновления карты
+      // Все состояния кнопок (buttonColorState, isEmergencyButtonActive, etc.) остаются неизменными
       
     } catch (error) {
       console.error('Error refreshing map markers:', error);
@@ -542,6 +557,7 @@ const MapViewComponent: React.FC<MapViewComponentProps> = ({
             <TouchableOpacity 
               style={styles.additionalButton}
               onPress={() => {
+                if (index === 0) refreshMapMarkers(); // refresh-outline
                 if (index === 4) handleZoomIn(); // add-outline
                 if (index === 5) handleZoomOut(); // remove-outline
               }}

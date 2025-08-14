@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { View, SafeAreaView, Text, TouchableOpacity, Animated, Alert, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MapViewComponent from '../../components/MapView';
@@ -113,6 +113,11 @@ const OrdersMapScreen: React.FC = () => {
       setIsRefreshing(false);
     }
   };
+
+  const handleDriverVisibilityToggle = useCallback((timestamp: number) => {
+    // Обновляем триггер видимости водителей
+    setDriverVisibilityTrigger(timestamp);
+  }, []);
 
   const handleClientLocationToggle = async () => {
     if (user?.role !== 'client') return; // Только для клиентов
@@ -280,7 +285,7 @@ const OrdersMapScreen: React.FC = () => {
         <MapViewComponent 
           key={mapRefreshKey} // Ключ для перезагрузки компонента
           initialLocation={currentLocation}
-          onDriverVisibilityToggle={driverVisibilityTrigger}
+          onDriverVisibilityToggle={handleDriverVisibilityToggle}
           role={user?.role === 'driver' ? 'driver' : 'client'}
           clientLocationActive={isClientLocationActive}
           isDriverModalVisible={isDriverModalVisible}

@@ -38,7 +38,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const styles = createDriverModalStyles(isDark, role);
   
   const [isDriverExpanded, setIsDriverExpanded] = useState(false);
-  const [buttonColorState, setButtonColorState] = useState(0); // 0: primary, 1: yellow, 2: green, 3: stopped
+  const [buttonColorState, setButtonColorState] = useState(0); // 0: primary, 1: cyan, 2: green, 3: stopped
   const [showDialog1, setShowDialog1] = useState(false);
   const [showDialog2, setShowDialog2] = useState(false);
   const [showDialog3, setShowDialog3] = useState(false);
@@ -126,12 +126,8 @@ const DriverModal: React.FC<DriverModalProps> = ({
   // Асинхронная активация кнопки экстренных действий
   useEffect(() => {
     if (buttonColorState === 3 && !isPaused) {
-      // Активируем кнопку экстренных действий через 2 секунды
-      const timer = setTimeout(() => {
-        setIsEmergencyButtonActive(true);
-      }, 2000);
-      
-      return () => clearTimeout(timer);
+      // Активируем кнопку экстренных действий сразу
+      setIsEmergencyButtonActive(true);
     } else {
       setIsEmergencyButtonActive(false);
     }
@@ -372,7 +368,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
                       <Animated.View
                         style={[
                           styles.sliderButton,
-                          buttonColorState === 1 && { backgroundColor: '#FCD34D' },
+                          buttonColorState === 1 && { backgroundColor: '#06B6D4' },
                           buttonColorState === 2 && { backgroundColor: '#10B981' },
                           buttonColorState === 3 && { backgroundColor: '#6B7280' },
                           {
@@ -395,7 +391,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
                             height: '100%', 
                             alignItems: 'center', 
                             justifyContent: 'center',
-                            opacity: (buttonColorState === 2 || (buttonColorState === 3 && isEmergencyButtonActive)) ? 1 : 0.3 // активна в зеленом и сером только после активации
+                            opacity: 1 // всегда полная непрозрачность для всех состояний
                           }}
                           disabled={!(buttonColorState === 2 || (buttonColorState === 3 && isEmergencyButtonActive))} // активна в зеленом и сером только после активации
                         >
@@ -438,9 +434,6 @@ const DriverModal: React.FC<DriverModalProps> = ({
               distance={driverInfo.distance}
               timeOrChildType={role === 'driver' ? driverInfo.time : driverInfo.childType}
               onPress={handleDriverExpand}
-              vehicleBrand={driver?.vehicle_brand}
-              vehicleModel={driver?.vehicle_model}
-              vehicleNumber={driver?.vehicle_number}
             />
 
             <Animated.View
