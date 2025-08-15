@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Gains",
     "today": "Aujourd'hui",
-    "week": "Cette semaine",
-    "month": "Ce mois",
-    "year": "Cette année",
-    "custom": "Personnalisé",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année",
+
     "total": "Total",
     "perHour": "Par heure",
     "perOrder": "Par commande",
@@ -19,7 +19,86 @@
     "withdraw": "Retirer",
     "withdrawMessage": "La fonction de retrait sera disponible dans la prochaine mise à jour",
     "viewDetails": "Détails",
-    "detailsMessage": "Les statistiques détaillées seront disponibles dans la prochaine mise à jour"
+    "detailsMessage": "Les statistiques détaillées seront disponibles dans la prochaine mise à jour",
+    "stats": {
+      "title": "Statistiques",
+      "rides": "Courses",
+      "avgRating": "Note Moyenne",
+      "workHours": "Heures de Travail",
+      "completionRate": "Taux de Réalisation",
+      "totalRides": "Total des Courses",
+      "avgPerRide": "Moyenne par Course",
+      "totalHours": "Heures Totales",
+      "scheduleCompletion": "Réalisation du Planning"
+    },
+    "bonuses": {
+      "title": "Bonus & Réalisations",
+      "vipStatus": "Statut VIP",
+      "qualityBonus": "Bonus Qualité",
+      "highRating": "Note Élevée",
+      "noCancellations": "Aucune Annulation",
+      "achievements": "Réalisations",
+      "rides100": "100 Courses",
+      "rating5": "Note 5 Étoiles",
+      "referralBonus": "Bonus de Parrainage",
+      "invitedDrivers": "Chauffeurs Invités"
+    },
+    "levels": {
+      "title": "Niveaux & Notes",
+      "novice": "Débutant",
+      "experienced": "Expérimenté",
+      "expert": "Expert",
+      "vip": "VIP",
+      "currentLevel": "Niveau Actuel",
+      "nextLevel": "Niveau Suivant",
+      "progress": "Progrès",
+      "ridesToNext": "Vers le Niveau Suivant",
+      "badges": "Badges & Récompenses"
+    },
+    "charts": {
+      "title": "Analytique",
+      "earningsChart": "Graphique des Gains",
+      "activityHeatmap": "Carte de Chaleur d'Activité",
+      "comparison": "Comparaison de Périodes",
+      "forecast": "Prévision des Gains",
+      "previousPeriod": "Période Précédente",
+      "currentPeriod": "Période Actuelle",
+      "nextPeriod": "Période Suivante"
+    },
+    "goals": {
+      "title": "Objectifs & Réalisations",
+      "dailyGoal": "Objectif Quotidien",
+      "weeklyGoal": "Objectif Hebdomadaire",
+      "monthlyGoal": "Objectif Mensuel",
+      "targetEarnings": "Gains Cibles",
+      "progress": "Progrès",
+      "achieved": "Atteint",
+      "remaining": "Restant"
+    },
+    "map": {
+      "title": "Zones d'Activité",
+      "activityZones": "Zones d'Activité",
+      "hotSpots": "Points Chauds",
+      "earningsByZone": "Gains par Zone"
+    },
+    "leaderboard": {
+      "title": "Classement",
+      "topDrivers": "Meilleurs Chauffeurs",
+      "byEarnings": "Par Gains",
+      "byRating": "Par Note",
+      "yourPosition": "Votre Position",
+      "rank": "Rang"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "targetEarnings": "Gains Cibles",
+      "notifications": "Notifications",
+      "displaySettings": "Paramètres d'Affichage",
+      "showStats": "Afficher les Statistiques",
+      "showCharts": "Afficher les Graphiques",
+      "showMap": "Afficher la Carte",
+      "showGoals": "Afficher les Objectifs"
+    }
   },
   "status": {
     "online": "En ligne",

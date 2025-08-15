@@ -4,10 +4,10 @@
   "earnings": {
     "title": "الأرباح",
     "today": "اليوم",
-    "week": "هذا الأسبوع",
-    "month": "هذا الشهر",
-    "year": "هذا العام",
-    "custom": "مخصص",
+    "week": "الأسبوع",
+    "month": "الشهر",
+    "year": "العام",
+
     "total": "الإجمالي",
     "perHour": "في الساعة",
     "perOrder": "لكل طلب",
@@ -19,7 +19,86 @@
     "withdraw": "سحب",
     "withdrawMessage": "ستكون وظيفة السحب متاحة في التحديث القادم",
     "viewDetails": "التفاصيل",
-    "detailsMessage": "ستكون الإحصائيات التفصيلية متاحة في التحديث القادم"
+    "detailsMessage": "ستكون الإحصائيات التفصيلية متاحة في التحديث القادم",
+    "stats": {
+      "title": "الإحصائيات",
+      "rides": "الرحلات",
+      "avgRating": "متوسط التقييم",
+      "workHours": "ساعات العمل",
+      "completionRate": "معدل الإنجاز",
+      "totalRides": "إجمالي الرحلات",
+      "avgPerRide": "المتوسط لكل رحلة",
+      "totalHours": "إجمالي الساعات",
+      "scheduleCompletion": "إنجاز الجدول"
+    },
+    "bonuses": {
+      "title": "المكافآت والإنجازات",
+      "vipStatus": "حالة VIP",
+      "qualityBonus": "مكافأة الجودة",
+      "highRating": "تقييم عالي",
+      "noCancellations": "لا توجد إلغاءات",
+      "achievements": "الإنجازات",
+      "rides100": "100 رحلة",
+      "rating5": "تقييم 5 نجوم",
+      "referralBonus": "مكافآت الإحالة",
+      "invitedDrivers": "السائقون المدعوون"
+    },
+    "levels": {
+      "title": "المستويات والتقييمات",
+      "novice": "مبتدئ",
+      "experienced": "خبير",
+      "expert": "محترف",
+      "vip": "VIP",
+      "currentLevel": "المستوى الحالي",
+      "nextLevel": "المستوى التالي",
+      "progress": "التقدم",
+      "ridesToNext": "إلى المستوى التالي",
+      "badges": "الشارات والجوائز"
+    },
+    "charts": {
+      "title": "التحليلات",
+      "earningsChart": "رسم بياني للأرباح",
+      "activityHeatmap": "خريطة حرارية للنشاط",
+      "comparison": "مقارنة الفترات",
+      "forecast": "توقعات الأرباح",
+      "previousPeriod": "الفترة السابقة",
+      "currentPeriod": "الفترة الحالية",
+      "nextPeriod": "الفترة التالية"
+    },
+    "goals": {
+      "title": "الأهداف والإنجازات",
+      "dailyGoal": "الهدف اليومي",
+      "weeklyGoal": "الهدف الأسبوعي",
+      "monthlyGoal": "الهدف الشهري",
+      "targetEarnings": "الأرباح المستهدفة",
+      "progress": "التقدم",
+      "achieved": "محقق",
+      "remaining": "متبقي"
+    },
+    "map": {
+      "title": "مناطق النشاط",
+      "activityZones": "مناطق النشاط",
+      "hotSpots": "النقاط الساخنة",
+      "earningsByZone": "الأرباح حسب المنطقة"
+    },
+    "leaderboard": {
+      "title": "قائمة المتصدرين",
+      "topDrivers": "أفضل السائقين",
+      "byEarnings": "حسب الأرباح",
+      "byRating": "حسب التقييم",
+      "yourPosition": "موقعك",
+      "rank": "الرتبة"
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "targetEarnings": "الأرباح المستهدفة",
+      "notifications": "الإشعارات",
+      "displaySettings": "إعدادات العرض",
+      "showStats": "إظهار الإحصائيات",
+      "showCharts": "إظهار الرسوم البيانية",
+      "showMap": "إظهار الخريطة",
+      "showGoals": "إظهار الأهداف"
+    }
   },
   "status": {
     "online": "متصل",

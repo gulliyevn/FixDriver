@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Ganancias",
     "today": "Hoy",
-    "week": "Esta semana",
-    "month": "Este mes",
-    "year": "Este año",
-    "custom": "Personalizado",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
+
     "total": "Total",
     "perHour": "Por hora",
     "perOrder": "Por pedido",
@@ -19,7 +19,86 @@
     "withdraw": "Retirar",
     "withdrawMessage": "La función de retiro estará disponible en la próxima actualización",
     "viewDetails": "Detalles",
-    "detailsMessage": "Las estadísticas detalladas estarán disponibles en la próxima actualización"
+    "detailsMessage": "Las estadísticas detalladas estarán disponibles en la próxima actualización",
+    "stats": {
+      "title": "Estadísticas",
+      "rides": "Viajes",
+      "avgRating": "Calificación Promedio",
+      "workHours": "Horas de Trabajo",
+      "completionRate": "Tasa de Cumplimiento",
+      "totalRides": "Total de Viajes",
+      "avgPerRide": "Promedio por Viaje",
+      "totalHours": "Horas Totales",
+      "scheduleCompletion": "Cumplimiento de Horario"
+    },
+    "bonuses": {
+      "title": "Bonos y Logros",
+      "vipStatus": "Estado VIP",
+      "qualityBonus": "Bono de Calidad",
+      "highRating": "Alta Calificación",
+      "noCancellations": "Sin Cancelaciones",
+      "achievements": "Logros",
+      "rides100": "100 Viajes",
+      "rating5": "Calificación 5 Estrellas",
+      "referralBonus": "Bonos de Referencia",
+      "invitedDrivers": "Conductores Invitados"
+    },
+    "levels": {
+      "title": "Niveles y Calificaciones",
+      "novice": "Novato",
+      "experienced": "Experimentado",
+      "expert": "Experto",
+      "vip": "VIP",
+      "currentLevel": "Nivel Actual",
+      "nextLevel": "Siguiente Nivel",
+      "progress": "Progreso",
+      "ridesToNext": "Al Siguiente Nivel",
+      "badges": "Insignias y Premios"
+    },
+    "charts": {
+      "title": "Analítica",
+      "earningsChart": "Gráfico de Ganancias",
+      "activityHeatmap": "Mapa de Calor de Actividad",
+      "comparison": "Comparación de Períodos",
+      "forecast": "Pronóstico de Ganancias",
+      "previousPeriod": "Período Anterior",
+      "currentPeriod": "Período Actual",
+      "nextPeriod": "Período Siguiente"
+    },
+    "goals": {
+      "title": "Objetivos y Logros",
+      "dailyGoal": "Objetivo Diario",
+      "weeklyGoal": "Objetivo Semanal",
+      "monthlyGoal": "Objetivo Mensual",
+      "targetEarnings": "Ganancias Objetivo",
+      "progress": "Progreso",
+      "achieved": "Logrado",
+      "remaining": "Restante"
+    },
+    "map": {
+      "title": "Zonas de Actividad",
+      "activityZones": "Zonas de Actividad",
+      "hotSpots": "Puntos Calientes",
+      "earningsByZone": "Ganancias por Zona"
+    },
+    "leaderboard": {
+      "title": "Tabla de Posiciones",
+      "topDrivers": "Mejores Conductores",
+      "byEarnings": "Por Ganancias",
+      "byRating": "Por Calificación",
+      "yourPosition": "Tu Posición",
+      "rank": "Rango"
+    },
+    "settings": {
+      "title": "Configuración",
+      "targetEarnings": "Ganancias Objetivo",
+      "notifications": "Notificaciones",
+      "displaySettings": "Configuración de Visualización",
+      "showStats": "Mostrar Estadísticas",
+      "showCharts": "Mostrar Gráficos",
+      "showMap": "Mostrar Mapa",
+      "showGoals": "Mostrar Objetivos"
+    }
   },
   "status": {
     "online": "En línea",

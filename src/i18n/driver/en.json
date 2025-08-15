@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Earnings",
     "today": "Today",
-    "week": "This Week",
-    "month": "This Month",
-    "year": "This Year",
-    "custom": "Custom",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+
     "total": "Total",
     "perHour": "Per Hour",
     "perOrder": "Per Order",
@@ -19,7 +19,86 @@
     "withdraw": "Withdraw",
     "withdrawMessage": "Withdrawal function will be available in the next update",
     "viewDetails": "Details",
-    "detailsMessage": "Detailed statistics will be available in the next update"
+    "detailsMessage": "Detailed statistics will be available in the next update",
+    "stats": {
+      "title": "Statistics",
+      "rides": "Rides",
+      "avgRating": "Average Rating",
+      "workHours": "Work Hours",
+      "completionRate": "Schedule Completion",
+      "totalRides": "Total Rides",
+      "avgPerRide": "Average per Ride",
+      "totalHours": "Total Hours",
+      "scheduleCompletion": "Schedule Completion"
+    },
+    "bonuses": {
+      "title": "Bonuses & Achievements",
+      "vipStatus": "VIP Status",
+      "qualityBonus": "Quality Bonus",
+      "highRating": "High Rating",
+      "noCancellations": "No Cancellations",
+      "achievements": "Achievements",
+      "rides100": "100 Rides",
+      "rating5": "5 Star Rating",
+      "referralBonus": "Referral Bonuses",
+      "invitedDrivers": "Invited Drivers"
+    },
+    "levels": {
+      "title": "Levels & Ratings",
+      "novice": "Novice",
+      "experienced": "Experienced",
+      "expert": "Expert",
+      "vip": "VIP",
+      "currentLevel": "Current Level",
+      "nextLevel": "Next Level",
+      "progress": "Progress",
+      "ridesToNext": "To Next Level",
+      "badges": "Badges & Awards"
+    },
+    "charts": {
+      "title": "Analytics",
+      "earningsChart": "Earnings Chart",
+      "activityHeatmap": "Activity Heatmap",
+      "comparison": "Period Comparison",
+      "forecast": "Earnings Forecast",
+      "previousPeriod": "Previous Period",
+      "currentPeriod": "Current Period",
+      "nextPeriod": "Next Period"
+    },
+    "goals": {
+      "title": "Goals & Achievements",
+      "dailyGoal": "Daily Goal",
+      "weeklyGoal": "Weekly Goal",
+      "monthlyGoal": "Monthly Goal",
+      "targetEarnings": "Target Earnings",
+      "progress": "Progress",
+      "achieved": "Achieved",
+      "remaining": "Remaining"
+    },
+    "map": {
+      "title": "Activity Zones",
+      "activityZones": "Activity Zones",
+      "hotSpots": "Hot Spots",
+      "earningsByZone": "Earnings by Zone"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "topDrivers": "Top Drivers",
+      "byEarnings": "By Earnings",
+      "byRating": "By Rating",
+      "yourPosition": "Your Position",
+      "rank": "Rank"
+    },
+    "settings": {
+      "title": "Settings",
+      "targetEarnings": "Target Earnings",
+      "notifications": "Notifications",
+      "displaySettings": "Display Settings",
+      "showStats": "Show Statistics",
+      "showCharts": "Show Charts",
+      "showMap": "Show Map",
+      "showGoals": "Show Goals"
+    }
   },
   "status": {
     "online": "Online",

@@ -1,11 +1,9 @@
 // Screen Styles
-export { LoginScreenStyles } from './screens/LoginScreen.styles';
-export { RoleSelectScreenStyles } from './screens/RoleSelectScreen.styles';
-export { DriverRegisterScreenStyles } from './screens/DriverRegisterScreen.styles';
-export { ChatListScreenStyles } from './screens/ChatListScreen.styles';
-export { DriversScreenStyles } from './screens/DriversScreen.styles';
-export { ChatScreenStyles } from './screens/ChatScreen.styles';
-export { ClientProfileScreenStyles } from './screens/ClientProfileScreen.styles';
+export { createLoginScreenStyles } from './screens/LoginScreen.styles';
+export { createRoleSelectScreenStyles } from './screens/RoleSelectScreen.styles';
+export { createDriverRegisterScreenStyles } from './screens/DriverRegisterScreen.styles';
+export { createChatScreenStyles } from './screens/ChatScreen.styles';
+export { createEarningsScreenStyles } from './screens/EarningsScreen.styles';
 
 
 // Component Styles

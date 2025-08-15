@@ -7,7 +7,7 @@
     "week": "Неделя",
     "month": "Месяц",
     "year": "Год",
-    "custom": "Кастом",
+
     "total": "Всего",
     "perHour": "В час",
     "perOrder": "За заказ",
@@ -19,7 +19,86 @@
     "withdraw": "Вывести",
     "withdrawMessage": "Функция вывода будет доступна в следующем обновлении",
     "viewDetails": "Детали",
-    "detailsMessage": "Подробная статистика будет доступна в следующем обновлении"
+    "detailsMessage": "Подробная статистика будет доступна в следующем обновлении",
+    "stats": {
+      "title": "Статистика",
+      "rides": "Поездки",
+      "avgRating": "Средний рейтинг",
+      "workHours": "Часы работы",
+      "completionRate": "Выполнение расписания",
+      "totalRides": "Всего поездок",
+      "avgPerRide": "Средний чек",
+      "totalHours": "Общее время",
+      "scheduleCompletion": "Выполнение расписания"
+    },
+    "bonuses": {
+      "title": "Бонусы и достижения",
+      "vipStatus": "VIP-статус",
+      "qualityBonus": "Бонус за качество",
+      "highRating": "Высокий рейтинг",
+      "noCancellations": "Без отмен",
+      "achievements": "Достижения",
+      "rides100": "100 поездок",
+      "rating5": "5 звезд рейтинг",
+      "referralBonus": "Реферальные бонусы",
+      "invitedDrivers": "Приглашенные водители"
+    },
+    "levels": {
+      "title": "Уровни и рейтинги",
+      "novice": "Новичок",
+      "experienced": "Опытный",
+      "expert": "Эксперт",
+      "vip": "VIP",
+      "currentLevel": "Текущий уровень",
+      "nextLevel": "Следующий уровень",
+      "progress": "Прогресс",
+      "ridesToNext": "До следующего уровня",
+      "badges": "Бейджи и награды"
+    },
+    "charts": {
+      "title": "Аналитика",
+      "earningsChart": "График заработка",
+      "activityHeatmap": "Тепловая карта активности",
+      "comparison": "Сравнение периодов",
+      "forecast": "Прогноз заработка",
+      "previousPeriod": "Предыдущий период",
+      "currentPeriod": "Текущий период",
+      "nextPeriod": "Следующий период"
+    },
+    "goals": {
+      "title": "Цели и достижения",
+      "dailyGoal": "Ежедневная цель",
+      "weeklyGoal": "Еженедельная цель",
+      "monthlyGoal": "Месячная цель",
+      "targetEarnings": "Целевой заработок",
+      "progress": "Прогресс",
+      "achieved": "Достигнуто",
+      "remaining": "Осталось"
+    },
+    "map": {
+      "title": "Зоны активности",
+      "activityZones": "Зоны активности",
+      "hotSpots": "Горячие точки",
+      "earningsByZone": "Заработок по зонам"
+    },
+    "leaderboard": {
+      "title": "Лидерборд",
+      "topDrivers": "Топ водителей",
+      "byEarnings": "По заработку",
+      "byRating": "По рейтингу",
+      "yourPosition": "Ваша позиция",
+      "rank": "Ранг"
+    },
+    "settings": {
+      "title": "Настройки",
+      "targetEarnings": "Целевой заработок",
+      "notifications": "Уведомления",
+      "displaySettings": "Настройки отображения",
+      "showStats": "Показывать статистику",
+      "showCharts": "Показывать графики",
+      "showMap": "Показывать карту",
+      "showGoals": "Показывать цели"
+    }
   },
   "status": {
     "online": "Онлайн",

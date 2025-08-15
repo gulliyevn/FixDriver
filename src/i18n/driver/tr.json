@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Kazanç",
     "today": "Bugün",
-    "week": "Bu hafta",
-    "month": "Bu ay",
-    "year": "Bu yıl",
-    "custom": "Özel",
+    "week": "Hafta",
+    "month": "Ay",
+    "year": "Yıl",
+
     "total": "Toplam",
     "perHour": "Saatlik",
     "perOrder": "Sipariş başına",
@@ -19,7 +19,86 @@
     "withdraw": "Çek",
     "withdrawMessage": "Çekme fonksiyonu bir sonraki güncellemede mevcut olacak",
     "viewDetails": "Detaylar",
-    "detailsMessage": "Detaylı istatistikler bir sonraki güncellemede mevcut olacak"
+    "detailsMessage": "Detaylı istatistikler bir sonraki güncellemede mevcut olacak",
+    "stats": {
+      "title": "İstatistikler",
+      "rides": "Yolculuklar",
+      "avgRating": "Ortalama Puan",
+      "workHours": "Çalışma Saatleri",
+      "completionRate": "Tamamlama Oranı",
+      "totalRides": "Toplam Yolculuk",
+      "avgPerRide": "Yolculuk Başına Ortalama",
+      "totalHours": "Toplam Saat",
+      "scheduleCompletion": "Program Tamamlama"
+    },
+    "bonuses": {
+      "title": "Bonuslar ve Başarılar",
+      "vipStatus": "VIP Durumu",
+      "qualityBonus": "Kalite Bonusu",
+      "highRating": "Yüksek Puan",
+      "noCancellations": "İptal Yok",
+      "achievements": "Başarılar",
+      "rides100": "100 Yolculuk",
+      "rating5": "5 Yıldız Puanı",
+      "referralBonus": "Referans Bonusları",
+      "invitedDrivers": "Davet Edilen Sürücüler"
+    },
+    "levels": {
+      "title": "Seviyeler ve Puanlar",
+      "novice": "Acemi",
+      "experienced": "Deneyimli",
+      "expert": "Uzman",
+      "vip": "VIP",
+      "currentLevel": "Mevcut Seviye",
+      "nextLevel": "Sonraki Seviye",
+      "progress": "İlerleme",
+      "ridesToNext": "Sonraki Seviyeye",
+      "badges": "Rozetler ve Ödüller"
+    },
+    "charts": {
+      "title": "Analitik",
+      "earningsChart": "Kazanç Grafiği",
+      "activityHeatmap": "Aktivite Isı Haritası",
+      "comparison": "Dönem Karşılaştırması",
+      "forecast": "Kazanç Tahmini",
+      "previousPeriod": "Önceki Dönem",
+      "currentPeriod": "Mevcut Dönem",
+      "nextPeriod": "Sonraki Dönem"
+    },
+    "goals": {
+      "title": "Hedefler ve Başarılar",
+      "dailyGoal": "Günlük Hedef",
+      "weeklyGoal": "Haftalık Hedef",
+      "monthlyGoal": "Aylık Hedef",
+      "targetEarnings": "Hedef Kazanç",
+      "progress": "İlerleme",
+      "achieved": "Başarıldı",
+      "remaining": "Kalan"
+    },
+    "map": {
+      "title": "Aktivite Bölgeleri",
+      "activityZones": "Aktivite Bölgeleri",
+      "hotSpots": "Sıcak Noktalar",
+      "earningsByZone": "Bölgeye Göre Kazanç"
+    },
+    "leaderboard": {
+      "title": "Lider Tablosu",
+      "topDrivers": "En İyi Sürücüler",
+      "byEarnings": "Kazanca Göre",
+      "byRating": "Puana Göre",
+      "yourPosition": "Pozisyonunuz",
+      "rank": "Sıralama"
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "targetEarnings": "Hedef Kazanç",
+      "notifications": "Bildirimler",
+      "displaySettings": "Görüntüleme Ayarları",
+      "showStats": "İstatistikleri Göster",
+      "showCharts": "Grafikleri Göster",
+      "showMap": "Haritayı Göster",
+      "showGoals": "Hedefleri Göster"
+    }
   },
   "status": {
     "online": "Çevrimiçi",

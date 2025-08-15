@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Qazanc",
     "today": "Bu gün",
-    "week": "Bu həftə",
-    "month": "Bu ay",
-    "year": "Bu il",
-    "custom": "Xüsusi",
+    "week": "Həftə",
+    "month": "Ay",
+    "year": "İl",
+
     "total": "Ümumi",
     "perHour": "Saatda",
     "perOrder": "Sifarişə",
@@ -19,7 +19,86 @@
     "withdraw": "Çıxarış",
     "withdrawMessage": "Çıxarış funksiyası növbəti yeniləmədə mövcud olacaq",
     "viewDetails": "Detallar",
-    "detailsMessage": "Ətraflı statistikalar növbəti yeniləmədə mövcud olacaq"
+    "detailsMessage": "Ətraflı statistikalar növbəti yeniləmədə mövcud olacaq",
+    "stats": {
+      "title": "Statistika",
+      "rides": "Səyahətlər",
+      "avgRating": "Orta Reyting",
+      "workHours": "İş Saatları",
+      "completionRate": "Cədvəl Tamamlanması",
+      "totalRides": "Ümumi Səyahətlər",
+      "avgPerRide": "Səyahətə Orta",
+      "totalHours": "Ümumi Saatlar",
+      "scheduleCompletion": "Cədvəl Tamamlanması"
+    },
+    "bonuses": {
+      "title": "Bonuslar və Uğurlar",
+      "vipStatus": "VIP Status",
+      "qualityBonus": "Keyfiyyət Bonusu",
+      "highRating": "Yüksək Reyting",
+      "noCancellations": "Ləğv Yoxdur",
+      "achievements": "Uğurlar",
+      "rides100": "100 Səyahət",
+      "rating5": "5 Ulduz Reyting",
+      "referralBonus": "Referral Bonusları",
+      "invitedDrivers": "Dəvət Edilmiş Sürücülər"
+    },
+    "levels": {
+      "title": "Səviyyələr və Reytinglər",
+      "novice": "Yeni Başlayan",
+      "experienced": "Təcrübəli",
+      "expert": "Ekspert",
+      "vip": "VIP",
+      "currentLevel": "Cari Səviyyə",
+      "nextLevel": "Növbəti Səviyyə",
+      "progress": "Tərəqqi",
+      "ridesToNext": "Növbəti Səviyyəyə",
+      "badges": "Nişanlar və Mükafatlar"
+    },
+    "charts": {
+      "title": "Analitika",
+      "earningsChart": "Qazanc Qrafiki",
+      "activityHeatmap": "Fəaliyyət İstilik Xəritəsi",
+      "comparison": "Dövr Müqayisəsi",
+      "forecast": "Qazanc Proqnozu",
+      "previousPeriod": "Əvvəlki Dövr",
+      "currentPeriod": "Cari Dövr",
+      "nextPeriod": "Növbəti Dövr"
+    },
+    "goals": {
+      "title": "Hədəflər və Uğurlar",
+      "dailyGoal": "Gündəlik Hədəf",
+      "weeklyGoal": "Həftəlik Hədəf",
+      "monthlyGoal": "Aylıq Hədəf",
+      "targetEarnings": "Hədəf Qazanc",
+      "progress": "Tərəqqi",
+      "achieved": "Əldə Edildi",
+      "remaining": "Qalıb"
+    },
+    "map": {
+      "title": "Fəaliyyət Zonları",
+      "activityZones": "Fəaliyyət Zonları",
+      "hotSpots": "İstilik Nöqtələri",
+      "earningsByZone": "Zona Üzrə Qazanc"
+    },
+    "leaderboard": {
+      "title": "Liderlər Cədvəli",
+      "topDrivers": "Ən Yaxşı Sürücülər",
+      "byEarnings": "Qazanca Görə",
+      "byRating": "Reytingə Görə",
+      "yourPosition": "Sizin Pozisiyanız",
+      "rank": "Rütbə"
+    },
+    "settings": {
+      "title": "Parametrlər",
+      "targetEarnings": "Hədəf Qazanc",
+      "notifications": "Bildirişlər",
+      "displaySettings": "Göstərmə Parametrləri",
+      "showStats": "Statistikaları Göstər",
+      "showCharts": "Qrafikləri Göstər",
+      "showMap": "Xəritəni Göstər",
+      "showGoals": "Hədəfləri Göstər"
+    }
   },
   "status": {
     "online": "Onlayn",

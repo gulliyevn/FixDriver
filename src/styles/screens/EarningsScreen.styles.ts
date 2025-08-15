@@ -142,11 +142,12 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       borderRadius: SIZES.radius.md,
       backgroundColor: colors.primary,
     },
-    modalButtonConfirmText: {
-      fontSize: SIZES.fontSize.md,
-      color: colors.background,
-      fontWeight: '600',
-    },
+               modalButtonConfirmText: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.background,
+             fontWeight: '600',
+           },
+
     statsBox: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -224,6 +225,7 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       margin: SIZES.xl,
       padding: SIZES.xl,
       borderRadius: SIZES.radius.lg,
+      minHeight: 120,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
     earningsHeader: {
@@ -244,6 +246,14 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       fontWeight: '700',
       color: colors.text,
       marginLeft: 10,
+    },
+    earningsReward: {
+      fontSize: SIZES.fontSize.sm,
+      fontWeight: '600',
+      color: colors.success,
+      marginLeft: 10,
+      alignSelf: 'flex-end',
+      marginBottom: 4,
     },
     earningsSubtext: {
       fontSize: SIZES.fontSize.md,
@@ -287,13 +297,13 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       marginBottom: SIZES.sm,
     },
-    statValue: {
+    statCardValue: {
       fontSize: SIZES.fontSize.xl,
       fontWeight: '700',
       color: colors.text,
       marginBottom: SIZES.xs,
     },
-    statLabel: {
+    statCardLabel: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
       textAlign: 'center',

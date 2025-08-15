@@ -8,7 +8,7 @@ import TabBar from './TabBar';
 // Импорт экранов
 import OrdersMapScreen from '../screens/common/OrdersMapScreen';
 import DriversScreen from '../screens/client/DriversScreen';
-import EarningsScreen from '../screens/common/EarningsScreen';
+import EarningsScreen from '../components/EarningsScreen';
 import ChatStack from './ChatStack';
 import DriverProfileStack from './driver/DriverProfileStack';
 

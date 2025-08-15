@@ -8,8 +8,8 @@ type EarningsHeaderProps = {
   isDark: boolean;
   filterExpandAnim: Animated.Value;
   onToggleFilter: () => void;
-  selectedPeriod: 'today' | 'week' | 'month' | 'year' | 'custom';
-  onPeriodSelect: (period: 'today' | 'week' | 'month' | 'year' | 'custom') => void;
+  selectedPeriod: 'today' | 'week' | 'month' | 'year';
+  onPeriodSelect: (period: 'today' | 'week' | 'month' | 'year') => void;
   isOnline: boolean;
   onStatusChange: () => void;
 };
@@ -27,11 +27,10 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
   const { t } = useI18n();
 
   const periodOptions = [
-    { key: 'today', label: t('driver.earnings.today'), icon: 'today' },
-    { key: 'week', label: t('driver.earnings.week'), icon: 'calendar-week' },
+    { key: 'today', label: t('driver.earnings.today'), icon: 'time' },
+    { key: 'week', label: t('driver.earnings.week'), icon: 'today' },
     { key: 'month', label: t('driver.earnings.month'), icon: 'calendar' },
     { key: 'year', label: t('driver.earnings.year'), icon: 'calendar-outline' },
-    { key: 'custom', label: t('driver.earnings.custom'), icon: 'options' },
   ] as const;
 
   return (

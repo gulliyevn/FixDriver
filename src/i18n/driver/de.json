@@ -4,10 +4,10 @@
   "earnings": {
     "title": "Verdienst",
     "today": "Heute",
-    "week": "Diese Woche",
-    "month": "Diesen Monat",
-    "year": "Dieses Jahr",
-    "custom": "Benutzerdefiniert",
+    "week": "Woche",
+    "month": "Monat",
+    "year": "Jahr",
+
     "total": "Gesamt",
     "perHour": "Pro Stunde",
     "perOrder": "Pro Bestellung",
@@ -19,7 +19,86 @@
     "withdraw": "Auszahlen",
     "withdrawMessage": "Auszahlungsfunktion wird im nächsten Update verfügbar sein",
     "viewDetails": "Details",
-    "detailsMessage": "Detaillierte Statistiken werden im nächsten Update verfügbar sein"
+    "detailsMessage": "Detaillierte Statistiken werden im nächsten Update verfügbar sein",
+    "stats": {
+      "title": "Statistik",
+      "rides": "Fahrten",
+      "avgRating": "Durchschnittsbewertung",
+      "workHours": "Arbeitsstunden",
+      "completionRate": "Zeitplan-Erfüllung",
+      "totalRides": "Gesamte Fahrten",
+      "avgPerRide": "Durchschnitt pro Fahrt",
+      "totalHours": "Gesamtstunden",
+      "scheduleCompletion": "Zeitplan-Erfüllung"
+    },
+    "bonuses": {
+      "title": "Boni & Erfolge",
+      "vipStatus": "VIP-Status",
+      "qualityBonus": "Qualitätsbonus",
+      "highRating": "Hohe Bewertung",
+      "noCancellations": "Keine Stornierungen",
+      "achievements": "Erfolge",
+      "rides100": "100 Fahrten",
+      "rating5": "5-Sterne Bewertung",
+      "referralBonus": "Empfehlungsboni",
+      "invitedDrivers": "Eingeladene Fahrer"
+    },
+    "levels": {
+      "title": "Level & Bewertungen",
+      "novice": "Anfänger",
+      "experienced": "Erfahren",
+      "expert": "Experte",
+      "vip": "VIP",
+      "currentLevel": "Aktuelles Level",
+      "nextLevel": "Nächstes Level",
+      "progress": "Fortschritt",
+      "ridesToNext": "Zum nächsten Level",
+      "badges": "Abzeichen & Auszeichnungen"
+    },
+    "charts": {
+      "title": "Analytik",
+      "earningsChart": "Verdienst-Chart",
+      "activityHeatmap": "Aktivitäts-Heatmap",
+      "comparison": "Zeitraum-Vergleich",
+      "forecast": "Verdienst-Prognose",
+      "previousPeriod": "Vorheriger Zeitraum",
+      "currentPeriod": "Aktueller Zeitraum",
+      "nextPeriod": "Nächster Zeitraum"
+    },
+    "goals": {
+      "title": "Ziele & Erfolge",
+      "dailyGoal": "Tagesziel",
+      "weeklyGoal": "Wochenziel",
+      "monthlyGoal": "Monatsziel",
+      "targetEarnings": "Zielverdienst",
+      "progress": "Fortschritt",
+      "achieved": "Erreicht",
+      "remaining": "Verbleibend"
+    },
+    "map": {
+      "title": "Aktivitätszonen",
+      "activityZones": "Aktivitätszonen",
+      "hotSpots": "Hotspots",
+      "earningsByZone": "Verdienst nach Zone"
+    },
+    "leaderboard": {
+      "title": "Rangliste",
+      "topDrivers": "Top-Fahrer",
+      "byEarnings": "Nach Verdienst",
+      "byRating": "Nach Bewertung",
+      "yourPosition": "Ihre Position",
+      "rank": "Rang"
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "targetEarnings": "Zielverdienst",
+      "notifications": "Benachrichtigungen",
+      "displaySettings": "Anzeigeeinstellungen",
+      "showStats": "Statistiken anzeigen",
+      "showCharts": "Charts anzeigen",
+      "showMap": "Karte anzeigen",
+      "showGoals": "Ziele anzeigen"
+    }
   },
   "status": {
     "online": "Online",
