@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../hooks/useI18n';
-import { useEarningsLevel } from '../hooks/useEarningsLevel';
 import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
+import { useLevelProgress } from '../../../context/LevelProgressContext';
 
 interface EarningsLevelProps {
   isDark: boolean;
@@ -13,9 +13,39 @@ interface EarningsLevelProps {
 const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
   const { t } = useI18n();
   const colors = getCurrentColors(isDark);
-  const { driverLevel } = useEarningsLevel();
+  const { driverLevel, incrementProgress, resetProgress } = useLevelProgress();
+
+  // Анимация для круглого прогресс бара
+  const circleProgressAnim = useRef(new Animated.Value(0)).current;
+  const barProgressAnim = useRef(new Animated.Value(0)).current;
+  const prevProgress = useRef(driverLevel.currentProgress);
 
   const progressPercentage = (driverLevel.currentProgress / driverLevel.maxProgress) * 100;
+
+  // Анимация при изменении прогресса
+  useEffect(() => {
+    if (driverLevel.currentProgress !== prevProgress.current) {
+      // Анимируем круглый прогресс
+      Animated.timing(circleProgressAnim, {
+        toValue: progressPercentage,
+        duration: 800,
+        useNativeDriver: false,
+      }).start();
+
+      // Анимируем линейный прогресс
+      Animated.timing(barProgressAnim, {
+        toValue: progressPercentage,
+        duration: 800,
+        useNativeDriver: false,
+      }).start();
+      
+      prevProgress.current = driverLevel.currentProgress;
+    } else {
+      // Устанавливаем начальные значения без анимации
+      circleProgressAnim.setValue(progressPercentage);
+      barProgressAnim.setValue(progressPercentage);
+    }
+  }, [driverLevel.currentProgress, driverLevel.maxProgress, progressPercentage, circleProgressAnim, barProgressAnim]);
 
   const styles = StyleSheet.create({
     container: {
@@ -54,7 +84,6 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       borderColor: 'transparent',
       borderTopColor: '#10B981',
       borderRightColor: '#10B981',
-      transform: [{ rotate: `${-90 + (progressPercentage * 3.6)}deg` }],
     },
     progressText: {
       fontSize: SIZES.fontSize.lg,
@@ -102,8 +131,41 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       backgroundColor: colors.border,
       borderRadius: 2,
       marginTop: SIZES.sm,
+      overflow: 'hidden',
+    },
+    testButton: {
+      backgroundColor: colors.primary,
+      padding: SIZES.sm,
+      borderRadius: SIZES.radius.sm,
+      marginTop: SIZES.md,
+      alignItems: 'center',
+    },
+    testButtonText: {
+      color: colors.background,
+      fontSize: SIZES.fontSize.sm,
+      fontWeight: '600',
+    },
+    resetButton: {
+      backgroundColor: colors.error,
+      padding: SIZES.sm,
+      borderRadius: SIZES.radius.sm,
+      marginTop: SIZES.sm,
+      alignItems: 'center',
+    },
+    resetButtonText: {
+      color: colors.background,
+      fontSize: SIZES.fontSize.sm,
+      fontWeight: '600',
     },
   });
+
+  const handleTestIncrement = async () => {
+    await incrementProgress();
+  };
+
+  const handleReset = async () => {
+    await resetProgress();
+  };
 
   return (
     <View style={styles.container}>
@@ -111,7 +173,21 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
         {/* Круглый прогресс-бар */}
         <View style={styles.progressSection}>
           <View style={styles.progressCircle}>
-            <View style={styles.progressFill} />
+            <Animated.View
+              style={[
+                styles.progressFill,
+                {
+                  transform: [
+                    {
+                      rotate: circleProgressAnim.interpolate({
+                        inputRange: [0, 100],
+                        outputRange: ['-90deg', '270deg'], // От -90 до 270 градусов для полного круга
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            />
             <Text style={styles.progressText}>
               {driverLevel.currentProgress}/{driverLevel.maxProgress}
             </Text>
@@ -120,27 +196,45 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
           
           {/* Информация об уровне */}
           <View style={styles.levelInfo}>
-            <Text style={styles.levelTitle}>{driverLevel.title}</Text>
+            <Text style={styles.levelTitle}>{driverLevel.subLevelTitle}</Text>
             <Text style={styles.levelDescription}>
               Уровень {driverLevel.currentLevel}
             </Text>
             <View style={styles.progressBar}>
-              <LinearGradient
-                colors={['#10B981', '#059669']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
+              <Animated.View
                 style={{
-                  width: `${progressPercentage}%`,
+                  width: barProgressAnim.interpolate({
+                    inputRange: [0, 100],
+                    outputRange: ['0%', '100%'],
+                  }),
                   height: '100%',
                   borderRadius: 2,
                 }}
-              />
+              >
+                <LinearGradient
+                  colors={['#10B981', '#059669']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 2,
+                  }}
+                />
+              </Animated.View>
             </View>
           </View>
         </View>
-
-
       </View>
+      
+      {/* Тестовые кнопки */}
+      <TouchableOpacity style={styles.testButton} onPress={handleTestIncrement}>
+        <Text style={styles.testButtonText}>Тест: +1 к прогрессу</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
+        <Text style={styles.resetButtonText}>Сбросить прогресс</Text>
+      </TouchableOpacity>
     </View>
   );
 };

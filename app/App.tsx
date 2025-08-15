@@ -7,6 +7,7 @@ import { ThemeProvider } from '../src/context/ThemeContext';
 import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import { PackageProvider } from '../src/context/PackageContext';
+import { LevelProgressProvider } from '../src/context/LevelProgressContext';
 
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
@@ -37,10 +38,12 @@ function App() {
             <AuthProvider>
               <ProfileProvider>
                 <PackageProvider>
-                  <NavigationContainer>
-                    <RootNavigator />
-                    <DynamicStatusBar />
-                  </NavigationContainer>
+                  <LevelProgressProvider>
+                    <NavigationContainer>
+                      <RootNavigator />
+                      <DynamicStatusBar />
+                    </NavigationContainer>
+                  </LevelProgressProvider>
                 </PackageProvider>
               </ProfileProvider>
             </AuthProvider>

@@ -3,6 +3,7 @@ import { Linking } from 'react-native';
 import { DriverModalState, DriverModalActions, DriverModalHandlers } from '../types/driver-modal.types';
 import { mockDrivers } from '../../../mocks/data/users';
 import { getSampleDriverId } from '../../../mocks/driverModalMock';
+import { useLevelProgress } from '../../../context/LevelProgressContext';
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
@@ -11,6 +12,7 @@ export const useDriverModalHandlers = (
 ): DriverModalHandlers => {
   const driverId = getSampleDriverId();
   const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
+  const { incrementProgress } = useLevelProgress();
 
   const handleChatPress = useCallback(() => {
     if (onChat) {
@@ -47,12 +49,15 @@ export const useDriverModalHandlers = (
     actions.setEmergencyActionType('stop');
   }, [actions]);
 
-  const handleEndOkPress = useCallback(() => {
+  const handleEndOkPress = useCallback(async () => {
     actions.setShowEndDialog(false);
     actions.setEmergencyActionsUsed(true);
     actions.setEmergencyActionType('end');
     actions.setShowRatingDialog(true);
-  }, [actions]);
+    
+    // Увеличиваем прогресс при экстренном завершении поездки
+    await incrementProgress();
+  }, [actions, incrementProgress]);
 
   const handleStartOk = useCallback(() => {
     actions.setShowDialog1(false);
@@ -80,10 +85,13 @@ export const useDriverModalHandlers = (
     }, 5000);
   }, [actions]);
 
-  const handleEndTripOk = useCallback(() => {
+  const handleEndTripOk = useCallback(async () => {
     actions.setShowDialog3(false);
     actions.setShowRatingDialog(true);
-  }, [actions]);
+    
+    // Увеличиваем прогресс при нормальном завершении поездки
+    await incrementProgress();
+  }, [actions, incrementProgress]);
 
   const handleRatingSubmit = useCallback((rating: number, comment: string) => {
     actions.setShowRatingDialog(false);
