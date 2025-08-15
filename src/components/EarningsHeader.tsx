@@ -10,7 +10,8 @@ type EarningsHeaderProps = {
   onToggleFilter: () => void;
   selectedPeriod: 'today' | 'week' | 'month' | 'year' | 'custom';
   onPeriodSelect: (period: 'today' | 'week' | 'month' | 'year' | 'custom') => void;
-  onViewDetails: () => void;
+  isOnline: boolean;
+  onStatusChange: () => void;
 };
 
 const EarningsHeader: React.FC<EarningsHeaderProps> = ({ 
@@ -20,7 +21,8 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
   onToggleFilter, 
   selectedPeriod, 
   onPeriodSelect,
-  onViewDetails 
+  isOnline,
+  onStatusChange
 }) => {
   const { t } = useI18n();
 
@@ -54,11 +56,15 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
               <Ionicons name="funnel-outline" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
             </TouchableOpacity>
             <TouchableOpacity 
-              accessibilityLabel={t('driver.earnings.viewDetails')} 
-              onPress={onViewDetails} 
-              style={styles.filterButton}
+              accessibilityLabel={t('driver.status.changeStatus')} 
+              onPress={onStatusChange} 
+              style={styles.statusButton}
             >
-              <Ionicons name="information-circle-outline" size={22} color={isDark ? '#F9FAFB' : '#111827'} />
+              <Ionicons 
+                name={isOnline ? "radio-button-on" : "radio-button-off"} 
+                size={22} 
+                color={isOnline ? "#10B981" : "#6B7280"} 
+              />
             </TouchableOpacity>
           </View>
         </View>

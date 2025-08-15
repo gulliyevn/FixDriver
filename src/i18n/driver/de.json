@@ -21,6 +21,14 @@
     "viewDetails": "Details",
     "detailsMessage": "Detaillierte Statistiken werden im nächsten Update verfügbar sein"
   },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "changeStatus": "Status ändern",
+    "changeStatusMessage": "Möchten Sie Ihren Status ändern zu",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
+  },
   "orders": {
     "title": "Bestellungen",
     "active": "Aktiv",
@@ -165,14 +173,7 @@
     "goodTrip": "Gute Fahrt!",
     "loading": "Lädt..."
   },
-  "status": {
-    "online": "Online",
-    "offline": "Offline",
-    "busy": "Beschäftigt",
-    "away": "Abwesend",
-    "available": "Verfügbar",
-    "unavailable": "Nicht verfügbar"
-  },
+
   "notifications": {
     "title": "Benachrichtigungen",
     "readAll": "Alle lesen",

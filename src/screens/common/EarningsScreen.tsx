@@ -1,25 +1,33 @@
 import React, { useMemo, useState, useRef, useCallback } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Alert, Animated } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Alert, Animated, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { createEarningsScreenStyles } from '../../styles/screens/EarningsScreen.styles';
 import { useBalance } from '../../hooks/useBalance';
 import EarningsHeader from '../../components/EarningsHeader';
+import { useNavigation } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { DriverStackParamList, RootStackParamList } from '../../types/driver/DriverNavigation';
 
 const EarningsScreen: React.FC = () => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const { balance } = useBalance() as any;
   const styles = createEarningsScreenStyles(isDark);
+  const navigation = useNavigation<any>();
 
   const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'year' | 'custom'>('week');
   const [filterExpanded, setFilterExpanded] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const filterExpandAnim = useRef(new Animated.Value(0)).current;
 
   const currentData = useMemo(() => ({
-    total: `${balance} AFc`,
-  }), [balance]);
+    total: `100 AFc`,
+  }), []);
 
   const quickStats = {
     totalTrips: 42,
@@ -37,9 +45,7 @@ const EarningsScreen: React.FC = () => {
     Alert.alert(t('driver.earnings.withdraw'), t('driver.earnings.withdrawMessage'));
   };
 
-  const handleViewDetails = () => {
-    Alert.alert(t('driver.earnings.viewDetails'), t('driver.earnings.detailsMessage'));
-  };
+
 
   const toggleFilter = useCallback(() => {
     const toValue = filterExpanded ? 0 : 1;
@@ -56,6 +62,32 @@ const EarningsScreen: React.FC = () => {
     setSelectedPeriod(period);
   }, []);
 
+  const handleStatusChange = useCallback(() => {
+    setStatusModalVisible(true);
+  }, []);
+
+  const confirmStatusChange = useCallback(() => {
+    setIsOnline(!isOnline);
+    setStatusModalVisible(false);
+  }, [isOnline]);
+
+  const handleBalancePress = useCallback(() => {
+    try {
+      // Переходим на таб профиля
+      navigation.navigate('Profile' as any);
+      
+      setTimeout(() => {
+        // Навигируем к экрану баланса внутри стека профиля
+        (navigation as any).navigate('Profile', {
+          screen: 'Balance'
+        });
+      }, 100);
+    } catch (error) {
+      console.warn('Balance navigation failed, falling back to Profile tab:', error);
+      navigation.navigate('Profile' as any);
+    }
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeAreaTop}>
@@ -66,76 +98,62 @@ const EarningsScreen: React.FC = () => {
           onToggleFilter={toggleFilter}
           selectedPeriod={selectedPeriod}
           onPeriodSelect={handlePeriodSelect}
-          onViewDetails={handleViewDetails}
+          isOnline={isOnline}
+          onStatusChange={handleStatusChange}
         />
       </SafeAreaView>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
-        <View style={styles.earningsCard}>
+        <TouchableOpacity style={styles.earningsCard} onPress={handleBalancePress}>
           <View style={styles.earningsHeader}>
-            <Text style={styles.earningsLabel}>{t('driver.earnings.total')}</Text>
-            <Ionicons name="wallet-outline" size={20} color="#6B7280" />
+            <View style={styles.earningsLeft}>
+              <Ionicons name="wallet-outline" size={28} color="#6B7280" />
+              <Text style={styles.earningsAmount}>{currentData.total}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#6B7280" />
           </View>
-          <Text style={styles.earningsAmount}>{currentData.total}</Text>
-          <Text style={styles.earningsSubtext}>+12% {t('common.success') || ''}</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>{t('common.info')}</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#007AFF' }]}>
-                <Ionicons name="car-outline" size={20} color="#fff" />
-              </View>
-              <Text style={styles.statValue}>{quickStats.totalTrips}</Text>
-              <Text style={styles.statLabel}>{t('driver.orders.all')}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#27ae60' }]}>
-                <Ionicons name="cash-outline" size={20} color="#fff" />
-              </View>
-              <Text style={styles.statValue}>{quickStats.totalEarnings}</Text>
-              <Text style={styles.statLabel}>{t('driver.earnings.total')}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#f39c12' }]}>
-                <Ionicons name="star" size={20} color="#fff" />
-              </View>
-              <Text style={styles.statValue}>{quickStats.averageRating}</Text>
-              <Text style={styles.statLabel}>Rating</Text>
-            </View>
-            <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#6c5ce7' }]}>
-                <Ionicons name="time-outline" size={20} color="#fff" />
-              </View>
-              <Text style={styles.statValue}>{quickStats.onlineHours}</Text>
-              <Text style={styles.statLabel}>Online</Text>
-            </View>
-          </View>
-        </View>
 
-        <View style={styles.ridesSection}>
-          <Text style={styles.sectionTitle}>{t('driver.orders.completed')}</Text>
-          {rides.map((ride) => (
-            <View key={ride.id} style={styles.rideCard}>
-              <View style={styles.rideHeader}>
-                <View style={styles.rideInfo}>
-                  <Text style={styles.rideClient}>{ride.from} → {ride.to}</Text>
-                  <Text style={styles.rideTime}>{ride.time}</Text>
-                </View>
-                <View style={styles.rideAmount}>
-                  <Text style={styles.amountText}>{ride.earnings}</Text>
-                  <View style={styles.ratingContainer}>
-                    <Ionicons name="star" size={14} color="#F59E0B" />
-                    <Text style={styles.ratingText}>{ride.rating}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
-        </View>
+
+
+
       </ScrollView>
+
+      {/* Модалка изменения статуса */}
+      <Modal
+        visible={statusModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setStatusModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{t('driver.status.changeStatus')}</Text>
+            <Text style={styles.modalMessage}>
+              {t('driver.status.changeStatusMessage')}{'\n'}
+              <Text style={styles.modalStatusText}>
+                {isOnline ? t('driver.status.offline') : t('driver.status.online')}?
+              </Text>
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={styles.modalButtonCancel} 
+                onPress={() => setStatusModalVisible(false)}
+              >
+                <Text style={styles.modalButtonCancelText}>{t('driver.status.cancel')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.modalButtonConfirm} 
+                onPress={confirmStatusChange}
+              >
+                <Text style={styles.modalButtonConfirmText}>{t('driver.status.confirm')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

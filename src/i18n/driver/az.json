@@ -21,6 +21,14 @@
     "viewDetails": "Detallar",
     "detailsMessage": "Ətraflı statistikalar növbəti yeniləmədə mövcud olacaq"
   },
+  "status": {
+    "online": "Onlayn",
+    "offline": "Oflayn",
+    "changeStatus": "Statusu dəyişdir",
+    "changeStatusMessage": "Statusunuzu dəyişmək istəyirsiniz",
+    "cancel": "Ləğv et",
+    "confirm": "Təsdiqlə"
+  },
   "orders": {
     "title": "Sifarişlər",
     "active": "Aktiv",
@@ -165,14 +173,7 @@
     "goodTrip": "Yaxşı səyahət!",
     "loading": "Yüklənir..."
   },
-  "status": {
-    "online": "Onlayn",
-    "offline": "Oflayn",
-    "busy": "Məşğul",
-    "away": "Kənarda",
-    "available": "Mövcud",
-    "unavailable": "Mövcud deyil"
-  },
+
   "notifications": {
     "title": "Bildirişlər",
     "readAll": "Hamısını oxu",

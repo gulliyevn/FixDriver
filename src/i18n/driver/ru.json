@@ -21,6 +21,14 @@
     "viewDetails": "Детали",
     "detailsMessage": "Подробная статистика будет доступна в следующем обновлении"
   },
+  "status": {
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "changeStatus": "Изменить статус",
+    "changeStatusMessage": "Вы хотите изменить свой статус на",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить"
+  },
   "orders": {
     "title": "Заказы",
     "active": "Активные",

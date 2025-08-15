@@ -21,6 +21,14 @@
     "viewDetails": "Details",
     "detailsMessage": "Detailed statistics will be available in the next update"
   },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "changeStatus": "Change Status",
+    "changeStatusMessage": "Do you want to change your status to",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
   "orders": {
     "title": "Orders",
     "active": "Active",
@@ -165,14 +173,7 @@
     "goodTrip": "Have a good trip!",
     "loading": "Loading..."
   },
-  "status": {
-    "online": "Online",
-    "offline": "Offline",
-    "busy": "Busy",
-    "away": "Away",
-    "available": "Available",
-    "unavailable": "Unavailable"
-  },
+
   "notifications": {
     "title": "Notifications",
     "readAll": "Read all",

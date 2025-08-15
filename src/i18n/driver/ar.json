@@ -21,6 +21,14 @@
     "viewDetails": "التفاصيل",
     "detailsMessage": "ستكون الإحصائيات التفصيلية متاحة في التحديث القادم"
   },
+  "status": {
+    "online": "متصل",
+    "offline": "غير متصل",
+    "changeStatus": "تغيير الحالة",
+    "changeStatusMessage": "هل تريد تغيير حالتك إلى",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد"
+  },
   "orders": {
     "title": "الطلبات",
     "active": "نشط",
@@ -165,14 +173,7 @@
     "goodTrip": "رحلة سعيدة!",
     "loading": "جاري التحميل..."
   },
-  "status": {
-    "online": "متصل",
-    "offline": "غير متصل",
-    "busy": "مشغول",
-    "away": "غائب",
-    "available": "متاح",
-    "unavailable": "غير متاح"
-  },
+
   "notifications": {
     "title": "الإشعارات",
     "readAll": "قراءة الكل",

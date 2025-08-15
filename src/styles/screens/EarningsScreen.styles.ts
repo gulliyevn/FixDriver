@@ -36,6 +36,9 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
     filterButton: {
       padding: SIZES.xs,
     },
+    statusButton: {
+      padding: SIZES.xs,
+    },
     headerTop: {
       flexDirection: 'column',
       width: '100%',
@@ -81,6 +84,103 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
     },
     filterChipTextActive: {
       color: colors.background,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: colors.background,
+      borderRadius: SIZES.radius.lg,
+      padding: SIZES.xl,
+      marginHorizontal: SIZES.xl,
+      alignItems: 'center',
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
+    modalTitle: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: SIZES.md,
+      textAlign: 'center',
+    },
+               modalMessage: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.textSecondary,
+             textAlign: 'center',
+             marginBottom: SIZES.xl,
+             lineHeight: 22,
+           },
+           modalStatusText: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.text,
+             fontWeight: '700',
+             textAlign: 'center',
+           },
+    modalButtons: {
+      flexDirection: 'row',
+      gap: SIZES.md,
+    },
+    modalButtonCancel: {
+      paddingHorizontal: SIZES.xl,
+      paddingVertical: SIZES.md,
+      borderRadius: SIZES.radius.md,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    modalButtonCancelText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.textSecondary,
+      fontWeight: '600',
+    },
+    modalButtonConfirm: {
+      paddingHorizontal: SIZES.xl,
+      paddingVertical: SIZES.md,
+      borderRadius: SIZES.radius.md,
+      backgroundColor: colors.primary,
+    },
+    modalButtonConfirmText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.background,
+      fontWeight: '600',
+    },
+    statsBox: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.primary + '08',
+      marginHorizontal: SIZES.xl,
+      borderRadius: SIZES.radius.xl,
+      marginTop: SIZES.lg,
+      marginBottom: SIZES.lg,
+      paddingVertical: SIZES.lg,
+      borderWidth: 1,
+      borderColor: colors.primary + '15',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    statCol: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: SIZES.sm,
+    },
+    statValue: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: SIZES.xs,
+    },
+    statLabel: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+    statDivider: {
+      width: 1,
+      height: 40,
+      backgroundColor: colors.border,
     },
     headerTitle: {
       fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
@@ -130,7 +230,10 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: SIZES.md,
+    },
+    earningsLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     earningsLabel: {
       fontSize: SIZES.fontSize.lg,
@@ -140,7 +243,7 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       fontSize: 34,
       fontWeight: '700',
       color: colors.text,
-      marginBottom: SIZES.sm,
+      marginLeft: 10,
     },
     earningsSubtext: {
       fontSize: SIZES.fontSize.md,

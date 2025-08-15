@@ -21,6 +21,14 @@
     "viewDetails": "Detaylar",
     "detailsMessage": "Detaylı istatistikler bir sonraki güncellemede mevcut olacak"
   },
+  "status": {
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı",
+    "changeStatus": "Durumu değiştir",
+    "changeStatusMessage": "Durumunuzu değiştirmek istiyor musunuz",
+    "cancel": "İptal",
+    "confirm": "Onayla"
+  },
   "orders": {
     "title": "Siparişler",
     "active": "Aktif",
@@ -164,14 +172,7 @@
     "goodTrip": "İyi yolculuklar!",
     "loading": "Yükleniyor..."
   },
-  "status": {
-    "online": "Çevrimiçi",
-    "offline": "Çevrimdışı",
-    "busy": "Meşgul",
-    "away": "Uzakta",
-    "available": "Mevcut",
-    "unavailable": "Mevcut değil"
-  },
+
   "notifications": {
     "title": "Bildirimler",
     "readAll": "Tümünü oku",

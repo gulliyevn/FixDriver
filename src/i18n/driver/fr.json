@@ -21,6 +21,14 @@
     "viewDetails": "Détails",
     "detailsMessage": "Les statistiques détaillées seront disponibles dans la prochaine mise à jour"
   },
+  "status": {
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "changeStatus": "Changer le statut",
+    "changeStatusMessage": "Voulez-vous changer votre statut à",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
+  },
   "orders": {
     "title": "Commandes",
     "active": "Actif",
@@ -165,14 +173,7 @@
     "goodTrip": "Bon trajet !",
     "loading": "Chargement..."
   },
-  "status": {
-    "online": "En ligne",
-    "offline": "Hors ligne",
-    "busy": "Occupé",
-    "away": "Absent",
-    "available": "Disponible",
-    "unavailable": "Indisponible"
-  },
+
   "notifications": {
     "title": "Notifications",
     "readAll": "Tout lire",
