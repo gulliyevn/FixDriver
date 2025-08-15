@@ -6,6 +6,8 @@
     "today": "Aujourd'hui",
     "week": "Cette semaine",
     "month": "Ce mois",
+    "year": "Cette année",
+    "custom": "Personnalisé",
     "total": "Total",
     "perHour": "Par heure",
     "perOrder": "Par commande",

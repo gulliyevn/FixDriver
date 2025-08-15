@@ -21,7 +21,6 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(true);
   const [showAttachments, setShowAttachments] = useState(false);
-  const [attachmentMenuLeft, setAttachmentMenuLeft] = useState<number | null>(null);
   const [showCallSheet, setShowCallSheet] = useState(false);
   const callSheetAnim = useRef(new Animated.Value(0)).current; // 0 hidden, 1 shown
   const [showProfileSheet, setShowProfileSheet] = useState(false);
@@ -29,7 +28,6 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const [showActionsSheet, setShowActionsSheet] = useState(false);
   const actionsSheetAnim = useRef(new Animated.Value(0)).current;
   const listRef = useRef<FlatList>(null);
-  const toolbarRef = useRef<View>(null);
 
   useEffect(() => {
     loadMessages();
@@ -115,7 +113,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   // Typing indicator removed per design
 
   const renderAttachmentMenu = () => (
-    <View style={[styles.attachmentMenu, attachmentMenuLeft != null ? { left: attachmentMenuLeft } : undefined]}>
+    <View style={styles.attachmentMenu}>
       <TouchableOpacity style={styles.attachmentOption} onPress={attachFromCamera}>
         <Ionicons name="camera" size={20} color={isDark ? '#F9FAFB' : '#111827'} />
         <Text style={styles.attachmentOptionText}>{t('client.chat.camera')}</Text>
@@ -380,25 +378,8 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
             <TouchableOpacity 
-              ref={toolbarRef}
               style={styles.toolbarButton}
-              onPress={() => {
-                if (!showAttachments) {
-                  // measure X to align menu vertically with the button
-                  requestAnimationFrame(() => {
-                    try {
-                      // @ts-ignore measureInWindow exists at runtime
-                      toolbarRef.current?.measure?.((x: number, y: number, width: number, height: number, pageX: number) => {
-                        // align left edge to match input container horizontal margin (SIZES.lg) plus button's offset inside container
-                        // Since container has marginHorizontal SIZES.lg and toolbar button is at the very left of the row,
-                        // we align menu to the same pageX as the button.
-                        setAttachmentMenuLeft(pageX);
-                      });
-                    } catch {}
-                  });
-                }
-                setShowAttachments(!showAttachments);
-              }}
+              onPress={() => setShowAttachments(!showAttachments)}
             >
               <Ionicons name="add" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
             </TouchableOpacity>

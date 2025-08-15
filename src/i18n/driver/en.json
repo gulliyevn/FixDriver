@@ -6,6 +6,8 @@
     "today": "Today",
     "week": "This Week",
     "month": "This Month",
+    "year": "This Year",
+    "custom": "Custom",
     "total": "Total",
     "perHour": "Per Hour",
     "perOrder": "Per Order",

@@ -6,7 +6,14 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.background,
+    },
+    safeAreaTop: {
+      backgroundColor: colors.background,
+      paddingTop: 0,
+    },
+    scrollView: {
+      flex: 1,
     },
     header: {
       flexDirection: 'row',
@@ -17,12 +24,70 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
+    },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.md,
+    },
+    filterIconContainer: {
+      padding: SIZES.xs,
+    },
+    filterButton: {
+      padding: SIZES.xs,
+    },
+    headerTop: {
+      flexDirection: 'column',
+      width: '100%',
+    },
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    },
+    filtersWrapper: {
+      marginTop: SIZES.xxl,
+      zIndex: 1,
+    },
+    filtersContainer: {
+      maxHeight: 40,
+    },
+    filtersContent: {
+      paddingHorizontal: SIZES.sm,
+      gap: SIZES.xs,
+    },
+    filterChip: {
+      backgroundColor: colors.primary + '15',
+      borderRadius: 24,
+      paddingHorizontal: SIZES.lg,
+      paddingVertical: SIZES.sm,
+      marginHorizontal: SIZES.xs / 2,
+      borderWidth: 1.5,
+      borderColor: colors.primary + '30',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs,
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
-    headerTitle: {
-      fontSize: SIZES.fontSize.xxl,
+    filterChipActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    filterChipText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.primary,
       fontWeight: '600',
+    },
+    filterChipTextActive: {
+      color: colors.background,
+    },
+    headerTitle: {
+      fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
+      fontWeight: '700',
       color: colors.text,
+      textAlign: 'left',
+      marginLeft: SIZES.sm, // Сдвигаем правее
     },
     detailsButton: {
       padding: SIZES.sm,
@@ -55,7 +120,7 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       color: colors.background,
     },
     earningsCard: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       margin: SIZES.xl,
       padding: SIZES.xl,
       borderRadius: SIZES.radius.lg,
@@ -82,10 +147,12 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       color: colors.success,
     },
     statsSection: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       padding: SIZES.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.lg,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     sectionTitle: {
       fontSize: SIZES.fontSize.xl,
@@ -100,13 +167,14 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
     },
     statCard: {
       width: '48%',
-      backgroundColor: colors.surface,
+      backgroundColor: colors.background,
       borderRadius: SIZES.radius.md,
       padding: SIZES.lg,
       marginBottom: SIZES.md,
       alignItems: 'center',
       borderWidth: 1,
       borderColor: colors.border,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     statIcon: {
       width: 40,
@@ -156,22 +224,24 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       marginTop: SIZES.xs,
     },
     ridesSection: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       padding: SIZES.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      flex: 1,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.lg,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     ridesList: {
       flex: 1,
     },
     rideCard: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.background,
       borderRadius: SIZES.radius.md,
       padding: SIZES.lg,
       marginBottom: SIZES.md,
       borderWidth: 1,
       borderColor: colors.border,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     rideHeader: {
       flexDirection: 'row',
@@ -210,10 +280,12 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       marginLeft: SIZES.xs,
     },
     withdrawSection: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.surface,
       padding: SIZES.xl,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.xl,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     withdrawButton: {
       backgroundColor: colors.primary,

@@ -215,7 +215,7 @@ export const createChatScreenStyles = (isDark: boolean) => {
     attachmentMenu: {
       position: 'absolute',
       bottom: 80,
-      left: SIZES.lg,
+      left: 0,
       backgroundColor: colors.surface,
       borderRadius: SIZES.radius.lg,
       borderWidth: 1,
