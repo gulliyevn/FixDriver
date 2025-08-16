@@ -4,7 +4,10 @@ import { useEarningsLevel } from '../components/EarningsScreen/hooks/useEarnings
 interface LevelProgressContextType {
   driverLevel: any;
   incrementProgress: () => Promise<void>;
+  addRides: (count: number) => Promise<void>;
   resetProgress: () => Promise<void>;
+  testVIPStatus: () => Promise<void>;
+  clearAllData: () => Promise<void>;
 }
 
 const LevelProgressContext = createContext<LevelProgressContextType | undefined>(undefined);
@@ -22,15 +25,15 @@ interface LevelProgressProviderProps {
 }
 
 export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ children }) => {
-  const { driverLevel, incrementProgress, resetProgress } = useEarningsLevel();
-
-  // Отладочная информация
-  console.log('LevelProgressProvider - driverLevel:', driverLevel);
+  const { driverLevel, incrementProgress, addRides, resetProgress, testVIPStatus, clearAllData } = useEarningsLevel();
 
   const value: LevelProgressContextType = {
     driverLevel,
     incrementProgress,
+    addRides,
     resetProgress,
+    testVIPStatus,
+    clearAllData,
   };
 
   return (

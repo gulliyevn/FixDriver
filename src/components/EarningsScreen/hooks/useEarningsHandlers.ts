@@ -9,7 +9,9 @@ export const useEarningsHandlers = (
   setSelectedPeriod: (period: 'today' | 'week' | 'month' | 'year') => void,
   setStatusModalVisible: (visible: boolean) => void,
   isOnline: boolean,
-  setIsOnline: (online: boolean) => void
+  setIsOnline: (online: boolean) => void,
+  startOnlineTime?: () => void,
+  stopOnlineTime?: () => void
 ) => {
   const navigation = useNavigation<any>();
 
@@ -33,9 +35,19 @@ export const useEarningsHandlers = (
   }, [setStatusModalVisible]);
 
   const confirmStatusChange = useCallback(() => {
-    setIsOnline(!isOnline);
+    const newOnlineStatus = !isOnline;
+    setIsOnline(newOnlineStatus);
     setStatusModalVisible(false);
-  }, [isOnline, setIsOnline, setStatusModalVisible]);
+    
+    // Интеграция с VIP системой
+    if (newOnlineStatus) {
+      // Становимся онлайн
+      startOnlineTime?.();
+    } else {
+      // Становимся офлайн
+      stopOnlineTime?.();
+    }
+  }, [isOnline, setIsOnline, setStatusModalVisible, startOnlineTime, stopOnlineTime]);
 
   const handleBalancePress = useCallback(() => {
     try {

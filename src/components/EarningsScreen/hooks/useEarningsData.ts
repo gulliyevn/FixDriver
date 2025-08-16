@@ -58,9 +58,22 @@ const mockData = {
 export const useEarningsData = (selectedPeriod: PeriodType = 'week') => {
   const { balance } = useBalance() as any;
 
-  const currentData = useMemo(() => ({
-    total: mockData[selectedPeriod].total,
-  }), [selectedPeriod]);
+  const currentData = useMemo(() => {
+    const currentBalance = balance || 0;
+    
+    // Если баланс 0, показываем без точки
+    if (currentBalance === 0) {
+      return {
+        total: `0 AFc`,
+      };
+    }
+    
+    // Для остальных случаев показываем с одним знаком после точки
+    const formattedBalance = currentBalance.toFixed(1);
+    return {
+      total: `${formattedBalance} AFc`,
+    };
+  }, [balance]);
 
   const quickStats = useMemo(() => ({
     totalTrips: mockData[selectedPeriod].rides.length,

@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useI18n } from '../../../hooks/useI18n';
 import { getCurrentColors, SIZES } from '../../../constants/colors';
 import { useLevelProgress } from '../../../context/LevelProgressContext';
+import { useVIPTimeTracking } from '../hooks/useVIPTimeTracking';
 
 interface EarningsProgressLineProps {
   isDark: boolean;
@@ -14,19 +15,25 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({ isDark }) =
   const colors = getCurrentColors(isDark);
   const { driverLevel } = useLevelProgress();
   
+  // VIP система отслеживания времени
+  const { vipTimeData, getCurrentHoursOnline } = useVIPTimeTracking(driverLevel.isVIP);
+  
   // Анимация для прогресс бара
   const progressAnim = useRef(new Animated.Value(0)).current;
-  const prevProgress = useRef(driverLevel.currentProgress);
+  const prevProgress = useRef(driverLevel.isVIP ? vipTimeData.daysOnline : driverLevel.currentProgress);
   
-  const progressPercentage = (driverLevel.currentProgress / driverLevel.maxProgress) * 100;
+  // Рассчитываем процент прогресса в зависимости от VIP статуса
+  const progressPercentage = driverLevel.isVIP 
+    ? (driverLevel.vipDaysOnline / driverLevel.vipDaysRequired) * 100
+    : (driverLevel.currentProgress / driverLevel.maxProgress) * 100;
 
-  // Отладочная информация
-  console.log('EarningsProgressLine - driverLevel:', driverLevel);
-  console.log('EarningsProgressLine - progressPercentage:', progressPercentage);
+
   
   // Анимация при изменении прогресса
   useEffect(() => {
-    if (driverLevel.currentProgress !== prevProgress.current) {
+    const currentProgress = driverLevel.isVIP ? driverLevel.vipDaysOnline : driverLevel.currentProgress;
+    
+    if (currentProgress !== prevProgress.current) {
       // Анимируем к новому значению
       Animated.timing(progressAnim, {
         toValue: progressPercentage,
@@ -34,12 +41,12 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({ isDark }) =
         useNativeDriver: false,
       }).start();
       
-      prevProgress.current = driverLevel.currentProgress;
+      prevProgress.current = currentProgress;
     } else {
       // Устанавливаем начальное значение без анимации
       progressAnim.setValue(progressPercentage);
     }
-  }, [driverLevel.currentProgress, driverLevel.maxProgress, progressPercentage, progressAnim]);
+  }, [driverLevel.currentProgress, driverLevel.maxProgress, driverLevel.vipDaysOnline, progressPercentage, progressAnim, driverLevel.isVIP]);
 
   const styles = StyleSheet.create({
     container: {
@@ -75,6 +82,18 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({ isDark }) =
       6: 'Император'
     };
     return levelNames[level as keyof typeof levelNames] || 'Максимум';
+  };
+
+  // Функция для получения текста прогресса
+  const getProgressText = () => {
+    // Если VIP статус, показываем дни онлайн
+    if (driverLevel.isVIP) {
+      // Используем данные из driverLevel для синхронизации
+      return `${driverLevel.vipDaysOnline}/${driverLevel.vipDaysRequired} ${t('common.levels.days')}`;
+    }
+    
+    // Обычный прогресс поездок
+    return `${driverLevel.currentProgress}/${driverLevel.maxProgress}`;
   };
 
   // Проверяем, есть ли данные
@@ -119,7 +138,7 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({ isDark }) =
         </Animated.View>
         
         <Text style={styles.progressText}>
-          {driverLevel.currentProgress}/{driverLevel.maxProgress}
+          {getProgressText()}
         </Text>
       </View>
     </View>

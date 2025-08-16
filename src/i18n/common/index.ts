@@ -6,14 +6,15 @@ const fr = require('./fr.json');
 const ar = require('./ar.json');
 const es = require('./es.json');
 const de = require('./de.json');
+const levels = require('./levels.json');
 
 module.exports = {
-  ru,
-  en,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
+  ru: { ...ru, levels: levels.ru },
+  en: { ...en, levels: levels.en },
+  tr: { ...tr, levels: levels.tr },
+  az: { ...az, levels: levels.az },
+  fr: { ...fr, levels: levels.fr },
+  ar: { ...ar, levels: levels.ar },
+  es: { ...es, levels: levels.es },
+  de: { ...de, levels: levels.de },
 }; 

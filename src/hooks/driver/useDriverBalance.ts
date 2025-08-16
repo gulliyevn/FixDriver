@@ -40,35 +40,34 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const loadBalance = async () => {
     try {
-      const storedBalance = await AsyncStorage.getItem(balanceKey);
-      if (storedBalance) {
-        setBalance(parseFloat(storedBalance));
-      }
+      // Принудительно обнуляем баланс
+      await AsyncStorage.removeItem(balanceKey);
+      setBalance(0);
     } catch (error) {
       console.error('Error loading driver balance:', error);
+      setBalance(0);
     }
   };
 
   const loadTransactions = async () => {
     try {
-      const storedTransactions = await AsyncStorage.getItem(transactionsKey);
-      if (storedTransactions) {
-        const parsedTransactions = JSON.parse(storedTransactions);
-        setTransactions(parsedTransactions);
-      }
+      // Принудительно очищаем транзакции
+      await AsyncStorage.removeItem(transactionsKey);
+      setTransactions([]);
     } catch (error) {
       console.error('Error loading driver transactions:', error);
+      setTransactions([]);
     }
   };
 
   const loadEarnings = async () => {
     try {
-      const storedEarnings = await AsyncStorage.getItem(earningsKey);
-      if (storedEarnings) {
-        setEarnings(parseFloat(storedEarnings));
-      }
+      // Принудительно обнуляем заработки
+      await AsyncStorage.removeItem(earningsKey);
+      setEarnings(0);
     } catch (error) {
       console.error('Error loading driver earnings:', error);
+      setEarnings(0);
     }
   };
 
@@ -101,6 +100,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const topUpBalance = async (amount: number) => {
     const newBalance = balance + amount;
+    
     await saveBalance(newBalance);
     
     await addTransaction({

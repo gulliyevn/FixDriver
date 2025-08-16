@@ -6,10 +6,13 @@ import { useLanguage } from '../../context/LanguageContext';
 import { createEarningsScreenStyles } from '../../styles/screens/EarningsScreen.styles';
 import EarningsHeader from '../EarningsHeader';
 import levelsTranslations from '../../i18n/common/levels.json';
+import { useLevelProgress } from '../../context/LevelProgressContext';
+import { useBalance } from '../../hooks/useBalance';
 
 import { useEarningsState } from './hooks/useEarningsState';
 import { useEarningsHandlers } from './hooks/useEarningsHandlers';
 import { useEarningsData } from './hooks/useEarningsData';
+import { useVIPTimeTracking } from './hooks/useVIPTimeTracking';
 import EarningsStats from './components/EarningsStats';
 import EarningsLevel from './components/EarningsLevel';
 import EarningsEmptyContainer from './components/EarningsEmptyContainer';
@@ -33,22 +36,6 @@ const EarningsScreen: React.FC = () => {
     filterExpandAnim,
   } = useEarningsState();
 
-  const {
-    toggleFilter,
-    handlePeriodSelect,
-    handleStatusChange,
-    confirmStatusChange,
-    handleBalancePress,
-  } = useEarningsHandlers(
-    filterExpanded,
-    setFilterExpanded,
-    filterExpandAnim,
-    setSelectedPeriod,
-    setStatusModalVisible,
-    isOnline,
-    setIsOnline
-  );
-
   const { currentData } = useEarningsData(selectedPeriod);
 
   // Адаптивный цвет для круга
@@ -62,9 +49,65 @@ const EarningsScreen: React.FC = () => {
   const currentLanguage = useLanguage().language || 'ru';
   const levelTranslations = levelsTranslations[currentLanguage as keyof typeof levelsTranslations] || levelsTranslations.ru;
 
+  // Получаем данные о прогрессе водителя
+  const { driverLevel } = useLevelProgress();
+  const { balance } = useBalance() as any;
+  
+  // VIP система отслеживания времени
+  const { 
+    vipTimeData, 
+    startOnlineTime, 
+    stopOnlineTime, 
+    getCurrentHoursOnline,
+    resetVIPTimeData 
+  } = useVIPTimeTracking(driverLevel.isVIP);
+
+  const {
+    toggleFilter,
+    handlePeriodSelect,
+    handleStatusChange,
+    confirmStatusChange,
+    handleBalancePress,
+  } = useEarningsHandlers(
+    filterExpanded,
+    setFilterExpanded,
+    filterExpandAnim,
+    setSelectedPeriod,
+    setStatusModalVisible,
+    isOnline,
+    setIsOnline,
+    startOnlineTime,
+    stopOnlineTime
+  );
+  
+
+
+  // Функция для получения названия уровня на текущем языке
+  const getLevelDisplayName = () => {
+    // Если VIP статус, показываем только "VIP"
+    if (driverLevel.currentLevel >= 7) {
+      return levelTranslations.levelNames.vip;
+    }
+    
+    const levelKeys = ['starter', 'determined', 'reliable', 'champion', 'superstar', 'emperor'];
+    const levelKey = levelKeys[driverLevel.currentLevel - 1] || 'starter';
+    const levelName = levelTranslations.levelNames[levelKey as keyof typeof levelTranslations.levelNames];
+    return `${levelName} ${driverLevel.currentSubLevel}`;
+  };
+
+  // Функция для получения иконки уровня
+  const getLevelIcon = () => {
+    // Используем иконку из driverLevel для синхронизации
+    return driverLevel.icon;
+  };
+
+
+
   const handleLevelPress = () => {
     setLevelModalVisible(true);
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -94,15 +137,15 @@ const EarningsScreen: React.FC = () => {
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}>
-                  <Text style={{ fontSize: 32 }}>🥉</Text>
+                  <Text style={{ fontSize: 32 }}>{getLevelIcon()}</Text>
                 </View>
               </TouchableOpacity>
               <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Text style={styles.earningsAmount}>{currentData.total}</Text>
-                  <Text style={styles.earningsReward}>+25 AFc</Text>
+                  <Text style={styles.earningsReward}>+{parseInt(driverLevel.nextReward)} AFc</Text>
                 </View>
-                <Text style={{ fontSize: 10, color: textColor, marginTop: 4, fontWeight: '600', marginLeft: 14 }}>Стартер 1</Text>
+                <Text style={{ fontSize: 10, color: textColor, marginTop: 4, fontWeight: '600', marginLeft: 14 }}>{getLevelDisplayName()}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#6B7280" />

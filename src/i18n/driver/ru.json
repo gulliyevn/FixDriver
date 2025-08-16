@@ -134,6 +134,7 @@
     "all": "Все заказы",
     "refresh": "Обновить"
   },
+  "settings": "Настройки",
   "tripDialogs": {
     "startTrip": {
       "title": "Поехали?",
