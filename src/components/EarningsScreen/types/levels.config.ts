@@ -56,7 +56,7 @@ export const LEVELS_CONFIG: Record<string, LevelConfig> = {
   "6.3": { levelKey: "emperor", subLevel: 3, icon: "👑", bonus: 500, maxProgress: 600 },
 };
 
-// VIP система лояльности (4000+ поездок)
+// VIP система лояльности (4320+ поездок)
 export const VIP_CONFIG: VIPConfig = {
   levelKey: "vip",
   icon: "💎",

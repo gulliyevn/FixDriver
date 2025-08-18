@@ -8,10 +8,12 @@ export interface DriverModalProps {
 
 export interface DriverModalState {
   isDriverExpanded: boolean;
-  buttonColorState: number; // 0: primary, 1: cyan, 2: green, 3: stopped
+  buttonColorState: number; // 0: primary, 1: yellow (ожидание клиента), 2: cyan (поездка началась), 3: green (поездка окончилась), 4: stopped (остановлено/экстренное)
   showDialog1: boolean;
   showDialog2: boolean;
   showDialog3: boolean;
+  showDialogEmpty: boolean;
+  showDialogCancel: boolean;
   showLongPressDialog: boolean;
   showStopDialog: boolean;
   showEndDialog: boolean;
@@ -27,6 +29,7 @@ export interface DriverModalState {
   iconOpacity: number;
   isCallSheetOpen: boolean;
   sliderWidth: number;
+  isButtonsSwapped: boolean;
 }
 
 export interface DriverModalActions {
@@ -35,6 +38,8 @@ export interface DriverModalActions {
   setShowDialog1: (show: boolean) => void;
   setShowDialog2: (show: boolean) => void;
   setShowDialog3: (show: boolean) => void;
+  setShowDialogEmpty: (show: boolean) => void;
+  setShowDialogCancel: (show: boolean) => void;
   setShowLongPressDialog: (show: boolean) => void;
   setShowStopDialog: (show: boolean) => void;
   setShowEndDialog: (show: boolean) => void;
@@ -50,6 +55,7 @@ export interface DriverModalActions {
   setIconOpacity: (opacity: number) => void;
   setCallSheetOpen: (open: boolean) => void;
   setSliderWidth: (width: number) => void;
+  setIsButtonsSwapped: (swapped: boolean) => void;
   resetButtonState: () => Promise<void>;
 }
 
@@ -67,11 +73,14 @@ export interface DriverModalHandlers {
   handleEndOkPress: () => void;
   handleStartOk: () => void;
   handleWaitingOk: () => void;
+  handleEmptyOk: () => void;
+  handleCancelOk: () => void;
   handleEndTripOk: () => void;
   handleRatingSubmit: (rating: number, comment: string) => void;
   handleRatingCancel: () => void;
   handleContinueOk: () => void;
   handleButtonClick: () => void;
+  handleSmallButtonClick: () => void;
   formatTime: (seconds: number) => string;
 }
 

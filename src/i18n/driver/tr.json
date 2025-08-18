@@ -270,6 +270,14 @@
       "title": "Bekliyor musunuz?",
       "message": "{clientName} müşterisini bekliyor musunuz?"
     },
+    "beginTrip": {
+      "title": "Gidelim mi?",
+      "message": "Siz {clientName} ile yolculuğa başlıyorsunuz?"
+    },
+    "cancelTrip": {
+      "title": "İptal edelim mi?",
+      "message": "Siz {clientName} ile yolculuğu iptal ediyorsunuz?"
+    },
     "endTrip": {
       "title": "Bitir?",
       "message": "{clientName} ile yolculuk bitti mi?"

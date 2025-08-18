@@ -271,6 +271,14 @@
       "title": "ننتظر؟",
       "message": "هل تنتظر العميل {clientName}؟"
     },
+    "beginTrip": {
+      "title": "نذهب؟",
+      "message": "أنت تبدأ الرحلة مع {clientName}؟"
+    },
+    "cancelTrip": {
+      "title": "نلغي؟",
+      "message": "أنت تلغي الرحلة مع {clientName}؟"
+    },
     "endTrip": {
       "title": "تنهي؟",
       "message": "هل انتهت الرحلة مع {clientName}؟"

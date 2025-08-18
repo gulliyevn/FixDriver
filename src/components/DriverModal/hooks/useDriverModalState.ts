@@ -11,6 +11,8 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const [showDialog1, setShowDialog1] = useState(false);
   const [showDialog2, setShowDialog2] = useState(false);
   const [showDialog3, setShowDialog3] = useState(false);
+  const [showDialogEmpty, setShowDialogEmpty] = useState(false);
+  const [showDialogCancel, setShowDialogCancel] = useState(false);
   const [showLongPressDialog, setShowLongPressDialog] = useState(false);
   const [showStopDialog, setShowStopDialog] = useState(false);
   const [showEndDialog, setShowEndDialog] = useState(false);
@@ -26,6 +28,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const [iconOpacity, setIconOpacity] = useState(1);
   const [isCallSheetOpen, setCallSheetOpen] = useState(false);
   const [sliderWidth, setSliderWidth] = useState(0);
+  const [isButtonsSwapped, setIsButtonsSwapped] = useState(false);
 
   // Синхронизация с персистентным состоянием при загрузке
   useEffect(() => {
@@ -54,7 +57,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
 
   // Асинхронная активация кнопки экстренных действий
   useEffect(() => {
-    if (buttonColorState === 3 && !isPaused) {
+    if (buttonColorState === 4 && !isPaused) {
       setIsEmergencyButtonActive(true);
     } else {
       setIsEmergencyButtonActive(false);
@@ -67,6 +70,8 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     showDialog1,
     showDialog2,
     showDialog3,
+    showDialogEmpty,
+    showDialogCancel,
     showLongPressDialog,
     showStopDialog,
     showEndDialog,
@@ -82,6 +87,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     iconOpacity,
     isCallSheetOpen,
     sliderWidth,
+    isButtonsSwapped,
   };
 
   const actions: DriverModalActions = {
@@ -90,6 +96,8 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     setShowDialog1,
     setShowDialog2,
     setShowDialog3,
+    setShowDialogEmpty,
+    setShowDialogCancel,
     setShowLongPressDialog,
     setShowStopDialog,
     setShowEndDialog,
@@ -105,6 +113,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     setIconOpacity,
     setCallSheetOpen,
     setSliderWidth,
+    setIsButtonsSwapped,
     resetButtonState,
   };
 

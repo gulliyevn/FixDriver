@@ -1,7 +1,7 @@
 {
   "ru": {
     "title": "Система уровней водителя",
-    "description": "Прогрессируйте и получайте бонусы за каждую поездку!",
+    "description": "Прогрессируйте и получайте бонусы за каждый уровень!",
     "levelNames": {
       "starter": "Стартер",
       "determined": "Целеустремленный", 
@@ -18,14 +18,14 @@
       "quarterlyTitle": "Ежеквартальные бонусы (мин. 20 дней/мес):",
       "daysOnline": "дней онлайн в месяц",
       "monthsInRow": "месяцев подряд",
-      "additionalNote": "*Ежеквартальные бонусы начисляются дополнительно к ежемесячным бонусам"
+      "additionalNote": "Ежеквартальными и Ежемесячными бонусами считаются дни, в которых за период 00:00–23:59 (местное время) выполнено не менее 3 поездок и 10 часов онлайн. Ежеквартальные бонусы начисляются сверх ежемесячных."
     },
     "days": "дней",
     "content": "🥉 Стартер (0-120 поездок)\n• Стартер 1 (0-30) +2 AFc\n• Стартер 2 (31-70) +3 AFc\n• Стартер 3 (71-120) +5 AFc\n\n🥈 Целеустремленный (121-360 поездок)\n• Целеустремленный 1 (121-180) +8 AFc\n• Целеустремленный 2 (181-260) +10 AFc\n• Целеустремленный 3 (261-360) +15 AFc\n\n🥇 Надежный (361-810 поездок)\n• Надежный 1 (361-480) +20 AFc\n• Надежный 2 (481-630) +25 AFc\n• Надежный 3 (631-810) +35 AFc\n\n🏆 Чемпион (811-1560 поездок)\n• Чемпион 1 (811-1020) +50 AFc\n• Чемпион 2 (1021-1270) +65 AFc\n• Чемпион 3 (1271-1560) +85 AFc\n\n⭐ Суперзвезда (1561-2700 поездок)\n• Суперзвезда 1 (1561-1890) +120 AFc\n• Суперзвезда 2 (1891-2270) +150 AFc\n• Суперзвезда 3 (2271-2700) +200 AFc\n\n👑 Император (2701-4320 поездок)\n• Император 1 (2701-3180) +300 AFc\n• Император 2 (3181-3720) +400 AFc\n• Император 3 (3721-4320) +500 AFc\n\n💎 VIP система лояльности (4320+ поездок)\n\nЕжемесячные бонусы за активность:\n• 20 дней онлайн в месяц +50 AFc\n• 25 дней онлайн в месяц +75 AFc\n• 30 дней онлайн в месяц +100 AFc\n\nЕжеквартальные бонусы (мин. 20 дней/мес):\n• 3 месяца подряд +200 AFc\n• 6 месяцев подряд +500 AFc\n• 12 месяцев подряд +1000 AFc\n\n*Ежеквартальные бонусы начисляются дополнительно к ежемесячным бонусам"
   },
   "en": {
     "title": "Driver Level System",
-    "description": "Progress and earn bonuses for every ride!",
+    "description": "Progress and earn bonuses for each level!",
     "levelNames": {
       "starter": "Starter",
       "determined": "Determined",
@@ -42,14 +42,14 @@
       "quarterlyTitle": "Quarterly bonuses (min. 20 days/month):",
       "daysOnline": "days online per month",
       "monthsInRow": "months in a row",
-      "additionalNote": "*Quarterly bonuses are awarded in addition to monthly bonuses"
+      "additionalNote": "Quarterly and Monthly bonuses count days where, within 00:00–23:59 (local time), at least 3 rides and 10 hours online are completed. Quarterly bonuses are awarded in addition to monthly bonuses."
     },
     "days": "days",
     "content": "🥉 Starter (0-120 rides)\n• Starter 1 (0-30) +2 AFc\n• Starter 2 (31-70) +3 AFc\n• Starter 3 (71-120) +5 AFc\n\n🥈 Determined (121-360 rides)\n• Determined 1 (121-180) +8 AFc\n• Determined 2 (181-260) +10 AFc\n• Determined 3 (261-360) +15 AFc\n\n🥇 Reliable (361-810 rides)\n• Reliable 1 (361-480) +20 AFc\n• Reliable 2 (481-630) +25 AFc\n• Reliable 3 (631-810) +35 AFc\n\n🏆 Champion (811-1560 rides)\n• Champion 1 (811-1020) +50 AFc\n• Champion 2 (1021-1270) +65 AFc\n• Champion 3 (1271-1560) +85 AFc\n\n⭐ Superstar (1561-2700 rides)\n• Superstar 1 (1561-1890) +120 AFc\n• Superstar 2 (1891-2270) +150 AFc\n• Superstar 3 (2271-2700) +200 AFc\n\n👑 Emperor (2701-4320 rides)\n• Emperor 1 (2701-3180) +300 AFc\n• Emperor 2 (3181-3720) +400 AFc\n• Emperor 3 (3721-4320) +500 AFc\n\n💎 VIP Loyalty System (4320+ rides)\n\nMonthly activity bonuses:\n• 20 days online per month +50 AFc\n• 25 days online per month +75 AFc\n• 30 days online per month +100 AFc\n\nQuarterly bonuses (min. 20 days/month):\n• 3 months in a row +200 AFc\n• 6 months in a row +500 AFc\n• 12 months in a row +1000 AFc\n\n*Quarterly bonuses are awarded in addition to monthly bonuses"
   },
   "az": {
     "title": "Sürücü Səviyyə Sistemi",
-    "description": "Tərəqqi edin və hər səyahət üçün bonus qazanın!",
+    "description": "Səviyyələrdə irəliləyin və hər səviyyə üçün bonus qazanın!",
     "levelNames": {
       "starter": "Başlanğıc",
       "determined": "Məqsədli",
@@ -66,14 +66,14 @@
       "quarterlyTitle": "Rüblük bonuslar (min. 20 gün/ay):",
       "daysOnline": "gün online ayda",
       "monthsInRow": "ay ardıcıl",
-      "additionalNote": "*Rüblük bonuslar aylıq bonuslara əlavə olaraq verilir"
+      "additionalNote": "Rüblük və Aylıq bonuslar üçün günlər sayılır ki, 00:00–23:59 (yerli vaxt) intervalında ən az 3 səfər və 10 saat onlayn olsun. Rüblük bonuslar aylıq bonuslara əlavə olaraq verilir."
     },
     "days": "gün",
     "content": "🥉 Başlanğıc (0-120 səyahət)\n• Başlanğıc 1 (0-30) +2 AFc\n• Başlanğıc 2 (31-70) +3 AFc\n• Başlanğıc 3 (71-120) +5 AFc\n\n🥈 Məqsədli (121-360 səyahət)\n• Məqsədli 1 (121-180) +8 AFc\n• Məqsədli 2 (181-260) +10 AFc\n• Məqsədli 3 (261-360) +15 AFc\n\n🥇 Etibarlı (361-810 səyahət)\n• Etibarlı 1 (361-480) +20 AFc\n• Etibarlı 2 (481-630) +25 AFc\n• Etibarlı 3 (631-810) +35 AFc\n\n🏆 Çempion (811-1560 səyahət)\n• Çempion 1 (811-1020) +50 AFc\n• Çempion 2 (1021-1270) +65 AFc\n• Çempion 3 (1271-1560) +85 AFc\n\n⭐ Superstar (1561-2700 səyahət)\n• Superstar 1 (1561-1890) +120 AFc\n• Superstar 2 (1891-2270) +150 AFc\n• Superstar 3 (2271-2700) +200 AFc\n\n👑 İmperator (2701-4320 səyahət)\n• İmperator 1 (2701-3180) +300 AFc\n• İmperator 2 (3181-3720) +400 AFc\n• İmperator 3 (3721-4320) +500 AFc\n\n💎 VIP Sədaqət Sistemi (4320+ səyahət)\n\nAylıq fəaliyyət bonusları:\n• Ayda 20 gün online +50 AFc\n• Ayda 25 gün online +75 AFc\n• Ayda 30 gün online +100 AFc\n\nRüblük bonuslar (min. 20 gün/ay):\n• 3 ay ardıcıl +200 AFc\n• 6 ay ardıcıl +500 AFc\n• 12 ay ardıcıl +1000 AFc\n\n*Rüblük bonuslar aylıq bonuslara əlavə olaraq verilir"
   },
   "ar": {
     "title": "نظام مستويات السائق",
-    "description": "تقدم واحصل على مكافآت لكل رحلة!",
+    "description": "تقدّم في المستويات واحصل على مكافآت عن كل مستوى!",
     "levelNames": {
       "starter": "مبتدئ",
       "determined": "مصمم",
@@ -90,14 +90,14 @@
       "quarterlyTitle": "المكافآت الفصلية (الحد الأدنى ٢٠ يوم/شهر):",
       "daysOnline": "يوم متصل شهرياً",
       "monthsInRow": "شهر متتالي",
-      "additionalNote": "*المكافآت الفصلية تُمنح بالإضافة إلى المكافآت الشهرية"
+      "additionalNote": "المكافآت الفصلية والشهرية تحتسب الأيام التي يتم فيها خلال ٠٠:٠٠–٢٣:٥٩ (الوقت المحلي) إكمال ٣ رحلات على الأقل و١٠ ساعات اتصال. المكافآت الفصلية تُمنح بالإضافة إلى المكافآت الشهرية."
     },
     "days": "أيام",
     "content": "🥉 مبتدئ (٠-١٢٠ رحلة)\n• مبتدئ ١ (٠-٣٠) +٢ AFc\n• مبتدئ ٢ (٣١-٧٠) +٣ AFc\n• مبتدئ ٣ (٧١-١٢٠) +٥ AFc\n\n🥈 مصمم (١٢١-٣٦٠ رحلة)\n• مصمم ١ (١٢١-١٨٠) +٨ AFc\n• مصمم ٢ (١٨١-٢٦٠) +١٠ AFc\n• مصمم ٣ (٢٦١-٣٦٠) +١٥ AFc\n\n🥇 موثوق (٣٦١-٨١٠ رحلة)\n• موثوق ١ (٣٦١-٤٨٠) +٢٠ AFc\n• موثوق ٢ (٤٨١-٦٣٠) +٢٥ AFc\n• موثوق ٣ (٦٣١-٨١٠) +٣٥ AFc\n\n🏆 بطل (٨١١-١٥٦٠ رحلة)\n• بطل ١ (٨١١-١٠٢٠) +٥٠ AFc\n• بطل ٢ (١٠٢١-١٢٧٠) +٦٥ AFc\n• بطل ٣ (١٢٧١-١٥٦٠) +٨٥ AFc\n\n⭐ نجم (١٥٦١-٢٧٠٠ رحلة)\n• نجم ١ (١٥٦١-١٨٩٠) +١٢٠ AFc\n• نجم ٢ (١٨٩١-٢٢٧٠) +١٥٠ AFc\n• نجم ٣ (٢٢٧١-٢٧٠٠) +٢٠٠ AFc\n\n👑 إمبراطور (٢٧٠١-٤٣٢٠ رحلة)\n• إمبراطور ١ (٢٧٠١-٣١٨٠) +٣٠٠ AFc\n• إمبراطور ٢ (٣١٨١-٣٧٢٠) +٤٠٠ AFc\n• إمبراطور ٣ (٣٧٢١-٤٣٢٠) +٥٠٠ AFc\n\n💎 نظام الولاء VIP (٤٣٢٠+ رحلة)\n\nمكافآت النشاط الشهرية:\n• ٢٠ يوم متصل شهرياً +٥٠ AFc\n• ٢٥ يوم متصل شهرياً +٧٥ AFc\n• ٣٠ يوم متصل شهرياً +١٠٠ AFc\n\nالمكافآت الفصلية (الحد الأدنى ٢٠ يوم/شهر):\n• ٣ أشهر متتالية +٢٠٠ AFc\n• ٦ أشهر متتالية +٥٠٠ AFc\n• ١٢ شهر متتالي +١٠٠٠ AFc\n\n*المكافآت الفصلية تُمنح بالإضافة إلى المكافآت الشهرية"
   },
   "de": {
     "title": "Fahrer-Level-System",
-    "description": "Fortschritt machen und Boni für jede Fahrt verdienen!",
+    "description": "Mache Fortschritte und erhalte Boni für jedes Level!",
     "levelNames": {
       "starter": "Anfänger",
       "determined": "Entschlossen",
@@ -114,14 +114,14 @@
       "quarterlyTitle": "Vierteljährliche Boni (min. 20 Tage/Monat):",
       "daysOnline": "Tage online pro Monat",
       "monthsInRow": "Monate in Folge",
-      "additionalNote": "*Vierteljährliche Boni werden zusätzlich zu monatlichen Boni vergeben"
+      "additionalNote": "Vierteljährliche und Monatliche Boni zählen Tage, an denen im Zeitraum 00:00–23:59 (Ortszeit) mindestens 3 Fahrten und 10 Online-Stunden erreicht werden. Vierteljährliche Boni werden zusätzlich zu den monatlichen Boni vergeben."
     },
     "days": "Tage",
     "content": "🥉 Anfänger (0-120 Fahrten)\n• Anfänger 1 (0-30) +2 AFc\n• Anfänger 2 (31-70) +3 AFc\n• Anfänger 3 (71-120) +5 AFc\n\n🥈 Entschlossen (121-360 Fahrten)\n• Entschlossen 1 (121-180) +8 AFc\n• Entschlossen 2 (181-260) +10 AFc\n• Entschlossen 3 (261-360) +15 AFc\n\n🥇 Zuverlässig (361-810 Fahrten)\n• Zuverlässig 1 (361-480) +20 AFc\n• Zuverlässig 2 (481-630) +25 AFc\n• Zuverlässig 3 (631-810) +35 AFc\n\n🏆 Champion (811-1560 Fahrten)\n• Champion 1 (811-1020) +50 AFc\n• Champion 2 (1021-1270) +65 AFc\n• Champion 3 (1271-1560) +85 AFc\n\n⭐ Superstar (1561-2700 Fahrten)\n• Superstar 1 (1561-1890) +120 AFc\n• Superstar 2 (1891-2270) +150 AFc\n• Superstar 3 (2271-2700) +200 AFc\n\n👑 Kaiser (2701-4320 Fahrten)\n• Kaiser 1 (2701-3180) +300 AFc\n• Kaiser 2 (3181-3720) +400 AFc\n• Kaiser 3 (3721-4320) +500 AFc\n\n💎 VIP-Treueprogramm (4320+ Fahrten)\n\nMonatliche Aktivitätsboni:\n• 20 Tage online pro Monat +50 AFc\n• 25 Tage online pro Monat +75 AFc\n• 30 Tage online pro Monat +100 AFc\n\nVierteljährliche Boni (min. 20 Tage/Monat):\n• 3 Monate in Folge +200 AFc\n• 6 Monate in Folge +500 AFc\n• 12 Monate in Folge +1000 AFc\n\n*Vierteljährliche Boni werden zusätzlich zu monatlichen Boni vergeben"
   },
   "es": {
     "title": "Sistema de Niveles del Conductor",
-    "description": "¡Progresa y gana bonificaciones por cada viaje!",
+    "description": "¡Progresa y gana bonificaciones por cada nivel!",
     "levelNames": {
       "starter": "Principiante",
       "determined": "Determinado",
@@ -138,14 +138,14 @@
       "quarterlyTitle": "Bonificaciones trimestrales (mín. 20 días/mes):",
       "daysOnline": "días online por mes",
       "monthsInRow": "meses seguidos",
-      "additionalNote": "*Las bonificaciones trimestrales se otorgan además de las mensuales"
+      "additionalNote": "Las bonificaciones trimestrales y mensuales cuentan días en los que, entre 00:00–23:59 (hora local), se completan al menos 3 viajes y 10 horas en línea. Las bonificaciones trimestrales se otorgan además de las mensuales."
     },
     "days": "días",
     "content": "🥉 Principiante (0-120 viajes)\n• Principiante 1 (0-30) +2 AFc\n• Principiante 2 (31-70) +3 AFc\n• Principiante 3 (71-120) +5 AFc\n\n🥈 Determinado (121-360 viajes)\n• Determinado 1 (121-180) +8 AFc\n• Determinado 2 (181-260) +10 AFc\n• Determinado 3 (281-360) +15 AFc\n\n🥇 Confiable (361-810 viajes)\n• Confiable 1 (361-480) +20 AFc\n• Confiable 2 (481-630) +25 AFc\n• Confiable 3 (631-810) +35 AFc\n\n🏆 Campeón (811-1560 viajes)\n• Campeón 1 (811-1020) +50 AFc\n• Campeón 2 (1021-1270) +65 AFc\n• Campeón 3 (1271-1560) +85 AFc\n\n⭐ Superestrella (1561-2700 viajes)\n• Superestrella 1 (1561-1890) +120 AFc\n• Superestrella 2 (1891-2270) +150 AFc\n• Superestrella 3 (2271-2700) +200 AFc\n\n👑 Emperador (2701-4320 viajes)\n• Emperador 1 (2701-3180) +300 AFc\n• Emperador 2 (3181-3720) +400 AFc\n• Emperador 3 (3721-4320) +500 AFc\n\n💎 Sistema VIP de Lealtad (4320+ viajes)\n\nBonificaciones mensuales por actividad:\n• 20 días online por mes +50 AFc\n• 25 días online por mes +75 AFc\n• 30 días online por mes +100 AFc\n\nBonificaciones trimestrales (mín. 20 días/mes):\n• 3 meses seguidos +200 AFc\n• 6 meses seguidos +500 AFc\n• 12 meses seguidos +1000 AFc\n\n*Las bonificaciones trimestrales se otorgan además de las mensuales"
   },
   "fr": {
     "title": "Système de Niveaux du Conducteur",
-    "description": "Progressez et gagnez des bonus pour chaque trajet !",
+    "description": "Progressez et gagnez des bonus pour chaque niveau !",
     "levelNames": {
       "starter": "Débutant",
       "determined": "Déterminé",
@@ -162,14 +162,14 @@
       "quarterlyTitle": "Bonus trimestriels (min. 20 jours/mois) :",
       "daysOnline": "jours en ligne par mois",
       "monthsInRow": "mois consécutifs",
-      "additionalNote": "*Les bonus trimestriels sont accordés en plus des bonus mensuels"
+      "additionalNote": "Les bonus trimestriels et mensuels comptabilisent les jours où, sur la période 00:00–23:59 (heure locale), au moins 3 trajets et 10 heures en ligne sont réalisés. Les bonus trimestriels sont accordés en plus des bonus mensuels."
     },
     "days": "jours",
     "content": "🥉 Débutant (0-120 trajets)\n• Débutant 1 (0-30) +2 AFc\n• Débutant 2 (31-70) +3 AFc\n• Débutant 3 (71-120) +5 AFc\n\n🥈 Déterminé (121-360 trajets)\n• Déterminé 1 (121-180) +8 AFc\n• Déterminé 2 (181-260) +10 AFc\n• Déterminé 3 (261-360) +15 AFc\n\n🥇 Fiable (361-810 trajets)\n• Fiable 1 (361-480) +20 AFc\n• Fiable 2 (481-630) +25 AFc\n• Fiable 3 (631-810) +35 AFc\n\n🏆 Champion (811-1560 trajets)\n• Champion 1 (811-1020) +50 AFc\n• Champion 2 (1021-1270) +65 AFc\n• Champion 3 (1271-1560) +85 AFc\n\n⭐ Superstar (1561-2700 trajets)\n• Superstar 1 (1561-1890) +120 AFc\n• Superstar 2 (1891-2270) +150 AFc\n• Superstar 3 (2271-2700) +200 AFc\n\n👑 Empereur (2701-4320 trajets)\n• Empereur 1 (2701-3180) +300 AFc\n• Empereur 2 (3181-3720) +400 AFc\n• Empereur 3 (3721-4320) +500 AFc\n\n💎 Système VIP de Fidélité (4320+ trajets)\n\nBonus mensuels d'activité :\n• 20 jours en ligne par mois +50 AFc\n• 25 jours en ligne par mois +75 AFc\n• 30 jours en ligne par mois +100 AFc\n\nBonus trimestriels (min. 20 jours/mois) :\n• 3 mois consécutifs +200 AFc\n• 6 mois consécutifs +500 AFc\n• 12 mois consécutifs +1000 AFc\n\n*Les bonus trimestriels sont accordés en plus des bonus mensuels"
   },
   "tr": {
     "title": "Sürücü Seviye Sistemi",
-    "description": "İlerleyin ve her yolculuk için bonus kazanın!",
+    "description": "Seviyelerde ilerleyin ve her seviye için bonus kazanın!",
     "levelNames": {
       "starter": "Başlangıç",
       "determined": "Kararlı",
@@ -186,7 +186,7 @@
       "quarterlyTitle": "Üç aylık bonuslar (min. 20 gün/ay):",
       "daysOnline": "gün çevrimiçi ayda",
       "monthsInRow": "ay üst üste",
-      "additionalNote": "*Üç aylık bonuslar aylık bonuslara ek olarak verilir"
+      "additionalNote": "Üç aylık ve Aylık bonuslar, 00:00–23:59 (yerel saat) aralığında en az 3 yolculuk ve 10 saat çevrimiçi olunmuş günleri sayar. Üç aylık bonuslar, aylık bonuslara ek olarak verilir."
     },
     "days": "gün",
     "content": "🥉 Başlangıç (0-120 yolculuk)\n• Başlangıç 1 (0-30) +2 AFc\n• Başlangıç 2 (31-70) +3 AFc\n• Başlangıç 3 (71-120) +5 AFc\n\n🥈 Kararlı (121-360 yolculuk)\n• Kararlı 1 (121-180) +8 AFc\n• Kararlı 2 (181-260) +10 AFc\n• Kararlı 3 (261-360) +15 AFc\n\n🥇 Güvenilir (361-810 yolculuk)\n• Güvenilir 1 (361-480) +20 AFc\n• Güvenilir 2 (481-630) +25 AFc\n• Güvenilir 3 (631-810) +35 AFc\n\n🏆 Şampiyon (811-1560 yolculuk)\n• Şampiyon 1 (811-1020) +50 AFc\n• Şampiyon 2 (1021-1270) +65 AFc\n• Şampiyon 3 (1271-1560) +85 AFc\n\n⭐ Süperstar (1561-2700 yolculuk)\n• Süperstar 1 (1561-1890) +120 AFc\n• Süperstar 2 (1891-2270) +150 AFc\n• Süperstar 3 (2271-2700) +200 AFc\n\n👑 İmparator (2701-4320 yolculuk)\n• İmparator 1 (2701-3180) +300 AFc\n• İmparator 2 (3181-3720) +400 AFc\n• İmparator 3 (3721-4320) +500 AFc\n\n💎 VIP Sadakat Sistemi (4320+ yolculuk)\n\nAylık aktivite bonusları:\n• Ayda 20 gün çevrimiçi +50 AFc\n• Ayda 25 gün çevrimiçi +75 AFc\n• Ayda 30 gün çevrimiçi +100 AFc\n\nÜç aylık bonuslar (min. 20 gün/ay):\n• 3 ay üst üste +200 AFc\n• 6 ay üst üste +500 AFc\n• 12 ay üst üste +1000 AFc\n\n*Üç aylık bonuslar aylık bonuslara ek olarak verilir"

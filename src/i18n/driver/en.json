@@ -271,6 +271,14 @@
       "title": "Waiting?",
       "message": "Are you waiting for client {clientName}?"
     },
+    "beginTrip": {
+      "title": "Let's go?",
+      "message": "You are starting the trip with {clientName}?"
+    },
+    "cancelTrip": {
+      "title": "Cancel trip?",
+      "message": "You are canceling the trip with {clientName}?"
+    },
     "endTrip": {
       "title": "Finish?",
       "message": "Is the trip with {clientName} finished?"

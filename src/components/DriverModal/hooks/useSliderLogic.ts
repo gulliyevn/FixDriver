@@ -62,17 +62,29 @@ export const useSliderLogic = (
     if (state.buttonColorState === 0) {
       actions.setShowDialog1(true);
     } else if (state.buttonColorState === 1) {
-      actions.setShowDialog2(true);
+      // Если кнопка изменена (красная), показать диалог отмены
+      if (state.isButtonsSwapped) {
+        actions.setShowDialogCancel(true);
+      } else {
+        actions.setShowDialog2(true);
+      }
     } else if (state.buttonColorState === 2) {
-      actions.setShowDialog3(true);
+      // Если кнопка изменена (красная), показать диалог отмены
+      if (state.isButtonsSwapped) {
+        actions.setShowDialogCancel(true);
+      } else {
+        actions.setShowDialogEmpty(true);
+      }
     } else if (state.buttonColorState === 3) {
+      actions.setShowDialog3(true);
+    } else if (state.buttonColorState === 4) {
       if (state.isPaused) {
         actions.setShowContinueDialog(true);
       } else {
         actions.setShowLongPressDialog(true);
       }
     }
-  }, [slideAnim, maxSlideDistance, state.buttonColorState, state.isPaused, actions]);
+  }, [slideAnim, maxSlideDistance, state.buttonColorState, state.isPaused, state.isButtonsSwapped, actions]);
 
   const onHandlerStateChange = useCallback((event: any) => {
     const { state: gestureState, translationX } = event.nativeEvent;

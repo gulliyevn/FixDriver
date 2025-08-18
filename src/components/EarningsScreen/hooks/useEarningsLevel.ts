@@ -5,9 +5,7 @@ import {
   LEVELS_CONFIG, 
   VIP_CONFIG, 
   getLevelConfig, 
-  isVIPLevel,
-  calculateMonthlyVIPBonus,
-  calculateQuarterlyVIPBonus
+  isVIPLevel
 } from '../types/levels.config';
 import { useBalanceContext } from '../../../context/BalanceContext';
 import { useI18n } from '../../../hooks/useI18n';
@@ -93,7 +91,7 @@ export const useEarningsLevel = () => {
       isRewardAvailable: false,
       isVIP: false,
       vipDaysOnline: 0,
-      vipDaysRequired: 30,
+      vipDaysRequired: VIP_CONFIG.minDaysPerMonth,
       vipLevel: 1,
     };
   };
@@ -108,28 +106,14 @@ export const useEarningsLevel = () => {
     }
   };
 
-  // Функция для расчета VIP уровня на основе скользящего календаря
+  // Функция для расчета VIP уровня: +1 за каждый успешный 30-дневный период (>=20 дней)
+  // Расчет ведется по массиву завершенных периодов текущего цикла (до 12 шт.)
   const calculateVIPLevel = (vipStartDate: string, qualifiedDaysInPeriods: number[]): number => {
-    const startDate = new Date(vipStartDate);
-    const currentDate = new Date();
-    const daysSinceStart = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    
-    // Определяем количество завершенных 30-дневных периодов
-    const completedPeriods = Math.floor(daysSinceStart / 30);
-    
-    // VIP уровень = 1 + количество завершенных периодов с минимум 20 днями
-    let vipLevel = 1;
-    
-    for (let i = 0; i < completedPeriods && i < qualifiedDaysInPeriods.length; i++) {
-      if (qualifiedDaysInPeriods[i] >= 20) {
-        vipLevel++;
-      } else {
-        // Если не выполнил условия в каком-то периоде, сбрасываем прогресс
-        break;
-      }
-    }
-    
-    // Максимум VIP 12
+    void vipStartDate; // дата старта VIP не влияет на подсчет уровня внутри цикла
+    const successfulPeriods = qualifiedDaysInPeriods.filter(
+      (days) => days >= VIP_CONFIG.minDaysPerMonth
+    ).length;
+    const vipLevel = 1 + successfulPeriods;
     return Math.min(vipLevel, 12);
   };
 

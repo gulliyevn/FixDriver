@@ -144,6 +144,14 @@
       "title": "Ждем?",
       "message": "Ожидаете клиента {clientName}?"
     },
+    "beginTrip": {
+      "title": "Поехали?",
+      "message": "Вы начинаете поездку {clientName}?"
+    },
+    "cancelTrip": {
+      "title": "Отменяем?",
+      "message": "Вы отменяете поездку {clientName}?"
+    },
     "endTrip": {
       "title": "Завершить?",
       "message": "Поездка {clientName} окончена?"

@@ -35,14 +35,14 @@ const DriverModal: React.FC<DriverModalProps> = ({
   const { isDark } = useTheme();
   const styles = createDriverModalStyles(isDark, role);
 
+  // Централизованные моки
+  const driverId = getSampleDriverId();
+
   // Используем созданные хуки
   const [state, actions] = useDriverModalState(driverId);
   const handlers = useDriverModalHandlers(state, actions, onChat);
   const callSheet = useCallSheet(actions);
   const slider = useSliderLogic(state, actions);
-
-  // Централизованные моки
-  const driverId = getSampleDriverId();
   const clientId = getSampleClientId();
   const driverInfo = getDriverInfoMock(driverId);
   const driverTrips = getDriverTripsMock(driverId);
@@ -67,6 +67,49 @@ const DriverModal: React.FC<DriverModalProps> = ({
       friction: 8,
     }).start();
   }, [state.isDriverExpanded, slider.driverExpandAnim]);
+
+  // Функции для определения цветов и иконок кнопок
+  const getMainButtonColor = () => {
+    if (state.buttonColorState === 1) {
+      return state.isButtonsSwapped ? '#DC2626' : '#EAB308';
+    } else if (state.buttonColorState === 2) {
+      return state.isButtonsSwapped ? '#DC2626' : '#06B6D4';
+    } else if (state.buttonColorState === 3) {
+      return '#10B981';
+    } else if (state.buttonColorState === 4) {
+      return '#6B7280';
+    }
+    return undefined; // состояние 0 использует styles.sliderButton
+  };
+
+  const getMainButtonIcon = () => {
+    if (state.buttonColorState === 1) {
+      return state.isButtonsSwapped ? 'close' : 'chevron-back';
+    } else if (state.buttonColorState === 2) {
+      return state.isButtonsSwapped ? 'close' : 'chevron-back';
+    } else if (state.buttonColorState === 3) {
+      return 'chevron-back'; // Большая кнопка зелёная с chevron-back
+    } else if (state.buttonColorState === 4) {
+      return 'shield'; // Большая кнопка серая с shield
+    }
+    return 'chevron-back';
+  };
+
+  const getSmallButtonColor = () => {
+    if (state.buttonColorState === 1) {
+      return state.isButtonsSwapped ? '#EAB308' : '#DC2626';
+    } else if (state.buttonColorState === 2) {
+      return state.isButtonsSwapped ? '#06B6D4' : '#DC2626';
+    }
+    return '#DC2626';
+  };
+
+  const getSmallButtonIcon = () => {
+    if (state.buttonColorState === 1 || state.buttonColorState === 2) {
+      return state.isButtonsSwapped ? 'chevron-back' : 'close';
+    }
+    return 'close';
+  };
 
   return (
     <Modal
@@ -133,9 +176,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
                       <Animated.View
                         style={[
                           styles.sliderButton,
-                          state.buttonColorState === 1 && { backgroundColor: '#06B6D4' },
-                          state.buttonColorState === 2 && { backgroundColor: '#10B981' },
-                          state.buttonColorState === 3 && { backgroundColor: '#6B7280' },
+                          getMainButtonColor() && { backgroundColor: getMainButtonColor() },
                           {
                             transform: [
                               {
@@ -158,15 +199,11 @@ const DriverModal: React.FC<DriverModalProps> = ({
                             justifyContent: 'center',
                             opacity: 1
                           }}
-                          disabled={!(state.buttonColorState === 2 || (state.buttonColorState === 3 && state.isEmergencyButtonActive))}
+                          disabled={!(state.buttonColorState === 3 || (state.buttonColorState === 4 && state.isEmergencyButtonActive))}
                         >
                           <Animated.View style={{ opacity: state.iconOpacity }}>
                             <Ionicons 
-                              name={
-                                state.buttonColorState === 3 
-                                  ? (state.isPaused ? "pause" : "shield")
-                                  : (state.showSwapIcon && state.buttonColorState === 2 ? "swap-horizontal" : "chevron-back")
-                              } 
+                              name={getMainButtonIcon()} 
                               size={24} 
                               color="#FFFFFF" 
                             />
@@ -178,12 +215,12 @@ const DriverModal: React.FC<DriverModalProps> = ({
                 )}
                 
                 {/* Маленький круг справа сверху */}
-                {role === 'driver' && (state.buttonColorState === 2 || state.buttonColorState === 3) && (
+                {role === 'driver' && (state.buttonColorState === 3 || state.buttonColorState === 4) && (
                   <TouchableOpacity 
                     style={[
                       styles.smallCircle,
-                      state.buttonColorState === 2 && { backgroundColor: '#6B7280' },
-                      state.buttonColorState === 3 && { backgroundColor: '#10B981' }
+                      state.buttonColorState === 3 && { backgroundColor: '#6B7280' }, // Серый
+                      state.buttonColorState === 4 && { backgroundColor: '#10B981' }  // Зелёный
                     ]}
                     onPress={handlers.handleButtonClick}
                   >
@@ -194,7 +231,31 @@ const DriverModal: React.FC<DriverModalProps> = ({
                       height: '100%'
                     }}>
                       <Ionicons 
-                        name="swap-horizontal" 
+                        name={state.buttonColorState === 3 ? 'shield' : 'chevron-back'} 
+                        size={16} 
+                        color="#FFFFFF" 
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
+
+                {/* Маленький круг для жёлтого и цианового состояний */}
+                {role === 'driver' && (state.buttonColorState === 1 || state.buttonColorState === 2) && (
+                  <TouchableOpacity 
+                    style={[
+                      styles.smallCircle,
+                      { backgroundColor: getSmallButtonColor() }
+                    ]}
+                    onPress={handlers.handleSmallButtonClick}
+                  >
+                    <View style={{ 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%'
+                    }}>
+                      <Ionicons 
+                        name={getSmallButtonIcon()} 
                         size={16} 
                         color="#FFFFFF" 
                       />
@@ -267,6 +328,12 @@ const DriverModal: React.FC<DriverModalProps> = ({
         showWaiting={state.showDialog2}
         onWaitingCancel={() => actions.setShowDialog2(false)}
         onWaitingOk={handlers.handleWaitingOk}
+        showEmpty={state.showDialogEmpty}
+        onEmptyCancel={() => actions.setShowDialogEmpty(false)}
+        onEmptyOk={handlers.handleEmptyOk}
+        showCancel={state.showDialogCancel}
+        onCancelCancel={() => actions.setShowDialogCancel(false)}
+        onCancelOk={handlers.handleCancelOk}
         showEnd={state.showDialog3}
         onEndCancel={() => actions.setShowDialog3(false)}
         onEndOk={handlers.handleEndTripOk}

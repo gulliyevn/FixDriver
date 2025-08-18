@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { VIP_CONFIG, calculateMonthlyVIPBonus, calculateQuarterlyVIPBonus } from '../types/levels.config';
+import { VIP_CONFIG, calculateMonthlyVIPBonus } from '../types/levels.config';
 import { useBalanceContext } from '../../../context/BalanceContext';
 
 const VIP_TIME_KEY = '@driver_vip_time_tracking';
@@ -71,7 +71,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     return d.toISOString().split('T')[0];
   };
 
-  // Проверяем смену дня каждый час (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
+  // Проверяем смену дня каждую минуту (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
   useEffect(() => {
 
     const checkDayChange = () => {
@@ -82,17 +82,20 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
                    String(now.getDate()).padStart(2, '0');
       const currentMonth = today.slice(0, 7);
       
-      // Ежедневная проверка скользящего 360-дневного окна цикла
+      // Ежедневная проверка 360-дневного цикла: по истечении 360 дней от старта — полный сброс цикла
       if (vipTimeData.vipCycleStartDate) {
         const cycleStart = new Date(vipTimeData.vipCycleStartDate);
         const msInDay = 24 * 60 * 60 * 1000;
         const diffDays = Math.floor((now.getTime() - cycleStart.getTime()) / msInDay);
         if (diffDays >= 360) {
-          // Сбрасываем счетчик месяцев и цикл
+          const nextPeriodStart = getNextLocalMidnightDate();
           const resetData: VIPTimeData = {
             ...vipTimeData,
             consecutiveQualifiedMonths: 0,
             vipCycleStartDate: null,
+            qualifiedDaysHistory: [],
+            qualifiedDaysThisMonth: 0,
+            periodStartDate: nextPeriodStart,
           };
           setVipTimeData(resetData);
           saveVIPTimeData(resetData);
@@ -152,7 +155,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         setVipTimeData(newData);
         saveVIPTimeData(newData);
       }
-      // Проверка завершения 30-дневного периода (скользящего) — только для VIP
+      // Проверка завершения 30-дневного периода — только для VIP
       if (isVIP && vipTimeData.periodStartDate) {
         const periodStart = new Date(vipTimeData.periodStartDate);
         const msInDay = 24 * 60 * 60 * 1000;
@@ -160,13 +163,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         if (diffDays >= 30) {
           const qualifiedDays = vipTimeData.qualifiedDaysThisMonth;
           
-          // Добавляем период в историю
+          // Добавляем период в историю текущего цикла
           const newHistory = [...vipTimeData.qualifiedDaysHistory, qualifiedDays];
-          
-          // Ограничиваем историю до 12 периодов (максимум VIP 12)
-          if (newHistory.length > 12) {
-            newHistory.shift(); // Удаляем самый старый период
-          }
 
           // Месячный бонус за период
           const monthlyBonus = calculateMonthlyVIPBonus(qualifiedDays);
@@ -174,13 +172,16 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
             addEarnings(monthlyBonus);
           }
 
-          // Квартальный бонус в 3/6/12-м успешном периоде (при >=20 днях в текущем периоде)
-          if (qualifiedDays >= VIP_CONFIG.minDaysPerMonth) {
-            let trailingQualified = 0;
-            for (let i = newHistory.length - 1; i >= 0; i -= 1) {
-              if (newHistory[i] >= VIP_CONFIG.minDaysPerMonth) trailingQualified += 1;
-              else break;
-            }
+          // Подсчитываем подряд идущие успешные периоды
+          const metMonthlyRequirement = qualifiedDays >= VIP_CONFIG.minDaysPerMonth;
+          let trailingQualified = 0;
+          for (let i = newHistory.length - 1; i >= 0; i -= 1) {
+            if (newHistory[i] >= VIP_CONFIG.minDaysPerMonth) trailingQualified += 1;
+            else break;
+          }
+
+          // Квартальные бонусы на 3/6/12-м успешном периоде
+          if (metMonthlyRequirement) {
             if (trailingQualified === 3) {
               addEarnings(VIP_CONFIG.quarterlyBonuses.months3);
             } else if (trailingQualified === 6) {
@@ -191,13 +192,32 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
           }
 
           const nextPeriodStart = getNextLocalMidnightDate();
-          const newData: VIPTimeData = {
-            ...vipTimeData,
-            currentMonth, // для совместимости со старыми полями
-            qualifiedDaysThisMonth: 0,
-            qualifiedDaysHistory: newHistory,
-            periodStartDate: nextPeriodStart,
-          };
+          // Решаем, нужно ли сбрасывать цикл: при провале месяца ИЛИ по завершении 12-го успешного месяца
+          const shouldResetCycle = (!metMonthlyRequirement) || (trailingQualified === 12);
+
+          const newData: VIPTimeData = shouldResetCycle
+            ? {
+                ...vipTimeData,
+                currentMonth, // для совместимости
+                qualifiedDaysThisMonth: 0,
+                qualifiedDaysHistory: [], // новый цикл
+                consecutiveQualifiedMonths: 0,
+                vipCycleStartDate: null,
+                periodStartDate: nextPeriodStart,
+              }
+            : {
+                ...vipTimeData,
+                currentMonth, // для совместимости
+                qualifiedDaysThisMonth: 0,
+                qualifiedDaysHistory: newHistory,
+                consecutiveQualifiedMonths: trailingQualified,
+                // Старт новой серии — ставим дату начала серии, если это первый успешный месяц
+                vipCycleStartDate:
+                  trailingQualified === 1
+                    ? new Date(vipTimeData.currentMonth + '-01T00:00:00').toISOString().split('T')[0]
+                    : vipTimeData.vipCycleStartDate,
+                periodStartDate: nextPeriodStart,
+              };
           setVipTimeData(newData);
           saveVIPTimeData(newData);
           

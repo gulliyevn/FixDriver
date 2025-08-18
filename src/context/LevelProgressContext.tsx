@@ -15,6 +15,7 @@ interface LevelProgressContextType {
   addRides: (count: number) => Promise<void>;
   resetProgress: () => Promise<void>;
   getTotalRidesForLevel: (level: number, subLevel: number, progress: number) => number;
+  updateVIPLevel: (qualifiedDaysInPeriods: number[]) => Promise<void>;
 }
 
 const LevelProgressContext = createContext<LevelProgressContextType | undefined>(undefined);
@@ -32,7 +33,7 @@ interface LevelProgressProviderProps {
 }
 
 export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ children }) => {
-  const { driverLevel, incrementProgress, activateVIPLevel, addRides, resetProgress, getTotalRidesForLevel } = useEarningsLevel();
+  const { driverLevel, incrementProgress, activateVIPLevel, addRides, resetProgress, getTotalRidesForLevel, updateVIPLevel } = useEarningsLevel();
 
   const value: LevelProgressContextType = {
     driverLevel,
@@ -41,6 +42,7 @@ export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ ch
     addRides,
     resetProgress,
     getTotalRidesForLevel,
+    updateVIPLevel,
   };
 
   return (

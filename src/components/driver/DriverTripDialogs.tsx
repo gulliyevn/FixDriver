@@ -14,6 +14,14 @@ export type DriverTripDialogsProps = {
   showWaiting: boolean;
   onWaitingCancel: () => void;
   onWaitingOk: () => void;
+  // Empty dialog
+  showEmpty: boolean;
+  onEmptyCancel: () => void;
+  onEmptyOk: () => void;
+  // Cancel dialog
+  showCancel: boolean;
+  onCancelCancel: () => void;
+  onCancelOk: () => void;
   // End trip
   showEnd: boolean;
   onEndCancel: () => void;
@@ -52,6 +60,12 @@ const DriverTripDialogs: React.FC<DriverTripDialogsProps> = ({
   showWaiting,
   onWaitingCancel,
   onWaitingOk,
+  showEmpty,
+  onEmptyCancel,
+  onEmptyOk,
+  showCancel,
+  onCancelCancel,
+  onCancelOk,
   showEnd,
   onEndCancel,
   onEndOk,
@@ -105,6 +119,42 @@ const DriverTripDialogs: React.FC<DriverTripDialogsProps> = ({
                 <Text style={styles.dialogCancelButtonText}>{t('driver.tripDialogs.buttons.cancelAction')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.dialogOkButton} onPress={onWaitingOk}>
+                <Text style={styles.dialogOkButtonText}>{t('driver.tripDialogs.buttons.okAction')}</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Begin trip dialog */}
+      <Modal visible={showEmpty} transparent animationType="fade">
+        <TouchableOpacity style={styles.dialogOverlay} activeOpacity={1} onPress={onEmptyCancel}>
+          <TouchableOpacity style={styles.dialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+            <Text style={styles.dialogTitle}>{t('driver.tripDialogs.beginTrip.title')}</Text>
+            <Text style={styles.dialogText}>{t('driver.tripDialogs.beginTrip.message', { clientName })}</Text>
+            <View style={styles.dialogButtonsContainer}>
+              <TouchableOpacity style={styles.dialogCancelButton} onPress={onEmptyCancel}>
+                <Text style={styles.dialogCancelButtonText}>{t('driver.tripDialogs.buttons.cancelAction')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.dialogOkButton} onPress={onEmptyOk}>
+                <Text style={styles.dialogOkButtonText}>{t('driver.tripDialogs.buttons.okAction')}</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Cancel trip dialog */}
+      <Modal visible={showCancel} transparent animationType="fade">
+        <TouchableOpacity style={styles.dialogOverlay} activeOpacity={1} onPress={onCancelCancel}>
+          <TouchableOpacity style={styles.dialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+            <Text style={styles.dialogTitle}>{t('driver.tripDialogs.cancelTrip.title')}</Text>
+            <Text style={styles.dialogText}>{t('driver.tripDialogs.cancelTrip.message', { clientName })}</Text>
+            <View style={styles.dialogButtonsContainer}>
+              <TouchableOpacity style={styles.dialogCancelButton} onPress={onCancelCancel}>
+                <Text style={styles.dialogCancelButtonText}>{t('driver.tripDialogs.buttons.cancelAction')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.dialogOkButton} onPress={onCancelOk}>
                 <Text style={styles.dialogOkButtonText}>{t('driver.tripDialogs.buttons.okAction')}</Text>
               </TouchableOpacity>
             </View>

@@ -12,11 +12,7 @@ import {
   LEVELS_CONFIG, 
   VIP_CONFIG, 
   getLevelConfig,
-  getTranslatedLevelName, 
-  getTranslatedVIPName,
-  isVIPLevel,
-  calculateMonthlyVIPBonus,
-  calculateQuarterlyVIPBonus
+  getTranslatedLevelName
 } from './types/levels.config';
 import { useLevelProgress } from '../../context/LevelProgressContext';
 import { useBalance } from '../../hooks/useBalance';
@@ -25,9 +21,7 @@ import { useEarningsState } from './hooks/useEarningsState';
 import { useEarningsHandlers } from './hooks/useEarningsHandlers';
 import { useEarningsData } from './hooks/useEarningsData';
 import { useVIPTimeTracking } from './hooks/useVIPTimeTracking';
-import { useEarningsLevel } from './hooks/useEarningsLevel';
 import EarningsStats from './components/EarningsStats';
-import EarningsLevel from './components/EarningsLevel';
 import EarningsEmptyContainer from './components/EarningsEmptyContainer';
 import EarningsProgressLine from './components/EarningsProgressLine';
 
@@ -57,8 +51,8 @@ const EarningsScreen: React.FC = () => {
   // Анимация для визуальной обратной связи
   const balanceAnim = useRef(new Animated.Value(1)).current;
 
-  // Получаем данные о прогрессе водителя - используем новый хук
-  const { driverLevel, incrementProgress, resetProgress, updateVIPLevel } = useEarningsLevel();
+  // Получаем данные о прогрессе водителя из контекста — единый источник истины
+  const { driverLevel, incrementProgress, updateVIPLevel } = useLevelProgress();
   const { balance, earnings, addEarnings, loadBalance, loadEarnings, resetBalance } = useBalance();
   
   const { currentData } = useEarningsData(selectedPeriod, forceUpdate);
@@ -432,7 +426,7 @@ const EarningsScreen: React.FC = () => {
             </Text>
             <ScrollView style={{ flex: 1, marginVertical: 10 }}>
               <Text style={[styles.modalMessage, { textAlign: 'left' }]}>
-                {generateLevelModalContent().split(/(\+\d+ AFc)/).map((part, index) => {
+                {generateLevelModalContent().split(/(\+\d+ AFc|Ежеквартальными и Ежемесячными бонусами считаются дни.*|Quarterly and Monthly bonuses count days.*|Rüblük və Aylıq bonuslar üçün günlər.*|المكافآت الفصلية والشهرية تحتسب الأيام.*|Vierteljährliche und Monatliche Boni zählen Tage.*|Las bonificaciones trimestrales y mensuales cuentan días.*|Les bonus trimestriels et mensuels comptabilisent.*|Üç aylık ve Aylık bonuslar.*)/u).map((part, index) => {
                   if (part.match(/^\+\d+ AFc$/)) {
                     return (
                       <Text key={index} style={{ fontWeight: 'bold', color: '#10B981' }}>
@@ -443,6 +437,21 @@ const EarningsScreen: React.FC = () => {
                   if (part.includes('*Ежеквартальные бонусы')) {
                     return (
                       <Text key={index} style={{ fontStyle: 'italic', color: '#6B7280', fontSize: 12 }}>
+                        {part}
+                      </Text>
+                    );
+                  }
+                  // Проверяем, содержит ли часть текст про правила бонусов (для любого языка)
+                  if (part.includes('Ежеквартальными и Ежемесячными бонусами') || 
+                      part.includes('Quarterly and Monthly bonuses') ||
+                      part.includes('Rüblük və Aylıq bonuslar') ||
+                      part.includes('المكافآت الفصلية والشهرية') ||
+                      part.includes('Vierteljährliche und Monatliche') ||
+                      part.includes('Las bonificaciones trimestrales') ||
+                      part.includes('Les bonus trimestriels') ||
+                      part.includes('Üç aylık ve Aylık bonuslar')) {
+                    return (
+                      <Text key={index} style={{ fontWeight: 'bold', fontSize: 14 }}>
                         {part}
                       </Text>
                     );

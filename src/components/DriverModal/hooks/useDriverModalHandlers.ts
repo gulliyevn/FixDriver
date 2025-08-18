@@ -54,7 +54,7 @@ export const useDriverModalHandlers = (
   }, [state.isDriverExpanded, actions]);
 
   const handleLongPress = useCallback(() => {
-    if (state.buttonColorState === 2) {
+    if (state.buttonColorState === 3) {
       actions.setShowLongPressDialog(true);
     }
   }, [state.buttonColorState, actions]);
@@ -112,8 +112,20 @@ export const useDriverModalHandlers = (
     }, 5000);
   }, [actions]);
 
+  const handleEmptyOk = useCallback(() => {
+    actions.setShowDialogEmpty(false);
+    actions.setButtonColorState(3);
+  }, [actions]);
+
+  const handleCancelOk = useCallback(() => {
+    actions.setShowDialogCancel(false);
+    actions.setButtonColorState(0); // Возврат к начальному состоянию
+    actions.setIsButtonsSwapped(false);
+  }, [actions]);
+
   const handleEndTripOk = useCallback(async () => {
     actions.setShowDialog3(false);
+    actions.setEmergencyActionsUsed(false); // Обычное завершение - комментарий необязательный
     actions.setShowRatingDialog(true);
     // Комплексное начисление (уровень, бонус, тариф, VIP-ride)
     await completeTripAccounting();
@@ -142,24 +154,34 @@ export const useDriverModalHandlers = (
     actions.setShowContinueDialog(false);
     actions.setIsPaused(false);
     actions.setPauseStartTime(null);
-    actions.setButtonColorState(2);
+    actions.setButtonColorState(3);
   }, [actions]);
 
   const handleButtonClick = useCallback(() => {
-    if (state.buttonColorState === 2) {
+    if (state.buttonColorState === 1 || state.buttonColorState === 2) {
+      // Обычный клик - обмен кнопок местами
+      actions.setIsButtonsSwapped(!state.isButtonsSwapped);
+    } else if (state.buttonColorState === 3) {
+      // Переключение между состояниями 3 и 4
+      actions.setButtonColorState(4);
+      actions.setIsPaused(false);
+      actions.setPauseStartTime(null);
+      actions.setShowSwapIcon(false);
+      actions.setIconOpacity(1);
+    } else if (state.buttonColorState === 4) {
+      // Переключение между состояниями 4 и 3
       actions.setButtonColorState(3);
       actions.setIsPaused(false);
       actions.setPauseStartTime(null);
       actions.setShowSwapIcon(false);
       actions.setIconOpacity(1);
-    } else if (state.buttonColorState === 3 && state.isEmergencyButtonActive) {
-      actions.setButtonColorState(2);
-      actions.setIsPaused(false);
-      actions.setPauseStartTime(null);
-      actions.setShowSwapIcon(false);
-      actions.setIconOpacity(1);
     }
-  }, [state.buttonColorState, state.isEmergencyButtonActive, actions]);
+  }, [state.buttonColorState, state.isButtonsSwapped, actions]);
+
+  const handleSmallButtonClick = useCallback(() => {
+    // Маленькая кнопка просто меняет цвета
+    actions.setIsButtonsSwapped(!state.isButtonsSwapped);
+  }, [state.isButtonsSwapped, actions]);
 
   // Обработчики звонков (простейшая версия без анимации; совместимо с интерфейсом)
   const openCallSheet = useCallback(() => {
@@ -211,11 +233,14 @@ export const useDriverModalHandlers = (
     handleEndOkPress,
     handleStartOk,
     handleWaitingOk,
+    handleEmptyOk,
+    handleCancelOk,
     handleEndTripOk,
     handleRatingSubmit,
     handleRatingCancel,
     handleContinueOk,
     handleButtonClick,
+    handleSmallButtonClick,
     formatTime,
   };
 };

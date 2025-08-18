@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../hooks/useI18n';
 import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
 import { useLevelProgress } from '../../../context/LevelProgressContext';
@@ -13,7 +12,7 @@ interface EarningsLevelProps {
 const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
   const { t } = useI18n();
   const colors = getCurrentColors(isDark);
-  const { driverLevel, incrementProgress, resetProgress } = useLevelProgress();
+  const { driverLevel } = useLevelProgress();
 
   // Анимация для круглого прогресс бара
   const circleProgressAnim = useRef(new Animated.Value(0)).current;
@@ -133,39 +132,8 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       marginTop: SIZES.sm,
       overflow: 'hidden',
     },
-    testButton: {
-      backgroundColor: colors.primary,
-      padding: SIZES.sm,
-      borderRadius: SIZES.radius.sm,
-      marginTop: SIZES.md,
-      alignItems: 'center',
-    },
-    testButtonText: {
-      color: colors.background,
-      fontSize: SIZES.fontSize.sm,
-      fontWeight: '600',
-    },
-    resetButton: {
-      backgroundColor: colors.error,
-      padding: SIZES.sm,
-      borderRadius: SIZES.radius.sm,
-      marginTop: SIZES.sm,
-      alignItems: 'center',
-    },
-    resetButtonText: {
-      color: colors.background,
-      fontSize: SIZES.fontSize.sm,
-      fontWeight: '600',
-    },
+    
   });
-
-  const handleTestIncrement = async () => {
-    await incrementProgress();
-  };
-
-  const handleReset = async () => {
-    await resetProgress();
-  };
 
   return (
     <View style={styles.container}>
@@ -227,14 +195,6 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
         </View>
       </View>
       
-      {/* Тестовые кнопки */}
-      <TouchableOpacity style={styles.testButton} onPress={handleTestIncrement}>
-        <Text style={styles.testButtonText}>Тест: +1 к прогрессу</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
-        <Text style={styles.resetButtonText}>Сбросить прогресс</Text>
-      </TouchableOpacity>
     </View>
   );
 };

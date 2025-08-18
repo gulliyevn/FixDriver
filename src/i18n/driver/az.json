@@ -271,6 +271,14 @@
       "title": "Gözləyirsiniz?",
       "message": "{clientName} müştərisini gözləyirsiniz?"
     },
+    "beginTrip": {
+      "title": "Gedək?",
+      "message": "Siz {clientName} ilə səfəri başlayırsınız?"
+    },
+    "cancelTrip": {
+      "title": "Ləğv edək?",
+      "message": "Siz {clientName} ilə səfəri ləğv edirsiniz?"
+    },
     "endTrip": {
       "title": "Bitir?",
       "message": "{clientName} ilə səfər bitdi?"
