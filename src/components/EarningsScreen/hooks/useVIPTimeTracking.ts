@@ -51,18 +51,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     loadVIPTimeData();
   }, []);
 
-  // Инициализируем старт 30-дневного периода после загрузки, если VIP и период ещё не установлен
-  useEffect(() => {
-    if (!isVIP) return;
-    if (!vipTimeData.periodStartDate) {
-      const updated: VIPTimeData = {
-        ...vipTimeData,
-        periodStartDate: getNextLocalMidnightDate(),
-      };
-      setVipTimeData(updated);
-      saveVIPTimeData(updated);
-    }
-  }, [isVIP, vipTimeData.periodStartDate, vipTimeData.currentDay]);
+  // Инициализируем старт 30-дневного периода только при первом включении онлайн, если VIP и период ещё не установлен
+  // useEffect удален - период устанавливается только в startOnlineTime
 
   // Вспомогательная: следующая локальная полуночь как YYYY-MM-DD
   const getNextLocalMidnightDate = () => {
@@ -278,7 +268,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
       ...vipTimeData,
       isCurrentlyOnline: true,
       lastOnlineTime: now,
-      // Инициализируем старт периода ближайшей полуночью только для VIP, если ещё не установлен
+      // Инициализируем старт периода в 00:00 следующего дня после первого включения онлайн
       periodStartDate: isVIP ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate()) : vipTimeData.periodStartDate,
     };
     

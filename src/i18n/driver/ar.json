@@ -304,6 +304,12 @@
     "buttons": {
       "cancelAction": "إلغاء",
       "okAction": "موافق"
+    },
+    "pauseTrip": {
+      "title": "إيقاف الرحلة مؤقتاً؟",
+      "message": "هل تريد إيقاف الرحلة مع {clientName} مؤقتاً؟",
+      "paused": "تم إيقاف الرحلة مؤقتاً",
+      "resume": "استئناف الرحلة"
     }
   }
 }

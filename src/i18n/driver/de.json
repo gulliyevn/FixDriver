@@ -304,6 +304,12 @@
     "buttons": {
       "cancelAction": "Abbrechen",
       "okAction": "OK"
+    },
+    "pauseTrip": {
+      "title": "Fahrt pausieren?",
+      "message": "Möchten Sie die Fahrt mit {clientName} pausieren?",
+      "paused": "Fahrt pausiert",
+      "resume": "Fahrt fortsetzen"
     }
   }
 }

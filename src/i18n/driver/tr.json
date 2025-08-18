@@ -303,6 +303,12 @@
     "buttons": {
       "cancelAction": "İptal",
       "okAction": "Tamam"
+    },
+    "pauseTrip": {
+      "title": "Yolculuğu duraklat?",
+      "message": "{clientName} ile yolculuğu duraklatmak istiyor musunuz?",
+      "paused": "Yolculuk duraklatıldı",
+      "resume": "Yolculuğu devam ettir"
     }
   }
 }

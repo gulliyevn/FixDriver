@@ -304,6 +304,12 @@
     "buttons": {
       "cancelAction": "Ləğv et",
       "okAction": "OK"
+    },
+    "pauseTrip": {
+      "title": "Səyahəti dayandır?",
+      "message": "{clientName} ilə səyahəti dayandırmaq istəyirsiniz?",
+      "paused": "Səyahət dayandırıldı",
+      "resume": "Səyahəti davam etdir"
     }
   }
 }

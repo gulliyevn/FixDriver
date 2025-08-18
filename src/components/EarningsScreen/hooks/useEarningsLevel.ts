@@ -204,7 +204,7 @@ export const useEarningsLevel = () => {
         const config = getLevelConfig(level, subLevel);
         const ridesInThisSubLevel = config.maxProgress;
         
-        if (totalRides <= accumulatedRides + ridesInThisSubLevel) {
+        if (totalRides < accumulatedRides + ridesInThisSubLevel) {
           // Нашли нужный подуровень
           const progressInSubLevel = totalRides - accumulatedRides;
           

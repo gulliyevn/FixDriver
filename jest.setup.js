@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler/jestSetup';
 
 // Мокаем Animated
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // Мокаем AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
