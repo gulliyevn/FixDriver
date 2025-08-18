@@ -65,6 +65,8 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
                 color={isOnline ? "#10B981" : "#6B7280"} 
               />
             </TouchableOpacity>
+
+            {/* Кнопки сброса удалены */}
           </View>
         </View>
 

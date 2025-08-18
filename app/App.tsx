@@ -8,6 +8,7 @@ import { AuthProvider } from '../src/context/AuthContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
 import { PackageProvider } from '../src/context/PackageContext';
 import { LevelProgressProvider } from '../src/context/LevelProgressContext';
+import { BalanceProvider } from '../src/context/BalanceContext';
 
 import RootNavigator from '../src/navigation/RootNavigator';
 import { LanguageProvider } from '../src/context/LanguageContext';
@@ -36,16 +37,18 @@ function App() {
         <LanguageProvider>
           <ThemeProvider>
             <AuthProvider>
-              <ProfileProvider>
-                <PackageProvider>
-                  <LevelProgressProvider>
-                    <NavigationContainer>
-                      <RootNavigator />
-                      <DynamicStatusBar />
-                    </NavigationContainer>
-                  </LevelProgressProvider>
-                </PackageProvider>
-              </ProfileProvider>
+              <BalanceProvider>
+                <ProfileProvider>
+                  <PackageProvider>
+                    <LevelProgressProvider>
+                      <NavigationContainer>
+                        <RootNavigator />
+                        <DynamicStatusBar />
+                      </NavigationContainer>
+                    </LevelProgressProvider>
+                  </PackageProvider>
+                </ProfileProvider>
+              </BalanceProvider>
             </AuthProvider>
           </ThemeProvider>
         </LanguageProvider>

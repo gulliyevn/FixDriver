@@ -1,83 +1,208 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { VIP_CONFIG, calculateMonthlyVIPBonus, calculateQuarterlyVIPBonus } from '../types/levels.config';
+import { useBalanceContext } from '../../../context/BalanceContext';
 
 const VIP_TIME_KEY = '@driver_vip_time_tracking';
 
 interface VIPTimeData {
   currentDay: string; // YYYY-MM-DD
-  currentMonth: string; // YYYY-MM
-  hoursOnline: number;
-  daysOnline: number;
+  currentMonth: string; // YYYY-MM (для совместимости)
+  hoursOnline: number; // Накопленные часы за текущий день
+  ridesToday: number; // Количество поездок за текущий день
+  qualifiedDaysThisMonth: number; // Кол-во VIP-дней (>=10ч онлайн и >=3 поездки) за текущий период
+  consecutiveQualifiedMonths: number; // Кол-во 30-дневных периодов подряд с >=20 VIP-днями
   lastOnlineTime: number | null;
   isCurrentlyOnline: boolean;
+  vipCycleStartDate: string | null; // Дата начала VIP статуса (YYYY-MM-DD)
+  periodStartDate: string | null; // Дата начала текущего 30-дневного периода (YYYY-MM-DD)
+  qualifiedDaysHistory: number[]; // История квалифицированных дней по 30-дневным периодам
 }
 
 const MIN_HOURS_PER_DAY = 10;
 
 export const useVIPTimeTracking = (isVIP: boolean) => {
+  const { addEarnings } = useBalanceContext();
+  // Функция для получения локальной даты в формате YYYY-MM-DD
+  const getLocalDateString = (date: Date = new Date()) => {
+    return date.getFullYear() + '-' + 
+           String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+           String(date.getDate()).padStart(2, '0');
+  };
+
   const [vipTimeData, setVipTimeData] = useState<VIPTimeData>({
-    currentDay: new Date().toISOString().split('T')[0],
-    currentMonth: new Date().toISOString().slice(0, 7),
+    currentDay: getLocalDateString(),
+    currentMonth: getLocalDateString().slice(0, 7),
     hoursOnline: 0,
-    daysOnline: 0,
+    ridesToday: 0,
+    qualifiedDaysThisMonth: 0,
+    consecutiveQualifiedMonths: 0,
     lastOnlineTime: null,
     isCurrentlyOnline: false,
+    vipCycleStartDate: null,
+    periodStartDate: null,
+    qualifiedDaysHistory: [],
   });
 
 
 
-  // Загружаем данные при инициализации
+  // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
   useEffect(() => {
-    if (isVIP) {
-      loadVIPTimeData();
-    } else {
-      // Сбрасываем данные при отключении VIP
-      setVipTimeData({
-        currentDay: new Date().toISOString().split('T')[0],
-        currentMonth: new Date().toISOString().slice(0, 7),
-        hoursOnline: 0,
-        daysOnline: 0,
-        lastOnlineTime: null,
-        isCurrentlyOnline: false,
-      });
-    }
-  }, [isVIP]);
+    loadVIPTimeData();
+  }, []);
 
-  // Проверяем смену дня каждый час
+  // Инициализируем старт 30-дневного периода после загрузки, если VIP и период ещё не установлен
   useEffect(() => {
     if (!isVIP) return;
+    if (!vipTimeData.periodStartDate) {
+      const updated: VIPTimeData = {
+        ...vipTimeData,
+        periodStartDate: getNextLocalMidnightDate(),
+      };
+      setVipTimeData(updated);
+      saveVIPTimeData(updated);
+    }
+  }, [isVIP, vipTimeData.periodStartDate, vipTimeData.currentDay]);
+
+  // Вспомогательная: следующая локальная полуночь как YYYY-MM-DD
+  const getNextLocalMidnightDate = () => {
+    const d = new Date();
+    d.setHours(24, 0, 0, 0);
+    return d.toISOString().split('T')[0];
+  };
+
+  // Проверяем смену дня каждый час (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
+  useEffect(() => {
 
     const checkDayChange = () => {
-      const today = new Date().toISOString().split('T')[0];
-      const currentMonth = new Date().toISOString().slice(0, 7);
+      const now = new Date();
+      // Используем локальную дату, а не UTC
+      const today = now.getFullYear() + '-' + 
+                   String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(now.getDate()).padStart(2, '0');
+      const currentMonth = today.slice(0, 7);
       
+      // Ежедневная проверка скользящего 360-дневного окна цикла
+      if (vipTimeData.vipCycleStartDate) {
+        const cycleStart = new Date(vipTimeData.vipCycleStartDate);
+        const msInDay = 24 * 60 * 60 * 1000;
+        const diffDays = Math.floor((now.getTime() - cycleStart.getTime()) / msInDay);
+        if (diffDays >= 360) {
+          // Сбрасываем счетчик месяцев и цикл
+          const resetData: VIPTimeData = {
+            ...vipTimeData,
+            consecutiveQualifiedMonths: 0,
+            vipCycleStartDate: null,
+          };
+          setVipTimeData(resetData);
+          saveVIPTimeData(resetData);
+        }
+      }
+
       if (today !== vipTimeData.currentDay) {
-        // Новый день - сбрасываем часы
-        const newData = {
+        // Завершение суток: учитываем текущую онлайновую сессию до 23:59:59 предыдущего дня
+        let additionalHours = 0;
+        if (vipTimeData.isCurrentlyOnline && vipTimeData.lastOnlineTime) {
+          // Полночь предыдущего дня (начало текущего дня)
+          const midnight = new Date();
+          midnight.setHours(0, 0, 0, 0);
+          
+          // Если сессия началась вчера, считаем только время до полуночи
+          if (vipTimeData.lastOnlineTime < midnight.getTime()) {
+            const diffMs = midnight.getTime() - vipTimeData.lastOnlineTime;
+            additionalHours = diffMs / (1000 * 60 * 60);
+          }
+        }
+
+        const effectiveHours = vipTimeData.hoursOnline + additionalHours;
+        const isQualifiedDay = effectiveHours >= MIN_HOURS_PER_DAY && vipTimeData.ridesToday >= VIP_CONFIG.minRidesPerDay;
+        
+        // logs removed in production
+
+        // Если есть активная сессия, продолжаем ее в новый день
+        let newSessionHours = 0;
+        let newLastOnlineTime = null;
+        
+        if (vipTimeData.isCurrentlyOnline && vipTimeData.lastOnlineTime) {
+          const midnight = new Date();
+          midnight.setHours(0, 0, 0, 0);
+          
+          // Если сессия продолжается через полночь, считаем время с полуночи
+          if (vipTimeData.lastOnlineTime < midnight.getTime()) {
+            newLastOnlineTime = midnight.getTime(); // Начинаем считать с полуночи
+            newSessionHours = (Date.now() - midnight.getTime()) / (1000 * 60 * 60);
+          } else {
+            // Сессия началась уже сегодня
+            newLastOnlineTime = vipTimeData.lastOnlineTime;
+            newSessionHours = (Date.now() - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
+          }
+        }
+
+        const newData: VIPTimeData = {
           ...vipTimeData,
           currentDay: today,
-          hoursOnline: 0,
-          lastOnlineTime: null,
+          hoursOnline: newSessionHours,
+          ridesToday: 0, // Поездки сбрасываются каждый день
+          qualifiedDaysThisMonth: isVIP
+            ? vipTimeData.qualifiedDaysThisMonth + (isQualifiedDay ? 1 : 0)
+            : vipTimeData.qualifiedDaysThisMonth,
+          lastOnlineTime: newLastOnlineTime,
         };
-        
-        // Если предыдущий день был активным (>= 10 часов), увеличиваем дни
-        if (vipTimeData.hoursOnline >= MIN_HOURS_PER_DAY) {
-          newData.daysOnline += 1;
-        }
-        
+
         setVipTimeData(newData);
         saveVIPTimeData(newData);
       }
-      
-      if (currentMonth !== vipTimeData.currentMonth) {
-        // Новый месяц - сбрасываем дни
-        const newData = {
-          ...vipTimeData,
-          currentMonth,
-          daysOnline: 0,
-        };
-        setVipTimeData(newData);
-        saveVIPTimeData(newData);
+      // Проверка завершения 30-дневного периода (скользящего) — только для VIP
+      if (isVIP && vipTimeData.periodStartDate) {
+        const periodStart = new Date(vipTimeData.periodStartDate);
+        const msInDay = 24 * 60 * 60 * 1000;
+        const diffDays = Math.floor((now.getTime() - periodStart.getTime()) / msInDay);
+        if (diffDays >= 30) {
+          const qualifiedDays = vipTimeData.qualifiedDaysThisMonth;
+          
+          // Добавляем период в историю
+          const newHistory = [...vipTimeData.qualifiedDaysHistory, qualifiedDays];
+          
+          // Ограничиваем историю до 12 периодов (максимум VIP 12)
+          if (newHistory.length > 12) {
+            newHistory.shift(); // Удаляем самый старый период
+          }
+
+          // Месячный бонус за период
+          const monthlyBonus = calculateMonthlyVIPBonus(qualifiedDays);
+          if (monthlyBonus > 0) {
+            addEarnings(monthlyBonus);
+          }
+
+          // Квартальный бонус в 3/6/12-м успешном периоде (при >=20 днях в текущем периоде)
+          if (qualifiedDays >= VIP_CONFIG.minDaysPerMonth) {
+            let trailingQualified = 0;
+            for (let i = newHistory.length - 1; i >= 0; i -= 1) {
+              if (newHistory[i] >= VIP_CONFIG.minDaysPerMonth) trailingQualified += 1;
+              else break;
+            }
+            if (trailingQualified === 3) {
+              addEarnings(VIP_CONFIG.quarterlyBonuses.months3);
+            } else if (trailingQualified === 6) {
+              addEarnings(VIP_CONFIG.quarterlyBonuses.months6);
+            } else if (trailingQualified === 12) {
+              addEarnings(VIP_CONFIG.quarterlyBonuses.months12);
+            }
+          }
+
+          const nextPeriodStart = getNextLocalMidnightDate();
+          const newData: VIPTimeData = {
+            ...vipTimeData,
+            currentMonth, // для совместимости со старыми полями
+            qualifiedDaysThisMonth: 0,
+            qualifiedDaysHistory: newHistory,
+            periodStartDate: nextPeriodStart,
+          };
+          setVipTimeData(newData);
+          saveVIPTimeData(newData);
+          
+          // logs removed in production
+        }
       }
     };
 
@@ -87,18 +212,33 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
 
   const loadVIPTimeData = async () => {
     try {
-      // Принудительно сбрасываем VIP время при запуске (для тестирования)
-      await AsyncStorage.removeItem(VIP_TIME_KEY);
-      const initialData: VIPTimeData = {
-        currentDay: new Date().toISOString().split('T')[0],
-        currentMonth: new Date().toISOString().slice(0, 7),
-        hoursOnline: 0,
-        daysOnline: 0,
-        lastOnlineTime: null,
-        isCurrentlyOnline: false,
-      };
-      setVipTimeData(initialData);
-      console.log('⏰ VIP время сброшено при запуске');
+      const saved = await AsyncStorage.getItem(VIP_TIME_KEY);
+      if (saved) {
+        const parsed: VIPTimeData = JSON.parse(saved);
+        // Кламп значений от мусора/старых версий
+        parsed.qualifiedDaysThisMonth = Math.max(0, Math.min(30, parsed.qualifiedDaysThisMonth || 0));
+        parsed.hoursOnline = Math.max(0, parsed.hoursOnline || 0);
+        parsed.ridesToday = Math.max(0, parsed.ridesToday || 0);
+        // Обеспечиваем совместимость с новыми полями
+        parsed.qualifiedDaysHistory = parsed.qualifiedDaysHistory || [];
+        setVipTimeData(parsed);
+      } else {
+        const initialData: VIPTimeData = {
+          currentDay: getLocalDateString(),
+          currentMonth: getLocalDateString().slice(0, 7),
+          hoursOnline: 0,
+          ridesToday: 0,
+          qualifiedDaysThisMonth: 0,
+          consecutiveQualifiedMonths: 0,
+          lastOnlineTime: null,
+          isCurrentlyOnline: false,
+          vipCycleStartDate: null,
+          periodStartDate: null,
+          qualifiedDaysHistory: [],
+        };
+        setVipTimeData(initialData);
+        await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(initialData));
+      }
     } catch (error) {
       console.error('Ошибка при загрузке VIP времени:', error);
     }
@@ -113,27 +253,28 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   };
 
   const startOnlineTime = useCallback(() => {
-    if (!isVIP) return;
-    
     const now = Date.now();
-    const newData = {
+    const newData: VIPTimeData = {
       ...vipTimeData,
       isCurrentlyOnline: true,
       lastOnlineTime: now,
+      // Инициализируем старт периода ближайшей полуночью только для VIP, если ещё не установлен
+      periodStartDate: isVIP ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate()) : vipTimeData.periodStartDate,
     };
     
     setVipTimeData(newData);
     saveVIPTimeData(newData);
-    console.log('VIP: Начало времени онлайн');
+    // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
+    AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
   }, [isVIP, vipTimeData]);
 
   const stopOnlineTime = useCallback(() => {
-    if (!isVIP || !vipTimeData.isCurrentlyOnline || !vipTimeData.lastOnlineTime) return;
+    if (!vipTimeData.isCurrentlyOnline || !vipTimeData.lastOnlineTime) return;
     
     const now = Date.now();
     const hoursDiff = (now - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
     
-    const newData = {
+    const newData: VIPTimeData = {
       ...vipTimeData,
       isCurrentlyOnline: false,
       hoursOnline: vipTimeData.hoursOnline + hoursDiff,
@@ -142,33 +283,163 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     
     setVipTimeData(newData);
     saveVIPTimeData(newData);
-    console.log(`VIP: Остановка времени онлайн. Добавлено часов: ${hoursDiff.toFixed(2)}`);
-  }, [isVIP, vipTimeData]);
+    // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
+    AsyncStorage.setItem('@driver_online_status', 'false').catch(() => {});
+  }, [vipTimeData]);
 
   const getCurrentHoursOnline = useCallback(() => {
-    if (!isVIP || !vipTimeData.isCurrentlyOnline || !vipTimeData.lastOnlineTime) {
-      return vipTimeData.hoursOnline;
-    }
-    
     const now = Date.now();
-    const currentSessionHours = (now - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
-    return vipTimeData.hoursOnline + currentSessionHours;
-  }, [isVIP, vipTimeData]);
+    // Если сессия активна — считаем до текущего момента
+    if (vipTimeData.isCurrentlyOnline && vipTimeData.lastOnlineTime) {
+      const currentSessionHours = (now - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
+      return vipTimeData.hoursOnline + currentSessionHours;
+    }
+    // Если сессия не активна — возвращаем накопленное
+    return vipTimeData.hoursOnline;
+  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime, vipTimeData.hoursOnline]);
 
   const resetVIPTimeData = useCallback(async () => {
     const resetData: VIPTimeData = {
-      currentDay: new Date().toISOString().split('T')[0],
-      currentMonth: new Date().toISOString().slice(0, 7),
+      currentDay: getLocalDateString(),
+      currentMonth: getLocalDateString().slice(0, 7),
       hoursOnline: 0,
-      daysOnline: 0,
+      ridesToday: 0,
+      qualifiedDaysThisMonth: 0,
+      consecutiveQualifiedMonths: 0,
       lastOnlineTime: null,
       isCurrentlyOnline: false,
+      vipCycleStartDate: null,
+      periodStartDate: null,
+      qualifiedDaysHistory: [],
     };
     
     setVipTimeData(resetData);
     await saveVIPTimeData(resetData);
-    console.log('VIP: Данные времени сброшены');
   }, []);
+
+  // Регистрируем завершенную поездку для учёта VIP-дня
+  const registerRide = useCallback(async () => {
+    if (!isVIP) return;
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      ridesToday: vipTimeData.ridesToday + 1,
+    };
+    setVipTimeData(newData);
+    await saveVIPTimeData(newData);
+  }, [isVIP, vipTimeData]);
+
+  // Ручное добавление часов онлайн (для тестирования)
+  const addManualOnlineHours = useCallback(async (hours: number) => {
+    if (!isVIP || hours <= 0) return;
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      hoursOnline: vipTimeData.hoursOnline + hours,
+      isCurrentlyOnline: true,
+      lastOnlineTime: Date.now(),
+    };
+    setVipTimeData(newData);
+    await saveVIPTimeData(newData);
+  }, [isVIP, vipTimeData]);
+
+  // Симуляция смены дня (для тестирования)
+  const simulateDayChange = useCallback(async () => {
+    const isQualified = vipTimeData.hoursOnline >= MIN_HOURS_PER_DAY && vipTimeData.ridesToday >= VIP_CONFIG.minRidesPerDay;
+    
+    const nextDay = new Date();
+    nextDay.setDate(nextDay.getDate() + 1);
+    
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      currentDay: getLocalDateString(nextDay),
+      hoursOnline: 0,
+      ridesToday: 0,
+      qualifiedDaysThisMonth: vipTimeData.qualifiedDaysThisMonth + (isQualified ? 1 : 0),
+      lastOnlineTime: null,
+      isCurrentlyOnline: false,
+    };
+    
+    setVipTimeData(newData);
+    await saveVIPTimeData(newData);
+    return { isQualified, newQualifiedDays: newData.qualifiedDaysThisMonth };
+  }, [isVIP, vipTimeData]);
+
+  // Симуляция смены месяца (для тестирования)
+  const simulateMonthChange = useCallback(async () => {
+    const qualifiedDays = vipTimeData.qualifiedDaysThisMonth;
+    
+    // Рассчитываем месячный бонус
+    let monthlyBonus = 0;
+    if (qualifiedDays >= 30) monthlyBonus = VIP_CONFIG.monthlyBonuses.days30;
+    else if (qualifiedDays >= 25) monthlyBonus = VIP_CONFIG.monthlyBonuses.days25;
+    else if (qualifiedDays >= 20) monthlyBonus = VIP_CONFIG.monthlyBonuses.days20;
+    
+    // Обновляем счетчик последовательных месяцев
+    const metMonthlyRequirement = qualifiedDays >= 20;
+    const newConsecutive = metMonthlyRequirement ? vipTimeData.consecutiveQualifiedMonths + 1 : 0;
+    
+    // Рассчитываем квартальный бонус
+    let quarterlyBonus = 0;
+    if (metMonthlyRequirement) {
+      if (newConsecutive === 3) quarterlyBonus = VIP_CONFIG.quarterlyBonuses.months3;
+      else if (newConsecutive === 6) quarterlyBonus = VIP_CONFIG.quarterlyBonuses.months6;
+      else if (newConsecutive === 12) quarterlyBonus = VIP_CONFIG.quarterlyBonuses.months12;
+    }
+    
+    // Начисляем бонусы
+    if (monthlyBonus > 0) {
+      await addEarnings(monthlyBonus);
+    }
+    
+    if (quarterlyBonus > 0) {
+      await addEarnings(quarterlyBonus);
+    }
+    
+    // Обновление даты начала цикла
+    let newVipCycleStartDate = vipTimeData.vipCycleStartDate;
+    if (metMonthlyRequirement) {
+      if (newConsecutive === 1) {
+        // Старт новой серии: считаем, что закончился первый успешный месяц
+        const prevMonthDate = new Date(vipTimeData.currentMonth + '-01T00:00:00');
+        newVipCycleStartDate = prevMonthDate.toISOString().split('T')[0];
+      }
+    } else {
+      newVipCycleStartDate = null;
+    }
+
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      currentMonth: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 7),
+      qualifiedDaysThisMonth: 0,
+      consecutiveQualifiedMonths: newConsecutive,
+      vipCycleStartDate: newVipCycleStartDate,
+    };
+    
+    setVipTimeData(newData);
+    await saveVIPTimeData(newData);
+    
+    return { monthlyBonus, quarterlyBonus, consecutiveMonths: newConsecutive };
+  }, [isVIP, vipTimeData, addEarnings]);
+
+  // Функция для получения истории квалифицированных дней для расчета VIP уровня
+  const getQualifiedDaysHistory = useCallback((): number[] => {
+    return vipTimeData.qualifiedDaysHistory;
+  }, [vipTimeData.qualifiedDaysHistory]);
+
+  // Проверка квалификации текущего дня (для отладки)
+  const checkCurrentDayQualification = useCallback(() => {
+    const currentHours = getCurrentHoursOnline();
+    const ridesCount = vipTimeData.ridesToday;
+    const isQualified = currentHours >= MIN_HOURS_PER_DAY && ridesCount >= VIP_CONFIG.minRidesPerDay;
+    
+    // logs removed in production
+    
+    return {
+      hours: currentHours,
+      rides: ridesCount,
+      isQualified,
+      day: vipTimeData.currentDay
+    };
+  }, [vipTimeData, getCurrentHoursOnline]);
 
   return {
     vipTimeData,
@@ -176,5 +447,11 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     stopOnlineTime,
     getCurrentHoursOnline,
     resetVIPTimeData,
+    registerRide,
+    addManualOnlineHours,
+    simulateDayChange,
+    simulateMonthChange,
+    getQualifiedDaysHistory,
+    checkCurrentDayQualification,
   };
 };

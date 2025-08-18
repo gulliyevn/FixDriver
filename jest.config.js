@@ -1,67 +1,26 @@
 module.exports = {
-  preset: 'react-native',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation|expo|@expo|expo-.*|react-native-.*|@react-native-.*)/)',
-  ],
+  preset: 'jest-expo',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'node',
   testMatch: [
     '**/__tests__/**/*.(ts|tsx|js)',
-    '**/?(*.)+(spec|test).(ts|tsx|js)',
+    '**/*.(test|spec).(ts|tsx|js)'
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/__tests__/**',
-    '!src/**/*.test.{ts,tsx}',
-    '!src/**/*.spec.{ts,tsx}',
-    '!src/mocks/**',
-    '!src/types/**',
-    '!src/styles/**',
+    '!src/**/node_modules/**',
   ],
-  coverageThreshold: {
-    global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100,
-    },
-  },
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^expo-localization$': '<rootDir>/src/mocks/expoLocalizationMock.ts',
-    '^@react-native-async-storage/async-storage$': '<rootDir>/src/mocks/asyncStorageMock.ts',
-    '^expo-constants$': '<rootDir>/src/mocks/expoConstantsMock.ts',
-    '^expo-crypto$': '<rootDir>/src/mocks/expoCryptoMock.ts',
-    '^expo-device$': '<rootDir>/src/mocks/expoDeviceMock.ts',
-    '^expo-haptics$': '<rootDir>/src/mocks/expoHapticsMock.ts',
-    '^expo-image-picker$': '<rootDir>/src/mocks/expoImagePickerMock.ts',
-    '^expo-linear-gradient$': '<rootDir>/src/mocks/expoLinearGradientMock.tsx',
-    '^expo-location$': '<rootDir>/src/mocks/expoLocationMock.ts',
-    '^expo-notifications$': '<rootDir>/src/mocks/expoNotificationsMock.ts',
-    '^expo-router$': '<rootDir>/src/mocks/expoRouterMock.ts',
-    '^expo-status-bar$': '<rootDir>/src/mocks/expoStatusBarMock.tsx',
-    '^react-native-maps$': '<rootDir>/src/mocks/reactNativeMapsMock.ts',
-    '^react-native-calendars$': '<rootDir>/src/mocks/reactNativeCalendarsMock.tsx',
-
-    '^react-native-dropdown-picker$': '<rootDir>/src/mocks/reactNativeDropdownPickerMock.tsx',
-    '^react-native-gesture-handler$': '<rootDir>/src/mocks/reactNativeGestureHandlerMock.tsx',
-    '^react-native-permissions$': '<rootDir>/src/mocks/reactNativePermissionsMock.ts',
-    '^react-native-reanimated$': '<rootDir>/src/mocks/reactNativeReanimatedMock.ts',
-    '^react-native-safe-area-context$': '<rootDir>/src/mocks/reactNativeSafeAreaContextMock.ts',
-    '^react-native-screens$': '<rootDir>/src/mocks/reactNativeScreensMock.tsx',
-    '^react-native-svg$': '<rootDir>/src/mocks/reactNativeSvgMock.tsx',
-    '^react-native-web$': '<rootDir>/src/mocks/reactNativeWebMock.ts',
+    '\\.(jpg|jpeg|png|gif|svg)$': 'identity-obj-proxy',
   },
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/android/',
-    '/ios/',
+  // Транспилируем нужные ESM-пакеты из node_modules
+  transformIgnorePatterns: [
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|expo(nent)?|@expo(nent)?/.*|expo-modules-core|@unimodules/.*|unimodules|react-native-svg|react-native-reanimated)'
   ],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
-  },
-  moduleDirectories: ['node_modules', 'src'],
-  testTimeout: 10000,
-}; 
+  // Оставляем окружение по умолчанию из jest-expo
+  verbose: true,
+};

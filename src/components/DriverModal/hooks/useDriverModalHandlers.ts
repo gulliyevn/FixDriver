@@ -4,6 +4,8 @@ import { DriverModalState, DriverModalActions, DriverModalHandlers } from '../ty
 import { mockDrivers } from '../../../mocks/data/users';
 import { getSampleDriverId } from '../../../mocks/driverModalMock';
 import { useLevelProgress } from '../../../context/LevelProgressContext';
+import { useBalance } from '../../../hooks/useBalance';
+import { useVIPTimeTracking } from '../../EarningsScreen/hooks/useVIPTimeTracking';
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
@@ -12,7 +14,33 @@ export const useDriverModalHandlers = (
 ): DriverModalHandlers => {
   const driverId = getSampleDriverId();
   const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
-  const { incrementProgress } = useLevelProgress();
+  const { driverLevel, incrementProgress } = useLevelProgress();
+  const { addEarnings } = useBalance();
+  const { registerRide } = useVIPTimeTracking(!!driverLevel?.isVIP);
+
+  // Мок-расчет тарифа. Заменить при подключении бэкенда
+  const computeTripFare = useCallback((): number => {
+    return 5.13; // AFc
+  }, []);
+
+  const completeTripAccounting = useCallback(async () => {
+    // 1) Увеличиваем прогресс уровней
+    const result = await incrementProgress();
+
+    // 2) Начисляем бонус за завершенный подуровень (если был ап)
+    if (result && result.hasLevelUp && typeof (result as any).bonusAmount === 'number') {
+      await addEarnings((result as any).bonusAmount);
+    }
+
+    // 3) Начисляем стоимость поездки (мок)
+    const fare = computeTripFare();
+    if (fare > 0) {
+      await addEarnings(fare);
+    }
+
+    // 4) Регистрируем поездку для VIP-учета (3 поездки/день)
+    await registerRide();
+  }, [incrementProgress, addEarnings, computeTripFare, registerRide]);
 
   const handleChatPress = useCallback(() => {
     if (onChat) {
@@ -54,10 +82,9 @@ export const useDriverModalHandlers = (
     actions.setEmergencyActionsUsed(true);
     actions.setEmergencyActionType('end');
     actions.setShowRatingDialog(true);
-    
-    // Увеличиваем прогресс при экстренном завершении поездки
-    await incrementProgress();
-  }, [actions, incrementProgress]);
+    // Комплексное начисление (уровень, бонус, тариф, VIP-ride)
+    await completeTripAccounting();
+  }, [actions, completeTripAccounting]);
 
   const handleStartOk = useCallback(() => {
     actions.setShowDialog1(false);
@@ -88,10 +115,9 @@ export const useDriverModalHandlers = (
   const handleEndTripOk = useCallback(async () => {
     actions.setShowDialog3(false);
     actions.setShowRatingDialog(true);
-    
-    // Увеличиваем прогресс при нормальном завершении поездки
-    await incrementProgress();
-  }, [actions, incrementProgress]);
+    // Комплексное начисление (уровень, бонус, тариф, VIP-ride)
+    await completeTripAccounting();
+  }, [actions, completeTripAccounting]);
 
   const handleRatingSubmit = useCallback((rating: number, comment: string) => {
     actions.setShowRatingDialog(false);
@@ -135,6 +161,30 @@ export const useDriverModalHandlers = (
     }
   }, [state.buttonColorState, state.isEmergencyButtonActive, actions]);
 
+  // Обработчики звонков (простейшая версия без анимации; совместимо с интерфейсом)
+  const openCallSheet = useCallback(() => {
+    actions.setCallSheetOpen(true);
+  }, [actions]);
+
+  const closeCallSheet = useCallback(() => {
+    actions.setCallSheetOpen(false);
+  }, [actions]);
+
+  const handleNetworkCall = useCallback(() => {
+    try {
+      if ((driver as any)?.phone_number) {
+        Linking.openURL(`tel:${(driver as any).phone_number}`);
+      }
+    } finally {
+      closeCallSheet();
+    }
+  }, [driver, closeCallSheet]);
+
+  const handleInternetCall = useCallback(() => {
+    closeCallSheet();
+    // Зарезервировано для логики интернет‑звонка
+  }, [closeCallSheet]);
+
   const formatTime = useCallback((seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -148,6 +198,10 @@ export const useDriverModalHandlers = (
   }, []);
 
   return {
+    openCallSheet,
+    closeCallSheet,
+    handleNetworkCall,
+    handleInternetCall,
     handleChatPress,
     handleDriverExpand,
     handleLongPress,

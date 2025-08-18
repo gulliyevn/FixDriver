@@ -1,13 +1,20 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useEarningsLevel } from '../components/EarningsScreen/hooks/useEarningsLevel';
 
+interface LevelUpResult {
+  hasLevelUp: boolean;
+  bonusAmount: number;
+  completedLevel: number;
+  completedSubLevel: number;
+}
+
 interface LevelProgressContextType {
   driverLevel: any;
-  incrementProgress: () => Promise<void>;
+  incrementProgress: () => Promise<LevelUpResult | undefined>;
+  activateVIPLevel: () => Promise<void>;
   addRides: (count: number) => Promise<void>;
   resetProgress: () => Promise<void>;
-  testVIPStatus: () => Promise<void>;
-  clearAllData: () => Promise<void>;
+  getTotalRidesForLevel: (level: number, subLevel: number, progress: number) => number;
 }
 
 const LevelProgressContext = createContext<LevelProgressContextType | undefined>(undefined);
@@ -25,15 +32,15 @@ interface LevelProgressProviderProps {
 }
 
 export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ children }) => {
-  const { driverLevel, incrementProgress, addRides, resetProgress, testVIPStatus, clearAllData } = useEarningsLevel();
+  const { driverLevel, incrementProgress, activateVIPLevel, addRides, resetProgress, getTotalRidesForLevel } = useEarningsLevel();
 
   const value: LevelProgressContextType = {
     driverLevel,
     incrementProgress,
+    activateVIPLevel,
     addRides,
     resetProgress,
-    testVIPStatus,
-    clearAllData,
+    getTotalRidesForLevel,
   };
 
   return (

@@ -1,66 +1,60 @@
 import 'react-native-gesture-handler/jestSetup';
-import React from 'react';
 
-// Mock Expo modules
-jest.mock('expo', () => ({
-  ...jest.requireActual('expo'),
-  Linking: {
-    openURL: jest.fn(),
-  },
-  Notifications: {
-    getPermissionsAsync: jest.fn(),
-    requestPermissionsAsync: jest.fn(),
-    getExpoPushTokenAsync: jest.fn(),
-    addNotificationReceivedListener: jest.fn(),
-    addNotificationResponseReceivedListener: jest.fn(),
-  },
-}));
+// Мокаем Animated
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
-// Mock expo-crypto
-jest.mock('expo-crypto', () => ({
-  digestStringAsync: jest.fn(() => Promise.resolve('mock-hash')),
-}));
-
-// Mock React Navigation
-jest.mock('@react-navigation/native', () => ({
-  ...jest.requireActual('@react-navigation/native'),
-  useNavigation: () => ({
-    navigate: jest.fn(),
-    goBack: jest.fn(),
-    push: jest.fn(),
-    pop: jest.fn(),
-  }),
-  useRoute: () => ({
-    params: {},
-  }),
-}));
-
-// Mock AsyncStorage
+// Мокаем AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
-// Mock Expo Vector Icons as React components
-jest.mock('@expo/vector-icons', () => {
-  const React = require('react');
-  const createIcon = (iconName) => (props) => React.createElement('Icon', { ...props, name: props.name || iconName });
+// Мокаем react-native-reanimated
+jest.mock('react-native-reanimated', () => {
+  const Reanimated = require('react-native-reanimated/mock');
+  Reanimated.default.call = () => {};
+  return Reanimated;
+});
+
+// Мокаем Expo модули
+jest.mock('expo-haptics', () => ({
+  notificationAsync: jest.fn(),
+  impactAsync: jest.fn(),
+  NotificationFeedbackType: {
+    Success: 'success',
+    Warning: 'warning',
+    Error: 'error',
+  },
+  ImpactFeedbackStyle: {
+    Light: 'light',
+    Medium: 'medium',
+    Heavy: 'heavy',
+  },
+}));
+
+jest.mock('expo-font', () => ({
+  loadAsync: jest.fn(),
+}));
+
+jest.mock('expo-asset', () => ({
+  Asset: {
+    loadAsync: jest.fn(),
+  },
+}));
+
+// Мокаем react-native компоненты
+jest.mock('react-native/Libraries/Components/StatusBar/StatusBar', () => 'StatusBar');
+
+// Мокаем SafeAreaProvider
+jest.mock('react-native-safe-area-context', () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 };
   return {
-    Ionicons: createIcon('Ionicons'),
-    MaterialIcons: createIcon('MaterialIcons'),
-    AntDesign: createIcon('AntDesign'),
-    Feather: createIcon('Feather'),
-    FontAwesome: createIcon('FontAwesome'),
-    FontAwesome5: createIcon('FontAwesome5'),
-    MaterialCommunityIcons: createIcon('MaterialCommunityIcons'),
+    SafeAreaProvider: ({ children }) => children,
+    SafeAreaConsumer: ({ children }) => children(inset),
+    SafeAreaView: ({ children }) => children,
+    useSafeAreaInsets: () => inset,
+    useSafeAreaFrame: () => ({ x: 0, y: 0, width: 390, height: 844 }),
   };
 });
 
-// Global test setup
-global.console = {
-  ...console,
-  log: jest.fn(),
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-}; 
+// Увеличиваем timeout для тестов
+jest.setTimeout(30000);

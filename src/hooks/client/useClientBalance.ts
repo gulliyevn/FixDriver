@@ -17,10 +17,14 @@ export interface ClientBalanceContextType {
   balance: number;
   transactions: ClientTransaction[];
   cashback: number;
+  earnings?: number;
   topUpBalance: (amount: number) => Promise<void>;
+  addEarnings?: (amount: number) => Promise<void>;
   deductBalance: (amount: number, description: string, packageType?: string) => Promise<boolean>;
   addTransaction: (transaction: Omit<ClientTransaction, 'id' | 'date'>) => Promise<void>;
   getCashback: () => Promise<number>;
+  resetBalance?: () => Promise<void>;
+  loadEarnings?: () => Promise<void>;
 }
 
 export const useClientBalance = (): ClientBalanceContextType => {
@@ -161,13 +165,49 @@ export const useClientBalance = (): ClientBalanceContextType => {
     return cashback;
   };
 
+  const resetBalance = async () => {
+    try {
+      console.log('🔄 Сброс клиентского баланса...');
+      
+      // Обнуляем баланс
+      setBalance(0);
+      await AsyncStorage.setItem(balanceKey, '0');
+      
+      // Очищаем транзакции
+      setTransactions([]);
+      await AsyncStorage.setItem(transactionsKey, JSON.stringify([]));
+      
+      // Обнуляем cashback
+      setCashback(0);
+      await AsyncStorage.setItem(cashbackKey, '0');
+      
+      console.log('✅ Клиентский баланс успешно сброшен');
+    } catch (error) {
+      console.error('❌ Ошибка при сбросе клиентского баланса:', error);
+    }
+  };
+
+  // Dummy функция для совместимости с интерфейсом
+  const addEarnings = async (amount: number) => {
+    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
+  };
+
+  // Dummy функция для совместимости с интерфейсом
+  const loadEarnings = async () => {
+    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
+  };
+
   return {
     balance,
     transactions,
     cashback,
+    earnings: 0, // Клиенты не зарабатывают
     topUpBalance,
+    addEarnings,
     deductBalance,
     addTransaction,
     getCashback,
+    resetBalance,
+    loadEarnings,
   };
 }; 

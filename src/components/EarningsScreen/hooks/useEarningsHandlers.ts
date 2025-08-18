@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -38,6 +39,8 @@ export const useEarningsHandlers = (
     const newOnlineStatus = !isOnline;
     setIsOnline(newOnlineStatus);
     setStatusModalVisible(false);
+    // Persist status to AsyncStorage
+    AsyncStorage.setItem('@driver_online_status', String(newOnlineStatus)).catch(() => {});
     
     // Интеграция с VIP системой
     if (newOnlineStatus) {

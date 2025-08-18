@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useBalance } from '../../../hooks/useBalance';
 
 type PeriodType = 'today' | 'week' | 'month' | 'year';
@@ -55,11 +55,14 @@ const mockData = {
   }
 };
 
-export const useEarningsData = (selectedPeriod: PeriodType = 'week') => {
-  const { balance } = useBalance() as any;
+export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate?: number, localBalance?: number) => {
+  const { balance, earnings } = useBalance();
+  
+  // Используем локальный баланс, если он передан, иначе используем earnings из хука
+  const effectiveBalance = localBalance !== undefined ? localBalance : earnings;
 
   const currentData = useMemo(() => {
-    const currentBalance = balance || 0;
+    const currentBalance = effectiveBalance || 0;
     
     // Если баланс 0, показываем без точки
     if (currentBalance === 0) {
@@ -73,7 +76,7 @@ export const useEarningsData = (selectedPeriod: PeriodType = 'week') => {
     return {
       total: `${formattedBalance} AFc`,
     };
-  }, [balance]);
+  }, [effectiveBalance, forceUpdate, localBalance, earnings, balance]);
 
   const quickStats = useMemo(() => ({
     totalTrips: mockData[selectedPeriod].rides.length,

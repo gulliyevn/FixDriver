@@ -1,21 +1,8 @@
-import { useAuth } from '../context/AuthContext';
-import { useClientBalance, ClientBalanceContextType } from './client/useClientBalance';
-import { useDriverBalance, DriverBalanceContextType } from './driver/useDriverBalance';
-
-// Объединяем типы для умного хука
-export type BalanceContextType = ClientBalanceContextType | DriverBalanceContextType;
+import { useBalanceContext } from '../context/BalanceContext';
 
 /**
- * Умный хук для работы с балансом
- * Автоматически выбирает клиентский или драйверский хук в зависимости от роли пользователя
+ * Хук для работы с балансом через централизованный контекст
  */
-export const useBalance = (): BalanceContextType => {
-  const { user } = useAuth();
-  
-  // Выбираем хук в зависимости от роли
-  if (user?.role === 'driver') {
-    return useDriverBalance();
-  } else {
-    return useClientBalance();
-  }
+export const useBalance = () => {
+  return useBalanceContext();
 }; 

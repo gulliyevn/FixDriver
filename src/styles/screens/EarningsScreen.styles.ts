@@ -99,6 +99,16 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       alignItems: 'center',
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
+    modalTimerContainer: {
+      width: '100%',
+      alignItems: 'center',
+      marginBottom: SIZES.sm,
+    },
+    modalTimerText: {
+      fontSize: SIZES.fontSize.xxl,
+      fontWeight: '700',
+      color: colors.primary,
+    },
     modalTitle: {
       fontSize: SIZES.fontSize.xl,
       fontWeight: '700',
@@ -414,6 +424,20 @@ export const createEarningsScreenStyles = (isDark: boolean) => {
       fontSize: SIZES.fontSize.lg,
       fontWeight: '600',
       marginLeft: SIZES.sm,
+    },
+    testButton: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: SIZES.md,
+      alignSelf: 'center',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    testButtonText: {
+      fontSize: 24,
+      color: 'white',
     },
   });
 };

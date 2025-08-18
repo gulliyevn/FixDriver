@@ -260,6 +260,9 @@ storybook-static/
 # Bundle analyzer
 bundle-analyzer-report.html
 
+# Project docs (private)
+EARNINGS_LEVELS_VIP_LOGIC.md
+
 # Performance
 .perf/
 
