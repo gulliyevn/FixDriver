@@ -1,112 +1,102 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useDriverModalHandlers } from '../useDriverModalHandlers';
 
-// Mock dependencies
+// Моки функций, которые будем проверять
+const mockIncrementProgress = jest.fn();
+const mockAddEarnings = jest.fn();
+const mockRegisterRide = jest.fn();
+
+// Мокаем LevelProgressContext (возвращаем driverLevel и incrementProgress)
 jest.mock('../../../../context/LevelProgressContext', () => ({
-  useLevelProgress: () => ({
-    incrementProgress: jest.fn(),
-    addRides: jest.fn(),
-  }),
+	useLevelProgress: () => ({
+		driverLevel: { isVIP: true },
+		incrementProgress: mockIncrementProgress,
+	}),
 }));
 
-jest.mock('../../../../context/BalanceContext', () => ({
-  useBalanceContext: () => ({
-    addEarnings: jest.fn(),
-  }),
+// Мокаем useBalance (addEarnings)
+jest.mock('../../../../hooks/useBalance', () => ({
+	useBalance: () => ({
+		addEarnings: mockAddEarnings,
+	}),
 }));
 
+// Мокаем useVIPTimeTracking (registerRide)
 jest.mock('../../../../components/EarningsScreen/hooks/useVIPTimeTracking', () => ({
-  useVIPTimeTracking: () => ({
-    registerRide: jest.fn(),
-  }),
+	useVIPTimeTracking: () => ({
+		registerRide: mockRegisterRide,
+	}),
 }));
+
+// Минимальные заглушки состояния и экшенов, чтобы хук корректно создал колбэки
+const createStubState = () => ({
+	isDriverExpanded: false,
+	buttonColorState: 0,
+	isButtonsSwapped: false,
+});
+
+const createStubActions = () => ({
+	setIsDriverExpanded: jest.fn(),
+	setShowLongPressDialog: jest.fn(),
+	setShowStopDialog: jest.fn(),
+	setShowEndDialog: jest.fn(),
+	setShowRatingDialog: jest.fn(),
+	setPauseStartTime: jest.fn(),
+	setEmergencyActionsUsed: jest.fn(),
+	setEmergencyActionType: jest.fn(),
+	setButtonColorState: jest.fn(),
+	setIconOpacity: jest.fn(),
+	setShowSwapIcon: jest.fn(),
+	setShowDialog1: jest.fn(),
+	setShowDialog2: jest.fn(),
+	setShowDialogEmpty: jest.fn(),
+	setShowDialogCancel: jest.fn(),
+	setIsButtonsSwapped: jest.fn(),
+	setCallSheetOpen: jest.fn(),
+	setShowContinueDialog: jest.fn(),
+});
 
 describe('useDriverModalHandlers', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-  describe('completeTripAccounting', () => {
-    it('calls all required functions when completing a trip', async () => {
-      const mockIncrementProgress = jest.fn();
-      const mockAddRides = jest.fn();
-      const mockAddEarnings = jest.fn();
-      const mockRegisterRide = jest.fn();
+	describe('completeTripAccounting', () => {
+		it('calls incrementProgress, adds fare, registers VIP ride', async () => {
+			mockIncrementProgress.mockResolvedValueOnce({ hasLevelUp: false });
 
-      // Mock the context hooks
-      jest.doMock('../../../context/LevelProgressContext', () => ({
-        useLevelProgress: () => ({
-          incrementProgress: mockIncrementProgress,
-          addRides: mockAddRides,
-        }),
-      }));
+			const state = createStubState();
+			const actions = createStubActions();
 
-      jest.doMock('../../../context/BalanceContext', () => ({
-        useBalanceContext: () => ({
-          addEarnings: mockAddEarnings,
-        }),
-      }));
+			const { result } = renderHook(() => useDriverModalHandlers(state as any, actions as any));
 
-      jest.doMock('../../../hooks/useVIPTimeTracking', () => ({
-        useVIPTimeTracking: () => ({
-          registerRide: mockRegisterRide,
-        }),
-      }));
+			await act(async () => {
+				await result.current.handleEndOkPress();
+			});
 
-      const { result } = renderHook(() => useDriverModalHandlers());
+			// incrementProgress вызван
+			expect(mockIncrementProgress).toHaveBeenCalled();
+			// Добавлен тариф 5.13 AFc
+			expect(mockAddEarnings).toHaveBeenCalledWith(5.13);
+			// Зарегистрирована поездка для VIP
+			expect(mockRegisterRide).toHaveBeenCalled();
+		});
 
-      const tripData = {
-        fare: 1500,
-        distance: 5.5,
-        duration: 1200,
-      };
+		it('adds bonus when level up occurs', async () => {
+			mockIncrementProgress.mockResolvedValueOnce({ hasLevelUp: true, bonusAmount: 500 });
 
-      await act(async () => {
-        await result.current.completeTripAccounting(tripData);
-      });
+			const state = createStubState();
+			const actions = createStubActions();
 
-      // Verify all functions were called
-      expect(mockIncrementProgress).toHaveBeenCalled();
-      expect(mockAddRides).toHaveBeenCalledWith(1);
-      expect(mockAddEarnings).toHaveBeenCalledWith(1500); // fare amount
-      expect(mockRegisterRide).toHaveBeenCalled();
-    });
+			const { result } = renderHook(() => useDriverModalHandlers(state as any, actions as any));
 
-    it('handles trip completion with bonus earnings', async () => {
-      const mockIncrementProgress = jest.fn().mockResolvedValue({
-        bonus: 500,
-        levelUp: true,
-      });
-      const mockAddEarnings = jest.fn();
+			await act(async () => {
+				await result.current.handleEndOkPress();
+			});
 
-      jest.doMock('../../../context/LevelProgressContext', () => ({
-        useLevelProgress: () => ({
-          incrementProgress: mockIncrementProgress,
-          addRides: jest.fn(),
-        }),
-      }));
-
-      jest.doMock('../../../context/BalanceContext', () => ({
-        useBalanceContext: () => ({
-          addEarnings: mockAddEarnings,
-        }),
-      }));
-
-      const { result } = renderHook(() => useDriverModalHandlers());
-
-      const tripData = {
-        fare: 2000,
-        distance: 8.0,
-        duration: 1800,
-      };
-
-      await act(async () => {
-        await result.current.completeTripAccounting(tripData);
-      });
-
-      // Verify fare and bonus were added
-      expect(mockAddEarnings).toHaveBeenCalledWith(2000); // fare
-      expect(mockAddEarnings).toHaveBeenCalledWith(500); // bonus
-    });
-  });
+			// Бонус и тариф начислены
+			expect(mockAddEarnings).toHaveBeenCalledWith(500);
+			expect(mockAddEarnings).toHaveBeenCalledWith(5.13);
+		});
+	});
 });

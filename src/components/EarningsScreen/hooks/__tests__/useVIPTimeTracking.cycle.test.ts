@@ -2,114 +2,99 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useVIPTimeTracking } from '../useVIPTimeTracking';
 
-// Mock dependencies
-jest.mock('expo-haptics', () => ({
-  notificationAsync: jest.fn(),
+// Ключ, используемый в хуке
+const VIP_TIME_KEY = '@driver_vip_time_tracking';
+
+// Моки
+jest.mock('@react-native-async-storage/async-storage', () => ({
+	setItem: jest.fn(() => Promise.resolve()),
+	getItem: jest.fn(() => Promise.resolve(null)),
 }));
 
-jest.mock('react-native-reanimated', () => ({
-  useSharedValue: jest.fn(() => ({ value: 0 })),
-  useAnimatedStyle: jest.fn(() => ({})),
-  withTiming: jest.fn(),
-  runOnJS: jest.fn((fn) => fn),
+jest.mock('../../../../context/BalanceContext', () => ({
+	useBalanceContext: () => ({ addEarnings: jest.fn() }),
 }));
 
 describe('useVIPTimeTracking - 360-day auto reset', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    AsyncStorage.clear();
-    jest.useFakeTimers();
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+	it('resets VIP cycle fully after 360 days from vipCycleStartDate', async () => {
+		const now = new Date();
+		const old = new Date(now);
+		old.setDate(old.getDate() - 365);
 
-  it('resets VIP cycle fully after 360 days from vipCycleStartDate', async () => {
-    const { result } = renderHook(() => useVIPTimeTracking());
+		const initialVIPData = {
+			currentDay: now.toISOString().split('T')[0],
+			currentMonth: now.toISOString().slice(0, 7),
+			hoursOnline: 0,
+			ridesToday: 0,
+			qualifiedDaysThisMonth: 15,
+			consecutiveQualifiedMonths: 5,
+			lastOnlineTime: null,
+			isCurrentlyOnline: false,
+			vipCycleStartDate: old.toISOString().split('T')[0],
+			periodStartDate: now.toISOString().split('T')[0],
+			qualifiedDaysHistory: [25, 22, 20, 18, 21],
+		};
+		(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(initialVIPData));
 
-    // Set up initial VIP data with old cycle start date
-    const oldCycleStartDate = new Date();
-    oldCycleStartDate.setDate(oldCycleStartDate.getDate() - 365); // 365 days ago
+		const { result } = renderHook(() => useVIPTimeTracking(true));
 
-    const initialVIPData = {
-      consecutiveQualifiedMonths: 5,
-      vipCycleStartDate: oldCycleStartDate.toISOString(),
-      qualifiedDaysHistory: [25, 22, 20, 18, 21],
-      qualifiedDaysThisMonth: 15,
-      periodStartDate: new Date().toISOString(),
-    };
+		// Ждём загрузки
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 0));
+		});
 
-    await AsyncStorage.setItem('vipTimeData', JSON.stringify(initialVIPData));
+		// Форсируем дневную проверку
+		await act(async () => {
+			(result.current as any).forceDayCheck();
+		});
 
-    // Initialize hook
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
-    });
+		// Проверяем полный сброс по состоянию
+		const data = (result.current as any).vipTimeData;
+		expect(data.consecutiveQualifiedMonths).toBe(0);
+		expect(data.vipCycleStartDate).toBeNull();
+		expect(data.qualifiedDaysHistory).toEqual([]);
+		expect(data.qualifiedDaysThisMonth).toBe(0);
+		expect(typeof data.periodStartDate).toBe('string');
+	});
 
-    // Trigger day change check (simulate 360+ days passed)
-    await act(async () => {
-      result.current.checkDayChange();
-    });
+	it('does not reset VIP cycle if less than 360 days passed', async () => {
+		const now = new Date();
+		const recent = new Date(now);
+		recent.setDate(recent.getDate() - 30);
 
-    // Wait for async operations
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    });
+		const initialVIPData = {
+			currentDay: now.toISOString().split('T')[0],
+			currentMonth: now.toISOString().slice(0, 7),
+			hoursOnline: 0,
+			ridesToday: 0,
+			qualifiedDaysThisMonth: 15,
+			consecutiveQualifiedMonths: 3,
+			lastOnlineTime: null,
+			isCurrentlyOnline: false,
+			vipCycleStartDate: recent.toISOString().split('T')[0],
+			periodStartDate: now.toISOString().split('T')[0],
+			qualifiedDaysHistory: [25, 22, 20],
+		};
+		(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(initialVIPData));
 
-    // Get updated data
-    const storedData = await AsyncStorage.getItem('vipTimeData');
-    const data = storedData ? JSON.parse(storedData) : null;
+		const { result } = renderHook(() => useVIPTimeTracking(true));
 
-    // Verify full reset occurred
-    expect(data).toBeTruthy();
-    expect(data.consecutiveQualifiedMonths).toBe(0);
-    expect(typeof data.vipCycleStartDate).toBe('string'); // Re-initialized to next midnight
-    expect(data.qualifiedDaysHistory).toEqual([]);
-    expect(data.qualifiedDaysThisMonth).toBe(0);
-  });
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 0));
+		});
 
-  it('does not reset VIP cycle if less than 360 days passed', async () => {
-    const { result } = renderHook(() => useVIPTimeTracking());
+		await act(async () => {
+			(result.current as any).forceDayCheck();
+		});
 
-    // Set up initial VIP data with recent cycle start date
-    const recentCycleStartDate = new Date();
-    recentCycleStartDate.setDate(recentCycleStartDate.getDate() - 30); // 30 days ago
-
-    const initialVIPData = {
-      consecutiveQualifiedMonths: 3,
-      vipCycleStartDate: recentCycleStartDate.toISOString(),
-      qualifiedDaysHistory: [25, 22, 20],
-      qualifiedDaysThisMonth: 15,
-      periodStartDate: new Date().toISOString(),
-    };
-
-    await AsyncStorage.setItem('vipTimeData', JSON.stringify(initialVIPData));
-
-    // Initialize hook
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
-    });
-
-    // Trigger day change check
-    await act(async () => {
-      result.current.checkDayChange();
-    });
-
-    // Wait for async operations
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    });
-
-    // Get updated data
-    const storedData = await AsyncStorage.getItem('vipTimeData');
-    const data = storedData ? JSON.parse(storedData) : null;
-
-    // Verify no reset occurred
-    expect(data).toBeTruthy();
-    expect(data.consecutiveQualifiedMonths).toBe(3);
-    expect(data.vipCycleStartDate).toBe(recentCycleStartDate.toISOString());
-    expect(data.qualifiedDaysHistory).toEqual([25, 22, 20]);
-    expect(data.qualifiedDaysThisMonth).toBe(15);
-  });
+		const data = (result.current as any).vipTimeData;
+		expect(data.consecutiveQualifiedMonths).toBe(3);
+		expect(data.vipCycleStartDate).toBe(initialVIPData.vipCycleStartDate);
+		expect(data.qualifiedDaysHistory).toEqual([25, 22, 20]);
+		expect(data.qualifiedDaysThisMonth).toBe(15);
+	});
 });

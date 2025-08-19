@@ -61,10 +61,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     return d.toISOString().split('T')[0];
   };
 
-  // Проверяем смену дня каждую минуту (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
-  useEffect(() => {
-
-    const checkDayChange = () => {
+  // Проверка смены дня (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
+  const performDayCheck = useCallback(() => {
       const now = new Date();
       // Используем локальную дату, а не UTC
       const today = now.getFullYear() + '-' + 
@@ -214,11 +212,13 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
           // logs removed in production
         }
       }
-    };
+    }, [isVIP, vipTimeData]);
 
-    const interval = setInterval(checkDayChange, 60000); // Проверяем каждую минуту
+  // Таймер: проверяем каждую минуту
+  useEffect(() => {
+    const interval = setInterval(performDayCheck, 60000);
     return () => clearInterval(interval);
-  }, [isVIP, vipTimeData]);
+  }, [performDayCheck]);
 
   const loadVIPTimeData = async () => {
     try {
@@ -463,5 +463,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     simulateMonthChange,
     getQualifiedDaysHistory,
     checkCurrentDayQualification,
+    // Для тестов/отладки: форсированная проверка смены дня
+    forceDayCheck: performDayCheck,
   };
 };
