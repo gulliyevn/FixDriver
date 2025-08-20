@@ -32,6 +32,9 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const [isCallSheetOpen, setCallSheetOpen] = useState(false);
   const [sliderWidth, setSliderWidth] = useState(0);
   const [isButtonsSwapped, setIsButtonsSwapped] = useState(false);
+  // Новые состояния для таймера в статусе 2 (циан)
+  const [isTripTimerActive, setIsTripTimerActive] = useState(false);
+  const [tripStartTime, setTripStartTime] = useState<number | null>(null);
 
   // Синхронизация с персистентным состоянием при загрузке
   useEffect(() => {
@@ -41,6 +44,8 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
       setEmergencyActionsUsed(buttonState.emergencyActionsUsed);
       setEmergencyActionType(buttonState.emergencyActionType);
       setPauseStartTime(buttonState.pauseStartTime);
+      setIsTripTimerActive(buttonState.isTripTimerActive);
+      setTripStartTime(buttonState.tripStartTime);
       isInitialized.current = true;
     }
   }, [isLoaded, buttonState]);
@@ -54,9 +59,11 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
         emergencyActionsUsed,
         emergencyActionType,
         pauseStartTime,
+        isTripTimerActive,
+        tripStartTime,
       });
     }
-  }, [buttonColorState, isPaused, emergencyActionsUsed, emergencyActionType, pauseStartTime, isLoaded]);
+  }, [buttonColorState, isPaused, emergencyActionsUsed, emergencyActionType, pauseStartTime, isTripTimerActive, tripStartTime, isLoaded]);
 
   // Асинхронная активация кнопки экстренных действий
   useEffect(() => {
@@ -93,12 +100,15 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     isCallSheetOpen,
     sliderWidth,
     isButtonsSwapped,
+    isTripTimerActive,
+    tripStartTime,
   };
 
   const actions: DriverModalActions = {
     setIsDriverExpanded,
     setButtonColorState,
     setIsOnline,
+    setShowGoOnlineConfirm,
     setShowDialog1,
     setShowDialog2,
     setShowDialog3,
@@ -109,7 +119,6 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     setShowEndDialog,
     setShowContinueDialog,
     setShowRatingDialog,
-    setShowGoOnlineConfirm,
     setIsPaused,
     setEmergencyActionsUsed,
     setEmergencyActionType,
@@ -122,6 +131,8 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     setSliderWidth,
     setIsButtonsSwapped,
     resetButtonState,
+    setIsTripTimerActive,
+    setTripStartTime,
   };
 
   return [state, actions];

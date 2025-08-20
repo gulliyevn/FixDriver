@@ -354,7 +354,11 @@
       "deleteDriversTitle": "Supprimer des chauffeurs",
       "deleteDriversMessage": "Supprimer les chauffeurs sélectionnés de la liste ?",
       "deleteOneDriverTitle": "Supprimer le chauffeur",
-      "deleteOneDriverMessage": "Supprimer le chauffeur de la liste ?"
+      "deleteOneDriverMessage": "Supprimer le chauffeur de la liste ?",
+      "pauseTripTitle": "Mettre en pause le trajet ?",
+      "pauseTripMessage": "Voulez-vous mettre en pause le trajet avec %{driverName} ?",
+      "resumeTripTitle": "Reprendre le trajet ?",
+      "resumeTripMessage": "Voulez-vous reprendre le trajet avec %{driverName} ?"
     },
     "selection": {
       "selectAll": "Tout sélectionner",

@@ -129,6 +129,20 @@ const EarningsScreen: React.FC = () => {
     }
   }, [uiUpdateTrigger]);
 
+  // Принудительное обновление таймера при изменении VIP данных
+  React.useEffect(() => {
+    if (isCurrentlyOnline) {
+      setTimerTick(prev => prev + 1);
+    }
+  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime]);
+
+  // Принудительное обновление таймера при изменении онлайн-статуса
+  React.useEffect(() => {
+    if (isOnline) {
+      setTimerTick(prev => prev + 1);
+    }
+  }, [isOnline]);
+
   const {
     toggleFilter,
     handlePeriodSelect,

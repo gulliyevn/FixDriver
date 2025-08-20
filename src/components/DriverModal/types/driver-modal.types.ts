@@ -32,6 +32,9 @@ export interface DriverModalState {
   isCallSheetOpen: boolean;
   sliderWidth: number;
   isButtonsSwapped: boolean;
+  // Новые состояния для таймера в статусе 2 (циан)
+  isTripTimerActive: boolean;
+  tripStartTime: number | null;
 }
 
 export interface DriverModalActions {
@@ -61,6 +64,9 @@ export interface DriverModalActions {
   setSliderWidth: (width: number) => void;
   setIsButtonsSwapped: (swapped: boolean) => void;
   resetButtonState: () => Promise<void>;
+  // Новые действия для таймера в статусе 2 (циан)
+  setIsTripTimerActive: (active: boolean) => void;
+  setTripStartTime: (time: number | null) => void;
 }
 
 export interface DriverModalHandlers {

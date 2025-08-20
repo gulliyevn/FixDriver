@@ -13,13 +13,17 @@ type Driver = {
 export type DriverModalHeaderProps = {
   styles: any;
   role?: 'client' | 'driver';
-  driver?: Driver | null;
+  driver?: any;
   childName?: string;
   childAge?: string;
-  slideProgress?: number; // прогресс свайпа для анимации
-  isPaused?: boolean; // состояние паузы
-  pauseStartTime?: number | null; // время начала паузы
-  formatTime?: (seconds: number) => string; // функция форматирования времени
+  slideProgress?: number;
+  isPaused?: boolean;
+  pauseStartTime?: number | null;
+  formatTime?: (seconds: number) => string;
+  // Новые пропсы для таймера в статусе 2
+  buttonColorState?: number;
+  isTripTimerActive?: boolean;
+  tripStartTime?: number | null;
 };
 
 const DriverModalHeader: React.FC<DriverModalHeaderProps> = ({ 
@@ -31,11 +35,15 @@ const DriverModalHeader: React.FC<DriverModalHeaderProps> = ({
   slideProgress = 0,
   isPaused = false,
   pauseStartTime = null,
-  formatTime = () => '00:00'
+  formatTime = () => '00:00',
+  buttonColorState = 0,
+  isTripTimerActive = false,
+  tripStartTime = null
 }) => {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [tripElapsedSeconds, setTripElapsedSeconds] = useState(0);
 
-  // Обновление таймера каждую секунду при паузе
+  // Обновление таймера каждую секунду при паузе (статус 4)
   useEffect(() => {
     if (isPaused && pauseStartTime === 0) {
       const interval = setInterval(() => {
@@ -47,9 +55,21 @@ const DriverModalHeader: React.FC<DriverModalHeaderProps> = ({
     }
   }, [isPaused, pauseStartTime]);
 
+  // Обновление таймера каждую секунду при активной поездке (статус 2)
+  useEffect(() => {
+    if (isTripTimerActive && tripStartTime === 0) {
+      const interval = setInterval(() => {
+        setTripElapsedSeconds(prev => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else if (!isTripTimerActive) {
+      setTripElapsedSeconds(0); // сбрасываем при остановке таймера
+    }
+  }, [isTripTimerActive, tripStartTime]);
+
   return (
     <View style={styles.avatarAndInfoRow}>
-      {/* Таймер при паузе */}
+      {/* Таймер при паузе (статус 4) */}
       {isPaused && role === 'driver' ? (
         <View style={[
           styles.timerContainer,
@@ -61,40 +81,54 @@ const DriverModalHeader: React.FC<DriverModalHeaderProps> = ({
         </View>
       ) : (
         <>
-          <View style={[
-            styles.avatarContainer,
-            {
-              opacity: Math.max(0, 1 - Math.abs(slideProgress) / 50),
-            }
-          ]}>
-            <View style={styles.avatar}>
-              <Ionicons name="person" size={32} color="#FFFFFF" />
+          {/* Таймер при активной поездке (статус 2) */}
+          {isTripTimerActive && buttonColorState === 2 && role === 'driver' ? (
+            <View style={[
+              styles.timerContainer,
+              {
+                opacity: Math.max(0, 1 - Math.abs(slideProgress) / 50),
+              }
+            ]}>
+              <Text style={styles.timerText}>{formatTime(tripElapsedSeconds)}</Text>
             </View>
-            <View style={styles.onlineIndicator} />
-          </View>
-          <View style={[
-            styles.driverMainInfo,
-            {
-              opacity: Math.max(0, 1 - Math.abs(slideProgress) / 50),
-            }
-          ]}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.driverName}>{`${driver?.first_name ?? ''} ${driver?.last_name ?? ''}`}</Text>
-              <Ionicons name="diamond" size={16} color="#9CA3AF" style={styles.premiumIcon} />
-            </View>
-            <View style={styles.vehicleExpandRow}>
-              <View style={styles.vehicleInfoContainer}>
-                {role === 'driver' && (
-                  <Ionicons name="football" size={16} color="#9CA3AF" style={styles.childIcon} />
-                )}
-                <Text style={styles.vehicleInfo}>
-                  {role === 'driver'
-                    ? `${childName ?? ''} • ${childAge ?? ''} лет`
-                    : `${driver?.vehicle_brand ?? ''} ${driver?.vehicle_model ?? ''} • ${driver?.vehicle_number ?? ''}`}
-                </Text>
+          ) : (
+            <>
+              <View style={[
+                styles.avatarContainer,
+                {
+                  opacity: Math.max(0, 1 - Math.abs(slideProgress) / 50),
+                }
+              ]}>
+                <View style={styles.avatar}>
+                  <Ionicons name="person" size={32} color="#FFFFFF" />
+                </View>
+                <View style={styles.onlineIndicator} />
               </View>
-            </View>
-          </View>
+              <View style={[
+                styles.driverMainInfo,
+                {
+                  opacity: Math.max(0, 1 - Math.abs(slideProgress) / 50),
+                }
+              ]}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.driverName}>{`${driver?.first_name ?? ''} ${driver?.last_name ?? ''}`}</Text>
+                  <Ionicons name="diamond" size={16} color="#9CA3AF" style={styles.premiumIcon} />
+                </View>
+                <View style={styles.vehicleExpandRow}>
+                  <View style={styles.vehicleInfoContainer}>
+                    {role === 'driver' && (
+                      <Ionicons name="football" size={16} color="#9CA3AF" style={styles.childIcon} />
+                    )}
+                    <Text style={styles.vehicleInfo}>
+                      {role === 'driver'
+                        ? `${childName ?? ''} • ${childAge ?? ''} лет`
+                        : `${driver?.vehicle_brand ?? ''} ${driver?.vehicle_model ?? ''} • ${driver?.vehicle_number ?? ''}`}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
         </>
       )}
       

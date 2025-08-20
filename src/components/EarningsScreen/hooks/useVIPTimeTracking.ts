@@ -53,11 +53,24 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     const unsub = DriverStatusService.subscribe((online) => {
       // Принудительно обновляем состояние при изменении статуса
       setUpdateTrigger(prev => prev + 1);
+      
+      // Принудительно обновляем VIP данные при изменении статуса
+      if (online && !vipTimeData.isCurrentlyOnline) {
+        const now = Date.now();
+        const newData: VIPTimeData = {
+          ...vipTimeData,
+          isCurrentlyOnline: true,
+          lastOnlineTime: now,
+          periodStartDate: isVIP ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate()) : vipTimeData.periodStartDate,
+        };
+        setVipTimeData(newData);
+        saveVIPTimeData(newData);
+      }
     });
     return () => {
       unsub();
     };
-  }, []);
+  }, [vipTimeData, isVIP]);
 
   // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
   useEffect(() => {

@@ -6,7 +6,7 @@ import { Driver } from '../../types/driver';
 import { getDriverInfo as getDriverInfoMock, getDriverTrips as getDriverTripsMock } from '../../mocks/driverModalMock';
 
 export type DriverListItemProps = {
-  driver: Driver & { isFavorite?: boolean };
+  driver: Driver & { isFavorite?: boolean; isPaused?: boolean };
   isDark: boolean;
   styles: any;
   actionWidth: number;
@@ -18,6 +18,7 @@ export type DriverListItemProps = {
   onToggleFavorite: (driverId: string) => void;
   onDelete: (driverId: string) => void;
   onChat: (driver: Driver) => void;
+  onTogglePause?: (driverId: string) => void;
 };
 
 const DriverListItem: React.FC<DriverListItemProps> = ({
@@ -32,6 +33,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
   onToggleFavorite,
   onDelete,
   onChat,
+  onTogglePause,
   role = 'client',
 }) => {
   const { t } = useI18n();
@@ -84,6 +86,12 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     // Сообщение реализовано в родителе ранее, здесь оставляем только закрытие
   }, [closeCallSheet]);
 
+  const handlePausePress = useCallback(() => {
+    if (onTogglePause) {
+      onTogglePause(driver.id);
+    }
+  }, [onTogglePause, driver.id]);
+
   const getDriverInfo = useCallback((driverId: string) => getDriverInfoMock(driverId), []);
 
   const getDriverTrips = useCallback((driverId: string) => getDriverTripsMock(driverId), []);
@@ -93,18 +101,32 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     const opacity = dragX.interpolate({ inputRange: [0, actionWidth * 0.6, actionWidth], outputRange: [0, 0.6, 1], extrapolate: 'clamp' });
     return (
       <View style={[styles.swipeActionsLeft]}>
-        <Animated.View style={{ transform: [{ scale }], opacity }}>
-          <TouchableOpacity
-            style={[styles.swipeAction, styles.favoriteAction, styles.swipeActionInnerLeft]}
-            onPress={() => onToggleFavorite(driver.id)}
-            accessibilityRole="button"
-            accessibilityLabel="bookmark"
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            activeOpacity={0.85}
-          >
-            <Ionicons name="bookmark" size={28} color="#fff" />
-          </TouchableOpacity>
-        </Animated.View>
+        <View style={styles.swipeActionsLeftColumn}>
+          <Animated.View style={{ transform: [{ scale }], opacity }}>
+            <TouchableOpacity
+              style={[styles.swipeAction, styles.pauseAction, styles.swipeActionInnerLeft]}
+              onPress={handlePausePress}
+              accessibilityRole="button"
+              accessibilityLabel={driver.isPaused ? "resume" : "pause"}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.85}
+            >
+              <Ionicons name={driver.isPaused ? "play" : "pause"} size={28} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={{ transform: [{ scale }], opacity }}>
+            <TouchableOpacity
+              style={[styles.swipeAction, styles.favoriteAction, styles.swipeActionInnerLeft]}
+              onPress={() => onToggleFavorite(driver.id)}
+              accessibilityRole="button"
+              accessibilityLabel="bookmark"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              activeOpacity={0.85}
+            >
+              <Ionicons name="bookmark" size={28} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
       </View>
     );
   };
@@ -144,7 +166,14 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
       onSwipeableWillOpen={() => onSwipeableWillOpen?.(driver.id, null)}
       onSwipeableClose={() => onSwipeableClose?.(driver.id, null)}
     >
-      <View style={styles.driverItem}>
+      <View style={[styles.driverItem, driver.isPaused && styles.driverItemPaused]}>
+        {driver.isPaused && (
+          <View style={styles.pauseOverlay}>
+            <View style={styles.pauseIconLarge}>
+              <Ionicons name="pause" size={32} color="#000" />
+            </View>
+          </View>
+        )}
         <TouchableOpacity style={styles.driverHeader} onPress={toggleExpanded} activeOpacity={0.7}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
@@ -159,6 +188,9 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
                 <Ionicons name="diamond" size={16} color="#9CA3AF" style={styles.premiumIcon} />
                 {driver.isFavorite && (
                   <Ionicons name="bookmark" size={14} color={isDark ? '#F9FAFB' : '#111827'} style={styles.favoriteIcon} />
+                )}
+                {driver.isPaused && (
+                  <Ionicons name="pause" size={14} color="#9CA3AF" style={styles.pauseIcon} />
                 )}
               </View>
               <Text style={styles.ratingText}>{driver.rating.toFixed(1)}</Text>

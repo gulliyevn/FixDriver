@@ -1,5 +1,6 @@
-import React, { useMemo, useState, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import { SafeAreaView, View, Text, FlatList, TouchableOpacity, Alert, Animated, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Swipeable } from 'react-native-gesture-handler';
 import type { Swipeable as RNSwipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,12 +32,54 @@ const DriversScreen: React.FC = () => {
   // Используем моки в зависимости от роли
   const [drivers] = useState<Driver[]>(user?.role === 'driver' ? mockClients : mockDrivers);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [lastBookmarkedId, setLastBookmarkedId] = useState<string | null>(null);
+  const [pausedDrivers, setPausedDrivers] = useState<Set<string>>(new Set());
+  const [deletedDrivers, setDeletedDrivers] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const loadingMore = false;
   const hasMore = false;
 
+  // Загрузка сохраненных статусов при монтировании
+  useEffect(() => {
+    loadSavedStatuses();
+  }, []);
+
+  const loadSavedStatuses = async () => {
+    try {
+      const [savedFavorites, savedPaused, savedDeleted, savedLastBookmarked] = await Promise.all([
+        AsyncStorage.getItem('driver_favorites'),
+        AsyncStorage.getItem('driver_paused'),
+        AsyncStorage.getItem('driver_deleted'),
+        AsyncStorage.getItem('driver_last_bookmarked'),
+      ]);
+
+      if (savedFavorites) {
+        setFavorites(new Set(JSON.parse(savedFavorites)));
+      }
+      if (savedPaused) {
+        setPausedDrivers(new Set(JSON.parse(savedPaused)));
+      }
+      if (savedDeleted) {
+        setDeletedDrivers(new Set(JSON.parse(savedDeleted)));
+      }
+      if (savedLastBookmarked) {
+        setLastBookmarkedId(JSON.parse(savedLastBookmarked));
+      }
+    } catch (error) {
+      console.error('Error loading saved statuses:', error);
+    }
+  };
+
   // Фильтрация водителей
+  const originalIndexById = useMemo(() => {
+    const map: Record<string, number> = {};
+    drivers.forEach((d, idx) => {
+      map[d.id] = idx;
+    });
+    return map;
+  }, [drivers]);
+
   const filteredDrivers = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     const filtered = query 
@@ -47,9 +90,26 @@ const DriversScreen: React.FC = () => {
           driver.vehicle_model?.toLowerCase().includes(query)
         )
       : drivers;
-    
-    return filtered.map(d => ({ ...d, isFavorite: favorites.has(d.id) }));
-  }, [drivers, searchQuery, favorites]);
+
+    // Исключаем удаленных водителей
+    const notDeleted = filtered.filter(driver => !deletedDrivers.has(driver.id));
+
+    const mapped = notDeleted.map(d => ({ 
+      ...d, 
+      isFavorite: favorites.has(d.id),
+      isPaused: pausedDrivers.has(d.id)
+    }));
+
+    mapped.sort((a, b) => {
+      const aIsPinned = lastBookmarkedId != null && a.id === lastBookmarkedId && a.isFavorite;
+      const bIsPinned = lastBookmarkedId != null && b.id === lastBookmarkedId && b.isFavorite;
+      if (aIsPinned !== bIsPinned) return aIsPinned ? -1 : 1;
+      if (a.isFavorite !== b.isFavorite) return a.isFavorite ? -1 : 1;
+      return (originalIndexById[a.id] ?? 0) - (originalIndexById[b.id] ?? 0);
+    });
+
+    return mapped;
+  }, [drivers, searchQuery, favorites, pausedDrivers, deletedDrivers, lastBookmarkedId, originalIndexById]);
 
   const loadMoreDrivers = async () => {};
   const handleRefresh = async () => {
@@ -57,23 +117,113 @@ const DriversScreen: React.FC = () => {
     setTimeout(() => setLoading(false), 500);
   };
   
-  const toggleFavorite = useCallback((driverId: string) => {
+  const toggleFavorite = useCallback(async (driverId: string) => {
     setFavorites(prev => {
       const next = new Set(prev);
-      if (next.has(driverId)) next.delete(driverId); else next.add(driverId);
+      if (next.has(driverId)) {
+        next.delete(driverId);
+      } else {
+        next.add(driverId);
+        setLastBookmarkedId(driverId);
+      }
       return next;
     });
-  }, []);
+
+    // Сохраняем в AsyncStorage
+    try {
+      const newFavorites = favorites.has(driverId) 
+        ? new Set([...favorites].filter(id => id !== driverId))
+        : new Set([...favorites, driverId]);
+      
+      await AsyncStorage.setItem('driver_favorites', JSON.stringify([...newFavorites]));
+      await AsyncStorage.setItem('driver_last_bookmarked', JSON.stringify(driverId));
+    } catch (error) {
+      console.error('Error saving favorites:', error);
+    }
+  }, [favorites]);
+
+  const togglePause = useCallback((driverId: string) => {
+    const driver = drivers.find(d => d.id === driverId);
+    if (!driver) return;
+
+    const isCurrentlyPaused = pausedDrivers.has(driverId);
+    const driverName = `${driver.first_name} ${driver.last_name}`;
+    
+    // Умная логика ролей
+    const isDriver = user?.role === 'driver';
+    
+    // Выбираем правильные ключи в зависимости от состояния
+    let titleKey, messageKey;
+    if (isDriver) {
+      titleKey = isCurrentlyPaused ? 'driver.tripDialogs.pauseTrip.resume' : 'driver.tripDialogs.pauseTrip.title';
+      messageKey = isCurrentlyPaused ? 'driver.tripDialogs.pauseTrip.resume' : 'driver.tripDialogs.pauseTrip.message';
+    } else {
+      titleKey = isCurrentlyPaused ? 'client.driversScreen.alerts.resumeTripTitle' : 'client.driversScreen.alerts.pauseTripTitle';
+      messageKey = isCurrentlyPaused ? 'client.driversScreen.alerts.resumeTripMessage' : 'client.driversScreen.alerts.pauseTripMessage';
+    }
+    const nameKey = isDriver ? 'clientName' : 'driverName';
+    
+    Alert.alert(
+      t(titleKey),
+      t(messageKey, { [nameKey]: driverName }),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('common.confirm'),
+          onPress: async () => {
+            setPausedDrivers(prev => {
+              const next = new Set(prev);
+              if (isCurrentlyPaused) {
+                next.delete(driverId);
+              } else {
+                next.add(driverId);
+              }
+              return next;
+            });
+
+            // Сохраняем в AsyncStorage
+            try {
+              const newPausedDrivers = isCurrentlyPaused
+                ? new Set([...pausedDrivers].filter(id => id !== driverId))
+                : new Set([...pausedDrivers, driverId]);
+              
+              await AsyncStorage.setItem('driver_paused', JSON.stringify([...newPausedDrivers]));
+            } catch (error) {
+              console.error('Error saving paused status:', error);
+            }
+
+            // TODO: Обновить статус в БД
+            console.log(`${isCurrentlyPaused ? 'Resume' : 'Pause'} trip for ${isDriver ? 'client' : 'driver'}:`, driverId);
+            // Закрываем свайп после подтверждения
+            try { swipeRefs.current[driverId]?.close?.(); } catch {}
+          }
+        }
+      ]
+    );
+  }, [drivers, pausedDrivers, t, user?.role]);
 
   const removeDriver = useCallback((driverId: string) => {
     // В режиме моков просто скрываем
     console.log('Remove driver:', driverId);
   }, []);
 
-  const removeDrivers = useCallback((ids: Set<string>) => {
-    // В режиме моков просто скрываем
+  const removeDrivers = useCallback(async (ids: Set<string>) => {
+    setDeletedDrivers(prev => {
+      const next = new Set(prev);
+      ids.forEach(id => next.add(id));
+      return next;
+    });
+
+    // Сохраняем в AsyncStorage
+    try {
+      const newDeletedDrivers = new Set([...deletedDrivers, ...ids]);
+      await AsyncStorage.setItem('driver_deleted', JSON.stringify([...newDeletedDrivers]));
+    } catch (error) {
+      console.error('Error saving deleted status:', error);
+    }
+
     console.log('Remove drivers:', Array.from(ids));
-  }, []);
+  }, [deletedDrivers]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [notificationsModalVisible, setNotificationsModalVisible] = useState(false);
@@ -207,6 +357,7 @@ const DriversScreen: React.FC = () => {
         try { swipeRefs.current[driverId]?.close?.(); } catch {}
       }}
       onChat={handleChatWithDriver}
+      onTogglePause={togglePause}
       role={user?.role === 'driver' ? 'driver' : 'client'}
     />
   );
@@ -271,8 +422,22 @@ const DriversScreen: React.FC = () => {
         {
           text: t('common.delete'),
           style: 'destructive',
-          onPress: () => {
-            removeDriver(driverId);
+          onPress: async () => {
+            setDeletedDrivers(prev => {
+              const next = new Set(prev);
+              next.add(driverId);
+              return next;
+            });
+
+            // Сохраняем в AsyncStorage
+            try {
+              const newDeletedDrivers = new Set([...deletedDrivers, driverId]);
+              await AsyncStorage.setItem('driver_deleted', JSON.stringify([...newDeletedDrivers]));
+            } catch (error) {
+              console.error('Error saving deleted status:', error);
+            }
+
+            console.log('Driver deleted:', driverId);
           }
         }
       ]

@@ -354,7 +354,11 @@
       "deleteDriversTitle": "حذف السائقين",
       "deleteDriversMessage": "حذف السائقين المحددين من القائمة؟",
       "deleteOneDriverTitle": "حذف السائق",
-      "deleteOneDriverMessage": "حذف السائق من القائمة؟"
+      "deleteOneDriverMessage": "حذف السائق من القائمة؟",
+      "pauseTripTitle": "إيقاف الرحلة مؤقتاً؟",
+      "pauseTripMessage": "هل تريد إيقاف الرحلة مؤقتاً مع %{driverName}؟",
+      "resumeTripTitle": "استئناف الرحلة؟",
+      "resumeTripMessage": "هل تريد استئناف الرحلة مع %{driverName}؟"
     },
     "selection": {
       "selectAll": "تحديد الكل",

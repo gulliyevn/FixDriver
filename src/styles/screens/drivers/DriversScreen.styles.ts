@@ -135,6 +135,31 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       width: undefined,
       height: undefined,
     },
+    driverItemPaused: {
+      opacity: 0.6,
+      position: 'relative',
+    },
+    pauseOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      borderRadius: SIZES.radius.lg + 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1,
+    },
+    pauseIconLarge: {
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
     driverHeader: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -156,6 +181,9 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       marginLeft: SIZES.xs,
     },
     favoriteIcon: {
+      marginLeft: SIZES.xs,
+    },
+    pauseIcon: {
       marginLeft: SIZES.xs,
     },
     nameRatingRow: {
@@ -523,6 +551,12 @@ export const createDriversScreenStyles = (isDark: boolean) => {
       justifyContent: 'flex-start',
       paddingLeft: SIZES.xl,
     },
+    swipeActionsLeftColumn: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      gap: 6,
+    },
     swipeActionsRight: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -545,6 +579,9 @@ export const createDriversScreenStyles = (isDark: boolean) => {
     },
     favoriteAction: {
       backgroundColor: '#F59E0B', // Оранжевый цвет для избранного
+    },
+    pauseAction: {
+      backgroundColor: '#9CA3AF', // Серый цвет для паузы
     },
     deleteAction: {
       backgroundColor: '#EF4444', // Красный цвет для удаления

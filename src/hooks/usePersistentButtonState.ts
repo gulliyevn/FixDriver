@@ -7,6 +7,9 @@ interface ButtonState {
   emergencyActionsUsed: boolean;
   emergencyActionType: 'stop' | 'end' | null;
   pauseStartTime: number | null;
+  // Новые состояния для таймера в статусе 2 (циан)
+  isTripTimerActive: boolean;
+  tripStartTime: number | null;
 }
 
 const BUTTON_STATE_KEY = '@driver_modal_button_state';
@@ -18,6 +21,8 @@ export const usePersistentButtonState = (driverId: string) => {
     emergencyActionsUsed: false,
     emergencyActionType: null,
     pauseStartTime: null,
+    isTripTimerActive: false,
+    tripStartTime: null,
   });
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -69,6 +74,8 @@ export const usePersistentButtonState = (driverId: string) => {
       emergencyActionsUsed: false,
       emergencyActionType: null,
       pauseStartTime: null,
+      isTripTimerActive: false,
+      tripStartTime: null,
     };
     
     setButtonState(newState);

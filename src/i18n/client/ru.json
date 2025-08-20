@@ -342,7 +342,11 @@
       "deleteDriversTitle": "Удалить водителей",
       "deleteDriversMessage": "Удалить выбранных водителей из списка?",
       "deleteOneDriverTitle": "Удалить водителя",
-      "deleteOneDriverMessage": "Удалить водителя из списка?"
+      "deleteOneDriverMessage": "Удалить водителя из списка?",
+      "pauseTripTitle": "Приостановить поездку?",
+      "pauseTripMessage": "Вы хотите приостановить поездку с %{driverName}?",
+      "resumeTripTitle": "Возобновить поездку?",
+      "resumeTripMessage": "Вы хотите возобновить поездку с %{driverName}?"
     },
     "selection": {
       "selectAll": "Выбрать все",

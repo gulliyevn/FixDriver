@@ -102,7 +102,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
     } else if (state.buttonColorState === 3) {
       return 'chevron-back'; // Большая кнопка зелёная с chevron-back
     } else if (state.buttonColorState === 4) {
-      return 'shield'; // Большая кнопка серая с shield
+      return state.isPaused ? 'pause' : 'shield'; // Пауза только после включения остановки
     }
     return 'chevron-back';
   };
@@ -286,6 +286,9 @@ const DriverModal: React.FC<DriverModalProps> = ({
                   isPaused={state.isPaused}
                   pauseStartTime={state.pauseStartTime}
                   formatTime={handlers.formatTime}
+                  buttonColorState={state.buttonColorState}
+                  isTripTimerActive={state.isTripTimerActive}
+                  tripStartTime={state.tripStartTime}
                 />
               </View>
             </View>

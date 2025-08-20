@@ -8,6 +8,7 @@ import { useLevelProgress } from '../../../context/LevelProgressContext';
 import { useBalance } from '../../../hooks/useBalance';
 import { useVIPTimeTracking } from '../../EarningsScreen/hooks/useVIPTimeTracking';
 import DriverStatusService from '../../../services/DriverStatusService';
+import BillingService from '../../../services/BillingService';
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
@@ -77,6 +78,8 @@ export const useDriverModalHandlers = (
     actions.setPauseStartTime(0);
     actions.setEmergencyActionsUsed(true);
     actions.setEmergencyActionType('stop');
+    // Биллинг: экстренная остановка оплачивается с первой секунды
+    BillingService.startEmergency().catch(() => {});
   }, [actions]);
 
   const handleEndOkPress = useCallback(async () => {
@@ -118,6 +121,11 @@ export const useDriverModalHandlers = (
   const handleWaitingOk = useCallback(() => {
     actions.setShowDialog2(false);
     actions.setButtonColorState(2);
+    // Запускаем таймер поездки при переходе с желтого на циан
+    actions.setIsTripTimerActive(true);
+    actions.setTripStartTime(0);
+    // Биллинг: ожидание бесплатно первые 5 минут, далее 0.01 AFc/сек
+    BillingService.startWaiting().catch(() => {});
     
     setTimeout(() => {
       actions.setIconOpacity(0);
@@ -139,6 +147,11 @@ export const useDriverModalHandlers = (
   const handleEmptyOk = useCallback(() => {
     actions.setShowDialogEmpty(false);
     actions.setButtonColorState(3);
+    // Останавливаем таймер поездки при переходе с циана на зеленый
+    actions.setIsTripTimerActive(false);
+    actions.setTripStartTime(null);
+    // Биллинг: закрыть ожидание и записать чек
+    BillingService.stopWaiting().catch(() => {});
   }, [actions]);
 
   const handleCancelOk = useCallback(() => {
@@ -179,6 +192,8 @@ export const useDriverModalHandlers = (
     actions.setIsPaused(false);
     actions.setPauseStartTime(null);
     actions.setButtonColorState(3);
+    // Биллинг: остановить экстренную остановку и записать чек
+    BillingService.stopEmergency().catch(() => {});
   }, [actions]);
 
   const handleButtonClick = useCallback(() => {
@@ -191,6 +206,11 @@ export const useDriverModalHandlers = (
         DriverStatusService.setOnline(true);
         actions.setButtonColorState(1);
         actions.setShowGoOnlineConfirm(true);
+        
+        // Принудительно обновляем UI через небольшую задержку
+        setTimeout(() => {
+          DriverStatusService.setOnline(true);
+        }, 100);
       }
     } else if (state.buttonColorState === 1 || state.buttonColorState === 2) {
       // Обычный клик - обмен кнопок местами

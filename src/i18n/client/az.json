@@ -354,7 +354,11 @@
       "deleteDriversTitle": "Sürücüləri sil",
       "deleteDriversMessage": "Seçilmiş sürücülər siyahıdan silinsin?",
       "deleteOneDriverTitle": "Sürücünü sil",
-      "deleteOneDriverMessage": "Sürücünü siyahıdan silək?"
+      "deleteOneDriverMessage": "Sürücünü siyahıdan silək?",
+      "pauseTripTitle": "Səyahəti dayandır?",
+      "pauseTripMessage": "%{driverName} ilə səyahəti dayandırmaq istəyirsiniz?",
+      "resumeTripTitle": "Səyahəti davam etdir?",
+      "resumeTripMessage": "%{driverName} ilə səyahəti davam etdirmək istəyirsiniz?"
     },
     "selection": {
       "selectAll": "Hamısını seç",
