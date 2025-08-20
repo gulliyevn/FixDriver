@@ -105,5 +105,24 @@ export const createDialogsStyles = (isDark: boolean) => {
       fontWeight: '600',
       textAlign: 'center',
     },
+    // Специальные стили для диалога онлайн статуса
+    onlineDialogContainer: {
+      backgroundColor: palette.background,
+      borderRadius: SIZES.radius.lg,
+      paddingTop: SIZES.xl + 10,
+      paddingHorizontal: SIZES.lg + 10,
+      paddingBottom: 0,
+      marginHorizontal: SIZES.md,
+      marginVertical: SIZES.lg,
+      minWidth: 340,
+      minHeight: 160,
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
+    onlineDialogButtonsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: SIZES.md,
+      marginBottom: -SIZES.sm,
+    },
   });
 };

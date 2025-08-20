@@ -182,7 +182,17 @@ export const useDriverModalHandlers = (
   }, [actions]);
 
   const handleButtonClick = useCallback(() => {
-    if (state.buttonColorState === 1 || state.buttonColorState === 2) {
+    if (state.buttonColorState === 0) {
+      // Статус 0 - офлайн, при клике включаем онлайн
+      if (!state.isOnline) {
+        AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
+        actions.setIsOnline(true);
+        startOnlineTime?.();
+        DriverStatusService.setOnline(true);
+        actions.setButtonColorState(1);
+        actions.setShowGoOnlineConfirm(true);
+      }
+    } else if (state.buttonColorState === 1 || state.buttonColorState === 2) {
       // Обычный клик - обмен кнопок местами
       actions.setIsButtonsSwapped(!state.isButtonsSwapped);
     } else if (state.buttonColorState === 3) {
@@ -200,7 +210,7 @@ export const useDriverModalHandlers = (
       actions.setShowSwapIcon(false);
       actions.setIconOpacity(1);
     }
-  }, [state.buttonColorState, state.isButtonsSwapped, actions]);
+  }, [state.buttonColorState, state.isButtonsSwapped, state.isOnline, actions, startOnlineTime]);
 
   const handleSmallButtonClick = useCallback(() => {
     // Маленькая кнопка просто меняет цвета

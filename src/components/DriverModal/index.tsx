@@ -383,9 +383,9 @@ const DriverModal: React.FC<DriverModalProps> = ({
       {/* Диалог: Вы станете Онлайн */}
       <Modal visible={state.showGoOnlineConfirm} transparent animationType="fade">
         <TouchableOpacity style={styles.dialogOverlay} activeOpacity={1} onPress={() => actions.setShowGoOnlineConfirm(false)}>
-          <TouchableOpacity style={styles.dialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+          <TouchableOpacity style={styles.onlineDialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
             <Text style={styles.dialogTitle}>{t('driver.status.goOnlineMessage')}</Text>
-            <View style={styles.dialogButtonsContainer}>
+            <View style={styles.onlineDialogButtonsContainer}>
               <TouchableOpacity style={styles.dialogOkButton} onPress={handlers.handleGoOnlineConfirm}>
                 <Text style={styles.dialogOkButtonText}>{t('driver.tripDialogs.buttons.okAction')}</Text>
               </TouchableOpacity>

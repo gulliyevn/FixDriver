@@ -129,13 +129,6 @@ const EarningsScreen: React.FC = () => {
     }
   }, [uiUpdateTrigger]);
 
-  // Принудительное обновление таймера при изменении VIP данных
-  React.useEffect(() => {
-    if (isCurrentlyOnline) {
-      setTimerTick(prev => prev + 1);
-    }
-  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime]);
-
   const {
     toggleFilter,
     handlePeriodSelect,
