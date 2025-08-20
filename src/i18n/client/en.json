@@ -357,8 +357,8 @@
       "deleteOneDriverMessage": "Delete the driver from the list?",
       "pauseTripTitle": "Pause trip?",
       "pauseTripMessage": "Do you want to pause the trip with %{driverName}?",
-      "resumeTripTitle": "Resume trip?",
-      "resumeTripMessage": "Do you want to resume the trip with %{driverName}?"
+      "resumeTripTitle": "Resume trip",
+      "resumeTripMessage": "Continue trip with %{driverName}?"
     },
     "selection": {
       "selectAll": "Select all",

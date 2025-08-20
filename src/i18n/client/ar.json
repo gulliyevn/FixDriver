@@ -357,8 +357,8 @@
       "deleteOneDriverMessage": "حذف السائق من القائمة؟",
       "pauseTripTitle": "إيقاف الرحلة مؤقتاً؟",
       "pauseTripMessage": "هل تريد إيقاف الرحلة مؤقتاً مع %{driverName}؟",
-      "resumeTripTitle": "استئناف الرحلة؟",
-      "resumeTripMessage": "هل تريد استئناف الرحلة مع %{driverName}؟"
+      "resumeTripTitle": "استئناف الرحلة",
+      "resumeTripMessage": "متابعة الرحلة مع %{driverName}؟"
     },
     "selection": {
       "selectAll": "تحديد الكل",

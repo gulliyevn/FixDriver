@@ -357,8 +357,8 @@
       "deleteOneDriverMessage": "Sürücünü siyahıdan silək?",
       "pauseTripTitle": "Səyahəti dayandır?",
       "pauseTripMessage": "%{driverName} ilə səyahəti dayandırmaq istəyirsiniz?",
-      "resumeTripTitle": "Səyahəti davam etdir?",
-      "resumeTripMessage": "%{driverName} ilə səyahəti davam etdirmək istəyirsiniz?"
+      "resumeTripTitle": "Səyahəti davam etdir",
+      "resumeTripMessage": "%{driverName} ilə səyahətə davam et?"
     },
     "selection": {
       "selectAll": "Hamısını seç",

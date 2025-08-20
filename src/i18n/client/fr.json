@@ -357,8 +357,8 @@
       "deleteOneDriverMessage": "Supprimer le chauffeur de la liste ?",
       "pauseTripTitle": "Mettre en pause le trajet ?",
       "pauseTripMessage": "Voulez-vous mettre en pause le trajet avec %{driverName} ?",
-      "resumeTripTitle": "Reprendre le trajet ?",
-      "resumeTripMessage": "Voulez-vous reprendre le trajet avec %{driverName} ?"
+      "resumeTripTitle": "Reprendre le trajet",
+      "resumeTripMessage": "Continuer le trajet avec %{driverName} ?"
     },
     "selection": {
       "selectAll": "Tout sélectionner",

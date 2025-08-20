@@ -310,7 +310,8 @@
       "title": "Səyahəti dayandır?",
       "message": "{clientName} ilə səyahəti dayandırmaq istəyirsiniz?",
       "paused": "Səyahət dayandırıldı",
-      "resume": "Səyahəti davam etdir"
+      "resume": "Səyahəti davam etdir",
+      "resumeMessage": "{clientName} ilə səyahətə davam et?"
     }
   }
 }

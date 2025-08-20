@@ -156,7 +156,7 @@ const DriversScreen: React.FC = () => {
     let titleKey, messageKey;
     if (isDriver) {
       titleKey = isCurrentlyPaused ? 'driver.tripDialogs.pauseTrip.resume' : 'driver.tripDialogs.pauseTrip.title';
-      messageKey = isCurrentlyPaused ? 'driver.tripDialogs.pauseTrip.resume' : 'driver.tripDialogs.pauseTrip.message';
+      messageKey = isCurrentlyPaused ? 'driver.tripDialogs.pauseTrip.resumeMessage' : 'driver.tripDialogs.pauseTrip.message';
     } else {
       titleKey = isCurrentlyPaused ? 'client.driversScreen.alerts.resumeTripTitle' : 'client.driversScreen.alerts.pauseTripTitle';
       messageKey = isCurrentlyPaused ? 'client.driversScreen.alerts.resumeTripMessage' : 'client.driversScreen.alerts.pauseTripMessage';

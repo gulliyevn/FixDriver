@@ -358,8 +358,8 @@
       "deleteOneDriverMessage": "Fahrer aus der Liste löschen?",
       "pauseTripTitle": "Fahrt pausieren?",
       "pauseTripMessage": "Möchten Sie die Fahrt mit %{driverName} pausieren?",
-      "resumeTripTitle": "Fahrt fortsetzen?",
-      "resumeTripMessage": "Möchten Sie die Fahrt mit %{driverName} fortsetzen?"
+      "resumeTripTitle": "Fahrt fortsetzen",
+      "resumeTripMessage": "Fahrt mit %{driverName} fortsetzen?"
     },
     "selection": {
       "selectAll": "Alle auswählen",

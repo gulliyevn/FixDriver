@@ -309,7 +309,8 @@
       "title": "Yolculuğu duraklat?",
       "message": "{clientName} ile yolculuğu duraklatmak istiyor musunuz?",
       "paused": "Yolculuk duraklatıldı",
-      "resume": "Yolculuğu devam ettir"
+      "resume": "Yolculuğu devam ettir",
+      "resumeMessage": "{clientName} ile yolculuğa devam et?"
     }
   }
 }

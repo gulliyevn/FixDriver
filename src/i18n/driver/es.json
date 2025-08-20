@@ -310,7 +310,8 @@
       "title": "¿Pausar viaje?",
       "message": "¿Quieres pausar el viaje con {clientName}?",
       "paused": "Viaje pausado",
-      "resume": "Reanudar viaje"
+      "resume": "Reanudar viaje",
+      "resumeMessage": "¿Continuar viaje con {clientName}?"
     }
   }
 }

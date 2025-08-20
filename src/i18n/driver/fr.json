@@ -310,7 +310,8 @@
       "title": "Pauser le trajet ?",
       "message": "Voulez-vous pauser le trajet avec {clientName} ?",
       "paused": "Trajet pausé",
-      "resume": "Reprendre le trajet"
+      "resume": "Reprendre le trajet",
+      "resumeMessage": "Continuer le trajet avec {clientName} ?"
     }
   }
 }
