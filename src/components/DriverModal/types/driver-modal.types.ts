@@ -9,6 +9,7 @@ export interface DriverModalProps {
 export interface DriverModalState {
   isDriverExpanded: boolean;
   buttonColorState: number; // 0: primary, 1: yellow (ожидание клиента), 2: cyan (поездка началась), 3: green (поездка окончилась), 4: stopped (остановлено/экстренное)
+  isOnline: boolean;
   showDialog1: boolean;
   showDialog2: boolean;
   showDialog3: boolean;
@@ -19,6 +20,7 @@ export interface DriverModalState {
   showEndDialog: boolean;
   showContinueDialog: boolean;
   showRatingDialog: boolean;
+  showGoOnlineConfirm: boolean;
   isPaused: boolean;
   emergencyActionsUsed: boolean;
   emergencyActionType: 'stop' | 'end' | null;
@@ -35,6 +37,8 @@ export interface DriverModalState {
 export interface DriverModalActions {
   setIsDriverExpanded: (expanded: boolean) => void;
   setButtonColorState: (state: number) => void;
+  setIsOnline: (online: boolean) => void;
+  setShowGoOnlineConfirm: (show: boolean) => void;
   setShowDialog1: (show: boolean) => void;
   setShowDialog2: (show: boolean) => void;
   setShowDialog3: (show: boolean) => void;
@@ -82,6 +86,7 @@ export interface DriverModalHandlers {
   handleButtonClick: () => void;
   handleSmallButtonClick: () => void;
   formatTime: (seconds: number) => string;
+  handleGoOnlineConfirm: () => void;
 }
 
 export interface SliderConfig {

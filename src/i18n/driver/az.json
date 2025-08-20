@@ -106,7 +106,8 @@
     "changeStatus": "Statusu dəyişdir",
     "changeStatusMessage": "Statusunuzu dəyişmək istəyirsiniz",
     "cancel": "Ləğv et",
-    "confirm": "Təsdiqlə"
+    "confirm": "Təsdiqlə",
+    "goOnlineMessage": "Siz Onlayn olacaqsınız"
   },
   "orders": {
     "title": "Sifarişlər",

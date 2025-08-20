@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { View, Alert, Animated } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -8,12 +8,14 @@ import { createMapViewStyles } from '../../styles/components/MapView.styles';
 import DriverModal from '../DriverModal';
 
 // Импорты из новой структуры
-import { MapViewComponentProps, MapRef } from './types/map.types';
+import { MapViewComponentProps, MapRef, RoutePoint } from './types/map.types';
 import { useMapZoom } from './hooks/useMapZoom';
 import { useMapMarkers } from './hooks/useMapMarkers';
 import { useMapLocation } from './hooks/useMapLocation';
 import MapControls from './components/MapControls';
 import MapMarkersComponent from './components/MapMarkers';
+import { useDirections } from './hooks/useDirections';
+import { useOsrmDirections } from './hooks/useOsrmDirections';
 
 const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
   initialLocation,
@@ -25,12 +27,48 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
   isDriverModalVisible = false,
   onDriverModalClose,
   mapType = 'standard',
+  routePoints = [],
+  showTrafficMock = true,
 }, ref) => {
   const mapRef = useRef<MapView>(null);
   const { isDark } = useTheme();
   const { user } = useAuth();
   const navigation = useNavigation<any>();
   const styles = createMapViewStyles(isDark);
+  
+  const plannedArrivalAtMs = useMemo(() => {
+    const end = routePoints && routePoints[routePoints.length - 1];
+    return end?.plannedArrivalAtMs;
+  }, [routePoints]);
+
+  const googleKey = (process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '').trim();
+  const useGoogle = Boolean(googleKey);
+  const { route: gRoute } = useDirections(routePoints, plannedArrivalAtMs, true, 5, useGoogle);
+  const { route: oRoute } = useOsrmDirections(!useGoogle ? routePoints : undefined);
+  const routeCoordinates = (useGoogle ? gRoute?.coordinates : oRoute?.coordinates) ?? [];
+  const fallbackRouteCoordinates = useMemo(() => {
+    if (!routePoints || routePoints.length < 2) return [] as { latitude: number; longitude: number }[];
+    return routePoints.map(p => ({ latitude: p.coordinate.latitude, longitude: p.coordinate.longitude }));
+  }, [routePoints]);
+  const effectiveRouteCoordinates = routeCoordinates.length >= 2 ? routeCoordinates : fallbackRouteCoordinates;
+
+  const routeMarkers = useMemo(() => {
+    if (!routePoints || routePoints.length === 0) return [] as any[];
+    return routePoints.map((p, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === routePoints.length - 1;
+      const type: 'start' | 'waypoint' | 'end' = isFirst ? 'start' : (isLast ? 'end' : 'waypoint');
+      const label = String.fromCharCode(65 + idx);
+      return {
+        id: `route_${p.id}`,
+        coordinate: p.coordinate,
+        title: label,
+        description: type,
+        type,
+        label,
+      };
+    });
+  }, [routePoints]);
 
   // Используем созданные хуки
   const { handleZoomIn, handleZoomOut } = useMapZoom(mapRef);
@@ -136,7 +174,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
         showsMyLocationButton={false}
         showsCompass={false}
         showsScale={false}
-        showsTraffic={false}
+        showsTraffic={true}
         showsBuildings={false}
         showsIndoors={false}
         showsIndoorLevelPicker={false}
@@ -249,8 +287,21 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
         liteMode={false}
         mapPadding={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
+        {effectiveRouteCoordinates.length >= 2 && (
+          <Polyline
+            coordinates={effectiveRouteCoordinates}
+            strokeColor={isDark ? '#60A5FA' : '#3B82F6'}
+            strokeWidth={5}
+            lineCap="round"
+            lineJoin="round"
+            geodesic
+          />
+        )}
+
+        {/* Трафик показывается системно showsTraffic. Доп. красный дэш — больше не нужен */}
+
         <MapMarkersComponent
-          markers={mapMarkers}
+          markers={[...mapMarkers, ...routeMarkers]}
           clientMarker={clientMarker}
           onMarkerPress={handleMarkerPress}
         />

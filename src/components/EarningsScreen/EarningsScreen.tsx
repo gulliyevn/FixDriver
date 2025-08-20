@@ -41,6 +41,7 @@ const EarningsScreen: React.FC = () => {
     statusModalVisible,
     setStatusModalVisible,
     filterExpandAnim,
+    uiUpdateTrigger, // Добавляем триггер для обновления UI
   } = useEarningsState();
 
   // Состояние для принудительного обновления
@@ -113,6 +114,27 @@ const EarningsScreen: React.FC = () => {
     const id = setInterval(() => setTimerTick((v) => v + 1), 1000);
     return () => clearInterval(id);
   }, [statusModalVisible]);
+
+  // Автообновление таймера на экране, когда онлайн
+  React.useEffect(() => {
+    if (!isOnline) return;
+    const id = setInterval(() => setTimerTick((v) => v + 1), 1000);
+    return () => clearInterval(id);
+  }, [isOnline]);
+
+  // Принудительное обновление таймера при изменении статуса через DriverModal
+  React.useEffect(() => {
+    if (uiUpdateTrigger > 0) {
+      setTimerTick(prev => prev + 1);
+    }
+  }, [uiUpdateTrigger]);
+
+  // Принудительное обновление таймера при изменении VIP данных
+  React.useEffect(() => {
+    if (isCurrentlyOnline) {
+      setTimerTick(prev => prev + 1);
+    }
+  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime]);
 
   const {
     toggleFilter,

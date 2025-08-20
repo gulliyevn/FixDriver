@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DriverModalState, DriverModalActions } from '../types/driver-modal.types';
 import { usePersistentButtonState } from '../../../hooks/usePersistentButtonState';
 
@@ -8,6 +9,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   
   const [isDriverExpanded, setIsDriverExpanded] = useState(false);
   const [buttonColorState, setButtonColorState] = useState(0);
+  const [isOnline, setIsOnline] = useState(false);
   const [showDialog1, setShowDialog1] = useState(false);
   const [showDialog2, setShowDialog2] = useState(false);
   const [showDialog3, setShowDialog3] = useState(false);
@@ -18,6 +20,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [showContinueDialog, setShowContinueDialog] = useState(false);
   const [showRatingDialog, setShowRatingDialog] = useState(false);
+  const [showGoOnlineConfirm, setShowGoOnlineConfirm] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [emergencyActionsUsed, setEmergencyActionsUsed] = useState(false);
   const [emergencyActionType, setEmergencyActionType] = useState<'stop' | 'end' | null>(null);
@@ -67,6 +70,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const state: DriverModalState = {
     isDriverExpanded,
     buttonColorState,
+    isOnline,
     showDialog1,
     showDialog2,
     showDialog3,
@@ -77,6 +81,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     showEndDialog,
     showContinueDialog,
     showRatingDialog,
+    showGoOnlineConfirm,
     isPaused,
     emergencyActionsUsed,
     emergencyActionType,
@@ -93,6 +98,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const actions: DriverModalActions = {
     setIsDriverExpanded,
     setButtonColorState,
+    setIsOnline,
     setShowDialog1,
     setShowDialog2,
     setShowDialog3,
@@ -103,6 +109,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
     setShowEndDialog,
     setShowContinueDialog,
     setShowRatingDialog,
+    setShowGoOnlineConfirm,
     setIsPaused,
     setEmergencyActionsUsed,
     setEmergencyActionType,

@@ -106,7 +106,8 @@
     "changeStatus": "تغيير الحالة",
     "changeStatusMessage": "هل تريد تغيير حالتك إلى",
     "cancel": "إلغاء",
-    "confirm": "تأكيد"
+    "confirm": "تأكيد",
+    "goOnlineMessage": "ستصبح متصلاً"
   },
   "orders": {
     "title": "الطلبات",

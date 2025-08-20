@@ -58,7 +58,7 @@
   },
   "report": {
     "title": "Hesabat göndər",
-    "subtitle": "Problemi təsvir edin (istəyə bağlı)",
+    "subtitle": "Problemi təsvir edin",
     "commentPlaceholder": "Şərh daxil edin...",
     "submit": "Göndər",
     "success": "Hesabat göndərildi"

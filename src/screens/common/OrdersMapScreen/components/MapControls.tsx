@@ -23,6 +23,8 @@ interface MapControlsProps {
   onZoomOut: () => void;
   onSimpleDialogOpen: () => void;
   onChevronPress: () => void;
+  onSharePress: () => void;
+  canShare?: boolean;
 }
 
 const MapControls: React.FC<MapControlsProps> = ({
@@ -43,6 +45,8 @@ const MapControls: React.FC<MapControlsProps> = ({
   onZoomOut,
   onSimpleDialogOpen,
   onChevronPress,
+  onSharePress,
+  canShare = true,
 }) => {
   const { user } = useAuth();
   const styles = createOrdersMapScreenStyles(isDark);
@@ -64,12 +68,26 @@ const MapControls: React.FC<MapControlsProps> = ({
           justifyContent: 'center',
         }}>
           <Ionicons
-            name="warning"
-            size={20}
+            name="shield"
+            size={16}
             color="#FFFFFF"
             style={{ marginTop: -1 }}
           />
         </View>
+      </TouchableOpacity>
+
+      {/* Кнопка сверху справа - поделиться */}
+      <TouchableOpacity
+        style={[styles.topRightButton, !canShare && { opacity: 0.5 }]}
+        onPress={onSharePress}
+        accessibilityLabel="Share"
+        disabled={!canShare}
+      >
+        <Ionicons
+          name="share-outline"
+          size={20}
+          color={isDark ? '#F9FAFB' : '#111827'}
+        />
       </TouchableOpacity>
       
       {/* Кнопки управления вертикально внизу справа */}

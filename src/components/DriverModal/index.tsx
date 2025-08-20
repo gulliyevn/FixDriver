@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, TouchableOpacity, Animated, Text, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PanGestureHandler } from 'react-native-gesture-handler';
@@ -67,6 +68,17 @@ const DriverModal: React.FC<DriverModalProps> = ({
       friction: 8,
     }).start();
   }, [state.isDriverExpanded, slider.driverExpandAnim]);
+
+  // Синхронизируем онлайн-статус при открытии модалки
+  useEffect(() => {
+    if (!isVisible) return;
+    (async () => {
+      try {
+        const saved = await AsyncStorage.getItem('@driver_online_status');
+        actions.setIsOnline(saved === 'true');
+      } catch {}
+    })();
+  }, [isVisible]);
 
   // Функции для определения цветов и иконок кнопок
   const getMainButtonColor = () => {
@@ -368,6 +380,19 @@ const DriverModal: React.FC<DriverModalProps> = ({
         onNetworkCall={callSheet.handleNetworkCall}
         onInternetCall={callSheet.handleInternetCall}
       />
+      {/* Диалог: Вы станете Онлайн */}
+      <Modal visible={state.showGoOnlineConfirm} transparent animationType="fade">
+        <TouchableOpacity style={styles.dialogOverlay} activeOpacity={1} onPress={() => actions.setShowGoOnlineConfirm(false)}>
+          <TouchableOpacity style={styles.dialogContainer} activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+            <Text style={styles.dialogTitle}>{t('driver.status.goOnlineMessage')}</Text>
+            <View style={styles.dialogButtonsContainer}>
+              <TouchableOpacity style={styles.dialogOkButton} onPress={handlers.handleGoOnlineConfirm}>
+                <Text style={styles.dialogOkButtonText}>{t('driver.tripDialogs.buttons.okAction')}</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </Modal>
   );
 };

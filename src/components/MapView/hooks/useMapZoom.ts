@@ -1,61 +1,43 @@
 import { useRef, useCallback } from 'react';
-import { MapRef } from '../types/map.types';
+import { MapView } from 'react-native-maps';
 
-export const useMapZoom = (mapRef: React.RefObject<MapRef>) => {
+export const useMapZoom = (mapRef: React.RefObject<MapView>) => {
   const isZoomingRef = useRef(false);
 
   const handleZoomIn = useCallback(() => {
-    if (isZoomingRef.current) {
-      return;
-    }
+    if (!mapRef.current || isZoomingRef.current) return;
     
     isZoomingRef.current = true;
-    
-    if (mapRef.current) {
-      // Плавный зум с animateCamera
-      mapRef.current.getCamera().then((camera) => {
-        const newZoom = Math.min(camera.zoom + 1, 20);
+    mapRef.current.getCamera().then((camera) => {
+      if (camera && camera.zoom) {
         mapRef.current?.animateCamera({
           ...camera,
-          zoom: newZoom,
+          zoom: Math.min(camera.zoom + 1, 20),
         });
-        
-        setTimeout(() => {
-          isZoomingRef.current = false;
-        }, 600);
-      }).catch(() => {
+      }
+    }).finally(() => {
+      setTimeout(() => {
         isZoomingRef.current = false;
-      });
-    } else {
-      isZoomingRef.current = false;
-    }
+      }, 300);
+    });
   }, [mapRef]);
 
   const handleZoomOut = useCallback(() => {
-    if (isZoomingRef.current) {
-      return;
-    }
+    if (!mapRef.current || isZoomingRef.current) return;
     
     isZoomingRef.current = true;
-    
-    if (mapRef.current) {
-      // Плавный зум с animateCamera
-      mapRef.current.getCamera().then((camera) => {
-        const newZoom = Math.max(camera.zoom - 1, 5);
+    mapRef.current.getCamera().then((camera) => {
+      if (camera && camera.zoom) {
         mapRef.current?.animateCamera({
           ...camera,
-          zoom: newZoom,
+          zoom: Math.max(camera.zoom - 1, 5),
         });
-        
-        setTimeout(() => {
-          isZoomingRef.current = false;
-        }, 600);
-      }).catch(() => {
+      }
+    }).finally(() => {
+      setTimeout(() => {
         isZoomingRef.current = false;
-      });
-    } else {
-      isZoomingRef.current = false;
-    }
+      }, 300);
+    });
   }, [mapRef]);
 
   return {

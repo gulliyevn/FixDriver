@@ -58,7 +58,7 @@
   },
   "report": {
     "title": "Enviar reporte",
-    "subtitle": "Describe el problema (opcional)",
+    "subtitle": "Describe el problema",
     "commentPlaceholder": "Ingresa un comentario...",
     "submit": "Enviar",
     "success": "Reporte enviado"

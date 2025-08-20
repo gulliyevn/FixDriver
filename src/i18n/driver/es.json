@@ -106,7 +106,8 @@
     "changeStatus": "Cambiar estado",
     "changeStatusMessage": "¿Quieres cambiar tu estado a",
     "cancel": "Cancelar",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "goOnlineMessage": "Vas a estar en línea"
   },
   "orders": {
     "title": "Pedidos",

@@ -13,6 +13,7 @@ import { useMapSettings } from './hooks/useMapSettings';
 import MapControlsComponent from './components/MapControls';
 import ReportModal from './components/ReportModal';
 import SimpleDialog from './components/SimpleDialog';
+import ShareRouteService from '../../../services/ShareRouteService';
 
 const OrdersMapScreen: React.FC = () => {
   const { isDark } = useTheme();
@@ -38,6 +39,12 @@ const OrdersMapScreen: React.FC = () => {
           isDriverModalVisible={state.isDriverModalVisible}
           onDriverModalClose={handlers.handleDriverModalClose}
           mapType={state.mapType}
+          routePoints={state.currentLocation ? [
+            { id: 'start', type: 'start', coordinate: { latitude: state.currentLocation.latitude, longitude: state.currentLocation.longitude } },
+            { id: 'wp1', type: 'waypoint', coordinate: { latitude: state.currentLocation.latitude + 0.01, longitude: state.currentLocation.longitude + 0.008 } },
+            { id: 'end', type: 'end', coordinate: { latitude: state.currentLocation.latitude + 0.02, longitude: state.currentLocation.longitude + 0.015 } },
+          ] : []}
+          showTrafficMock={true}
         />
 
         <MapControlsComponent
@@ -58,6 +65,15 @@ const OrdersMapScreen: React.FC = () => {
           onZoomOut={handlers.handleZoomOut}
           onSimpleDialogOpen={() => actions.setIsSimpleDialogVisible(true)}
           onChevronPress={handlers.handleChevronPress}
+          onSharePress={() => {
+            const points = state.currentLocation ? [
+              { id: 'start', type: 'start' as const, coordinate: { latitude: state.currentLocation.latitude, longitude: state.currentLocation.longitude } },
+              { id: 'wp1', type: 'waypoint' as const, coordinate: { latitude: state.currentLocation.latitude + 0.01, longitude: state.currentLocation.longitude + 0.008 } },
+              { id: 'end', type: 'end' as const, coordinate: { latitude: state.currentLocation.latitude + 0.02, longitude: state.currentLocation.longitude + 0.015 } },
+            ] : [];
+            ShareRouteService.open(points);
+          }}
+          canShare={Boolean(state.currentLocation)}
         />
       </View>
 

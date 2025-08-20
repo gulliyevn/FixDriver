@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import DriverStatusService from '../../../services/DriverStatusService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -46,9 +47,16 @@ export const useEarningsHandlers = (
     if (newOnlineStatus) {
       // Становимся онлайн
       startOnlineTime?.();
+      DriverStatusService.setOnline(true);
+      
+      // Принудительно обновляем UI через небольшую задержку
+      setTimeout(() => {
+        DriverStatusService.setOnline(true);
+      }, 100);
     } else {
       // Становимся офлайн
       stopOnlineTime?.();
+      DriverStatusService.setOnline(false);
     }
   }, [isOnline, setIsOnline, setStatusModalVisible, startOnlineTime, stopOnlineTime]);
 

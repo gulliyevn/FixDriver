@@ -106,7 +106,8 @@
     "changeStatus": "Durumu değiştir",
     "changeStatusMessage": "Durumunuzu değiştirmek istiyor musunuz",
     "cancel": "İptal",
-    "confirm": "Onayla"
+    "confirm": "Onayla",
+    "goOnlineMessage": "Online olacaksınız"
   },
   "orders": {
     "title": "Siparişler",

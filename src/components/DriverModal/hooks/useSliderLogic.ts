@@ -60,6 +60,7 @@ export const useSliderLogic = (
     ]).start();
 
     if (state.buttonColorState === 0) {
+      // Всегда показываем диалог "Вы начинаете поездку к ..."
       actions.setShowDialog1(true);
     } else if (state.buttonColorState === 1) {
       // Если кнопка изменена (красная), показать диалог отмены

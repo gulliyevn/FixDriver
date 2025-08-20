@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Linking } from 'react-native';
 import { DriverModalState, DriverModalActions, DriverModalHandlers } from '../types/driver-modal.types';
 import { mockDrivers } from '../../../mocks/data/users';
@@ -6,6 +7,7 @@ import { getSampleDriverId } from '../../../mocks/driverModalMock';
 import { useLevelProgress } from '../../../context/LevelProgressContext';
 import { useBalance } from '../../../hooks/useBalance';
 import { useVIPTimeTracking } from '../../EarningsScreen/hooks/useVIPTimeTracking';
+import DriverStatusService from '../../../services/DriverStatusService';
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
@@ -16,7 +18,7 @@ export const useDriverModalHandlers = (
   const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
   const { driverLevel, incrementProgress } = useLevelProgress();
   const { addEarnings } = useBalance();
-  const { registerRide } = useVIPTimeTracking(!!driverLevel?.isVIP);
+  const { registerRide, startOnlineTime } = useVIPTimeTracking(!!driverLevel?.isVIP);
 
   // Мок-расчет тарифа. Заменить при подключении бэкенда
   const computeTripFare = useCallback((): number => {
@@ -86,9 +88,31 @@ export const useDriverModalHandlers = (
     await completeTripAccounting();
   }, [actions, completeTripAccounting]);
 
-  const handleStartOk = useCallback(() => {
+  const handleStartOk = useCallback(async () => {
     actions.setShowDialog1(false);
-    actions.setButtonColorState(1);
+    if (!state.isOnline) {
+      try {
+        await AsyncStorage.setItem('@driver_online_status', 'true');
+      } catch {}
+      actions.setIsOnline(true);
+      startOnlineTime?.();
+      DriverStatusService.setOnline(true);
+      actions.setButtonColorState(1);
+      // Показать информирующий диалог без действий
+      actions.setShowGoOnlineConfirm(true);
+      
+      // Принудительно обновляем UI через небольшую задержку
+      setTimeout(() => {
+        DriverStatusService.setOnline(true);
+      }, 100);
+    } else {
+      actions.setButtonColorState(1);
+    }
+  }, [actions, state.isOnline, startOnlineTime]);
+
+  const handleGoOnlineConfirm = useCallback(async () => {
+    // Просто закрыть информационный диалог
+    actions.setShowGoOnlineConfirm(false);
   }, [actions]);
 
   const handleWaitingOk = useCallback(() => {
@@ -242,5 +266,6 @@ export const useDriverModalHandlers = (
     handleButtonClick,
     handleSmallButtonClick,
     formatTime,
+    handleGoOnlineConfirm,
   };
 };

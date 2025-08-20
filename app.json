@@ -16,14 +16,48 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fixdrive.app"
+      "bundleIdentifier": "com.fixdrive.app",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": [
+          "comgooglemaps",
+          "yandexmaps",
+          "yandexnavi",
+          "waze"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.fixdrive.app"
+      "package": "com.fixdrive.app",
+      "intentQueries": [
+        {
+          "action": "android.intent.action.VIEW",
+          "data": {
+            "scheme": "comgooglemaps"
+          }
+        },
+        {
+          "action": "android.intent.action.VIEW",
+          "data": {
+            "scheme": "yandexmaps"
+          }
+        },
+        {
+          "action": "android.intent.action.VIEW",
+          "data": {
+            "scheme": "yandexnavi"
+          }
+        },
+        {
+          "action": "android.intent.action.VIEW",
+          "data": {
+            "scheme": "waze"
+          }
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import DriverStatusService from '../../../services/DriverStatusService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Animated } from 'react-native';
 
@@ -7,6 +8,8 @@ export const useEarningsState = () => {
   const [filterExpanded, setFilterExpanded] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
+  // Добавляем состояние для принудительного обновления UI
+  const [uiUpdateTrigger, setUiUpdateTrigger] = useState(0);
 
   const filterExpandAnim = useRef(new Animated.Value(0)).current;
 
@@ -22,6 +25,16 @@ export const useEarningsState = () => {
     })();
   }, []);
 
+  // Подписка на глобальные изменения статуса (из DriverModal)
+  useEffect(() => {
+    const unsub = DriverStatusService.subscribe((online) => {
+      setIsOnline(online);
+      // Принудительно обновляем UI при изменении статуса
+      setUiUpdateTrigger(prev => prev + 1);
+    });
+    return unsub;
+  }, []);
+
   return {
     selectedPeriod,
     setSelectedPeriod,
@@ -32,5 +45,6 @@ export const useEarningsState = () => {
     statusModalVisible,
     setStatusModalVisible,
     filterExpandAnim,
+    uiUpdateTrigger, // Экспортируем триггер для обновления UI
   };
 };

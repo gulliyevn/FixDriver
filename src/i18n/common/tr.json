@@ -57,7 +57,7 @@
   },
   "report": {
     "title": "Rapor gönder",
-    "subtitle": "Sorunu açıklayın (isteğe bağlı)",
+    "subtitle": "Sorunu açıklayın",
     "commentPlaceholder": "Yorum girin...",
     "submit": "Gönder",
     "success": "Rapor gönderildi"

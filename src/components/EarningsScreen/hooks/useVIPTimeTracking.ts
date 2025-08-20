@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VIP_CONFIG, calculateMonthlyVIPBonus } from '../types/levels.config';
 import { useBalanceContext } from '../../../context/BalanceContext';
+import DriverStatusService from '../../../services/DriverStatusService';
 
 const VIP_TIME_KEY = '@driver_vip_time_tracking';
 
@@ -23,6 +24,9 @@ const MIN_HOURS_PER_DAY = 10;
 
 export const useVIPTimeTracking = (isVIP: boolean) => {
   const { addEarnings } = useBalanceContext();
+  // Добавляем состояние для принудительного обновления
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+  
   // Функция для получения локальной даты в формате YYYY-MM-DD
   const getLocalDateString = (date: Date = new Date()) => {
     return date.getFullYear() + '-' + 
@@ -44,12 +48,87 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     qualifiedDaysHistory: [],
   });
 
+  // Подписка на изменения статуса через DriverStatusService
+  useEffect(() => {
+    const unsub = DriverStatusService.subscribe((online) => {
+      // Принудительно обновляем состояние при изменении статуса
+      setUpdateTrigger(prev => prev + 1);
+    });
+    return () => {
+      unsub();
+    };
+  }, []);
 
+  // Синхронизация VIP системы с глобальным статусом
+  useEffect(() => {
+    const unsub = DriverStatusService.subscribe((online) => {
+      console.log('VIP: Получено изменение статуса через DriverStatusService:', online);
+      // Синхронизируем VIP систему с глобальным статусом
+      if (online && !vipTimeData.isCurrentlyOnline) {
+        console.log('VIP: Синхронизируем статус онлайн');
+        // Если статус стал онлайн, но VIP система не знает об этом
+        const now = Date.now();
+        const newData: VIPTimeData = {
+          ...vipTimeData,
+          isCurrentlyOnline: true,
+          lastOnlineTime: now,
+          periodStartDate: isVIP ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate()) : vipTimeData.periodStartDate,
+        };
+        setVipTimeData(newData);
+        saveVIPTimeData(newData);
+      } else if (!online && vipTimeData.isCurrentlyOnline) {
+        console.log('VIP: Синхронизируем статус офлайн');
+        // Если статус стал офлайн, но VIP система думает что онлайн
+        if (vipTimeData.lastOnlineTime) {
+          const now = Date.now();
+          const hoursDiff = (now - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
+          const newData: VIPTimeData = {
+            ...vipTimeData,
+            isCurrentlyOnline: false,
+            hoursOnline: vipTimeData.hoursOnline + hoursDiff,
+            lastOnlineTime: null,
+          };
+          setVipTimeData(newData);
+          saveVIPTimeData(newData);
+        }
+      }
+    });
+    return () => {
+      unsub();
+    };
+  }, [vipTimeData, isVIP]);
 
   // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
   useEffect(() => {
     loadVIPTimeData();
   }, []);
+
+  // Инициализация VIP системы с текущим статусом
+  useEffect(() => {
+    const initializeWithCurrentStatus = async () => {
+      try {
+        const savedStatus = await AsyncStorage.getItem('@driver_online_status');
+        const isCurrentlyOnline = savedStatus === 'true';
+        
+        // Если статус онлайн, но VIP система не знает об этом
+        if (isCurrentlyOnline && !vipTimeData.isCurrentlyOnline) {
+          const now = Date.now();
+          const newData: VIPTimeData = {
+            ...vipTimeData,
+            isCurrentlyOnline: true,
+            lastOnlineTime: now,
+            periodStartDate: isVIP ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate()) : vipTimeData.periodStartDate,
+          };
+          setVipTimeData(newData);
+          saveVIPTimeData(newData);
+        }
+      } catch (error) {
+        console.error('Ошибка при инициализации VIP системы:', error);
+      }
+    };
+    
+    initializeWithCurrentStatus();
+  }, [vipTimeData.isCurrentlyOnline, isVIP]);
 
   // Инициализируем старт 30-дневного периода только при первом включении онлайн, если VIP и период ещё не установлен
   // useEffect удален - период устанавливается только в startOnlineTime
@@ -220,6 +299,18 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     return () => clearInterval(interval);
   }, [performDayCheck]);
 
+  // Обновляем состояние каждую секунду когда онлайн для корректного отображения таймера
+  useEffect(() => {
+    if (!vipTimeData.isCurrentlyOnline) return;
+    
+    const interval = setInterval(() => {
+      // Принудительно обновляем состояние для пересчета getCurrentHoursOnline
+      setVipTimeData(prev => ({ ...prev }));
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [vipTimeData.isCurrentlyOnline, updateTrigger]); // Добавляем updateTrigger в зависимости
+
   const loadVIPTimeData = async () => {
     try {
       const saved = await AsyncStorage.getItem(VIP_TIME_KEY);
@@ -263,6 +354,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   };
 
   const startOnlineTime = useCallback(() => {
+    console.log('VIP: startOnlineTime вызвана');
     const now = Date.now();
     const newData: VIPTimeData = {
       ...vipTimeData,
@@ -276,9 +368,12 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     saveVIPTimeData(newData);
     // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
     AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
+    // Уведомляем DriverStatusService о изменении статуса
+    DriverStatusService.setOnline(true);
   }, [isVIP, vipTimeData]);
 
   const stopOnlineTime = useCallback(() => {
+    console.log('VIP: stopOnlineTime вызвана');
     if (!vipTimeData.isCurrentlyOnline || !vipTimeData.lastOnlineTime) return;
     
     const now = Date.now();
@@ -295,6 +390,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     saveVIPTimeData(newData);
     // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
     AsyncStorage.setItem('@driver_online_status', 'false').catch(() => {});
+    // Уведомляем DriverStatusService о изменении статуса
+    DriverStatusService.setOnline(false);
   }, [vipTimeData]);
 
   const getCurrentHoursOnline = useCallback(() => {
@@ -306,7 +403,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     }
     // Если сессия не активна — возвращаем накопленное
     return vipTimeData.hoursOnline;
-  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime, vipTimeData.hoursOnline]);
+  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime, vipTimeData.hoursOnline, updateTrigger]); // Добавляем updateTrigger
 
   const resetVIPTimeData = useCallback(async () => {
     const resetData: VIPTimeData = {

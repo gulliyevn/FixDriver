@@ -57,7 +57,7 @@
   },
   "report": {
     "title": "إرسال تقرير",
-    "subtitle": "صف المشكلة (اختياري)",
+    "subtitle": "صف المشكلة",
     "commentPlaceholder": "أدخل تعليقاً...",
     "submit": "إرسال",
     "success": "تم إرسال التقرير"

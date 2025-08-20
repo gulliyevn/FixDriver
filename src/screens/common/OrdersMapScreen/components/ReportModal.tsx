@@ -64,10 +64,20 @@ const ReportModal: React.FC<ReportModalProps> = ({
             </TouchableOpacity>
             
             <TouchableOpacity 
-              style={styles.reportSubmitButton}
+              style={[
+                styles.reportSubmitButton,
+                !reportComment?.trim() && styles.reportSubmitButtonDisabled,
+              ]}
               onPress={onSubmit}
+              disabled={!reportComment?.trim()}
             >
-              <Text style={styles.reportSubmitButtonText}>{t('common.report.submit')}</Text>
+              <Text style={[
+                styles.reportSubmitButtonText,
+                !reportComment?.trim() && styles.reportSubmitButtonTextDisabled,
+              ]}
+              >
+                {t('common.report.submit')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
