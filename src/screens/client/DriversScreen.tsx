@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList, DriverStackParamList } from '../../types/navigation';
 import { Driver } from '../../types/driver';
+import { getDriverInfo } from '../../mocks/driverModalMock';
 import NotificationsModal from '../../components/NotificationsModal';
 import DriverListItem from '../../components/driver/DriverListItem';
 import DriversHeader from '../../components/DriversHeader';
@@ -39,6 +40,50 @@ const DriversScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const loadingMore = false;
   const hasMore = false;
+
+  // Фильтры/сортировки для чипов в хедере
+  const [activeFilters, setActiveFilters] = useState<{ 
+    all?: boolean;
+    online?: boolean; 
+    priceAsc?: boolean; 
+    priceDesc?: boolean; 
+    rating45?: boolean;
+    vip?: boolean;
+    dailyTrips?: boolean;
+    economy?: boolean;
+  }>({ 
+    all: true,
+    online: false, priceAsc: false, priceDesc: false, rating45: false, vip: false, dailyTrips: false, economy: false 
+  });
+
+  const onSelectFilter = useCallback((key: 'all' | 'online' | 'priceAsc' | 'priceDesc' | 'rating45' | 'vip' | 'nearby' | 'fastDispatch' | 'economy' | 'dailyTrips') => {
+    setActiveFilters(prev => {
+      const base = { all: false, online: false, priceAsc: false, priceDesc: false, rating45: false, vip: false, dailyTrips: false, economy: false } as typeof prev;
+      if (key === 'all') return { ...base, all: true };
+      // Эксклюзивно: только один активен. Повторное нажатие возвращает к All
+      if ((prev as any)[key]) {
+        return { ...base, all: true };
+      }
+      switch (key) {
+        case 'online':
+          return { ...base, online: true };
+        case 'priceAsc':
+          return { ...base, priceAsc: true };
+        case 'priceDesc':
+          return { ...base, priceDesc: true };
+        case 'rating45':
+          return { ...base, rating45: true };
+        case 'vip':
+          return { ...base, vip: true };
+        case 'dailyTrips':
+          return { ...base, dailyTrips: true };
+        case 'economy':
+          return { ...base, economy: true };
+        default:
+          return prev;
+      }
+    });
+  }, []);
 
   // Загрузка сохраненных статусов при монтировании
   useEffect(() => {
@@ -80,6 +125,16 @@ const DriversScreen: React.FC = () => {
     return map;
   }, [drivers]);
 
+  const parsePrice = (driverId: string): number => {
+    try {
+      const priceStr = getDriverInfo(driverId).price; // например: "25.5 AFc"
+      const match = priceStr.match(/\d+(?:[\.,]\d+)?/);
+      return match ? parseFloat(match[0].replace(',', '.')) : Number.POSITIVE_INFINITY;
+    } catch {
+      return Number.POSITIVE_INFINITY;
+    }
+  };
+
   const filteredDrivers = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     const filtered = query 
@@ -92,7 +147,36 @@ const DriversScreen: React.FC = () => {
       : drivers;
 
     // Исключаем удаленных водителей
-    const notDeleted = filtered.filter(driver => !deletedDrivers.has(driver.id));
+    let notDeleted = filtered.filter(driver => !deletedDrivers.has(driver.id));
+
+    // Фильтр по онлайн, если активен
+    if (activeFilters.online) {
+      notDeleted = notDeleted.filter(driver => !!driver.isAvailable);
+    }
+
+    // Фильтр по рейтингу 4.5+
+    if (activeFilters.rating45) {
+      notDeleted = notDeleted.filter(driver => (driver.rating ?? 0) >= 4.5);
+    }
+
+    // Фильтр VIP (как суррогат — высокий рейтинг)
+    if (activeFilters.vip) {
+      notDeleted = notDeleted.filter(driver => (driver.rating ?? 0) >= 4.8);
+    }
+
+    // Фильтр Ежедневные поездки (по расписанию из моков)
+    if (activeFilters.dailyTrips) {
+      notDeleted = notDeleted.filter(driver => {
+        const schedule = getDriverInfo(driver.id).schedule?.toLowerCase?.() ?? '';
+        // считаем ежедневными диапазоны типа "пн-пт", "пн-сб"
+        return schedule.includes('пн-пт') || schedule.includes('пн-сб') || schedule.includes('-');
+      });
+    }
+
+    // Эконом — низкая цена по мок-цене
+    if (activeFilters.economy) {
+      notDeleted = notDeleted.filter(driver => parsePrice(driver.id) <= 20);
+    }
 
     const mapped = notDeleted.map(d => ({ 
       ...d, 
@@ -100,16 +184,25 @@ const DriversScreen: React.FC = () => {
       isPaused: pausedDrivers.has(d.id)
     }));
 
-    mapped.sort((a, b) => {
-      const aIsPinned = lastBookmarkedId != null && a.id === lastBookmarkedId && a.isFavorite;
-      const bIsPinned = lastBookmarkedId != null && b.id === lastBookmarkedId && b.isFavorite;
-      if (aIsPinned !== bIsPinned) return aIsPinned ? -1 : 1;
-      if (a.isFavorite !== b.isFavorite) return a.isFavorite ? -1 : 1;
-      return (originalIndexById[a.id] ?? 0) - (originalIndexById[b.id] ?? 0);
-    });
+    // Сортировка по цене при активных чипах
+    if (activeFilters.priceAsc || activeFilters.priceDesc) {
+      mapped.sort((a, b) => {
+        const pa = parsePrice(a.id);
+        const pb = parsePrice(b.id);
+        return activeFilters.priceAsc ? pa - pb : pb - pa;
+      });
+    } else {
+      mapped.sort((a, b) => {
+        const aIsPinned = lastBookmarkedId != null && a.id === lastBookmarkedId && a.isFavorite;
+        const bIsPinned = lastBookmarkedId != null && b.id === lastBookmarkedId && b.isFavorite;
+        if (aIsPinned !== bIsPinned) return aIsPinned ? -1 : 1;
+        if (a.isFavorite !== b.isFavorite) return a.isFavorite ? -1 : 1;
+        return (originalIndexById[a.id] ?? 0) - (originalIndexById[b.id] ?? 0);
+      });
+    }
 
     return mapped;
-  }, [drivers, searchQuery, favorites, pausedDrivers, deletedDrivers, lastBookmarkedId, originalIndexById]);
+  }, [drivers, searchQuery, favorites, pausedDrivers, deletedDrivers, activeFilters, lastBookmarkedId, originalIndexById]);
 
   const loadMoreDrivers = async () => {};
   const handleRefresh = async () => {
@@ -465,6 +558,8 @@ const DriversScreen: React.FC = () => {
           filterExpandAnim={filterExpandAnim}
           onToggleFilter={toggleFilter}
           onOpenNotifications={() => setNotificationsModalVisible(true)}
+          activeFilters={activeFilters}
+          onSelectFilter={onSelectFilter}
         />
 
 

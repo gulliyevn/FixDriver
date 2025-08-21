@@ -330,8 +330,8 @@
       "all": "Alle",
       "rating45": "Bewertung 4.5+",
       "premium": "Premium",
-      "nearby": "In der Nähe",
-      "fastDispatch": "Schnelle Bereitstellung",
+      "price": "Preis",
+      "dailyTrips": "Tägliche Fahrten",
       "economy": "Economy"
     },
     "actions": {

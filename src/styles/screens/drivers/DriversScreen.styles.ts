@@ -48,11 +48,12 @@ export const createDriversScreenStyles = (isDark: boolean) => {
           zIndex: 1,
         },
         filtersContainer: {
-          maxHeight: 40,
+          height: 40,
         },
         filtersContent: {
           paddingHorizontal: SIZES.sm,
           gap: SIZES.xs,
+          alignItems: 'center',
         },
         filterChip: {
           backgroundColor: colors.primary + '15',
@@ -67,10 +68,17 @@ export const createDriversScreenStyles = (isDark: boolean) => {
           gap: SIZES.xs,
           ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
         },
+        filterChipActive: {
+          backgroundColor: colors.primary + '25',
+          borderColor: colors.primary,
+        },
         filterChipText: {
           fontSize: SIZES.fontSize.md,
           color: colors.primary,
           fontWeight: '600',
+        },
+        filterChipTextActive: {
+          color: isDark ? '#FFFFFF' : '#083198',
         },
         filtersSection: {
           overflow: 'hidden',

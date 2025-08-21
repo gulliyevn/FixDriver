@@ -9,9 +9,24 @@ type DriversHeaderProps = {
   filterExpandAnim: Animated.Value;
   onToggleFilter: () => void;
   onOpenNotifications: () => void;
+  activeFilters?: {
+    all?: boolean;
+    online?: boolean;
+    priceAsc?: boolean;
+    priceDesc?: boolean;
+    rating45?: boolean;
+    vip?: boolean;
+    nearby?: boolean;
+    fastDispatch?: boolean;
+    economy?: boolean;
+    dailyTrips?: boolean;
+  };
+  onSelectFilter?: (
+    key: 'all' | 'online' | 'priceAsc' | 'priceDesc' | 'rating45' | 'vip' | 'nearby' | 'fastDispatch' | 'economy' | 'dailyTrips'
+  ) => void;
 };
 
-const DriversHeader: React.FC<DriversHeaderProps> = ({ styles, isDark, filterExpandAnim, onToggleFilter, onOpenNotifications }) => {
+const DriversHeader: React.FC<DriversHeaderProps> = ({ styles, isDark, filterExpandAnim, onToggleFilter, onOpenNotifications, activeFilters = {}, onSelectFilter = () => {} }) => {
   const { t } = useI18n();
 
   return (
@@ -20,7 +35,7 @@ const DriversHeader: React.FC<DriversHeaderProps> = ({ styles, isDark, filterExp
         styles.header,
         {
           paddingTop: filterExpandAnim.interpolate({ inputRange: [0, 1], outputRange: [8, 16] }),
-          paddingBottom: filterExpandAnim.interpolate({ inputRange: [0, 1], outputRange: [-2, 12] }),
+          paddingBottom: filterExpandAnim.interpolate({ inputRange: [0, 1], outputRange: [8, 12] }),
         },
       ]}
     >
@@ -47,33 +62,72 @@ const DriversHeader: React.FC<DriversHeaderProps> = ({ styles, isDark, filterExp
             },
           ]}
         >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer} contentContainerStyle={styles.filtersContent}>
-            <TouchableOpacity style={styles.filterChip}>
-              <Text style={styles.filterChipText}>{t('client.driversScreen.filters.all')}</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            directionalLockEnabled
+            alwaysBounceVertical={false}
+            bounces={false}
+            overScrollMode="never"
+            scrollEventThrottle={16}
+            style={styles.filtersContainer}
+            contentContainerStyle={styles.filtersContent}
+          >
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.all && styles.filterChipActive]}
+              onPress={() => onSelectFilter('all')}
+            >
+              <Text style={[styles.filterChipText, activeFilters.all && styles.filterChipTextActive]}>{t('client.driversScreen.filters.all')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.online && styles.filterChipActive]}
+              onPress={() => onSelectFilter('online')}
+            >
               <Ionicons name="radio-button-on" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.chat.online')}</Text>
+              <Text style={[styles.filterChipText, activeFilters.online && styles.filterChipTextActive]}>{t('client.chat.online')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.priceDesc && styles.filterChipActive]}
+              onPress={() => onSelectFilter('priceDesc')}
+            >
+              <Ionicons name="chevron-down-outline" size={16} color={isDark ? '#3B82F6' : '#083198'} />
+              <Text style={[styles.filterChipText, activeFilters.priceDesc && styles.filterChipTextActive]}>{t('client.driversScreen.filters.price')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.priceAsc && styles.filterChipActive]}
+              onPress={() => onSelectFilter('priceAsc')}
+            >
+              <Ionicons name="chevron-up-outline" size={16} color={isDark ? '#3B82F6' : '#083198'} />
+              <Text style={[styles.filterChipText, activeFilters.priceAsc && styles.filterChipTextActive]}>{t('client.driversScreen.filters.price')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.rating45 && styles.filterChipActive]}
+              onPress={() => onSelectFilter('rating45')}
+            >
               <Ionicons name="star" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.driversScreen.filters.rating45')}</Text>
+              <Text style={[styles.filterChipText, activeFilters.rating45 && styles.filterChipTextActive]}>{t('client.driversScreen.filters.rating45')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.vip && styles.filterChipActive]}
+              onPress={() => onSelectFilter('vip')}
+            >
               <Ionicons name="diamond" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.profile.vip.title')}</Text>
+              <Text style={[styles.filterChipText, activeFilters.vip && styles.filterChipTextActive]}>{t('client.profile.vip.title')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
-              <Ionicons name="location" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.driversScreen.filters.nearby')}</Text>
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.dailyTrips && styles.filterChipActive]}
+              onPress={() => onSelectFilter('dailyTrips')}
+            >
+              <Ionicons name="calendar-outline" size={16} color={isDark ? '#3B82F6' : '#083198'} />
+              <Text style={[styles.filterChipText, activeFilters.dailyTrips && styles.filterChipTextActive]}>{t('client.driversScreen.filters.dailyTrips')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
-              <Ionicons name="flash" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.driversScreen.filters.fastDispatch')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.filterChip}>
+            {/* Nearby and Fast dispatch removed per request */}
+            <TouchableOpacity
+              style={[styles.filterChip, activeFilters.economy && styles.filterChipActive]}
+              onPress={() => onSelectFilter('economy')}
+            >
               <Ionicons name="wallet" size={16} color={isDark ? '#3B82F6' : '#083198'} />
-              <Text style={styles.filterChipText}>{t('client.driversScreen.filters.economy')}</Text>
+              <Text style={[styles.filterChipText, activeFilters.economy && styles.filterChipTextActive]}>{t('client.driversScreen.filters.economy')}</Text>
             </TouchableOpacity>
           </ScrollView>
         </Animated.View>

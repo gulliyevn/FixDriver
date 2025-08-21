@@ -329,8 +329,8 @@
       "all": "Tous",
       "rating45": "Note 4.5+",
       "premium": "Premium",
-      "nearby": "À proximité",
-      "fastDispatch": "Envoi rapide",
+      "price": "Prix",
+      "dailyTrips": "Trajets quotidiens",
       "economy": "Économie"
     },
     "actions": {

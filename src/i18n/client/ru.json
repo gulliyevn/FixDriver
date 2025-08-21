@@ -317,8 +317,8 @@
       "all": "Все",
       "rating45": "Рейтинг 4.5+",
       "premium": "Премиум",
-      "nearby": "Близко",
-      "fastDispatch": "Быстрая подача",
+      "price": "Цена",
+      "dailyTrips": "Ежедневные поездки",
       "economy": "Эконом"
     },
     "actions": {
