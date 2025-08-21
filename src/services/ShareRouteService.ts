@@ -47,7 +47,7 @@ export const ShareRouteService = {
     return allValid;
   },
 
-  async open(points: ShareRoutePoint[]): Promise<void> {
+  async open(points: ShareRoutePoint[], role: 'client' | 'driver' = 'client'): Promise<void> {
     if (!this.hasSufficientRoute(points)) {
       return;
     }
@@ -56,12 +56,19 @@ export const ShareRouteService = {
 
     if (Platform.OS === 'ios') {
       const options: Array<{ key: string; title: string; url: string }> = [];
-      const candidates = [
+      const clientOrder = [
         { key: 'google', title: 'Google Maps', url: urls.googleApp },
         { key: 'yandexMaps', title: 'Yandex Maps', url: urls.yandexMaps },
+        { key: 'waze', title: 'Waze', url: urls.waze },
         { key: 'yandexNavi', title: 'Yandex Navigator', url: urls.yandexNavi },
+      ];
+      const driverOrder = [
+        { key: 'yandexNavi', title: 'Yandex Navigator', url: urls.yandexNavi },
+        { key: 'yandexMaps', title: 'Yandex Maps', url: urls.yandexMaps },
+        { key: 'google', title: 'Google Maps', url: urls.googleApp },
         { key: 'waze', title: 'Waze', url: urls.waze },
       ];
+      const candidates = role === 'driver' ? driverOrder : clientOrder;
 
       const availability = await Promise.all(candidates.map(c => checkInstalled(c.url)));
       availability.forEach((isAvailable, idx) => {
@@ -97,27 +104,17 @@ export const ShareRouteService = {
       return;
     }
 
-    // Android: либо откроем прямое приложение, либо системный chooser
-    const googleAvailable = await checkInstalled(urls.googleApp);
-    const yMapsAvailable = await checkInstalled(urls.yandexMaps);
-    const yNaviAvailable = await checkInstalled(urls.yandexNavi);
-    const wazeAvailable = await checkInstalled(urls.waze);
+    // Android: проверяем доступность в порядке роли
+    const order = role === 'driver'
+      ? [urls.yandexNavi, urls.yandexMaps, urls.googleApp, urls.waze]
+      : [urls.googleApp, urls.yandexMaps, urls.waze, urls.yandexNavi];
 
-    if (googleAvailable) {
-      await Linking.openURL(urls.googleApp);
-      return;
-    }
-    if (yMapsAvailable) {
-      await Linking.openURL(urls.yandexMaps);
-      return;
-    }
-    if (yNaviAvailable) {
-      await Linking.openURL(urls.yandexNavi);
-      return;
-    }
-    if (wazeAvailable) {
-      await Linking.openURL(urls.waze);
-      return;
+    for (const appUrl of order) {
+      const available = await checkInstalled(appUrl);
+      if (available) {
+        await Linking.openURL(appUrl);
+        return;
+      }
     }
 
     // Fallback: системный выбор
