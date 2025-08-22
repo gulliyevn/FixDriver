@@ -10,6 +10,7 @@ interface BalanceContextType {
   topUpBalance: (amount: number) => Promise<void>;
   withdrawBalance: (amount: number) => Promise<boolean>;
   resetBalance: () => Promise<void>;
+  resetEarnings: () => Promise<number>; // Обнуляет только earnings, возвращает старое значение
   loadBalance: () => Promise<void>;
   loadEarnings: () => Promise<void>;
 }
@@ -189,6 +190,20 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     }
   };
 
+  const resetEarnings = async (): Promise<number> => {
+    try {
+      const oldEarnings = earnings;
+      setEarnings(0);
+      await AsyncStorage.setItem(earningsKey, '0');
+      
+      console.log(`[BalanceContext] Заработок обнулен: ${oldEarnings} AFc → 0 AFc`);
+      return oldEarnings;
+    } catch (error) {
+      console.error('❌ Ошибка при сбросе заработка:', error);
+      return earnings; // Возвращаем текущие earnings в случае ошибки
+    }
+  };
+
   const value: BalanceContextType = {
     balance,
     earnings,
@@ -197,6 +212,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     topUpBalance,
     withdrawBalance,
     resetBalance,
+    resetEarnings,
     loadBalance,
     loadEarnings,
   };

@@ -69,5 +69,9 @@
     "call": "Anrufen",
     "cancel": "Abbrechen",
     "error": "Notruf konnte nicht getätigt werden. Bitte rufen Sie manuell an."
+  },
+  "dayEnd": {
+    "title": "Tag beendet",
+    "subtitle": "Online aktivieren?"
   }
 } 

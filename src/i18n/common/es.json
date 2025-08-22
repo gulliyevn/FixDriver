@@ -69,5 +69,9 @@
     "call": "Llamar",
     "cancel": "Cancelar",
     "error": "No se pudo llamar a los servicios de emergencia. Por favor, llama manualmente."
+  },
+  "dayEnd": {
+    "title": "Día terminado",
+    "subtitle": "¿Activar en línea?"
   }
 } 

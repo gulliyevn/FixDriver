@@ -68,5 +68,9 @@
     "call": "Ara",
     "cancel": "İptal",
     "error": "Acil servise arama yapılamadı. Lütfen manuel olarak arayın."
+  },
+  "dayEnd": {
+    "title": "Gün bitti",
+    "subtitle": "Çevrimiçi etkinleştir?"
   }
 } 

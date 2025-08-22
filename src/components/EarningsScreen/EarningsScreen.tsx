@@ -24,6 +24,7 @@ import { useVIPTimeTracking } from './hooks/useVIPTimeTracking';
 import EarningsStats from './components/EarningsStats';
 import EarningsEmptyContainer from './components/EarningsEmptyContainer';
 import EarningsProgressLine from './components/EarningsProgressLine';
+import DayEndModal from '../DayEndModal';
 
 const EarningsScreen: React.FC = () => {
   const { isDark } = useTheme();
@@ -92,7 +93,14 @@ const EarningsScreen: React.FC = () => {
     simulateDayChange,
     simulateMonthChange,
     getQualifiedDaysHistory,
+    // Диалог окончания дня
+    dayEndModalVisible,
+    handleDayEndConfirm,
+    handleDayEndCancel,
+    forceDayCheck,
   } = useVIPTimeTracking(driverLevel.isVIP);
+
+
   
   // Единый источник значений для VIP прогресс-бара и тестового контейнера
   const vipQualifiedDays = vipTimeData.qualifiedDaysThisMonth;
@@ -332,16 +340,17 @@ const EarningsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeAreaTop}>
-        <EarningsHeader
-          styles={styles}
-          isDark={isDark}
-          filterExpandAnim={filterExpandAnim}
-          onToggleFilter={toggleFilter}
-          selectedPeriod={selectedPeriod}
-          onPeriodSelect={handlePeriodSelect}
-          isOnline={isOnline}
-          onStatusChange={handleStatusChange}
-        />
+                    <EarningsHeader
+              styles={styles}
+              isDark={isDark}
+              filterExpandAnim={filterExpandAnim}
+              onToggleFilter={toggleFilter}
+              selectedPeriod={selectedPeriod}
+              onPeriodSelect={handlePeriodSelect}
+              isOnline={isOnline}
+              onStatusChange={handleStatusChange}
+
+            />
       </SafeAreaView>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -500,6 +509,13 @@ const EarningsScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Диалог окончания дня */}
+      <DayEndModal
+        visible={dayEndModalVisible}
+        onConfirm={handleDayEndConfirm}
+        onCancel={handleDayEndCancel}
+      />
 
     </View>
   );

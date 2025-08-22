@@ -3,8 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VIP_CONFIG, calculateMonthlyVIPBonus } from '../types/levels.config';
 import { useBalanceContext } from '../../../context/BalanceContext';
 import DriverStatusService from '../../../services/DriverStatusService';
+import DriverStatsService from '../../../services/DriverStatsService';
 
 const VIP_TIME_KEY = '@driver_vip_time_tracking';
+const DAILY_STATS_KEY = '@driver_daily_stats';
 
 interface VIPTimeData {
   currentDay: string; // YYYY-MM-DD
@@ -20,12 +22,23 @@ interface VIPTimeData {
   qualifiedDaysHistory: number[]; // История квалифицированных дней по 30-дневным периодам
 }
 
+interface DailyStats {
+  [date: string]: {
+    hoursOnline: number;
+    ridesCount: number;
+    earnings: number;
+    isQualified: boolean;
+  };
+}
+
 const MIN_HOURS_PER_DAY = 10;
 
 export const useVIPTimeTracking = (isVIP: boolean) => {
-  const { addEarnings } = useBalanceContext();
+  const { addEarnings, resetEarnings } = useBalanceContext();
   // Добавляем состояние для принудительного обновления
   const [updateTrigger, setUpdateTrigger] = useState(0);
+  // Состояние для диалога окончания дня
+  const [dayEndModalVisible, setDayEndModalVisible] = useState(false);
   
   // Функция для получения локальной даты в формате YYYY-MM-DD
   const getLocalDateString = (date: Date = new Date()) => {
@@ -75,6 +88,12 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
   useEffect(() => {
     loadVIPTimeData();
+    // Принудительно проверяем день при загрузке
+    setTimeout(() => {
+      performDayCheck().catch(error => {
+        console.error('Ошибка при принудительной проверке дня:', error);
+      });
+    }, 1000);
   }, []);
 
   // Инициализируем старт 30-дневного периода только при первом включении онлайн, если VIP и период ещё не установлен
@@ -84,11 +103,12 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   const getNextLocalMidnightDate = () => {
     const d = new Date();
     d.setHours(24, 0, 0, 0);
-    return d.toISOString().split('T')[0];
+    return getLocalDateString(d);
   };
 
   // Проверка смены дня (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
-  const performDayCheck = useCallback(() => {
+  // ВАЖНО: В 00:00 автоматически отключается онлайн статус
+  const performDayCheck = useCallback(async () => {
       const now = new Date();
       // Используем локальную дату, а не UTC
       const today = now.getFullYear() + '-' + 
@@ -136,34 +156,40 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         
         // logs removed in production
 
-        // Если есть активная сессия, продолжаем ее в новый день
-        let newSessionHours = 0;
-        let newLastOnlineTime = null;
-        
-        if (vipTimeData.isCurrentlyOnline && vipTimeData.lastOnlineTime) {
-          const midnight = new Date();
-          midnight.setHours(0, 0, 0, 0);
+        // АВТОМАТИЧЕСКОЕ ОТКЛЮЧЕНИЕ ОНЛАЙН В 00:00
+        if (vipTimeData.isCurrentlyOnline) {
+          // Показываем диалог окончания дня
+          setDayEndModalVisible(true);
           
-          // Если сессия продолжается через полночь, считаем время с полуночи
-          if (vipTimeData.lastOnlineTime < midnight.getTime()) {
-            newLastOnlineTime = midnight.getTime(); // Начинаем считать с полуночи
-            newSessionHours = (Date.now() - midnight.getTime()) / (1000 * 60 * 60);
-          } else {
-            // Сессия началась уже сегодня
-            newLastOnlineTime = vipTimeData.lastOnlineTime;
-            newSessionHours = (Date.now() - vipTimeData.lastOnlineTime) / (1000 * 60 * 60);
-          }
+          // Сохраняем данные для обработки в диалоге
+          const previousDayEarnings = await resetEarnings();
+          const previousDayStats = {
+            date: vipTimeData.currentDay,
+            hoursOnline: vipTimeData.hoursOnline + additionalHours,
+            ridesCount: vipTimeData.ridesToday,
+            earnings: previousDayEarnings,
+            isQualified: isQualifiedDay,
+          };
+          
+          // Сохраняем в БД асинхронно
+          DriverStatsService.saveDayStats(previousDayStats).catch(error => {
+            console.error('Ошибка сохранения статистики в БД:', error);
+          });
+          
+          console.log(`[VIPTimeTracking] День завершен: ${vipTimeData.currentDay}, часы: ${previousDayStats.hoursOnline.toFixed(1)}, поездки: ${previousDayStats.ridesCount}, заработок: ${(previousDayEarnings || 0).toFixed(1)} AFc`);
+          
+          return; // Выходим из функции, диалог обработает дальнейшие действия
         }
 
+        // Если онлайн уже был выключен, просто обновляем данные дня
         const newData: VIPTimeData = {
           ...vipTimeData,
           currentDay: today,
-          hoursOnline: newSessionHours,
+          hoursOnline: vipTimeData.hoursOnline + additionalHours,
           ridesToday: 0, // Поездки сбрасываются каждый день
           qualifiedDaysThisMonth: isVIP
             ? vipTimeData.qualifiedDaysThisMonth + (isQualifiedDay ? 1 : 0)
             : vipTimeData.qualifiedDaysThisMonth,
-          lastOnlineTime: newLastOnlineTime,
         };
 
         setVipTimeData(newData);
@@ -242,7 +268,11 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
 
   // Таймер: проверяем каждую минуту
   useEffect(() => {
-    const interval = setInterval(performDayCheck, 60000);
+    const interval = setInterval(() => {
+      performDayCheck().catch(error => {
+        console.error('Ошибка при проверке дня:', error);
+      });
+    }, 60000);
     return () => clearInterval(interval);
   }, [performDayCheck]);
 
@@ -298,6 +328,39 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     } catch (error) {
       console.error('Ошибка при сохранении VIP времени:', error);
     }
+  };
+
+  // Функции для работы с дневной статистикой
+  const loadDailyStats = async (): Promise<DailyStats> => {
+    try {
+      const saved = await AsyncStorage.getItem(DAILY_STATS_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      console.error('Ошибка при загрузке дневной статистики:', error);
+      return {};
+    }
+  };
+
+  const saveDailyStats = async (stats: DailyStats) => {
+    try {
+      await AsyncStorage.setItem(DAILY_STATS_KEY, JSON.stringify(stats));
+    } catch (error) {
+      console.error('Ошибка при сохранении дневной статистики:', error);
+    }
+  };
+
+  const saveDayStats = async (date: string, hoursOnline: number, ridesCount: number, earnings: number = 0) => {
+    const stats = await loadDailyStats();
+    const isQualified = hoursOnline >= MIN_HOURS_PER_DAY && ridesCount >= VIP_CONFIG.minRidesPerDay;
+    
+    stats[date] = {
+      hoursOnline,
+      ridesCount,
+      earnings,
+      isQualified,
+    };
+    
+    await saveDailyStats(stats);
   };
 
   const startOnlineTime = useCallback(() => {
@@ -493,6 +556,55 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     };
   }, [vipTimeData, getCurrentHoursOnline]);
 
+  // Обработчики диалога окончания дня
+  const handleDayEndConfirm = useCallback(() => {
+    setDayEndModalVisible(false);
+    
+    // Обновляем данные для нового дня
+    const today = getLocalDateString();
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      currentDay: today,
+      hoursOnline: 0,
+      ridesToday: 0,
+      isCurrentlyOnline: true, // Включаем онлайн
+      lastOnlineTime: Date.now(),
+    };
+    
+    setVipTimeData(newData);
+    saveVIPTimeData(newData);
+    
+    // Уведомляем DriverStatusService
+    DriverStatusService.setOnline(true);
+    AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
+    
+    console.log('[VIPTimeTracking] Водитель продолжил работу в новом дне');
+  }, [vipTimeData, saveVIPTimeData]);
+
+  const handleDayEndCancel = useCallback(() => {
+    setDayEndModalVisible(false);
+    
+    // Обновляем данные для нового дня (офлайн)
+    const today = getLocalDateString();
+    const newData: VIPTimeData = {
+      ...vipTimeData,
+      currentDay: today,
+      hoursOnline: 0,
+      ridesToday: 0,
+      isCurrentlyOnline: false, // Оставляем офлайн
+      lastOnlineTime: null,
+    };
+    
+    setVipTimeData(newData);
+    saveVIPTimeData(newData);
+    
+    // Уведомляем DriverStatusService
+    DriverStatusService.setOnline(false);
+    AsyncStorage.setItem('@driver_online_status', 'false').catch(() => {});
+    
+    console.log('[VIPTimeTracking] Водитель завершил работу на день');
+  }, [vipTimeData, saveVIPTimeData]);
+
   return {
     vipTimeData,
     startOnlineTime,
@@ -506,6 +618,12 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     getQualifiedDaysHistory,
     checkCurrentDayQualification,
     // Для тестов/отладки: форсированная проверка смены дня
-    forceDayCheck: performDayCheck,
+    forceDayCheck: useCallback(async () => {
+      await performDayCheck();
+    }, [performDayCheck]),
+    // Диалог окончания дня
+    dayEndModalVisible,
+    handleDayEndConfirm,
+    handleDayEndCancel,
   };
 };

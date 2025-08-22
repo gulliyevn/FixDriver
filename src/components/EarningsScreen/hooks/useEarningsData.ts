@@ -1,5 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useBalance } from '../../../hooks/useBalance';
+import { useDriverStats } from '../../../hooks/useDriverStats';
+import { PeriodStats } from '../../../services/DriverStatsService';
 
 type PeriodType = 'today' | 'week' | 'month' | 'year';
 
@@ -57,12 +59,61 @@ const mockData = {
 
 export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate?: number, localBalance?: number) => {
   const { balance, earnings } = useBalance();
+  const { getWeekStats, getMonthStats, getTodayStats, loading, error } = useDriverStats();
+  const [periodStats, setPeriodStats] = useState<PeriodStats | null>(null);
   
   // Используем локальный баланс, если он передан, иначе используем earnings из хука
   const effectiveBalance = localBalance !== undefined ? localBalance : earnings;
 
+  // Загружаем статистику из БД в зависимости от выбранного периода
+  useEffect(() => {
+    const loadStats = async () => {
+      let stats: PeriodStats | null = null;
+      
+      switch (selectedPeriod) {
+        case 'today':
+          const todayStats = await getTodayStats();
+          if (todayStats) {
+            stats = {
+              totalHours: todayStats.hoursOnline,
+              totalRides: todayStats.ridesCount,
+              totalEarnings: todayStats.earnings,
+              qualifiedDays: todayStats.isQualified ? 1 : 0,
+              averageHoursPerDay: todayStats.hoursOnline,
+              averageRidesPerDay: todayStats.ridesCount,
+            };
+          }
+          break;
+        case 'week':
+          stats = await getWeekStats();
+          break;
+        case 'month':
+          stats = await getMonthStats();
+          break;
+        case 'year':
+          // TODO: Добавить getYearStats
+          stats = null;
+          break;
+      }
+      
+      setPeriodStats(stats);
+    };
+
+    loadStats();
+  }, [selectedPeriod, getWeekStats, getMonthStats, getTodayStats, forceUpdate]);
+
   const currentData = useMemo(() => {
-    const currentBalance = effectiveBalance || 0;
+    // Для периода "сегодня" показываем текущий заработок (earnings)
+    // Для других периодов показываем данные из БД
+    let currentBalance = 0;
+    
+    if (selectedPeriod === 'today') {
+      // Показываем текущий дневной заработок
+      currentBalance = effectiveBalance || 0;
+    } else {
+      // Показываем данные из БД для выбранного периода
+      currentBalance = periodStats?.totalEarnings || 0;
+    }
     
     // Если баланс 0, показываем без точки
     if (currentBalance === 0) {
@@ -76,14 +127,27 @@ export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate
     return {
       total: `${formattedBalance} AFc`,
     };
-  }, [effectiveBalance, forceUpdate, localBalance, earnings, balance]);
+  }, [selectedPeriod, effectiveBalance, periodStats, forceUpdate, localBalance, earnings, balance]);
 
-  const quickStats = useMemo(() => ({
-    totalTrips: mockData[selectedPeriod].rides.length,
-    totalEarnings: mockData[selectedPeriod].total,
-    averageRating: 4.8,
-    onlineHours: 36,
-  }), [selectedPeriod]);
+  const quickStats = useMemo(() => {
+    // Используем данные из БД, если доступны, иначе моковые данные
+    if (periodStats) {
+      return {
+        totalTrips: periodStats.totalRides,
+        totalEarnings: `${periodStats.totalEarnings.toFixed(1)} AFc`,
+        averageRating: 4.8, // TODO: Добавить в БД
+        onlineHours: Math.round(periodStats.totalHours),
+      };
+    }
+    
+    // Fallback на моковые данные
+    return {
+      totalTrips: mockData[selectedPeriod].rides.length,
+      totalEarnings: mockData[selectedPeriod].total,
+      averageRating: 4.8,
+      onlineHours: 36,
+    };
+  }, [periodStats, selectedPeriod]);
 
   const rides = useMemo(() => mockData[selectedPeriod].rides, [selectedPeriod]);
 
@@ -91,5 +155,8 @@ export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate
     currentData,
     quickStats,
     rides,
+    periodStats,
+    loading,
+    error,
   };
 };

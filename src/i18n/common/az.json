@@ -69,5 +69,9 @@
     "call": "Zəng et",
     "cancel": "Ləğv et",
     "error": "Təcili xidmətə zəng etmək mümkün olmadı. Zəhmət olmasa əl ilə zəng edin."
+  },
+  "dayEnd": {
+    "title": "Gün bitdi",
+    "subtitle": "Onlayn aktivləşdirilsin?"
   }
 } 

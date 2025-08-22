@@ -69,5 +69,9 @@
     "call": "Call",
     "cancel": "Cancel",
     "error": "Failed to call emergency service. Please call manually."
+  },
+  "dayEnd": {
+    "title": "Day Ended",
+    "subtitle": "Enable Online?"
   }
 } 

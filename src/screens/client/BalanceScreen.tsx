@@ -110,6 +110,11 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   // Выбираем нужный хук в зависимости от роли
   const balanceHook = isDriver ? driverBalanceHook : clientBalanceHook;
   const userBalance = balanceHook.balance;
+  
+  // Для водителей показываем общую сумму (баланс + заработок)
+  const totalBalance = isDriver 
+    ? userBalance + (driverBalanceHook as DriverBalanceContextType).earnings
+    : userBalance;
   const topUpBalance = isDriver 
     ? (driverBalanceHook as DriverBalanceContextType).topUpBalance 
     : clientBalanceHook.topUpBalance;
@@ -405,16 +410,19 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
               <View style={balanceCardFrontRow}>
                 <View>
                   <Text style={styles.balanceLabel}>
-                    {isDriver ? 'Available Balance' : t('client.balance.currentBalance')}
+                    {isDriver ? 'Total Balance' : t('client.balance.currentBalance')}
                   </Text>
                   <View style={styles.balanceRow}>
-                    <Text style={styles.balanceAmount}>{formatBalance(userBalance)}</Text>
-                    {!String(userBalance).includes('AFc') && (
+                    <Text style={styles.balanceAmount}>{formatBalance(totalBalance)}</Text>
+                    {!String(totalBalance).includes('AFc') && (
                       <Text style={styles.balanceCurrency}>AFc</Text>
                     )}
                   </View>
                   <Text style={cashbackText}>
-                    {isDriver ? t('client.balance.pending') + ': ' : 'FixCash: '}{cashback} AFc
+                    {isDriver 
+                      ? `Balance: ${formatBalance(userBalance)} | Earnings: ${formatBalance((driverBalanceHook as DriverBalanceContextType).earnings)}`
+                      : 'FixCash: ' + cashback + ' AFc'
+                    }
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleFlip} style={flipButtonFront}>

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
 import { useI18n } from '../../../hooks/useI18n';
-import { useEarningsStats } from '../hooks/useEarningsStats';
+import { useEarningsData } from '../hooks/useEarningsData';
+
 import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
 
 
@@ -14,10 +16,46 @@ interface EarningsStatsProps {
 const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
   const { t } = useI18n();
   const colors = getCurrentColors(isDark);
-  const { statsCards } = useEarningsStats(period);
+  const { quickStats, periodStats } = useEarningsData(period);
+
   const [isExpanded, setIsExpanded] = useState(true);
   const [animation] = useState(new Animated.Value(1));
   const [chevronRotation] = useState(new Animated.Value(0));
+  
+
+
+  // Создаем карточки статистики на основе реальных данных из БД
+
+  const statsCards = useMemo(() => [
+    {
+      title: 'totalRides',
+      value: quickStats.totalTrips,
+      icon: 'checkmark-outline',
+      color: '#3B82F6',
+      trend: { value: 12, isPositive: true },
+    },
+    {
+      title: 'workHours',
+      value: quickStats.onlineHours.toString(),
+      icon: 'time-outline',
+      color: '#10B981',
+      trend: { value: 1.5, isPositive: true },
+    },
+    {
+      title: 'totalDistance',
+      value: '85', // Моковые данные, в реальности будут из БД
+      icon: 'navigate-outline',
+      color: '#F59E0B',
+      trend: { value: 0.2, isPositive: true },
+    },
+    {
+      title: 'waitingTime',
+      value: '15', // Моковые данные времени ожидания в минутах
+      icon: 'calendar-outline',
+      color: '#8B5CF6',
+      trend: { value: 0.8, isPositive: true },
+    },
+  ], [quickStats]);
 
   const styles = StyleSheet.create({
     container: {
@@ -45,11 +83,11 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
       justifyContent: 'space-between',
     },
     statCard: {
-      width: '48%',
+      width: '24%',
       backgroundColor: colors.background,
       borderRadius: SIZES.radius.md,
-      padding: SIZES.lg,
-      marginBottom: SIZES.md,
+      padding: SIZES.md,
+      marginBottom: SIZES.sm,
       alignItems: 'center',
       borderWidth: 1,
       borderColor: colors.border,
@@ -81,6 +119,23 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
       textAlign: 'center',
       marginBottom: SIZES.xs,
     },
+    divider: {
+      height: 1,
+      backgroundColor: colors.border,
+      marginVertical: SIZES.lg,
+    },
+    chartSection: {
+      marginTop: SIZES.md,
+    },
+    chartTitle: {
+      fontSize: SIZES.fontSize.lg,
+      fontWeight: '600',
+      color: colors.text,
+      marginTop: SIZES.md,
+      textAlign: 'center',
+      lineHeight: SIZES.lineHeight.lg,
+    },
+
 
   });
 
@@ -136,23 +191,26 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
           {statsCards.map((card, index) => (
             <View key={index} style={styles.statCard}>
               <View style={styles.valueContainer}>
-                <Text style={styles.statValue}>{card.value}</Text>
-                {card.subtitle && (
-                  <Text style={styles.statSubtitle}>{card.subtitle}</Text>
-                )}
+                <Ionicons 
+                  name={card.icon as any} 
+                  size={16} 
+                  color={card.color} 
+                  style={{ marginRight: SIZES.xs }}
+                />
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                  <Text style={styles.statValue}>{card.value}</Text>
+                </View>
               </View>
               
-              <Text style={styles.statTitle}>
-                {card.title === 'totalRides' && t('driver.earnings.stats.totalRides')}
-                {card.title === 'avgRating' && t('driver.earnings.stats.avgRating')}
-                {card.title === 'workHours' && t('driver.earnings.stats.workHours')}
-                {card.title === 'completionRate' && t('driver.earnings.stats.completionRate')}
-                {card.title === 'avgPerRide' && t('driver.earnings.stats.avgPerRide')}
-                {card.title === 'scheduleCompletion' && t('driver.earnings.stats.scheduleCompletion')}
-              </Text>
+              {/* Убираем заголовки, оставляем только значения */}
             </View>
           ))}
         </View>
+        
+        {/* Линия разделения */}
+        <View style={styles.divider} />
+        
+
       </Animated.View>
     </View>
   );

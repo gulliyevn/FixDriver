@@ -69,5 +69,9 @@
     "call": "Appeler",
     "cancel": "Annuler",
     "error": "Impossible d'appeler les services d'urgence. Veuillez appeler manuellement."
+  },
+  "dayEnd": {
+    "title": "Jour terminé",
+    "subtitle": "Activer en ligne ?"
   }
 } 

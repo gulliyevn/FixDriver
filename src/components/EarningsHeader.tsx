@@ -12,6 +12,7 @@ type EarningsHeaderProps = {
   onPeriodSelect: (period: 'today' | 'week' | 'month' | 'year') => void;
   isOnline: boolean;
   onStatusChange: () => void;
+
 };
 
 const EarningsHeader: React.FC<EarningsHeaderProps> = ({ 
@@ -22,7 +23,8 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
   selectedPeriod, 
   onPeriodSelect,
   isOnline,
-  onStatusChange
+  onStatusChange,
+
 }) => {
   const { t } = useI18n();
 
@@ -65,6 +67,8 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
                 color={isOnline ? "#10B981" : "#6B7280"} 
               />
             </TouchableOpacity>
+
+
 
             {/* Кнопки сброса удалены */}
           </View>
