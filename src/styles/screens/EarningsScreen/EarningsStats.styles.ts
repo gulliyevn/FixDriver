@@ -8,7 +8,7 @@ export const createEarningsStatsStyles = (isDark: boolean) => {
       backgroundColor: colors.surface,
       padding: SIZES.xl,
       marginHorizontal: SIZES.xl,
-      marginBottom: SIZES.lg,
+      marginBottom: SIZES.xs,
       borderRadius: SIZES.radius.lg,
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },

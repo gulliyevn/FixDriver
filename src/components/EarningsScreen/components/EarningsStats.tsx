@@ -6,6 +6,7 @@ import { useI18n } from '../../../hooks/useI18n';
 import { useEarningsData } from '../hooks/useEarningsData';
 
 import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
+import EarningsDetailView from './EarningsDetailView';
 
 
 interface EarningsStatsProps {
@@ -18,8 +19,9 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
   const colors = getCurrentColors(isDark);
   const { quickStats, periodStats } = useEarningsData(period);
 
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [animation] = useState(new Animated.Value(1));
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [animation] = useState(new Animated.Value(0));
+  const [selectedStat, setSelectedStat] = useState<'totalRides' | 'workHours' | 'totalDistance' | 'routePoints' | null>('routePoints');
   const [chevronRotation] = useState(new Animated.Value(0));
   
 
@@ -28,6 +30,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
 
   const statsCards = useMemo(() => [
     {
+      key: 'totalRides',
       title: 'totalRides',
       value: quickStats.totalTrips,
       icon: 'checkmark-outline',
@@ -35,6 +38,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
       trend: { value: 12, isPositive: true },
     },
     {
+      key: 'workHours',
       title: 'workHours',
       value: quickStats.onlineHours.toString(),
       icon: 'time-outline',
@@ -42,6 +46,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
       trend: { value: 1.5, isPositive: true },
     },
     {
+      key: 'totalDistance',
       title: 'totalDistance',
       value: '85', // Моковые данные, в реальности будут из БД
       icon: 'navigate-outline',
@@ -49,6 +54,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
       trend: { value: 0.2, isPositive: true },
     },
     {
+      key: 'routePoints',
       title: 'waitingTime',
       value: '15', // Моковые данные времени ожидания в минутах
       icon: 'calendar-outline',
@@ -179,17 +185,34 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
         </Animated.View>
       </TouchableOpacity>
       
-      <Animated.View style={{
-        maxHeight: animation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 500],
-        }),
-        opacity: animation,
-        overflow: 'hidden',
-      }}>
-        <View style={styles.statsGrid}>
+              <View style={styles.statsGrid}>
           {statsCards.map((card, index) => (
-            <View key={index} style={styles.statCard}>
+                              <TouchableOpacity 
+                    key={index} 
+                    style={styles.statCard}
+                    onPress={() => {
+                      setSelectedStat(card.key as any);
+                      if (!isExpanded) {
+                        setIsExpanded(true);
+                        const toValue = 1;
+                        const toRotation = 1;
+                        
+                        Animated.parallel([
+                          Animated.timing(animation, {
+                            toValue,
+                            duration: 300,
+                            useNativeDriver: false,
+                          }),
+                          Animated.timing(chevronRotation, {
+                            toValue: toRotation,
+                            duration: 300,
+                            useNativeDriver: true,
+                          }),
+                        ]).start();
+                      }
+                    }}
+                    activeOpacity={0.7}
+                  >
               <View style={styles.valueContainer}>
                 <Ionicons 
                   name={card.icon as any} 
@@ -201,17 +224,32 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
                   <Text style={styles.statValue}>{card.value}</Text>
                 </View>
               </View>
-              
-              {/* Убираем заголовки, оставляем только значения */}
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
         
-        {/* Линия разделения */}
-        <View style={styles.divider} />
-        
-
-      </Animated.View>
+        {/* Линия разделения и детальная статистика */}
+        <Animated.View style={{
+          maxHeight: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 300],
+          }),
+          opacity: animation,
+          overflow: 'hidden',
+        }}>
+          {/* Линия разделения */}
+          <View style={styles.divider} />
+          
+          {/* Детальная статистика */}
+          {selectedStat && (
+            <EarningsDetailView
+              selectedStat={selectedStat}
+              isDark={isDark}
+              onClose={() => setSelectedStat(null)}
+              period={period}
+            />
+          )}
+        </Animated.View>
     </View>
   );
 };
