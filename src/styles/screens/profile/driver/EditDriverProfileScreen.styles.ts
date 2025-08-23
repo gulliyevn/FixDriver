@@ -59,6 +59,15 @@ export const EditDriverProfileScreenStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Кнопка добавления автомобиля
+  addVehicleButton: {
+    backgroundColor: '#3B82F6', // Цвет активной иконки заработка
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
   // Кнопка сохранения
   saveButton: {
     backgroundColor: '#003366',
@@ -72,6 +81,52 @@ export const EditDriverProfileScreenStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+
+  // Стили для свайпа
+  swipeActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  swipeActionsLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 16,
+  },
+  swipeActionsRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: 16,
+  },
+  swipeActionInnerLeft: {
+    marginRight: 4,
+  },
+  swipeActionInnerRight: {
+    marginLeft: 4,
+  },
+  swipeAction: {
+    width: 100,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+    borderRadius: 12,
+  },
+  swipeActionText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  favoriteAction: {
+    backgroundColor: '#F59E0B',
+  },
+  deleteAction: {
+    backgroundColor: '#EF4444',
   },
 
 
@@ -110,9 +165,7 @@ export const getEditDriverProfileScreenColors = (isDark: boolean) => {
     },
     inputLabel: { color: colors.text },
 
-
-
-
+    addVehicleButton: { backgroundColor: colors.primary }, // Используем primary цвет для каждой темы
 
   };
 }; 

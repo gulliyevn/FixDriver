@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { colors } from '../../constants/colors';
 
 export const PhotoUploadStyles = StyleSheet.create({
   inputContainer: {
@@ -61,4 +62,19 @@ export const PhotoUploadStyles = StyleSheet.create({
     color: '#059669',
     fontWeight: '500',
   },
-}); 
+});
+
+export const getPhotoUploadColors = (isDark: boolean) => {
+  const currentColors = isDark ? colors.dark : colors.light;
+  
+  return {
+    label: { color: currentColors.text },
+    uploadButton: { 
+      borderColor: currentColors.primary,
+      backgroundColor: currentColors.surface 
+    },
+    uploadButtonText: { color: currentColors.primary },
+    removePhotoButton: { backgroundColor: currentColors.surface },
+    photoPreviewText: { color: currentColors.success },
+  };
+}; 

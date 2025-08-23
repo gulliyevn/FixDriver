@@ -14,6 +14,7 @@ import AddressPickerScreen from '../../screens/client/AddressPickerScreen';
 import ChangePasswordScreen from '../../screens/client/ChangePasswordScreen';
 import SupportChatScreen from '../../screens/common/SupportChatScreen';
 import EditDriverProfileScreen from '../../screens/profile/driver/EditDriverProfileScreen';
+import DriverVehiclesScreen from '../../screens/profile/driver/DriverVehiclesScreen';
 import DriverProfileScreen from '../../screens/driver/DriverProfileScreen';
 import PremiumPackagesScreen from '../../screens/profile/PremiumPackagesScreen';
 
@@ -44,6 +45,7 @@ const DriverProfileStack: React.FC = () => {
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="SupportChat" component={SupportChatScreen} />
       <Stack.Screen name="EditDriverProfile" component={EditDriverProfileScreen} />
+      <Stack.Screen name="DriverVehicles" component={DriverVehiclesScreen} />
       <Stack.Screen name="PremiumPackages" component={PremiumPackagesScreen} />
 
       <Stack.Screen name="Notifications" component={NotificationsScreen} />

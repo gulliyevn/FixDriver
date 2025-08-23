@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { usePackage } from '../../../context/PackageContext';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Animated } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import type { Swipeable as RNSwipeable } from 'react-native-gesture-handler';
 import { useTheme } from '../../../context/ThemeContext';
 import { EditDriverProfileScreenStyles as styles, getEditDriverProfileScreenColors } from '../../../styles/screens/profile/driver/EditDriverProfileScreen.styles';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,17 +12,17 @@ import { useAuth } from '../../../context/AuthContext';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDriverProfile as useProfile } from '../../../hooks/driver/DriverUseProfile';
 import { useVerification } from '../../../hooks/useVerification';
-import { useDriverFamilyMembers as useFamilyMembers } from '../../../hooks/driver/DriverUseFamilyMembers';
 import { getDefaultDate, hasChanges, handleDriverCirclePress } from '../../../utils/profileHelpers';
 import DatePicker from '../../../components/DatePicker';
 import PersonalInfoSection from '../../../components/driver/DriverPersonalInfoSection';
-import FamilySection from '../../../components/driver/DriverFamilySection';
-import AddFamilyModal from '../../../components/driver/DriverAddFamilyModal';
 import ProfileAvatarSection from '../../../components/driver/DriverProfileAvatarSection';
 import VipSection from '../../../components/driver/DriverVipSection';
 import ProfileHeader from '../../../components/driver/DriverProfileHeader';
+import VehicleIdCard from '../../../components/driver/VehicleIdCard';
 import { useI18n } from '../../../hooks/useI18n';
-import { FamilyMember } from '../../../types/driver/DriverFamily';
+import { useDriverVehicles } from '../../../hooks/driver/useDriverVehicles';
+
+const ACTION_WIDTH = 100; // Keep in sync with styles.swipeAction.width
 
 const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -28,11 +30,18 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   const { logout, login, changeRole } = useAuth();
   const rootNavigation = useNavigation();
   const dynamicStyles = getEditDriverProfileScreenColors(isDark);
-  const currentColors = isDark ? { dark: { primary: '#3B82F6' } } : { light: { primary: '#083198' } };
+  const currentColors = isDark ? { primary: '#3B82F6' } : { primary: '#083198' };
   
   const { profile, updateProfile, loadProfile } = useProfile();
   const { currentPackage } = usePackage();
   const user = profile || mockUsers[0];
+  
+  // Хук для работы с автомобилями
+  const { vehicles, loadVehicles, deleteVehicle } = useDriverVehicles();
+  
+  // Keep refs to swipeable rows to close them programmatically
+  const swipeRefs = useRef<Record<string, RNSwipeable | null>>({});
+  const openSwipeRef = useRef<RNSwipeable | null>(null);
   
 
   
@@ -57,7 +66,7 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  // Хуки для верификации и семейных членов
+  // Хуки для верификации
   const {
     verificationStatus,
     isVerifying,
@@ -67,29 +76,6 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
     verifyPhone,
   } = useVerification();
 
-  const {
-    familyMembers,
-    expandedFamilyMember,
-    editingFamilyMember,
-    showAddFamilyModal,
-    newFamilyMember,
-    setNewFamilyMember,
-    familyPhoneVerification,
-    familyPhoneVerifying,
-    toggleFamilyMember,
-    openAddFamilyModal,
-    closeAddFamilyModal,
-    addFamilyMember,
-    startEditingFamilyMember,
-    cancelEditingFamilyMember,
-    saveFamilyMember,
-    deleteFamilyMember,
-    verifyFamilyPhone,
-    resetFamilyPhoneVerification,
-  } = useFamilyMembers();
-
-  const saveFamilyRef = useRef<(() => void) | null>(null);
-
   // Функция для проверки изменений
   const checkHasChanges = () => {
     return formData.firstName !== originalDataRef.current.firstName ||
@@ -98,56 +84,7 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
            formData.email !== originalDataRef.current.email;
   };
 
-  const handleFamilyExit = () => {
-    // Если есть активное редактирование семейного члена
-    if (editingFamilyMember !== null) {
-      // Проверяем, есть ли изменения через функцию сохранения
-      if (saveFamilyRef.current) {
-        // Если есть функция сохранения, значит есть изменения - показываем диалог
-        Alert.alert(
-          t('common.confirmation'),
-          t('profile.family.confirmSave'),
-          [
-            { 
-              text: t('common.cancel'), 
-              style: 'cancel',
-              onPress: () => {
-                // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-                // Пользователь остается на экране и может продолжить редактирование
-              }
-            },
-            { 
-              text: t('common.save'), 
-              onPress: () => {
-                // Сохраняем изменения и отменяем редактирование
-                handleFamilySave();
-              }
-            }
-          ]
-        );
-      } else {
-        // Если нет функции сохранения, значит изменений нет - сразу выходим
-        cancelEditingFamilyMember();
-        navigation.goBack();
-      }
-    } else {
-      // Если нет активного редактирования, просто уходим назад
-      navigation.goBack();
-    }
-  };
 
-  const handleFamilySave = () => {
-    // Вызываем функцию сохранения из ref, если она есть
-    if (saveFamilyRef.current) {
-      saveFamilyRef.current();
-    }
-    
-    // Отменяем редактирование
-    cancelEditingFamilyMember();
-    
-    // Уходим назад напрямую, без вызова handleFamilyExit
-    navigation.goBack();
-  };
 
   // Функция валидации полей личной информации
   const validatePersonalInfo = (): { isValid: boolean; errors: string[] } => {
@@ -242,7 +179,6 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   // Обработчик для перехвата swipe-back жеста
   const handleBackPress = useCallback(() => {
     const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
-    const hasFamilyEditing = editingFamilyMember !== null;
     
     if (hasPersonalChanges) {
       Alert.alert(
@@ -265,52 +201,16 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
           }
         ]
       );
-    } else if (hasFamilyEditing) {
-      // Если есть редактирование семейной секции, используем специальную обработку
-      
-      // Проверяем, есть ли изменения через функцию сохранения
-      if (saveFamilyRef.current) {
-        // Если есть изменения - показываем диалог
-        Alert.alert(
-          t('common.confirmation'),
-          t('profile.family.confirmSave'),
-          [
-            { 
-              text: t('common.cancel'), 
-              style: 'cancel',
-              onPress: () => {
-                // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-              }
-            },
-            { 
-              text: t('common.save'), 
-              onPress: () => {
-                // Сохраняем изменения и отменяем редактирование
-                if (saveFamilyRef.current) {
-                  saveFamilyRef.current();
-                }
-                cancelEditingFamilyMember();
-                navigation.goBack();
-              }
-            }
-          ]
-        );
-      } else {
-        // Если нет изменений - сразу выходим
-        cancelEditingFamilyMember();
-        navigation.goBack();
-      }
     } else {
       navigation.goBack();
     }
-  }, [isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, saveFamilyRef, cancelEditingFamilyMember, navigation, t]);
+  }, [isEditingPersonalInfo, checkHasChanges, saveProfile, navigation, t]);
 
   // Перехватываем swipe-back жест
   useFocusEffect(
     useCallback(() => {
       const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
         const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
-        const hasFamilyEditing = editingFamilyMember !== null;
         
         if (hasPersonalChanges) {
           // Предотвращаем переход назад
@@ -336,47 +236,11 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
               }
             ]
           );
-        } else if (hasFamilyEditing) {
-          // Если есть редактирование семейной секции, используем специальную обработку
-          e.preventDefault();
-          
-          // Проверяем, есть ли изменения через функцию сохранения
-          if (saveFamilyRef.current) {
-            // Если есть изменения - показываем диалог
-            Alert.alert(
-              t('common.confirmation'),
-              t('profile.family.confirmSave'),
-              [
-                { 
-                  text: t('common.cancel'), 
-                  style: 'cancel',
-                  onPress: () => {
-                    // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-                  }
-                },
-                { 
-                  text: t('common.save'), 
-                  onPress: () => {
-                    // Сохраняем изменения и отменяем редактирование
-                    if (saveFamilyRef.current) {
-                      saveFamilyRef.current();
-                    }
-                    cancelEditingFamilyMember();
-                    navigation.dispatch(e.data.action);
-                  }
-                }
-              ]
-            );
-          } else {
-            // Если нет изменений - сразу выходим
-            cancelEditingFamilyMember();
-            navigation.dispatch(e.data.action);
-          }
         }
       });
 
       return unsubscribe;
-    }, [navigation, isEditingPersonalInfo, checkHasChanges, editingFamilyMember, saveProfile, saveFamilyRef, cancelEditingFamilyMember, t])
+    }, [navigation, isEditingPersonalInfo, checkHasChanges, saveProfile, t])
   );
 
   const handleCirclePressAction = () => {
@@ -397,7 +261,78 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   useEffect(() => {
     loadProfile();
     loadVerificationStatus();
+    loadVehicles();
   }, []); // Пустой массив зависимостей - выполняется только один раз
+
+  // Обновляем данные при фокусе экрана
+  useFocusEffect(
+    useCallback(() => {
+      loadVehicles(); // Перезагружаем автомобили при каждом фокусе
+      console.log('EditDriverProfile: vehicles loaded:', vehicles.length);
+    }, [loadVehicles])
+  );
+
+  // Функция для закрытия открытого свайпа
+  const closeOpenSwipe = () => {
+    if (openSwipeRef.current) {
+      try {
+        openSwipeRef.current.close();
+      } catch {}
+      openSwipeRef.current = null;
+    }
+  };
+
+  // Функция удаления автомобиля
+  const handleDeleteVehicle = (vehicleId: string) => {
+    Alert.alert(
+      t('profile.vehicles.deleteVehicle'),
+      t('profile.vehicles.deleteVehicleConfirm'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('components.modal.delete'),
+          style: 'destructive',
+          onPress: () => {
+            deleteVehicle(vehicleId);
+          }
+        }
+      ]
+    );
+  };
+
+  // Рендер правых действий (кнопка удаления)
+  const renderRightActions = (progress: any, dragX: any, vehicleId: string) => {
+    const scale = dragX.interpolate({
+      inputRange: [-ACTION_WIDTH, 0],
+      outputRange: [1, 0],
+      extrapolate: 'clamp',
+    });
+    const opacity = dragX.interpolate({
+      inputRange: [-ACTION_WIDTH, -ACTION_WIDTH * 0.6, 0],
+      outputRange: [1, 0.6, 0],
+      extrapolate: 'clamp',
+    });
+
+    return (
+      <View style={[styles.swipeActionsRight]}>
+        <Animated.View style={{ transform: [{ scale }], opacity }}>
+          <TouchableOpacity
+            style={[styles.swipeAction, styles.deleteAction, styles.swipeActionInnerRight]}
+            onPress={() => {
+              handleDeleteVehicle(vehicleId);
+              swipeRefs.current[vehicleId]?.close();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel="delete"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            activeOpacity={0.85}
+          >
+            <Ionicons name="trash" size={28} color="#fff" />
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    );
+  };
 
   // Обновляем форму при изменении профиля
   useEffect(() => {
@@ -495,38 +430,58 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
           onResetVerification={resetVerificationStatus}
         />
 
-        <FamilySection
-          familyMembers={familyMembers}
-          expandedFamilyMember={expandedFamilyMember}
-          editingFamilyMember={editingFamilyMember}
-          familyPhoneVerification={familyPhoneVerification}
-          onToggleFamilyMember={toggleFamilyMember}
-          onOpenAddFamilyModal={openAddFamilyModal}
-          onStartEditing={startEditingFamilyMember}
-          onCancelEditing={cancelEditingFamilyMember}
-          onSaveMember={saveFamilyMember}
-          onDeleteMember={deleteFamilyMember}
-          onResetPhoneVerification={resetFamilyPhoneVerification}
-          onVerifyPhone={verifyFamilyPhone}
-          saveFamilyRef={saveFamilyRef}
-        />
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
+            {t('profile.vehicles.title')} ({vehicles.length})
+          </Text>
+          
+          {/* Карточки автомобилей */}
+          {vehicles.map((vehicle) => (
+            <Swipeable
+              key={vehicle.id}
+              ref={(ref) => { swipeRefs.current[vehicle.id] = ref as RNSwipeable | null; }}
+              renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, vehicle.id)}
+              rightThreshold={60}
+              friction={2}
+              overshootRight={false}
+              onSwipeableWillOpen={() => {
+                if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[vehicle.id]) {
+                  try { openSwipeRef.current.close(); } catch {}
+                }
+                openSwipeRef.current = swipeRefs.current[vehicle.id] ?? null;
+              }}
+              onSwipeableClose={() => {
+                if (openSwipeRef.current === swipeRefs.current[vehicle.id]) {
+                  openSwipeRef.current = null;
+                }
+              }}
+            >
+              <VehicleIdCard
+                vehicleNumber={vehicle.vehicleNumber}
+                brand={vehicle.carBrand}
+                model={vehicle.carModel}
+                year={vehicle.carYear}
+                mileage={vehicle.carMileage}
+                isVerified={vehicle.isVerified}
+              />
+            </Swipeable>
+          ))}
+          
+                            {vehicles.length < 2 && (
+                    <TouchableOpacity 
+                      style={[styles.addVehicleButton, dynamicStyles.addVehicleButton]}
+                      onPress={() => navigation.navigate('DriverVehicles')}
+                    >
+                      <Ionicons name="add" size={24} color="#fff" />
+                    </TouchableOpacity>
+                  )}
+        </View>
 
         <VipSection 
           onVipPress={() => navigation.navigate('PremiumPackages')}
         />
 
       </ScrollView>
-
-      <AddFamilyModal
-        visible={showAddFamilyModal}
-        newFamilyMember={newFamilyMember}
-        setNewFamilyMember={setNewFamilyMember}
-        onClose={closeAddFamilyModal}
-        onAdd={addFamilyMember}
-        onVerifyPhone={verifyPhone}
-        phoneVerificationStatus={verificationStatus.phone}
-        isVerifyingPhone={isVerifying.phone}
-      />
     </View>
   );
 };

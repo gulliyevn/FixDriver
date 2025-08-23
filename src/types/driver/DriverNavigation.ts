@@ -73,6 +73,7 @@ export type ClientStackParamList = {
   // Профильные экраны
   DriverProfile: undefined;
   EditDriverProfile: undefined;
+  DriverVehicles: undefined;
   PaymentPackage: undefined;
   AddChild: undefined;
   ChildrenList: undefined;
@@ -115,6 +116,7 @@ export type DriverStackParamList = {
   };
   DriverProfile: undefined;
   EditDriverProfile: undefined;
+  DriverVehicles: undefined;
   // Профильные экраны для водителя
   Balance: undefined;
   Cards: undefined;
