@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -83,26 +83,7 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
     onAddressesChange(updatedAddresses);
   };
 
-  const swapAddresses = () => {
-    if (addresses.length >= 2) {
-      const fromAddress = addresses.find(addr => addr.type === 'from');
-      const toAddress = addresses.find(addr => addr.type === 'to');
-      
-      if (fromAddress && toAddress) {
-        const updatedAddresses = addresses.map(addr => {
-          if (addr.id === fromAddress.id) {
-            return { ...addr, address: toAddress.address };
-          }
-          if (addr.id === toAddress.id) {
-            return { ...addr, address: fromAddress.address };
-          }
-          return addr;
-        });
-        setAddresses(updatedAddresses);
-        onAddressesChange(updatedAddresses);
-      }
-    }
-  };
+
 
   const selectFromMap = (id: string) => {
     // Здесь будет логика выбора адреса из карты
@@ -159,14 +140,7 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
                 onChangeText={(text) => handleAddressChange(address.id, text)}
               />
               
-              {/* Три черточки */}
-              {address.type !== 'from' && (
-                <View style={styles.threeLinesContainer}>
-                  <View style={styles.line} />
-                  <View style={styles.line} />
-                  <View style={[styles.line, styles.lastLine]} />
-                </View>
-              )}
+
 
               {/* Кнопки действий внутри контейнера */}
               <View style={styles.actionsContainer}>
@@ -188,7 +162,7 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
             >
               <Ionicons 
                 name={address.type === 'from' ? "chevron-down" : address.type === 'to' ? "add" : "close"} 
-                size={20} 
+                size={16} 
                 color={
                   address.type === 'to' && addresses.filter(addr => addr.type === 'stop').length >= 2 
                     ? colors.textSecondary 

@@ -59,11 +59,11 @@ export const createFixDriveAddressInputStyles = (isDark: boolean) => {
     mapButton: {
       position: 'absolute',
       right: 10,
-      top: 16,
+      top: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      width: 40,
-      height: 40,
+      width: 30,
+      height: 30,
       zIndex: 1000,
     },
     additionalContainer: {
