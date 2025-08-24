@@ -72,5 +72,20 @@
   "dayEnd": {
     "title": "Gün bitti",
     "subtitle": "Çevrimiçi etkinleştir?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Kim seyahat ediyor?",
+    "selectPackage": "Paketi seçin",
+    "familyMemberPlaceholder": "Aile üyesi seçin",
+    "packagePlaceholder": "Paketi seçin",
+    "address": {
+      "from": "Nereden",
+      "to": "Nereye",
+      "fromPlaceholder": "Kalkış adresini girin",
+      "toPlaceholder": "Varış adresini girin",
+      "stopPlaceholder": "Durak adresini girin",
+      "addStop": "Durak ekle",
+      "selectFromMap": "Haritadan seç"
+    }
   }
 } 

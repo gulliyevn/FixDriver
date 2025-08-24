@@ -72,5 +72,20 @@
   "dayEnd": {
     "title": "انتهى اليوم",
     "subtitle": "تفعيل الاتصال؟"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "من يسافر؟",
+    "selectPackage": "اختر الباقة",
+    "familyMemberPlaceholder": "اختر عضو العائلة",
+    "packagePlaceholder": "اختر الباقة",
+    "address": {
+      "from": "من",
+      "to": "إلى",
+      "fromPlaceholder": "أدخل عنوان المغادرة",
+      "toPlaceholder": "أدخل عنوان الوجهة",
+      "stopPlaceholder": "أدخل عنوان التوقف",
+      "addStop": "إضافة توقف",
+      "selectFromMap": "اختر من الخريطة"
+    }
   }
 } 

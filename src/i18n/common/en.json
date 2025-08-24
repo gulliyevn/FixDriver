@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "Day Ended",
     "subtitle": "Enable Online?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Who is traveling?",
+    "selectPackage": "Select package",
+    "familyMemberPlaceholder": "Select family member",
+    "packagePlaceholder": "Select package",
+    "address": {
+      "from": "From",
+      "to": "To",
+      "fromPlaceholder": "Enter departure address",
+      "toPlaceholder": "Enter destination address",
+      "stopPlaceholder": "Enter stop address",
+      "addStop": "Add stop",
+      "selectFromMap": "Select from map"
+    }
   }
 } 

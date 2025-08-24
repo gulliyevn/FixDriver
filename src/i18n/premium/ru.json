@@ -5,6 +5,7 @@
     "year": "Год"
   },
   "packages": {
+    "standard": "Стандарт",
     "free": "Бесплатный",
     "plus": "Плюс",
     "premium": "Премиум",

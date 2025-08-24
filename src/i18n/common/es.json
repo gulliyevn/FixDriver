@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "Día terminado",
     "subtitle": "¿Activar en línea?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "¿Quién viaja?",
+    "selectPackage": "Seleccionar paquete",
+    "familyMemberPlaceholder": "Seleccionar miembro de la familia",
+    "packagePlaceholder": "Seleccionar paquete",
+    "address": {
+      "from": "Desde",
+      "to": "Hacia",
+      "fromPlaceholder": "Ingrese dirección de salida",
+      "toPlaceholder": "Ingrese dirección de destino",
+      "stopPlaceholder": "Ingrese dirección de parada",
+      "addStop": "Agregar parada",
+      "selectFromMap": "Seleccionar del mapa"
+    }
   }
 } 

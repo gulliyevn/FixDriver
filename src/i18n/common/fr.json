@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "Jour terminé",
     "subtitle": "Activer en ligne ?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Qui voyage ?",
+    "selectPackage": "Sélectionner le forfait",
+    "familyMemberPlaceholder": "Sélectionner un membre de la famille",
+    "packagePlaceholder": "Sélectionner le forfait",
+    "address": {
+      "from": "De",
+      "to": "Vers",
+      "fromPlaceholder": "Entrez l'adresse de départ",
+      "toPlaceholder": "Entrez l'adresse de destination",
+      "stopPlaceholder": "Entrez l'adresse d'arrêt",
+      "addStop": "Ajouter un arrêt",
+      "selectFromMap": "Sélectionner sur la carte"
+    }
   }
 } 

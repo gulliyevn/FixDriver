@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "Tag beendet",
     "subtitle": "Online aktivieren?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Wer reist?",
+    "selectPackage": "Paket auswählen",
+    "familyMemberPlaceholder": "Familienmitglied auswählen",
+    "packagePlaceholder": "Paket auswählen",
+    "address": {
+      "from": "Von",
+      "to": "Nach",
+      "fromPlaceholder": "Abfahrtsadresse eingeben",
+      "toPlaceholder": "Zieladresse eingeben",
+      "stopPlaceholder": "Haltestellenadresse eingeben",
+      "addStop": "Haltestelle hinzufügen",
+      "selectFromMap": "Aus Karte auswählen"
+    }
   }
 } 

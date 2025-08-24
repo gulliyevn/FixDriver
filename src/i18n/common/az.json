@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "Gün bitdi",
     "subtitle": "Onlayn aktivləşdirilsin?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Kim səyahət edir?",
+    "selectPackage": "Paketi seçin",
+    "familyMemberPlaceholder": "Ailə üzvünü seçin",
+    "packagePlaceholder": "Paketi seçin",
+    "address": {
+      "from": "Haradan",
+      "to": "Haraya",
+      "fromPlaceholder": "Göndərilmə ünvanını daxil edin",
+      "toPlaceholder": "Təyinat ünvanını daxil edin",
+      "stopPlaceholder": "Dayanacaq ünvanını daxil edin",
+      "addStop": "Dayanacaq əlavə et",
+      "selectFromMap": "Xəritədən seç"
+    }
   }
 } 

@@ -73,5 +73,20 @@
   "dayEnd": {
     "title": "День закончился",
     "subtitle": "Включить Онлайн?"
+  },
+  "fixDrive": {
+    "selectFamilyMember": "Кто едет?",
+    "selectPackage": "Выберите пакет",
+    "familyMemberPlaceholder": "Выберите участника семьи",
+    "packagePlaceholder": "Выберите пакет",
+    "address": {
+      "from": "Откуда",
+      "to": "Куда",
+      "fromPlaceholder": "Введите адрес отправления",
+      "toPlaceholder": "Введите адрес назначения",
+      "stopPlaceholder": "Введите адрес остановки",
+      "addStop": "Добавить остановку",
+      "selectFromMap": "Выбрать на карте"
+    }
   }
 } 

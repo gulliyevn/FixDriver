@@ -5,6 +5,7 @@
     "year": "Année"
   },
   "packages": {
+    "standard": "Standard",
     "free": "Gratuit",
     "plus": "Plus",
     "premium": "Premium",

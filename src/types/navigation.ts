@@ -70,6 +70,7 @@ export type ClientStackParamList = {
   Notifications: undefined;
   Progress: undefined;
   SupportChat: undefined;
+
   // Профильные экраны
   ClientProfile: undefined;
   EditClientProfile: undefined;
@@ -79,6 +80,7 @@ export type ClientStackParamList = {
   ChildrenList: undefined;
   BecomeDriver: undefined;
   ThemeToggle: undefined;
+  FixDrive: undefined;
   // Новые экраны профиля
   Cards: undefined;
   Debts: undefined;
