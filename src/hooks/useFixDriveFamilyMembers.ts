@@ -19,13 +19,11 @@ export const useFixDriveFamilyMembers = () => {
         
         // Загружаем данные напрямую из AsyncStorage
         const savedMembers = await AsyncStorage.getItem('family_members');
-        console.log('FixDrive - loading from AsyncStorage:', savedMembers);
         
         let members: FamilyMember[] = [];
         
         if (savedMembers) {
           members = JSON.parse(savedMembers);
-          console.log('FixDrive - parsed members from AsyncStorage:', members);
         }
         
         // Создаем владельца аккаунта как участника семьи
@@ -40,18 +38,11 @@ export const useFixDriveFamilyMembers = () => {
           phoneVerified: profile?.phoneVerified || false
         };
         
-        console.log('FixDrive - account owner:', accountOwner);
-        console.log('FixDrive - members from AsyncStorage:', members);
-        console.log('FixDrive - members length:', members.length);
-        
         // Если есть добавленные участники семьи, добавляем владельца к ним
         // Если нет - показываем только владельца
         const allMembers = members.length > 0 
           ? [accountOwner, ...members] 
           : [accountOwner];
-        
-        console.log('FixDrive - all members (including owner):', allMembers);
-        console.log('FixDrive - final familyMembers state:', allMembers);
         setFamilyMembers(allMembers);
       } catch (error) {
         console.error('Error loading family members for FixDrive:', error);
@@ -73,13 +64,11 @@ export const useFixDriveFamilyMembers = () => {
           
           // Загружаем данные напрямую из AsyncStorage
           const savedMembers = await AsyncStorage.getItem('family_members');
-          console.log('FixDrive - focus effect loading from AsyncStorage:', savedMembers);
           
           let members: FamilyMember[] = [];
           
           if (savedMembers) {
             members = JSON.parse(savedMembers);
-            console.log('FixDrive - focus effect parsed members:', members);
           }
           
           // Создаем владельца аккаунта как участника семьи
@@ -99,8 +88,6 @@ export const useFixDriveFamilyMembers = () => {
           const allMembers = members.length > 0 
             ? [accountOwner, ...members] 
             : [accountOwner];
-          
-          console.log('FixDrive - focus effect all members:', allMembers);
           setFamilyMembers(allMembers);
         } catch (error) {
           console.error('Error loading family members on focus:', error);
@@ -132,11 +119,9 @@ export const useFixDriveFamilyMembers = () => {
   const refreshFamilyMembers = async () => {
     try {
       const savedMembers = await AsyncStorage.getItem('family_members');
-      console.log('FixDrive - refreshing from AsyncStorage:', savedMembers);
       
       if (savedMembers) {
         const parsedMembers = JSON.parse(savedMembers);
-        console.log('FixDrive - parsed members from AsyncStorage:', parsedMembers);
         
         // Создаем владельца аккаунта
         const accountOwner: FamilyMember = {
@@ -154,7 +139,6 @@ export const useFixDriveFamilyMembers = () => {
           ? [accountOwner, ...parsedMembers] 
           : [accountOwner];
         
-        console.log('FixDrive - refreshed all members:', allMembers);
         setFamilyMembers(allMembers);
       }
     } catch (error) {

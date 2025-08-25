@@ -1,5 +1,6 @@
 import { mockOrders, mockUsers, mockDrivers } from '../mocks';
 import { Order, OrderStatus } from '../types/order';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Отключено для production - только для разработки
 const ENABLE_ORDER_LOGS = false;
@@ -10,10 +11,29 @@ const log = (message: string, data?: unknown) => {
   }
 };
 
+export interface OrderData {
+  id: string;
+  familyMemberId: string;
+  familyMemberName: string;
+  packageType: string;
+  addresses: Array<{
+    id: string;
+    type: 'from' | 'to' | 'stop';
+    address: string;
+    coordinates?: {
+      latitude: number;
+      longitude: number;
+    };
+  }>;
+  createdAt: number;
+  status: 'draft' | 'confirmed' | 'completed' | 'cancelled';
+}
+
 export class OrderService {
   private static instance: OrderService;
   private orders: Order[] = [];
   private trackingInterval: ReturnType<typeof setInterval> | null = null;
+  private storageKey = 'fixwave_order_data';
 
   private constructor() {
     this.orders = mockOrders;
@@ -231,6 +251,118 @@ export class OrderService {
         });
       }, 1000);
     });
+  }
+
+  // Сохранение данных заказа
+  async saveOrderData(orderData: Omit<OrderData, 'id' | 'createdAt'>): Promise<OrderData> {
+    try {
+      const order: OrderData = {
+        ...orderData,
+        id: `order_${Date.now()}`,
+        createdAt: Date.now(),
+      };
+
+      await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
+      return order;
+    } catch (error) {
+      console.error('Error saving order data:', error);
+      throw new Error('Не удалось сохранить данные заказа');
+    }
+  }
+
+  // Загрузка данных заказа
+  async loadOrderData(): Promise<OrderData | null> {
+    try {
+      const data = await AsyncStorage.getItem(this.storageKey);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error('Error loading order data:', error);
+      return null;
+    }
+  }
+
+  // Обновление данных заказа
+  async updateOrderData(updates: Partial<OrderData>): Promise<OrderData | null> {
+    try {
+      const currentData = await this.loadOrderData();
+      if (!currentData) {
+        throw new Error('Нет сохраненных данных заказа');
+      }
+
+      const updatedData: OrderData = {
+        ...currentData,
+        ...updates,
+      };
+
+      await AsyncStorage.setItem(this.storageKey, JSON.stringify(updatedData));
+      return updatedData;
+    } catch (error) {
+      console.error('Error updating order data:', error);
+      throw new Error('Не удалось обновить данные заказа');
+    }
+  }
+
+  // Очистка данных заказа
+  async clearOrderData(): Promise<void> {
+    try {
+      await AsyncStorage.removeItem(this.storageKey);
+    } catch (error) {
+      console.error('Error clearing order data:', error);
+      throw new Error('Не удалось очистить данные заказа');
+    }
+  }
+
+  // Проверка валидности данных заказа
+  validateOrderData(data: {
+    familyMemberId: string;
+    packageType: string;
+    addresses: Array<{
+      type: string;
+      address: string;
+      coordinates?: any;
+    }>;
+  }): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    // Проверка участника семьи
+    if (!data.familyMemberId) {
+      errors.push('Не выбран участник семьи');
+    }
+
+    // Проверка пакета
+    if (!data.packageType) {
+      errors.push('Не выбран пакет');
+    }
+
+    // Проверка адресов
+    if (!data.addresses || data.addresses.length === 0) {
+      errors.push('Не указаны адреса');
+    } else {
+      const fromAddress = data.addresses.find(addr => addr.type === 'from');
+      const toAddress = data.addresses.find(addr => addr.type === 'to');
+
+      if (!fromAddress || !fromAddress.address) {
+        errors.push('Не указан адрес отправления');
+      }
+
+      if (!toAddress || !toAddress.address) {
+        errors.push('Не указан адрес назначения');
+      }
+
+      // Проверка координат для основных адресов
+      if (fromAddress && !fromAddress.coordinates) {
+        errors.push('Не удалось определить координаты адреса отправления');
+      }
+
+      if (toAddress && !toAddress.coordinates) {
+        errors.push('Не удалось определить координаты адреса назначения');
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
   }
 
   notifySubscribers(): void {
