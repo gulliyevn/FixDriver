@@ -6,7 +6,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { getCurrentColors } from '../../../constants/colors';
 import { createFixWaveScreenStyles } from './styles';
 import FixDriveDropdown from '../../../components/FixDriveDropdown';
-import FixDriveAddressInput from '../../../components/FixDriveAddressInput';
+import FixDriveMapInput from '../../../components/FixDriveMapInput';
 import { useFixDriveFamilyMembers } from '../../../hooks/useFixDriveFamilyMembers';
 
 const FixWaveScreen: React.FC = () => {
@@ -240,29 +240,30 @@ const FixWaveScreen: React.FC = () => {
                 onSelect={handlePackageSelect}
               />
 
-              {/* Ввод адреса */}
-              <FixDriveAddressInput onAddressesChange={handleAddressesChange} />
+              {/* Ввод адреса через карту */}
+              <FixDriveMapInput onAddressesChange={handleAddressesChange} />
+              
+              {/* Одна широкая кнопка Сохранить */}
+              <TouchableOpacity 
+                style={{ 
+                  backgroundColor: colors.primary,
+                  paddingVertical: 12,
+                  marginHorizontal: 20,
+                  marginTop: 8,
+                  marginBottom: 20,
+                  borderRadius: 8
+                }}
+              >
+                <Text style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: 16, 
+                  fontWeight: '600',
+                  textAlign: 'center'
+                }}>
+                  {t('common.save')}
+                </Text>
+              </TouchableOpacity>
             </View>
-            
-            {/* Одна широкая кнопка Сохранить */}
-            <TouchableOpacity 
-              style={{ 
-                backgroundColor: colors.primary,
-                paddingVertical: 12,
-                marginHorizontal: 20,
-                marginTop: 20,
-                borderRadius: 8
-              }}
-            >
-              <Text style={{ 
-                color: '#FFFFFF', 
-                fontSize: 16, 
-                fontWeight: '600',
-                textAlign: 'center'
-              }}>
-                {t('common.save')}
-              </Text>
-            </TouchableOpacity>
           </>
         )}
         
