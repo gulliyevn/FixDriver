@@ -34,6 +34,11 @@ export const styles = StyleSheet.create({
   dayText: {
     fontSize: 12,
   },
+  selectDaysText: {
+    fontSize: 12,
+    textAlign: 'center',
+    flex: 1,
+  },
   bottomDivider: {
     height: 1,
   },

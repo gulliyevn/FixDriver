@@ -55,6 +55,16 @@ export interface TimeScheduleData {
   notes?: string;
   fromAddress?: string;
   toAddress?: string;
+  // Новые поля для сохранения состояния
+  fixedTimes?: Record<number, string>;
+  weekdayTimes?: Record<number, string>;
+  weekendTimes?: Record<number, string>;
+  selectedDays?: string[];
+  switchStates?: {
+    switch1: boolean;
+    switch2: boolean;
+    switch3: boolean;
+  };
 }
 
 export interface FixWaveOrderData {

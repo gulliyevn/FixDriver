@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createTimeSchedulePageStyles = (isDark: boolean) => StyleSheet.create({
   container: {
     padding: 0,
   },
@@ -19,6 +19,9 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     width: 100,
   },
+  switchToggleDisabled: {
+    opacity: 0.5,
+  },
   saveButton: {
     paddingVertical: 12,
     marginHorizontal: 20,
@@ -33,3 +36,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+// Константы для цветов контейнеров
+export const CONTAINER_COLORS = {
+  GREEN: '#4CAF50',   // отправление
+  BLUE: '#1565C0',    // назначение
+  YELLOW: '#FFF59D',  // обратно
+  GREY: '#9E9E9E',    // остановки
+} as const;
