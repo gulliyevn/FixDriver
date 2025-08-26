@@ -89,6 +89,32 @@ class FixWaveOrderService {
     }
   }
 
+  // Сохранение данных контейнеров по отдельности
+  async saveContainerTimes(containerData: Array<{
+    containerId: string;
+    containerType: string;
+    containerIndex: number;
+    address: string;
+    fromCoordinate?: { latitude: number; longitude: number };
+    toCoordinate?: { latitude: number; longitude: number };
+    time: string;
+    isActive: boolean;
+    isCalculated: boolean;
+  }>): Promise<void> {
+    try {
+      const containerTimesKey = 'fixwave_container_times';
+      const containerTimesWithTimestamp = {
+        containers: containerData,
+        lastUpdate: Date.now(),
+      };
+      await AsyncStorage.setItem(containerTimesKey, JSON.stringify(containerTimesWithTimestamp));
+      console.log('Container times saved:', containerData);
+    } catch (error) {
+      console.error('Error saving container times:', error);
+      throw new Error('Не удалось сохранить данные контейнеров');
+    }
+  }
+
   // Загрузка данных сессии
   async loadSessionData(): Promise<{
     currentPage: string;

@@ -27,6 +27,11 @@ interface ScheduleContainerProps {
   fromCoordinate?: { latitude: number; longitude: number };
   toCoordinate?: { latitude: number; longitude: number };
   departureTime?: Date;
+  isDark?: boolean;
+  shouldCalculateTime?: boolean;
+  shouldShowCalculatedTime?: boolean;
+  calculatedWeekdayTime?: string;
+  calculatedWeekendTime?: string;
 }
 
 export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({ 
@@ -49,7 +54,12 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
   allowTimeSelection = true,
   fromCoordinate,
   toCoordinate,
-  departureTime
+  departureTime,
+  isDark,
+  shouldCalculateTime = false,
+  shouldShowCalculatedTime = false,
+  calculatedWeekdayTime,
+  calculatedWeekendTime
 }) => {
   const weekDays = [
     { key: 'mon', label: t('common.mon') },
@@ -91,7 +101,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
     setWeekendTempDate,
     calculatedTime,
     isCalculating,
-  } = useScheduleContainer(allowTimeSelection, fromCoordinate, toCoordinate, departureTime);
+  } = useScheduleContainer(allowTimeSelection, fromCoordinate, toCoordinate, departureTime, shouldCalculateTime);
 
   // Обработчики для плавающего режима
   const openPickerForDay = (dayKey: string) => {
@@ -189,6 +199,8 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
         onFixedTimePress={handleFixedTimePress}
         weekdayTime={weekdayTime}
         weekendTime={weekendTime}
+        calculatedWeekdayTime={calculatedWeekdayTime}
+        calculatedWeekendTime={calculatedWeekendTime}
         onWeekdayPress={handleWeekdayPress}
         onWeekendPress={handleWeekendPress}
         visibleDays={visibleDays}
@@ -210,6 +222,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
         onConfirm={handleDayModalConfirm}
         colors={colors}
         t={t}
+        isDark={isDark}
       />
 
       <TimePickerModal
@@ -221,6 +234,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
         onConfirm={handleFixedModalConfirm}
         colors={colors}
         t={t}
+        isDark={isDark}
       />
 
       <TimePickerModal
@@ -232,6 +246,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
         onConfirm={handleWeekdayConfirm}
         colors={colors}
         t={t}
+        isDark={isDark}
       />
 
       <TimePickerModal
@@ -243,6 +258,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
         onConfirm={handleWeekendConfirm}
         colors={colors}
         t={t}
+        isDark={isDark}
       />
     </View>
   );

@@ -6,7 +6,8 @@ export const useScheduleContainer = (
   allowTimeSelection: boolean,
   fromCoordinate?: { latitude: number; longitude: number },
   toCoordinate?: { latitude: number; longitude: number },
-  departureTime?: Date
+  departureTime?: Date,
+  shouldCalculateTime?: boolean
 ) => {
   // Состояние для плавающего режима
   const [pickerState, setPickerState] = useState<{
@@ -34,7 +35,16 @@ export const useScheduleContainer = (
   // Расчет времени для полей "Откуда" и "Остановки"
   useEffect(() => {
     const calculateEstimatedTime = async () => {
-      if (!allowTimeSelection && fromCoordinate && toCoordinate && departureTime) {
+      console.log('🔍 useScheduleContainer - Проверка условий:', {
+        allowTimeSelection,
+        hasFromCoordinate: !!fromCoordinate,
+        hasToCoordinate: !!toCoordinate,
+        hasDepartureTime: !!departureTime,
+        shouldCalculateTime,
+        shouldCalculate: shouldCalculateTime && fromCoordinate && toCoordinate && departureTime,
+      });
+      
+      if (shouldCalculateTime && fromCoordinate && toCoordinate && departureTime) {
         setIsCalculating(true);
         try {
           const fromPoint: RoutePoint = {
@@ -54,7 +64,28 @@ export const useScheduleContainer = (
             departureTime
           );
           
-          setCalculatedTime(result.estimatedTime);
+          console.log('📈 useScheduleContainer - Результат расчета:', result);
+          
+          // Для GREEN контейнера (ОТКУДА) время отбытия = время прибытия минус время маршрута
+          let finalTime = result.estimatedTime;
+          if (result.durationMinutes && result.durationMinutes > 0) {
+            // Время прибытия (из BLUE контейнера)
+            const arrivalTime = new Date(departureTime);
+            
+            // Время отбытия = время прибытия минус время маршрута
+            const departureTimeCalculated = new Date(arrivalTime.getTime() - result.durationMinutes * 60 * 1000);
+            const departureHours = departureTimeCalculated.getHours().toString().padStart(2, '0');
+            const departureMinutes = departureTimeCalculated.getMinutes().toString().padStart(2, '0');
+            
+            finalTime = `${departureHours}:${departureMinutes}`;
+            console.log('⏰ useScheduleContainer - Рассчитанное время отбытия:', {
+              arrivalTime: arrivalTime.toISOString(),
+              routeDurationMinutes: result.durationMinutes,
+              departureTime: finalTime,
+            });
+          }
+          
+          setCalculatedTime(finalTime);
         } catch (error) {
           console.error('Error calculating time:', error);
           setCalculatedTime('--:--');
@@ -67,7 +98,7 @@ export const useScheduleContainer = (
     };
 
     calculateEstimatedTime();
-  }, [allowTimeSelection, fromCoordinate, toCoordinate, departureTime]);
+  }, [shouldCalculateTime, fromCoordinate, toCoordinate, departureTime]);
 
   return {
     // Плавающий режим

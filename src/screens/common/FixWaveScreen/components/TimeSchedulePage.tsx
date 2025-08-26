@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from '../../../../context/ThemeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
@@ -11,7 +11,7 @@ import { WeekDaysSelector } from './WeekDaysSelector';
 import { ScheduleContainer } from './ScheduleContainer';
 import { useScheduleState } from '../hooks/useScheduleState';
 import { useSessionData } from '../hooks/useSessionData';
-import { createScheduleContainers, getDepartureTime, canSelectTime } from '../utils/scheduleUtils';
+import { createScheduleContainers, getDepartureTime, canSelectTime, getDayNumber } from '../utils/scheduleUtils';
 
 interface TimeSchedulePageProps {
   onNext: (data: TimeScheduleData) => void;
@@ -35,7 +35,30 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
   
   // Вычисляемые значения
   const isSmooth = useMemo(() => state.switchStates.switch2 === true, [state.switchStates.switch2]);
+  
   const isWeekdaysMode = useMemo(() => !isSmooth && state.switchStates.switch3 === true, [isSmooth, state.switchStates.switch3]);
+  
+  // Определяем режим выходных по выбранному дню
+  const isWeekendMode = useMemo(() => {
+    if (state.selectedDays.length > 0) {
+      const selectedDay = state.selectedDays[0];
+      const weekends = ['sat', 'sun'];
+      return weekends.includes(selectedDay);
+    }
+    return false;
+  }, [state.selectedDays]);
+  
+  // Состояние для активного поля ввода времени
+  const [activeTimeField, setActiveTimeField] = useState<'weekday' | 'weekend' | undefined>(undefined);
+  
+  // Логируем режимы
+  console.log('🔍 TimeSchedulePage - Режимы:', {
+    isSmooth,
+    isWeekdaysMode,
+    isWeekendMode,
+    switchStates: state.switchStates,
+    selectedDays: state.selectedDays
+  });
   
   // Создание контейнеров
   const containers = useMemo(() => 
@@ -45,10 +68,17 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
   
   // Обработчики
   const toggleSwitch = (switchKey: keyof typeof state.switchStates) => {
-    state.setSwitchStates(prev => ({
-      ...prev,
-      [switchKey]: !prev[switchKey]
-    }));
+    // Сбрасываем все данные при переключении режимов
+    state.resetAllData();
+    
+    // Обновляем состояние переключателя
+    const newSwitchStates = {
+      ...state.switchStates,
+      [switchKey]: !state.switchStates[switchKey]
+    };
+    state.forceSetSwitchStates(newSwitchStates);
+    
+    console.log(`Switch ${switchKey} toggled, all data reset`);
   };
   
   const saveToSession = async (data: TimeScheduleData) => {
@@ -128,42 +158,148 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
       <WeekDaysSelector 
         colors={colors} 
         t={t}
+        selectedDays={state.selectedDays}
         onSelectionChange={state.setSelectedDays}
       />
 
       {/* Контейнеры расписания */}
-      {containers.map((container) => (
-        <ScheduleContainer
-          key={`${container.color}_${container.index}`}
-          fromAddress={container.address}
-          borderColor={container.color}
-          colors={colors}
-          t={t}
-          isLast={container.index === containers.length - 1}
-          fixedMode={!isSmooth}
-          fixedTime={state.times.fixed[container.index]}
-          onFixedTimeChange={(time) => 
-            state.setTimes(prev => ({ ...prev, fixed: { ...prev.fixed, [container.index]: time } }))
-          }
-          weekdaysMode={isWeekdaysMode}
-          weekdayTime={state.times.weekday[container.index]}
-          weekendTime={state.times.weekend[container.index]}
-          onWeekdayTimeChange={(time) => 
-            state.setTimes(prev => ({ ...prev, weekday: { ...prev.weekday, [container.index]: time } }))
-          }
-          onWeekendTimeChange={(time) => 
-            state.setTimes(prev => ({ ...prev, weekend: { ...prev.weekend, [container.index]: time } }))
-          }
-          showDays={isSmooth}
-          dayTimes={{}}
-          onDayTimeChange={() => {}}
-          activeDays={state.selectedDays}
-          allowTimeSelection={canSelectTime(container.color)}
-          fromCoordinate={container.fromCoordinate}
-          toCoordinate={container.toCoordinate}
-          departureTime={getDepartureTime(container.index, state.times)}
-        />
-      ))}
+      {containers.map((container, index) => {
+        const allowTimeSelection = canSelectTime(container.color);
+        const departureTime = getDepartureTime(index, state.times, container.color, isSmooth, isWeekdaysMode, isWeekendMode, activeTimeField);
+        
+        // Рассчитываем отдельные времена для будней и выходных
+        const weekdayDepartureTime = getDepartureTime(index, state.times, container.color, isSmooth, isWeekdaysMode, false, 'weekday');
+        const weekendDepartureTime = getDepartureTime(index, state.times, container.color, isSmooth, isWeekdaysMode, true, 'weekend');
+        
+        // Конвертируем Date в строку времени
+        const formatTimeFromDate = (date: Date | undefined): string => {
+          if (!date) return '';
+          const hours = date.getHours().toString().padStart(2, '0');
+          const minutes = date.getMinutes().toString().padStart(2, '0');
+          return `${hours}:${minutes}`;
+        };
+        
+        const calculatedWeekdayTime = formatTimeFromDate(weekdayDepartureTime);
+        const calculatedWeekendTime = formatTimeFromDate(weekendDepartureTime);
+        
+        console.log(`🏗️ Контейнер ${index} (${container.color}):`, {
+          allowTimeSelection,
+          departureTime: departureTime?.toISOString(),
+          fromCoordinate: container.fromCoordinate,
+          toCoordinate: container.toCoordinate,
+          address: container.address,
+          isSmooth,
+          isWeekdaysMode,
+          shouldCalculateTime: !allowTimeSelection,
+          shouldShowCalculatedTime: !allowTimeSelection,
+        });
+        
+        return (
+          <ScheduleContainer
+            key={`${container.color}-${index}`}
+            fromAddress={container.address}
+            borderColor={container.color}
+            colors={colors}
+            t={t}
+            isLast={index === containers.length - 1}
+            fixedMode={!isSmooth}
+            fixedTime={state.times.fixed[index]}
+            onFixedTimeChange={(time) => {
+              console.log(`📅 Изменение фиксированного времени для контейнера ${index}:`, {
+                time,
+                isSmooth,
+                isWeekdaysMode,
+                currentTimes: state.times
+              });
+              state.forceSetTimes({
+                ...state.times,
+                fixed: { ...state.times.fixed, [index]: time }
+              });
+            }}
+            weekdaysMode={isWeekdaysMode}
+            weekdayTime={state.times.weekday[index]}
+            weekendTime={state.times.weekend[index]}
+            onWeekdayTimeChange={(time) => {
+              console.log(`📅 Изменение времени будней для контейнера ${index}:`, {
+                time,
+                isSmooth,
+                isWeekdaysMode,
+                currentTimes: state.times
+              });
+              state.forceSetTimes({
+                ...state.times,
+                weekday: { ...state.times.weekday, [index]: time }
+              });
+              
+              // Устанавливаем активное поле как будни
+              setActiveTimeField('weekday');
+            }}
+            onWeekendTimeChange={(time) => {
+              console.log(`📅 Изменение времени выходных для контейнера ${index}:`, {
+                time,
+                isSmooth,
+                isWeekdaysMode,
+                currentTimes: state.times
+              });
+              state.forceSetTimes({
+                ...state.times,
+                weekend: { ...state.times.weekend, [index]: time }
+              });
+              
+              // Устанавливаем активное поле как выходные
+              setActiveTimeField('weekend');
+            }}
+            showDays={isSmooth}
+            dayTimes={{}}
+            calculatedWeekdayTime={calculatedWeekdayTime}
+            calculatedWeekendTime={calculatedWeekendTime}
+            onDayTimeChange={(dayKey, time) => {
+              console.log(`📅 Изменение времени дня ${dayKey} для контейнера ${index}:`, {
+                time,
+                isSmooth,
+                isWeekdaysMode,
+                currentTimes: state.times,
+              });
+              
+              // Сохраняем время для конкретного дня в плавном режиме
+              if (isSmooth) {
+                const timeKey = isWeekdaysMode ? 'weekday' : 'weekend';
+                const dayNumber = getDayNumber(dayKey);
+                
+                const newTimes = {
+                  ...state.times,
+                  [timeKey]: {
+                    ...state.times[timeKey],
+                    [dayNumber]: time
+                  }
+                };
+                
+                state.forceSetTimes(newTimes);
+                
+                console.log(`💾 Сохранено время для дня ${dayKey} (${dayNumber}) в ${timeKey}:`, time);
+              }
+              
+              // Логируем для режима "Будни/Выходные" (переключатель 3)
+              if (!isSmooth && state.switchStates.switch3) {
+                console.log(`📅 Будни/Выходные режим - Изменение времени для контейнера ${index}:`, {
+                  time,
+                  isWeekdaysMode,
+                  currentTimes: state.times,
+                  switchStates: state.switchStates
+                });
+              }
+            }}
+            activeDays={state.selectedDays}
+            allowTimeSelection={allowTimeSelection}
+            fromCoordinate={container.fromCoordinate}
+            toCoordinate={container.toCoordinate}
+            departureTime={departureTime}
+            shouldCalculateTime={!allowTimeSelection}
+            shouldShowCalculatedTime={!allowTimeSelection}
+            isDark={isDark}
+          />
+        );
+      })}
 
       {/* Кнопка Сохранить */}
       <TouchableOpacity 

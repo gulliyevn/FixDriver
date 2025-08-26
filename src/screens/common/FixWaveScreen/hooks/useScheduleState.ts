@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { TimeScheduleData } from '../types/fix-wave.types';
 
 export const useScheduleState = (initialData?: TimeScheduleData) => {
+  // Флаг для отслеживания инициализации
+  const isInitializedRef = useRef(false);
+  
   const [timeScheduleData, setTimeScheduleData] = useState<TimeScheduleData>(
     initialData || {
       date: new Date(),
@@ -36,19 +39,64 @@ export const useScheduleState = (initialData?: TimeScheduleData) => {
   });
   
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  // Функция для сброса всех данных при переключении режимов
+  const resetAllData = () => {
+    setTimes({
+      fixed: {},
+      weekday: {},
+      weekend: {},
+    });
+    setSelectedDays([]);
+    console.log('All data reset due to mode change');
+  };
+
+  // Функция для безопасного обновления состояния
+  const safeSetTimeScheduleData = (data: TimeScheduleData) => {
+    if (!isInitializedRef.current) {
+      setTimeScheduleData(data);
+      isInitializedRef.current = true;
+    }
+  };
+
+  const safeSetTimes = (newTimes: typeof times) => {
+    if (!isInitializedRef.current) {
+      setTimes(newTimes);
+    }
+  };
+
+  const safeSetSwitchStates = (newSwitchStates: typeof switchStates) => {
+    if (!isInitializedRef.current) {
+      setSwitchStates(newSwitchStates);
+    }
+  };
+
+  const safeSetSelectedDays = (newSelectedDays: string[]) => {
+    if (!isInitializedRef.current) {
+      setSelectedDays(newSelectedDays);
+    }
+  };
   
   return {
     timeScheduleData,
-    setTimeScheduleData,
+    setTimeScheduleData: safeSetTimeScheduleData,
     addresses,
     setAddresses,
     coordinates,
     setCoordinates,
     switchStates,
-    setSwitchStates,
+    setSwitchStates: safeSetSwitchStates,
     times,
-    setTimes,
+    setTimes: safeSetTimes,
     selectedDays,
-    setSelectedDays,
+    setSelectedDays: safeSetSelectedDays,
+    // Экспортируем оригинальные функции для принудительного обновления
+    forceSetTimeScheduleData: setTimeScheduleData,
+    forceSetTimes: setTimes,
+    forceSetSwitchStates: setSwitchStates,
+    forceSetSelectedDays: setSelectedDays,
+    // Функция для сброса данных
+    resetAllData,
+    isInitialized: () => isInitializedRef.current,
   };
 };

@@ -5,10 +5,11 @@ import { styles } from './WeekDaysSelector.styles';
 interface WeekDaysSelectorProps {
   colors: any;
   t: (key: string) => string;
+  selectedDays?: string[];
   onSelectionChange?: (days: string[]) => void;
 }
 
-export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({ colors, t, onSelectionChange }) => {
+export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({ colors, t, selectedDays = [], onSelectionChange }) => {
   const weekDays = [
     { key: 'mon', label: t('common.mon') },
     { key: 'tue', label: t('common.tue') },
@@ -19,14 +20,16 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({ colors, t, o
     { key: 'sun', label: t('common.sun') },
   ];
 
-  const [selected, setSelected] = useState<string[]>([]);
-
   const toggleDay = (key: string) => {
-    setSelected(prev => {
-      const next = prev.includes(key) ? prev.filter(d => d !== key) : [...prev, key];
-      onSelectionChange && onSelectionChange(next);
-      return next;
+    const next = selectedDays.includes(key) ? selectedDays.filter(d => d !== key) : [...selectedDays, key];
+    console.log('📅 WeekDaysSelector - Переключение дня:', { 
+      key, 
+      selectedDays, 
+      next,
+      isWeekday: ['mon', 'tue', 'wed', 'thu', 'fri'].includes(key),
+      isWeekend: ['sat', 'sun'].includes(key)
     });
+    onSelectionChange && onSelectionChange(next);
   };
 
   return (
@@ -38,7 +41,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({ colors, t, o
       }
     ]}>
       {weekDays.map((day) => {
-        const isActive = selected.includes(day.key);
+        const isActive = selectedDays.includes(day.key);
         return (
           <TouchableOpacity
             key={day.key}

@@ -8,7 +8,7 @@ export interface DistanceCalculationResult {
 }
 
 export class DistanceCalculationService {
-  private static readonly API_KEY = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+  private static readonly OSRM_API_URL = 'https://router.project-osrm.org/route/v1/driving';
   
   /**
    * Рассчитать расстояние и время между двумя точками
@@ -18,53 +18,56 @@ export class DistanceCalculationService {
     to: RoutePoint,
     departureTime?: Date
   ): Promise<DistanceCalculationResult> {
-    if (!this.API_KEY) {
-      // Fallback на примерные расчеты если нет API ключа
-      return this.calculateFallback(from, to);
-    }
-
     try {
-      const origin = `${from.coordinate.latitude},${from.coordinate.longitude}`;
-      const destination = `${to.coordinate.latitude},${to.coordinate.longitude}`;
+      console.log('🗺️ Используем OSRM для расчета маршрута');
       
-      let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&mode=driving&traffic_model=best_guess&key=${this.API_KEY}`;
-      
-      // Добавляем время отправления если указано
-      if (departureTime) {
-        const departureTimeSec = Math.floor(departureTime.getTime() / 1000);
-        url += `&departure_time=${departureTimeSec}`;
+      // Используем OSRM API (бесплатный, без ключа)
+      const coordinates = `${from.coordinate.longitude},${from.coordinate.latitude};${to.coordinate.longitude},${to.coordinate.latitude}`;
+      const url = `${this.OSRM_API_URL}/${coordinates}?overview=false&steps=false`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenRouteService error: ${response.status}`);
       }
 
-      const response = await fetch(url);
       const data = await response.json();
-
-      if (data.status !== 'OK' || !data.routes?.length) {
-        throw new Error(`Google Maps API error: ${data.status}`);
+      
+      if (!data.routes || !data.routes[0]) {
+        throw new Error('No route found');
       }
 
       const route = data.routes[0];
-      const leg = route.legs[0];
+      const distanceMeters = route.distance;
+      const durationSeconds = route.duration;
+      const durationMinutes = Math.ceil(durationSeconds / 60);
       
-      const distanceMeters = leg.distance.value;
-      const durationMinutes = Math.ceil((leg.duration_in_traffic?.value || leg.duration.value) / 60);
-      
-      // Определяем уровень трафика
-      const trafficLevel = this.determineTrafficLevel(leg.duration_in_traffic?.value, leg.duration.value);
-      
+      console.log('📊 OSRM результат:', {
+        distanceKm: (distanceMeters / 1000).toFixed(2),
+        durationMinutes,
+        durationSeconds
+      });
+
       // Рассчитываем примерное время прибытия
       const estimatedTime = this.calculateEstimatedTime(departureTime, durationMinutes);
 
       return {
         distanceMeters,
         durationMinutes,
-        trafficLevel,
+        trafficLevel: 'medium', // OpenRouteService не предоставляет данные о пробках
         estimatedTime,
       };
-    } catch (error) {
-      console.error('Distance calculation error:', error);
-      // Fallback на примерные расчеты при ошибке
-      return this.calculateFallback(from, to);
-    }
+          } catch (error) {
+        console.error('OSRM error:', error);
+        console.log('⚠️ Используем fallback расчет');
+        // Fallback на примерные расчеты при ошибке
+        return this.calculateFallback(from, to);
+      }
   }
 
   /**
@@ -114,15 +117,30 @@ export class DistanceCalculationService {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distanceMeters = 6371000 * c; // Радиус Земли в метрах
 
-    // Примерное время в пути (50 км/ч в среднем)
-    const durationMinutes = Math.ceil(distanceMeters / 1000 / 50 * 60);
+    // Более реалистичное время в пути для города
+    // Учитываем, что реальное расстояние по дорогам больше прямого
+    const roadDistanceMultiplier = 1.3; // +30% к прямому расстоянию
+    const averageSpeedKmh = 25; // Средняя скорость в городе 25 км/ч
     
-    // Добавляем случайность для имитации трафика
-    const trafficVariation = 0.8 + Math.random() * 0.4; // ±20%
+    const roadDistanceKm = (distanceMeters / 1000) * roadDistanceMultiplier;
+    const durationMinutes = Math.ceil(roadDistanceKm / averageSpeedKmh * 60);
+    
+    // Добавляем случайность для имитации трафика и светофоров
+    const trafficVariation = 0.9 + Math.random() * 0.4; // +10% до +50%
     const finalDurationMinutes = Math.ceil(durationMinutes * trafficVariation);
 
+    console.log('🚗 Fallback расчет:', {
+      directDistanceKm: (distanceMeters / 1000).toFixed(2),
+      roadDistanceKm: roadDistanceKm.toFixed(2),
+      averageSpeedKmh,
+      baseDurationMinutes: durationMinutes,
+      finalDurationMinutes,
+      trafficVariation: trafficVariation.toFixed(2),
+      formula: `${roadDistanceKm.toFixed(2)} км ÷ ${averageSpeedKmh} км/ч × 60 = ${durationMinutes} мин`,
+    });
+
     return {
-      distanceMeters: Math.round(distanceMeters),
+      distanceMeters: Math.round(distanceMeters * roadDistanceMultiplier),
       durationMinutes: finalDurationMinutes,
       trafficLevel: 'medium',
       estimatedTime: this.calculateEstimatedTime(new Date(), finalDurationMinutes),

@@ -17,6 +17,8 @@ interface ScheduleContainerContentProps {
   // Будни/выходные
   weekdayTime?: string;
   weekendTime?: string;
+  calculatedWeekdayTime?: string;
+  calculatedWeekendTime?: string;
   onWeekdayPress: () => void;
   onWeekendPress: () => void;
   // Плавающий режим
@@ -39,6 +41,8 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
   onFixedTimePress,
   weekdayTime,
   weekendTime,
+  calculatedWeekdayTime,
+  calculatedWeekendTime,
   onWeekdayPress,
   onWeekendPress,
   visibleDays,
@@ -46,6 +50,39 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
   localDayTimes,
   onDayPress,
 }) => {
+  const shouldShowCalculatedTime = !allowTimeSelection && isCalculating;
+
+  const getDisplayTime = () => {
+    console.log('🎯 getDisplayTime:', {
+      shouldShowCalculatedTime,
+      allowTimeSelection,
+      calculatedTime,
+      fixedTime,
+      weekdayTime,
+      weekendTime,
+      weekdaysMode,
+      fixedMode,
+    });
+
+    // Если нужно показать рассчитанное время и время не выбирается пользователем
+    if (shouldShowCalculatedTime && !allowTimeSelection) {
+      console.log('📊 Показываем рассчитанное время:', calculatedTime);
+      return calculatedTime;
+    }
+
+    // Иначе показываем время, введенное пользователем
+    if (fixedMode) {
+      console.log('📊 Показываем фиксированное время:', fixedTime);
+      return fixedTime || '--:--';
+    } else if (weekdaysMode) {
+      console.log('📊 Показываем время будней:', weekdayTime);
+      return weekdayTime || '--:--';
+    } else {
+      console.log('📊 Показываем время выходных:', weekendTime);
+      return weekendTime || '--:--';
+    }
+  };
+
   if (fixedMode) {
     if (weekdaysMode) {
       // Будни/Выходные внутри контейнера
@@ -75,7 +112,7 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
               onPress={onWeekdayPress}
             >
               <Text style={[styles.dayText, { color: colors.text }]}> 
-                {allowTimeSelection ? (weekdayTime || '--:--') : (isCalculating ? '...' : calculatedTime)}
+                {allowTimeSelection ? (weekdayTime || '--:--') : (isCalculating ? '...' : (calculatedWeekdayTime || calculatedTime))}
               </Text>
             </TouchableOpacity>
           </View>
@@ -94,7 +131,7 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
               onPress={onWeekendPress}
             >
               <Text style={[styles.dayText, { color: colors.text }]}> 
-                {allowTimeSelection ? (weekendTime || '--:--') : (isCalculating ? '...' : calculatedTime)}
+                {allowTimeSelection ? (weekendTime || '--:--') : (isCalculating ? '...' : (calculatedWeekendTime || calculatedTime))}
               </Text>
             </TouchableOpacity>
           </View>
