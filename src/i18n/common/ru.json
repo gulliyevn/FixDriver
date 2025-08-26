@@ -101,5 +101,11 @@
   "normal": "Обычные",
   "smooth": "Плавные",
   "fixed": "Ежедневно",
-  "weekdays": "Будни/Выходные"
-} 
+  "weekdays": "Будни/Выходные",
+  "weekdaysOnly": "Будни",
+  "weekend": "Выходные",
+  "selectTripDays": "Выберите дни поездок",
+  "departureTime": "Время отправления",
+  "time": "Время",
+  "selectTime": "Выберите время"
+}

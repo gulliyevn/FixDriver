@@ -100,5 +100,11 @@
   "normal": "Sabit",
   "smooth": "Sabit Olmayan",
   "fixed": "Hergün",
-  "weekdays": "Haftalık/Hafta Sonu"
+  "weekdays": "Haftalık/Hafta Sonu",
+  "weekdaysOnly": "Hafta içi",
+  "weekend": "Hafta sonu",
+  "selectTripDays": "Seyahat günlerini seçin",
+  "departureTime": "Kalkış zamanı",
+  "time": "Zaman",
+  "selectTime": "Zaman seçin"
 } 

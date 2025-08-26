@@ -101,5 +101,11 @@
   "normal": "régulier",
   "smooth": "fluide",
   "fixed": "quotidien",
-  "weekdays": "en semaine/week-end"
+  "weekdays": "en semaine/week-end",
+  "weekdaysOnly": "en semaine",
+  "weekend": "week-end",
+  "selectTripDays": "Sélectionnez les jours de voyage",
+  "departureTime": "Heure de départ",
+  "time": "Heure",
+  "selectTime": "Sélectionner l'heure"
 } 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from '../../../../context/ThemeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
@@ -30,11 +30,25 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
     }
   );
   const [fromAddress, setFromAddress] = useState<string>('');
+  const [toAddress, setToAddress] = useState<string>('');
+  const [stopAddresses, setStopAddresses] = useState<string[]>([]);
   const [switchStates, setSwitchStates] = useState({
+    // switch1 — направление: false = туда, true = туда-обратно
     switch1: false,
     switch2: false,
     switch3: false,
   });
+
+  // Режимы
+  const isSmooth = useMemo(() => switchStates.switch2 === true, [switchStates]);
+  const isDailyMode = useMemo(() => !isSmooth && switchStates.switch3 === false, [isSmooth, switchStates]);
+  const isWeekdaysMode = useMemo(() => !isSmooth && switchStates.switch3 === true, [isSmooth, switchStates]);
+
+  // Состояние для фикс времени по контейнерам (индекс -> HH:MM)
+  const [fixedTimes, setFixedTimes] = useState<Record<number, string>>({});
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [weekdayTimes, setWeekdayTimes] = useState<Record<number, string>>({});
+  const [weekendTimes, setWeekendTimes] = useState<Record<number, string>>({});
 
   // Загружаем данные из сессии при инициализации и при изменении initialData
   useEffect(() => {
@@ -50,10 +64,18 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
         if (sessionData?.addressData?.addresses) {
           console.log('TimeSchedulePage - Addresses found:', sessionData.addressData.addresses);
           const fromAddr = sessionData.addressData.addresses.find(addr => addr.type === 'from');
+          const toAddr = sessionData.addressData.addresses.find(addr => addr.type === 'to');
+          const stops = sessionData.addressData.addresses.filter(addr => addr.type === 'stop');
           console.log('TimeSchedulePage - From address found:', fromAddr);
           if (fromAddr) {
             setFromAddress(fromAddr.address);
             console.log('TimeSchedulePage - Setting fromAddress:', fromAddr.address);
+          }
+          if (toAddr) {
+            setToAddress(toAddr.address);
+          }
+          if (stops && stops.length) {
+            setStopAddresses(stops.map(s => s.address).slice(0, 2));
           }
         } else {
           console.log('TimeSchedulePage - No addressData or addresses found');
@@ -97,13 +119,42 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
     }));
   };
 
-  const containerColors = [
-    '#4CAF50', // зеленый
-    '#9E9E9E', // серый
-    '#9E9E9E', // серый
-    '#1565C0', // темно-синий
-    '#FFF59D', // светло-желтый
-  ];
+  // Динамически формируем список контейнеров по правилам
+  // зелёный (from), синий (to), жёлтый (обратно), серые (stops)
+  const containers = useMemo(() => {
+    const result: Array<{ color: string; address: string }>
+      = [];
+
+    const GREEN = '#4CAF50';
+    const BLUE = '#1565C0';
+    const YELLOW = '#FFF59D';
+    const GREY = '#9E9E9E';
+
+    // Если переданы from и to — порядок: зелёный -> серые (1,2) -> синий
+    if (fromAddress && toAddress) {
+      result.push({ color: GREEN, address: fromAddress });
+      if (stopAddresses.length >= 1) {
+        result.push({ color: GREY, address: stopAddresses[0] });
+      }
+      if (stopAddresses.length >= 2) {
+        result.push({ color: GREY, address: stopAddresses[1] });
+      }
+      result.push({ color: BLUE, address: toAddress });
+    } else {
+      // Если нет одной из точек, просто добавляем то, что есть
+      if (fromAddress) result.push({ color: GREEN, address: fromAddress });
+      if (stopAddresses.length >= 1) result.push({ color: GREY, address: stopAddresses[0] });
+      if (stopAddresses.length >= 2) result.push({ color: GREY, address: stopAddresses[1] });
+      if (toAddress) result.push({ color: BLUE, address: toAddress });
+    }
+
+    // Если включён туда-обратно — показываем жёлтый в конце
+    if (switchStates.switch1) {
+      result.push({ color: YELLOW, address: fromAddress || toAddress || '' });
+    }
+
+    return result;
+  }, [fromAddress, toAddress, stopAddresses, switchStates.switch1]);
 
   return (
     <View style={styles.container}>
@@ -119,11 +170,13 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
           onToggle={() => toggleSwitch('switch2')}
           colors={colors}
         />
-        <SwitchToggle
-          isActive={switchStates.switch3}
-          onToggle={() => toggleSwitch('switch3')}
-          colors={colors}
-        />
+        <View style={{ opacity: isSmooth ? 0.5 : 1 }} pointerEvents={isSmooth ? 'none' : 'auto'}>
+          <SwitchToggle
+            isActive={switchStates.switch3}
+            onToggle={() => toggleSwitch('switch3')}
+            colors={colors}
+          />
+        </View>
       </View>
 
       {/* Тексты под переключателями */}
@@ -134,23 +187,45 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
         <Text style={[styles.switchLabel, { color: colors.textSecondary }]}>
           {switchStates.switch2 ? t('common.smooth') : t('common.normal')}
         </Text>
-        <Text style={[styles.switchLabel, { color: colors.textSecondary }]}>
+        <Text style={[
+          styles.switchLabel,
+          { color: isSmooth ? colors.textSecondary : colors.textSecondary }
+        ]}> 
           {switchStates.switch3 ? t('common.weekdays') : t('common.fixed')}
         </Text>
       </View>
 
-      {/* Контейнер под кнопками */}
-      <WeekDaysSelector colors={colors} t={t} />
+      {/* Верхний выбор дней: всегда видим */}
+      <WeekDaysSelector 
+        colors={colors} 
+        t={t}
+        onSelectionChange={setSelectedDays}
+      />
 
-      {/* Контейнеры расписания */}
-      {containerColors.map((color, index) => (
+      {/* Контейнеры расписания (динамически по правилам) */}
+      {containers.map((item, index) => (
         <ScheduleContainer
-          key={index}
-          fromAddress={fromAddress}
-          borderColor={color}
+          key={`${item.color}_${index}`}
+          fromAddress={item.address}
+          borderColor={item.color}
           colors={colors}
           t={t}
-          isLast={index === containerColors.length - 1}
+          isLast={index === containers.length - 1}
+          // Для фикс-режима показываем один таймпикер без дней
+          fixedMode={!isSmooth}
+          fixedTime={fixedTimes[index]}
+          onFixedTimeChange={(time) => setFixedTimes(prev => ({ ...prev, [index]: time }))}
+          // Будни/Выходные (только при fixedMode)
+          weekdaysMode={isWeekdaysMode}
+          weekdayTime={weekdayTimes[index]}
+          weekendTime={weekendTimes[index]}
+          onWeekdayTimeChange={(time) => setWeekdayTimes(prev => ({ ...prev, [index]: time }))}
+          onWeekendTimeChange={(time) => setWeekendTimes(prev => ({ ...prev, [index]: time }))}
+          // Дни берём из верхнего селектора для всех режимов
+          showDays={isSmooth}
+          dayTimes={{}}
+          onDayTimeChange={() => {}}
+          activeDays={selectedDays}
         />
       ))}
 

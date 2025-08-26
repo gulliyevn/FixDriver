@@ -101,5 +101,11 @@
   "normal": "Normal",
   "smooth": "Glatt",
   "fixed": "Täglich",
-  "weekdays": "Werktags/Wochenende"
+  "weekdays": "Werktags/Wochenende",
+  "weekdaysOnly": "Werktags",
+  "weekend": "Wochenende",
+  "selectTripDays": "Reisetage auswählen",
+  "departureTime": "Abfahrtszeit",
+  "time": "Zeit",
+  "selectTime": "Zeit auswählen"
 } 

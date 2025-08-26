@@ -101,5 +101,11 @@
   "normal": "Sabit",
   "smooth": "Qeyri-Sabit",
   "fixed": "Hərgün",
-  "weekdays": "Həftəiçi/Həftəsonu"
+  "weekdays": "Həftəiçi/Həftəsonu",
+  "weekdaysOnly": "Həftəiçi",
+  "weekend": "Həftəsonu",
+  "selectTripDays": "Səyahət günlərini seçin",
+  "departureTime": "Yola çıxma vaxtı",
+  "time": "Vaxt",
+  "selectTime": "Vaxtı seçin"
 } 

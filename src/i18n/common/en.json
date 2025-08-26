@@ -101,5 +101,11 @@
   "normal": "Regular",
   "smooth": "Smooth",
   "fixed": "Daily",
-  "weekdays": "Weekdays/Weekends"
-} 
+  "weekdays": "Weekdays/Weekends",
+  "weekdaysOnly": "Weekdays",
+  "weekend": "Weekend",
+  "selectTripDays": "Select trip days",
+  "departureTime": "Departure time",
+  "time": "Time",
+  "selectTime": "Select time"
+}

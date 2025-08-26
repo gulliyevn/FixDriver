@@ -101,5 +101,11 @@
   "normal": "Regular",
   "smooth": "Sin problemas",
   "fixed": "Diario",
-  "weekdays": "Dias laborables/Fines de semana"
+  "weekdays": "Dias laborables/Fines de semana",
+  "weekdaysOnly": "Dias laborables",
+  "weekend": "Fin de semana",
+  "selectTripDays": "Seleccione los días de viaje",
+  "departureTime": "Hora de salida",
+  "time": "Hora",
+  "selectTime": "Seleccionar hora"
 } 
