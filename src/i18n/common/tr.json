@@ -106,5 +106,7 @@
   "selectTripDays": "Seyahat günlerini seçin",
   "departureTime": "Kalkış zamanı",
   "time": "Zaman",
+  "estimatedTime": "±5 dk (tahmini)",
+  "scheduleInfo": "Bu sayfada seyahat programlarını yapılandırabilirsiniz. Üstten haftanın günlerini seçin, ardından her rota alanı için kalkış zamanını ayarlayın. Ara duraklar için zamanlar trafik ve mesafeyi dikkate alarak otomatik olarak hesaplanır (±5 dakika).",
   "selectTime": "Zaman seçin"
 } 

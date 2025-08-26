@@ -107,5 +107,7 @@
   "selectTripDays": "Sélectionnez les jours de voyage",
   "departureTime": "Heure de départ",
   "time": "Heure",
+  "estimatedTime": "±5 min (estimé)",
+  "scheduleInfo": "Sur cette page, vous pouvez configurer les horaires de voyage. Sélectionnez les jours de la semaine en haut, puis définissez les heures de départ pour chaque champ d'itinéraire. Les temps pour les arrêts intermédiaires sont calculés automatiquement en tenant compte du trafic et de la distance (±5 minutes).",
   "selectTime": "Sélectionner l'heure"
 } 

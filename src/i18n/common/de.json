@@ -107,5 +107,7 @@
   "selectTripDays": "Reisetage auswählen",
   "departureTime": "Abfahrtszeit",
   "time": "Zeit",
+  "estimatedTime": "±5 min (geschätzt)",
+  "scheduleInfo": "Auf dieser Seite können Sie Reisepläne konfigurieren. Wählen Sie oben die Wochentage aus und legen Sie dann die Abfahrtszeiten für jedes Routenfeld fest. Zeiten für Zwischenstopps werden automatisch unter Berücksichtigung von Verkehr und Entfernung berechnet (±5 Minuten).",
   "selectTime": "Zeit auswählen"
 } 

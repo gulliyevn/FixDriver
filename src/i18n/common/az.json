@@ -107,5 +107,7 @@
   "selectTripDays": "Səyahət günlərini seçin",
   "departureTime": "Yola çıxma vaxtı",
   "time": "Vaxt",
+  "estimatedTime": "±5 dəq (təxmini)",
+  "scheduleInfo": "Bu səhifədə səyahət cədvəllərini konfiqurasiya edə bilərsiniz. Yuxarıdan həftənin günlərini seçin, sonra hər marşrut sahəsi üçün yola çıxma vaxtını təyin edin. Aralıq dayanacaqlar üçün vaxtlar trafik və məsafəni nəzərə alaraq avtomatik hesablanır (±5 dəqiqə).",
   "selectTime": "Vaxtı seçin"
 } 

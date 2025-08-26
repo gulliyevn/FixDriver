@@ -107,5 +107,7 @@
   "selectTripDays": "Select trip days",
   "departureTime": "Departure time",
   "time": "Time",
+  "estimatedTime": "±5 min (estimated)",
+  "scheduleInfo": "On this page you can configure trip schedules. Select days of the week at the top, then set departure times for each route field. Times for intermediate stops are calculated automatically considering traffic and distance (±5 minutes).",
   "selectTime": "Select time"
 }

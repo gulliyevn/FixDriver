@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, Animated, ScrollView } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, Animated, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -10,7 +10,7 @@ import { useSessionCleanup } from '../../../hooks/useSessionCleanup';
 import ProgressBar from './components/ProgressBar';
 import AddressPage from './components/AddressPage';
 import TimeSchedulePage from './components/TimeSchedulePage';
-import { AddressData, TimeScheduleData } from './types/fix-wave.types';
+import { AddressData, TimeScheduleData, FixWavePage } from './types/fix-wave.types';
 
 const FixWaveScreen: React.FC = () => {
   const { isDark } = useTheme();
@@ -85,6 +85,14 @@ const FixWaveScreen: React.FC = () => {
     goToPage(page);
   };
 
+  const handleInfoPress = () => {
+    Alert.alert(
+      t('common.info'),
+      t('common.scheduleInfo'),
+      [{ text: t('common.ok') }]
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Хедер скопированный из ChatListScreen */}
@@ -125,7 +133,16 @@ const FixWaveScreen: React.FC = () => {
         </View>
         
         {/* Пустой контейнер справа для центрирования */}
-        <View style={styles.headerRight} />
+        <View style={styles.headerRight}>
+          {/* Иконка информации в правом углу - только на странице расписания */}
+          {currentPage === 'timeSchedule' && (
+            <View style={{ alignItems: 'flex-end', paddingRight: 0 }}>
+              <TouchableOpacity onPress={handleInfoPress}>
+                <Ionicons name="information-circle-outline" size={24} color={colors.primary} />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
 
       <ScrollView style={{ flex: 1, padding: 20 }} showsVerticalScrollIndicator={false}>

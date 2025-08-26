@@ -32,6 +32,9 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
   const [fromAddress, setFromAddress] = useState<string>('');
   const [toAddress, setToAddress] = useState<string>('');
   const [stopAddresses, setStopAddresses] = useState<string[]>([]);
+  const [fromCoordinates, setFromCoordinates] = useState<{ latitude: number; longitude: number } | undefined>();
+  const [toCoordinates, setToCoordinates] = useState<{ latitude: number; longitude: number } | undefined>();
+  const [stopCoordinates, setStopCoordinates] = useState<Array<{ latitude: number; longitude: number }>>([]);
   const [switchStates, setSwitchStates] = useState({
     // switch1 — направление: false = туда, true = туда-обратно
     switch1: false,
@@ -69,13 +72,16 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
           console.log('TimeSchedulePage - From address found:', fromAddr);
           if (fromAddr) {
             setFromAddress(fromAddr.address);
+            setFromCoordinates(fromAddr.coordinates);
             console.log('TimeSchedulePage - Setting fromAddress:', fromAddr.address);
           }
           if (toAddr) {
             setToAddress(toAddr.address);
+            setToCoordinates(toAddr.coordinates);
           }
           if (stops && stops.length) {
             setStopAddresses(stops.map(s => s.address).slice(0, 2));
+            setStopCoordinates(stops.slice(0, 2).map(s => s.coordinates).filter(Boolean) as Array<{ latitude: number; longitude: number }>);
           }
         } else {
           console.log('TimeSchedulePage - No addressData or addresses found');
@@ -122,8 +128,12 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
   // Динамически формируем список контейнеров по правилам
   // зелёный (from), синий (to), жёлтый (обратно), серые (stops)
   const containers = useMemo(() => {
-    const result: Array<{ color: string; address: string }>
-      = [];
+    const result: Array<{ 
+      color: string; 
+      address: string; 
+      fromCoordinate?: { latitude: number; longitude: number };
+      toCoordinate?: { latitude: number; longitude: number };
+    }> = [];
 
     const GREEN = '#4CAF50';
     const BLUE = '#1565C0';
@@ -132,29 +142,78 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
 
     // Если переданы from и to — порядок: зелёный -> серые (1,2) -> синий
     if (fromAddress && toAddress) {
-      result.push({ color: GREEN, address: fromAddress });
+      result.push({ 
+        color: GREEN, 
+        address: fromAddress,
+        fromCoordinate: fromCoordinates,
+        toCoordinate: stopCoordinates[0] || toCoordinates
+      });
       if (stopAddresses.length >= 1) {
-        result.push({ color: GREY, address: stopAddresses[0] });
+        result.push({ 
+          color: GREY, 
+          address: stopAddresses[0],
+          fromCoordinate: stopCoordinates[0],
+          toCoordinate: stopCoordinates[1] || toCoordinates
+        });
       }
       if (stopAddresses.length >= 2) {
-        result.push({ color: GREY, address: stopAddresses[1] });
+        result.push({ 
+          color: GREY, 
+          address: stopAddresses[1],
+          fromCoordinate: stopCoordinates[1],
+          toCoordinate: toCoordinates
+        });
       }
-      result.push({ color: BLUE, address: toAddress });
+      result.push({ 
+        color: BLUE, 
+        address: toAddress,
+        fromCoordinate: stopCoordinates[stopCoordinates.length - 1] || fromCoordinates,
+        toCoordinate: toCoordinates
+      });
     } else {
       // Если нет одной из точек, просто добавляем то, что есть
-      if (fromAddress) result.push({ color: GREEN, address: fromAddress });
-      if (stopAddresses.length >= 1) result.push({ color: GREY, address: stopAddresses[0] });
-      if (stopAddresses.length >= 2) result.push({ color: GREY, address: stopAddresses[1] });
-      if (toAddress) result.push({ color: BLUE, address: toAddress });
+      if (fromAddress) result.push({ 
+        color: GREEN, 
+        address: fromAddress,
+        fromCoordinate: fromCoordinates,
+        toCoordinate: stopCoordinates[0] || toCoordinates
+      });
+      if (stopAddresses.length >= 1) {
+        result.push({ 
+          color: GREY, 
+          address: stopAddresses[0],
+          fromCoordinate: stopCoordinates[0],
+          toCoordinate: stopCoordinates[1] || toCoordinates
+        });
+      }
+      if (stopAddresses.length >= 2) {
+        result.push({ 
+          color: GREY, 
+          address: stopAddresses[1],
+          fromCoordinate: stopCoordinates[1],
+          toCoordinate: toCoordinates
+        });
+      }
+      if (toAddress) result.push({ 
+        color: BLUE, 
+        address: toAddress,
+        fromCoordinate: stopCoordinates[stopCoordinates.length - 1] || fromCoordinates,
+        toCoordinate: toCoordinates
+      });
     }
 
     // Если включён туда-обратно — показываем жёлтый в конце
     if (switchStates.switch1) {
-      result.push({ color: YELLOW, address: fromAddress || toAddress || '' });
+      result.push({ 
+        color: YELLOW, 
+        address: fromAddress || toAddress || '',
+        fromCoordinate: toCoordinates,
+        toCoordinate: fromCoordinates
+      });
     }
 
     return result;
-  }, [fromAddress, toAddress, stopAddresses, switchStates.switch1]);
+  }, [fromAddress, toAddress, stopAddresses, fromCoordinates, toCoordinates, stopCoordinates, switchStates.switch1]);
 
   return (
     <View style={styles.container}>
@@ -226,6 +285,13 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
           dayTimes={{}}
           onDayTimeChange={() => {}}
           activeDays={selectedDays}
+          // Разрешаем выбирать время только для синих (to) и жёлтых (back)
+          allowTimeSelection={item.color === '#1565C0' || item.color === '#FFF59D'}
+          // Координаты для расчета времени
+          fromCoordinate={item.fromCoordinate}
+          toCoordinate={item.toCoordinate}
+          // Время отправления для расчета ETA (используем время из первого контейнера)
+          departureTime={fixedTimes[0] ? new Date(`2000-01-01T${fixedTimes[0]}:00`) : undefined}
         />
       ))}
 

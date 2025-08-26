@@ -15,8 +15,9 @@ export const useFixWaveNavigation = () => {
         const data = await fixwaveOrderService.loadSessionData();
         if (data) {
           setSessionData(data);
-          setCurrentPage(data.currentPage as FixWavePage);
-          updateProgress(data.currentPage as FixWavePage);
+          // Всегда начинаем с первой страницы при загрузке
+          setCurrentPage('addresses');
+          updateProgress('addresses');
         }
       } catch (error) {
         console.error('Error loading session:', error);

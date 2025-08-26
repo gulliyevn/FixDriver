@@ -1,7 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Platform, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './ScheduleContainer.styles';
+import { DistanceCalculationService } from '../../../../services/DistanceCalculationService';
+import { RoutePoint } from '../../../../components/MapView/types/map.types';
 
 interface ScheduleContainerProps {
   fromAddress: string;
@@ -27,6 +29,13 @@ interface ScheduleContainerProps {
   onWeekendTimeChange?: (time: string) => void;
   // Показывать ли дни внутри контейнера (только для плавных)
   showDays?: boolean;
+  // Разрешить ли выбор времени в этом контейнере
+  allowTimeSelection?: boolean;
+  // Координаты для расчета времени (если не разрешен выбор времени)
+  fromCoordinate?: { latitude: number; longitude: number };
+  toCoordinate?: { latitude: number; longitude: number };
+  // Время отправления для расчета ETA
+  departureTime?: Date;
 }
 
 export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({ 
@@ -45,7 +54,11 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
   weekdayTime,
   weekendTime,
   onWeekdayTimeChange,
-  onWeekendTimeChange
+  onWeekendTimeChange,
+  allowTimeSelection = true,
+  fromCoordinate,
+  toCoordinate,
+  departureTime
 }) => {
   const weekDays = [
     { key: 'mon', label: t('common.mon') },
@@ -113,6 +126,46 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
   const [weekdayTempDate, setWeekdayTempDate] = useState<Date>(new Date());
   const [weekendPickerVisible, setWeekendPickerVisible] = useState(false);
   const [weekendTempDate, setWeekendTempDate] = useState<Date>(new Date());
+  
+  // Состояние для расчетного времени
+  const [calculatedTime, setCalculatedTime] = useState<string>('--:--');
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  // Расчет времени для полей "Откуда" и "Остановки"
+  useEffect(() => {
+    const calculateEstimatedTime = async () => {
+      if (!allowTimeSelection && fromCoordinate && toCoordinate) {
+        setIsCalculating(true);
+        try {
+          const fromPoint: RoutePoint = {
+            id: 'from',
+            coordinate: fromCoordinate,
+            type: 'start'
+          };
+          const toPoint: RoutePoint = {
+            id: 'to',
+            coordinate: toCoordinate,
+            type: 'end'
+          };
+          
+          const result = await DistanceCalculationService.calculateRouteSegment(
+            fromPoint,
+            toPoint,
+            departureTime
+          );
+          
+          setCalculatedTime(result.estimatedTime);
+        } catch (error) {
+          console.error('Error calculating time:', error);
+          setCalculatedTime('--:--');
+        } finally {
+          setIsCalculating(false);
+        }
+      }
+    };
+
+    calculateEstimatedTime();
+  }, [allowTimeSelection, fromCoordinate, toCoordinate, departureTime]);
 
   return (
     <View style={[
@@ -160,13 +213,13 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
                   <TouchableOpacity
                     style={[
                       styles.dayButton,
-                      { backgroundColor: colors.background, borderColor: colors.border }
+                      { backgroundColor: colors.background, borderColor: colors.border, opacity: allowTimeSelection ? 1 : 0.5 }
                     ]}
                     activeOpacity={0.8}
-                    onPress={() => setWeekdayPickerVisible(true)}
+                    onPress={() => allowTimeSelection && setWeekdayPickerVisible(true)}
                   >
                     <Text style={[styles.dayText, { color: colors.text }]}> 
-                      {weekdayTime || '--:--'}
+                      {allowTimeSelection ? (weekdayTime || '--:--') : calculatedTime}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -179,13 +232,13 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
                   <TouchableOpacity
                     style={[
                       styles.dayButton,
-                      { backgroundColor: colors.background, borderColor: colors.border }
+                      { backgroundColor: colors.background, borderColor: colors.border, opacity: allowTimeSelection ? 1 : 0.5 }
                     ]}
                     activeOpacity={0.8}
-                    onPress={() => setWeekendPickerVisible(true)}
+                    onPress={() => allowTimeSelection && setWeekendPickerVisible(true)}
                   >
                     <Text style={[styles.dayText, { color: colors.text }]}> 
-                      {weekendTime || '--:--'}
+                      {allowTimeSelection ? (weekendTime || '--:--') : calculatedTime}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -211,16 +264,18 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
                     {
                       backgroundColor: colors.background,
                       borderColor: colors.border,
+                      opacity: allowTimeSelection ? 1 : 0.5
                     }
                   ]}
                   onPress={() => {
+                    if (!allowTimeSelection) return;
                     setFixedTempDate(new Date());
                     setFixedPickerVisible(true);
                   }}
                   activeOpacity={0.8}
                 >
                   <Text style={[styles.dayText, { color: colors.text }]}> 
-                    {fixedTime ? fixedTime : '--:--'}
+                    {allowTimeSelection ? (fixedTime ? fixedTime : '--:--') : calculatedTime}
                   </Text>
                 </TouchableOpacity>
                 {fixedPickerVisible && (
@@ -287,7 +342,7 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
                     >
                       {!pickerState.isVisible || pickerState.dayKey !== day.key ? (
                         <Text style={[styles.dayText, { color: colors.text }]}>
-                          {selectedTime ? selectedTime : day.label}
+                          {allowTimeSelection ? (selectedTime ? selectedTime : day.label) : calculatedTime}
                         </Text>
                       ) : null}
                     </TouchableOpacity>
