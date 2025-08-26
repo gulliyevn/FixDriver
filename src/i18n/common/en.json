@@ -88,5 +88,18 @@
       "addStop": "Add stop",
       "selectFromMap": "Select from map"
     }
-  }
+  },
+  "mon": "Mon",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thu": "Thu",
+  "fri": "Fri",
+  "sat": "Sat",
+  "sun": "Sun",
+  "there": "One-Way",
+  "thereAndBack": "Return",
+  "normal": "Regular",
+  "smooth": "Smooth",
+  "fixed": "Daily",
+  "weekdays": "Weekdays/Weekends"
 } 

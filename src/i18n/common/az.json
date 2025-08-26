@@ -88,5 +88,18 @@
       "addStop": "Dayanacaq əlavə et",
       "selectFromMap": "Xəritədən seç"
     }
-  }
+  },
+  "mon": "B.e",
+  "tue": "Ç.a",
+  "wed": "Ç",
+  "thu": "C.a",
+  "fri": "C",
+  "sat": "Ş",
+  "sun": "B",
+  "there": "Tək-Yön",
+  "thereAndBack": "Gediş-Dönüş",
+  "normal": "Sabit",
+  "smooth": "Qeyri-Sabit",
+  "fixed": "Hərgün",
+  "weekdays": "Həftəiçi/Həftəsonu"
 } 

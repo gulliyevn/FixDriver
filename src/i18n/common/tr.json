@@ -87,5 +87,18 @@
       "addStop": "Durak ekle",
       "selectFromMap": "Haritadan seç"
     }
-  }
+  },
+  "mon": "Pzt",
+  "tue": "Sal",
+  "wed": "Çar",
+  "thu": "Per",
+  "fri": "Cum",
+  "sat": "Cmt",
+  "sun": "Paz",
+  "there": "Tek-Yön",
+  "thereAndBack": "Gidiş-Dönüş",
+  "normal": "Sabit",
+  "smooth": "Sabit Olmayan",
+  "fixed": "Hergün",
+  "weekdays": "Haftalık/Hafta Sonu"
 } 

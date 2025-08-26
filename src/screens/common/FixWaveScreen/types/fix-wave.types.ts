@@ -53,6 +53,8 @@ export interface TimeScheduleData {
   isRecurring: boolean;
   recurringDays?: string[];
   notes?: string;
+  fromAddress?: string;
+  toAddress?: string;
 }
 
 export interface FixWaveOrderData {

@@ -5,6 +5,10 @@ import { useLanguage } from '../../../../context/LanguageContext';
 import { getCurrentColors } from '../../../../constants/colors';
 import { TimeScheduleData } from '../types/fix-wave.types';
 import { fixwaveOrderService } from '../../../../services/fixwaveOrderService';
+import { styles } from './TimeSchedulePage.styles';
+import { SwitchToggle } from './SwitchToggle';
+import { WeekDaysSelector } from './WeekDaysSelector';
+import { ScheduleContainer } from './ScheduleContainer';
 
 interface TimeSchedulePageProps {
   onNext: (data: TimeScheduleData) => void;
@@ -25,21 +29,41 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
       notes: '',
     }
   );
+  const [fromAddress, setFromAddress] = useState<string>('');
+  const [switchStates, setSwitchStates] = useState({
+    switch1: false,
+    switch2: false,
+    switch3: false,
+  });
 
   // Загружаем данные из сессии при инициализации и при изменении initialData
   useEffect(() => {
     const loadSessionData = async () => {
       try {
         const sessionData = await fixwaveOrderService.loadSessionData();
+        console.log('TimeSchedulePage - Session data loaded:', sessionData);
+        
         if (sessionData?.timeScheduleData) {
           setTimeScheduleData(sessionData.timeScheduleData);
+        }
+        
+        if (sessionData?.addressData?.addresses) {
+          console.log('TimeSchedulePage - Addresses found:', sessionData.addressData.addresses);
+          const fromAddr = sessionData.addressData.addresses.find(addr => addr.type === 'from');
+          console.log('TimeSchedulePage - From address found:', fromAddr);
+          if (fromAddr) {
+            setFromAddress(fromAddr.address);
+            console.log('TimeSchedulePage - Setting fromAddress:', fromAddr.address);
+          }
+        } else {
+          console.log('TimeSchedulePage - No addressData or addresses found');
         }
       } catch (error) {
         console.error('Error loading session data:', error);
       }
     };
     loadSessionData();
-  }, [initialData]); // Добавляем зависимость от initialData
+  }, [initialData]);
 
   // Сохраняем в сессию при изменении данных
   const saveToSession = async (data: TimeScheduleData) => {
@@ -66,45 +90,76 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
     onNext(timeScheduleData);
   };
 
-  return (
-    <View style={{ marginTop: 10, padding: 20 }}>
-      <Text style={{ 
-        fontSize: 18, 
-        fontWeight: '600', 
-        color: colors.text,
-        marginBottom: 20,
-        textAlign: 'center'
-      }}>
-        Планирование времени
-      </Text>
+  const toggleSwitch = (switchKey: 'switch1' | 'switch2' | 'switch3') => {
+    setSwitchStates(prev => ({
+      ...prev,
+      [switchKey]: !prev[switchKey]
+    }));
+  };
 
-      <Text style={{ 
-        fontSize: 16, 
-        color: colors.textSecondary,
-        marginBottom: 30,
-        textAlign: 'center'
-      }}>
-        Здесь будет форма выбора даты и времени
-      </Text>
+  const containerColors = [
+    '#4CAF50', // зеленый
+    '#9E9E9E', // серый
+    '#9E9E9E', // серый
+    '#1565C0', // темно-синий
+    '#FFF59D', // светло-желтый
+  ];
+
+  return (
+    <View style={styles.container}>
+      {/* Переключатели */}
+      <View style={styles.switchesContainer}>
+        <SwitchToggle
+          isActive={switchStates.switch1}
+          onToggle={() => toggleSwitch('switch1')}
+          colors={colors}
+        />
+        <SwitchToggle
+          isActive={switchStates.switch2}
+          onToggle={() => toggleSwitch('switch2')}
+          colors={colors}
+        />
+        <SwitchToggle
+          isActive={switchStates.switch3}
+          onToggle={() => toggleSwitch('switch3')}
+          colors={colors}
+        />
+      </View>
+
+      {/* Тексты под переключателями */}
+      <View style={styles.switchLabelsContainer}>
+        <Text style={[styles.switchLabel, { color: colors.textSecondary }]}>
+          {switchStates.switch1 ? t('common.thereAndBack') : t('common.there')}
+        </Text>
+        <Text style={[styles.switchLabel, { color: colors.textSecondary }]}>
+          {switchStates.switch2 ? t('common.smooth') : t('common.normal')}
+        </Text>
+        <Text style={[styles.switchLabel, { color: colors.textSecondary }]}>
+          {switchStates.switch3 ? t('common.weekdays') : t('common.fixed')}
+        </Text>
+      </View>
+
+      {/* Контейнер под кнопками */}
+      <WeekDaysSelector colors={colors} t={t} />
+
+      {/* Контейнеры расписания */}
+      {containerColors.map((color, index) => (
+        <ScheduleContainer
+          key={index}
+          fromAddress={fromAddress}
+          borderColor={color}
+          colors={colors}
+          t={t}
+          isLast={index === containerColors.length - 1}
+        />
+      ))}
 
       {/* Кнопка Сохранить */}
       <TouchableOpacity 
-        style={{ 
-          backgroundColor: colors.primary,
-          paddingVertical: 12,
-          marginHorizontal: 20,
-          marginTop: 8,
-          marginBottom: 20,
-          borderRadius: 8,
-        }}
+        style={[styles.saveButton, { backgroundColor: colors.primary }]}
         onPress={handleSaveAndNext}
       >
-        <Text style={{ 
-          color: '#FFFFFF', 
-          fontSize: 16, 
-          fontWeight: '600',
-          textAlign: 'center'
-        }}>
+        <Text style={styles.saveButtonText}>
           {t('common.save')}
         </Text>
       </TouchableOpacity>

@@ -88,5 +88,18 @@
       "addStop": "Agregar parada",
       "selectFromMap": "Seleccionar del mapa"
     }
-  }
+  },
+  "mon": "Lun",
+  "tue": "Mar",
+  "wed": "Mié",
+  "thu": "Jue",
+  "fri": "Vie",
+  "sat": "Sáb",
+  "sun": "Dom",
+  "there": "Ida",
+  "thereAndBack": "vuelta",
+  "normal": "Regular",
+  "smooth": "Sin problemas",
+  "fixed": "Diario",
+  "weekdays": "Dias laborables/Fines de semana"
 } 
