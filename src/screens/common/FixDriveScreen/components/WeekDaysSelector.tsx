@@ -130,7 +130,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
                   onChange={time => onReturnTimeChange?.(time)}
                   placeholder={t('common.selectTime')}
                   indicatorColor={TIME_PICKER_COLORS.BACK}
-                  title={t('common.back')}
+                  title={t('common.return')}
                 />
               </View>
             )}

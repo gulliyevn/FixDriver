@@ -2,9 +2,9 @@
   "add": "Ekle",
   "attention": "Dikkat",
   "back": "Geri",
+  "return": "Dönüş",
   "cancel": "İptal",
   "close": "Kapat",
-  "confirm": "Подтвердить",
   "confirmation": "Onay",
   "dayEnd": {
     "subtitle": "Çevrimiçi etkinleştir?",
@@ -90,10 +90,10 @@
   "schedule": {
     "selectType": "Program türünü seçin",
     "types": {
-      "weekdaysDesc": "Sadece iş günlerinde yolculuklar",
+      "weekdaysDesc": "İş günleri ve tatil günlerinde yolculuklar",
       "weekendsDesc": "Sadece hafta sonu yolculuklar",
       "thereAndBackDesc": "Bir günde gidiş-dönüş yolculuğu",
-      "oneWayDesc": "Tek yönlü yolculuk",
+      "oneWayDesc": "Sadece tek yönde seyahat",
       "flexible": "Esnek program",
       "flexibleDesc": "Hafta içi ve hafta sonu için farklı saatler"
     }
@@ -109,7 +109,8 @@
   "success": "Başarılı",
   "sun": "Paz",
   "there": "Gidiş",
-  "thereAndBack": "Gidiş-dönüş",
+  "oneWay": "Tek yön",
+  "roundTrip": "Gidiş-dönüş",
   "customizeSchedule": "Programı Özelleştir",
   "selectDaysToCustomize": "Zamanı özelleştirmek için günleri seçin",
   "thu": "Per",

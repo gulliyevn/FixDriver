@@ -2,6 +2,7 @@
   "add": "إضافة",
   "attention": "انتباه",
   "back": "رجوع",
+  "return": "عودة",
   "cancel": "إلغاء",
   "close": "إغلاق",
   "confirm": "Подтвердить",
@@ -90,10 +91,10 @@
   "schedule": {
     "selectType": "اختر نوع الجدول",
     "types": {
-      "weekdaysDesc": "رحلات فقط في أيام الأسبوع",
+      "weekdaysDesc": "رحلات في أيام العمل والعطل",
       "weekendsDesc": "رحلات فقط في عطلات نهاية الأسبوع",
       "thereAndBackDesc": "رحلة ذهاب وعودة في يوم واحد",
-      "oneWayDesc": "رحلة ذهاب فقط",
+      "oneWayDesc": "رحلة في اتجاه واحد فقط",
       "flexible": "جدول مرن",
       "flexibleDesc": "أوقات مختلفة لأيام الأسبوع وعطلات نهاية الأسبوع"
     }
@@ -109,7 +110,8 @@
   "success": "نجح",
   "sun": "الأحد",
   "there": "ذهاب",
-  "thereAndBack": "ذهاب وعودة",
+  "oneWay": "اتجاه واحد",
+  "roundTrip": "ذهاب وعودة",
   "customizeSchedule": "تخصيص الجدول الزمني",
   "selectDaysToCustomize": "اختر الأيام لتخصيص الوقت",
   "thu": "الخميس",

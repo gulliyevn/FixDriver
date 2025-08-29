@@ -1,6 +1,15 @@
 export const TIME_PICKER_COLORS = {
   THERE: '#4CAF50',
   BACK: '#7E57C2',
+  WEEKDAYS: '#2196F3',
+  WEEKEND: '#FF9800',
+  MONDAY: '#E91E63',
+  TUESDAY: '#9C27B0',
+  WEDNESDAY: '#673AB7',
+  THURSDAY: '#607D8B',
+  FRIDAY: '#795548',
+  SATURDAY: '#00BCD4',
+  SUNDAY: '#FFC107',
 } as const;
 
 export const ANIMATION_CONFIG = {

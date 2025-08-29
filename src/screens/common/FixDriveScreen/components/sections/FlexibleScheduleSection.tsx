@@ -87,7 +87,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
           <ReturnTripCheckbox
             checked={isReturnTrip}
             onCheckedChange={v => onReturnTripChange?.(v)}
-            label={t('common.thereAndBack')}
+            label={t('common.roundTrip')}
           />
         </View>
       )}
@@ -99,7 +99,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
             onChange={onReturnTimeChange}
             placeholder={t('common.selectTime')}
             indicatorColor={TIME_PICKER_COLORS.BACK}
-            title={`${t('common.back')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
+            title={`${t('common.return')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
           />
         </View>
       )}

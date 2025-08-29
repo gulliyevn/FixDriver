@@ -10,6 +10,7 @@
   "confirmation": "Confirmation",
   "confirm": "Confirm",
   "back": "Back",
+  "return": "Return",
   "next": "Next",
   "previous": "Previous",
   "done": "Done",
@@ -96,8 +97,9 @@
   "fri": "Fri",
   "sat": "Sat",
   "sun": "Sun",
-  "there": "One-Way",
-  "thereAndBack": "Return",
+  "there": "Outbound",
+  "oneWay": "One-Way",
+  "roundTrip": "Round Trip",
   "customizeSchedule": "Customize Schedule",
   "selectDaysToCustomize": "Select days to customize time",
   "normal": "Regular",
@@ -115,10 +117,10 @@
   "schedule": {
     "selectType": "Choose schedule type",
     "types": {
-      "weekdaysDesc": "Trips only on working days",
+      "weekdaysDesc": "Trips on working and non-working days",
       "weekendsDesc": "Trips only on weekends",
       "thereAndBackDesc": "Round trip in one day",
-      "oneWayDesc": "One-way trip",
+      "oneWayDesc": "Trip in one direction only",
       "flexible": "Flexible schedule",
       "flexibleDesc": "Different times for weekdays and weekends"
     }

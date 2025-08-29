@@ -27,11 +27,12 @@ const ScheduleScreen: React.FC = () => {
         
         {/* Контент страниц */}
         <View style={{ flex: 1 }}>
-          {isLeft ? (
+          <View style={{ flex: 1, display: isLeft ? 'flex' : 'none' }}>
             <FixDriveScreen isChild={true} />
-          ) : (
+          </View>
+          <View style={{ flex: 1, display: isLeft ? 'none' : 'flex' }}>
             <FixWaveScreen isChild={true} />
-          )}
+          </View>
         </View>
       </SafeAreaView>
     </View>

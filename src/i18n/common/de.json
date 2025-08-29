@@ -10,6 +10,7 @@
   "confirmation": "Bestätigung",
   "confirm": "Bestätigen",
   "back": "Zurück",
+  "return": "Rückfahrt",
   "next": "Weiter",
   "previous": "Zurück",
   "done": "Fertig",
@@ -96,8 +97,9 @@
   "fri": "Fr",
   "sat": "Sa",
   "sun": "So",
-  "there": "Hin",
-  "thereAndBack": "Hin und zurück",
+  "there": "Hinfahrt",
+  "oneWay": "Einfache Fahrt",
+  "roundTrip": "Hin und zurück",
   "customizeSchedule": "Zeitplan anpassen",
   "selectDaysToCustomize": "Wählen Sie Tage aus, um die Zeit anzupassen",
   "normal": "Normal",
@@ -115,10 +117,10 @@
   "schedule": {
     "selectType": "Zeitplantyp auswählen",
     "types": {
-      "weekdaysDesc": "Fahrten nur an Werktagen",
+      "weekdaysDesc": "Fahrten an Werk- und freien Tagen",
       "weekendsDesc": "Fahrten nur am Wochenende",
       "thereAndBackDesc": "Hin- und Rückfahrt an einem Tag",
-      "oneWayDesc": "Hinfahrt",
+      "oneWayDesc": "Nur in eine Richtung",
       "flexible": "Flexibler Zeitplan",
       "flexibleDesc": "Verschiedene Zeiten für Werktage und Wochenende"
     }

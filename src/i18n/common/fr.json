@@ -10,6 +10,7 @@
   "confirmation": "Confirmation",
   "confirm": "Confirmer",
   "back": "Retour",
+  "return": "Retour",
   "next": "Suivant",
   "previous": "Précédent",
   "done": "Terminé",
@@ -96,8 +97,9 @@
   "fri": "Ven",
   "sat": "Sam",
   "sun": "Dim",
-  "there": "Aller",
-  "thereAndBack": "Aller-retour",
+  "there": "Départ",
+  "oneWay": "Sens unique",
+  "roundTrip": "Aller-retour",
   "customizeSchedule": "Personnaliser l'horaire",
   "selectDaysToCustomize": "Sélectionnez les jours pour personnaliser l'heure",
   "normal": "régulier",
@@ -115,10 +117,10 @@
   "schedule": {
     "selectType": "Choisir le type d'horaire",
     "types": {
-      "weekdaysDesc": "Trajets uniquement les jours de semaine",
+      "weekdaysDesc": "Trajets les jours de travail et de repos",
       "weekendsDesc": "Trajets uniquement le week-end",
       "thereAndBackDesc": "Trajet aller-retour en une journée",
-      "oneWayDesc": "Trajet aller simple",
+      "oneWayDesc": "Voyage dans une seule direction",
       "flexible": "Horaire flexible",
       "flexibleDesc": "Heures différentes pour les jours de semaine et le week-end"
     }

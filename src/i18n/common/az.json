@@ -10,6 +10,7 @@
   "confirmation": "Təsdiq",
   "confirm": "Təsdiqlə",
   "back": "Geri",
+  "return": "Geri dönüş",
   "next": "İrəli",
   "previous": "Əvvəlki",
   "done": "Hazır",
@@ -96,8 +97,9 @@
   "fri": "C",
   "sat": "Ş",
   "sun": "B",
-  "there": "Tək-Yön",
-  "thereAndBack": "Gediş-Dönüş",
+  "there": "Gediş",
+  "oneWay": "Tək istiqamət",
+  "roundTrip": "Gediş-Dönüş",
   "customizeSchedule": "Cədvəli fərdiləşdir",
   "selectDaysToCustomize": "Vaxtı fərdiləşdirmək üçün günləri seçin",
   "normal": "Sabit",
@@ -115,10 +117,10 @@
   "schedule": {
     "selectType": "Cədvəl növünü seçin",
     "types": {
-      "weekdaysDesc": "Yalnız iş günlərində səyahətlər",
+      "weekdaysDesc": "İş günləri və tətil günlərində səyahətlər",
       "weekendsDesc": "Yalnız həftəsonu səyahətlər",
       "thereAndBackDesc": "Bir gündə gediş-dönüş səyahəti",
-      "oneWayDesc": "Tək yönlü səyahət",
+      "oneWayDesc": "Yalnız bir istiqamətdə hərəkət",
       "flexible": "Çevik cədvəl",
       "flexibleDesc": "Həftəiçi və həftəsonu üçün fərqli vaxtlar"
     }

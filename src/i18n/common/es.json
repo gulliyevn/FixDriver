@@ -10,6 +10,7 @@
   "confirmation": "Confirmación",
   "confirm": "Confirmar",
   "back": "Atrás",
+  "return": "Vuelta",
   "next": "Siguiente",
   "previous": "Anterior",
   "done": "Hecho",
@@ -96,8 +97,9 @@
   "fri": "Vie",
   "sat": "Sáb",
   "sun": "Dom",
-  "there": "Ida",
-  "thereAndBack": "vuelta",
+  "there": "Salida",
+  "oneWay": "Solo ida",
+  "roundTrip": "Ida y vuelta",
   "customizeSchedule": "Personalizar Horario",
   "selectDaysToCustomize": "Selecciona días para personalizar tiempo",
   "normal": "Regular",
@@ -115,10 +117,10 @@
   "schedule": {
     "selectType": "Elegir tipo de horario",
     "types": {
-      "weekdaysDesc": "Viajes solo en días laborables",
+      "weekdaysDesc": "Viajes en días laborables y no laborables",
       "weekendsDesc": "Viajes solo en fines de semana",
       "thereAndBackDesc": "Viaje de ida y vuelta en un día",
-      "oneWayDesc": "Viaje de ida",
+      "oneWayDesc": "Viaje en una sola dirección",
       "flexible": "Horario flexible",
       "flexibleDesc": "Horas diferentes para días laborables y fines de semana"
     }

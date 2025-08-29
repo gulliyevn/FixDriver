@@ -50,7 +50,7 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
     }
   };
 
-  const Content = () => (
+  const renderContent = () => (
     <ScrollView style={{ flex: 1, padding: 20 }} showsVerticalScrollIndicator={false}>
         
         {/* Прогресс-бар */}
@@ -161,11 +161,11 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
   return (
     <>
       {isChild ? (
-        <Content />
+        renderContent()
       ) : (
         <View style={{ flex: 1, backgroundColor: colors.background }}>
           <SafeAreaView style={{ flex: 1 }}>
-            <Content />
+            {renderContent()}
           </SafeAreaView>
         </View>
       )}

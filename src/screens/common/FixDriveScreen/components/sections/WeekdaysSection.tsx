@@ -40,56 +40,55 @@ export const WeekdaysSection: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      {hasWeekdays && (
-        <TimePicker
-          value={selectedTime}
-          onChange={onTimeChange}
-          placeholder={t('common.selectTime')}
-          indicatorColor={TIME_PICKER_COLORS.THERE}
-          title={t('common.weekdaysOnly')}
-        />
-      )}
-
-      {hasWeekend && (
-        <View style={[styles.spacerTop16, !hasWeekdays && { marginTop: 0 }]}>
+      {hasWeekdays && hasWeekend && (
+        <>
           <TimePicker
-            value={returnTime}
-            onChange={onReturnTimeChange}
+            value={selectedTime}
+            onChange={onTimeChange}
             placeholder={t('common.selectTime')}
-            indicatorColor={TIME_PICKER_COLORS.BACK}
-            title={t('common.weekend')}
+            indicatorColor={TIME_PICKER_COLORS.WEEKDAYS}
+            title={t('common.weekdaysOnly')}
           />
-        </View>
+          <View style={styles.spacerTop16}>
+            <TimePicker
+              value={returnTime}
+              onChange={onReturnTimeChange}
+              placeholder={t('common.selectTime')}
+              indicatorColor={TIME_PICKER_COLORS.WEEKEND}
+              title={t('common.weekend')}
+            />
+          </View>
+        </>
       )}
 
-      {(hasWeekdays || hasWeekend) && (
+      {hasWeekdays && hasWeekend && (
         <View style={styles.spacerTop16Bottom16}>
           <ReturnTripCheckbox
             checked={isReturnTrip}
             onCheckedChange={v => onReturnTripChange?.(v)}
-            label={t('common.thereAndBack')}
+            label={t('common.roundTrip')}
           />
         </View>
       )}
 
-      {isReturnTrip && hasWeekdays && (
+      {isReturnTrip && hasWeekdays && hasWeekend && (
         <TimePicker
           value={returnTripTime}
           onChange={onReturnTripTimeChange}
           placeholder={t('common.selectTime')}
-          indicatorColor={TIME_PICKER_COLORS.THERE}
+          indicatorColor={TIME_PICKER_COLORS.WEEKDAYS}
           title={t('common.weekdaysOnly')}
         />
       )}
 
-      {isReturnTrip && hasWeekend && (
+      {isReturnTrip && hasWeekdays && hasWeekend && (
         <View style={styles.spacerTop16}>
           <TimePicker
             value={returnWeekdaysTime}
             onChange={onReturnWeekdaysTimeChange}
             placeholder={t('common.selectTime')}
-            indicatorColor={TIME_PICKER_COLORS.BACK}
-            title={t('common.back')}
+            indicatorColor={TIME_PICKER_COLORS.WEEKEND}
+            title={t('common.weekend')}
           />
         </View>
       )}

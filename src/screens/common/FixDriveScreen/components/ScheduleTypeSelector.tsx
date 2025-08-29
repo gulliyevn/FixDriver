@@ -54,7 +54,7 @@ const ScheduleTypeSelector: React.FC<ScheduleTypeSelectorProps> = ({
     {
       id: 'oneWay',
       icon: 'arrow-forward',
-      titleKey: 'common.there',
+      titleKey: 'common.oneWay',
       descriptionKey: 'common.schedule.types.oneWayDesc'
     },
     {
@@ -66,7 +66,7 @@ const ScheduleTypeSelector: React.FC<ScheduleTypeSelectorProps> = ({
     {
       id: 'thereAndBack',
       icon: 'swap-horizontal',
-      titleKey: 'common.thereAndBack',
+      titleKey: 'common.roundTrip',
       descriptionKey: 'common.schedule.types.thereAndBackDesc'
     },
     {
