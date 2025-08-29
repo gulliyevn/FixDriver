@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react';
+import React, { useRef, useCallback, forwardRef, useImperativeHandle, useMemo, memo } from 'react';
 import { View, Alert, Animated } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
@@ -327,4 +327,4 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
   );
 });
 
-export default MapViewComponent;
+export default memo(MapViewComponent);

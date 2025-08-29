@@ -98,6 +98,8 @@
   "sun": "B",
   "there": "Tək-Yön",
   "thereAndBack": "Gediş-Dönüş",
+  "customizeSchedule": "Cədvəli fərdiləşdir",
+  "selectDaysToCustomize": "Vaxtı fərdiləşdirmək üçün günləri seçin",
   "normal": "Sabit",
   "smooth": "Qeyri-Sabit",
   "fixed": "Hərgün",
@@ -109,5 +111,16 @@
   "time": "Vaxt",
   "estimatedTime": "±5 dəq (təxmini)",
   "scheduleInfo": "Bu səhifədə səyahət cədvəllərini konfiqurasiya edə bilərsiniz. Yuxarıdan həftənin günlərini seçin, sonra hər marşrut sahəsi üçün yola çıxma vaxtını təyin edin. Aralıq dayanacaqlar üçün vaxtlar trafik və məsafəni nəzərə alaraq avtomatik hesablanır (±5 dəqiqə).",
-  "selectTime": "Vaxtı seçin"
+  "selectTime": "Vaxtı seçin",
+  "schedule": {
+    "selectType": "Cədvəl növünü seçin",
+    "types": {
+      "weekdaysDesc": "Yalnız iş günlərində səyahətlər",
+      "weekendsDesc": "Yalnız həftəsonu səyahətlər",
+      "thereAndBackDesc": "Bir gündə gediş-dönüş səyahəti",
+      "oneWayDesc": "Tək yönlü səyahət",
+      "flexible": "Çevik cədvəl",
+      "flexibleDesc": "Həftəiçi və həftəsonu üçün fərqli vaxtlar"
+    }
+  }
 } 

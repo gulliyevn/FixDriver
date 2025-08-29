@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, memo } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
@@ -66,6 +66,8 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   const [showAddressList, setShowAddressList] = useState(false);
   const [activeAddressId, setActiveAddressId] = useState<string | null>(null);
   const [addressValidation, setAddressValidation] = useState<{ [key: string]: boolean }>({});
+  const [isExpandButtonPressed, setIsExpandButtonPressed] = useState(false);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   // Обновляем адреса при изменении initialAddresses
   useEffect(() => {
@@ -228,6 +230,11 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     setIsMapMode(!isMapMode);
   };
 
+  const handleExpandButtonPress = () => {
+    setIsExpandButtonPressed(!isExpandButtonPressed);
+    setIsMapExpanded(!isMapExpanded);
+  };
+
   const handleAddressChange = (id: string, text: string) => {
     const updatedAddresses = addresses.map(addr => 
       addr.id === id ? { ...addr, address: text } : addr
@@ -358,7 +365,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
       {/* Карта */}
       {isMapMode && (
         <View style={{ 
-          height: 200, 
+          height: isMapExpanded ? 600 : 200, 
           borderRadius: 8, 
           overflow: 'hidden',
           borderWidth: 1,
@@ -366,13 +373,15 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
           marginBottom: 12,
           position: 'relative'
         }}>
-          <MapViewComponent
-            ref={mapRef}
-            initialLocation={{ latitude: 40.3777, longitude: 49.8920 }}
-            onLocationSelect={handleMapPress}
-            routePoints={mapRoutePoints}
-            showTrafficMock={false}
-          />
+          {isMapMode && (
+            <MapViewComponent
+              ref={mapRef}
+              initialLocation={{ latitude: 40.3777, longitude: 49.8920 }}
+              onLocationSelect={handleMapPress}
+              routePoints={mapRoutePoints}
+              showTrafficMock={false}
+            />
+          )}
           
           {/* Кнопка переключения режима в правом верхнем углу */}
           <TouchableOpacity 
@@ -392,6 +401,31 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
             onPress={toggleMapMode}
           >
             <Ionicons name="text" size={16} color="#FFFFFF" />
+          </TouchableOpacity>
+          
+          {/* Кнопка раскрытия в правом нижнем углу */}
+          <TouchableOpacity 
+            style={{ 
+              position: 'absolute',
+              bottom: 8,
+              right: 8,
+              backgroundColor: colors.primary,
+              borderRadius: 20,
+              padding: 8,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 3
+            }}
+            onPress={handleExpandButtonPress}
+            activeOpacity={0.7}
+          >
+            <Ionicons 
+              name={isExpandButtonPressed ? "contract" : "expand"} 
+              size={16} 
+              color="#FFFFFF" 
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -645,4 +679,4 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   );
 };
 
-export default FixDriveMapInput;
+export default memo(FixDriveMapInput);

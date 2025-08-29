@@ -96,8 +96,10 @@
   "fri": "Ven",
   "sat": "Sam",
   "sun": "Dim",
-  "there": "Aller simple",
+  "there": "Aller",
   "thereAndBack": "Aller-retour",
+  "customizeSchedule": "Personnaliser l'horaire",
+  "selectDaysToCustomize": "Sélectionnez les jours pour personnaliser l'heure",
   "normal": "régulier",
   "smooth": "fluide",
   "fixed": "quotidien",
@@ -109,5 +111,16 @@
   "time": "Heure",
   "estimatedTime": "±5 min (estimé)",
   "scheduleInfo": "Sur cette page, vous pouvez configurer les horaires de voyage. Sélectionnez les jours de la semaine en haut, puis définissez les heures de départ pour chaque champ d'itinéraire. Les temps pour les arrêts intermédiaires sont calculés automatiquement en tenant compte du trafic et de la distance (±5 minutes).",
-  "selectTime": "Sélectionner l'heure"
+  "selectTime": "Sélectionner l'heure",
+  "schedule": {
+    "selectType": "Choisir le type d'horaire",
+    "types": {
+      "weekdaysDesc": "Trajets uniquement les jours de semaine",
+      "weekendsDesc": "Trajets uniquement le week-end",
+      "thereAndBackDesc": "Trajet aller-retour en une journée",
+      "oneWayDesc": "Trajet aller simple",
+      "flexible": "Horaire flexible",
+      "flexibleDesc": "Heures différentes pour les jours de semaine et le week-end"
+    }
+  }
 } 

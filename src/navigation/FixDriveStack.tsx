@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import FixWaveScreen from '../screens/common/FixWaveScreen';
+import FixDriveScreen from '../screens/common/FixDriveScreen';
 import { ClientStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<ClientStackParamList>();
@@ -13,7 +13,7 @@ const FixDriveStack: React.FC = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="FixDrive" component={FixWaveScreen} />
+      <Stack.Screen name="FixDrive" component={FixDriveScreen} />
     </Stack.Navigator>
   );
 };

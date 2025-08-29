@@ -98,6 +98,8 @@
   "sun": "Sun",
   "there": "One-Way",
   "thereAndBack": "Return",
+  "customizeSchedule": "Customize Schedule",
+  "selectDaysToCustomize": "Select days to customize time",
   "normal": "Regular",
   "smooth": "Smooth",
   "fixed": "Daily",
@@ -109,5 +111,16 @@
   "time": "Time",
   "estimatedTime": "±5 min (estimated)",
   "scheduleInfo": "On this page you can configure trip schedules. Select days of the week at the top, then set departure times for each route field. Times for intermediate stops are calculated automatically considering traffic and distance (±5 minutes).",
-  "selectTime": "Select time"
+  "selectTime": "Select time",
+  "schedule": {
+    "selectType": "Choose schedule type",
+    "types": {
+      "weekdaysDesc": "Trips only on working days",
+      "weekendsDesc": "Trips only on weekends",
+      "thereAndBackDesc": "Round trip in one day",
+      "oneWayDesc": "One-way trip",
+      "flexible": "Flexible schedule",
+      "flexibleDesc": "Different times for weekdays and weekends"
+    }
+  }
 }

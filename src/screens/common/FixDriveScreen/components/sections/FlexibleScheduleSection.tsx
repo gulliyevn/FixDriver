@@ -1,0 +1,123 @@
+import React from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import TimePicker from '../../../../../components/TimePicker';
+import ReturnTripCheckbox from '../../../../../components/ReturnTripCheckbox';
+import { styles } from './FlexibleScheduleSection.styles';
+import { TIME_PICKER_COLORS } from '../constants';
+import { CustomizationModal } from '../CustomizationModal';
+import { useCustomizedDays } from '../hooks/useCustomizedDays';
+
+interface Props {
+  t: (key: string) => string;
+  colors: Record<string, any>;
+  weekDays: { key: string; label: string }[];
+  selectedDays: string[];
+  selectedTime?: string;
+  onTimeChange?: (time: string) => void;
+  returnTime?: string;
+  onReturnTimeChange?: (time: string) => void;
+  isReturnTrip: boolean;
+  onReturnTripChange?: (v: boolean) => void;
+}
+
+export const FlexibleScheduleSection: React.FC<Props> = ({
+  t,
+  colors,
+  weekDays,
+  selectedDays,
+  selectedTime,
+  onTimeChange,
+  returnTime,
+  onReturnTimeChange,
+  isReturnTrip,
+  onReturnTripChange,
+}) => {
+  const customization = useCustomizedDays();
+  const customizedKeys = Object.keys(customization.customizedDays);
+
+  return (
+    <View>
+      <View style={styles.rowBetween}>
+        <View style={styles.flex1}>
+          <TimePicker
+            value={selectedTime}
+            onChange={onTimeChange}
+            placeholder={t('common.selectTime')}
+            indicatorColor={TIME_PICKER_COLORS.THERE}
+            title={`${t('common.there')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
+          />
+        </View>
+        {customizedKeys.length === 0 && (
+          <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
+            <Ionicons name="add" size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {customizedKeys.map((dayKey, index) => {
+        const day = weekDays.find(d => d.key === dayKey);
+        if (!day) return null;
+        const isLast = index === customizedKeys.length - 1;
+        return (
+          <View key={dayKey} style={[styles.rowBetween, styles.spacerTop16]}>
+            <View style={styles.flex1}>
+              <TimePicker
+                value={customization.customizedDays[dayKey]?.there || ''}
+                onChange={(time) => customization.setCustomizedDays({
+                  ...customization.customizedDays,
+                  [dayKey]: { ...customization.customizedDays[dayKey], there: time, back: customization.customizedDays[dayKey]?.back || '' }
+                })}
+                placeholder={t('common.selectTime')}
+                indicatorColor={TIME_PICKER_COLORS.THERE}
+                title={`${t('common.there')} - ${day.label}`}
+              />
+            </View>
+            {isLast && (
+              <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
+                <Ionicons name="add" size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
+          </View>
+        );
+      })}
+
+      {(selectedTime || customizedKeys.length > 0) && (
+        <View style={styles.spacerTop16}>
+          <ReturnTripCheckbox
+            checked={isReturnTrip}
+            onCheckedChange={v => onReturnTripChange?.(v)}
+            label={t('common.thereAndBack')}
+          />
+        </View>
+      )}
+
+      {isReturnTrip && (selectedTime || customizedKeys.length > 0) && (
+        <View style={styles.spacerTop16}>
+          <TimePicker
+            value={returnTime}
+            onChange={onReturnTimeChange}
+            placeholder={t('common.selectTime')}
+            indicatorColor={TIME_PICKER_COLORS.BACK}
+            title={`${t('common.back')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
+          />
+        </View>
+      )}
+
+      <CustomizationModal
+        visible={customization.showCustomizationModal}
+        onClose={customization.closeModal}
+        onSave={customization.saveModal}
+        colors={colors}
+        t={t}
+        weekDays={weekDays}
+        selectedDays={selectedDays}
+        selectedCustomDays={customization.selectedCustomDays}
+        onSelectedCustomDaysChange={customization.setSelectedCustomDays}
+        tempCustomizedDays={customization.tempCustomizedDays}
+        onTempCustomizedDaysChange={customization.setTempCustomizedDays}
+        isReturnTrip={isReturnTrip}
+      />
+    </View>
+  );
+};

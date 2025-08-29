@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import OrdersMapScreen from '../screens/common/OrdersMapScreen';
 import DriversScreen from '../screens/client/DriversScreen';
 import ChatStack from './ChatStack';
-import FixWaveScreen from '../screens/common/FixWaveScreen';
+import ScheduleScreen from '../screens/common/ScheduleScreen';
 import ClientProfileStack from './ClientProfileStack';
 import { ClientStackParamList } from '../types/navigation';
 import { useLanguage } from '../context/LanguageContext';
@@ -39,7 +39,7 @@ const TabNavigator: React.FC = () => {
     >
       <Tab.Screen name="Map" component={OrdersMapScreen} />
       <Tab.Screen name="Drivers" component={DriversScreen} />
-      <Tab.Screen name="Schedule" component={FixWaveScreen} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen 
         name="ClientProfile" 
@@ -56,6 +56,7 @@ const ClientNavigator: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MainTabs" component={TabNavigator} />
+
     </Stack.Navigator>
   );
 };

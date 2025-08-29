@@ -96,8 +96,10 @@
   "fri": "Fr",
   "sat": "Sa",
   "sun": "So",
-  "there": "Hinfahrt",
-  "thereAndBack": "Rückfahrt",
+  "there": "Hin",
+  "thereAndBack": "Hin und zurück",
+  "customizeSchedule": "Zeitplan anpassen",
+  "selectDaysToCustomize": "Wählen Sie Tage aus, um die Zeit anzupassen",
   "normal": "Normal",
   "smooth": "Glatt",
   "fixed": "Täglich",
@@ -109,5 +111,16 @@
   "time": "Zeit",
   "estimatedTime": "±5 min (geschätzt)",
   "scheduleInfo": "Auf dieser Seite können Sie Reisepläne konfigurieren. Wählen Sie oben die Wochentage aus und legen Sie dann die Abfahrtszeiten für jedes Routenfeld fest. Zeiten für Zwischenstopps werden automatisch unter Berücksichtigung von Verkehr und Entfernung berechnet (±5 Minuten).",
-  "selectTime": "Zeit auswählen"
+  "selectTime": "Zeit auswählen",
+  "schedule": {
+    "selectType": "Zeitplantyp auswählen",
+    "types": {
+      "weekdaysDesc": "Fahrten nur an Werktagen",
+      "weekendsDesc": "Fahrten nur am Wochenende",
+      "thereAndBackDesc": "Hin- und Rückfahrt an einem Tag",
+      "oneWayDesc": "Hinfahrt",
+      "flexible": "Flexibler Zeitplan",
+      "flexibleDesc": "Verschiedene Zeiten für Werktage und Wochenende"
+    }
+  }
 } 

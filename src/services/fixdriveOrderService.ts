@@ -18,17 +18,18 @@ export interface OrderData {
   status: 'draft' | 'confirmed' | 'completed' | 'cancelled';
 }
 
-class FixWaveOrderService {
-  private storageKey = 'fixwave_order_data';
-  private sessionKey = 'fixwave_session_data';
+class FixDriveOrderService {
+  private storageKey = 'fixdrive_order_data';
+  private sessionKey = 'fixdrive_session_data';
 
   // Сохранение данных заказа
-  async saveOrderData(orderData: Omit<OrderData, 'id' | 'createdAt'>): Promise<OrderData> {
+  async saveOrderData(orderData: Omit<OrderData, 'id' | 'createdAt' | 'status'>): Promise<OrderData> {
     try {
       const order: OrderData = {
         ...orderData,
         id: `order_${Date.now()}`,
         createdAt: Date.now(),
+        status: 'draft',
       };
 
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
@@ -102,7 +103,7 @@ class FixWaveOrderService {
     isCalculated: boolean;
   }>): Promise<void> {
     try {
-      const containerTimesKey = 'fixwave_container_times';
+      const containerTimesKey = 'fixdrive_container_times';
       const containerTimesWithTimestamp = {
         containers: containerData,
         lastUpdate: Date.now(),
@@ -245,4 +246,4 @@ class FixWaveOrderService {
   }
 }
 
-export const fixwaveOrderService = new FixWaveOrderService();
+export const fixdriveOrderService = new FixDriveOrderService();

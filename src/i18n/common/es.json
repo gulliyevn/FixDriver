@@ -98,6 +98,8 @@
   "sun": "Dom",
   "there": "Ida",
   "thereAndBack": "vuelta",
+  "customizeSchedule": "Personalizar Horario",
+  "selectDaysToCustomize": "Selecciona días para personalizar tiempo",
   "normal": "Regular",
   "smooth": "Sin problemas",
   "fixed": "Diario",
@@ -109,5 +111,16 @@
   "time": "Hora",
   "estimatedTime": "±5 min (estimado)",
   "scheduleInfo": "En esta página puedes configurar horarios de viajes. Selecciona los días de la semana en la parte superior, luego establece las horas de salida para cada campo de ruta. Los tiempos para paradas intermedias se calculan automáticamente considerando tráfico y distancia (±5 minutos).",
-  "selectTime": "Seleccionar hora"
+  "selectTime": "Seleccionar hora",
+  "schedule": {
+    "selectType": "Elegir tipo de horario",
+    "types": {
+      "weekdaysDesc": "Viajes solo en días laborables",
+      "weekendsDesc": "Viajes solo en fines de semana",
+      "thereAndBackDesc": "Viaje de ida y vuelta en un día",
+      "oneWayDesc": "Viaje de ida",
+      "flexible": "Horario flexible",
+      "flexibleDesc": "Horas diferentes para días laborables y fines de semana"
+    }
+  }
 } 
