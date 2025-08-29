@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TimePicker from '../../../../components/TimePicker';
+import { TIME_PICKER_COLORS } from './constants';
 
 interface CustomizationModalProps {
   visible: boolean;
@@ -32,6 +33,19 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
   onTempCustomizedDaysChange,
   isReturnTrip
 }) => {
+  // Функция для получения цвета дня
+  const getDayColor = (dayKey: string) => {
+    const colorMap: Record<string, string> = {
+      'mon': TIME_PICKER_COLORS.MONDAY,
+      'tue': TIME_PICKER_COLORS.TUESDAY,
+      'wed': TIME_PICKER_COLORS.WEDNESDAY,
+      'thu': TIME_PICKER_COLORS.THURSDAY,
+      'fri': TIME_PICKER_COLORS.FRIDAY,
+      'sat': TIME_PICKER_COLORS.SATURDAY,
+      'sun': TIME_PICKER_COLORS.SUNDAY,
+    };
+    return colorMap[dayKey] || TIME_PICKER_COLORS.THERE;
+  };
   return (
     <Modal
       visible={visible}
@@ -127,7 +141,7 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                     });
                   }}
                   placeholder={t('common.selectTime')}
-                  indicatorColor="#4CAF50"
+                  indicatorColor={getDayColor(dayKey)}
                   title={`${t('common.there')} - ${day.label}`}
                 />
                 {isReturnTrip && (
@@ -145,8 +159,8 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                         });
                       }}
                       placeholder={t('common.selectTime')}
-                      indicatorColor="#7E57C2"
-                      title={`${t('common.back')} - ${day.label}`}
+                      indicatorColor={getDayColor(dayKey)}
+                      title={`${t('common.return')} - ${day.label}`}
                     />
                   </View>
                 )}

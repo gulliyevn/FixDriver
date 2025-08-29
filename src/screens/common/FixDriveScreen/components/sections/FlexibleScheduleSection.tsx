@@ -35,6 +35,30 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
 }) => {
   const customization = useCustomizedDays();
   const customizedKeys = Object.keys(customization.customizedDays);
+  
+  // Функция для сортировки дней по порядку недели
+  const sortDaysByWeekOrder = (days: string[]) => {
+    const weekOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    return days.sort((a, b) => weekOrder.indexOf(a) - weekOrder.indexOf(b));
+  };
+
+  // Проверяем, есть ли еще дни для настройки (исключаем первый день, который уже показан сверху)
+  const remainingDaysToCustomize = selectedDays.slice(1).filter(day => !customizedKeys.includes(day));
+  const hasMoreDaysToCustomize = remainingDaysToCustomize.length > 0;
+
+  // Функция для получения цвета дня
+  const getDayColor = (dayKey: string) => {
+    const colorMap: Record<string, string> = {
+      'mon': TIME_PICKER_COLORS.MONDAY,
+      'tue': TIME_PICKER_COLORS.TUESDAY,
+      'wed': TIME_PICKER_COLORS.WEDNESDAY,
+      'thu': TIME_PICKER_COLORS.THURSDAY,
+      'fri': TIME_PICKER_COLORS.FRIDAY,
+      'sat': TIME_PICKER_COLORS.SATURDAY,
+      'sun': TIME_PICKER_COLORS.SUNDAY,
+    };
+    return colorMap[dayKey] || TIME_PICKER_COLORS.THERE;
+  };
 
   return (
     <View>
@@ -44,21 +68,21 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
             value={selectedTime}
             onChange={onTimeChange}
             placeholder={t('common.selectTime')}
-            indicatorColor={TIME_PICKER_COLORS.THERE}
-            title={`${t('common.there')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
+            indicatorColor={getDayColor(sortDaysByWeekOrder([...selectedDays])[0])}
+            title={`${t('common.there')} - ${weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}`}
           />
         </View>
-        {customizedKeys.length === 0 && (
+        {hasMoreDaysToCustomize && customizedKeys.length === 0 && (
           <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
             <Ionicons name="add" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         )}
       </View>
 
-      {customizedKeys.map((dayKey, index) => {
+      {sortDaysByWeekOrder(customizedKeys.filter(dayKey => selectedDays.includes(dayKey))).map((dayKey, index, filteredKeys) => {
         const day = weekDays.find(d => d.key === dayKey);
         if (!day) return null;
-        const isLast = index === customizedKeys.length - 1;
+        const isLast = index === filteredKeys.length - 1;
         return (
           <View key={dayKey} style={[styles.rowBetween, styles.spacerTop16]}>
             <View style={styles.flex1}>
@@ -69,11 +93,11 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
                   [dayKey]: { ...customization.customizedDays[dayKey], there: time, back: customization.customizedDays[dayKey]?.back || '' }
                 })}
                 placeholder={t('common.selectTime')}
-                indicatorColor={TIME_PICKER_COLORS.THERE}
+                indicatorColor={getDayColor(dayKey)}
                 title={`${t('common.there')} - ${day.label}`}
               />
             </View>
-            {isLast && (
+            {hasMoreDaysToCustomize && isLast && (
               <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
                 <Ionicons name="add" size={20} color="#FFFFFF" />
               </TouchableOpacity>
@@ -93,15 +117,51 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
       )}
 
       {isReturnTrip && (selectedTime || customizedKeys.length > 0) && (
-        <View style={styles.spacerTop16}>
-          <TimePicker
-            value={returnTime}
-            onChange={onReturnTimeChange}
-            placeholder={t('common.selectTime')}
-            indicatorColor={TIME_PICKER_COLORS.BACK}
-            title={`${t('common.return')} - ${weekDays.find(d => d.key === selectedDays[0])?.label || ''}`}
-          />
-        </View>
+        <>
+          <View style={styles.rowBetween}>
+            <View style={styles.flex1}>
+              <TimePicker
+                value={returnTime}
+                onChange={onReturnTimeChange}
+                placeholder={t('common.selectTime')}
+                indicatorColor={getDayColor(sortDaysByWeekOrder([...selectedDays])[0])}
+                title={`${t('common.return')} - ${weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}`}
+              />
+            </View>
+            {hasMoreDaysToCustomize && customizedKeys.length === 0 && (
+              <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
+                <Ionicons name="add" size={20} color="#FFFFFF" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {sortDaysByWeekOrder(customizedKeys.filter(dayKey => selectedDays.includes(dayKey))).map((dayKey, index, filteredKeys) => {
+            const day = weekDays.find(d => d.key === dayKey);
+            if (!day) return null;
+            const isLast = index === filteredKeys.length - 1;
+            return (
+              <View key={`return-${dayKey}`} style={[styles.rowBetween, styles.spacerTop16]}>
+                <View style={styles.flex1}>
+                  <TimePicker
+                    value={customization.customizedDays[dayKey]?.back || ''}
+                    onChange={(time) => customization.setCustomizedDays({
+                      ...customization.customizedDays,
+                      [dayKey]: { ...customization.customizedDays[dayKey], there: customization.customizedDays[dayKey]?.there || '', back: time }
+                    })}
+                    placeholder={t('common.selectTime')}
+                    indicatorColor={getDayColor(dayKey)}
+                    title={`${t('common.return')} - ${day.label}`}
+                  />
+                </View>
+                {hasMoreDaysToCustomize && isLast && (
+                  <TouchableOpacity style={[styles.addButton, { backgroundColor: colors.primary }]} onPress={customization.openModal}>
+                    <Ionicons name="add" size={20} color="#FFFFFF" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            );
+          })}
+        </>
       )}
 
       <CustomizationModal
