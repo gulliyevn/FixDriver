@@ -9,17 +9,21 @@ import { StyleSheet } from 'react-native';
 interface TimePickerProps {
   value?: string; // формат "HH:mm"
   onChange: (time: string) => void;
+  onClear?: () => void; // функция для очистки времени
   placeholder?: string;
   indicatorColor?: string;
   title?: string;
+  dayLabel?: string; // отдельно день недели после тире
 }
 
 const TimePicker: React.FC<TimePickerProps> = ({
   value,
   onChange,
+  onClear,
   placeholder = 'Выберите время',
   indicatorColor,
-  title
+  title,
+  dayLabel
 }) => {
   const { isDark } = useTheme();
   const colors = getCurrentColors(isDark);
@@ -72,15 +76,41 @@ const TimePicker: React.FC<TimePickerProps> = ({
       >
         <View style={styles.buttonContent}>
           {indicatorColor && (
-            <View style={[styles.indicator, { backgroundColor: indicatorColor }]} />
+            <>
+              <View style={[styles.indicator, { backgroundColor: indicatorColor }]} />
+              <Text style={[styles.dash, { color: colors.text }]}>—</Text>
+            </>
+          )}
+          {dayLabel && (
+            <Text style={[styles.dayLabel, { color: colors.text }]}>
+              {dayLabel}
+            </Text>
           )}
           <Text style={[
             styles.timeText,
             { color: value ? colors.text : colors.textSecondary }
           ]}>
-            {formatDisplayTime(value)}
+            {value || placeholder}
           </Text>
         </View>
+        
+        {/* Крестик для удаления - показываем только когда есть значение */}
+        {value && onClear && (
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={(e) => {
+              e.stopPropagation(); // Предотвращаем открытие picker'а
+              onClear();
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons 
+              name="close-circle" 
+              size={18} 
+              color={colors.textSecondary} 
+            />
+          </TouchableOpacity>
+        )}
         <Ionicons 
           name="time-outline" 
           size={20} 
@@ -165,10 +195,23 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: 12,
+    marginRight: 8,
+  },
+  dash: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  dayLabel: {
+    fontSize: 15,
+    marginRight: 8,
   },
   timeText: {
     fontSize: 15,
+  },
+  clearButton: {
+    marginRight: 8,
+    padding: 2,
+    alignSelf: 'center',
   },
   modalOverlay: {
     flex: 1,

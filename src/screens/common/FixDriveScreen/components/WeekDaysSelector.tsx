@@ -23,6 +23,7 @@ interface WeekDaysSelectorProps {
   onReturnWeekdaysTimeChange?: (time: string) => void;
   isReturnTrip?: boolean;
   onReturnTripChange?: (isReturnTrip: boolean) => void;
+
   scheduleType?: string;
 }
 
@@ -42,6 +43,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
   onReturnWeekdaysTimeChange,
   isReturnTrip = false,
   onReturnTripChange,
+
   scheduleType
 }) => {
   const [animations] = useState(() => Array(7).fill(0).map(() => new Animated.Value(1)));
@@ -70,6 +72,11 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
   };
 
   const renderSection = () => {
+    console.log('🔍 WeekDaysSelector Debug:');
+    console.log('  - scheduleType:', scheduleType);
+    console.log('  - selectedDays:', selectedDays);
+    console.log('  - selectedDays.length:', selectedDays.length);
+    
     switch (scheduleType) {
       case 'weekdays':
         return (
@@ -89,6 +96,9 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
           />
         );
       case 'flexible':
+        console.log('🎯 WeekDaysSelector: Режим flexible активирован');
+        console.log('🔢 WeekDaysSelector: Проверка условия selectedDays.length >= 2:', selectedDays.length >= 2);
+        
         return selectedDays.length >= 2 ? (
           <FlexibleScheduleSection
             t={t}
@@ -102,16 +112,49 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
             isReturnTrip={!!isReturnTrip}
             onReturnTripChange={onReturnTripChange}
           />
+        ) : (
+          console.log('❌ WeekDaysSelector: FlexibleScheduleSection НЕ отображается - недостаточно дней'),
+          null
+        );
+      
+      // Добавляем кнопку сохранения для режима flexible
+      case 'flexible-with-button':
+        console.log('🎯 WeekDaysSelector: Режим flexible с кнопкой активирован');
+        
+        return selectedDays.length >= 2 ? (
+          <View>
+            <FlexibleScheduleSection
+              t={t}
+              colors={colors}
+              weekDays={weekDays}
+              selectedDays={selectedDays}
+              selectedTime={selectedTime}
+              onTimeChange={onTimeChange}
+              returnTime={returnTime}
+              onReturnTimeChange={onReturnTimeChange}
+              isReturnTrip={!!isReturnTrip}
+              onReturnTripChange={onReturnTripChange}
+
+            />
+                            </View>
         ) : null;
       case 'oneWay':
+        console.log('🎯 WeekDaysSelector: Режим oneWay активирован');
+        console.log('⏰ selectedTime:', selectedTime);
+        
         return (
-          <TimePicker
-            value={selectedTime}
-            onChange={time => onTimeChange?.(time)}
-            placeholder={t('common.selectTime')}
-            indicatorColor={TIME_PICKER_COLORS.THERE}
-            title={t('common.there')}
-          />
+          <View>
+            <TimePicker
+              value={selectedTime}
+              onChange={time => onTimeChange?.(time)}
+              onClear={() => onTimeChange?.('')}
+              placeholder={t('common.selectTime')}
+              indicatorColor={TIME_PICKER_COLORS.THERE}
+              title={t('common.there')}
+            />
+            
+
+          </View>
         );
       case 'thereAndBack':
         return (
@@ -119,6 +162,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
             <TimePicker
               value={selectedTime}
               onChange={time => onTimeChange?.(time)}
+              onClear={() => onTimeChange?.('')}
               placeholder={t('common.selectTime')}
               indicatorColor={TIME_PICKER_COLORS.THERE}
               title={t('common.there')}
@@ -128,6 +172,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
                 <TimePicker
                   value={returnTime}
                   onChange={time => onReturnTimeChange?.(time)}
+                  onClear={() => onReturnTimeChange?.('')}
                   placeholder={t('common.selectTime')}
                   indicatorColor={TIME_PICKER_COLORS.BACK}
                   title={t('common.return')}
@@ -137,6 +182,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
           </>
         );
       default:
+        console.log('⚠️ WeekDaysSelector: Неизвестный scheduleType или null');
         return null;
     }
   };
@@ -149,6 +195,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
           return (
             <Animated.View key={day.key} style={{ transform: [{ scale: animations[index] }] }}>
               <TouchableOpacity
+                testID={`day-button-${day.key}`}
                 style={[styles.dayButton, { 
                   backgroundColor: isActive ? colors.primary : isDark ? colors.surface : colors.background
                 }]}

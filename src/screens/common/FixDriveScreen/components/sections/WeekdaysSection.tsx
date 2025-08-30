@@ -47,7 +47,7 @@ export const WeekdaysSection: React.FC<Props> = ({
             onChange={onTimeChange}
             placeholder={t('common.selectTime')}
             indicatorColor={TIME_PICKER_COLORS.WEEKDAYS}
-            title={t('common.weekdaysOnly')}
+            dayLabel={t('common.weekdaysOnly')}
           />
           <View style={styles.spacerTop16}>
             <TimePicker
@@ -55,7 +55,7 @@ export const WeekdaysSection: React.FC<Props> = ({
               onChange={onReturnTimeChange}
               placeholder={t('common.selectTime')}
               indicatorColor={TIME_PICKER_COLORS.WEEKEND}
-              title={t('common.weekend')}
+              dayLabel={t('common.weekend')}
             />
           </View>
         </>
@@ -77,7 +77,7 @@ export const WeekdaysSection: React.FC<Props> = ({
           onChange={onReturnTripTimeChange}
           placeholder={t('common.selectTime')}
           indicatorColor={TIME_PICKER_COLORS.WEEKDAYS}
-          title={t('common.weekdaysOnly')}
+          dayLabel={t('common.weekdaysOnly')}
         />
       )}
 
@@ -88,7 +88,7 @@ export const WeekdaysSection: React.FC<Props> = ({
             onChange={onReturnWeekdaysTimeChange}
             placeholder={t('common.selectTime')}
             indicatorColor={TIME_PICKER_COLORS.WEEKEND}
-            title={t('common.weekend')}
+            dayLabel={t('common.weekend')}
           />
         </View>
       )}

@@ -7,7 +7,7 @@ import { TIME_PICKER_COLORS } from './constants';
 interface CustomizationModalProps {
   visible: boolean;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (isReturnTrip: boolean) => Promise<boolean>;
   colors: any;
   t: (key: string) => string;
   weekDays: { key: string; label: string }[];
@@ -17,6 +17,7 @@ interface CustomizationModalProps {
   tempCustomizedDays: {[key: string]: {there: string, back: string}};
   onTempCustomizedDaysChange: (days: {[key: string]: {there: string, back: string}}) => void;
   isReturnTrip: boolean;
+  validationError?: { message: string; field: string } | null;
 }
 
 export const CustomizationModal: React.FC<CustomizationModalProps> = ({
@@ -31,7 +32,8 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
   onSelectedCustomDaysChange,
   tempCustomizedDays,
   onTempCustomizedDaysChange,
-  isReturnTrip
+  isReturnTrip,
+  validationError
 }) => {
   // Функция для получения цвета дня
   const getDayColor = (dayKey: string) => {
@@ -142,7 +144,7 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                   }}
                   placeholder={t('common.selectTime')}
                   indicatorColor={getDayColor(dayKey)}
-                  title={`${t('common.there')} - ${day.label}`}
+                  dayLabel={day.label}
                 />
                 {isReturnTrip && (
                   <View style={{ marginTop: 12 }}>
@@ -160,13 +162,28 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                       }}
                       placeholder={t('common.selectTime')}
                       indicatorColor={getDayColor(dayKey)}
-                      title={`${t('common.return')} - ${day.label}`}
+                      dayLabel={day.label}
                     />
                   </View>
                 )}
               </View>
             );
           })}
+          
+          {validationError && (
+            <View style={{
+              backgroundColor: '#FFE6E6',
+              padding: 12,
+              borderRadius: 8,
+              marginTop: 16,
+              borderWidth: 1,
+              borderColor: '#FF6B6B',
+            }}>
+              <Text style={{ color: '#D32F2F', fontSize: 14, textAlign: 'center' }}>
+                {validationError.message}
+              </Text>
+            </View>
+          )}
           
           <TouchableOpacity
             style={{
@@ -176,7 +193,7 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
               alignItems: 'center',
               marginTop: 20,
             }}
-            onPress={onSave}
+            onPress={() => onSave(isReturnTrip)}
           >
             <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}>
               {t('common.done')}

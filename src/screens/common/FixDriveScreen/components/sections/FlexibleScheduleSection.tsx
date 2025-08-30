@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TimePicker from '../../../../../components/TimePicker';
 import ReturnTripCheckbox from '../../../../../components/ReturnTripCheckbox';
@@ -7,6 +7,7 @@ import { styles } from './FlexibleScheduleSection.styles';
 import { TIME_PICKER_COLORS } from '../constants';
 import { CustomizationModal } from '../CustomizationModal';
 import { useCustomizedDays } from '../hooks/useCustomizedDays';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   t: (key: string) => string;
@@ -19,6 +20,7 @@ interface Props {
   onReturnTimeChange?: (time: string) => void;
   isReturnTrip: boolean;
   onReturnTripChange?: (v: boolean) => void;
+
 }
 
 export const FlexibleScheduleSection: React.FC<Props> = ({
@@ -32,9 +34,11 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
   onReturnTimeChange,
   isReturnTrip,
   onReturnTripChange,
+
 }) => {
   const customization = useCustomizedDays();
   const customizedKeys = Object.keys(customization.customizedDays);
+  const [mainValidationError, setMainValidationError] = useState<string | null>(null);
   
   // Функция для сортировки дней по порядку недели
   const sortDaysByWeekOrder = (days: string[]) => {
@@ -45,6 +49,14 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
   // Проверяем, есть ли еще дни для настройки (исключаем первый день, который уже показан сверху)
   const remainingDaysToCustomize = selectedDays.slice(1).filter(day => !customizedKeys.includes(day));
   const hasMoreDaysToCustomize = remainingDaysToCustomize.length > 0;
+  
+  // Логирование для отладки кнопки сохранения
+  const shouldShowSaveButton = selectedTime || customizedKeys.length > 0;
+  console.log('🔍 FlexibleScheduleSection Debug:');
+  console.log('  - selectedTime:', selectedTime);
+  console.log('  - customizedKeys:', customizedKeys);
+  console.log('  - customizedKeys.length:', customizedKeys.length);
+  console.log('  - shouldShowSaveButton:', shouldShowSaveButton);
 
   // Функция для получения цвета дня
   const getDayColor = (dayKey: string) => {
@@ -60,6 +72,35 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
     return colorMap[dayKey] || TIME_PICKER_COLORS.THERE;
   };
 
+  // Функция валидации основного расписания
+  const validateMainSchedule = (): string | null => {
+    if (!selectedTime || !selectedTime.trim()) {
+      return 'Выберите время "туда"';
+    }
+    
+    if (isReturnTrip && (!returnTime || !returnTime.trim())) {
+      return 'Выберите время "обратно"';
+    }
+    
+    // Проверяем кастомизированные дни
+    for (const dayKey of customizedKeys) {
+      const dayData = customization.customizedDays[dayKey];
+      if (!dayData.there || !dayData.there.trim()) {
+        const day = weekDays.find(d => d.key === dayKey);
+        return `Выберите время "туда" для ${day?.label || dayKey}`;
+      }
+      
+      if (isReturnTrip && (!dayData.back || !dayData.back.trim())) {
+        const day = weekDays.find(d => d.key === dayKey);
+        return `Выберите время "обратно" для ${day?.label || dayKey}`;
+      }
+    }
+    
+    return null;
+  };
+
+
+
   return (
     <View>
       <View style={styles.rowBetween}>
@@ -67,9 +108,10 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
           <TimePicker
             value={selectedTime}
             onChange={onTimeChange}
+            onClear={() => onTimeChange?.('')}
             placeholder={t('common.selectTime')}
             indicatorColor={getDayColor(sortDaysByWeekOrder([...selectedDays])[0])}
-            title={`${t('common.there')} - ${weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}`}
+            dayLabel={weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}
           />
         </View>
         {hasMoreDaysToCustomize && customizedKeys.length === 0 && (
@@ -94,7 +136,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
                 })}
                 placeholder={t('common.selectTime')}
                 indicatorColor={getDayColor(dayKey)}
-                title={`${t('common.there')} - ${day.label}`}
+                dayLabel={day.label}
               />
             </View>
             {hasMoreDaysToCustomize && isLast && (
@@ -107,7 +149,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
       })}
 
       {(selectedTime || customizedKeys.length > 0) && (
-        <View style={styles.spacerTop16}>
+        <View style={[styles.spacerTop16, styles.spacerBottom16]}>
           <ReturnTripCheckbox
             checked={isReturnTrip}
             onCheckedChange={v => onReturnTripChange?.(v)}
@@ -123,9 +165,10 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
               <TimePicker
                 value={returnTime}
                 onChange={onReturnTimeChange}
+                onClear={() => onReturnTimeChange?.('')}
                 placeholder={t('common.selectTime')}
                 indicatorColor={getDayColor(sortDaysByWeekOrder([...selectedDays])[0])}
-                title={`${t('common.return')} - ${weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}`}
+                dayLabel={weekDays.find(d => d.key === sortDaysByWeekOrder([...selectedDays])[0])?.label || ''}
               />
             </View>
             {hasMoreDaysToCustomize && customizedKeys.length === 0 && (
@@ -150,7 +193,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
                     })}
                     placeholder={t('common.selectTime')}
                     indicatorColor={getDayColor(dayKey)}
-                    title={`${t('common.return')} - ${day.label}`}
+                    dayLabel={day.label}
                   />
                 </View>
                 {hasMoreDaysToCustomize && isLast && (
@@ -162,6 +205,22 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
             );
           })}
         </>
+      )}
+
+      {/* Ошибка валидации */}
+      {mainValidationError && (
+        <View style={{
+          backgroundColor: '#FFE6E6',
+          padding: 12,
+          borderRadius: 8,
+          marginTop: 16,
+          borderWidth: 1,
+          borderColor: '#FF6B6B',
+        }}>
+          <Text style={{ color: '#D32F2F', fontSize: 14, textAlign: 'center' }}>
+            {mainValidationError}
+          </Text>
+        </View>
       )}
 
       <CustomizationModal
@@ -177,6 +236,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
         tempCustomizedDays={customization.tempCustomizedDays}
         onTempCustomizedDaysChange={customization.setTempCustomizedDays}
         isReturnTrip={isReturnTrip}
+        validationError={customization.validationError}
       />
     </View>
   );

@@ -17,4 +17,7 @@ export const styles = StyleSheet.create({
   spacerTop16: {
     marginTop: 16,
   },
+  spacerBottom16: {
+    marginBottom: 16,
+  },
 });
