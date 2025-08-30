@@ -8,6 +8,7 @@ import { getCurrentColors } from '../../../constants/colors';
 import ProgressBar from './components/ProgressBar';
 import ScheduleTypeSelector from './components/ScheduleTypeSelector';
 import FixDriveAddressPage from './components/FixDriveAddressPage';
+import FixDriveConfirm from './components/FixDriveConfirm';
 import { FixDrivePage, AddressData } from './types/fix-drive.types';
 
 interface FixDriveScreenProps {
@@ -263,7 +264,10 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
 
   const renderContent = () => (
     <ScrollView 
-      style={{ flex: 1, padding: 20 }} 
+      style={{ 
+        flex: 1, 
+        padding: currentPage === 'confirmation' ? 0 : 20 // Убираем padding для confirmation
+      }} 
       contentContainerStyle={{
         paddingBottom: needsBottomPadding() ? 80 : 20 // Умный отступ снизу
       }}
@@ -271,10 +275,15 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
     >
         
         {/* Прогресс-бар */}
-        <ProgressBar 
-          currentPage={currentPage} 
-          onStepPress={handleProgressStepPress}
-        />
+        <View style={{ 
+          paddingHorizontal: currentPage === 'confirmation' ? 20 : 0,
+          paddingTop: currentPage === 'confirmation' ? 20 : 0
+        }}>
+          <ProgressBar 
+            currentPage={currentPage} 
+            onStepPress={handleProgressStepPress}
+          />
+        </View>
         
         {/* Контейнеры страниц */}
         <View style={{ marginTop: 16 }}>
@@ -331,46 +340,18 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
           )}
           
           {currentPage === 'confirmation' && (
-            <View style={{ marginTop: 10 }}>
-              <Text style={{ 
-                fontSize: 18, 
-                fontWeight: '600', 
-                color: colors.text,
-                textAlign: 'center'
-              }}>
-                {t('fixDrive.confirmation.title')}
-              </Text>
-              <Text style={{ 
-                fontSize: 16, 
-                color: colors.textSecondary,
-                marginTop: 10,
-                textAlign: 'center'
-              }}>
-                {t('fixDrive.confirmation.description')}
-              </Text>
-              
-              {/* Кнопка Сохранить */}
-              <TouchableOpacity 
-                style={{ 
-                  backgroundColor: colors.primary,
-                  paddingVertical: 12,
-                  marginHorizontal: 20,
-                  marginTop: 24,
-                  marginBottom: 20,
-                  borderRadius: 8,
-                }}
-                onPress={handleSaveAndNext}
-              >
-                <Text style={{ 
-                  color: '#FFFFFF', 
-                  fontSize: 16, 
-                  fontWeight: '600',
-                  textAlign: 'center'
-                }}>
-                  {t('common.save')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <FixDriveConfirm 
+              scheduleData={{
+                scheduleType: selectedScheduleType,
+                selectedDays,
+                selectedTime,
+                returnTime,
+                returnTripTime,
+                returnWeekdaysTime,
+                isReturnTrip,
+              }}
+              addressData={addressData}
+            />
           )}
         </View>
         
