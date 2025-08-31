@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../../context/ThemeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
@@ -29,6 +29,8 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
   const colors = getCurrentColors(isDark);
   const { t } = useLanguage();
   const styles = useMemo(() => createDriversScreenStyles(isDark), [isDark]);
+  
+  const [isVehicleInfoExpanded, setIsVehicleInfoExpanded] = useState(false);
 
   // Выбираем первого доступного водителя из моков (только базовые данные)
   const selectedDriver = mockDrivers.find(driver => driver.isAvailable) || mockDrivers[0];
@@ -63,29 +65,40 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
         contentContainerStyle={styles.driversList}
         showsVerticalScrollIndicator={false}
       >
-        {/* Заголовок */}
-        <Text style={{ 
-          fontSize: 18, 
-          fontWeight: '600', 
-          color: colors.text,
-          textAlign: 'center',
-          marginBottom: 24,
-          marginHorizontal: 20
-        }}>
-          Рекомендуемый водитель
-        </Text>
+
 
         {/* Информация о водителе как в DriverListItem */}
         <View style={styles.driverItem}>
           {/* Хедер водителя */}
           <View style={styles.driverHeader}>
-            <View style={styles.avatarContainer}>
+            <View style={[styles.avatarContainer, { position: 'absolute', top: 0, left: 10 }]}>
               <View style={styles.avatar}>
                 <Ionicons name="person" size={32} color="#FFFFFF" />
               </View>
               <View style={styles.onlineIndicator} />
+              {isVehicleInfoExpanded && (
+                <>
+                  <View style={{
+                    position: 'absolute',
+                    bottom: -50,
+                    left: '50%',
+                    transform: [{ translateX: -1 }],
+                    width: 2,
+                    height: 40,
+                    backgroundColor: isDark ? '#4B5563' : '#E5E7EB',
+                  }} />
+                  <View style={{
+                    position: 'absolute',
+                    bottom: -50,
+                    left: '50%',
+                    width: 20,
+                    height: 2,
+                    backgroundColor: isDark ? '#4B5563' : '#E5E7EB',
+                  }} />
+                </>
+              )}
             </View>
-            <View style={styles.driverMainInfo}>
+            <View style={[styles.driverMainInfo, { marginLeft: 80 }]}>
               <View style={styles.nameRatingRow}>
                 <View style={styles.nameContainer}>
                   <Text style={styles.driverName}>
@@ -95,11 +108,74 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
                 </View>
                 <Text style={styles.ratingText}>{selectedDriver.rating.toFixed(1)}</Text>
               </View>
-              <View style={styles.vehicleInfoContainer}>
+              
+              {/* Кликабельный блок с данными автомобиля */}
+              <TouchableOpacity 
+                style={[styles.vehicleInfoContainer, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}
+                onPress={() => setIsVehicleInfoExpanded(!isVehicleInfoExpanded)}
+                activeOpacity={0.7}
+              >
                 <Text style={styles.vehicleInfo}>
                   {`${selectedDriver.vehicle_brand} ${selectedDriver.vehicle_model} • ${selectedDriver.vehicle_number}`}
                 </Text>
-              </View>
+                <Ionicons 
+                  name={isVehicleInfoExpanded ? "chevron-up" : "chevron-down"} 
+                  size={16} 
+                  color="#9CA3AF" 
+                />
+              </TouchableOpacity>
+              
+              {/* Разворачиваемый контент над линией */}
+              {isVehicleInfoExpanded && (
+                <View style={{
+                  backgroundColor: isDark ? '#374151' : '#F3F4F6',
+                  borderRadius: 8,
+                  padding: 12,
+                  marginTop: 20,
+                  marginBottom: 8,
+                }}>
+                  {/* Экстренный водитель */}
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: '#EF4444',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginRight: 12,
+                    }}>
+                      <Ionicons name="person" size={20} color="#FFFFFF" />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+                        <Text 
+                          style={{
+                            fontSize: 14,
+                            fontWeight: '600',
+                            color: isDark ? '#F9FAFB' : '#111827',
+                            marginRight: 8,
+                            flex: 1,
+                          }}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          Александр Николаевич Смирнов
+                        </Text>
+                        <View style={{ position: 'absolute', right: -4 }}>
+                          <Ionicons name="flash" size={16} color="#EF4444" />
+                        </View>
+                      </View>
+                      <Text style={{
+                        fontSize: 12,
+                        color: isDark ? '#D1D5DB' : '#6B7280',
+                      }}>
+                        Toyota Camry • А123БВ
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
 
@@ -144,14 +220,26 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
             <View style={styles.bottomBorder} />
 
             <View style={styles.buttonsContainer}>
-              <View style={styles.rightButton}>
+              <TouchableOpacity 
+                style={[styles.rightButton, { 
+                  backgroundColor: colors.primary,
+                  borderColor: colors.primary
+                }]}
+                onPress={() => {
+                  console.log('Водитель выбран:', selectedDriver);
+                  // Здесь можно добавить логику выбора водителя
+                }}
+                activeOpacity={0.8}
+              >
                 <View style={styles.rightButtonContent}>
-                  <Ionicons name="call-outline" size={18} color={isDark ? '#F9FAFB' : '#111827'} />
-                  <Text style={styles.rightButtonText}>
-                    {t('client.driversScreen.actions.call')}
+                  <Ionicons name="checkmark-outline" size={18} color="#FFFFFF" />
+                  <Text style={[styles.rightButtonText, { 
+                    color: '#FFFFFF'
+                  }]}>
+                    Выбрать
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
