@@ -262,22 +262,55 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
     }
   };
 
-  const renderContent = () => (
-    <ScrollView 
-      style={{ 
-        flex: 1, 
-        padding: currentPage === 'confirmation' ? 0 : 20 // Убираем padding для confirmation
-      }} 
-      contentContainerStyle={{
-        paddingBottom: needsBottomPadding() ? 80 : 20 // Умный отступ снизу
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-        
+  const renderContent = () => {
+    // Для страницы confirmation используем другую структуру
+    if (currentPage === 'confirmation') {
+      return (
+        <View style={{ flex: 1 }}>
+          {/* Прогресс-бар */}
+          <View style={{ 
+            paddingHorizontal: 20,
+            paddingTop: 20
+          }}>
+            <ProgressBar 
+              currentPage={currentPage} 
+              onStepPress={handleProgressStepPress}
+            />
+          </View>
+          
+          {/* Компонент подтверждения */}
+          <FixDriveConfirm 
+            scheduleData={{
+              scheduleType: selectedScheduleType,
+              selectedDays,
+              selectedTime,
+              returnTime,
+              returnTripTime,
+              returnWeekdaysTime,
+              isReturnTrip,
+            }}
+            addressData={addressData}
+          />
+        </View>
+      );
+    }
+
+    // Для остальных страниц используем ScrollView
+    return (
+      <ScrollView 
+        style={{ 
+          flex: 1, 
+          padding: 20
+        }} 
+        contentContainerStyle={{
+          paddingBottom: needsBottomPadding() ? 80 : 20
+        }}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Прогресс-бар */}
         <View style={{ 
-          paddingHorizontal: currentPage === 'confirmation' ? 20 : 0,
-          paddingTop: currentPage === 'confirmation' ? 20 : 0
+          paddingHorizontal: 0,
+          paddingTop: 0
         }}>
           <ProgressBar 
             currentPage={currentPage} 
@@ -338,32 +371,20 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
               )}
             </View>
           )}
-          
-          {currentPage === 'confirmation' && (
-            <FixDriveConfirm 
-              scheduleData={{
-                scheduleType: selectedScheduleType,
-                selectedDays,
-                selectedTime,
-                returnTime,
-                returnTripTime,
-                returnWeekdaysTime,
-                isReturnTrip,
-              }}
-              addressData={addressData}
-            />
-          )}
         </View>
-        
       </ScrollView>
-  );
+    );
+  };
 
   return (
     <>
       {isChild ? (
         renderContent()
       ) : (
-        <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <View style={{ 
+          flex: 1, 
+          backgroundColor: currentPage === 'confirmation' ? 'transparent' : colors.background 
+        }}>
           <SafeAreaView style={{ flex: 1 }}>
             {renderContent()}
           </SafeAreaView>
