@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/shared/*": ["./shared/*"],
+      "@/presentation/*": ["./presentation/*"],
+      "@/domain/*": ["./domain/*"],
+      "@/data/*": ["./data/*"],
+      "@/core/*": ["./core/*"]
+    },
+    "skipLibCheck": true,
+    "noEmit": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "declaration": false,
+    "sourceMap": false,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": false,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "../src1",
+    "../UNUSED"
+  ]
+}
