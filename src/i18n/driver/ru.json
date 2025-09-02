@@ -1,0 +1,190 @@
+{
+  "title": "Водитель",
+  "dashboard": "Панель управления",
+  "earnings": {
+    "title": "Заработок",
+    "today": "Сегодня",
+    "week": "Неделя",
+    "month": "Месяц",
+    "year": "Год",
+
+    "total": "Всего",
+    "perHour": "В час",
+    "perOrder": "За заказ",
+    "bonus": "Бонус",
+    "tips": "Чаевые",
+    "commission": "Комиссия",
+    "tax": "Налог",
+    "net": "Чистый доход",
+    "withdraw": "Вывести",
+    "withdrawMessage": "Функция вывода будет доступна в следующем обновлении",
+    "viewDetails": "Детали",
+    "detailsMessage": "Подробная статистика будет доступна в следующем обновлении",
+    "stats": {
+      "title": "Статистика",
+      "rides": "Поездки",
+      "avgRating": "Средний рейтинг",
+      "workHours": "Часы работы",
+      "completionRate": "Выполнение расписания",
+      "totalRides": "Всего поездок",
+      "avgPerRide": "Средний чек",
+      "totalHours": "Общее время",
+      "scheduleCompletion": "Выполнение расписания"
+    },
+    "bonuses": {
+      "title": "Бонусы и достижения",
+      "vipStatus": "VIP-статус",
+      "qualityBonus": "Бонус за качество",
+      "highRating": "Высокий рейтинг",
+      "noCancellations": "Без отмен",
+      "achievements": "Достижения",
+      "rides100": "100 поездок",
+      "rating5": "5 звезд рейтинг",
+      "referralBonus": "Реферальные бонусы",
+      "invitedDrivers": "Приглашенные водители"
+    },
+    "levels": {
+      "title": "Уровни и рейтинги",
+      "novice": "Новичок",
+      "experienced": "Опытный",
+      "expert": "Эксперт",
+      "vip": "VIP",
+      "currentLevel": "Текущий уровень",
+      "nextLevel": "Следующий уровень",
+      "progress": "Прогресс",
+      "ridesToNext": "До следующего уровня",
+      "badges": "Бейджи и награды"
+    },
+    "charts": {
+      "title": "Аналитика",
+      "earningsChart": "График заработка",
+      "activityHeatmap": "Тепловая карта активности",
+      "comparison": "Сравнение периодов",
+      "forecast": "Прогноз заработка",
+      "previousPeriod": "Предыдущий период",
+      "currentPeriod": "Текущий период",
+      "nextPeriod": "Следующий период"
+    },
+    "goals": {
+      "title": "Цели и достижения",
+      "dailyGoal": "Ежедневная цель",
+      "weeklyGoal": "Еженедельная цель",
+      "monthlyGoal": "Месячная цель",
+      "targetEarnings": "Целевой заработок",
+      "progress": "Прогресс",
+      "achieved": "Достигнуто",
+      "remaining": "Осталось"
+    },
+    "map": {
+      "title": "Зоны активности",
+      "activityZones": "Зоны активности",
+      "hotSpots": "Горячие точки",
+      "earningsByZone": "Заработок по зонам"
+    },
+    "leaderboard": {
+      "title": "Лидерборд",
+      "topDrivers": "Топ водителей",
+      "byEarnings": "По заработку",
+      "byRating": "По рейтингу",
+      "yourPosition": "Ваша позиция",
+      "rank": "Ранг"
+    },
+    "settings": {
+      "title": "Настройки",
+      "targetEarnings": "Целевой заработок",
+      "notifications": "Уведомления",
+      "displaySettings": "Настройки отображения",
+      "showStats": "Показывать статистику",
+      "showCharts": "Показывать графики",
+      "showMap": "Показывать карту",
+      "showGoals": "Показывать цели"
+    }
+  },
+  "status": {
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "changeStatus": "Изменить статус",
+    "changeStatusMessage": "Вы хотите изменить свой статус на",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "goOnlineMessage": "Вы станете Онлайн"
+  },
+  "orders": {
+    "title": "Заказы",
+    "active": "Активные",
+    "completed": "Завершенные",
+    "cancelled": "Отмененные",
+    "pending": "Ожидающие",
+    "accepted": "Принятые",
+    "rejected": "Отклоненные",
+    "new": "Новые",
+    "inProgress": "В процессе",
+    "pickup": "Забор",
+    "delivery": "Доставка",
+    "searchOrders": "Поиск заказов...",
+    "orderNumber": "Заказ #{id}",
+    "acceptOrderAction": "Принять заказ",
+    "completeTrip": "Завершить поездку",
+    "acceptOrderConfirm": "Принять заказ от {clientName}?",
+    "completeTripConfirm": "Завершить поездку с {clientName}?",
+    "orderAccepted": "Заказ принят!",
+    "tripCompleted": "Поездка завершена!",
+    "cancelOrder": "Отменить",
+    "acceptOrder": "Принять",
+    "completeOrder": "Завершить",
+    "all": "Все заказы",
+    "refresh": "Обновить"
+  },
+  "settings": "Настройки",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Поехали?",
+      "message": "Вы начинаете поездку к {clientName}?"
+    },
+    "waiting": {
+      "title": "Ждем?",
+      "message": "Ожидаете клиента {clientName}?"
+    },
+    "beginTrip": {
+      "title": "Поехали?",
+      "message": "Вы начинаете поездку {clientName}?"
+    },
+    "cancelTrip": {
+      "title": "Отменяем?",
+      "message": "Вы отменяете поездку {clientName}?"
+    },
+    "endTrip": {
+      "title": "Завершить?",
+      "message": "Поездка {clientName} окончена?"
+    },
+    "continueTrip": {
+      "title": "Продолжить?",
+      "message": "Продолжить поездку?"
+    },
+    "emergency": {
+      "title": "Экстренные действия",
+      "message": "Выберите экстренное действие",
+      "stop": "Остановка",
+      "end": "Завершение"
+    },
+    "stopTrip": {
+      "title": "Остановка",
+      "message": "Поездка принудительно остановлена"
+    },
+    "forceEndTrip": {
+      "title": "Завершение",
+      "message": "Поездка принудительно завершена"
+    },
+    "buttons": {
+      "cancelAction": "Отменить",
+      "okAction": "OK"
+    },
+    "pauseTrip": {
+      "title": "Приостановить поездку?",
+      "message": "Вы хотите приостановить поездку с {clientName}?",
+      "paused": "Поездка приостановлена",
+      "resume": "Возобновить поездку",
+      "resumeMessage": "Продолжить поездку с {clientName}?"
+    }
+  }
+}

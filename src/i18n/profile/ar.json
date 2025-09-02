@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "title": "الإعدادات",
+    "notifications": {
+      "title": "الإشعارات",
+      "push": "إشعارات الدفع"
+    },
+    "language": {
+      "section": "اللغة",
+      "current": "اللغة الحالية",
+      "title": "اختيار اللغة",
+      "syncWithSystem": "مزامنة مع النظام",
+      "systemLanguage": "لغة النظام: %{language}",
+      "alreadySynced": "مزامن بالفعل",
+      "syncSuccess": {
+        "title": "المزامنة",
+        "message": "تم تغيير اللغة إلى %{language}"
+      },
+      "error": {
+        "title": "خطأ في اللغة",
+        "message": "تعذر تغيير اللغة"
+      }
+    },
+    "appearance": {
+      "title": "المظهر",
+      "darkMode": "الوضع المظلم"
+    },
+    "location": {
+      "title": "الموقع",
+      "autoLocation": "اكتشاف تلقائي"
+    },
+    "security": {
+      "title": "الأمان",
+      "changePassword": "تغيير كلمة المرور",
+      "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح",
+      "passwordChangeError": "فشل في تغيير كلمة المرور",
+      "changingPassword": "جاري تغيير كلمة المرور...",
+      "passwordSameError": "يجب أن تكون كلمة المرور الجديدة مختلفة عن الحالية"
+    },
+    "data": {
+      "title": "البيانات",
+      "deleteAccount": "حذف الحساب",
+      "deleteAccountConfirm": "هل أنت متأكد أنك تريد حذف حسابك؟",
+      "deleteAccountSuccess": "تم حذف الحساب",
+      "deleteAccountSuccessMessage": "تم حذف حسابك بنجاح.",
+      "deleteAccountError": "تعذر حذف الحساب"
+    }
+  },
+  "residence": {
+    "title": "الموقع",
+    "deleteConfirm": "حذف العنوان",
+    "deleteMessage": "هل أنت متأكد من أنك تريد حذف العنوان %{title}؟",
+    "deleteSuccess": "تم حذف العنوان %{title}",
+    "deleteError": "فشل في حذف العنوان",
+    "setDefaultSuccess": "تم تعيين العنوان كافتراضي",
+    "setDefaultError": "فشل في تعيين العنوان كافتراضي",
+    "addSuccess": "تم إضافة العنوان بنجاح",
+    "addError": "فشل في إضافة العنوان",
+    "updateSuccess": "تم تحديث العنوان بنجاح",
+    "updateError": "فشل في تحديث العنوان",
+    "saveError": "فشل في حفظ العنوان",
+    "loading": "جاري تحميل العناوين...",
+    "retry": "إعادة المحاولة",
+    "emptyState": "لم يتم إضافة عناوين بعد",
+    "defaultBadge": "افتراضي",
+    "modal": {
+      "addTitle": "إضافة عنوان",
+      "editTitle": "تعديل العنوان",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "أدخل اسم العنوان",
+      "nameRequired": "اسم العنوان مطلوب",
+      "categoryLabel": "الفئة",
+      "categoryPlaceholder": "اختر الفئة",
+      "addressLabel": "العنوان",
+      "addressPlaceholder": "أدخل العنوان",
+      "addressRequired": "العنوان مطلوب",
+      "addressChecking": "جاري التحقق من العنوان...",
+      "addressValid": "العنوان صحيح",
+      "addressInvalid": "العنوان غير صحيح",
+      "verifyAddress": "التحقق من العنوان",
+      "defaultLabel": "تعيين كافتراضي",
+      "mapTitle": "اختر الموقع",
+      "mapDone": "تم",
+      "saveError": "فشل في حفظ العنوان"
+    },
+    "categories": {
+      "selectCategory": "اختر الفئة",
+      "home": "المنزل",
+      "work": "العمل",
+      "university": "الجامعة",
+      "mall": "مركز التسوق",
+      "hospital": "المستشفى",
+      "gym": "صالة رياضية",
+      "restaurant": "مطعم",
+      "parents": "الوالدان",
+      "dacha": "بيت الريف",
+      "other": "آخر"
+    }
+  },
+  "editProfile": "تعديل الملف الشخصي",
+  "editProfileDesc": "تغيير البيانات الشخصية",
+  "paymentMethods": "طرق الدفع",
+  "paymentMethodsDesc": "إدارة البطاقات",
+  "security": "الأمان",
+  "securityDesc": "إعدادات الأمان",
+  "support": "الدعم",
+  "supportDesc": "التواصل مع الدعم",
+  "about": "حول التطبيق",
+  "aboutDesc": "الإصدار 1.0.0",
+  "darkTheme": "الوضع المظلم",
+  "trips": "الرحلات",
+  "spent": "المُنفق",
+  "rating": "التقييم",
+  "changePhoto": "تغيير الصورة",
+  "personalInfo": "المعلومات الشخصية",
+  "firstName": "الاسم الأول",
+  "firstNamePlaceholder": "أدخل الاسم الأول",
+  "lastName": "اسم العائلة",
+  "lastNamePlaceholder": "أدخل اسم العائلة",
+  "phone": "الهاتف",
+  "phonePlaceholder": "أدخل رقم الهاتف",
+  "noPhone": "غير محدد",
+  "email": "بريد إلكتروني",
+  "emailPlaceholder": "أدخل البريد الإلكتروني",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "birthDate": "تاريخ الميلاد",
+  "birthDatePlaceholder": "YYYY-MM-DD",
+  "familyInfo": "معلومات العائلة",
+  "familyType": "الفئة",
+  "familyTypePlaceholder": "اختر الفئة",
+  "familyAge": "العمر",
+  "familyAgePlaceholder": "اختر العمر",
+  "familyTypes": {
+    "child": "طفل",
+    "spouse": "زوج",
+    "parent": "أب",
+    "relative": "قريب",
+    "husband": "زوج",
+    "wife": "زوجة",
+    "son": "ابن",
+    "daughter": "ابنة",
+    "mother": "أم",
+    "father": "أب",
+    "grandmother": "جدة",
+    "grandfather": "جد",
+    "brother": "أخ",
+    "sister": "أخت",
+    "uncle": "عم",
+    "aunt": "عمة",
+    "cousin": "ابن عم/ابنة عم",
+    "nephew": "ابن أخ",
+    "niece": "ابنة أخ",
+    "stepfather": "زوج الأم",
+    "stepmother": "زوجة الأب",
+    "stepson": "ابن الزوج",
+    "stepdaughter": "ابنة الزوج",
+    "other": "آخر"
+  },
+  "years": "سنوات",
+  "addFamilyMember": "إضافة عضو عائلة",
+  "editFamilyMember": "تحرير",
+  "saveChangesConfirm": {
+    "title": "حفظ التغييرات",
+    "message": "لديك تغييرات غير محفوظة. هل تريد حفظها قبل الخروج؟",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  },
+  "vipStatus": "حالة VIP",
+  "vipTitle": "اشتراك VIP",
+  "vipDescription": "احصل على خدمة ذات أولوية وعروض حصرية وخصومات خاصة",
+  "upgradeToVip": "الترقية إلى VIP",
+  "premiumStatus": "حالة متميزة",
+  "premiumSubscription": "اشتراك متميز",
+  "premiumDescription": "احصل على خدمة ذات أولوية وعروض حصرية وخصومات خاصة",
+  "becomePremium": "أن تصبح متميزاً",
+  "becomeDriver": "أن تصبح سائقاً",
+  "becomeDriverButton": "التسجيل كسائق",
+  "myVehicles": "سياراتي",
+  "myVehiclesButton": "إدارة السيارات",
+  "vehicles": {
+    "title": "سياراتي",
+    "addVehicle": "إضافة مركبة",
+    "editVehicle": "تعديل المركبة",
+    "vehicleNumber": "رقم المركبة",
+    "vehicleNumberPlaceholder": "أدخل رقم المركبة",
+    "vehicleNumberRequired": "رقم المركبة مطلوب",
+    "tariff": "التعريفة",
+    "tariffPlaceholder": "اختر التعريفة",
+    "tariffRequired": "التعريفة مطلوبة",
+    "carBrand": "ماركة السيارة",
+    "carBrandPlaceholder": "اختر الماركة",
+    "carBrandRequired": "ماركة السيارة مطلوبة",
+    "carModel": "موديل السيارة",
+    "carModelPlaceholder": "اختر الموديل",
+    "carModelRequired": "موديل السيارة مطلوب",
+    "carYear": "سنة الصنع",
+    "carYearPlaceholder": "اختر السنة",
+    "carYearRequired": "سنة الصنع مطلوبة",
+    "carMileage": "معدل الأميال",
+    "carMileagePlaceholder": "أدخل معدل الأميال بالكيلومتر",
+    "carMileageRequired": "معدل الأميال مطلوب",
+    "passportPhoto": "صورة جواز السفر",
+    "passportPhotoRequired": "صورة جواز السفر مطلوبة",
+    "saveVehicle": "حفظ المركبة",
+    "vehicleSaved": "تم حفظ المركبة",
+    "vehicleSaveError": "فشل في حفظ المركبة",
+    "noVehicles": "لم يتم إضافة مركبات",
+    "addFirstVehicle": "أضف مركبتك الأولى",
+    "loadError": "فشل في تحميل المركبات",
+    "createError": "فشل في إنشاء المركبة",
+    "updateError": "فشل في تحديث المركبة",
+    "deleteError": "فشل في حذف المركبة",
+    "toggleError": "فشل في تغيير حالة المركبة",
+    "photoUploadError": "فشل في رفع صورة جواز السفر",
+    "vehicleLabels": {
+      "number": "الرقم:",
+      "brand": "الماركة:",
+      "model": "الموديل:",
+      "year": "السنة:",
+      "mileage": "المسافة المقطوعة:"
+    },
+    "deleteVehicle": "حذف السيارة",
+    "deleteVehicleConfirm": "هل أنت متأكد من أنك تريد حذف هذه السيارة؟ لا يمكن التراجع عن هذا الإجراء."
+  },
+  "addPhoto": "إضافة صورة",
+  "addPhotoMessage": "اختر طريقة إضافة الصورة",
+  "takePhoto": "التقاط صورة",
+  "chooseFromGallery": "اختيار من المعرض",
+  "cameraAccess": "الوصول إلى الكاميرا",
+  "cameraAccessRequired": "مطلوب الوصول إلى الكاميرا لالتقاط صورة",
+  "galleryAccess": "الوصول إلى المعرض",
+  "galleryAccessRequired": "مطلوب الوصول إلى المعرض لاختيار صورة",
+  "photoError": "خطأ في الصورة",
+  "photoTakeError": "فشل في التقاط الصورة",
+  "photoPickError": "فشل في اختيار الصورة",
+  "changePhotoMessage": "اختر طريقة تغيير الصورة",
+  "deletePhoto": "حذف الصورة",
+  "deletePhotoConfirm": "حذف الصورة",
+  "deletePhotoMessage": "هل أنت متأكد من أنك تريد حذف الصورة؟",
+  "becomeDriverModal": {
+    "title": "أن تصبح سائقاً",
+    "message": "فتح صفحة السائق؟",
+    "cancel": "إلغاء",
+    "proceed": "المتابعة"
+  },
+  "becomeClientModal": {
+    "title": "أن تصبح عميلاً",
+    "message": "فتح صفحة العميل؟",
+    "cancel": "إلغاء",
+    "proceed": "المتابعة",
+    "loginError": "فشل تسجيل الدخول كعميل"
+  },
+  "saveProfileConfirm": {
+    "title": "حفظ التغييرات",
+    "message": "هل أنت متأكد من أنك تريد حفظ التغييرات في ملفك الشخصي؟",
+    "cancel": "إلغاء",
+    "save": "حفظ"
+  },
+  "saveProfileSuccess": {
+    "title": "نجح",
+    "message": "تم حفظ الملف الشخصي"
+  },
+  "saveProfileError": {
+    "title": "خطأ",
+    "message": "فشل في حفظ الملف الشخصي"
+  },
+  "verifyEmail": {
+    "title": "التحقق من البريد الإلكتروني",
+    "message": "أدخل الرمز المرسل إلى بريدك الإلكتروني",
+    "success": {
+      "title": "نجح",
+      "message": "تم التحقق من البريد الإلكتروني بنجاح"
+    },
+    "error": {
+      "title": "خطأ",
+      "message": "رمز غير صحيح"
+    },
+    "emailVerifiedSuccess": "تم التحقق من البريد الإلكتروني بنجاح"
+  },
+  "verifyPhone": {
+    "title": "تحقق من الهاتف",
+    "message": "إرسال رمز التحقق إلى الهاتف؟",
+    "success": {
+      "title": "تم إرسال الرمز",
+      "message": "تم إرسال رمز التحقق إلى هاتفك"
+    },
+    "error": {
+      "title": "خطأ في الإرسال",
+      "message": "فشل في إرسال رمز التحقق"
+    },
+    "phoneVerifiedSuccess": "تم التحقق من الهاتف بنجاح"
+  },
+  "validationError": "يرجى ملء جميع الحقول المطلوبة",
+  "loadingProfile": "جاري تحميل الملف الشخصي...",
+  "failedToLoadProfile": "فشل في تحميل الملف الشخصي",
+  "profileUpdateSuccess": {
+    "title": "نجح",
+    "message": "تم تحديث الملف الشخصي بنجاح"
+  },
+  "profileUpdateError": {
+    "title": "خطأ",
+    "message": "فشل في تحديث الملف الشخصي"
+  },
+  "profileUpdateGeneralError": {
+    "title": "خطأ",
+    "message": "حدث خطأ أثناء تحديث الملف الشخصي"
+  },
+  "validation": {
+    "title": "خطأ في التحقق",
+    "firstNameRequired": "الاسم الأول مطلوب",
+    "lastNameRequired": "اسم العائلة مطلوب",
+    "familyTypeRequired": "يرجى اختيار نوع عضو العائلة",
+    "familyAgeRequired": "يرجى اختيار تاريخ الميلاد",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب"
+  },
+  "verificationModal": {
+    "enterCode": "أدخل الرمز",
+    "enterSmsCode": "أدخل رمز التحقق من الرسالة النصية",
+    "enterEmailCode": "أدخل رمز التحقق من البريد الإلكتروني",
+    "phoneNotSpecified": "رقم الهاتف غير محدد"
+  },
+  "family": {
+    "addMemberSuccess": "تم إضافة عضو العائلة",
+    "fillNameSurname": "يرجى ملء الاسم واللقب",
+    "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا العضو من العائلة؟",
+    "confirmSave": "هل أنت متأكد من أنك تريد حفظ التغييرات؟",
+    "deleteSuccess": "تم حذف عضو العائلة",
+    "saveSuccess": "تم حفظ التغييرات",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
+  },
+  "photoSuccess": "نجح",
+  "photoTakeSuccess": "تم إضافة الصورة بنجاح",
+  "photoPickSuccess": "تم اختيار الصورة من المعرض بنجاح",
+  "photoDeleteSuccess": "تم حذف الصورة بنجاح",
+  "photoSaveError": "فشل في حفظ الصورة",
+  "photoDeleteError": "فشل في حذف الصورة"
+} 

@@ -1,0 +1,22 @@
+{
+  "title": "بطاقاتي",
+  "addTitle": "إضافة بطاقة",
+  "holderPlaceholder": "اسم حامل البطاقة",
+  "numberPlaceholder": "رقم البطاقة",
+  "expiryPlaceholder": "شهر/سنة",
+  "cvvPlaceholder": "CVV",
+  "holderError": "يرجى إدخال اسم حامل البطاقة",
+  "numberError": "يرجى إدخال رقم بطاقة صحيح",
+  "expiryError": "يرجى إدخال تاريخ صحيح",
+  "expiryMonthError": "يجب أن يكون الشهر بين 1 و 12",
+  "expiryPastError": "لا يمكن أن يكون التاريخ في الماضي",
+  "cvvError": "يرجى إدخال CVV صحيح",
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "add": "إضافة بطاقة",
+  "delete": "حذف",
+  "deleteConfirm": "هل أنت متأكد من أنك تريد حذف هذه البطاقة؟",
+  "empty": "ليس لديك بطاقات بعد",
+  "emptyDescription": "أضف بطاقة للدفع السريع للرحلات",
+  "default": "افتراضي"
+} 

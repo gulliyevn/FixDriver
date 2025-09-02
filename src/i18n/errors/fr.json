@@ -1,0 +1,12 @@
+{
+  "error": "Erreur",
+  "networkError": "Erreur réseau",
+  "serverError": "Erreur serveur",
+  "timeout": "Délai d'attente dépassé",
+  "unauthorized": "Non autorisé",
+  "forbidden": "Interdit",
+  "notFound": "Non trouvé",
+  "validationError": "Erreur de validation",
+  "unknownError": "Une erreur inconnue s'est produite",
+  "permissionDenied": "Accès Refusé"
+} 

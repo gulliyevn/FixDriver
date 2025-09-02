@@ -1,0 +1,372 @@
+{
+  "title": "Müşteri",
+  "dashboard": "Gösterge Paneli",
+  "bookings": "Rezervasyonlar",
+  "drivers": "Sürücüler",
+  "map": {
+    "title": "Harita",
+    "searchPlaceholder": "Nereye gitmek istiyorsunuz?",
+    "orderButton": "Sipariş ver",
+    "loadingLocation": "Konumunuz belirleniyor...",
+    "locationError": "Konumunuz alınamadı"
+  },
+  "chat": {
+    "title": "Sohbet",
+    "noChats": "Sohbet yok",
+    "loadingChats": "Sohbetler yükleniyor...",
+    "cancel": "İptal",
+    "read": "Okundu",
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı",
+    "unknownUser": "Bilinmeyen kullanıcı",
+    "noMessages": "Mesaj yok",
+    "loadingMessages": "Mesajlar yükleniyor...",
+    "messageError": "Mesaj gönderme hatası",
+    "typing": "yazıyor...",
+    "startConversation": "Konuşma başlat",
+    "startNewChat": "Yeni sohbet başlat",
+    "searchChats": "Sohbet ara...",
+    "markAsRead": "Okundu olarak işaretle",
+    "markAsReadConfirm": "%{count} sohbeti okundu olarak işaretle?",
+    "deleteSelected": "Seçilenleri sil",
+    "deleteSelectedConfirm": "Seçilen sohbetleri silmek istediğinizden emin misiniz?",
+    "deleteChat": "Sohbeti sil",
+    "deleteChatConfirm": "Bu sohbeti silmek istediğinizden emin misiniz?",
+    "camera": "Kamera",
+    "gallery": "Galeri",
+    "document": "Belge",
+    "location": "Konum",
+    "callOptions": "Arama türünü seçin",
+    "internetCall": "İnternet araması",
+    "networkCall": "Hücresel arama"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "readAll": "Tümünü oku",
+    "filter": "Filtre",
+    "read": "Okundu",
+    "delete": "Sil",
+    "showAll": "Tüm bildirimleri göster"
+  },
+  "settings": "Ayarlar",
+  "profile": {
+    "title": "Profil",
+    "trips": "Yolculuklar",
+    "spent": "Harcanan",
+    "rating": "Değerlendirme",
+    "balance": "Bakiyem",
+    "cards": "Kartlar",
+    "debts": "Borçlarım",
+    "paymentHistory": "Ödeme geçmişi",
+    "residence": "Konum",
+    "help": "Yardım ve kurallar",
+    "about": "Uygulama hakkında",
+    "logout": "Çıkış",
+    "logoutConfirm": "Hesabınızdan çıkmak istediğinizden emin misiniz?",
+    "vip": {
+      "title": "VIP Durumu",
+      "description": "Öncelikli hizmet ve bonuslar",
+      "upgrade": "Yükselt",
+      "benefits": "Avantajlar",
+      "priority": "Öncelikli rezervasyon",
+      "bestDrivers": "En iyi sürücüler",
+      "extraCashback": "Ekstra nakit iadesi",
+      "premiumSupport": "Premium destek"
+    }
+  },
+  "schedule": {
+    "title": "Program",
+    "loading": "Yükleniyor...",
+    "noBookings": "Rezerve yolculuk yok",
+    "addBooking": "Rezervasyon ekle"
+  },
+  "support": "Destek",
+  "balance": {
+    "title": "Bakiyem",
+    "currentBalance": "Mevcut bakiye",
+    "topUp": "Yükle",
+    "withdraw": "Çek",
+    "quickTopUp": "Hızlı yükleme",
+    "pending": "Bekliyor",
+    "enterWithdrawAmount": "Çekmek için miktar girin:",
+    "withdrawRequestSent": "%{0} AFc çekme talebi gönderildi",
+
+    "showAll": "Tümünü göster",
+    "pay": "Öde",
+    "insufficientFunds": "Yetersiz bakiye",
+    "minimumWithdrawal": "Çekim için minimum 20 AFc gerekli",
+    "useCashback": "FixBack kullan",
+    "useCashbackConfirm": "FixBack kullanmak istediğinizden emin misiniz?",
+    "cancel": "İptal",
+    "yes": "Evet",
+    "success": "Başarılı",
+    "cashbackAdded": "FixBack %{0} AFc bakiyeye eklendi",
+    "error": "Hata",
+    "enterValidAmount": "Lütfen geçerli bir miktar girin",
+    "paymentSuccess": "Ödeme başarılı",
+    "balanceToppedUp": "Bakiye %{0} AFc ile yüklendi",
+    "copied": "Kopyalandı",
+    "balanceTopUp": "Yükleme",
+    "topUpHistory": "Yükleme geçmişi",
+    "loadingMore": "Yükleniyor...",
+    "amountInAFc": "AFc cinsinden miktar",
+    "enterAmount": "Miktar girin",
+    "confirm": "Onayla",
+    "confirmTopUp": "Bakiyenizi %{0} AFc ile yüklemek istediğinizden emin misiniz?",
+    "topUpBalance": "Yükle",
+    "payButton": "Öde",
+    "recentTopUps": "Son yüklemeler",
+    "recentTransactions": "Son işlemler",
+    "withdrawal": "Para çekme",
+    "cashback": {
+      "title": "Nakit iade",
+      "available": "Kullanım için mevcut",
+      "pending": "Bekleniyor",
+      "use": "Kullan",
+      "history": "Geçmiş",
+      "description": "Biriken nakit iade seyahatler için ödeme yapmak için kullanılabilir"
+    }
+  },
+  "debts": {
+    "title": "Borçlarım",
+    "noDebts": "Aktif borç yok",
+    "noDebtsDescription": "Ödenmemiş borcunuz yok",
+    "debtAmount": "Borç miktarı",
+    "dueDate": "Vade tarihi",
+    "payDebt": "Borcu öde",
+    "confirmPayment": "Ödeme onayı",
+    "confirmPaymentMessage": "{amount} tutarında borcu öde?",
+    "paymentSuccess": "Borç ödendi",
+    "paymentSuccessMessage": "Borç başarıyla ödendi",
+    "status": {
+      "overdue": "Gecikmiş",
+      "dueSoon": "Yakında vade",
+      "active": "Aktif",
+      "paid": "Ödenmiş"
+    },
+    "tripDebt": "Yolculuk borcu",
+    "serviceDebt": "Hizmet borcu",
+    "penaltyDebt": "Ceza borcu",
+    "subscriptionDebt": "Abonelik borcu",
+    "parkingDebt": "Park borcu",
+    "unpaidTrip": "Ödenmemiş yolculuk",
+    "unpaidService": "Ödenmemiş hizmet",
+    "unpaidPenalty": "Ödenmemiş ceza",
+    "unpaidSubscription": "Ödenmemiş abonelik",
+    "unpaidParking": "Ödenmemiş park",
+    "toAirport": "havalimanına",
+    "toCityCenter": "şehir merkezine"
+  },
+  "cards": {
+    "title": "Kartlarım",
+    "noCards": "Eklenmiş kart yok",
+    "addCard": "Kart ekle",
+    "scanCard": "Kartı tara",
+    "enterManually": "Manuel giriş",
+    "delete": "Sil",
+    "expires": "Geçerlilik",
+    "addNewCard": "Yeni kart ekle"
+  },
+  "cars": {
+    "title": "Arabalarım",
+    "noCars": "Eklenmiş araba yok",
+    "addCar": "Araba ekle",
+    "scanDocuments": "Belgeleri tara",
+    "enterManually": "Manuel giriş",
+    "delete": "Sil",
+    "year": "Yıl",
+    "color": "Renk",
+    "type": "Tür",
+    "edit": "Düzenle",
+    "addNewCar": "Yeni araba ekle"
+  },
+  "plus": {
+    "title": "Rezervasyon",
+    "step1": {
+      "title": "Abonelik paketini seçin",
+      "description": "Yolculuklarınız için uygun tarifeyi seçin",
+      "popular": "Popüler"
+    },
+    "step2": {
+      "title": "Yolculuk detayları",
+      "passengers": "Yolcu sayısı",
+      "pickupAddress": "Alış adresi",
+      "destinationAddress": "Varış adresi",
+      "notes": "Ek notlar",
+      "notesPlaceholder": "Özel gereksinimler veya istekler"
+    },
+    "step3": {
+      "title": "Rezervasyon detayları",
+      "summary": "Yolculuk özeti"
+    },
+    "loading": "Yükleniyor..."
+  },
+  "driverCard": {
+    "route": "Rota",
+    "stops": "duraklar",
+    "call": "Ara"
+  },
+
+  "orders": {
+    "addOrder": "Sipariş ekle",
+    "create": "Sipariş oluştur",
+    "created": "Sipariş #{id} oluşturuldu"
+  },
+
+  "help": {
+    "title": "Yardım ve kurallar",
+    "needHelp": "Yardıma mı ihtiyacınız var?",
+    "contactSupport": "Destekle iletişim"
+  },
+  "residence": {
+    "title": "Konum",
+    "default": "Varsayılan"
+  },
+  "paymentHistory": {
+    "title": "Ödeme geçmişi",
+    "noPayments": "İşlem yok",
+    "emptyDescription": "İşlem geçmişi boş",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "viewAll": "Tümünü göster",
+    "showLess": "Daha az göster",
+    "empty": "Geçmiş boş",
+    "status": {
+      "completed": "Tamamlandı",
+      "pending": "Beklemede",
+      "failed": "Başarısız"
+    },
+    "transactions": {
+      "topUp": "Yükleme",
+      "packagePurchase": "Paket satın alma \"{{packageName}}\"",
+      "packageExtension": "Paket uzatma \"{{packageName}}\"",
+      "subscriptionRenewal": "Abonelik yenileme \"{{packageName}}\""
+    },
+    "package": "Paket: {{packageType}}",
+    "mock": {
+      "tripToCityCenter": "Şehir merkezine yolculuk",
+      "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
+      "balanceTopUp": "Yükleme",
+      "tripToAirport": "Havaalanına yolculuk",
+      "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
+      "refund": "İade",
+      "refundForCancelledTrip": "İptal edilen yolculuk için iade",
+      "balanceTopUpTitle": "Bakiye yükleme",
+      "tripToCityCenterTitle": "Şehir merkezine yolculuk",
+      "tripToAirportTitle": "Havaalanına yolculuk",
+      "refundTitle": "İade",
+      "refundDescription": "İptal edilen yolculuk için iade"
+    },
+    "filter": {
+      "title": "Filtre",
+      "paymentType": "Ödeme türü",
+      "status": "Durum",
+      "period": "Dönem",
+      "allTypes": "Tüm türler",
+      "trips": "Yolculuklar",
+      "topUps": "Yüklemeler",
+      "refunds": "İadeler",
+      "fees": "Ücretler",
+      "allStatuses": "Tüm durumlar",
+      "allTime": "Tüm zaman",
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl",
+      "reset": "Sıfırla",
+      "apply": "Uygula"
+    }
+  },
+  "trips": {
+    "title": "Yolculuklar",
+    "noTrips": "Yolculuk yok",
+    "emptyDescription": "Yolculuk geçmişi boş",
+    "driver": "Sürücü",
+    "status": {
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi",
+      "scheduled": "Planlandı"
+    },
+    "filter": {
+      "title": "Filtre",
+      "tripType": "Yolculuk türü",
+      "status": "Durum",
+      "period": "Dönem",
+      "allTypes": "Tüm türler",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi",
+      "scheduled": "Planlandı",
+      "allStatuses": "Tüm durumlar",
+      "allTime": "Tüm zaman",
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "thisYear": "Bu yıl",
+      "reset": "Sıfırla",
+      "apply": "Uygula"
+    },
+    "mock": {
+      "tripToCityCenter": "Şehir merkezine yolculuk",
+      "routeLeninGagarin": "Rota: Lenin Caddesi - Gagarin Caddesi",
+      "tripToAirport": "Havaalanına yolculuk",
+      "routeCenterAirport": "Rota: merkez - Heydar Aliyev Havalimanı",
+      "tripToMall": "Alışveriş merkezine yolculuk",
+      "routeToMall": "Rota: ev - alışveriş merkezi",
+      "tripToWork": "İşe yolculuk",
+      "routeToWork": "Rota: ev - ofis"
+    }
+  }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Sürücüleri ara...",
+    "loadingMore": "Daha fazla sürücü yükleniyor...",
+    "empty": {
+      "loadingDrivers": "Sürücüler yükleniyor...",
+      "noDrivers": "Sürücü yok",
+      "willAppear": "Sürücüler yüklemeden sonra burada görünecek"
+    },
+    "filters": {
+      "all": "Tümü",
+      "rating45": "Puan 4.5+",
+      "premium": "Premium",
+      "price": "Fiyat",
+      "dailyTrips": "Günlük yolculuklar",
+      "economy": "Ekonomi"
+    },
+    "actions": {
+      "chat": "Sohbet",
+      "call": "Ara"
+    },
+    "labels": {
+      "son": "Oğul"
+    },
+    "call": {
+      "internetCall": "İnternet araması",
+      "internetCallLater": "İnternet araması özelliği daha sonra eklenecek.",
+      "callTitle": "%{firstName} %{lastName} araması",
+      "networkCallWithNumber": "Hücresel arama %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Sürücü seç",
+      "selectDriverMessage": "%{firstName} %{lastName} seçilsin mi?",
+      "bookDriversTitle": "Sürücüleri ayırt",
+      "bookDriversMessage": "%{count} seçili sürücü ayırılsın mı?",
+      "deleteDriversTitle": "Sürücüleri sil",
+      "deleteDriversMessage": "Seçili sürücüler listeden silinsin mi?",
+      "deleteOneDriverTitle": "Sürücüyü sil",
+      "deleteOneDriverMessage": "Sürücü listeden silinsin mi?",
+      "pauseTripTitle": "Yolculuğu duraklat?",
+      "pauseTripMessage": "%{driverName} ile yolculuğu duraklatmak istiyor musunuz?",
+      "resumeTripTitle": "Yolculuğu devam ettir",
+      "resumeTripMessage": "%{driverName} ile yolculuğa devam et?"
+    },
+    "selection": {
+      "selectAll": "Tümünü seç",
+      "deselectAll": "Seçimi kaldır",
+      "bookCount": "Ayırt (%{count})"
+    },
+    "common": {
+      "book": "Ayırt"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "title": "Premium Durum",
+  "periods": {
+    "month": "Ay",
+    "year": "Yıl"
+  },
+  "packages": {
+    "standard": "Standart",
+    "free": "Ücretsiz",
+    "plus": "Plus",
+    "premium": "Premium",
+    "premiumPlus": "Premium+"
+  },
+  "descriptions": {
+    "free": "Ek özellikler olmadan temel işlevler.",
+    "plus": "Öncelik, en iyi sürücüler, %2 nakit iadesi.",
+    "premium": "Plus'tan her şey, özel sürücüler, %5 nakit iadesi, VIP destek.",
+    "premiumPlus": "Premium'dan her şey, maksimum ayrıcalıklar, %10 nakit iadesi, kişisel yönetici."
+  },
+  "features": {
+    "commission": "Müşteri Komisyonu",
+    "cashback": "Yolculuk Başına FixCash Nakit İadesi",
+    "priority": "Sürücü Seçimi Önceliği",
+    "support": "Destek Hizmeti",
+    "waitGuarantee": "Bekleme Garantisi",
+    "freeCancellation": "Ücretsiz Yolculuk İptali",
+    "multiRoute": "Çok Noktalı Rota",
+    "calendarIntegration": "Takvim Entegrasyonu",
+    "earlyAccess": "Promosyonlara Erken Erişim"
+  },
+  "values": {
+    "standard": "Standart",
+    "fast": "Hızlı",
+    "vip": "VIP",
+    "personal": "Kişisel",
+    "high": "Yüksek",
+    "maximum": "Maksimum"
+  },
+  "purchase": {
+    "confirmTitle": "Satın Alma Onayı",
+    "confirmMessage": "\"{{packageName}}\" planını {{price}} AFC karşılığında satın almak istediğinizden emin misiniz?\n\n{{price}} AFC bakiyenizden düşülecektir.",
+    "cancel": "İptal",
+    "cancelButton": "İptal",
+    "confirmButton": "Onayla",
+    "insufficientFunds": "Yetersiz Bakiye",
+    "insufficientMessage": "Bu planı satın almak için yeterli bakiyeniz yok.\n\nGerekli: {{price}} AFC\nBakiyeniz: {{balance}} AFC",
+    "topUpBalance": "Bakiyeyi Yükle"
+  },
+  "success": {
+    "title": "Başarılı!",
+    "message": "\"{{packageName}}\" paketini seçtiniz"
+  },
+  "subscription": {
+    "cancelTitle": "Aboneliği İptal Et",
+    "cancelMessage": "\"{{packageName}}\" paketinin aboneliğini iptal etmek istediğinizden emin misiniz?",
+    "cancelButton": "İptal Et",
+    "keepButton": "Sakla",
+    "autoRenew": "Otomatik yenileme",
+    "autoRenewDescription": "Aboneliği her ay otomatik olarak yenile",
+    "disableAutoRenewTitle": "Otomatik yenilemeyi devre dışı bırak",
+    "disableAutoRenewMessage": "Otomatik yenilemeyi devre dışı bırakmak istediğinizden emin misiniz? Aboneliğiniz otomatik olarak yenilenmeyecek.",
+    "disableButton": "Devre Dışı Bırak"
+  },
+  "insufficient": {
+    "title": "Yetersiz Bakiye",
+    "message": "\"{{packageName}}\" paketini satın almak için {{price}} AFC'ye ihtiyacınız var. Bakiyeniz: {{balance}} AFC",
+    "topUp": "Bakiyeyi Yükle"
+  },
+  "extension": {
+    "title": "Abonelik Uzatma",
+    "message": "\"{{packageName}}\" paketiniz {{activationDate}} tarihinden itibaren uzatılacaktır.\n\n{{price}} AFC bakiyenizden düşülecektir.\n\n{{autoRenewStatus}}",
+    "confirmButton": "Uzat",
+    "cancelButton": "İptal",
+    "autoRenew": {
+      "enabled": "Otomatik yenileme etkin - abonelik otomatik olarak yenilenecektir.",
+      "disabled": "Otomatik yenileme devre dışı - abonelik otomatik olarak yenilenmeyecektir."
+    }
+  },
+  "cancelToFree": {
+    "title": "Ücretsiz Pakete Geç",
+    "message": "Mevcut aboneliğinizi iptal edip ücretsiz pakete geçmek istiyor musunuz?\n\nİptalden sonra tüm premium özellikleri kaybedeceksiniz.",
+    "confirmButton": "Aboneliği İptal Et",
+    "keepButton": "Mevcut Paketi Sakla"
+  },
+  "free": {
+    "alreadyActive": {
+      "title": "Ücretsiz Paket",
+      "message": "Ücretsiz paket zaten aktif. Ek özellikler için ücretli bir pakete geçebilirsiniz."
+    }
+  },
+  "autoRenewal": {
+    "transactionDescription": "Otomatik yenileme aboneliği \"%{packageName}\"",
+    "insufficientFunds": {
+      "title": "Yetersiz Bakiye",
+      "message": "\"%{packageName}\" aboneliğini otomatik yenilemek için %{price} AFc'ye ihtiyacınız var. Otomatik yenileme devre dışı.",
+      "topUp": "Bakiyeyi Yükle"
+    },
+    "success": {
+      "title": "Otomatik Yenileme",
+      "message": "\"%{packageName}\" aboneliği başarıyla yenilendi"
+    },
+    "dailyReminder": {
+      "title": "Abonelik Hatırlatması",
+      "message": "\"%{packageName}\" aboneliğini yenilemek için %{price} AFc'ye ihtiyacınız var. Otomatik yenileme için bakiyenizi yükleyin.",
+      "topUp": "Bakiyeyi Yükle",
+      "remindLater": "Daha Sonra Hatırlat"
+    }
+  }
+} 

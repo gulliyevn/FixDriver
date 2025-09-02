@@ -1,0 +1,22 @@
+{
+  "title": "My Cards",
+  "addTitle": "Add Card",
+  "holderPlaceholder": "Cardholder Name",
+  "numberPlaceholder": "Card Number",
+  "expiryPlaceholder": "MM/YY",
+  "cvvPlaceholder": "CVV",
+  "holderError": "Please enter cardholder name",
+  "numberError": "Please enter a valid card number",
+  "expiryError": "Please enter a valid date",
+  "expiryMonthError": "Month must be between 1 and 12",
+  "expiryPastError": "Date cannot be in the past",
+  "cvvError": "Please enter a valid CVV",
+  "cancel": "Cancel",
+  "save": "Save",
+  "add": "Add Card",
+  "delete": "Delete",
+  "deleteConfirm": "Are you sure you want to delete this card?",
+  "empty": "You don't have any cards yet",
+  "emptyDescription": "Add a card for quick payment of trips",
+  "default": "Default"
+} 

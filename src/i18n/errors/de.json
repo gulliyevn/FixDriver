@@ -1,0 +1,12 @@
+{
+  "error": "Fehler",
+  "networkError": "Netzwerkfehler",
+  "serverError": "Serverfehler",
+  "timeout": "Anfrage-Timeout",
+  "unauthorized": "Nicht autorisiert",
+  "forbidden": "Verboten",
+  "notFound": "Nicht gefunden",
+  "validationError": "Validierungsfehler",
+  "unknownError": "Ein unbekannter Fehler ist aufgetreten",
+  "permissionDenied": "Zugriff Verweigert"
+} 

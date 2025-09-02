@@ -1,0 +1,443 @@
+import { StyleSheet } from 'react-native';
+import { getCurrentColors, SHADOWS, SIZES } from '../../constants/colors';
+
+export const createEarningsScreenStyles = (isDark: boolean) => {
+  const colors = getCurrentColors(isDark);
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    safeAreaTop: {
+      backgroundColor: colors.background,
+      paddingTop: 0,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: SIZES.xl,
+      paddingVertical: SIZES.lg,
+      backgroundColor: colors.background,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.md,
+    },
+    filterIconContainer: {
+      padding: SIZES.xs,
+    },
+    filterButton: {
+      padding: SIZES.xs,
+    },
+    statusButton: {
+      padding: SIZES.xs,
+    },
+    headerTop: {
+      flexDirection: 'column',
+      width: '100%',
+    },
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    },
+    filtersWrapper: {
+      marginTop: SIZES.xxl,
+      zIndex: 1,
+    },
+    filtersContainer: {
+      maxHeight: 40,
+    },
+    filtersContent: {
+      paddingHorizontal: SIZES.sm,
+      gap: SIZES.xs,
+    },
+    filterChip: {
+      backgroundColor: colors.primary + '15',
+      borderRadius: 24,
+      paddingHorizontal: SIZES.lg,
+      paddingVertical: SIZES.sm,
+      marginHorizontal: SIZES.xs / 2,
+      borderWidth: 1.5,
+      borderColor: colors.primary + '30',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SIZES.xs,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    filterChipActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    filterChipText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.primary,
+      fontWeight: '600',
+    },
+    filterChipTextActive: {
+      color: colors.background,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: colors.background,
+      borderRadius: SIZES.radius.lg,
+      padding: SIZES.xl,
+      marginHorizontal: SIZES.xl,
+      alignItems: 'center',
+      ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
+    },
+    modalTimerContainer: {
+      width: '100%',
+      alignItems: 'center',
+      marginBottom: SIZES.sm,
+    },
+    modalTimerText: {
+      fontSize: SIZES.fontSize.xxl,
+      fontWeight: '700',
+      color: colors.primary,
+    },
+    modalTitle: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: SIZES.md,
+      textAlign: 'center',
+    },
+               modalMessage: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.textSecondary,
+             textAlign: 'center',
+             marginBottom: SIZES.xl,
+             lineHeight: 22,
+           },
+           modalStatusText: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.text,
+             fontWeight: '700',
+             textAlign: 'center',
+           },
+    modalButtons: {
+      flexDirection: 'row',
+      gap: SIZES.md,
+    },
+    modalButtonCancel: {
+      paddingHorizontal: SIZES.xl,
+      paddingVertical: SIZES.md,
+      borderRadius: SIZES.radius.md,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    modalButtonCancelText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.textSecondary,
+      fontWeight: '600',
+    },
+    modalButtonConfirm: {
+      paddingHorizontal: SIZES.xl,
+      paddingVertical: SIZES.md,
+      borderRadius: SIZES.radius.md,
+      backgroundColor: colors.primary,
+    },
+               modalButtonConfirmText: {
+             fontSize: SIZES.fontSize.md,
+             color: colors.background,
+             fontWeight: '600',
+           },
+
+    statsBox: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.primary + '08',
+      marginHorizontal: SIZES.xl,
+      borderRadius: SIZES.radius.xl,
+      marginTop: SIZES.lg,
+      marginBottom: SIZES.lg,
+      paddingVertical: SIZES.lg,
+      borderWidth: 1,
+      borderColor: colors.primary + '15',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    statCol: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: SIZES.sm,
+    },
+    statValue: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: SIZES.xs,
+    },
+    statLabel: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+    statDivider: {
+      width: 1,
+      height: 40,
+      backgroundColor: colors.border,
+    },
+    headerTitle: {
+      fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
+      fontWeight: '700',
+      color: colors.text,
+      textAlign: 'left',
+      marginLeft: SIZES.sm, // Сдвигаем правее
+    },
+    detailsButton: {
+      padding: SIZES.sm,
+    },
+    periodContainer: {
+      backgroundColor: colors.background,
+      paddingVertical: SIZES.lg,
+    },
+    periodButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: SIZES.lg,
+      paddingVertical: SIZES.sm,
+      marginHorizontal: SIZES.sm,
+      borderRadius: SIZES.radius.round,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    periodButtonActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    periodText: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.textSecondary,
+      marginLeft: SIZES.xs,
+    },
+    periodTextActive: {
+      color: colors.background,
+    },
+    earningsCard: {
+      backgroundColor: colors.surface,
+      margin: SIZES.xl,
+      padding: SIZES.xl,
+      borderRadius: SIZES.radius.lg,
+      minHeight: 120,
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    earningsHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    earningsLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    earningsLabel: {
+      fontSize: SIZES.fontSize.lg,
+      color: colors.textSecondary,
+    },
+    earningsAmount: {
+      fontSize: 34,
+      fontWeight: '700',
+      color: colors.text,
+      marginLeft: 10,
+    },
+    earningsReward: {
+      fontSize: SIZES.fontSize.sm,
+      fontWeight: '600',
+      color: colors.success,
+      marginLeft: 10,
+      alignSelf: 'flex-end',
+      marginBottom: 4,
+    },
+    earningsSubtext: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.success,
+    },
+    statsSection: {
+      backgroundColor: colors.surface,
+      padding: SIZES.xl,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.lg,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    sectionTitle: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: SIZES.lg,
+    },
+    statsGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+    statCard: {
+      width: '48%',
+      backgroundColor: colors.background,
+      borderRadius: SIZES.radius.md,
+      padding: SIZES.lg,
+      marginBottom: SIZES.md,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    statIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: SIZES.sm,
+    },
+    statCardValue: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: SIZES.xs,
+    },
+    statCardLabel: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+    chartSection: {
+      backgroundColor: colors.background,
+      padding: SIZES.xl,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    chartContainer: {
+      backgroundColor: colors.surface,
+      borderRadius: SIZES.radius.md,
+      padding: SIZES.xl,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    chartPlaceholder: {
+      alignItems: 'center',
+    },
+    chartText: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '600',
+      color: colors.textSecondary,
+      marginTop: SIZES.md,
+    },
+    chartSubtext: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.textSecondary,
+      marginTop: SIZES.xs,
+    },
+    ridesSection: {
+      backgroundColor: colors.surface,
+      padding: SIZES.xl,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.lg,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    ridesList: {
+      flex: 1,
+    },
+    rideCard: {
+      backgroundColor: colors.background,
+      borderRadius: SIZES.radius.md,
+      padding: SIZES.lg,
+      marginBottom: SIZES.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    rideHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    rideInfo: {
+      flex: 1,
+    },
+    rideClient: {
+      fontSize: SIZES.fontSize.lg,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: SIZES.xs,
+    },
+    rideTime: {
+      fontSize: SIZES.fontSize.md,
+      color: colors.textSecondary,
+    },
+    rideAmount: {
+      alignItems: 'flex-end',
+    },
+    amountText: {
+      fontSize: SIZES.fontSize.xl,
+      fontWeight: '700',
+      color: colors.primary,
+      marginBottom: SIZES.xs,
+    },
+    ratingContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    ratingText: {
+      fontSize: SIZES.fontSize.sm,
+      color: colors.textSecondary,
+      marginLeft: SIZES.xs,
+    },
+    withdrawSection: {
+      backgroundColor: colors.surface,
+      padding: SIZES.xl,
+      marginHorizontal: SIZES.xl,
+      marginBottom: SIZES.xl,
+      borderRadius: SIZES.radius.lg,
+      ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
+    },
+    withdrawButton: {
+      backgroundColor: colors.primary,
+      borderRadius: SIZES.radius.lg,
+      paddingVertical: SIZES.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    withdrawButtonText: {
+      color: colors.background,
+      fontSize: SIZES.fontSize.lg,
+      fontWeight: '600',
+      marginLeft: SIZES.sm,
+    },
+    testButton: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: SIZES.md,
+      alignSelf: 'center',
+      ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
+    },
+    testButtonText: {
+      fontSize: 24,
+      color: 'white',
+    },
+  });
+};

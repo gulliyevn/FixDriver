@@ -1,0 +1,12 @@
+{
+  "error": "Error",
+  "networkError": "Network error",
+  "serverError": "Server error",
+  "timeout": "Request timeout",
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden",
+  "notFound": "Not found",
+  "validationError": "Validation error",
+  "unknownError": "An unknown error occurred",
+  "permissionDenied": "Access Denied"
+} 

@@ -1,0 +1,10 @@
+{
+  "title": "Theme-Einstellungen",
+  "current": "Aktuelles Theme",
+  "dark": "Dunkles Theme",
+  "light": "Helles Theme",
+  "darkDescription": "Verwenden Sie das dunkle Theme für komfortable Nutzung bei schlechten Lichtverhältnissen",
+  "lightDescription": "Verwenden Sie das helle Theme für klare Darstellung bei hellen Bedingungen",
+  "switchToLight": "Zu Hell wechseln",
+  "switchToDark": "Zu Dunkel wechseln"
+} 

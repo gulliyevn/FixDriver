@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "title": "Ayarlar",
+    "notifications": {
+      "title": "Bildirişlər",
+      "push": "Push bildirişləri"
+    },
+    "language": {
+      "section": "Dil",
+      "current": "Cari dil",
+      "title": "Dil seçimi",
+      "syncWithSystem": "Sistemlə sinxronlaşdır",
+      "systemLanguage": "Sistem dili: %{language}",
+      "alreadySynced": "Artıq sinxronlaşdırılıb",
+      "syncSuccess": {
+        "title": "Sinxronlaşdırma",
+        "message": "Dil %{language} olaraq dəyişdirildi"
+      },
+      "error": {
+        "title": "Dil xətası",
+        "message": "Dili dəyişmək mümkün olmadı"
+      }
+    },
+    "appearance": {
+      "title": "Görünüş",
+      "darkMode": "Qaranlıq rejim"
+    },
+    "location": {
+      "title": "Məkan",
+      "autoLocation": "Avtomatik təyin et"
+    },
+    "security": {
+      "title": "Təhlükəsizlik",
+      "changePassword": "Şifrəni dəyiş",
+      "passwordChangedSuccess": "Şifrə uğurla dəyişdirildi",
+      "passwordChangeError": "Şifrə dəyişdirilə bilmədi",
+      "changingPassword": "Şifrə dəyişdirilir...",
+      "passwordSameError": "Yeni şifrə cari şifrədən fərqli olmalıdır"
+    },
+    "data": {
+      "title": "Məlumat",
+      "deleteAccount": "Hesabı sil",
+      "deleteAccountConfirm": "Hesabınızı silmək istədiyinizə əminsiniz?",
+      "deleteAccountSuccess": "Hesab silindi",
+      "deleteAccountSuccessMessage": "Hesabınız uğurla silindi.",
+      "deleteAccountError": "Hesabı silmək mümkün olmadı"
+    }
+  },
+  "residence": {
+    "title": "Məkan",
+    "deleteConfirm": "Ünvanı Sil",
+    "deleteMessage": "%{title} ünvanını silmək istədiyinizə əminsiniz?",
+    "deleteSuccess": "%{title} ünvanı silindi",
+    "deleteError": "Ünvan silinə bilmədi",
+    "setDefaultSuccess": "Ünvan standart olaraq təyin edildi",
+    "setDefaultError": "Ünvan standart olaraq təyin edilə bilmədi",
+    "addSuccess": "Ünvan uğurla əlavə edildi",
+    "addError": "Ünvan əlavə edilə bilmədi",
+    "updateSuccess": "Ünvan uğurla yeniləndi",
+    "updateError": "Ünvan yenilənə bilmədi",
+    "saveError": "Ünvan saxlanıla bilmədi",
+    "loading": "Ünvanlar yüklənir...",
+    "retry": "Yenidən cəhd et",
+    "emptyState": "Hələ ünvan əlavə edilməyib",
+    "defaultBadge": "Standart",
+    "modal": {
+      "addTitle": "Ünvan Əlavə Et",
+      "editTitle": "Ünvanı Redaktə Et",
+      "nameLabel": "Ad",
+      "namePlaceholder": "Ünvan adını daxil edin",
+      "nameRequired": "Ünvan adı tələb olunur",
+      "categoryLabel": "Kateqoriya",
+      "categoryPlaceholder": "Kateqoriya seçin",
+      "addressLabel": "Ünvan",
+      "addressPlaceholder": "Ünvan daxil edin",
+      "addressRequired": "Ünvan tələb olunur",
+      "addressChecking": "Ünvan yoxlanılır...",
+      "addressValid": "Ünvan düzgündür",
+      "addressInvalid": "Ünvan düzgün deyil",
+      "verifyAddress": "Ünvanı Təsdiqlə",
+      "defaultLabel": "Varsayılan olaraq təyin et",
+      "mapTitle": "Məkan Seç",
+      "mapDone": "Tamam",
+      "saveError": "Ünvan saxlanıla bilmədi"
+    },
+    "categories": {
+      "selectCategory": "Kateqoriya seçin",
+      "home": "Ev",
+      "work": "İş",
+      "university": "Universitet",
+      "mall": "Ticarət Mərkəzi",
+      "hospital": "Xəstəxana",
+      "gym": "İdman Zalları",
+      "restaurant": "Restoran",
+      "parents": "Valideynlər",
+      "dacha": "Yay evi",
+      "other": "Digər"
+    }
+  },
+  "editProfile": "Profili Redaktə Et",
+  "editProfileDesc": "Şəxsi məlumatları dəyiş",
+  "paymentMethods": "Ödəniş üsulları",
+  "paymentMethodsDesc": "Kart idarəetməsi",
+  "security": "Təhlükəsizlik",
+  "securityDesc": "Təhlükəsizlik parametrləri",
+  "support": "Dəstək",
+  "supportDesc": "Dəstəklə əlaqə",
+  "about": "Tətbiq haqqında",
+  "aboutDesc": "Versiya 1.0.0",
+  "darkTheme": "Qaranlıq tema",
+  "trips": "Səfərlər",
+  "spent": "Xərclənmiş",
+  "rating": "Reytinq",
+  "changePhoto": "Şəkli dəyiş",
+  "personalInfo": "Şəxsi məlumat",
+  "firstName": "Ad",
+  "firstNamePlaceholder": "Adınızı daxil edin",
+  "lastName": "Soyad",
+  "lastNamePlaceholder": "Soyadınızı daxil edin",
+  "phone": "Telefon",
+  "phonePlaceholder": "Telefon nömrəsini daxil edin",
+  "noPhone": "Göstərilməyib",
+  "email": "E-poçt",
+  "emailPlaceholder": "E-poçt ünvanını daxil edin",
+  "emailRequired": "E-poçt məcburidir",
+  "birthDate": "Doğum tarixi",
+  "birthDatePlaceholder": "YYYY-AA-GG",
+  "familyInfo": "Ailə məlumatı",
+  "familyType": "Kateqoriya",
+  "familyTypePlaceholder": "Kateqoriya seçin",
+  "familyAge": "Yaş",
+  "familyAgePlaceholder": "Yaş seçin",
+  "familyTypes": {
+    "child": "Uşaq",
+    "spouse": "Həyat yoldaşı",
+    "parent": "Valideyn",
+    "relative": "Qohum",
+    "husband": "Ər",
+    "wife": "Arvad",
+    "son": "Oğul",
+    "daughter": "Qız",
+    "mother": "Ana",
+    "father": "Ata",
+    "grandmother": "Nənə",
+    "grandfather": "Baba",
+    "brother": "Qardaş",
+    "sister": "Bacı",
+    "uncle": "Dayı",
+    "aunt": "Xala",
+    "cousin": "Bibi oğlu/qızı",
+    "nephew": "Bacıoğlu",
+    "niece": "Bacıqızı",
+    "stepfather": "Ögey ata",
+    "stepmother": "Ögey ana",
+    "stepson": "Ögey oğul",
+    "stepdaughter": "Ögey qız",
+    "other": "Digər"
+  },
+  "years": "yaş",
+  "addFamilyMember": "Ailə üzvü əlavə et",
+  "editFamilyMember": "Redaktə et",
+  "saveChangesConfirm": {
+    "title": "Dəyişiklikləri saxla",
+    "message": "Saxlanmamış dəyişiklikləriniz var. Çıxmazdan əvvəl onları saxlamaq istəyirsiniz?",
+    "cancel": "Ləğv et",
+    "save": "Saxla"
+  },
+  "vipStatus": "VIP statusu",
+  "vipTitle": "VIP abunəlik",
+  "vipDescription": "Prioritetli xidmət, eksklüziv təkliflər və xüsusi endirimlər əldə edin",
+  "upgradeToVip": "VIP-ə yüksəlt",
+  "premiumStatus": "Premium statusu",
+  "premiumSubscription": "Premium abunəlik",
+  "premiumDescription": "Prioritetli xidmət, eksklüziv təkliflər və xüsusi endirimlər əldə edin",
+  "becomePremium": "Premium ol",
+  "becomeDriver": "Sürücü ol",
+  "becomeDriverButton": "Sürücü kimi qeydiyyatdan keç",
+  "myVehicles": "Mənim Avtomobillərim",
+  "myVehiclesButton": "Avtomobilləri İdarə Et",
+  "vehicles": {
+    "title": "Mənim Avtomobillərim",
+    "addVehicle": "Avtomobil Əlavə Et",
+    "editVehicle": "Avtomobili Redaktə Et",
+    "vehicleNumber": "Avtomobil Nömrəsi",
+    "vehicleNumberPlaceholder": "Avtomobil nömrəsini daxil edin",
+    "vehicleNumberRequired": "Avtomobil nömrəsi tələb olunur",
+    "tariff": "Tarif",
+    "tariffPlaceholder": "Tarif seçin",
+    "tariffRequired": "Tarif tələb olunur",
+    "carBrand": "Avtomobil Markası",
+    "carBrandPlaceholder": "Marka seçin",
+    "carBrandRequired": "Avtomobil markası tələb olunur",
+    "carModel": "Avtomobil Modeli",
+    "carModelPlaceholder": "Model seçin",
+    "carModelRequired": "Avtomobil modeli tələb olunur",
+    "carYear": "İstehsal İli",
+    "carYearPlaceholder": "İl seçin",
+    "carYearRequired": "İstehsal ili tələb olunur",
+    "carMileage": "Avtomobil Kilometrajı",
+    "carMileagePlaceholder": "Kilometrajı km ilə daxil edin",
+    "carMileageRequired": "Avtomobil kilometrajı tələb olunur",
+    "passportPhoto": "Pasport Fotoşəkli",
+    "passportPhotoRequired": "Pasport fotoşəkli tələb olunur",
+    "saveVehicle": "Avtomobili Saxla",
+    "vehicleSaved": "Avtomobil saxlanıldı",
+    "vehicleSaveError": "Avtomobil saxlanıla bilmədi",
+    "noVehicles": "Avtomobil əlavə edilməyib",
+    "addFirstVehicle": "İlk avtomobilinizi əlavə edin",
+    "loadError": "Avtomobillər yüklənə bilmədi",
+    "createError": "Avtomobil yaradıla bilmədi",
+    "updateError": "Avtomobil yenilənə bilmədi",
+    "deleteError": "Avtomobil silinə bilmədi",
+    "toggleError": "Avtomobil statusu dəyişdirilə bilmədi",
+    "photoUploadError": "Pasport fotoşəkli yüklənə bilmədi",
+    "vehicleLabels": {
+      "number": "Nömrə:",
+      "brand": "Marka:",
+      "model": "Model:",
+      "year": "İl:",
+      "mileage": "Kilometraj:"
+    },
+    "deleteVehicle": "Avtomobili sil",
+    "deleteVehicleConfirm": "Bu avtomobili silmək istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz."
+  },
+  "addPhoto": "Şəkil əlavə et",
+  "addPhotoMessage": "Şəkil əlavə etmə üsulunu seçin",
+  "takePhoto": "Şəkil çək",
+  "chooseFromGallery": "Qalereyadan seç",
+  "cameraAccess": "Kamera girişi",
+  "cameraAccessRequired": "Şəkil çəkmək üçün kamera girişi tələb olunur",
+  "galleryAccess": "Qalereya girişi",
+  "galleryAccessRequired": "Şəkil seçmək üçün qalereya girişi tələb olunur",
+  "photoError": "Şəkil xətası",
+  "photoTakeError": "Şəkil çəkilmədi",
+  "photoPickError": "Şəkil seçilmədi",
+  "changePhotoMessage": "Şəkil dəyişdirmə üsulunu seçin",
+  "deletePhoto": "Şəkli sil",
+  "deletePhotoConfirm": "Şəkli sil",
+  "deletePhotoMessage": "Şəkli silmək istədiyinizə əminsiniz?",
+  "becomeDriverModal": {
+    "title": "Sürücü ol",
+    "message": "Sürücü səhifəsini aç?",
+    "cancel": "Ləğv et",
+    "proceed": "Get"
+  },
+  "becomeClientModal": {
+    "title": "Müştəri ol",
+    "message": "Müştəri səhifəsini aç?",
+    "cancel": "Ləğv et",
+    "proceed": "Get",
+    "loginError": "Müştəri kimi daxil olmaq mümkün olmadı"
+  },
+  "saveProfileConfirm": {
+    "title": "Dəyişiklikləri saxla",
+    "message": "Profilinizdəki dəyişiklikləri saxlamaq istədiyinizə əminsiniz?",
+    "cancel": "Ləğv et",
+    "save": "Saxla"
+  },
+  "saveProfileSuccess": {
+    "title": "Uğurlu",
+    "message": "Profil saxlanıldı"
+  },
+  "saveProfileError": {
+    "title": "Xəta",
+    "message": "Profil saxlanılmadı"
+  },
+  "verifyEmail": {
+    "title": "E-poçt təsdiqi",
+    "message": "E-poçtunuza göndərilən kodu daxil edin",
+    "success": {
+      "title": "Uğurlu",
+      "message": "E-poçt uğurla təsdiqləndi"
+    },
+    "error": {
+      "title": "Xəta",
+      "message": "Yanlış kod"
+    },
+    "emailVerifiedSuccess": "E-poçt uğurla təsdiqləndi"
+  },
+  "verifyPhone": {
+    "title": "Telefonu Təsdiqlə",
+    "message": "Təsdiq kodunu telefona göndər?",
+    "success": {
+      "title": "Kod Göndərildi",
+      "message": "Təsdiq kodu telefonunuza göndərildi"
+    },
+    "error": {
+      "title": "Göndərmə Xətası",
+      "message": "Təsdiq kodu göndərilə bilmədi"
+    },
+    "phoneVerifiedSuccess": "Telefon uğurla təsdiqləndi"
+  },
+  "validationError": "Zəhmət olmasa bütün məcburi sahələri doldurun",
+  "loadingProfile": "Profil yüklənir...",
+  "failedToLoadProfile": "Profil yüklənə bilmədi",
+  "profileUpdateSuccess": {
+    "title": "Uğurlu",
+    "message": "Profil uğurla yeniləndi"
+  },
+  "profileUpdateError": {
+    "title": "Xəta",
+    "message": "Profil yenilənə bilmədi"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Xəta",
+    "message": "Profil yenilənərkən xəta baş verdi"
+  },
+  "validation": {
+    "title": "Doğrulama Xətası",
+    "firstNameRequired": "Ad məcburidir",
+    "lastNameRequired": "Soyad məcburidir",
+    "familyTypeRequired": "Zəhmət olmasa ailə üzvü növünü seçin",
+    "familyAgeRequired": "Zəhmət olmasa doğum tarixini seçin",
+    "phoneRequired": "Telefon nömrəsi məcburidir",
+    "emailRequired": "E-poçt məcburidir"
+  },
+  "verificationModal": {
+    "enterCode": "Kodu daxil edin",
+    "enterSmsCode": "SMS-dən təsdiq kodunu daxil edin",
+    "enterEmailCode": "E-poçtdan təsdiq kodunu daxil edin",
+    "phoneNotSpecified": "Telefon nömrəsi göstərilməyib"
+  },
+  "family": {
+    "addMemberSuccess": "Ailə üzvü əlavə edildi",
+    "fillNameSurname": "Zəhmət olmasa ad və soyadı doldurun",
+    "confirmDelete": "Bu ailə üzvünü silmək istədiyinizdən əminsiniz?",
+    "confirmSave": "Dəyişiklikləri saxlamaq istədiyinizdən əminsiniz?",
+    "deleteSuccess": "Ailə üzvü silindi",
+    "saveSuccess": "Dəyişikliklər saxlanıldı",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
+  },
+  "photoSuccess": "Uğurlu",
+  "photoTakeSuccess": "Şəkil uğurla əlavə edildi",
+  "photoPickSuccess": "Şəkil qalereyadan uğurla seçildi",
+  "photoDeleteSuccess": "Şəkil uğurla silindi",
+  "photoSaveError": "Şəkil saxlanıla bilmədi",
+  "photoDeleteError": "Şəkil silinə bilmədi"
+} 

@@ -1,0 +1,317 @@
+{
+  "title": "Driver",
+  "dashboard": "Dashboard",
+  "earnings": {
+    "title": "Earnings",
+    "today": "Today",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+
+    "total": "Total",
+    "perHour": "Per Hour",
+    "perOrder": "Per Order",
+    "bonus": "Bonus",
+    "tips": "Tips",
+    "commission": "Commission",
+    "tax": "Tax",
+    "net": "Net Income",
+    "withdraw": "Withdraw",
+    "withdrawMessage": "Withdrawal function will be available in the next update",
+    "viewDetails": "Details",
+    "detailsMessage": "Detailed statistics will be available in the next update",
+    "stats": {
+      "title": "Statistics",
+      "rides": "Rides",
+      "avgRating": "Average Rating",
+      "workHours": "Work Hours",
+      "completionRate": "Schedule Completion",
+      "totalRides": "Total Rides",
+      "avgPerRide": "Average per Ride",
+      "totalHours": "Total Hours",
+      "scheduleCompletion": "Schedule Completion"
+    },
+    "bonuses": {
+      "title": "Bonuses & Achievements",
+      "vipStatus": "VIP Status",
+      "qualityBonus": "Quality Bonus",
+      "highRating": "High Rating",
+      "noCancellations": "No Cancellations",
+      "achievements": "Achievements",
+      "rides100": "100 Rides",
+      "rating5": "5 Star Rating",
+      "referralBonus": "Referral Bonuses",
+      "invitedDrivers": "Invited Drivers"
+    },
+    "levels": {
+      "title": "Levels & Ratings",
+      "novice": "Novice",
+      "experienced": "Experienced",
+      "expert": "Expert",
+      "vip": "VIP",
+      "currentLevel": "Current Level",
+      "nextLevel": "Next Level",
+      "progress": "Progress",
+      "ridesToNext": "To Next Level",
+      "badges": "Badges & Awards"
+    },
+    "charts": {
+      "title": "Analytics",
+      "earningsChart": "Earnings Chart",
+      "activityHeatmap": "Activity Heatmap",
+      "comparison": "Period Comparison",
+      "forecast": "Earnings Forecast",
+      "previousPeriod": "Previous Period",
+      "currentPeriod": "Current Period",
+      "nextPeriod": "Next Period"
+    },
+    "goals": {
+      "title": "Goals & Achievements",
+      "dailyGoal": "Daily Goal",
+      "weeklyGoal": "Weekly Goal",
+      "monthlyGoal": "Monthly Goal",
+      "targetEarnings": "Target Earnings",
+      "progress": "Progress",
+      "achieved": "Achieved",
+      "remaining": "Remaining"
+    },
+    "map": {
+      "title": "Activity Zones",
+      "activityZones": "Activity Zones",
+      "hotSpots": "Hot Spots",
+      "earningsByZone": "Earnings by Zone"
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "topDrivers": "Top Drivers",
+      "byEarnings": "By Earnings",
+      "byRating": "By Rating",
+      "yourPosition": "Your Position",
+      "rank": "Rank"
+    },
+    "settings": {
+      "title": "Settings",
+      "targetEarnings": "Target Earnings",
+      "notifications": "Notifications",
+      "displaySettings": "Display Settings",
+      "showStats": "Show Statistics",
+      "showCharts": "Show Charts",
+      "showMap": "Show Map",
+      "showGoals": "Show Goals"
+    }
+  },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "changeStatus": "Change Status",
+    "changeStatusMessage": "Do you want to change your status to",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "goOnlineMessage": "You will become Online"
+  },
+  "orders": {
+    "title": "Orders",
+    "active": "Active",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "new": "New",
+    "inProgress": "In Progress",
+    "pickup": "Pickup",
+    "delivery": "Delivery",
+    "searchOrders": "Search orders...",
+    "orderNumber": "Order #{id}",
+    "acceptOrderAction": "Accept Order",
+    "completeTrip": "Complete Trip",
+    "acceptOrderConfirm": "Accept order from {clientName}?",
+    "completeTripConfirm": "Complete trip with {clientName}?",
+    "orderAccepted": "Order accepted!",
+    "tripCompleted": "Trip completed!",
+    "cancelOrder": "Cancel",
+    "acceptOrder": "Accept",
+    "completeOrder": "Complete",
+    "all": "All",
+    "refresh": "Refresh"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "workHours": "Work Hours",
+    "break": "Break",
+    "start": "Start",
+    "end": "End",
+    "pause": "Pause",
+    "resume": "Resume",
+    "totalHours": "Total Hours",
+    "overtime": "Overtime",
+    "weekend": "Weekend",
+    "holiday": "Holiday",
+    "upcoming": "Upcoming",
+    "scheduleCompleted": "Completed",
+    "scheduleCancelled": "Cancelled",
+    "cancelScheduleTrip": "Cancel Trip",
+    "cancelScheduleTripConfirm": "Cancel trip {date} at {time}?",
+    "no": "No",
+    "yes": "Yes",
+    "totalEarnings": "Total earnings: {amount} ₽"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Info",
+    "vehicleInfo": "Vehicle Info",
+    "documents": "Documents",
+    "ratings": "Ratings",
+    "reviews": "Reviews",
+    "statistics": "Statistics",
+    "achievements": "Achievements",
+    "badges": "Badges",
+    "level": "Level",
+    "experience": "Experience",
+    "points": "Points",
+    "rank": "Rank"
+  },
+  "map": {
+    "title": "Map",
+    "loadingMap": "Loading map...",
+    "currentLocation": "Current Location",
+    "destination": "Destination",
+    "route": "Route",
+    "traffic": "Traffic",
+    "weather": "Weather",
+    "fuel": "Fuel",
+    "parking": "Parking"
+  },
+  "chat": {
+    "title": "Chat",
+    "messages": "Messages",
+    "clients": "Clients",
+    "support": "Support",
+    "unread": "Unread",
+    "typing": "typing...",
+    "online": "online",
+    "offline": "offline",
+    "lastSeen": "last seen",
+    "send": "Send",
+    "attach": "Attach",
+    "image": "Image",
+    "file": "File",
+    "location": "Location",
+    "voice": "Voice Message",
+    "video": "Video",
+    "call": "Call",
+    "videoCall": "Video Call",
+    "block": "Block",
+    "report": "Report",
+    "delete": "Delete",
+    "archive": "Archive",
+    "mute": "Mute",
+    "pin": "Pin",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "loadMore": "Load More",
+    "noMessages": "No messages",
+    "noClients": "No clients",
+    "startChat": "Start Chat",
+    "endChat": "End Chat",
+    "leaveChat": "Leave Chat",
+    "joinChat": "Join Chat",
+    "back": "← Back",
+    "logout": "Logout",
+    "enterMessage": "Enter message...",
+    "noActiveChats": "You don't have any active chats yet"
+  },
+  "plus": {
+    "title": "Additional",
+    "subtitle": "Additional features",
+    "premiumDriver": "Premium Driver",
+    "premiumSubtitle": "Get priority orders and higher rates",
+    "learnMore": "Learn More",
+    "premiumMessage": "Premium subscription feature will be available in the next update",
+    "quickActions": "Quick Actions",
+    "actionMessage": "Function \"{action}\" will be available in the next update",
+    "understand": "Understand",
+    "roadsideAssistance": "Roadside Assistance",
+    "roadsideSubtitle": "Help on the road",
+    "deliveryService": "Delivery",
+    "deliverySubtitle": "Fast delivery"
+  },
+  "startTrip": {
+    "title": "Start Trip",
+    "tripDetails": "Trip Details",
+    "clientName": "Client Name",
+    "clientPhone": "Client Phone",
+    "pickupAddress": "Pickup Address",
+    "destinationAddress": "Destination Address",
+    "price": "Price",
+    "startTrip": "Start Trip",
+    "cancelTrip": "Cancel Trip",
+    "cancelTripConfirm": "Are you sure you want to cancel the trip?",
+    "tripStarted": "Trip Started",
+    "goodTrip": "Have a good trip!",
+    "loading": "Loading..."
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "readAll": "Read all",
+    "filter": "Filter",
+    "read": "Read",
+    "delete": "Delete",
+    "showAll": "Show all notifications"
+  },
+  "settings": "Settings",
+  "tripDialogs": {
+    "startTrip": {
+      "title": "Let's go?",
+      "message": "Are you starting a trip to {clientName}?"
+    },
+    "waiting": {
+      "title": "Waiting?",
+      "message": "Are you waiting for client {clientName}?"
+    },
+    "beginTrip": {
+      "title": "Let's go?",
+      "message": "You are starting the trip with {clientName}?"
+    },
+    "cancelTrip": {
+      "title": "Cancel trip?",
+      "message": "You are canceling the trip with {clientName}?"
+    },
+    "endTrip": {
+      "title": "Finish?",
+      "message": "Is the trip with {clientName} finished?"
+    },
+    "continueTrip": {
+      "title": "Continue?",
+      "message": "Continue the trip?"
+    },
+    "emergency": {
+      "title": "Emergency Actions",
+      "message": "Choose an emergency action",
+      "stop": "Stop",
+      "end": "End"
+    },
+    "stopTrip": {
+      "title": "Stop",
+      "message": "Trip has been forcibly stopped"
+    },
+    "forceEndTrip": {
+      "title": "End",
+      "message": "Trip has been forcibly ended"
+    },
+    "buttons": {
+      "cancelAction": "Cancel",
+      "okAction": "OK"
+    },
+    "pauseTrip": {
+      "title": "Pause Trip?",
+      "message": "Do you want to pause the trip with {clientName}?",
+      "paused": "Trip paused",
+      "resume": "Resume trip",
+      "resumeMessage": "Continue trip with {clientName}?"
+    }
+  }
+}

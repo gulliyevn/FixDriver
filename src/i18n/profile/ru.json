@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "title": "Настройки",
+    "notifications": {
+      "title": "Уведомления",
+      "push": "Push-уведомления"
+    },
+    "language": {
+      "section": "Язык",
+      "current": "Текущий язык",
+      "title": "Выбор языка",
+      "syncWithSystem": "Синхронизировать с системой",
+      "systemLanguage": "Системный язык: %{language}",
+      "alreadySynced": "Уже синхронизировано",
+      "syncSuccess": {
+        "title": "Синхронизация",
+        "message": "Язык изменен на %{language}"
+      },
+      "error": {
+        "title": "Ошибка языка",
+        "message": "Не удалось изменить язык"
+      }
+    },
+    "appearance": {
+      "title": "Внешний вид",
+      "darkMode": "Темная тема"
+    },
+    "location": {
+      "title": "Местоположение",
+      "autoLocation": "Автоматически определять"
+    },
+    "security": {
+      "title": "Безопасность",
+      "changePassword": "Изменить пароль",
+      "passwordChangedSuccess": "Пароль успешно изменен",
+      "passwordChangeError": "Не удалось изменить пароль",
+      "changingPassword": "Изменение пароля...",
+      "passwordSameError": "Новый пароль должен отличаться от текущего"
+    },
+    "data": {
+      "title": "Данные",
+      "deleteAccount": "Удалить аккаунт",
+      "deleteAccountConfirm": "Вы уверены, что хотите удалить аккаунт?",
+      "deleteAccountSuccess": "Аккаунт удален",
+      "deleteAccountSuccessMessage": "Ваш аккаунт успешно удален.",
+      "deleteAccountError": "Не удалось удалить аккаунт"
+    }
+  },
+  "residence": {
+    "title": "Местоположение",
+    "deleteConfirm": "Удалить адрес",
+    "deleteMessage": "Вы уверены, что хотите удалить адрес %{title}?",
+    "deleteSuccess": "Адрес %{title} был удален",
+    "deleteError": "Не удалось удалить адрес",
+    "setDefaultSuccess": "Адрес установлен по умолчанию",
+    "setDefaultError": "Не удалось установить адрес по умолчанию",
+    "addSuccess": "Адрес успешно добавлен",
+    "addError": "Не удалось добавить адрес",
+    "updateSuccess": "Адрес успешно обновлен",
+    "updateError": "Не удалось обновить адрес",
+    "saveError": "Не удалось сохранить адрес",
+    "loading": "Загрузка адресов...",
+    "retry": "Повторить",
+    "emptyState": "Адреса еще не добавлены",
+    "defaultBadge": "По умолчанию",
+    "modal": {
+      "addTitle": "Добавить адрес",
+      "editTitle": "Редактировать адрес",
+      "nameLabel": "Название",
+      "namePlaceholder": "Введите название адреса",
+      "nameRequired": "Название адреса обязательно",
+      "categoryLabel": "Категория",
+      "categoryPlaceholder": "Выберите категорию",
+      "addressLabel": "Адрес",
+      "addressPlaceholder": "Введите адрес",
+      "addressRequired": "Адрес обязателен",
+      "addressChecking": "Проверка адреса...",
+      "addressValid": "Адрес действителен",
+      "addressInvalid": "Адрес недействителен",
+      "verifyAddress": "Проверить адрес",
+      "defaultLabel": "Установить по умолчанию",
+      "mapTitle": "Выбрать местоположение",
+      "mapDone": "Готово",
+      "saveError": "Не удалось сохранить адрес"
+    },
+    "categories": {
+      "selectCategory": "Выберите категорию",
+      "home": "Дом",
+      "work": "Работа",
+      "university": "Университет",
+      "mall": "Торговый центр",
+      "hospital": "Больница",
+      "gym": "Спортзал",
+      "restaurant": "Ресторан",
+      "parents": "Родители",
+      "dacha": "Дача",
+      "other": "Другой"
+    }
+  },
+  "editProfile": "Редактировать Профиль",
+  "editProfileDesc": "Изменить личные данные",
+  "paymentMethods": "Способы оплаты",
+  "paymentMethodsDesc": "Управление картами",
+  "security": "Безопасность",
+  "securityDesc": "Настройки безопасности",
+  "support": "Поддержка",
+  "supportDesc": "Связаться с поддержкой",
+  "about": "О приложении",
+  "aboutDesc": "Версия 1.0.0",
+  "darkTheme": "Темная тема",
+  "trips": "Поездок",
+  "spent": "Потрачено",
+  "rating": "Рейтинг",
+  "changePhoto": "Изменить фото",
+  "personalInfo": "Личная информация",
+  "firstName": "Имя",
+  "firstNamePlaceholder": "Введите имя",
+  "lastName": "Фамилия",
+  "lastNamePlaceholder": "Введите фамилию",
+  "phone": "Телефон",
+  "phonePlaceholder": "Введите номер телефона",
+  "noPhone": "Не указан",
+  "email": "Почта",
+  "emailPlaceholder": "Введите почту",
+  "emailRequired": "Почта обязательна для заполнения",
+  "birthDate": "Дата рождения",
+  "birthDatePlaceholder": "ГГГГ-ММ-ДД",
+  "familyInfo": "Семейная информация",
+  "familyType": "Категория",
+  "familyTypePlaceholder": "Выберите категорию",
+  "familyAge": "Возраст",
+  "familyAgePlaceholder": "Выберите возраст",
+  "familyTypes": {
+    "child": "Ребенок",
+    "spouse": "Супруг",
+    "parent": "Родитель",
+    "relative": "Родственник",
+    "husband": "Муж",
+    "wife": "Жена",
+    "son": "Сын",
+    "daughter": "Дочь",
+    "mother": "Мать",
+    "father": "Отец",
+    "grandmother": "Бабушка",
+    "grandfather": "Дедушка",
+    "brother": "Брат",
+    "sister": "Сестра",
+    "uncle": "Дядя",
+    "aunt": "Тетя",
+    "cousin": "Двоюродный брат/сестра",
+    "nephew": "Племянник",
+    "niece": "Племянница",
+    "stepfather": "Отчим",
+    "stepmother": "Мачеха",
+    "stepson": "Пасынок",
+    "stepdaughter": "Падчерица",
+    "other": "Другое"
+  },
+  "years": "лет",
+  "addFamilyMember": "Добавить члена семьи",
+  "editFamilyMember": "Редактировать",
+  "saveChangesConfirm": {
+    "title": "Сохранить изменения",
+    "message": "У вас есть несохраненные изменения. Хотите сохранить их перед выходом?",
+    "cancel": "Отменить",
+    "save": "Сохранить"
+  },
+  "vipStatus": "VIP статус",
+  "vipTitle": "VIP подписка",
+  "vipDescription": "Получите приоритетное обслуживание, эксклюзивные предложения и специальные скидки",
+  "upgradeToVip": "Стать VIP",
+  "premiumStatus": "Премиум статус",
+  "premiumSubscription": "Премиум подписка",
+  "premiumDescription": "Получите приоритетное обслуживание, эксклюзивные предложения и специальные скидки",
+  "becomePremium": "Стать Премиум",
+  "becomeDriver": "Стать водителем",
+  "becomeDriverButton": "Зарегистрироваться как водитель",
+  "myVehicles": "Мои Автомобили",
+  "myVehiclesButton": "Управление автомобилями",
+  "vehicles": {
+    "title": "Мои Автомобили",
+    "addVehicle": "Добавить автомобиль",
+    "editVehicle": "Редактировать автомобиль",
+    "vehicleNumber": "Номер автомобиля",
+    "vehicleNumberPlaceholder": "Введите номер автомобиля",
+    "vehicleNumberRequired": "Номер автомобиля обязателен",
+    "tariff": "Тариф",
+    "tariffPlaceholder": "Выберите тариф",
+    "tariffRequired": "Тариф обязателен",
+    "carBrand": "Марка автомобиля",
+    "carBrandPlaceholder": "Выберите марку",
+    "carBrandRequired": "Марка автомобиля обязательна",
+    "carModel": "Модель автомобиля",
+    "carModelPlaceholder": "Выберите модель",
+    "carModelRequired": "Модель автомобиля обязательна",
+    "carYear": "Год выпуска",
+    "carYearPlaceholder": "Выберите год",
+    "carYearRequired": "Год выпуска обязателен",
+    "carMileage": "Пробег автомобиля",
+    "carMileagePlaceholder": "Введите пробег в км",
+    "carMileageRequired": "Пробег автомобиля обязателен",
+    "passportPhoto": "Фото техпаспорта",
+    "passportPhotoRequired": "Фото техпаспорта обязательно",
+    "saveVehicle": "Сохранить автомобиль",
+    "vehicleSaved": "Автомобиль сохранен",
+    "vehicleSaveError": "Не удалось сохранить автомобиль",
+    "noVehicles": "Автомобили не добавлены",
+    "addFirstVehicle": "Добавьте первый автомобиль",
+    "loadError": "Не удалось загрузить автомобили",
+    "createError": "Не удалось создать автомобиль",
+    "updateError": "Не удалось обновить автомобиль",
+    "deleteError": "Не удалось удалить автомобиль",
+    "toggleError": "Не удалось изменить статус автомобиля",
+    "photoUploadError": "Не удалось загрузить фото техпаспорта",
+    "vehicleLabels": {
+      "number": "Номер:",
+      "brand": "Марка:",
+      "model": "Модель:",
+      "year": "Год:",
+      "mileage": "Пробег:"
+    },
+    "deleteVehicle": "Удалить автомобиль",
+    "deleteVehicleConfirm": "Вы уверены, что хотите удалить этот автомобиль? Это действие нельзя отменить."
+  },
+  "addPhoto": "Добавить фото",
+  "addPhotoMessage": "Выберите способ добавления фото",
+  "takePhoto": "Сделать фото",
+  "chooseFromGallery": "Выбрать из галереи",
+  "cameraAccess": "Доступ к камере",
+  "cameraAccessRequired": "Для съемки фото необходим доступ к камере",
+  "galleryAccess": "Доступ к галерее",
+  "galleryAccessRequired": "Для выбора фото необходим доступ к галерее",
+  "photoError": "Ошибка фото",
+  "photoTakeError": "Не удалось сделать фото",
+  "photoPickError": "Не удалось выбрать фото",
+  "changePhotoMessage": "Выберите способ изменения фото",
+  "deletePhoto": "Удалить фото",
+  "deletePhotoConfirm": "Удалить фото",
+  "deletePhotoMessage": "Вы уверены, что хотите удалить фото?",
+  "becomeDriverModal": {
+    "title": "Стать водителем",
+    "message": "Открыть страницу водителя?",
+    "cancel": "Отмена",
+    "proceed": "Перейти"
+  },
+  "becomeClientModal": {
+    "title": "Стать клиентом",
+    "message": "Открыть страницу клиента?",
+    "cancel": "Отмена",
+    "proceed": "Перейти",
+    "loginError": "Не удалось войти как клиент"
+  },
+  "saveProfileConfirm": {
+    "title": "Сохранить изменения?",
+    "message": "Вы уверены, что хотите сохранить изменения?",
+    "cancel": "Отмена",
+    "save": "Сохранить"
+  },
+  "saveProfileSuccess": {
+    "title": "Профиль обновлен",
+    "message": "Ваши данные успешно сохранены"
+  },
+  "saveProfileError": {
+    "title": "Ошибка сохранения",
+    "message": "Не удалось сохранить изменения"
+  },
+  "verifyEmail": {
+    "title": "Подтвердить почту",
+    "message": "Отправить код подтверждения на почту?",
+    "success": {
+      "title": "Код отправлен",
+      "message": "Код подтверждения отправлен на вашу почту"
+    },
+    "error": {
+      "title": "Ошибка отправки",
+      "message": "Не удалось отправить код подтверждения"
+    },
+    "emailVerifiedSuccess": "Email успешно верифицирован"
+  },
+  "verifyPhone": {
+    "title": "Подтвердить телефон",
+    "message": "Отправить код подтверждения на телефон?",
+    "success": {
+      "title": "Код отправлен",
+      "message": "Код подтверждения отправлен на ваш телефон"
+    },
+    "error": {
+      "title": "Ошибка отправки",
+      "message": "Не удалось отправить код подтверждения"
+    },
+    "phoneVerifiedSuccess": "Телефон успешно верифицирован"
+  },
+  "validationError": "Пожалуйста, заполните все обязательные поля",
+  "loadingProfile": "Загрузка профиля...",
+  "failedToLoadProfile": "Не удалось загрузить профиль",
+  "profileUpdateSuccess": {
+    "title": "Успех",
+    "message": "Профиль успешно обновлен"
+  },
+  "profileUpdateError": {
+    "title": "Ошибка",
+    "message": "Не удалось обновить профиль"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Ошибка",
+    "message": "Произошла ошибка при обновлении профиля"
+  },
+  "validation": {
+    "title": "Ошибка валидации",
+    "firstNameRequired": "Имя обязательно для заполнения",
+    "lastNameRequired": "Фамилия обязательна для заполнения",
+    "familyTypeRequired": "Выберите категорию члена семьи",
+    "familyAgeRequired": "Выберите дату рождения",
+    "phoneRequired": "Номер телефона обязателен для заполнения",
+    "emailRequired": "E-mail обязателен для заполнения"
+  },
+  "verificationModal": {
+    "enterCode": "Введите код",
+    "enterSmsCode": "Введите код подтверждения из SMS",
+    "enterEmailCode": "Введите код подтверждения из email",
+    "phoneNotSpecified": "Номер телефона не указан"
+  },
+  "family": {
+    "addMemberSuccess": "Член семьи добавлен",
+    "fillNameSurname": "Пожалуйста, заполните имя и фамилию",
+    "confirmDelete": "Вы уверены, что хотите удалить этого члена семьи?",
+    "confirmSave": "Вы уверены, что хотите сохранить изменения?",
+    "deleteSuccess": "Член семьи удален",
+    "saveSuccess": "Изменения сохранены",
+    "defaultMembers": {
+      "child": {
+        "name": "Анна",
+        "surname": "Петрова"
+      },
+      "spouse": {
+        "name": "Михаил",
+        "surname": "Петров"
+      }
+    }
+  },
+  "photoSuccess": "Успешно",
+  "photoTakeSuccess": "Фото успешно добавлено",
+  "photoPickSuccess": "Фото успешно выбрано из галереи",
+  "photoDeleteSuccess": "Фото успешно удалено",
+  "photoSaveError": "Не удалось сохранить фото",
+  "photoDeleteError": "Не удалось удалить фото"
+} 

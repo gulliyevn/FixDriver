@@ -1,0 +1,105 @@
+{
+  "title": "Ayuda y Reglas",
+  "description": "Encuentra respuestas a preguntas frecuentes y aprende sobre las reglas del servicio",
+  "howToOrder": "¿Cómo pedir un viaje?",
+  "howToOrderDesc": "Aprende cómo pedir un viaje rápidamente",
+  "paymentAndRates": "Pago y tarifas",
+  "paymentAndRatesDesc": "Información sobre métodos de pago y tarifas",
+  "safetyTitle": "Seguridad",
+  "safetyDesc": "Medidas de seguridad durante los viajes",
+  "rulesTitle": "Términos de servicio",
+  "rulesDesc": "Reglas básicas del servicio",
+  "support": "Soporte",
+  "supportDesc": "Contactar soporte",
+  "contactTitle": "¿Necesitas ayuda?",
+  "contactDescription": "Contacta con nuestro servicio de soporte",
+  "contactWhatsApp": "Contactar soporte",
+  "booking": {
+    "routeSelection": {
+      "title": "Selección de ruta",
+      "description": "Cómo seleccionar correctamente una ruta de viaje",
+      "content": "Abre el mapa y selecciona los puntos de partida y destino. Especifica la dirección exacta para el cálculo correcto de la ruta."
+    },
+    "driverSelection": {
+      "title": "Selección de conductor",
+      "description": "Cómo elegir un conductor adecuado",
+      "content": "Revisa los conductores disponibles, sus calificaciones y reseñas. Elige un conductor adecuado para tu viaje."
+    },
+    "orderConfirmation": {
+      "title": "Confirmación de pedido",
+      "description": "Cómo confirmar un pedido de viaje",
+      "content": "Confirma los detalles del viaje: tiempo, dirección, número de pasajeros. El conductor recibirá una notificación sobre el pedido."
+    },
+    "waitingDriver": {
+      "title": "Esperando al conductor",
+      "description": "Qué hacer mientras esperas al conductor",
+      "content": "El conductor llegará a la dirección especificada en 5-10 minutos. Puedes rastrear su ubicación en el mapa."
+    }
+  },
+  "payment": {
+    "paymentMethods": {
+      "title": "Métodos de pago",
+      "description": "Qué métodos de pago están disponibles",
+      "content": "Están disponibles varios métodos de pago: tarjetas bancarias, billeteras electrónicas, efectivo al recibir. Elige el método conveniente para ti."
+    },
+    "tariffCalculation": {
+      "title": "Cálculo de tarifa",
+      "description": "Cómo se calcula el costo del viaje",
+      "content": "La tarifa se calcula automáticamente basándose en la distancia, tiempo de viaje y plan tarifario seleccionado. Todos los precios están en manats."
+    },
+    "tariffPlans": {
+      "title": "Planes tarifarios",
+      "description": "Qué planes tarifarios están disponibles",
+      "content": "Elige un plan tarifario adecuado: básico, premium o corporativo. Cada plan tiene sus ventajas y características."
+    },
+    "refund": {
+      "title": "Reembolso",
+      "description": "Cómo se procesa el reembolso",
+      "content": "En caso de cancelación del viaje o problemas técnicos, los fondos se devuelven a tu cuenta en 1-3 días hábiles."
+    }
+  },
+  "rules": {
+    "generalProvisions": {
+      "title": "Disposiciones generales",
+      "description": "Aprende sobre los principios básicos de operación del servicio",
+      "content": "Reglas básicas para usar el servicio FixDrive. Al usar el servicio, aceptas estos términos de uso. El servicio proporciona una plataforma para pedir viajes entre conductores y pasajeros."
+    },
+    "terms": {
+      "title": "Términos",
+      "description": "Términos de registro y uso de cuenta",
+      "content": "Términos de uso del servicio. Para usar el servicio, necesitas crear una cuenta con datos válidos. Eres responsable de la seguridad de tus credenciales de cuenta."
+    },
+    "policy": {
+      "title": "Política",
+      "description": "Política de privacidad y protección de datos",
+      "content": "Política de privacidad y procesamiento de datos. Recopilamos y procesamos tus datos de acuerdo con la ley. Tu privacidad es importante para nosotros."
+    },
+    "rules": {
+      "title": "Reglas",
+      "description": "Reglas adicionales para pedir y cancelar viajes",
+      "content": "Reglas y restricciones adicionales. Al pedir un viaje, especifica la dirección de destino exacta. La cancelación del viaje debe hacerse con anticipación."
+    }
+  },
+  "safety": {
+    "driverCheck": {
+      "title": "Verificación del conductor",
+      "description": "Cómo se asegura la seguridad del conductor",
+      "content": "Todos los conductores pasan por una verificación exhaustiva de documentos, vehículos y antecedentes penales. Garantizamos la seguridad de cada viaje."
+    },
+    "routeTracking": {
+      "title": "Seguimiento de ruta",
+      "description": "Cómo rastrear la ruta del viaje",
+      "content": "Tus seres queridos pueden rastrear tu ruta en tiempo real. Comparte el enlace del viaje para seguridad adicional."
+    },
+    "emergencyButton": {
+      "title": "Botón de emergencia",
+      "description": "Cómo usar el botón de emergencia",
+      "content": "Un botón de emergencia está disponible en la aplicación para ayuda rápida. Al presionarlo, se envía automáticamente una señal al servicio de seguridad."
+    },
+    "ratingSystem": {
+      "title": "Sistema de calificación",
+      "description": "Cómo funciona el sistema de calificación",
+      "content": "Después de cada viaje, puedes calificar al conductor. Esto ayuda a mantener alta calidad de servicio y seguridad."
+    }
+  }
+} 
