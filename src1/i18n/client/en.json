@@ -1,0 +1,372 @@
+{
+  "title": "Client",
+  "dashboard": "Dashboard",
+  "bookings": "Bookings",
+  "drivers": "Drivers",
+  "map": {
+    "title": "Map",
+    "searchPlaceholder": "Where to go?",
+    "orderButton": "Order",
+    "loadingLocation": "Determining your location...",
+    "locationError": "Failed to get your location"
+  },
+  "chat": {
+    "title": "Chat",
+    "noChats": "No chats",
+    "loadingChats": "Loading chats...",
+    "cancel": "Cancel",
+    "read": "Read",
+    "online": "Online",
+    "offline": "Offline",
+    "unknownUser": "Unknown user",
+    "noMessages": "No messages",
+    "loadingMessages": "Loading messages...",
+    "messageError": "Message sending error",
+    "typing": "typing...",
+    "startConversation": "Start a conversation",
+    "startNewChat": "Start new chat",
+    "searchChats": "Search chats...",
+    "markAsRead": "Mark as read",
+    "markAsReadConfirm": "Mark %{count} chats as read?",
+    "deleteSelected": "Delete selected",
+    "deleteSelectedConfirm": "Are you sure you want to delete selected chats?",
+    "deleteChat": "Delete chat",
+    "deleteChatConfirm": "Are you sure you want to delete this chat?",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "document": "Document",
+    "location": "Location",
+    "callOptions": "Choose call type",
+    "internetCall": "Internet call",
+    "networkCall": "Cellular call"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "readAll": "Read all",
+    "filter": "Filter",
+    "read": "Read",
+    "delete": "Delete",
+    "showAll": "Show all notifications"
+  },
+  "settings": "Settings",
+  "profile": {
+    "title": "Profile",
+    "trips": "Trips",
+    "spent": "Spent",
+    "rating": "Rating",
+    "balance": "My balance",
+    "cards": "Cards",
+    "debts": "My debts",
+    "paymentHistory": "Payment history",
+    "residence": "Location",
+    "help": "Help & rules",
+    "about": "About app",
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to logout from your account?",
+    "vip": {
+      "title": "VIP Status",
+      "description": "Priority service and bonuses",
+      "upgrade": "Upgrade",
+      "benefits": "Benefits",
+      "priority": "Priority booking",
+      "bestDrivers": "Best drivers",
+      "extraCashback": "Extra cashback",
+      "premiumSupport": "Premium support"
+    }
+  },
+  "schedule": {
+    "title": "Schedule",
+    "loading": "Loading...",
+    "noBookings": "No booked trips",
+    "addBooking": "Add booking"
+  },
+  "support": "Support",
+  "balance": {
+    "title": "My balance",
+    "currentBalance": "Current balance",
+    "topUp": "Top up",
+    "withdraw": "Withdraw",
+    "quickTopUp": "Quick top up",
+    "pending": "Pending",
+    "enterWithdrawAmount": "Enter amount to withdraw:",
+    "withdrawRequestSent": "Withdrawal request for %{0} AFc sent",
+
+    "showAll": "Show all",
+    "pay": "Pay",
+    "insufficientFunds": "Insufficient funds",
+    "minimumWithdrawal": "Minimum 20 AFc required for withdrawal",
+    "useCashback": "Use FixBack",
+    "useCashbackConfirm": "Are you sure you want to use FixBack?",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "success": "Success",
+    "cashbackAdded": "FixBack %{0} AFc added to balance",
+    "error": "Error",
+    "enterValidAmount": "Please enter a valid amount",
+    "paymentSuccess": "Payment successful",
+    "balanceToppedUp": "Balance topped up by %{0} AFc",
+    "copied": "Copied",
+    "balanceTopUp": "Top up",
+    "topUpHistory": "Top-up history",
+    "loadingMore": "Loading...",
+    "amountInAFc": "Amount in AFc",
+    "enterAmount": "Enter amount",
+    "confirm": "Confirm",
+    "confirmTopUp": "Are you sure you want to top up your balance by %{0} AFc?",
+    "topUpBalance": "Top up balance",
+    "payButton": "Pay",
+    "recentTopUps": "Recent top-ups",
+    "recentTransactions": "Recent transactions",
+    "withdrawal": "Withdrawal",
+    "cashback": {
+      "title": "FixBack",
+      "available": "Available to use",
+      "pending": "Pending",
+      "use": "Use",
+      "history": "History",
+      "description": "Accumulated FixBack can be used to pay for trips"
+    }
+  },
+  "debts": {
+    "title": "My debts",
+    "noDebts": "No active debts",
+    "noDebtsDescription": "You have no unpaid debts",
+    "debtAmount": "Debt amount",
+    "dueDate": "Due date",
+    "payDebt": "Pay debt",
+    "confirmPayment": "Payment confirmation",
+    "confirmPaymentMessage": "Pay debt for {amount}?",
+    "paymentSuccess": "Debt paid",
+    "paymentSuccessMessage": "Debt successfully paid",
+    "status": {
+      "overdue": "Overdue",
+      "dueSoon": "Due soon",
+      "active": "Active",
+      "paid": "Paid"
+    },
+    "tripDebt": "Trip debt",
+    "serviceDebt": "Service debt",
+    "penaltyDebt": "Penalty debt",
+    "subscriptionDebt": "Subscription debt",
+    "parkingDebt": "Parking debt",
+    "unpaidTrip": "Unpaid trip",
+    "unpaidService": "Unpaid service",
+    "unpaidPenalty": "Unpaid penalty",
+    "unpaidSubscription": "Unpaid subscription",
+    "unpaidParking": "Unpaid parking",
+    "toAirport": "to airport",
+    "toCityCenter": "to city center"
+  },
+  "cards": {
+    "title": "My cards",
+    "noCards": "No added cards",
+    "addCard": "Add card",
+    "scanCard": "Scan card",
+    "enterManually": "Enter manually",
+    "delete": "Delete",
+    "expires": "Expires",
+    "addNewCard": "Add new card"
+  },
+  "cars": {
+    "title": "My cars",
+    "noCars": "No added cars",
+    "addCar": "Add car",
+    "scanDocuments": "Scan documents",
+    "enterManually": "Enter manually",
+    "delete": "Delete",
+    "year": "Year",
+    "color": "Color",
+    "type": "Type",
+    "edit": "Edit",
+    "addNewCar": "Add new car"
+  },
+  "plus": {
+    "title": "Booking",
+    "step1": {
+      "title": "Select subscription package",
+      "description": "Choose the right tariff for your trips",
+      "popular": "Popular"
+    },
+    "step2": {
+      "title": "Trip details",
+      "passengers": "Number of passengers",
+      "pickupAddress": "Pickup address",
+      "destinationAddress": "Destination address",
+      "notes": "Additional notes",
+      "notesPlaceholder": "Special requirements or wishes"
+    },
+    "step3": {
+      "title": "Booking details",
+      "summary": "Trip summary"
+    },
+    "loading": "Loading..."
+  },
+  "driverCard": {
+    "route": "Route",
+    "stops": "stops",
+    "call": "Call"
+  },
+
+  "orders": {
+    "addOrder": "Add order",
+    "create": "Create order",
+    "created": "Order #{id} created"
+  },
+
+  "help": {
+    "title": "Help & rules",
+    "needHelp": "Need help?",
+    "contactSupport": "Contact support"
+  },
+  "residence": {
+    "title": "Location",
+    "default": "Default"
+  },
+  "paymentHistory": {
+    "title": "Payment history",
+    "noPayments": "No transactions",
+    "emptyDescription": "Transaction history is empty",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "viewAll": "View all",
+    "showLess": "Show less",
+    "empty": "History is empty",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "transactions": {
+      "topUp": "Top-up",
+      "packagePurchase": "Package purchase \"{{packageName}}\"",
+      "packageExtension": "Package extension \"{{packageName}}\"",
+      "subscriptionRenewal": "Subscription renewal \"{{packageName}}\""
+    },
+    "package": "Package: {{packageType}}",
+    "mock": {
+      "tripToCityCenter": "Trip to city center",
+      "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",
+      "balanceTopUp": "Top-up",
+      "tripToAirport": "Trip to airport",
+      "routeCenterAirport": "Route: center - Heydar Aliyev airport",
+      "refund": "Refund",
+      "refundForCancelledTrip": "Refund for cancelled trip",
+      "balanceTopUpTitle": "Balance top-up",
+      "tripToCityCenterTitle": "Trip to city center",
+      "tripToAirportTitle": "Trip to airport",
+      "refundTitle": "Refund",
+      "refundDescription": "Refund for cancelled trip"
+    },
+    "filter": {
+      "title": "Filter",
+      "paymentType": "Payment type",
+      "status": "Status",
+      "period": "Period",
+      "allTypes": "All types",
+      "trips": "Trips",
+      "topUps": "Top-ups",
+      "refunds": "Refunds",
+      "fees": "Fees",
+      "allStatuses": "All statuses",
+      "allTime": "All time",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "reset": "Reset",
+      "apply": "Apply"
+    }
+  },
+  "trips": {
+    "title": "Trips",
+    "noTrips": "No trips",
+    "emptyDescription": "Trip history is empty",
+    "driver": "Driver",
+    "status": {
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "scheduled": "Scheduled"
+    },
+    "filter": {
+      "title": "Filter",
+      "tripType": "Trip type",
+      "status": "Status",
+      "period": "Period",
+      "allTypes": "All types",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "scheduled": "Scheduled",
+      "allStatuses": "All statuses",
+      "allTime": "All time",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "reset": "Reset",
+      "apply": "Apply"
+    },
+    "mock": {
+      "tripToCityCenter": "Trip to city center",
+      "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",
+      "tripToAirport": "Trip to airport",
+      "routeCenterAirport": "Route: center - Heydar Aliyev airport",
+      "tripToMall": "Trip to mall",
+      "routeToMall": "Route: home - shopping center",
+      "tripToWork": "Trip to work",
+      "routeToWork": "Route: home - office"
+    }
+  }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Search drivers...",
+    "loadingMore": "Loading more drivers...",
+    "empty": {
+      "loadingDrivers": "Loading drivers...",
+      "noDrivers": "No drivers",
+      "willAppear": "Drivers will appear here after loading"
+    },
+    "filters": {
+      "all": "All",
+      "rating45": "Rating 4.5+",
+      "premium": "Premium",
+      "price": "Price",
+      "dailyTrips": "Daily trips",
+      "economy": "Economy"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Call"
+    },
+    "labels": {
+      "son": "Son"
+    },
+    "call": {
+      "internetCall": "Internet call",
+      "internetCallLater": "Internet call feature will be implemented later.",
+      "callTitle": "Call %{firstName} %{lastName}",
+      "networkCallWithNumber": "Cellular call %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Select driver",
+      "selectDriverMessage": "Select %{firstName} %{lastName}?",
+      "bookDriversTitle": "Book drivers",
+      "bookDriversMessage": "Book %{count} selected drivers?",
+      "deleteDriversTitle": "Delete drivers",
+      "deleteDriversMessage": "Delete selected drivers from the list?",
+      "deleteOneDriverTitle": "Delete driver",
+      "deleteOneDriverMessage": "Delete the driver from the list?",
+      "pauseTripTitle": "Pause trip?",
+      "pauseTripMessage": "Do you want to pause the trip with %{driverName}?",
+      "resumeTripTitle": "Resume trip",
+      "resumeTripMessage": "Continue trip with %{driverName}?"
+    },
+    "selection": {
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "bookCount": "Book (%{count})"
+    },
+    "common": {
+      "book": "Book"
+    }
+  }
+}

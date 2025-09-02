@@ -1,0 +1,105 @@
+{
+  "title": "Yardım ve Kurallar",
+  "description": "Sık sorulan soruların cevaplarını bulun ve hizmet kurallarını öğrenin",
+  "howToOrder": "Yolculuk nasıl sipariş edilir?",
+  "howToOrderDesc": "Yolculuğu nasıl hızlı sipariş edeceğinizi öğrenin",
+  "paymentAndRates": "Ödeme ve tarifeler",
+  "paymentAndRatesDesc": "Ödeme yöntemleri ve tarifeler hakkında bilgi",
+  "safetyTitle": "Güvenlik",
+  "safetyDesc": "Yolculuklar sırasında güvenlik önlemleri",
+  "rulesTitle": "Kullanım şartları",
+  "rulesDesc": "Hizmetin temel kuralları",
+  "support": "Destek",
+  "supportDesc": "Destekle iletişim",
+  "contactTitle": "Yardıma mı ihtiyacınız var?",
+  "contactDescription": "Destek hizmetimizle iletişime geçin",
+  "contactWhatsApp": "Destekle iletişim",
+  "booking": {
+    "routeSelection": {
+      "title": "Rota seçimi",
+      "description": "Yolculuk rotasını nasıl doğru seçmek",
+      "content": "Haritayı açın ve kalkış ve varış noktalarını seçin. Doğru rota hesaplaması için tam adresi belirtin."
+    },
+    "driverSelection": {
+      "title": "Sürücü seçimi",
+      "description": "Uygun sürücüyü nasıl seçmek",
+      "content": "Mevcut sürücüleri, puanlarını ve yorumlarını inceleyin. Yolculuğunuz için uygun sürücüyü seçin."
+    },
+    "orderConfirmation": {
+      "title": "Sipariş onayı",
+      "description": "Yolculuk siparişini nasıl onaylamak",
+      "content": "Yolculuk detaylarını onaylayın: zaman, adres, yolcu sayısı. Sürücü sipariş hakkında bildirim alacak."
+    },
+    "waitingDriver": {
+      "title": "Sürücüyü beklemek",
+      "description": "Sürücüyü beklerken ne yapmak gerekir",
+      "content": "Sürücü belirtilen adrese 5-10 dakika içinde gelecek. Konumunu haritada takip edebilirsiniz."
+    }
+  },
+  "payment": {
+    "paymentMethods": {
+      "title": "Ödeme yöntemleri",
+      "description": "Hangi ödeme yöntemleri mevcut",
+      "content": "Çeşitli ödeme yöntemleri mevcuttur: banka kartları, elektronik cüzdanlar, teslimatta nakit. Size uygun olan yöntemi seçin."
+    },
+    "tariffCalculation": {
+      "title": "Tarife hesaplaması",
+      "description": "Yolculuk maliyeti nasıl hesaplanır",
+      "content": "Tarife mesafe, yolculuk süresi ve seçilen tarife planına göre otomatik olarak hesaplanır. Tüm fiyatlar manat cinsinden gösterilir."
+    },
+    "tariffPlans": {
+      "title": "Tarife planları",
+      "description": "Hangi tarife planları mevcut",
+      "content": "Uygun tarife planını seçin: temel, premium veya kurumsal. Her planın kendi avantajları ve özellikleri vardır."
+    },
+    "refund": {
+      "title": "Para iadesi",
+      "description": "Para iadesi nasıl gerçekleşir",
+      "content": "Yolculuk iptali veya teknik sorunlar durumunda, para 1-3 iş günü içinde hesabınıza iade edilir."
+    }
+  },
+  "rules": {
+    "generalProvisions": {
+      "title": "Genel hükümler",
+      "description": "Hizmetin temel çalışma prensipleri hakkında bilgi",
+      "content": "FixDrive hizmetini kullanmanın temel kuralları. Hizmeti kullanarak bu kullanım şartlarını kabul etmiş olursunuz. Hizmet, sürücüler ve yolcular arasında yolculuk sipariş etmek için platform sağlar."
+    },
+    "terms": {
+      "title": "Şartlar",
+      "description": "Hesap kaydı ve kullanım şartları",
+      "content": "Hizmet kullanım şartları. Hizmeti kullanmak için geçerli verilerle hesap oluşturmanız gerekir. Hesap bilgilerinizin güvenliğinden sorumlusunuz."
+    },
+    "policy": {
+      "title": "Politika",
+      "description": "Gizlilik ve veri koruma politikası",
+      "content": "Gizlilik ve veri işleme politikası. Verilerinizi yasaya uygun olarak topluyor ve işliyoruz. Gizliliğiniz bizim için önemlidir."
+    },
+    "rules": {
+      "title": "Kurallar",
+      "description": "Yolculuk sipariş etme ve iptal etme için ek kurallar",
+      "content": "Ek kurallar ve kısıtlamalar. Yolculuk sipariş ederken tam varış adresini belirtin. Yolculuk iptali zamanında yapılmalıdır."
+    }
+  },
+  "safety": {
+    "driverCheck": {
+      "title": "Sürücü kontrolü",
+      "description": "Sürücü güvenliği nasıl sağlanır",
+      "content": "Tüm sürücüler belgelerin, araçların ve suç geçmişinin kapsamlı kontrolünden geçer. Her yolculuğun güvenliğini garanti ediyoruz."
+    },
+    "routeTracking": {
+      "title": "Rota takibi",
+      "description": "Yolculuk rotasını nasıl takip etmek",
+      "content": "Sevdikleriniz rotanızı gerçek zamanlı olarak takip edebilir. Ek güvenlik için yolculuk linkini paylaşın."
+    },
+    "emergencyButton": {
+      "title": "Acil durum düğmesi",
+      "description": "Acil durum düğmesini nasıl kullanmak",
+      "content": "Uygulamada hızlı yardım için acil durum düğmesi mevcuttur. Basıldığında otomatik olarak güvenlik hizmetine sinyal gönderilir."
+    },
+    "ratingSystem": {
+      "title": "Puanlama sistemi",
+      "description": "Puanlama sistemi nasıl çalışır",
+      "content": "Her yolculuktan sonra sürücüyü puanlayabilirsiniz. Bu yüksek hizmet kalitesini ve güvenliği korumaya yardımcı olur."
+    }
+  }
+} 

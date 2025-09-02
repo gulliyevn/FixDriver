@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "notifications": {
+      "title": "Notifications",
+      "push": "Notifications push"
+    },
+    "language": {
+      "section": "Langue",
+      "current": "Langue actuelle",
+      "title": "Sélection de la langue",
+      "syncWithSystem": "Synchroniser avec le système",
+      "systemLanguage": "Langue du système : %{language}",
+      "alreadySynced": "Déjà synchronisé",
+      "syncSuccess": {
+        "title": "Synchronisation",
+        "message": "Langue changée vers %{language}"
+      },
+      "error": {
+        "title": "Erreur de langue",
+        "message": "Impossible de changer la langue"
+      }
+    },
+    "appearance": {
+      "title": "Apparence",
+      "darkMode": "Mode sombre"
+    },
+    "location": {
+      "title": "Localisation",
+      "autoLocation": "Détection automatique"
+    },
+    "security": {
+      "title": "Sécurité",
+      "changePassword": "Changer le mot de passe",
+      "passwordChangedSuccess": "Mot de passe modifié avec succès",
+      "passwordChangeError": "Échec de la modification du mot de passe",
+      "changingPassword": "Modification du mot de passe...",
+      "passwordSameError": "Le nouveau mot de passe doit être différent de l'actuel"
+    },
+    "data": {
+      "title": "Données",
+      "deleteAccount": "Supprimer le compte",
+      "deleteAccountConfirm": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+      "deleteAccountSuccess": "Compte supprimé",
+      "deleteAccountSuccessMessage": "Votre compte a été supprimé avec succès.",
+      "deleteAccountError": "Impossible de supprimer le compte"
+    }
+  },
+  "residence": {
+    "title": "Localisation",
+    "deleteConfirm": "Supprimer l'adresse",
+    "deleteMessage": "Êtes-vous sûr de vouloir supprimer l'adresse %{title}?",
+    "deleteSuccess": "L'adresse %{title} a été supprimée",
+    "deleteError": "Impossible de supprimer l'adresse",
+    "setDefaultSuccess": "Adresse définie par défaut",
+    "setDefaultError": "Impossible de définir l'adresse par défaut",
+    "addSuccess": "Adresse ajoutée avec succès",
+    "addError": "Impossible d'ajouter l'adresse",
+    "updateSuccess": "Adresse mise à jour avec succès",
+    "updateError": "Impossible de mettre à jour l'adresse",
+    "saveError": "Impossible de sauvegarder l'adresse",
+    "loading": "Chargement des adresses...",
+    "retry": "Réessayer",
+    "emptyState": "Aucune adresse ajoutée pour le moment",
+    "defaultBadge": "Par défaut",
+    "modal": {
+      "addTitle": "Ajouter une adresse",
+      "editTitle": "Modifier l'adresse",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez le nom de l'adresse",
+      "nameRequired": "Le nom de l'adresse est requis",
+      "categoryLabel": "Catégorie",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Entrez l'adresse",
+      "addressRequired": "L'adresse est requise",
+      "addressChecking": "Vérification de l'adresse...",
+      "addressValid": "L'adresse est valide",
+      "addressInvalid": "L'adresse est invalide",
+      "verifyAddress": "Vérifier l'adresse",
+      "defaultLabel": "Définir par défaut",
+      "mapTitle": "Sélectionner l'emplacement",
+      "mapDone": "Terminé",
+      "saveError": "Impossible de sauvegarder l'adresse"
+    },
+    "categories": {
+      "selectCategory": "Sélectionner une catégorie",
+      "home": "Maison",
+      "work": "Travail",
+      "university": "Université",
+      "mall": "Centre commercial",
+      "hospital": "Hôpital",
+      "gym": "Salle de sport",
+      "restaurant": "Restaurant",
+      "parents": "Parents",
+      "dacha": "Maison de campagne",
+      "other": "Autre"
+    }
+  },
+  "editProfile": "Modifier le profil",
+  "editProfileDesc": "Modifier les données personnelles",
+  "paymentMethods": "Méthodes de paiement",
+  "paymentMethodsDesc": "Gestion des cartes",
+  "security": "Sécurité",
+  "securityDesc": "Paramètres de sécurité",
+  "support": "Support",
+  "supportDesc": "Contacter le support",
+  "about": "À propos de l'app",
+  "aboutDesc": "Version 1.0.0",
+  "darkTheme": "Thème sombre",
+  "trips": "Trajets",
+  "spent": "Dépensé",
+  "rating": "Évaluation",
+  "changePhoto": "Changer la photo",
+  "personalInfo": "Informations personnelles",
+  "firstName": "Prénom",
+  "firstNamePlaceholder": "Entrez le prénom",
+  "lastName": "Nom de famille",
+  "lastNamePlaceholder": "Entrez le nom de famille",
+  "phone": "Téléphone",
+  "phonePlaceholder": "Entrez le numéro de téléphone",
+  "noPhone": "Non spécifié",
+  "email": "E-mail",
+  "emailPlaceholder": "Entrez l'e-mail",
+  "emailRequired": "L'e-mail est obligatoire",
+  "birthDate": "Date de naissance",
+  "birthDatePlaceholder": "AAAA-MM-JJ",
+  "familyInfo": "Informations familiales",
+  "familyType": "Catégorie",
+  "familyTypePlaceholder": "Sélectionner la catégorie",
+  "familyAge": "Âge",
+  "familyAgePlaceholder": "Sélectionner l'âge",
+  "familyTypes": {
+    "child": "Enfant",
+    "spouse": "Conjoint",
+    "parent": "Parent",
+    "relative": "Parent",
+    "husband": "Mari",
+    "wife": "Femme",
+    "son": "Fils",
+    "daughter": "Fille",
+    "mother": "Mère",
+    "father": "Père",
+    "grandmother": "Grand-mère",
+    "grandfather": "Grand-père",
+    "brother": "Frère",
+    "sister": "Sœur",
+    "uncle": "Oncle",
+    "aunt": "Tante",
+    "cousin": "Cousin/Cousine",
+    "nephew": "Neveu",
+    "niece": "Nièce",
+    "stepfather": "Beau-père",
+    "stepmother": "Belle-mère",
+    "stepson": "Beau-fils",
+    "stepdaughter": "Belle-fille",
+    "other": "Autre"
+  },
+  "years": "ans",
+  "addFamilyMember": "Ajouter un membre de la famille",
+  "editFamilyMember": "Modifier",
+  "saveChangesConfirm": {
+    "title": "Enregistrer les modifications",
+    "message": "Vous avez des modifications non enregistrées. Voulez-vous les enregistrer avant de quitter?",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
+  },
+  "vipStatus": "Statut VIP",
+  "vipTitle": "Abonnement VIP",
+  "vipDescription": "Obtenez un service prioritaire, des offres exclusives et des remises spéciales",
+  "upgradeToVip": "Passer à VIP",
+  "premiumStatus": "Statut Premium",
+  "premiumSubscription": "Abonnement Premium",
+  "premiumDescription": "Obtenez un service prioritaire, des offres exclusives et des remises spéciales",
+  "becomePremium": "Devenir Premium",
+  "becomeDriver": "Devenir chauffeur",
+  "becomeDriverButton": "S'inscrire comme chauffeur",
+  "myVehicles": "Mes Véhicules",
+  "myVehiclesButton": "Gérer les Véhicules",
+  "vehicles": {
+    "title": "Mes Véhicules",
+    "addVehicle": "Ajouter un véhicule",
+    "editVehicle": "Modifier le véhicule",
+    "vehicleNumber": "Numéro du véhicule",
+    "vehicleNumberPlaceholder": "Entrez le numéro du véhicule",
+    "vehicleNumberRequired": "Le numéro du véhicule est requis",
+    "tariff": "Tarif",
+    "tariffPlaceholder": "Sélectionnez le tarif",
+    "tariffRequired": "Le tarif est requis",
+    "carBrand": "Marque de voiture",
+    "carBrandPlaceholder": "Sélectionnez la marque",
+    "carBrandRequired": "La marque de voiture est requise",
+    "carModel": "Modèle de voiture",
+    "carModelPlaceholder": "Sélectionnez le modèle",
+    "carModelRequired": "Le modèle de voiture est requis",
+    "carYear": "Année de fabrication",
+    "carYearPlaceholder": "Sélectionnez l'année",
+    "carYearRequired": "L'année de fabrication est requise",
+    "carMileage": "Kilométrage",
+    "carMileagePlaceholder": "Entrez le kilométrage en km",
+    "carMileageRequired": "Le kilométrage est requis",
+    "passportPhoto": "Photo du passeport",
+    "passportPhotoRequired": "La photo du passeport est requise",
+    "saveVehicle": "Sauvegarder le véhicule",
+    "vehicleSaved": "Véhicule sauvegardé",
+    "vehicleSaveError": "Échec de la sauvegarde du véhicule",
+    "noVehicles": "Aucun véhicule ajouté",
+    "addFirstVehicle": "Ajoutez votre premier véhicule",
+    "loadError": "Échec du chargement des véhicules",
+    "createError": "Échec de la création du véhicule",
+    "updateError": "Échec de la mise à jour du véhicule",
+    "deleteError": "Échec de la suppression du véhicule",
+    "toggleError": "Échec du changement de statut du véhicule",
+    "photoUploadError": "Échec du téléchargement de la photo du passeport",
+    "vehicleLabels": {
+      "number": "Numéro:",
+      "brand": "Marque:",
+      "model": "Modèle:",
+      "year": "Année:",
+      "mileage": "Kilométrage:"
+    },
+    "deleteVehicle": "Supprimer le véhicule",
+    "deleteVehicleConfirm": "Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action ne peut pas être annulée."
+  },
+  "addPhoto": "Ajouter une photo",
+  "addPhotoMessage": "Choisir la méthode d'ajout de photo",
+  "takePhoto": "Prendre une photo",
+  "chooseFromGallery": "Choisir dans la galerie",
+  "cameraAccess": "Accès à la caméra",
+  "cameraAccessRequired": "Accès à la caméra requis pour prendre une photo",
+  "galleryAccess": "Accès à la galerie",
+  "galleryAccessRequired": "Accès à la galerie requis pour sélectionner une photo",
+  "photoError": "Erreur de photo",
+  "photoTakeError": "Échec de la prise de photo",
+  "photoPickError": "Échec de la sélection de photo",
+  "changePhotoMessage": "Choisir la méthode de changement de photo",
+  "deletePhoto": "Supprimer la photo",
+  "deletePhotoConfirm": "Supprimer la photo",
+  "deletePhotoMessage": "Êtes-vous sûr de vouloir supprimer la photo ?",
+  "becomeDriverModal": {
+    "title": "Devenir chauffeur",
+    "message": "Ouvrir la page chauffeur ?",
+    "cancel": "Annuler",
+    "proceed": "Continuer"
+  },
+  "becomeClientModal": {
+    "title": "Devenir client",
+    "message": "Ouvrir la page client ?",
+    "cancel": "Annuler",
+    "proceed": "Continuer",
+    "loginError": "Échec de la connexion en tant que client"
+  },
+  "saveProfileConfirm": {
+    "title": "Enregistrer les modifications",
+    "message": "Êtes-vous sûr de vouloir enregistrer les modifications de votre profil ?",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
+  },
+  "saveProfileSuccess": {
+    "title": "Succès",
+    "message": "Profil enregistré"
+  },
+  "saveProfileError": {
+    "title": "Erreur",
+    "message": "Échec de l'enregistrement du profil"
+  },
+  "verifyEmail": {
+    "title": "Vérification de l'e-mail",
+    "message": "Entrez le code envoyé à votre e-mail",
+    "success": {
+      "title": "Succès",
+      "message": "E-mail vérifié avec succès"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Code invalide"
+    },
+    "emailVerifiedSuccess": "E-mail vérifié avec succès"
+  },
+  "verifyPhone": {
+    "title": "Vérifier le téléphone",
+    "message": "Envoyer le code de vérification au téléphone?",
+    "success": {
+      "title": "Code envoyé",
+      "message": "Code de vérification envoyé à votre téléphone"
+    },
+    "error": {
+      "title": "Erreur d'envoi",
+      "message": "Impossible d'envoyer le code de vérification"
+    },
+    "phoneVerifiedSuccess": "Téléphone vérifié avec succès"
+  },
+  "validationError": "Veuillez remplir tous les champs obligatoires",
+  "loadingProfile": "Chargement du profil...",
+  "failedToLoadProfile": "Impossible de charger le profil",
+  "profileUpdateSuccess": {
+    "title": "Succès",
+    "message": "Profil mis à jour avec succès"
+  },
+  "profileUpdateError": {
+    "title": "Erreur",
+    "message": "Impossible de mettre à jour le profil"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Erreur",
+    "message": "Une erreur s'est produite lors de la mise à jour du profil"
+  },
+  "validation": {
+    "title": "Erreur de validation",
+    "firstNameRequired": "Le prénom est requis",
+    "lastNameRequired": "Le nom de famille est requis",
+    "familyTypeRequired": "Veuillez sélectionner le type de membre de la famille",
+    "familyAgeRequired": "Veuillez sélectionner la date de naissance",
+    "phoneRequired": "Le numéro de téléphone est requis",
+    "emailRequired": "L'e-mail est obligatoire"
+  },
+  "verificationModal": {
+    "enterCode": "Entrez le code",
+    "enterSmsCode": "Entrez le code de vérification du SMS",
+    "enterEmailCode": "Entrez le code de vérification de l'e-mail",
+    "phoneNotSpecified": "Le numéro de téléphone n'est pas spécifié"
+  },
+  "family": {
+    "addMemberSuccess": "Membre de la famille ajouté",
+    "fillNameSurname": "Veuillez remplir le nom et le prénom",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce membre de la famille?",
+    "confirmSave": "Êtes-vous sûr de vouloir enregistrer les modifications?",
+    "deleteSuccess": "Membre de la famille supprimé",
+    "saveSuccess": "Modifications enregistrées",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
+  },
+  "photoSuccess": "Succès",
+  "photoTakeSuccess": "Photo ajoutée avec succès",
+  "photoPickSuccess": "Photo sélectionnée de la galerie avec succès",
+  "photoDeleteSuccess": "Photo supprimée avec succès",
+  "photoSaveError": "Échec de l'enregistrement de la photo",
+  "photoDeleteError": "Échec de la suppression de la photo"
+} 

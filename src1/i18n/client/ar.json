@@ -1,0 +1,369 @@
+{
+  "balance": {
+    "amountInAFc": "المبلغ بـ AFc",
+    "balanceToppedUp": "تم إعادة شحن الرصيد بمبلغ {0} AFc",
+    "balanceTopUp": "إعادة شحن",
+    "cancel": "إلغاء",
+    "cardHolderName": "IVAN IVANOV",
+    "cashback": {
+      "available": "متاح للاستخدام",
+      "description": "يمكن استخدام الاسترداد النقدي المتراكم لدفع الرحلات",
+      "history": "السجل",
+      "pending": "في الانتظار",
+      "title": "استرداد نقدي",
+      "use": "استخدم"
+    },
+    "cashbackAdded": "تم إضافة FixBack {0} AFc إلى الرصيد",
+    "confirm": "تأكيد",
+    "confirmTopUp": "هل أنت متأكد من أنك تريد إعادة شحن رصيدك بمبلغ {0} AFc؟",
+    "copied": "تم النسخ",
+    "currentBalance": "الرصيد الحالي",
+    "enterAmount": "أدخل المبلغ",
+    "enterValidAmount": "يرجى إدخال مبلغ صحيح",
+    "enterWithdrawAmount": "أدخل المبلغ للسحب:",
+    "error": "خطأ",
+    "insufficientFunds": "أموال غير كافية",
+    "loadingMore": "جاري التحميل...",
+    "minimumWithdrawal": "مطلوب حد أدنى 20 AFc للسحب",
+    "pay": "دفع",
+    "payButton": "دفع",
+    "paymentSuccess": "تم الدفع بنجاح",
+    "pending": "في الانتظار",
+    "quickTopUp": "شحن سريع",
+    "recentTopUps": "آخر الإيداعات",
+    "recentTransactions": "آخر المعاملات",
+    "showAll": "عرض الكل",
+    "success": "نجح",
+    "title": "رصيدي",
+    "topUp": "شحن",
+    "topUpBalance": "إعادة شحن",
+    "topUpHistory": "سجل إعادة الشحن",
+    "useCashback": "استخدام FixBack",
+    "useCashbackConfirm": "هل أنت متأكد من أنك تريد استخدام FixBack؟",
+    "withdraw": "سحب",
+    "withdrawal": "سحب",
+    "withdrawRequestSent": "تم إرسال طلب السحب لـ %{0} AFc",
+    "yes": "نعم"
+  },
+  "bookings": "الحجوزات",
+  "cards": {
+    "addCard": "إضافة بطاقة",
+    "addNewCard": "إضافة بطاقة جديدة",
+    "delete": "حذف",
+    "enterManually": "إدخال يدوي",
+    "expires": "ينتهي في",
+    "noCards": "لا توجد بطاقات مضافة",
+    "scanCard": "مسح البطاقة",
+    "title": "بطاقاتي"
+  },
+  "cars": {
+    "addCar": "إضافة سيارة",
+    "addNewCar": "إضافة سيارة جديدة",
+    "color": "اللون",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "enterManually": "إدخال يدوي",
+    "noCars": "لا توجد سيارات مضافة",
+    "scanDocuments": "مسح المستندات",
+    "title": "سياراتي",
+    "type": "النوع",
+    "year": "السنة"
+  },
+  "chat": {
+    "callOptions": "اختر نوع الاتصال",
+    "camera": "الكاميرا",
+    "cancel": "إلغاء",
+    "deleteChat": "حذف المحادثة",
+    "deleteChatConfirm": "هل أنت متأكد من أنك تريد حذف هذه المحادثة؟",
+    "deleteSelected": "حذف المحدد",
+    "deleteSelectedConfirm": "هل أنت متأكد من أنك تريد حذف المحادثات المحددة؟",
+    "document": "المستند",
+    "gallery": "المعرض",
+    "internetCall": "مكالمة عبر الإنترنت",
+    "loadingChats": "تحميل المحادثات...",
+    "loadingMessages": "تحميل الرسائل...",
+    "location": "الموقع",
+    "markAsRead": "تحديد كمقروء",
+    "markAsReadConfirm": "تحديد %{count} محادثة كمقروءة؟",
+    "messageError": "خطأ في إرسال الرسالة",
+    "networkCall": "مكالمة عبر الشبكة",
+    "noChats": "لا توجد محادثات",
+    "noMessages": "لا توجد رسائل",
+    "offline": "غير متصل",
+    "online": "متصل",
+    "read": "مقروء",
+    "searchChats": "البحث في المحادثات...",
+    "startConversation": "ابدأ محادثة",
+    "startNewChat": "ابدأ محادثة جديدة",
+    "title": "الدردشة",
+    "typing": "يكتب...",
+    "unknownUser": "مستخدم غير معروف"
+  },
+  "dashboard": "لوحة التحكم",
+  "debts": {
+    "confirmPayment": "تأكيد الدفع",
+    "confirmPaymentMessage": "سداد الدين بمبلغ {amount}؟",
+    "debtAmount": "مبلغ الدين",
+    "dueDate": "تاريخ الاستحقاق",
+    "noDebts": "لا توجد ديون نشطة",
+    "noDebtsDescription": "ليس لديك ديون غير مدفوعة",
+    "parkingDebt": "دين موقف السيارات",
+    "payDebt": "سداد الدين",
+    "paymentSuccess": "تم سداد الدين",
+    "paymentSuccessMessage": "تم سداد الدين بنجاح",
+    "penaltyDebt": "دين الغرامة",
+    "serviceDebt": "دين الخدمة",
+    "status": {
+      "active": "نشط",
+      "dueSoon": "يستحق قريباً",
+      "overdue": "متأخر",
+      "paid": "مدفوع"
+    },
+    "subscriptionDebt": "دين الاشتراك",
+    "title": "ديوني",
+    "toAirport": "إلى المطار",
+    "toCityCenter": "إلى مركز المدينة",
+    "tripDebt": "دين الرحلة",
+    "unpaidParking": "موقف سيارات غير مدفوع",
+    "unpaidPenalty": "غرامة غير مدفوعة",
+    "unpaidService": "خدمة غير مدفوعة",
+    "unpaidSubscription": "اشتراك غير مدفوع",
+    "unpaidTrip": "رحلة غير مدفوعة"
+  },
+  "driverCard": {
+    "call": "اتصال",
+    "route": "المسار",
+    "stops": "محطات"
+  },
+  "drivers": "السائقين",
+  "driversScreen": {
+    "actions": {
+      "call": "اتصال",
+      "chat": "دردشة"
+    },
+    "alerts": {
+      "bookDriversMessage": "حجز %{count} من السائقين المحددين؟",
+      "bookDriversTitle": "حجز السائقين",
+      "deleteDriversMessage": "حذف السائقين المحددين من القائمة؟",
+      "deleteDriversTitle": "حذف السائقين",
+      "deleteOneDriverMessage": "حذف السائق من القائمة؟",
+      "deleteOneDriverTitle": "حذف السائق",
+      "pauseTripMessage": "هل تريد إيقاف الرحلة مؤقتاً مع %{driverName}؟",
+      "pauseTripTitle": "إيقاف الرحلة مؤقتاً؟",
+      "resumeTripMessage": "متابعة الرحلة مع %{driverName}؟",
+      "resumeTripTitle": "استئناف الرحلة",
+      "selectDriverMessage": "اختيار %{firstName} %{lastName}؟",
+      "selectDriverTitle": "اختر السائق"
+    },
+    "call": {
+      "callTitle": "مكالمة %{firstName} %{lastName}",
+      "internetCall": "مكالمة عبر الإنترنت",
+      "internetCallLater": "سيتم إضافة ميزة المكالمة عبر الإنترنت لاحقًا.",
+      "networkCallWithNumber": "مكالمة عبر الشبكة %{phone}"
+    },
+    "common": {
+      "book": "حجز"
+    },
+    "empty": {
+      "loadingDrivers": "جارٍ تحميل السائقين...",
+      "noDrivers": "لا يوجد سائقون",
+      "willAppear": "ستظهر السائقون هنا بعد التحميل"
+    },
+    "filters": {
+      "all": "الكل",
+      "dailyTrips": "رحلات يومية",
+      "economy": "اقتصادي",
+      "premium": "Premium",
+      "price": "السعر",
+      "rating45": "تقييم 4.5+"
+    },
+    "labels": {
+      "son": "ابن"
+    },
+    "loadingMore": "جارٍ تحميل المزيد من السائقين...",
+    "searchPlaceholder": "ابحث عن السائقين...",
+    "selection": {
+      "bookCount": "حجز (%{count})",
+      "deselectAll": "إلغاء تحديد الكل",
+      "selectAll": "تحديد الكل"
+    }
+  },
+  "help": {
+    "contactSupport": "تواصل مع الدعم",
+    "needHelp": "تحتاج مساعدة؟",
+    "title": "المساعدة والقواعد"
+  },
+  "map": {
+    "loadingLocation": "تحديد موقعك...",
+    "locationError": "فشل في الحصول على موقعك",
+    "orderButton": "اطلب",
+    "searchPlaceholder": "إلى أين تريد الذهاب؟",
+    "title": "الخريطة"
+  },
+  "notifications": {
+    "delete": "حذف",
+    "filter": "تصفية",
+    "read": "مقروء",
+    "readAll": "اقرأ الكل",
+    "showAll": "عرض جميع الإشعارات",
+    "title": "الإشعارات"
+  },
+  "orders": {
+    "addOrder": "إضافة طلب",
+    "create": "إنشاء طلب",
+    "created": "تم إنشاء الطلب رقم {id}"
+  },
+  "paymentHistory": {
+    "empty": "السجل فارغ",
+    "emptyDescription": "سجل المعاملات فارغ",
+    "filter": {
+      "allStatuses": "جميع الحالات",
+      "allTime": "كل الوقت",
+      "allTypes": "جميع الأنواع",
+      "apply": "تطبيق",
+      "fees": "الرسوم",
+      "paymentType": "نوع الدفع",
+      "period": "الفترة",
+      "refunds": "الاسترداد",
+      "reset": "إعادة تعيين",
+      "status": "الحالة",
+      "thisMonth": "هذا الشهر",
+      "thisWeek": "هذا الأسبوع",
+      "thisYear": "هذا العام",
+      "title": "مرشح",
+      "today": "اليوم",
+      "topUps": "إعادة الشحن",
+      "trips": "الرحلات"
+    },
+    "mock": {
+      "balanceTopUp": "إعادة شحن",
+      "balanceTopUpTitle": "إعادة شحن الرصيد",
+      "refund": "استرداد",
+      "refundDescription": "استرداد للرحلة الملغاة",
+      "refundForCancelledTrip": "استرداد للرحلة الملغاة",
+      "refundTitle": "استرداد",
+      "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
+      "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
+      "tripToAirport": "رحلة إلى المطار",
+      "tripToAirportTitle": "رحلة إلى المطار",
+      "tripToCityCenter": "رحلة إلى مركز المدينة",
+      "tripToCityCenterTitle": "رحلة إلى مركز المدينة"
+    },
+    "noPayments": "لا توجد معاملات",
+    "package": "الحزمة: {{packageType}}",
+    "showLess": "عرض أقل",
+    "status": {
+      "completed": "مكتمل",
+      "failed": "فشل",
+      "pending": "قيد الانتظار"
+    },
+    "title": "تاريخ المدفوعات",
+    "today": "اليوم",
+    "transactions": {
+      "packageExtension": "Продление пакета \"{{packageName}}\"",
+      "packagePurchase": "شراء الحزمة \"{{packageName}}\"",
+      "subscriptionRenewal": "تجديد الاشتراك \"{{packageName}}\"",
+      "topUp": "إعادة شحن"
+    },
+    "viewAll": "عرض الكل",
+    "yesterday": "أمس"
+  },
+  "plus": {
+    "loading": "جاري التحميل...",
+    "step1": {
+      "description": "اختر التعريفة المناسبة لرحلاتك",
+      "popular": "شائع",
+      "title": "اختر حزمة الاشتراك"
+    },
+    "step2": {
+      "destinationAddress": "عنوان الوجهة",
+      "notes": "ملاحظات إضافية",
+      "notesPlaceholder": "متطلبات أو رغبات خاصة",
+      "passengers": "عدد الركاب",
+      "pickupAddress": "عنوان الانطلاق",
+      "title": "تفاصيل الرحلة"
+    },
+    "step3": {
+      "summary": "ملخص الرحلة",
+      "title": "تفاصيل الحجز"
+    },
+    "title": "الحجز"
+  },
+  "profile": {
+    "about": "حول التطبيق",
+    "balance": "رصيدي",
+    "cards": "البطاقات",
+    "debts": "ديوني",
+    "help": "المساعدة والقواعد",
+    "logout": "تسجيل الخروج",
+    "logoutConfirm": "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟",
+    "paymentHistory": "تاريخ المدفوعات",
+    "rating": "التقييم",
+    "residence": "الموقع",
+    "spent": "المنفق",
+    "title": "الملف الشخصي",
+    "trips": "الرحلات",
+    "vip": {
+      "benefits": "المزايا",
+      "bestDrivers": "أفضل السائقين",
+      "description": "خدمة أولوية ومكافآت",
+      "extraCashback": "استرداد نقدي إضافي",
+      "premiumSupport": "دعم متميز",
+      "priority": "حجز ذو أولوية",
+      "title": "حالة VIP",
+      "upgrade": "ترقية"
+    }
+  },
+  "residence": {
+    "default": "افتراضي",
+    "title": "الموقع"
+  },
+  "schedule": {
+    "addBooking": "إضافة حجز",
+    "loading": "جاري التحميل...",
+    "noBookings": "لا توجد حجوزات",
+    "title": "الجدول"
+  },
+  "settings": "الإعدادات",
+  "support": "الدعم",
+  "title": "عميل",
+  "trips": {
+    "driver": "السائق",
+    "emptyDescription": "سجل الرحلات فارغ",
+    "filter": {
+      "allStatuses": "جميع الحالات",
+      "allTime": "كل الوقت",
+      "allTypes": "جميع الأنواع",
+      "apply": "تطبيق",
+      "cancelled": "ملغي",
+      "completed": "مكتمل",
+      "period": "الفترة",
+      "reset": "إعادة تعيين",
+      "scheduled": "مجدول",
+      "status": "الحالة",
+      "thisMonth": "هذا الشهر",
+      "thisWeek": "هذا الأسبوع",
+      "thisYear": "هذا العام",
+      "title": "مرشح",
+      "today": "اليوم",
+      "tripType": "نوع الرحلة"
+    },
+    "mock": {
+      "routeCenterAirport": "المسار: المركز - مطار حيدر علييف",
+      "routeLeninGagarin": "المسار: شارع لينين - شارع غاغارين",
+      "routeToMall": "المسار: المنزل - مركز التسوق",
+      "routeToWork": "المسار: المنزل - المكتب",
+      "tripToAirport": "رحلة إلى المطار",
+      "tripToCityCenter": "رحلة إلى مركز المدينة",
+      "tripToMall": "رحلة إلى مركز التسوق",
+      "tripToWork": "رحلة إلى العمل"
+    },
+    "noTrips": "لا توجد رحلات",
+    "status": {
+      "cancelled": "ملغي",
+      "completed": "مكتمل",
+      "scheduled": "مجدول"
+    },
+    "title": "الرحلات"
+  }
+}

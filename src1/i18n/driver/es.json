@@ -1,0 +1,318 @@
+{
+  "chat": {
+    "archive": "Archivar",
+    "attach": "Adjuntar",
+    "back": "← Atrás",
+    "block": "Bloquear",
+    "call": "Llamada",
+    "clients": "Clientes",
+    "delete": "Eliminar",
+    "endChat": "Terminar chat",
+    "enterMessage": "Ingrese mensaje...",
+    "file": "Archivo",
+    "filter": "Filtro",
+    "image": "Imagen",
+    "joinChat": "Unirse al chat",
+    "lastSeen": "última vez",
+    "leaveChat": "Salir del chat",
+    "loadMore": "Cargar más",
+    "location": "Ubicación",
+    "logout": "Cerrar sesión",
+    "messages": "Mensajes",
+    "mute": "Silenciar",
+    "noActiveChats": "Aún no tiene chats activos",
+    "noClients": "No hay clientes",
+    "noMessages": "No hay mensajes",
+    "offline": "desconectado",
+    "online": "en línea",
+    "pin": "Fijar",
+    "refresh": "Actualizar",
+    "report": "Reportar",
+    "search": "Buscar",
+    "send": "Enviar",
+    "sort": "Ordenar",
+    "startChat": "Iniciar chat",
+    "support": "Soporte",
+    "title": "Chat",
+    "typing": "escribiendo...",
+    "unread": "No leído",
+    "video": "Video",
+    "videoCall": "Videollamada",
+    "voice": "Mensaje de voz"
+  },
+  "dashboard": "Panel de control",
+  "earnings": {
+    "bonus": "Bono",
+    "bonuses": {
+      "achievements": "Logros",
+      "highRating": "Alta Calificación",
+      "invitedDrivers": "Conductores Invitados",
+      "noCancellations": "Sin Cancelaciones",
+      "qualityBonus": "Bono de Calidad",
+      "rating5": "Calificación 5 Estrellas",
+      "referralBonus": "Bonos de Referencia",
+      "rides100": "100 Viajes",
+      "title": "Bonos y Logros",
+      "vipStatus": "Estado VIP"
+    },
+    "charts": {
+      "activityHeatmap": "Mapa de Calor de Actividad",
+      "comparison": "Comparación de Períodos",
+      "currentPeriod": "Período Actual",
+      "earningsChart": "Gráfico de Ganancias",
+      "forecast": "Pronóstico de Ganancias",
+      "nextPeriod": "Período Siguiente",
+      "previousPeriod": "Período Anterior",
+      "title": "Analítica"
+    },
+    "commission": "Comisión",
+    "detailsMessage": "Las estadísticas detalladas estarán disponibles en la próxima actualización",
+    "goals": {
+      "achieved": "Logrado",
+      "dailyGoal": "Objetivo Diario",
+      "monthlyGoal": "Objetivo Mensual",
+      "progress": "Progreso",
+      "remaining": "Restante",
+      "targetEarnings": "Ganancias Objetivo",
+      "title": "Objetivos y Logros",
+      "weeklyGoal": "Objetivo Semanal"
+    },
+    "leaderboard": {
+      "byEarnings": "Por Ganancias",
+      "byRating": "Por Calificación",
+      "rank": "Rango",
+      "title": "Tabla de Posiciones",
+      "topDrivers": "Mejores Conductores",
+      "yourPosition": "Tu Posición"
+    },
+    "levels": {
+      "badges": "Insignias y Premios",
+      "currentLevel": "Nivel Actual",
+      "experienced": "Experimentado",
+      "expert": "Experto",
+      "nextLevel": "Siguiente Nivel",
+      "novice": "Novato",
+      "progress": "Progreso",
+      "ridesToNext": "Al Siguiente Nivel",
+      "title": "Niveles y Calificaciones",
+      "vip": "VIP"
+    },
+    "map": {
+      "activityZones": "Zonas de Actividad",
+      "earningsByZone": "Ganancias por Zona",
+      "hotSpots": "Puntos Calientes",
+      "title": "Zonas de Actividad"
+    },
+    "month": "Mes",
+    "net": "Ingreso neto",
+    "perHour": "Por hora",
+    "perOrder": "Por pedido",
+    "settings": {
+      "displaySettings": "Configuración de Visualización",
+      "notifications": "Notificaciones",
+      "showCharts": "Mostrar Gráficos",
+      "showGoals": "Mostrar Objetivos",
+      "showMap": "Mostrar Mapa",
+      "showStats": "Mostrar Estadísticas",
+      "targetEarnings": "Ganancias Objetivo",
+      "title": "Configuración"
+    },
+    "stats": {
+      "avgPerRide": "Promedio por Viaje",
+      "avgRating": "Calificación Promedio",
+      "completionRate": "Tasa de Cumplimiento",
+      "rides": "Viajes",
+      "scheduleCompletion": "Cumplimiento de Horario",
+      "title": "Estadísticas",
+      "totalHours": "Horas Totales",
+      "totalRides": "Total de Viajes",
+      "workHours": "Horas de Trabajo"
+    },
+    "tax": "Impuesto",
+    "tips": "Propinas",
+    "title": "Ganancias",
+    "today": "Hoy",
+    "total": "Total",
+    "viewDetails": "Detalles",
+    "week": "Semana",
+    "withdraw": "Retirar",
+    "withdrawMessage": "La función de retiro estará disponible en la próxima actualización",
+    "year": "Año"
+  },
+  "map": {
+    "currentLocation": "Ubicación actual",
+    "destination": "Destino",
+    "fuel": "Combustible",
+    "loadingMap": "Cargando mapa...",
+    "parking": "Estacionamiento",
+    "route": "Ruta",
+    "title": "Mapa",
+    "traffic": "Tráfico",
+    "weather": "Clima"
+  },
+  "notifications": {
+    "delete": "Eliminar",
+    "filter": "Filtro",
+    "read": "Leído",
+    "readAll": "Leer todo",
+    "showAll": "Mostrar todas las notificaciones",
+    "title": "Notificaciones"
+  },
+  "orders": {
+    "accept": "Aceptar",
+    "accepted": "Aceptado",
+    "acceptOrder": "Aceptar pedido",
+    "acceptOrderAction": "Принять заказ",
+    "acceptOrderConfirm": "¿Aceptar pedido de {clientName}?",
+    "active": "Activo",
+    "all": "Todos",
+    "cancel": "Cancelar",
+    "cancelled": "Cancelado",
+    "cancelOrder": "Отменить",
+    "complete": "Completar",
+    "completed": "Completado",
+    "completeOrder": "Завершить",
+    "completeTrip": "Completar viaje",
+    "completeTripConfirm": "¿Completar viaje con {clientName}?",
+    "delivery": "Entrega",
+    "inProgress": "En progreso",
+    "new": "Nuevo",
+    "orderAccepted": "¡Pedido aceptado!",
+    "orderNumber": "Pedido #{id}",
+    "pending": "Pendiente",
+    "pickup": "Recogida",
+    "refresh": "Actualizar",
+    "rejected": "Rechazado",
+    "searchOrders": "Buscar pedidos...",
+    "title": "Pedidos",
+    "tripCompleted": "¡Viaje completado!"
+  },
+  "plus": {
+    "actionMessage": "La función \"{action}\" estará disponible en la próxima actualización",
+    "delivery": "Entrega",
+    "deliverySubtitle": "Entrega rápida",
+    "learnMore": "Saber más",
+    "premiumDriver": "Conductor Premium",
+    "premiumMessage": "La función de suscripción premium estará disponible en la próxima actualización",
+    "premiumSubtitle": "Obtenga pedidos prioritarios y tarifas más altas",
+    "quickActions": "Acciones rápidas",
+    "roadsideAssistance": "Asistencia en carretera",
+    "roadsideSubtitle": "Ayuda en el camino",
+    "subtitle": "Funciones adicionales",
+    "title": "Adicional",
+    "understand": "Entendido"
+  },
+  "profile": {
+    "achievements": "Logros",
+    "badges": "Insignias",
+    "documents": "Documentos",
+    "experience": "Experiencia",
+    "level": "Nivel",
+    "personalInfo": "Información personal",
+    "points": "Puntos",
+    "rank": "Rango",
+    "ratings": "Calificaciones",
+    "reviews": "Reseñas",
+    "statistics": "Estadísticas",
+    "title": "Perfil",
+    "vehicleInfo": "Información del vehículo"
+  },
+  "schedule": {
+    "break": "Descanso",
+    "cancelled": "Cancelado",
+    "cancelTrip": "Cancelar viaje",
+    "cancelTripConfirm": "¿Cancelar viaje {date} a las {time}?",
+    "completed": "Completado",
+    "end": "Terminar",
+    "holiday": "Vacaciones",
+    "no": "No",
+    "overtime": "Horas extra",
+    "pause": "Pausa",
+    "resume": "Reanudar",
+    "start": "Iniciar",
+    "title": "Horario",
+    "totalEarnings": "Ganancias totales: {amount} ₽",
+    "totalHours": "Horas totales",
+    "upcoming": "Próximo",
+    "weekend": "Fin de semana",
+    "workHours": "Horas de trabajo",
+    "yes": "Sí"
+  },
+  "settings": "Configuración",
+  "startTrip": {
+    "cancelTrip": "Cancelar viaje",
+    "cancelTripConfirm": "¿Está seguro de que quiere cancelar el viaje?",
+    "clientName": "Nombre del cliente",
+    "clientPhone": "Teléfono del cliente",
+    "destinationAddress": "Dirección de destino",
+    "goodTrip": "¡Buen viaje!",
+    "loading": "Cargando...",
+    "pickupAddress": "Dirección de recogida",
+    "price": "Precio",
+    "startTrip": "Iniciar viaje",
+    "title": "Iniciar viaje",
+    "tripDetails": "Detalles del viaje",
+    "tripStarted": "Viaje iniciado"
+  },
+  "status": {
+    "cancel": "Cancelar",
+    "changeStatus": "Cambiar estado",
+    "changeStatusMessage": "¿Quieres cambiar tu estado a",
+    "confirm": "Confirmar",
+    "goOnlineMessage": "Vas a estar en línea",
+    "offline": "Desconectado",
+    "online": "En línea"
+  },
+  "title": "Conductor",
+  "tripDialogs": {
+    "beginTrip": {
+      "message": "¿Estás empezando el viaje con {clientName}?",
+      "title": "¿Vamos?"
+    },
+    "buttons": {
+      "cancelAction": "Cancelar",
+      "okAction": "OK"
+    },
+    "cancelTrip": {
+      "message": "¿Estás cancelando el viaje con {clientName}?",
+      "title": "¿Cancelamos?"
+    },
+    "continueTrip": {
+      "message": "¿Continuar el viaje?",
+      "title": "¿Continuar?"
+    },
+    "emergency": {
+      "end": "Terminar",
+      "message": "Elige una acción de emergencia",
+      "stop": "Detener",
+      "title": "Acciones de Emergencia"
+    },
+    "endTrip": {
+      "message": "¿El viaje con {clientName} ha terminado?",
+      "title": "¿Terminar?"
+    },
+    "forceEndTrip": {
+      "message": "El viaje ha sido forzadamente terminado",
+      "title": "Terminar"
+    },
+    "pauseTrip": {
+      "message": "¿Quieres pausar el viaje con {clientName}?",
+      "paused": "Viaje pausado",
+      "resume": "Reanudar viaje",
+      "resumeMessage": "¿Continuar viaje con {clientName}?",
+      "title": "¿Pausar viaje?"
+    },
+    "startTrip": {
+      "message": "¿Estás comenzando un viaje hacia {clientName}?",
+      "title": "¿Vamos?"
+    },
+    "stopTrip": {
+      "message": "El viaje ha sido forzadamente detenido",
+      "title": "Detener"
+    },
+    "waiting": {
+      "message": "¿Estás esperando al cliente {clientName}?",
+      "title": "¿Esperando?"
+    }
+  }
+}

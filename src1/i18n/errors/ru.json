@@ -1,0 +1,12 @@
+{
+  "error": "Ошибка",
+  "networkError": "Ошибка сети",
+  "serverError": "Ошибка сервера",
+  "timeout": "Время ожидания истекло",
+  "unauthorized": "Не авторизован",
+  "forbidden": "Доступ запрещен",
+  "notFound": "Не найдено",
+  "validationError": "Ошибка валидации",
+  "unknownError": "Произошла неизвестная ошибка",
+  "permissionDenied": "Доступ запрещен"
+} 

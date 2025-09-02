@@ -1,0 +1,347 @@
+{
+  "settings": {
+    "title": "Settings",
+    "notifications": {
+      "title": "Notifications",
+      "push": "Push notifications"
+    },
+    "language": {
+      "section": "Language",
+      "current": "Current language",
+      "title": "Language selection",
+      "syncWithSystem": "Sync with system",
+      "systemLanguage": "System language: %{language}",
+      "alreadySynced": "Already synced",
+      "syncSuccess": {
+        "title": "Sync",
+        "message": "Language changed to %{language}"
+      },
+      "error": {
+        "title": "Language error",
+        "message": "Failed to change language"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "darkMode": "Dark mode"
+    },
+    "location": {
+      "title": "Location",
+      "autoLocation": "Auto detect"
+    },
+    "security": {
+      "title": "Security",
+      "changePassword": "Change password",
+      "passwordChangedSuccess": "Password changed successfully",
+      "passwordChangeError": "Failed to change password",
+      "changingPassword": "Changing password...",
+      "passwordSameError": "New password must be different from current password"
+    },
+    "data": {
+      "title": "Data",
+      "deleteAccount": "Delete account",
+      "deleteAccountConfirm": "Are you sure you want to delete your account?",
+      "deleteAccountSuccess": "Account deleted",
+      "deleteAccountSuccessMessage": "Your account has been successfully deleted.",
+      "deleteAccountError": "Failed to delete account"
+    }
+  },
+  "residence": {
+    "title": "Location",
+    "deleteConfirm": "Delete Address",
+    "deleteMessage": "Are you sure you want to delete address %{title}?",
+    "deleteSuccess": "Address %{title} has been deleted",
+    "deleteError": "Failed to delete address",
+    "setDefaultSuccess": "Address set as default",
+    "setDefaultError": "Failed to set address as default",
+    "addSuccess": "Address added successfully",
+    "addError": "Failed to add address",
+    "updateSuccess": "Address updated successfully",
+    "updateError": "Failed to update address",
+    "saveError": "Failed to save address",
+    "loading": "Loading addresses...",
+    "retry": "Retry",
+    "emptyState": "No addresses added yet",
+    "defaultBadge": "Default",
+    "modal": {
+      "addTitle": "Add Address",
+      "editTitle": "Edit Address",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter address name",
+      "nameRequired": "Address name is required",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Enter address",
+      "addressRequired": "Address is required",
+      "addressChecking": "Checking address...",
+      "addressValid": "Address is valid",
+      "addressInvalid": "Address is invalid",
+      "verifyAddress": "Verify Address",
+      "defaultLabel": "Set as default",
+      "mapTitle": "Select Location",
+      "mapDone": "Done",
+      "saveError": "Failed to save address"
+    },
+    "categories": {
+      "selectCategory": "Select category",
+      "home": "Home",
+      "work": "Work",
+      "university": "University",
+      "mall": "Shopping Mall",
+      "hospital": "Hospital",
+      "gym": "Gym",
+      "restaurant": "Restaurant",
+      "parents": "Parents",
+      "dacha": "Country House",
+      "other": "Other"
+    }
+  },
+  "editProfile": "Edit Profile",
+  "editProfileDesc": "Change personal data",
+  "paymentMethods": "Payment Methods",
+  "paymentMethodsDesc": "Manage cards",
+  "security": "Security",
+  "securityDesc": "Security settings",
+  "support": "Support",
+  "supportDesc": "Contact support",
+  "about": "About App",
+  "aboutDesc": "Version 1.0.0",
+  "darkTheme": "Dark Theme",
+  "trips": "Trips",
+  "spent": "Spent",
+  "rating": "Rating",
+  "changePhoto": "Change Photo",
+  "personalInfo": "Personal Information",
+  "firstName": "First Name",
+  "firstNamePlaceholder": "Enter first name",
+  "lastName": "Last Name",
+  "lastNamePlaceholder": "Enter last name",
+  "phone": "Phone",
+  "phonePlaceholder": "Enter phone number",
+  "noPhone": "Not specified",
+  "email": "E-mail",
+  "emailPlaceholder": "Enter e-mail",
+  "emailRequired": "E-mail is required",
+  "birthDate": "Birth Date",
+  "birthDatePlaceholder": "YYYY-MM-DD",
+  "familyInfo": "Family Information",
+  "familyType": "Category",
+  "familyTypePlaceholder": "Select category",
+  "familyAge": "Age",
+  "familyAgePlaceholder": "Select age",
+  "familyTypes": {
+    "child": "Child",
+    "spouse": "Spouse",
+    "parent": "Parent",
+    "relative": "Relative",
+    "husband": "Husband",
+    "wife": "Wife",
+    "son": "Son",
+    "daughter": "Daughter",
+    "mother": "Mother",
+    "father": "Father",
+    "grandmother": "Grandmother",
+    "grandfather": "Grandfather",
+    "brother": "Brother",
+    "sister": "Sister",
+    "uncle": "Uncle",
+    "aunt": "Aunt",
+    "cousin": "Cousin",
+    "nephew": "Nephew",
+    "niece": "Niece",
+    "stepfather": "Stepfather",
+    "stepmother": "Stepmother",
+    "stepson": "Stepson",
+    "stepdaughter": "Stepdaughter",
+    "other": "Other"
+  },
+  "years": "years",
+  "addFamilyMember": "Add Family Member",
+  "editFamilyMember": "Edit",
+  "saveChangesConfirm": {
+    "title": "Save Changes",
+    "message": "You have unsaved changes. Do you want to save them before exiting?",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "vipStatus": "VIP Status",
+  "vipTitle": "VIP Subscription",
+  "vipDescription": "Get priority service, exclusive offers and special discounts",
+  "upgradeToVip": "Upgrade to VIP",
+  "premiumStatus": "Premium Status",
+  "premiumSubscription": "Premium Subscription",
+  "premiumDescription": "Get priority service, exclusive offers and special discounts",
+  "becomePremium": "Become Premium",
+  "becomeDriver": "Become Driver",
+  "becomeDriverButton": "Register as Driver",
+  "myVehicles": "My Vehicles",
+  "myVehiclesButton": "Manage Vehicles",
+  "vehicles": {
+    "title": "My Vehicles",
+    "addVehicle": "Add Vehicle",
+    "editVehicle": "Edit Vehicle",
+    "vehicleNumber": "Vehicle Number",
+    "vehicleNumberPlaceholder": "Enter vehicle number",
+    "vehicleNumberRequired": "Vehicle number is required",
+    "tariff": "Tariff",
+    "tariffPlaceholder": "Select tariff",
+    "tariffRequired": "Tariff is required",
+    "carBrand": "Car Brand",
+    "carBrandPlaceholder": "Select brand",
+    "carBrandRequired": "Car brand is required",
+    "carModel": "Car Model",
+    "carModelPlaceholder": "Select model",
+    "carModelRequired": "Car model is required",
+    "carYear": "Year of Manufacture",
+    "carYearPlaceholder": "Select year",
+    "carYearRequired": "Year of manufacture is required",
+    "carMileage": "Car Mileage",
+    "carMileagePlaceholder": "Enter mileage in km",
+    "carMileageRequired": "Car mileage is required",
+    "passportPhoto": "Passport Photo",
+    "passportPhotoRequired": "Passport photo is required",
+    "saveVehicle": "Save Vehicle",
+    "vehicleSaved": "Vehicle saved",
+    "vehicleSaveError": "Failed to save vehicle",
+    "noVehicles": "No vehicles added",
+    "addFirstVehicle": "Add your first vehicle",
+    "loadError": "Failed to load vehicles",
+    "createError": "Failed to create vehicle",
+    "updateError": "Failed to update vehicle",
+    "deleteError": "Failed to delete vehicle",
+    "toggleError": "Failed to change vehicle status",
+    "photoUploadError": "Failed to upload passport photo",
+    "vehicleLabels": {
+      "number": "Number:",
+      "brand": "Brand:",
+      "model": "Model:",
+      "year": "Year:",
+      "mileage": "Mileage:"
+    },
+    "deleteVehicle": "Delete Vehicle",
+    "deleteVehicleConfirm": "Are you sure you want to delete this vehicle? This action cannot be undone."
+  },
+  "addPhoto": "Add Photo",
+  "addPhotoMessage": "Choose photo addition method",
+  "takePhoto": "Take Photo",
+  "chooseFromGallery": "Choose from Gallery",
+  "cameraAccess": "Camera Access",
+  "cameraAccessRequired": "Camera access required to take photo",
+  "galleryAccess": "Gallery Access",
+  "galleryAccessRequired": "Gallery access required to select photo",
+  "photoError": "Photo Error",
+  "photoTakeError": "Failed to take photo",
+  "photoPickError": "Failed to select photo",
+  "changePhotoMessage": "Choose photo change method",
+  "deletePhoto": "Delete Photo",
+  "deletePhotoConfirm": "Delete Photo",
+  "deletePhotoMessage": "Are you sure you want to delete the photo?",
+  "becomeDriverModal": {
+    "title": "Become Driver",
+    "message": "Open driver page?",
+    "cancel": "Cancel",
+    "proceed": "Proceed"
+  },
+  "becomeClientModal": {
+    "title": "Become Client",
+    "message": "Open client page?",
+    "cancel": "Cancel",
+    "proceed": "Proceed",
+    "loginError": "Failed to login as client"
+  },
+  "saveProfileConfirm": {
+    "title": "Save Changes?",
+    "message": "Are you sure you want to save changes?",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "saveProfileSuccess": {
+    "title": "Profile Updated",
+    "message": "Your data has been successfully saved"
+  },
+  "saveProfileError": {
+    "title": "Save Error",
+    "message": "Failed to save changes"
+  },
+  "verifyEmail": {
+    "title": "Verify E-mail",
+    "message": "Send verification code to e-mail?",
+    "success": {
+      "title": "Code Sent",
+      "message": "Verification code sent to your e-mail"
+    },
+    "error": {
+      "title": "Send Error",
+      "message": "Failed to send verification code"
+    },
+    "emailVerifiedSuccess": "Email successfully verified"
+  },
+  "verifyPhone": {
+    "title": "Verify Phone",
+    "message": "Send verification code to phone?",
+    "success": {
+      "title": "Code Sent",
+      "message": "Verification code sent to your phone"
+    },
+    "error": {
+      "title": "Send Error",
+      "message": "Failed to send verification code"
+    },
+    "phoneVerifiedSuccess": "Phone successfully verified"
+  },
+  "validationError": "Please fill in all required fields",
+  "loadingProfile": "Loading profile...",
+  "failedToLoadProfile": "Failed to load profile",
+  "profileUpdateSuccess": {
+    "title": "Success",
+    "message": "Profile updated successfully"
+  },
+  "profileUpdateError": {
+    "title": "Error",
+    "message": "Failed to update profile"
+  },
+  "profileUpdateGeneralError": {
+    "title": "Error",
+    "message": "An error occurred while updating profile"
+  },
+  "validation": {
+    "title": "Validation Error",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "familyTypeRequired": "Please select family member type",
+    "familyAgeRequired": "Please select birth date",
+    "phoneRequired": "Phone number is required",
+    "emailRequired": "Email is required"
+  },
+  "verificationModal": {
+    "enterCode": "Enter code",
+    "enterSmsCode": "Enter verification code from SMS",
+    "enterEmailCode": "Enter verification code from email",
+    "phoneNotSpecified": "Phone number is not specified"
+  },
+  "family": {
+    "addMemberSuccess": "Family member added",
+    "fillNameSurname": "Please fill in name and surname",
+    "confirmDelete": "Are you sure you want to delete this family member?",
+    "confirmSave": "Are you sure you want to save changes?",
+    "deleteSuccess": "Family member deleted",
+    "saveSuccess": "Changes saved",
+    "defaultMembers": {
+      "child": {
+        "name": "Anna",
+        "surname": "Petrova"
+      },
+      "spouse": {
+        "name": "Mikhail",
+        "surname": "Petrov"
+      }
+    }
+  },
+  "photoSuccess": "Success",
+  "photoTakeSuccess": "Photo successfully added",
+  "photoPickSuccess": "Photo successfully selected from gallery",
+  "photoDeleteSuccess": "Photo successfully deleted",
+  "photoSaveError": "Failed to save photo",
+  "photoDeleteError": "Failed to delete photo"
+} 

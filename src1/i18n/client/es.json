@@ -1,0 +1,372 @@
+{
+  "title": "Cliente",
+  "dashboard": "Panel de control",
+  "bookings": "Reservas",
+  "drivers": "Conductores",
+  "map": {
+    "title": "Mapa",
+    "searchPlaceholder": "¿A dónde quieres ir?",
+    "orderButton": "Pedir",
+    "loadingLocation": "Determinando tu ubicación...",
+    "locationError": "No se pudo obtener tu ubicación"
+  },
+  "chat": {
+    "title": "Chat",
+    "noChats": "No hay chats",
+    "loadingChats": "Cargando chats...",
+    "cancel": "Cancelar",
+    "read": "Leído",
+    "online": "En línea",
+    "offline": "Desconectado",
+    "unknownUser": "Usuario desconocido",
+    "noMessages": "No hay mensajes",
+    "loadingMessages": "Cargando mensajes...",
+    "messageError": "Error al enviar mensaje",
+    "typing": "escribiendo...",
+    "startConversation": "Iniciar conversación",
+    "startNewChat": "Iniciar nuevo chat",
+    "searchChats": "Buscar chats...",
+    "markAsRead": "Marcar como leído",
+    "markAsReadConfirm": "¿Marcar %{count} chats como leídos?",
+    "deleteSelected": "Eliminar seleccionados",
+    "deleteSelectedConfirm": "¿Está seguro de que quiere eliminar los chats seleccionados?",
+    "deleteChat": "Eliminar chat",
+    "deleteChatConfirm": "¿Está seguro de que quiere eliminar este chat?",
+    "camera": "Cámara",
+    "gallery": "Galería",
+    "document": "Documento",
+    "location": "Ubicación",
+    "callOptions": "Elegir tipo de llamada",
+    "internetCall": "Llamada por Internet",
+    "networkCall": "Llamada por red"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "readAll": "Leer todo",
+    "filter": "Filtro",
+    "read": "Leído",
+    "delete": "Eliminar",
+    "showAll": "Mostrar todas las notificaciones"
+  },
+  "settings": "Configuración",
+  "profile": {
+    "title": "Perfil",
+    "trips": "Viajes",
+    "spent": "Gastado",
+    "rating": "Calificación",
+    "balance": "Mi saldo",
+    "cards": "Tarjetas",
+    "debts": "Mis deudas",
+    "paymentHistory": "Historial de pagos",
+    "residence": "Ubicación",
+    "help": "Ayuda y reglas",
+    "about": "Acerca de la app",
+    "logout": "Cerrar sesión",
+    "logoutConfirm": "¿Está seguro de que desea cerrar sesión de su cuenta?",
+    "vip": {
+      "title": "Estado VIP",
+      "description": "Servicio prioritario y bonificaciones",
+      "upgrade": "Mejorar",
+      "benefits": "Beneficios",
+      "priority": "Reserva prioritaria",
+      "bestDrivers": "Mejores conductores",
+      "extraCashback": "Cashback extra",
+      "premiumSupport": "Soporte premium"
+    }
+  },
+  "schedule": {
+    "title": "Horario",
+    "loading": "Cargando...",
+    "noBookings": "No hay viajes reservados",
+    "addBooking": "Agregar reserva"
+  },
+  "support": "Soporte",
+  "balance": {
+    "title": "Mi saldo",
+    "currentBalance": "Saldo actual",
+    "topUp": "Recargar",
+    "withdraw": "Retirar",
+    "quickTopUp": "Recarga rápida",
+    "pending": "Pendiente",
+    "enterWithdrawAmount": "Ingrese el monto a retirar:",
+    "withdrawRequestSent": "Solicitud de retiro de %{0} AFc enviada",
+
+    "showAll": "Mostrar todo",
+    "pay": "Pagar",
+    "insufficientFunds": "Fondos insuficientes",
+    "minimumWithdrawal": "Se requieren mínimo 20 AFc para retiro",
+    "useCashback": "Usar FixBack",
+    "useCashbackConfirm": "¿Está seguro de que quiere usar FixBack?",
+    "cancel": "Cancelar",
+    "yes": "Sí",
+    "success": "Exitoso",
+    "cashbackAdded": "FixBack %{0} AFc agregado al saldo",
+    "error": "Error",
+    "enterValidAmount": "Por favor ingrese un monto válido",
+    "paymentSuccess": "Pago exitoso",
+    "balanceToppedUp": "Saldo recargado por {0} AFc",
+    "copied": "Copiado",
+    "balanceTopUp": "Recargar",
+    "topUpHistory": "Historial de recargas",
+    "loadingMore": "Cargando...",
+    "amountInAFc": "Monto en AFc",
+    "enterAmount": "Ingrese monto",
+    "confirm": "Confirmar",
+    "confirmTopUp": "¿Está seguro de que quiere recargar su saldo por {0} AFc?",
+    "topUpBalance": "Recargar",
+    "payButton": "Pagar",
+    "recentTopUps": "Recargas recientes",
+    "recentTransactions": "Transacciones recientes",
+    "withdrawal": "Retirar",
+    "cashback": {
+      "title": "FixBack",
+      "available": "Disponible para usar",
+      "pending": "Pendiente",
+      "use": "Usar",
+      "history": "Historial",
+      "description": "El FixBack acumulado se puede usar para pagar viajes"
+    }
+  },
+  "debts": {
+    "title": "Mis deudas",
+    "noDebts": "No hay deudas activas",
+    "noDebtsDescription": "No tienes deudas impagas",
+    "debtAmount": "Cantidad de deuda",
+    "dueDate": "Fecha de vencimiento",
+    "payDebt": "Pagar deuda",
+    "confirmPayment": "Confirmación de pago",
+    "confirmPaymentMessage": "¿Pagar deuda por {amount}?",
+    "paymentSuccess": "Deuda pagada",
+    "paymentSuccessMessage": "Deuda pagada exitosamente",
+    "status": {
+      "overdue": "Vencida",
+      "dueSoon": "Vence pronto",
+      "active": "Activa",
+      "paid": "Pagada"
+    },
+    "tripDebt": "Deuda de viaje",
+    "serviceDebt": "Deuda de servicio",
+    "penaltyDebt": "Deuda de multa",
+    "subscriptionDebt": "Deuda de suscripción",
+    "parkingDebt": "Deuda de estacionamiento",
+    "unpaidTrip": "Viaje impago",
+    "unpaidService": "Servicio impago",
+    "unpaidPenalty": "Multa impaga",
+    "unpaidSubscription": "Suscripción impaga",
+    "unpaidParking": "Estacionamiento impago",
+    "toAirport": "al aeropuerto",
+    "toCityCenter": "al centro de la ciudad"
+  },
+  "cards": {
+    "title": "Mis tarjetas",
+    "noCards": "No hay tarjetas agregadas",
+    "addCard": "Agregar tarjeta",
+    "scanCard": "Escanear tarjeta",
+    "enterManually": "Ingresar manualmente",
+    "delete": "Eliminar",
+    "expires": "Vence en",
+    "addNewCard": "Agregar nueva tarjeta"
+  },
+  "cars": {
+    "title": "Mis coches",
+    "noCars": "No hay coches agregados",
+    "addCar": "Agregar coche",
+    "scanDocuments": "Escanear documentos",
+    "enterManually": "Ingresar manualmente",
+    "delete": "Eliminar",
+    "year": "Año",
+    "color": "Color",
+    "type": "Tipo",
+    "edit": "Editar",
+    "addNewCar": "Agregar nuevo coche"
+  },
+  "plus": {
+    "title": "Reserva",
+    "step1": {
+      "title": "Seleccionar paquete de suscripción",
+      "description": "Elige la tarifa adecuada para tus viajes",
+      "popular": "Popular"
+    },
+    "step2": {
+      "title": "Detalles del viaje",
+      "passengers": "Número de pasajeros",
+      "pickupAddress": "Dirección de recogida",
+      "destinationAddress": "Dirección de destino",
+      "notes": "Notas adicionales",
+      "notesPlaceholder": "Requisitos o deseos especiales"
+    },
+    "step3": {
+      "title": "Detalles de la reserva",
+      "summary": "Resumen del viaje"
+    },
+    "loading": "Cargando..."
+  },
+  "driverCard": {
+    "route": "Ruta",
+    "stops": "paradas",
+    "call": "Llamar"
+  },
+
+  "orders": {
+    "addOrder": "Agregar pedido",
+    "create": "Crear pedido",
+    "created": "Pedido #{id} creado"
+  },
+
+  "help": {
+    "title": "Ayuda y reglas",
+    "needHelp": "¿Necesitas ayuda?",
+    "contactSupport": "Contactar soporte"
+  },
+  "residence": {
+    "title": "Ubicación",
+    "default": "Predeterminado"
+  },
+  "paymentHistory": {
+    "title": "Historial de pagos",
+    "noPayments": "No hay transacciones",
+    "emptyDescription": "El historial de transacciones está vacío",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "viewAll": "Ver todo",
+    "showLess": "Mostrar menos",
+    "empty": "El historial está vacío",
+    "status": {
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "failed": "Fallido"
+    },
+    "transactions": {
+      "topUp": "Recarga",
+      "packagePurchase": "Compra de paquete \"{{packageName}}\"",
+      "packageExtension": "Extensión de paquete \"{{packageName}}\"",
+      "subscriptionRenewal": "Renovación de suscripción \"{{packageName}}\""
+    },
+    "package": "Paquete: {{packageType}}",
+    "mock": {
+      "tripToCityCenter": "Viaje al centro de la ciudad",
+      "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",
+      "balanceTopUp": "Recarga",
+      "tripToAirport": "Viaje al aeropuerto",
+      "routeCenterAirport": "Ruta: centro - Aeropuerto Heydar Aliyev",
+      "refund": "Reembolso",
+      "refundForCancelledTrip": "Reembolso por viaje cancelado",
+      "balanceTopUpTitle": "Recarga de saldo",
+      "tripToCityCenterTitle": "Viaje al centro de la ciudad",
+      "tripToAirportTitle": "Viaje al aeropuerto",
+      "refundTitle": "Reembolso",
+      "refundDescription": "Reembolso por viaje cancelado"
+    },
+    "filter": {
+      "title": "Filtro",
+      "paymentType": "Tipo de pago",
+      "status": "Estado",
+      "period": "Período",
+      "allTypes": "Todos los tipos",
+      "trips": "Viajes",
+      "topUps": "Recargas",
+      "refunds": "Reembolsos",
+      "fees": "Comisiones",
+      "allStatuses": "Todos los estados",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisYear": "Este año",
+      "reset": "Restablecer",
+      "apply": "Aplicar"
+    }
+  },
+  "trips": {
+    "title": "Viajes",
+    "noTrips": "No hay viajes",
+    "emptyDescription": "El historial de viajes está vacío",
+    "driver": "Conductor",
+    "status": {
+      "completed": "Completado",
+      "cancelled": "Cancelado",
+      "scheduled": "Programado"
+    },
+    "filter": {
+      "title": "Filtro",
+      "tripType": "Tipo de viaje",
+      "status": "Estado",
+      "period": "Período",
+      "allTypes": "Todos los tipos",
+      "completed": "Completado",
+      "cancelled": "Cancelado",
+      "scheduled": "Programado",
+      "allStatuses": "Todos los estados",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisYear": "Este año",
+      "reset": "Restablecer",
+      "apply": "Aplicar"
+    },
+    "mock": {
+      "tripToCityCenter": "Viaje al centro de la ciudad",
+      "routeLeninGagarin": "Ruta: Calle Lenin - Calle Gagarin",
+      "tripToAirport": "Viaje al aeropuerto",
+      "routeCenterAirport": "Ruta: centro - Aeropuerto Heydar Aliyev",
+      "tripToMall": "Viaje al centro comercial",
+      "routeToMall": "Ruta: casa - centro comercial",
+      "tripToWork": "Viaje al trabajo",
+      "routeToWork": "Ruta: casa - oficina"
+    }
+  }
+  ,
+  "driversScreen": {
+    "searchPlaceholder": "Buscar conductores...",
+    "loadingMore": "Cargando más conductores...",
+    "empty": {
+      "loadingDrivers": "Cargando conductores...",
+      "noDrivers": "No hay conductores",
+      "willAppear": "Los conductores aparecerán aquí después de cargar"
+    },
+    "filters": {
+      "all": "Todos",
+      "rating45": "Calificación 4.5+",
+      "premium": "Premium",
+      "price": "Precio",
+      "dailyTrips": "Viajes diarios",
+      "economy": "Económico"
+    },
+    "actions": {
+      "chat": "Chat",
+      "call": "Llamada"
+    },
+    "labels": {
+      "son": "Hijo"
+    },
+    "call": {
+      "internetCall": "Llamada por Internet",
+      "internetCallLater": "La función de llamada por Internet se implementará más tarde.",
+      "callTitle": "Llamar a %{firstName} %{lastName}",
+      "networkCallWithNumber": "Llamada por red %{phone}"
+    },
+    "alerts": {
+      "selectDriverTitle": "Seleccionar conductor",
+      "selectDriverMessage": "¿Seleccionar a %{firstName} %{lastName}?",
+      "bookDriversTitle": "Reservar conductores",
+      "bookDriversMessage": "¿Reservar %{count} conductores seleccionados?",
+      "deleteDriversTitle": "Eliminar conductores",
+      "deleteDriversMessage": "¿Eliminar los conductores seleccionados de la lista?",
+      "deleteOneDriverTitle": "Eliminar conductor",
+      "deleteOneDriverMessage": "¿Eliminar el conductor de la lista?",
+      "pauseTripTitle": "¿Pausar viaje?",
+      "pauseTripMessage": "¿Quieres pausar el viaje con %{driverName}?",
+      "resumeTripTitle": "Reanudar viaje",
+      "resumeTripMessage": "¿Continuar viaje con %{driverName}?"
+    },
+    "selection": {
+      "selectAll": "Seleccionar todo",
+      "deselectAll": "Deseleccionar todo",
+      "bookCount": "Reservar (%{count})"
+    },
+    "common": {
+      "book": "Reservar"
+    }
+  }
+}

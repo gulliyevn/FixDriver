@@ -1,0 +1,105 @@
+{
+  "title": "Hilfe & Regeln",
+  "description": "Finden Sie Antworten auf häufig gestellte Fragen und lernen Sie die Service-Regeln kennen",
+  "howToOrder": "Wie bestelle ich eine Fahrt?",
+  "howToOrderDesc": "Erfahren Sie, wie Sie schnell eine Fahrt bestellen können",
+  "paymentAndRates": "Zahlung & Tarife",
+  "paymentAndRatesDesc": "Informationen zu Zahlungsmethoden und Tarifen",
+  "safetyTitle": "Sicherheit",
+  "safetyDesc": "Sicherheitsmaßnahmen während der Fahrt",
+  "rulesTitle": "Nutzungsbedingungen",
+  "rulesDesc": "Grundlegende Service-Regeln",
+  "support": "Support",
+  "supportDesc": "Support kontaktieren",
+  "contactTitle": "Brauchen Sie Hilfe?",
+  "contactDescription": "Kontaktieren Sie unseren Support-Service",
+  "contactWhatsApp": "Support kontaktieren",
+  "booking": {
+    "routeSelection": {
+      "title": "Routenauswahl",
+      "description": "Wie wählt man eine Fahrtroute richtig aus",
+      "content": "Öffnen Sie die Karte und wählen Sie Abfahrts- und Zielpunkte. Geben Sie die genaue Adresse für die korrekte Routenberechnung an."
+    },
+    "driverSelection": {
+      "title": "Fahrerauswahl",
+      "description": "Wie wählt man einen passenden Fahrer aus",
+      "content": "Durchsuchen Sie verfügbare Fahrer, ihre Bewertungen und Kommentare. Wählen Sie einen passenden Fahrer für Ihre Fahrt."
+    },
+    "orderConfirmation": {
+      "title": "Bestellbestätigung",
+      "description": "Wie bestätigt man eine Fahrtbestellung",
+      "content": "Bestätigen Sie die Fahrtdetails: Zeit, Adresse, Anzahl der Passagiere. Der Fahrer erhält eine Benachrichtigung über die Bestellung."
+    },
+    "waitingDriver": {
+      "title": "Auf den Fahrer warten",
+      "description": "Was tun, während man auf den Fahrer wartet",
+      "content": "Der Fahrer kommt innerhalb von 5-10 Minuten zur angegebenen Adresse. Sie können seinen Standort auf der Karte verfolgen."
+    }
+  },
+  "payment": {
+    "paymentMethods": {
+      "title": "Zahlungsmethoden",
+      "description": "Welche Zahlungsmethoden sind verfügbar",
+      "content": "Verschiedene Zahlungsmethoden sind verfügbar: Bankkarten, elektronische Geldbörsen, Bargeld bei Lieferung. Wählen Sie die für Sie bequeme Methode."
+    },
+    "tariffCalculation": {
+      "title": "Tarifberechnung",
+      "description": "Wie wird die Fahrtkosten berechnet",
+      "content": "Der Tarif wird automatisch basierend auf Entfernung, Fahrzeit und gewähltem Tarifplan berechnet. Alle Preise sind in Manat angegeben."
+    },
+    "tariffPlans": {
+      "title": "Tarifpläne",
+      "description": "Welche Tarifpläne sind verfügbar",
+      "content": "Wählen Sie einen passenden Tarifplan: Basic, Premium oder Corporate. Jeder Plan hat seine eigenen Vorteile und Besonderheiten."
+    },
+    "refund": {
+      "title": "Rückerstattung",
+      "description": "Wie erfolgt die Rückerstattung",
+      "content": "Bei Fahrtstornierung oder technischen Problemen werden die Mittel innerhalb von 1-3 Werktagen auf Ihr Konto zurückerstattet."
+    }
+  },
+  "rules": {
+    "generalProvisions": {
+      "title": "Allgemeine Bestimmungen",
+      "description": "Erfahren Sie mehr über die grundlegenden Betriebsprinzipien des Services",
+      "content": "Grundlegende Regeln für die Nutzung des FixDrive-Services. Durch die Nutzung des Services stimmen Sie diesen Nutzungsbedingungen zu. Der Service bietet eine Plattform für die Bestellung von Fahrten zwischen Fahrern und Passagieren."
+    },
+    "terms": {
+      "title": "Bedingungen",
+      "description": "Kontoregistrierung und Nutzungsbedingungen",
+      "content": "Service-Nutzungsbedingungen. Um den Service zu nutzen, müssen Sie ein Konto mit gültigen Daten erstellen. Sie sind für die Sicherheit Ihrer Kontodaten verantwortlich."
+    },
+    "policy": {
+      "title": "Richtlinie",
+      "description": "Datenschutz- und Datenschutzrichtlinie",
+      "content": "Datenschutz- und Datenverarbeitungsrichtlinie. Wir sammeln und verarbeiten Ihre Daten gemäß dem Gesetz. Ihre Privatsphäre ist uns wichtig."
+    },
+    "rules": {
+      "title": "Regeln",
+      "description": "Zusätzliche Regeln für Fahrtbestellung und -stornierung",
+      "content": "Zusätzliche Regeln und Einschränkungen. Geben Sie bei der Fahrtbestellung die genaue Zieladresse an. Die Fahrtstornierung sollte rechtzeitig erfolgen."
+    }
+  },
+  "safety": {
+    "driverCheck": {
+      "title": "Fahrerüberprüfung",
+      "description": "Wie wird die Fahrersicherheit gewährleistet",
+      "content": "Alle Fahrer durchlaufen eine gründliche Überprüfung von Dokumenten, Fahrzeugen und Strafregister. Wir garantieren die Sicherheit jeder Fahrt."
+    },
+    "routeTracking": {
+      "title": "Routenverfolgung",
+      "description": "Wie verfolgt man die Fahrtroute",
+      "content": "Ihre Angehörigen können Ihre Route in Echtzeit verfolgen. Teilen Sie den Fahrtlink für zusätzliche Sicherheit."
+    },
+    "emergencyButton": {
+      "title": "Notfall-Taste",
+      "description": "Wie verwendet man die Notfall-Taste",
+      "content": "Eine Notfall-Taste ist in der App für schnelle Hilfe verfügbar. Beim Drücken wird automatisch ein Signal an den Sicherheitsdienst gesendet."
+    },
+    "ratingSystem": {
+      "title": "Bewertungssystem",
+      "description": "Wie funktioniert das Bewertungssystem",
+      "content": "Nach jeder Fahrt können Sie den Fahrer bewerten. Dies hilft dabei, hohe Servicequalität und Sicherheit zu gewährleisten."
+    }
+  }
+} 

@@ -1,0 +1,12 @@
+{
+  "error": "Hata",
+  "networkError": "Ağ hatası",
+  "serverError": "Sunucu hatası",
+  "timeout": "İstek zaman aşımına uğradı",
+  "unauthorized": "Yetkisiz",
+  "forbidden": "Yasak",
+  "notFound": "Bulunamadı",
+  "validationError": "Doğrulama hatası",
+  "unknownError": "Bilinmeyen bir hata oluştu",
+  "permissionDenied": "Erişim Reddedildi"
+} 

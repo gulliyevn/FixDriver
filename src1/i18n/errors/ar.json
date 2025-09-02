@@ -1,0 +1,12 @@
+{
+  "error": "خطأ",
+  "networkError": "خطأ في الشبكة",
+  "serverError": "خطأ في الخادم",
+  "timeout": "انتهت مهلة الطلب",
+  "unauthorized": "غير مصرح",
+  "forbidden": "محظور",
+  "notFound": "غير موجود",
+  "validationError": "خطأ في التحقق",
+  "unknownError": "حدث خطأ غير معروف",
+  "permissionDenied": "تم رفض الوصول"
+} 
