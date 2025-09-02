@@ -120,7 +120,7 @@ export const RegisterScreenStyles = StyleSheet.create({
   },
   agreementContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: SIZES.xl,
     paddingHorizontal: 0,
   },

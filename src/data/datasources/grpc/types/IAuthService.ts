@@ -40,4 +40,19 @@ export interface IAuthService {
    * Создание профиля для роли
    */
   createProfile(role: 'client' | 'driver' | 'admin', profileData: any): Promise<User>;
+
+  /**
+   * Send password reset OTP to email
+   */
+  sendPasswordReset(email: string): Promise<{ success: boolean; requestId: string }>;
+
+  /**
+   * Verify OTP for password reset
+   */
+  verifyPasswordResetOtp(requestId: string, otp: string): Promise<{ success: boolean; token: string }>;
+
+  /**
+   * Finalize password reset using server-issued reset token
+   */
+  resetPassword(token: string, newPassword: string): Promise<{ success: boolean }>;
 }

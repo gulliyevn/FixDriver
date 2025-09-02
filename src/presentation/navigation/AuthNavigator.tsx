@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import RoleSelectScreen from '../screens/auth/RoleSelectScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import ModalScreen from '../screens/auth/ModalScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 
 // Define the navigation types
 export type AuthStackParamList = {
@@ -12,7 +15,9 @@ export type AuthStackParamList = {
   ForgotPassword: undefined;
   Modal: {
     type: 'terms' | 'privacy';
+    role?: 'client' | 'driver';
   };
+  ResetPassword: { token: string };
 };
 
 type ScreenName = keyof AuthStackParamList;
@@ -59,10 +64,11 @@ const AuthNavigator: React.FC = () => {
     case 'Register':
       return <RegisterScreen navigation={navigation} route={{ params: routeParams }} />;
     case 'ForgotPassword':
-      // For now, show RoleSelect as placeholder
-      return <RoleSelectScreen navigation={navigation} />;
+      return <ForgotPasswordScreen navigation={navigation} />;
     case 'Modal':
       return <ModalScreen navigation={navigation} route={{ params: routeParams }} />;
+    case 'ResetPassword':
+      return <ResetPasswordScreen navigation={navigation} route={{ params: routeParams }} />;
     default:
       return <RoleSelectScreen navigation={navigation} />;
   }

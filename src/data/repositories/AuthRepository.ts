@@ -5,9 +5,13 @@ import { User, AuthResponse, LoginCredentials, RegisterData, UserRole } from '..
 
 export class AuthRepository implements IAuthRepository {
   private authService: AuthServiceStub;
+  private static sharedService: AuthServiceStub | null = null;
 
   constructor() {
-    this.authService = new AuthServiceStub();
+    if (!AuthRepository.sharedService) {
+      AuthRepository.sharedService = new AuthServiceStub();
+    }
+    this.authService = AuthRepository.sharedService;
   }
 
   async login(email: string, password: string): Promise<AuthResponse> {
@@ -152,6 +156,32 @@ export class AuthRepository implements IAuthRepository {
       return updatedUser;
     } catch (error) {
       throw new Error(`Profile creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async sendPasswordReset(email: string): Promise<{ requestId: string }> {
+    try {
+      const { requestId } = await this.authService.sendPasswordReset(email);
+      return { requestId };
+    } catch (error) {
+      throw new Error(`Password reset request failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async verifyPasswordResetOtp(requestId: string, otp: string): Promise<{ token: string }> {
+    try {
+      const { token } = await this.authService.verifyPasswordResetOtp(requestId, otp);
+      return { token };
+    } catch (error) {
+      throw new Error(`OTP verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      await this.authService.resetPassword(token, newPassword);
+    } catch (error) {
+      throw new Error(`Password reset failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

@@ -18,6 +18,7 @@ interface ModalScreenProps {
   route?: {
     params?: {
       type: 'terms' | 'privacy';
+      role?: 'client' | 'driver';
     };
   };
 }
@@ -28,7 +29,10 @@ const ModalScreen: React.FC<ModalScreenProps> = ({ navigation, route }) => {
   const type = route?.params?.type || 'terms';
 
   const handleBack = () => {
-    if (navigation && navigation.goBack) {
+    const role = route?.params?.role;
+    if (role) {
+      navigation?.reset?.({ index: 0, routes: [{ name: 'Register', params: { role } }] });
+    } else if (navigation && navigation.goBack) {
       navigation.goBack();
     }
   };

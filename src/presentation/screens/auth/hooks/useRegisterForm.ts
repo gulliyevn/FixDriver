@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert } from 'react-native';
 import { useI18n } from '../../../../shared/i18n';
-import { experienceOptions, getTariffOptions } from '../../../../../src1/utils/driverData';
+import { getTariffOptions } from '../../../../shared/constants/driverOptions';
 import { carBrands, carModelsByBrand, getYearOptions } from '../../../../shared/constants/cars';
 import { COUNTRIES_FULL } from '../../../../shared/constants/countries';
 import { AuthUseCase } from '../../../../domain/usecases/auth/AuthUseCase';
@@ -73,7 +73,10 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
     else if (!/\S+@\S+\.\S+/.test(formData.email)) e.email = t('auth.register.emailInvalid');
     if (!formData.phone.trim()) e.phone = t('auth.register.phoneRequired');
     if (!formData.password) e.password = t('auth.register.passwordRequired');
-    else if (formData.password.length < 8) e.password = t('auth.register.passwordShort');
+    else {
+      const policy = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+      if (!policy.test(formData.password)) e.password = t('auth.register.passwordPolicy');
+    }
     if (formData.confirmPassword !== formData.password) e.confirmPassword = t('auth.register.passwordsDontMatch');
 
     if (role === 'driver') {

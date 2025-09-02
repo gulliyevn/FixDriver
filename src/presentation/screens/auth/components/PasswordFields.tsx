@@ -34,6 +34,21 @@ const PasswordFields: React.FC<Props> = ({ t, styles, errors, values, onChange, 
             <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color="#64748B" />
           </TouchableOpacity>
         </View>
+        {(() => {
+          const pwd = values.password || '';
+          const unmet: string[] = [];
+          if (pwd.length < 8) unmet.push(t('auth.register.policy.minLength'));
+          if (!/[A-Z]/.test(pwd)) unmet.push(t('auth.register.policy.uppercase'));
+          if (!/\d/.test(pwd)) unmet.push(t('auth.register.policy.digit'));
+          if (!/[^A-Za-z0-9]/.test(pwd)) unmet.push(t('auth.register.policy.special'));
+          return pwd.length > 0 && unmet.length ? (
+            <View style={{ marginTop: 4 }}>
+              {unmet.map((line, idx) => (
+                <Text key={idx} style={styles.errorText}>• {line}</Text>
+              ))}
+            </View>
+          ) : null;
+        })()}
         {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
       </View>
 

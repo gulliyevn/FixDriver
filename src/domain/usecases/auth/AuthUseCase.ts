@@ -56,8 +56,9 @@ export class AuthUseCase {
       }
 
       // Validate password strength
-      if (userData.password.length < 8) {
-        throw new Error('Password must be at least 8 characters long');
+      const policy = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+      if (!policy.test(userData.password)) {
+        throw new Error('Password policy not met');
       }
 
       // Validate names

@@ -15,6 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../shared/i18n';
 import { Button } from '../../components';
+import { AuthUseCase } from '../../../domain/usecases/auth/AuthUseCase';
+import { AuthRepository } from '../../../data/repositories/AuthRepository';
 import { LoginScreenStyles } from './LoginScreen.styles';
 
 interface FormData {
@@ -65,15 +67,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
 
     setLoading(true);
     try {
-      // TODO: Подключить AuthUseCase
-      console.log('Login attempt:', formData);
-      
-      // Временная заглушка
-      setTimeout(() => {
-        setLoading(false);
-        Alert.alert('Success', 'Login successful!');
-      }, 1000);
-      
+      const useCase = new AuthUseCase(new AuthRepository());
+      await useCase.login(formData.email, formData.password);
+      setLoading(false);
+      Alert.alert('Success', 'Login successful!');
     } catch (error) {
       Alert.alert(t('auth.login.loginError'), t('auth.login.loginErrorGeneric'));
       setLoading(false);
@@ -208,24 +205,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
               style={styles.loginButton}
             />
 
-            {/* Quick Login Buttons */}
-            <View style={styles.quickLoginContainer}>
-              <Text style={styles.quickLoginText}>Быстрый вход:</Text>
-              <View style={styles.quickLoginButtons}>
-                <TouchableOpacity 
-                  style={styles.quickLoginButton}
-                  onPress={() => handleAutoFill('client')}
-                >
-                  <Text style={styles.quickLoginButtonText}>Клиент</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.quickLoginButton}
-                  onPress={() => handleAutoFill('driver')}
-                >
-                  <Text style={styles.quickLoginButtonText}>Водитель</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
           </View>
 
 
@@ -236,6 +215,24 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
             <TouchableOpacity onPress={handleRegister}>
               <Text style={styles.registerLink}>{t('auth.login.registerLink')}</Text>
             </TouchableOpacity>
+          </View>
+
+          {/* Quick Login Buttons (moved to bottom) */}
+          <View style={styles.quickLoginContainer}>
+            <View style={styles.quickLoginButtons}>
+              <TouchableOpacity 
+                style={styles.quickLoginButton}
+                onPress={() => handleAutoFill('client')}
+              >
+                <Text style={styles.quickLoginButtonText}>Клиент</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.quickLoginButton}
+                onPress={() => handleAutoFill('driver')}
+              >
+                <Text style={styles.quickLoginButtonText}>Водитель</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           

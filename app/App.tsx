@@ -8,6 +8,7 @@ import 'formdata-polyfill';
 
 // Import new architecture components
 import AuthNavigator from '../src/presentation/navigation/AuthNavigator';
+import { I18nProvider } from '../src/shared/i18n';
 
 // Feature flag for switching between old and new code
 const USE_NEW_ARCHITECTURE = true; // Set to false to use old code
@@ -21,10 +22,12 @@ const NewApp = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          {/* Import and use the AuthNavigator */}
-          <AuthNavigator />
-        </NavigationContainer>
+        <I18nProvider>
+          <NavigationContainer>
+            {/* Import and use the AuthNavigator */}
+            <AuthNavigator />
+          </NavigationContainer>
+        </I18nProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -20,6 +20,15 @@ const config: I18nConfig = {
   fallbackLanguage: 'en',
 };
 
+// ===== Context =====
+type I18nContextValue = {
+  language: string;
+  changeLanguage: (lang: string) => void;
+  t: (key: string) => string;
+};
+
+const I18nContext = React.createContext<I18nContextValue | null>(null);
+
 // Временные переводы (пока не создали полные файлы)
 const temporaryTranslations: Record<string, TranslationData> = {
   ru: {
@@ -143,6 +152,13 @@ const temporaryTranslations: Record<string, TranslationData> = {
         phoneRequired: 'Телефон обязателен',
         passwordRequired: 'Пароль обязателен',
         passwordShort: 'Пароль должен быть не менее 8 символов',
+        passwordPolicy: 'Пароль: минимум 8 символов, 1 заглавная, 1 цифра, 1 спецсимвол',
+        policy: {
+          minLength: 'Минимум 8 символов',
+          uppercase: 'Хотя бы одна заглавная буква',
+          digit: 'Хотя бы одна цифра',
+          special: 'Хотя бы один спецсимвол',
+        },
         passwordsDontMatch: 'Пароли не совпадают',
         agreementRequired: 'Согласитесь с условиями',
         agreementText: 'Я согласен с Условиями и Политикой конфиденциальности',
@@ -214,6 +230,7 @@ const temporaryTranslations: Record<string, TranslationData> = {
         next: 'Далее',
         submit: 'Отправить',
         confirm: 'Подтвердить',
+        contactSupport: 'Связаться с поддержкой',
       },
       labels: {
         email: 'Почта',
@@ -377,6 +394,13 @@ const temporaryTranslations: Record<string, TranslationData> = {
         phoneRequired: 'Phone is required',
         passwordRequired: 'Password is required',
         passwordShort: 'Password must be at least 8 characters',
+        passwordPolicy: 'Password: min 8 chars, 1 uppercase, 1 digit, 1 special',
+        policy: {
+          minLength: 'At least 8 characters',
+          uppercase: 'At least one uppercase letter',
+          digit: 'At least one digit',
+          special: 'At least one special character',
+        },
         passwordsDontMatch: 'Passwords do not match',
         agreementRequired: 'Please agree to the terms',
         agreementText: 'I agree to the Terms and Privacy Policy',
@@ -448,6 +472,7 @@ const temporaryTranslations: Record<string, TranslationData> = {
         next: 'Next',
         submit: 'Submit',
         confirm: 'Confirm',
+        contactSupport: 'Contact support',
       },
       labels: {
         email: 'Email',
@@ -518,24 +543,35 @@ export const t = (key: string, language: string = config.language): string => {
   return typeof translation === 'string' ? translation : key;
 };
 
-// Хук для использования в компонентах
-export const useI18n = () => {
+// Provider and hook based on React Context
+export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = React.useState(config.language);
-  
-  const translate = (key: string): string => {
-    return t(key, language);
-  };
-  
-  const changeLanguage = (newLanguage: string) => {
+
+  const changeLanguage = React.useCallback((newLanguage: string) => {
     setLanguage(newLanguage);
     config.language = newLanguage;
-  };
-  
-  return {
-    t: translate,
-    language,
-    changeLanguage,
-  };
+  }, []);
+
+  const translate = React.useCallback((key: string): string => t(key, language), [language]);
+
+  const value = React.useMemo(() => ({ language, changeLanguage, t: translate }), [language, changeLanguage, translate]);
+
+  return React.createElement(I18nContext.Provider, { value }, children as any);
+};
+
+export const useI18n = () => {
+  const ctx = React.useContext(I18nContext);
+  if (!ctx) {
+    // Fallback to local state if provider not present (dev safety)
+    const [language, setLanguage] = React.useState(config.language);
+    const changeLanguage = (newLanguage: string) => {
+      setLanguage(newLanguage);
+      config.language = newLanguage;
+    };
+    const translate = (key: string) => t(key, language);
+    return { t: translate, language, changeLanguage };
+  }
+  return ctx;
 };
 
 // Экспортируем ключи для TypeScript

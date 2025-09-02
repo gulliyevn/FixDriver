@@ -42,6 +42,11 @@ const MOCK_USERS: Record<string, User> = {
   },
 };
 
+// Simple in-memory password store keyed by email (mock DB)
+const USER_PASSWORDS: Record<string, string> = {
+  'test@example.com': 'Password1!'
+};
+
 // Simulate network delay
 const simulateNetworkDelay = (min: number = 300, max: number = 800): Promise<void> => {
   const delay = Math.random() * (max - min) + min;
@@ -51,13 +56,16 @@ const simulateNetworkDelay = (min: number = 300, max: number = 800): Promise<voi
 export class AuthServiceStub implements IAuthService {
   private currentUser: User | null = null;
   private currentToken: string | null = null;
+  private resetRequests: Record<string, { email: string; otp: string } > = {};
+  private resetTokens: Record<string, { email: string }> = {};
 
   async login(email: string, password: string): Promise<AuthResponse> {
     await simulateNetworkDelay();
 
-    // Simulate credential validation
-    if (email === 'test@example.com' && password === 'password') {
-      const user = MOCK_USERS['mock-user-id'];
+    // Validate against mock DB
+    const user = Object.values(MOCK_USERS).find(u => u.email === email) || null;
+    const validPassword = USER_PASSWORDS[email];
+    if (user && validPassword && validPassword === password) {
       const token = `mock-jwt-token-${Date.now()}`;
       
       this.currentUser = user;
@@ -91,6 +99,9 @@ export class AuthServiceStub implements IAuthService {
       updatedAt: new Date().toISOString(),
       profiles: {},
     };
+
+    // Save mock password
+    USER_PASSWORDS[userData.email] = userData.password;
 
     const token = `mock-jwt-token-${Date.now()}`;
     
@@ -184,5 +195,35 @@ export class AuthServiceStub implements IAuthService {
 
     this.currentUser = updatedUser;
     return updatedUser;
+  }
+
+  async sendPasswordReset(email: string): Promise<{ success: boolean; requestId: string }> {
+    await simulateNetworkDelay();
+    const requestId = `reset-${Date.now()}`;
+    const otp = String(Math.floor(1000 + Math.random() * 9000));
+    this.resetRequests[requestId] = { email, otp };
+    // Dev log to help test OTP flow
+    console.log(`[AuthServiceStub] Password reset requested for ${email}. requestId=${requestId}, otp=${otp}`);
+    return { success: true, requestId };
+  }
+
+  async verifyPasswordResetOtp(requestId: string, otp: string): Promise<{ success: boolean; token: string }> {
+    await simulateNetworkDelay();
+    const req = this.resetRequests[requestId];
+    if (!req) throw new Error('Invalid request');
+    if (req.otp !== otp) throw new Error('Invalid OTP');
+    const token = `reset-token-${Date.now()}`;
+    this.resetTokens[token] = { email: req.email };
+    return { success: true, token };
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean }> {
+    await simulateNetworkDelay();
+    const record = this.resetTokens[token];
+    if (!record) throw new Error('Invalid reset token');
+    // Update mock password by email
+    USER_PASSWORDS[record.email] = newPassword;
+    delete this.resetTokens[token];
+    return { success: true };
   }
 }

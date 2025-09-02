@@ -9,10 +9,8 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  TextInput
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../shared/i18n';
 import { Button } from '../../components';
 import { RegisterScreenStyles } from './RegisterScreen.styles';
@@ -194,7 +192,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation: propNavigat
               styles={styles}
               agree={agree}
               setAgree={setAgree}
-              onOpen={(type) => navigation.navigate('Modal' as never, { type })}
+              onOpen={(type) => navigation.navigate('Modal' as never, { type, role } as never)}
             />
 
             

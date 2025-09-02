@@ -92,11 +92,9 @@ export const LoginScreenStyles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
     borderRadius: SIZES.radius.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
-    ...SHADOWS.light.small,
+    borderWidth: 0,
   },
   inputError: {
     borderColor: colors.error,
