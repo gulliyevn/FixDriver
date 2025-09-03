@@ -1,8 +1,6 @@
-// Типы для ролей пользователей
+// Типы для ролей, разрешений и функций пользователей
 
 export type UserRole = 'client' | 'driver' | 'admin';
-
-export type UserRoleType = 'client' | 'driver' | 'admin';
 
 // Детали ролей
 export interface RoleDetails {
@@ -154,4 +152,46 @@ export const getRolePermissions = (role: UserRole): string[] => {
   };
   
   return permissions[role] || [];
+};
+
+// Получение функций для роли
+export const getRoleFeatures = (role: UserRole): string[] => {
+  const features: Record<UserRole, string[]> = {
+    client: [
+      'order_creation',
+      'real_time_tracking',
+      'payment_management',
+      'driver_rating',
+      'trip_history',
+      'support_chat',
+    ],
+    driver: [
+      'order_management',
+      'navigation',
+      'earnings_tracking',
+      'availability_control',
+      'trip_history',
+      'support_chat',
+    ],
+    admin: [
+      'user_management',
+      'order_management',
+      'analytics_dashboard',
+      'system_configuration',
+      'payment_management',
+      'support_management',
+    ],
+  };
+  
+  return features[role] || [];
+};
+
+// Проверка разрешений
+export const hasPermission = (userPermissions: string[], requiredPermission: string): boolean => {
+  return userPermissions.includes(requiredPermission);
+};
+
+// Проверка роли
+export const hasRole = (userRoles: UserRole[], requiredRole: UserRole): boolean => {
+  return userRoles.includes(requiredRole);
 };

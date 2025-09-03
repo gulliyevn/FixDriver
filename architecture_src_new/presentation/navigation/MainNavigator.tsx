@@ -6,6 +6,9 @@ import TabBar from './TabBar';
 import { AuthServiceStub } from '../../data/datasources/grpc/stubs/AuthServiceStub';
 import { UserRole } from '../../shared/types';
 
+// Импортируем MapScreen
+import MapScreen from '../screens/common/MapScreen';
+
 type Role = 'client' | 'driver';
 
 interface MainNavigatorProps {
@@ -58,16 +61,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
   const renderContent = () => {
     switch (activeTab) {
       case 'Map':
-        return (
-          <View style={styles.content}>
-            <Text style={styles.title}>
-              {currentRole === 'client' ? 'Client Map' : 'Driver Map'}
-            </Text>
-            <Text style={styles.subtitle}>
-              {currentRole === 'client' ? 'Find drivers here' : 'Find orders here'}
-            </Text>
-          </View>
-        );
+        return <MapScreen />;
       case 'Profile':
         return (
           <View style={styles.content}>

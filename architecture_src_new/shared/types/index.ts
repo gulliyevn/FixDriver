@@ -5,3 +5,6 @@ export * from './payment';
 export * from './chat';
 export * from './navigation';
 export * from './common';
+export * from './permissions';
+export * from './auth';
+export * from './userService';

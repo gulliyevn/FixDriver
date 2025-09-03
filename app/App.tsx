@@ -66,6 +66,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+// Импорт ThemeProvider
+import { ThemeProvider } from '../architecture_src_new/core/context/ThemeContext';
+
 // Импорт экранов из новой архитектуры
 import LoginScreen from '../architecture_src_new/presentation/screens/auth/LoginScreen';
 import RegisterScreen from '../architecture_src_new/presentation/screens/auth/RegisterScreen';
@@ -83,7 +86,8 @@ function AppNew() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <ThemeProvider>
+        <NavigationContainer>
         <Stack.Navigator 
           id={undefined}
           initialRouteName={isAuthenticated ? "MainApp" : "Login"} 
@@ -108,7 +112,8 @@ function AppNew() {
             </>
           )}
         </Stack.Navigator>
-      </NavigationContainer>
+        </NavigationContainer>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
