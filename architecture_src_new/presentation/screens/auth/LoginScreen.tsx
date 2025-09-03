@@ -67,13 +67,25 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
 
     setLoading(true);
     try {
+      console.log('Attempting login with:', formData.email);
       const useCase = new AuthUseCase(new AuthRepository());
-      await useCase.login(formData.email, formData.password);
+      const result = await useCase.login(formData.email, formData.password);
+      console.log('Login successful, result:', result);
       setLoading(false);
       Alert.alert('Success', 'Login successful!');
     } catch (error) {
-      Alert.alert(t('auth.login.loginError'), t('auth.login.loginErrorGeneric'));
+      console.log('Login failed with error:', error);
       setLoading(false);
+      const errorMessage = error instanceof Error ? error.message : 'auth.login.loginErrorGeneric';
+      
+      // Show specific error message based on error type
+      if (errorMessage === 'auth.login.userNotFound') {
+        Alert.alert(t('auth.login.loginError'), t('auth.login.userNotFound'));
+      } else if (errorMessage === 'auth.login.invalidPassword') {
+        Alert.alert(t('auth.login.loginError'), t('auth.login.invalidPassword'));
+      } else {
+        Alert.alert(t('auth.login.loginError'), t('auth.login.loginErrorGeneric'));
+      }
     }
   };
 
@@ -88,31 +100,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
     }
   };
 
-  const handleAutoFill = (type: 'client' | 'driver') => {
-    if (type === 'client') {
-      setFormData({
-        email: 'client@example.com',
-        password: 'password123',
-      });
-    } else {
-      setFormData({
-        email: 'driver@example.com',
-        password: 'password123',
-      });
-    }
-    setErrors({});
-  };
-
   const handleForgotPassword = () => {
     navigation.navigate('ForgotPassword' as never);
   };
 
   const handleRegister = () => {
-    // Reset navigation stack to avoid accumulation
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'RoleSelect' as never }],
-    });
+    navigation.navigate('RoleSelect' as never);
   };
 
   return (
@@ -215,24 +208,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
             <TouchableOpacity onPress={handleRegister}>
               <Text style={styles.registerLink}>{t('auth.login.registerLink')}</Text>
             </TouchableOpacity>
-          </View>
-
-          {/* Quick Login Buttons (moved to bottom) */}
-          <View style={styles.quickLoginContainer}>
-            <View style={styles.quickLoginButtons}>
-              <TouchableOpacity 
-                style={styles.quickLoginButton}
-                onPress={() => handleAutoFill('client')}
-              >
-                <Text style={styles.quickLoginButtonText}>Клиент</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.quickLoginButton}
-                onPress={() => handleAutoFill('driver')}
-              >
-                <Text style={styles.quickLoginButtonText}>Водитель</Text>
-              </TouchableOpacity>
-            </View>
           </View>
 
           

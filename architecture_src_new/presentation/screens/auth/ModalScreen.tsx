@@ -30,8 +30,8 @@ const ModalScreen: React.FC<ModalScreenProps> = ({ navigation, route }) => {
 
   const handleBack = () => {
     const role = route?.params?.role;
-    if (role) {
-      navigation?.reset?.({ index: 0, routes: [{ name: 'Register', params: { role } }] });
+    if (role && !(navigation as any)?.canGoBack?.()) {
+      navigation.navigate('Register', { role });
     } else if (navigation && navigation.goBack) {
       navigation.goBack();
     }

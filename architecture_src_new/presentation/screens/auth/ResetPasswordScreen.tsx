@@ -48,7 +48,16 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, r
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.scrollContent}>
           <View style={styles.headerRow}>
-            <TouchableOpacity onPress={() => navigation?.goBack?.()} style={styles.headerBackButton}>
+            <TouchableOpacity
+              onPress={() => {
+                if (navigation?.canGoBack?.()) {
+                  navigation.goBack();
+                } else {
+                  navigation?.replace?.('ForgotPassword');
+                }
+              }}
+              style={styles.headerBackButton}
+            >
               <Ionicons name="chevron-back" size={28} color="#64748B" />
             </TouchableOpacity>
             <View style={styles.headerContent}>

@@ -52,8 +52,11 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
   };
 
   const handleBack = () => {
-    // Ensure reliable back behavior with our simple navigator
-    navigation?.reset?.({ index: 0, routes: [{ name: 'Login' }] });
+    if ((navigation as any)?.canGoBack?.()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('Login');
+    }
   };
 
   const handleContactSupport = () => {
@@ -130,8 +133,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
                       try {
                         const repo = new AuthRepository();
                         const { token } = await repo.verifyPasswordResetOtp(requestId, otp);
-                        // navigate to ResetPassword with token
-                        navigation.reset({ index: 0, routes: [{ name: 'ResetPassword', params: { token } }] });
+                        navigation.navigate('ResetPassword', { token } as never);
                       } catch (e) {
                         setError('Invalid OTP');
                       }
@@ -168,7 +170,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
                 const repo = new AuthRepository();
                 const { token } = await repo.verifyPasswordResetOtp(requestId, code);
                 console.log('[ForgotPassword] OTP verified, navigating with reset token', token);
-                navigation.reset({ index: 0, routes: [{ name: 'ResetPassword', params: { token } }] });
+                navigation.navigate('ResetPassword', { token } as never);
               } catch (e) {
                 console.warn('[ForgotPassword] OTP verification failed', e);
                 setOtpError(true);

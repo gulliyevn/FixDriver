@@ -6,9 +6,10 @@ interface HeaderProps {
   t: (k: string) => string;
   styles: any;
   onBack: () => void;
+  titleKey?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ t, styles, onBack }) => {
+const Header: React.FC<HeaderProps> = ({ t, styles, onBack, titleKey = 'auth.register.title' }) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.backButton} onPress={onBack}>
@@ -16,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ t, styles, onBack }) => {
       </TouchableOpacity>
 
       <View style={styles.headerContent}>
-        <Text style={styles.title}>{t('auth.register.title')}</Text>
+        <Text style={styles.title}>{t(titleKey)}</Text>
       </View>
     </View>
   );

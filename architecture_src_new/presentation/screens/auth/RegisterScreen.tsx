@@ -91,7 +91,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation: propNavigat
       Alert.alert(
         t('auth.register.successTitle'),
         t('auth.register.successText'),
-        [{ text: t('common.buttons.confirm'), onPress: () => navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] }) }]
+        [{ text: t('common.buttons.confirm'), onPress: () => navigation.navigate('Login' as never) }]
       );
     });
   };
@@ -99,17 +99,15 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation: propNavigat
   // updateFormData provided by hook
 
   const handleBack = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'RoleSelect' as never }],
-    });
+    if ((navigation as any)?.canGoBack?.()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('RoleSelect' as never);
+    }
   };
 
   const handleLogin = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' as never }],
-    });
+    navigation.navigate('Login' as never);
   };
 
   const handleSelect = (field: keyof FormData, title: string) => {
@@ -138,7 +136,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation: propNavigat
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          <Header t={t} styles={styles} onBack={handleBack} />
+          <Header t={t} styles={styles} onBack={handleBack} titleKey={'auth.register.title'} />
 
           {/* Form */}
           <View style={styles.form}>

@@ -30,7 +30,11 @@ export class AuthRepository implements IAuthRepository {
 
       return response;
     } catch (error) {
-      throw new Error(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      // Pass through the original error message without adding prefix
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Unknown error');
     }
   }
 

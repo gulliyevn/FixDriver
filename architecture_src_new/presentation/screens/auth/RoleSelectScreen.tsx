@@ -26,24 +26,11 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
   };
 
   const handleContinue = () => {
-    // Reset navigation stack to Register with role param
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'Register' as never,
-          params: { role: selectedRole } as never,
-        },
-      ],
-    });
+    navigation.navigate('Register' as never, { role: selectedRole } as never);
   };
 
   const handleLogin = () => {
-    // Reset navigation stack to avoid accumulation
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' as never }],
-    });
+    navigation.navigate('Login' as never);
   };
 
   const getRoleFeatures = (role: Role) => {

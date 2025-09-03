@@ -33,6 +33,8 @@ export const TRANSLATION_KEYS = {
       LOGIN_BUTTON: 'auth.login.loginButton',
       LOGIN_ERROR: 'auth.login.loginError',
       LOGIN_ERROR_GENERIC: 'auth.login.loginErrorGeneric',
+      USER_NOT_FOUND: 'auth.login.userNotFound',
+      INVALID_PASSWORD: 'auth.login.invalidPassword',
       OR: 'auth.login.or',
       NO_ACCOUNT: 'auth.login.noAccount',
       REGISTER_LINK: 'auth.login.registerLink',
