@@ -73,21 +73,40 @@ import ForgotPasswordScreen from '../architecture_src_new/presentation/screens/a
 import ResetPasswordScreen from '../architecture_src_new/presentation/screens/auth/ResetPasswordScreen';
 import RoleSelectScreen from '../architecture_src_new/presentation/screens/auth/RoleSelectScreen';
 import ModalScreen from '../architecture_src_new/presentation/screens/auth/ModalScreen';
+import MainNavigator from '../architecture_src_new/presentation/navigation/MainNavigator';
 
 const Stack = createNativeStackNavigator();
 
 function AppNew() {
+  // TODO: Добавить логику аутентификации
+  const isAuthenticated = true; // Пока что true для тестирования навигации
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {/* @ts-ignore */}
-        <Stack.Navigator id="MainStack" initialRouteName="Login" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} options={{ gestureEnabled: false }} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-          <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-          <Stack.Screen name="RoleSelect" component={RoleSelectScreen} options={{ gestureEnabled: false }} />
-          <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Navigator 
+          id={undefined}
+          initialRouteName={isAuthenticated ? "MainApp" : "Login"} 
+          screenOptions={{ headerShown: false }}
+        >
+          {isAuthenticated ? (
+            // Аутентифицированный пользователь
+            <Stack.Screen 
+              name="MainApp" 
+              component={MainNavigator}
+              options={{ gestureEnabled: false }}
+            />
+          ) : (
+            // Неаутентифицированный пользователь
+            <>
+              <Stack.Screen name="Login" component={LoginScreen} options={{ gestureEnabled: false }} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+              <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+              <Stack.Screen name="RoleSelect" component={RoleSelectScreen} options={{ gestureEnabled: false }} />
+              <Stack.Screen name="Modal" component={ModalScreen} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

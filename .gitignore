@@ -1,6 +1,11 @@
 # ===== FIXDRIVE .GITIGNORE =====
 # React Native + Expo + TypeScript + Node.js
 
+# ===== ДОКУМЕНТАЦИЯ =====
+# Архитектурные промпты и документация
+ARCHITECTURE_PROMPT.md
+*.md
+
 # ===== ОСНОВНЫЕ ФАЙЛЫ =====
 
 # Зависимости
