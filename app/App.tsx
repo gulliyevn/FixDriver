@@ -65,12 +65,18 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
 
 // Импорт из нового index.ts
 import { 
   ThemeProvider, 
+  AuthProvider,
   MainNavigator 
 } from '../architecture_src_new';
+import { LevelProgressProvider } from '../architecture_src_new/core/context/LevelProgressContext';
+import { BalanceProvider } from '../architecture_src_new/core/context/BalanceContext';
+import { I18nProvider } from '../architecture_src_new/shared/i18n';
 
 const Stack = createNativeStackNavigator();
 
@@ -84,9 +90,14 @@ function AppNew() {
   };
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <I18nProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <LevelProgressProvider>
+                <BalanceProvider>
+                  <NavigationContainer>
         <Stack.Navigator 
           id={undefined}
           initialRouteName={isAuthenticated ? "MainApp" : "Login"} 
@@ -112,14 +123,18 @@ function AppNew() {
             </>
           )}
         </Stack.Navigator>
-        </NavigationContainer>
-      </ThemeProvider>
-    </SafeAreaProvider>
+                  </NavigationContainer>
+                </BalanceProvider>
+              </LevelProgressProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
 export default AppNew;
 
 // Регистрация компонента для Expo
-import { registerRootComponent } from 'expo';
 registerRootComponent(AppNew);

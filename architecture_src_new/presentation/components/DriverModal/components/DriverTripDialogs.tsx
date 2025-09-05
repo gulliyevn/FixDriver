@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, TouchableOpacity, Text, View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { t } from '../../i18n';
+import { t } from '../../../../shared/i18n';
 
 export type DriverTripDialogsProps = {
   styles: any;

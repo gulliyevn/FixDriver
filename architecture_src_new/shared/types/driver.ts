@@ -1,3 +1,31 @@
+export interface Driver {
+  id: string;
+  userId: string;
+  status: 'available' | 'busy' | 'offline';
+  currentLocation: {
+    id: string;
+    latitude: number;
+    longitude: number;
+    address: string;
+    city: string;
+    country: string;
+  };
+  rating: {
+    value: number;
+    count: number;
+    average: number;
+  };
+  vehicleId: string;
+  licenseNumber: string;
+  experience: number;
+  totalTrips: number;
+  totalEarnings: number;
+  isOnline: boolean;
+  lastActive: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ExperienceOption {
   label: string;
   value: string;

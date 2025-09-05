@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapRegion } from '../types/map.types';
-import { Location } from '../../../../../../../shared/types/user';
-import { MapService } from '../../../../../../../data/datasources/grpc/MapService';
+import { Location } from '../../../../../shared/types/user';
+import { MapService } from '../../../../../data/datasources/grpc/MapService';
 
 const mapService = new MapService();
 
@@ -30,7 +30,7 @@ export const useMapLocation = (initialLocation?: Location) => {
   useEffect(() => {
     const initializeMap = async () => {
       try {
-        const location = await mapService.getCurrentLocation();
+        const location = await MapService.getCurrentLocationWithRetry(3);
         if (location) {
           setRegion({
             latitude: location.latitude,

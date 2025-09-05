@@ -14,8 +14,8 @@ export type DriverInfoBarProps = {
 };
 
 const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ role = 'client', schedule, price, distance, timeOrChildType, onPress }) => {
-  const { isDark } = useTheme();
-  const styles = createDriverInfoBarStyles(isDark);
+  const { colors } = useTheme();
+  const styles = createDriverInfoBarStyles({ colors });
   return (
     <TouchableOpacity style={styles.driverInfoBar} onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
       <View style={styles.scheduleInfo}>

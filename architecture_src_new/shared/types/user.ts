@@ -1,170 +1,185 @@
-import { UserRole } from './permissions';
+// User types for the application
 
-// Базовый пользователь
+import { UserRole, Location } from './common';
+
+// Re-export Location for convenience
+export { Location };
+
+// Base user interface
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  role: UserRole; // текущая активная роль
-  avatar?: string;
-  isVerified: boolean;
+  name: string;
+  surname: string;
+  role: UserRole;
+  phone: string;
+  avatar: string | null;
+  rating: number;
   createdAt: string;
-  updatedAt: string;
-  
-  // Профили для разных ролей (может быть несколько)
-  profiles: {
-    client?: ClientProfile;
-    driver?: DriverProfile;
-    admin?: AdminProfile;
+  address: string;
+  birthDate?: string;
+}
+
+// Driver user interface
+export interface UserDriver extends User {
+  role: UserRole.DRIVER;
+  vehicle: {
+    make: string;
+    model: string;
+    year: number;
+    color: string;
+    licensePlate: string;
   };
+  isAvailable: boolean;
+  currentLocation?: Location;
+  car?: string;
+  carInfo?: string;
+  clientsPerDay?: number;
 }
 
-// Профиль администратора
-export interface AdminProfile {
-  permissions: string[];
-  accessLevel: 'basic' | 'advanced' | 'super';
-  createdAt: string;
-  updatedAt: string;
+// Client user interface
+export interface Client extends User {
+  role: UserRole.CLIENT;
+  children?: Child[];
+  paymentMethods?: PaymentMethod[];
 }
 
-// Вспомогательные типы
-export interface VehicleInfo {
-  id: string;
-  make: string;
-  model: string;
-  year: number;
-  color: string;
-  licensePlate: string;
-  vin?: string;
-  fuelType: 'gasoline' | 'diesel' | 'electric' | 'hybrid';
-  transmission: 'manual' | 'automatic';
-  seats: number;
-  features: string[];
-  photos: string[];
-  documents: {
-    registration: DocumentInfo;
-    insurance?: DocumentInfo;
-    inspection?: DocumentInfo;
-  };
-}
-
-export interface Location {
-  latitude: number;
-  longitude: number;
-  address?: string;
-}
-
-// Аутентификация (основные типы)
-export interface AuthResponse {
-  token: string;
-  userId: string;
-  success: boolean;
-  user?: User;
-}
-
-// Утилиты для работы с профилями
-export type UserWithClientProfile = User & { profiles: { client: ClientProfile } };
-export type UserWithDriverProfile = User & { profiles: { driver: DriverProfile } };
-export type UserWithAdminProfile = User & { profiles: { admin: AdminProfile } };
-
-// Дополнительные типы для клиентов
+// Child interface
 export interface Child {
   id: string;
   name: string;
   age: number;
   school?: string;
   address?: string;
-  parentId: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
+// Payment method interface
 export interface PaymentMethod {
   id: string;
-  type: 'card' | 'paypal' | 'apple_pay' | 'google_pay';
-  last4?: string;
-  brand?: 'visa' | 'mastercard' | 'amex' | 'discover';
-  isDefault: boolean;
+  type: 'card' | 'cash' | 'wallet';
+  cardNumber?: string;
+  cardHolder?: string;
+  expiryDate?: string;
+  isDefault?: boolean;
+}
+
+// Auth types
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+  surname: string;
+  phone: string;
+  role: UserRole;
+  birthDate?: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+  refreshToken: string;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+// Profile update types
+export interface UpdateProfileRequest {
+  name?: string;
+  surname?: string;
+  phone?: string;
+  address?: string;
+  birthDate?: string;
+  avatar?: string;
+}
+
+// Driver specific types
+export interface UpdateDriverProfileRequest extends UpdateProfileRequest {
+  vehicle?: {
+    make: string;
+    model: string;
+    year: number;
+    color: string;
+    licensePlate: string;
+  };
+  isAvailable?: boolean;
+}
+
+// Location types for user
+export interface UserLocation extends Location {
+  userId: string;
   isActive: boolean;
-  expiryMonth?: number;
-  expiryYear?: number;
-  cardholderName?: string;
-  createdAt: string;
-  updatedAt: string;
+  lastUpdated: string;
 }
 
-// Расширенный профиль клиента
-export interface ClientProfile {
-  balance: number;
-  rating?: number;
+// User stats types
+export interface UserStats {
   totalTrips: number;
-  children?: Child[];
-  paymentMethods?: PaymentMethod[];
-  preferences: {
-    language: 'ru' | 'en' | 'az';
-    notifications: {
-      email: boolean;
-      push: boolean;
-      sms: boolean;
-    };
-    accessibility: {
-      wheelchairAccess: boolean;
-      childSeat: boolean;
-      petFriendly: boolean;
-    };
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Расширенный профиль водителя
-export interface DriverProfile {
-  licenseNumber: string;
-  vehicleInfo?: VehicleInfo;
+  totalEarnings: number;
   rating: number;
-  totalTrips: number;
-  isOnline: boolean;
-  currentLocation?: Location;
-  experience: {
-    years: number;
-    totalDistance: number;
-    completedTrips: number;
-  };
-  earnings: {
-    total: number;
-    thisMonth: number;
-    thisWeek: number;
-    averagePerTrip: number;
-  };
-  schedule: {
-    workingDays: string[];
-    workingHours: {
-      start: string;
-      end: string;
-    };
-    isFlexible: boolean;
-  };
-  documents: {
-    license: DocumentInfo;
-    insurance?: DocumentInfo;
-    vehicleRegistration?: DocumentInfo;
-    backgroundCheck?: DocumentInfo;
-  };
-  createdAt: string;
-  updatedAt: string;
+  completedTrips: number;
+  cancelledTrips: number;
 }
 
-// Информация о документе
-export interface DocumentInfo {
-  id: string;
-  type: string;
-  number: string;
-  issuedBy: string;
-  issuedDate: string;
-  expiryDate: string;
-  isVerified: boolean;
-  verificationDate?: string;
-  documentUrl?: string;
+export interface DriverStats extends UserStats {
+  onlineHours: number;
+  averageRating: number;
+  clientsPerDay: number;
+  weeklyEarnings: number;
+  monthlyEarnings: number;
+}
+
+// User preferences
+export interface UserPreferences {
+  language: string;
+  theme: 'light' | 'dark';
+  notifications: {
+    push: boolean;
+    email: boolean;
+    sms: boolean;
+  };
+  privacy: {
+    shareLocation: boolean;
+    showOnlineStatus: boolean;
+  };
+}
+
+// User session types
+export interface UserSession {
+  user: User;
+  token: string;
+  refreshToken: string;
+  expiresAt: number;
+  isActive: boolean;
+}
+
+// User verification types
+export interface VerificationRequest {
+  email: string;
+  code: string;
+}
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+// Password reset types
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
 }

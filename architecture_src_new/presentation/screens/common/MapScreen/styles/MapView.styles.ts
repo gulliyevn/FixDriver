@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../../../../../shared/constants/colors';
+import { getCurrentColors, SHADOWS, SIZES } from '../../../../../shared/constants/colors';
 
 export const createMapViewStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);

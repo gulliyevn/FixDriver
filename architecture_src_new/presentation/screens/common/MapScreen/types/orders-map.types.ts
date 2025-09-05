@@ -1,4 +1,4 @@
-import { Location } from '../../../../../../shared/types/common';
+import { Location } from '../../../../../shared/types/common';
 
 export interface OrdersMapState {
   currentLocation?: Location;

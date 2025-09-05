@@ -6,12 +6,14 @@ interface DriverLevel {
   experience: number;
   isVIP: boolean;
   nextLevelExperience: number;
+  vipStartDate?: string;
 }
 
 interface LevelProgressContextType {
   driverLevel: DriverLevel | null;
   incrementProgress: (amount: number) => void;
   resetProgress: () => void;
+  updateVIPLevel: (qualifiedDaysInPeriods: number[]) => Promise<void>;
 }
 
 const LevelProgressContext = createContext<LevelProgressContextType | undefined>(undefined);
@@ -54,8 +56,14 @@ export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ ch
     });
   };
 
+  const updateVIPLevel = async (qualifiedDaysInPeriods: number[]) => {
+    // TODO: Implement VIP level update logic
+    // This is a placeholder implementation
+    console.log('updateVIPLevel called with:', qualifiedDaysInPeriods);
+  };
+
   return (
-    <LevelProgressContext.Provider value={{ driverLevel, incrementProgress, resetProgress }}>
+    <LevelProgressContext.Provider value={{ driverLevel, incrementProgress, resetProgress, updateVIPLevel }}>
       {children}
     </LevelProgressContext.Provider>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { useTheme } from '../../../../../../core/context/ThemeContext';
-import { useI18n } from '../../../../../../shared/i18n';
-import { createMapScreenStyles } from '../../styles/MapScreen.styles';
+import { useTheme } from '../../../../../core/context/ThemeContext';
+import { useI18n } from '../../../../../shared/i18n';
+import { createMapScreenStyles } from '../styles/MapScreen.styles';
 
 interface SimpleDialogProps {
   isVisible: boolean;

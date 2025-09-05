@@ -6,8 +6,7 @@ import TabBar from './TabBar';
 import { AuthServiceStub } from '../../data/datasources/grpc/stubs/AuthServiceStub';
 import { UserRole } from '../../shared/types';
 
-// Импортируем MapScreen
-import MapScreen from '../screens/common/MapScreen';
+// Импорт MapScreen будет внутри функции
 
 type Role = 'client' | 'driver';
 
@@ -61,6 +60,8 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
   const renderContent = () => {
     switch (activeTab) {
       case 'Map':
+        // Импортируем MapScreen только когда он нужен
+        const MapScreen = require('../screens/common/MapScreen').default;
         return <MapScreen />;
       case 'Profile':
         return (

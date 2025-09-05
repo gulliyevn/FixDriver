@@ -1,32 +1,79 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getCurrentColors } from '../../shared/constants/colors';
+
+type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
+  theme: Theme;
   isDark: boolean;
-  toggleTheme: () => void;
-  setTheme: (isDark: boolean) => void;
+  toggleTheme: () => Promise<void>;
+  setTheme: (theme: Theme) => Promise<void>;
+  colors: ReturnType<typeof getCurrentColors>;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
+
 interface ThemeProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
+const THEME_STORAGE_KEY = '@FixDrive:theme';
+
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [theme, setThemeState] = useState<Theme>('light');
 
-  const toggleTheme = () => {
-    setIsDark(prev => !prev);
+  useEffect(() => {
+    loadTheme();
+  }, []);
+
+  const loadTheme = async () => {
+    try {
+      const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setThemeState(savedTheme);
+      } else {
+        // Use system theme preference if available
+        // For now, default to light theme
+        setThemeState('light');
+      }
+    } catch (error) {
+      console.warn('Theme load error:', error);
+      setThemeState('light');
+    }
   };
 
-  const setTheme = (dark: boolean) => {
-    setIsDark(dark);
+  const setTheme = async (newTheme: Theme) => {
+    try {
+      setThemeState(newTheme);
+      await AsyncStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    } catch (error) {
+      console.warn('Theme save error:', error);
+    }
   };
 
-  const value: ThemeContextType = {
+  const toggleTheme = async () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    await setTheme(newTheme);
+  };
+
+  const isDark = theme === 'dark';
+  const colors = getCurrentColors(isDark);
+
+  const value = {
+    theme,
     isDark,
     toggleTheme,
     setTheme,
+    colors,
   };
 
   return (
@@ -34,12 +81,4 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       {children}
     </ThemeContext.Provider>
   );
-};
-
-export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
 };

@@ -1,3 +1,5 @@
+// Color constants and theme system for the application
+
 export const lightColors = {
   // Основные цвета FixDrive
   primary: '#083198', // Основные кнопки
@@ -226,3 +228,20 @@ export const Z_INDEX = {
   tooltip: 1001,
   toast: 1002,
 };
+
+// Дополнительные константы для VIP пакетов
+export const VIP_COLORS = {
+  SUCCESS: '#10B981',
+  ERROR: '#EF4444',
+  PRIMARY: '#3B82F6',
+  WHITE: '#FFFFFF',
+  BLACK: '#000000',
+} as const;
+
+// Константы для иконок
+export const ICON_SIZES = {
+  FEATURE_ICON: 14,
+  CHECKMARK: 16,
+  CLOSE: 12,
+  SELECTED_INDICATOR: 24,
+} as const;

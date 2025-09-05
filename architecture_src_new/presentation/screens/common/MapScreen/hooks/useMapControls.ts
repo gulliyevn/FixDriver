@@ -104,7 +104,7 @@ export const useMapControls = (
     
     try {
       const mapService = new MapService();
-      const newLocation = await mapService.getCurrentLocation();
+      const newLocation = await MapService.getCurrentLocationWithRetry(3);
       if (newLocation) {
         actions.setCurrentLocation(newLocation);
       }
@@ -130,7 +130,7 @@ export const useMapControls = (
   const handleLocatePress = useCallback(async () => {
     try {
       const mapService = new MapService();
-      const location = await mapService.getCurrentLocation();
+      const location = await MapService.getCurrentLocationWithRetry(3);
       if (location) {
         actions.setCurrentLocation(location);
       }
@@ -144,7 +144,7 @@ export const useMapControls = (
     try {
       if (!state.isClientLocationActive) {
         const mapService = new MapService();
-        const location = await mapService.getCurrentLocation();
+        const location = await MapService.getCurrentLocationWithRetry(3);
         if (location) {
           actions.setIsClientLocationActive(true);
           actions.setCurrentLocation(location);

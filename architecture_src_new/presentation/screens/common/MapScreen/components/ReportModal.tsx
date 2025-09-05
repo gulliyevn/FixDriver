@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../../../../../core/context/ThemeContext';
-import { useI18n } from '../../../../../../shared/i18n';
-import { createMapScreenStyles } from '../../styles/MapScreen.styles';
+import { useTheme } from '../../../../../core/context/ThemeContext';
+import { useI18n } from '../../../../../shared/i18n';
+import { createMapScreenStyles } from '../styles/MapScreen.styles';
 
 interface ReportModalProps {
   isVisible: boolean;

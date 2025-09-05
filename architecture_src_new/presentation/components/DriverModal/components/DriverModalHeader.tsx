@@ -136,7 +136,7 @@ const DriverModalHeader: React.FC<DriverModalHeaderProps> = ({
       {role === 'client' && driver?.vehicle_brand && driver?.vehicle_model && (
         <View style={styles.vehiclePhotoContainer}>
           <Image 
-            source={require('../../../assets/vehicles/toyota-camry.jpg')} 
+            source={require('../../../../../assets/vehicles/toyota-camry.jpg')} 
             style={styles.vehiclePhoto}
             resizeMode="contain"
           />

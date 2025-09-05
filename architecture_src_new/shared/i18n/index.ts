@@ -274,6 +274,42 @@ const temporaryTranslations: Record<string, TranslationData> = {
       theme: 'Тема',
       logout: 'Выйти',
     },
+    // Заработки
+    earnings: {
+      title: 'Заработки',
+      topDrivers: 'Топ водители',
+      earnings: 'Заработок',
+      rides: 'Поездки',
+      level: 'Уровень',
+      position: 'Позиция',
+      today: 'Сегодня',
+      week: 'Неделя',
+      month: 'Месяц',
+      year: 'Год',
+      filter: 'Фильтр',
+      changeStatus: 'Изменить статус',
+    },
+    // Карта
+    map: {
+      title: 'Карта',
+      currentLocation: 'Текущее местоположение',
+      searchPlaceholder: 'Поиск места...',
+      noResults: 'Результаты не найдены',
+      permissionDenied: 'Доступ к местоположению запрещен',
+      locationError: 'Ошибка получения местоположения',
+      nearbyDrivers: 'Ближайшие водители',
+      noDriversFound: 'Водители не найдены',
+      driverAvailable: 'Доступен',
+      driverBusy: 'Занят',
+      driverOffline: 'Офлайн',
+      reportDriver: 'Пожаловаться на водителя',
+      shareRoute: 'Поделиться маршрутом',
+      settings: 'Настройки',
+      mapType: 'Тип карты',
+      standard: 'Стандартная',
+      satellite: 'Спутник',
+      hybrid: 'Гибридная',
+    },
   },
   en: {
     // Аутентификация
@@ -518,11 +554,47 @@ const temporaryTranslations: Record<string, TranslationData> = {
       theme: 'Theme',
       logout: 'Logout',
     },
+    // Заработки
+    earnings: {
+      title: 'Earnings',
+      topDrivers: 'Top Drivers',
+      earnings: 'Earnings',
+      rides: 'Rides',
+      level: 'Level',
+      position: 'Position',
+      today: 'Today',
+      week: 'Week',
+      month: 'Month',
+      year: 'Year',
+      filter: 'Filter',
+      changeStatus: 'Change Status',
+    },
+    // Карта
+    map: {
+      title: 'Map',
+      currentLocation: 'Current Location',
+      searchPlaceholder: 'Search place...',
+      noResults: 'No results found',
+      permissionDenied: 'Location permission denied',
+      locationError: 'Location error',
+      nearbyDrivers: 'Nearby Drivers',
+      noDriversFound: 'No drivers found',
+      driverAvailable: 'Available',
+      driverBusy: 'Busy',
+      driverOffline: 'Offline',
+      reportDriver: 'Report Driver',
+      shareRoute: 'Share Route',
+      settings: 'Settings',
+      mapType: 'Map Type',
+      standard: 'Standard',
+      satellite: 'Satellite',
+      hybrid: 'Hybrid',
+    },
   },
 };
 
 // Функция для получения перевода
-export const t = (key: string, language: string = config.language): string => {
+export const t = (key: string, params?: Record<string, string | number>, language: string = config.language): string => {
   const keys = key.split('.');
   let translation: any = temporaryTranslations[language] || temporaryTranslations[config.fallbackLanguage];
   
@@ -540,11 +612,21 @@ export const t = (key: string, language: string = config.language): string => {
           return key; // Возвращаем ключ если перевод не найден
         }
       }
-      return fallback;
+      translation = fallback;
+      break;
     }
   }
   
-  return typeof translation === 'string' ? translation : key;
+  let result = typeof translation === 'string' ? translation : key;
+  
+  // Если есть параметры, делаем интерполяцию
+  if (params && typeof result === 'string') {
+    Object.entries(params).forEach(([paramKey, paramValue]) => {
+      result = result.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+    });
+  }
+  
+  return result;
 };
 
 // Provider and hook based on React Context
@@ -556,7 +638,7 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     config.language = newLanguage;
   }, []);
 
-  const translate = React.useCallback((key: string): string => t(key, language), [language]);
+  const translate = React.useCallback((key: string): string => t(key, undefined, language), [language]);
 
   const value = React.useMemo(() => ({ language, changeLanguage, t: translate }), [language, changeLanguage, translate]);
 
@@ -572,7 +654,7 @@ export const useI18n = () => {
       setLanguage(newLanguage);
       config.language = newLanguage;
     };
-    const translate = (key: string) => t(key, language);
+    const translate = (key: string) => t(key, undefined, language);
     return { t: translate, language, changeLanguage };
   }
   return ctx;
@@ -580,3 +662,4 @@ export const useI18n = () => {
 
 // Экспортируем ключи для TypeScript
 export { TRANSLATION_KEYS };
+

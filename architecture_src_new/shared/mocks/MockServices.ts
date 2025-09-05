@@ -5,7 +5,91 @@
  */
 
 import MockData from './MockData';
-import { User, Driver, Order, Location, AuthResult, DriverStatus, OrderStatus, FlexibleScheduleData, CustomizedScheduleData, AllScheduleData, ProfileFormData, PackageType, PackageVisuals, AppLanguage, DateFormat, AuthErrorCode, NetworkErrorCode, ValidationErrorCode, Country, EmergencyService, CarBrand, CarModel } from './types';
+import { User, Order, Location, OrderStatus, EmergencyService, CarBrand, CarModel } from './types';
+
+// Temporary types for MockServices
+interface AuthResult {
+  success: boolean;
+  user: User;
+  token: string;
+}
+
+interface Driver {
+  id: string;
+  name: string;
+  status: string;
+  isOnline: boolean;
+}
+
+interface DriverStatus {
+  status: string;
+  isOnline: boolean;
+}
+
+interface FlexibleScheduleData {
+  id: string;
+  name: string;
+}
+
+interface CustomizedScheduleData {
+  id: string;
+  name: string;
+}
+
+interface AllScheduleData {
+  flexibleSchedule: FlexibleScheduleData | null;
+  customizedSchedule: CustomizedScheduleData | null;
+  timestamp: string;
+}
+
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  birthDate: string;
+}
+
+interface PackageType {
+  type: string;
+  name: string;
+}
+
+interface PackageVisuals {
+  icon: string;
+  color: string;
+  label: string;
+  decoration: string;
+  isPremium: boolean;
+}
+
+enum AppLanguage {
+  ENGLISH = 'en',
+  RUSSIAN = 'ru',
+  AZERBAIJANI = 'az'
+}
+
+interface DateFormat {
+  format: string;
+}
+
+enum AuthErrorCode {
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS'
+}
+
+enum NetworkErrorCode {
+  NO_INTERNET = 'NO_INTERNET'
+}
+
+enum ValidationErrorCode {
+  INVALID_EMAIL = 'INVALID_EMAIL'
+}
+
+interface Country {
+  code: string;
+  name: string;
+  emergencyNumber: string;
+}
 
 export default class MockServices {
   // 🔐 AUTHENTICATION SERVICE
@@ -126,19 +210,14 @@ export default class MockServices {
     async create(orderData: Partial<Order>): Promise<Order> {
       const newOrder: Order = {
         id: `order_${Date.now()}`,
-        userId: orderData.userId!,
+        clientId: orderData.clientId!,
         driverId: orderData.driverId || '',
-        pickupLocation: orderData.pickupLocation!,
-        dropoffLocation: orderData.dropoffLocation!,
+        from: orderData.from!,
+        to: orderData.to!,
         status: 'pending',
-        price: orderData.price || {
-          amount: 0,
-          currency: 'USD',
-          formatted: '$0.00'
-        },
+        price: orderData.price || 0,
         distance: orderData.distance || 0,
         duration: orderData.duration || 0,
-        paymentMethod: orderData.paymentMethod || 'card',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -163,24 +242,18 @@ export default class MockServices {
     async getCurrentLocation(): Promise<Location> {
       // Mock current location - in real app this would be gRPC call
       return {
-        id: 'current_location',
         latitude: 40.7128,
         longitude: -74.0060,
         address: 'New York, NY',
-        city: 'New York',
-        country: 'USA',
       };
     },
 
     async geocodeAddress(address: string): Promise<Location> {
       // Mock geocoding - in real app this would be gRPC call
       return {
-        id: `geocoded_${Date.now()}`,
         latitude: 40.7128 + (Math.random() - 0.5) * 0.1,
         longitude: -74.0060 + (Math.random() - 0.5) * 0.1,
         address,
-        city: 'New York',
-        country: 'USA',
       };
     },
 
@@ -647,6 +720,11 @@ export default class MockServices {
           await new Promise(resolve => setTimeout(resolve, 80));
           console.log(`Driver ${driverId} online status: ${isOnline}`);
         },
+        async getOnlineStatus(driverId: string): Promise<boolean> {
+          await new Promise(resolve => setTimeout(resolve, 50));
+          // Mock: return random online status for testing
+          return Math.random() > 0.5;
+        },
         async setOnline(isOnline: boolean): Promise<void> {
           await new Promise(resolve => setTimeout(resolve, 80));
           console.log(`Driver online status: ${isOnline}`);
@@ -752,8 +830,121 @@ export default class MockServices {
     },
   };
 
-  // 💰 BALANCE SERVICE
-  static balance = {
+        // 📊 DRIVER STATS SERVICE
+      static driverStats = {
+        async getEarningsChartData(driverId: string, period: 'today' | 'week' | 'month' | 'year'): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          const mockData = {
+            today: {
+              labels: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+              data: [15, 25, 35, 45, 30]
+            },
+            week: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              data: [120, 150, 180, 200, 220, 250, 280]
+            },
+            month: {
+              labels: ['1', '5', '10', '15', '20', '25', '30'],
+              data: [800, 1200, 1600, 2000, 2400, 2800, 3200]
+            },
+            year: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              data: [25000, 28000, 32000, 35000, 38000, 42000, 45000, 48000, 52000, 55000, 58000, 62000]
+            }
+          };
+
+          return {
+            labels: mockData[period].labels,
+            data: mockData[period].data,
+            period
+          };
+        },
+
+        async saveDayStats(driverId: string, stats: any): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log(`Driver ${driverId} day stats saved:`, stats);
+        },
+
+        async getDayStats(driverId: string, date: string): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 50));
+          // Mock: return sample day stats
+          return {
+            date,
+            hoursOnline: Math.random() * 8 + 4,
+            ridesCount: Math.floor(Math.random() * 20) + 5,
+            earnings: Math.random() * 500 + 200,
+            isQualified: Math.random() > 0.3,
+            timestamp: Date.now()
+          };
+        },
+
+        async getPeriodStats(driverId: string, startDate: string, endDate: string): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          // Mock: return sample period stats
+          return {
+            totalHours: Math.random() * 200 + 100,
+            totalRides: Math.floor(Math.random() * 500) + 200,
+            totalEarnings: Math.random() * 10000 + 5000,
+            qualifiedDays: Math.floor(Math.random() * 20) + 10,
+            averageHoursPerDay: Math.random() * 8 + 4,
+            averageRidesPerDay: Math.random() * 15 + 8,
+          };
+        },
+
+        async getLastNDaysStats(driverId: string, days: number): Promise<any[]> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          // Mock: return sample stats for last N days
+          const stats = [];
+          for (let i = 0; i < days; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            stats.push({
+              date: date.toISOString().split('T')[0],
+              hoursOnline: Math.random() * 8 + 4,
+              ridesCount: Math.floor(Math.random() * 20) + 5,
+              earnings: Math.random() * 500 + 200,
+              isQualified: Math.random() > 0.3,
+              timestamp: Date.now()
+            });
+          }
+          return stats;
+        },
+
+        async getPerformanceMetrics(driverId: string): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 80));
+          return {
+            rating: Math.random() * 2 + 3, // 3-5 rating
+            completionRate: Math.random() * 0.3 + 0.7, // 70-100%
+            responseTime: Math.random() * 5 + 2, // 2-7 minutes
+            totalTrips: Math.floor(Math.random() * 1000) + 500,
+            totalEarnings: Math.random() * 50000 + 25000,
+            averageEarningsPerTrip: Math.random() * 100 + 50,
+          };
+        },
+
+        async getDriverRanking(driverId: string): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 60));
+          const position = Math.floor(Math.random() * 1000) + 1;
+          const totalDrivers = 10000;
+          const percentile = Math.floor((1 - position / totalDrivers) * 100);
+          
+          let category = 'bronze';
+          if (percentile >= 90) category = 'platinum';
+          else if (percentile >= 75) category = 'gold';
+          else if (percentile >= 50) category = 'silver';
+
+          return {
+            position,
+            totalDrivers,
+            percentile,
+            category,
+          };
+        }
+      };
+
+      // 💰 BALANCE SERVICE
+      static balance = {
     async getBalance(userId: string): Promise<number> {
       // Mock balance retrieval - in real app this would be gRPC call
       const user = MockData.users.find(u => u.id === userId);

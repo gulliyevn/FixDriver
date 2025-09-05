@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MapMarker } from '../types/map.types';
-import { Location } from '../../../../../../../shared/types/user';
-import { MapService } from '../../../../../../../data/datasources/grpc/MapService';
+import { Location } from '../../../../../shared/types/user';
+import { MapService } from '../../../../../data/datasources/grpc/MapService';
 
 const mapService = new MapService();
 
@@ -47,7 +47,7 @@ export const useMapMarkers = (
       }
       
       // Обновляем текущую локацию без влияния на другие состояния
-      const location = await mapService.getCurrentLocation();
+      const location = await MapService.getCurrentLocationWithRetry(3);
       if (location && !initialLocation) {
         // Здесь можно обновить регион карты
       }

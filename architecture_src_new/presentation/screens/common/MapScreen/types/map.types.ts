@@ -1,4 +1,4 @@
-import { Location } from '../../../../../../shared/types/user';
+import { Location } from '../../../../../shared/types/user';
 
 export interface MapMarker {
   id: string;
@@ -46,4 +46,45 @@ export interface MapRegion {
   longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
+}
+
+export interface MapLocation {
+  latitude: number;
+  longitude: number;
+  address?: string;
+  timestamp?: number;
+}
+
+export interface MapState {
+  currentLocation?: MapLocation;
+  isExpanded: boolean;
+  driverVisibilityTrigger: number;
+  mapRefreshKey: number;
+  isRefreshing: boolean;
+  isClientLocationActive: boolean;
+  isDriverModalVisible: boolean;
+  isReportModalVisible: boolean;
+  reportComment: string;
+  isSimpleDialogVisible: boolean;
+  mapType: 'standard' | 'satellite' | 'hybrid';
+  isSettingsExpanded: boolean;
+  markers: any[];
+  routePoints: any[];
+}
+
+export interface MapActions {
+  setCurrentLocation: (location: MapLocation | undefined) => void;
+  setIsExpanded: (expanded: boolean) => void;
+  setDriverVisibilityTrigger: (trigger: number) => void;
+  setMapRefreshKey: (key: number) => void;
+  setIsRefreshing: (refreshing: boolean) => void;
+  setIsClientLocationActive: (active: boolean) => void;
+  setIsDriverModalVisible: (visible: boolean) => void;
+  setIsReportModalVisible: (visible: boolean) => void;
+  setReportComment: (comment: string) => void;
+  setIsSimpleDialogVisible: (visible: boolean) => void;
+  setMapType: (type: 'standard' | 'satellite' | 'hybrid') => void;
+  setIsSettingsExpanded: (expanded: boolean) => void;
+  setMarkers: (markers: any[]) => void;
+  setRoutePoints: (points: any[]) => void;
 }

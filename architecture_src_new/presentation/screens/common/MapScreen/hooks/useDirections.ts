@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import polyline from '@mapbox/polyline';
 import { RoutePoint } from '../types/map.types';
-import { ENV_CONFIG } from '../../../../../../../shared/config/environment';
+import { ENV_CONFIG } from '../../../../../shared/config/environment';
 
 interface DirectionsResult {
   coordinates: Array<{ latitude: number; longitude: number }>;
