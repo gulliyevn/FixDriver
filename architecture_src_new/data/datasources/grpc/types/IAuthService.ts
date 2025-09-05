@@ -1,45 +1,45 @@
-import { AuthResponse, LoginCredentials, RegisterData, User } from '../../../../shared/types';
+import { AuthResponse, RegisterData, User, UserRole } from '../../../../shared/types';
 
 export interface IAuthService {
   /**
-   * Вход в систему
+   * User login
    */
   login(email: string, password: string): Promise<AuthResponse>;
 
   /**
-   * Регистрация нового пользователя
+   * Register new user
    */
   register(userData: RegisterData): Promise<AuthResponse>;
 
   /**
-   * Выход из системы
+   * User logout
    */
   logout(): Promise<void>;
 
   /**
-   * Обновление токена
+   * Refresh authentication token
    */
   refreshToken(): Promise<AuthResponse>;
 
   /**
-   * Проверка валидности токена
+   * Validate authentication token
    */
   validateToken(token: string): Promise<boolean>;
 
   /**
-   * Получение текущего пользователя
+   * Get current authenticated user
    */
   getCurrentUser(): Promise<User | null>;
 
   /**
-   * Смена роли пользователя
+   * Switch user role
    */
-  switchRole(role: 'client' | 'driver' | 'admin'): Promise<User>;
+  switchRole(role: UserRole): Promise<User>;
 
   /**
-   * Создание профиля для роли
+   * Create profile for specific role
    */
-  createProfile(role: 'client' | 'driver' | 'admin', profileData: any): Promise<User>;
+  createProfile(role: UserRole, profileData: any): Promise<User>;
 
   /**
    * Send password reset OTP to email

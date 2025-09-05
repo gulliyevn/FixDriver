@@ -1,7 +1,27 @@
 // Типы для аутентификации и авторизации
 
-import { User, UserRole } from './user';
-import { ClientPermission, DriverPermission, AdminPermission } from './permissions';
+import { User } from './user';
+import { UserRole, ClientPermission, DriverPermission, AdminPermission } from './permissions';
+
+// Базовые типы для аутентификации
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  role: UserRole;
+}
+
+// Внутренний тип для сервисов (с паролем)
+export interface UserWithPassword extends User {
+  password: string;
+}
 
 // Запросы аутентификации
 export interface LoginRequest {

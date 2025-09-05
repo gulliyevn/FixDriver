@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { t } from '../../../i18n';
-import { createDriverModalStyles } from '../../../styles/components/DriverModal';
+import { useTheme } from '../../../../core/context/ThemeContext';
+import { useI18n } from '../../../../shared/i18n';
+import { createDriverModalStyles } from '../../../../shared/styles/components/DriverModal';
 
 interface DriverCallSheetProps {
   isVisible: boolean;
@@ -26,6 +26,7 @@ const DriverCallSheet: React.FC<DriverCallSheetProps> = ({
   onNetworkCall,
   onInternetCall,
 }) => {
+  const { t } = useI18n();
   const styles = createDriverModalStyles(isDark, role);
 
   return (
@@ -54,7 +55,7 @@ const DriverCallSheet: React.FC<DriverCallSheetProps> = ({
           </TouchableOpacity>
           <View style={styles.callSheetHandle} />
           <Text style={styles.callSheetTitle}>
-            {t('client.driversScreen.call.callTitle', { firstName: driver.first_name, lastName: driver.last_name })}
+            {t('client.driversScreen.call.callTitle')}
           </Text>
           <TouchableOpacity style={styles.callSheetOption} onPress={onInternetCall}>
             <Ionicons name="wifi" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
@@ -63,7 +64,7 @@ const DriverCallSheet: React.FC<DriverCallSheetProps> = ({
           <TouchableOpacity style={styles.callSheetOption} onPress={onNetworkCall}>
             <Ionicons name="call" size={24} color={isDark ? '#F9FAFB' : '#111827'} />
             <Text style={styles.callSheetOptionText}>
-              {t('client.driversScreen.call.networkCallWithNumber', { phone: driver.phone_number })}
+              {t('client.driversScreen.call.networkCall')}
             </Text>
           </TouchableOpacity>
         </Animated.View>

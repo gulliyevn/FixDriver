@@ -1,72 +1,6 @@
 import { IPaymentService } from '../types/IPaymentService';
 import { Payment, Balance, CreatePaymentData, PaginationParams, PaginatedResponse } from '../../../../shared/types';
 
-// Mock payment data
-const MOCK_PAYMENTS: Payment[] = [
-  {
-    id: 'payment-1',
-    userId: 'user-1',
-    type: 'top_up',
-    amount: 100,
-    status: 'completed',
-    description: 'Top up balance',
-    createdAt: '2024-01-01T10:00:00.000Z',
-    updatedAt: '2024-01-01T10:00:00.000Z',
-    completedAt: '2024-01-01T10:00:00.000Z',
-    metadata: {
-      method: 'card',
-      cardLast4: '1234',
-    },
-  },
-  {
-    id: 'payment-2',
-    userId: 'user-1',
-    type: 'trip_payment',
-    amount: 25.50,
-    status: 'completed',
-    description: 'Trip payment - Order #123',
-    createdAt: '2024-01-01T15:00:00.000Z',
-    updatedAt: '2024-01-01T15:00:00.000Z',
-    completedAt: '2024-01-01T15:00:00.000Z',
-    metadata: {
-      orderId: 'order-1',
-      tripId: 'trip-1',
-    },
-  },
-  {
-    id: 'payment-3',
-    userId: 'user-2',
-    type: 'refund',
-    amount: 15.00,
-    status: 'completed',
-    description: 'Refund for cancelled trip',
-    createdAt: '2024-01-02T09:00:00.000Z',
-    updatedAt: '2024-01-02T09:00:00.000Z',
-    completedAt: '2024-01-02T09:00:00.000Z',
-    refundedAt: '2024-01-02T09:00:00.000Z',
-    metadata: {
-      originalPaymentId: 'payment-2',
-      reason: 'trip_cancelled',
-    },
-  },
-];
-
-// Mock balance data
-const MOCK_BALANCES: Record<string, Balance> = {
-  'user-1': {
-    userId: 'user-1',
-    amount: 500.50,
-    currency: 'AFc',
-    lastUpdated: '2024-01-01T15:00:00.000Z',
-  },
-  'user-2': {
-    userId: 'user-2',
-    amount: 125.00,
-    currency: 'AFc',
-    lastUpdated: '2024-01-02T09:00:00.000Z',
-  },
-};
-
 // Simulate network delay
 const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<void> => {
   const delay = Math.random() * (max - min) + min;
@@ -74,8 +8,18 @@ const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<voi
 };
 
 export class PaymentServiceStub implements IPaymentService {
-  private payments = new Map<string, Payment>(MOCK_PAYMENTS.map(payment => [payment.id, payment]));
-  private balances = new Map<string, Balance>(Object.entries(MOCK_BALANCES).map(([userId, balance]) => [userId, balance]));
+  private payments = new Map<string, Payment>();
+  private balances = new Map<string, Balance>();
+
+  constructor() {
+    this.initializeData();
+  }
+
+  private initializeData() {
+    // Initialize with empty data - will be populated dynamically
+    // This removes hardcoded data and makes the service more flexible
+    console.log('PaymentServiceStub initialized with empty data');
+  }
 
   async getPayments(userId: string, params?: PaginationParams): Promise<PaginatedResponse<Payment>> {
     await simulateNetworkDelay();

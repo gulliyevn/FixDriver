@@ -1,33 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Storage keys
-export const STORAGE_KEYS = {
-  // Authentication
-  AUTH_TOKEN: 'auth_token',
-  REFRESH_TOKEN: 'refresh_token',
-  CURRENT_USER: 'current_user',
-  
-  // User data
-  USERS_CACHE: 'users_cache',
-  USER_PROFILE: 'user_profile',
-  
-  // Orders
-  ORDERS_CACHE: 'orders_cache',
-  USER_ORDERS: 'user_orders',
-  
-  // Payments
-  PAYMENTS_CACHE: 'payments_cache',
-  USER_BALANCE: 'user_balance',
-  
-  // Settings
-  APP_SETTINGS: 'app_settings',
-  LANGUAGE: 'language',
-  THEME: 'theme',
-  
-  // Offline data
-  OFFLINE_ORDERS: 'offline_orders',
-  PENDING_SYNC: 'pending_sync',
-} as const;
+import { STORAGE_KEYS } from '../../../shared/utils/storageKeys';
 
 export interface CacheItem<T> {
   data: T;

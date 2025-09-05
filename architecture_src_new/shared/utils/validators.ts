@@ -5,6 +5,28 @@
 
 import { SECURITY_CONFIG, SecurityUtils } from '../config/security';
 
+// 📝 Centralized validation messages
+const VALIDATION_MESSAGES = {
+  EMAIL_REQUIRED: 'Email is required',
+  EMAIL_INVALID: 'Invalid email format',
+  EMAIL_TOO_LONG: 'Email must not exceed 254 characters',
+  PASSWORD_REQUIRED: 'Password is required',
+  PASSWORD_TOO_WEAK: 'Password is too weak',
+  PHONE_REQUIRED: 'Phone number is required',
+  PHONE_TOO_SHORT: 'Phone number is too short',
+  PHONE_TOO_LONG: 'Phone number is too long',
+  PHONE_INVALID: 'Invalid phone number format',
+  NAME_REQUIRED: 'Name is required',
+  NAME_TOO_SHORT: 'Name must contain at least 2 characters',
+  NAME_TOO_LONG: 'Name must not exceed 50 characters',
+  NAME_INVALID: 'Name contains invalid characters',
+  LICENSE_INVALID: 'Invalid license number format (AZ12345678)',
+  VEHICLE_INVALID: 'Invalid vehicle number format (12-AB-123)',
+  DATE_INVALID: 'Invalid date',
+  LICENSE_EXPIRED: 'License has expired',
+  PASSWORDS_DONT_MATCH: 'Passwords do not match',
+} as const;
+
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
@@ -20,14 +42,14 @@ export interface PasswordStrength {
 export class Validators {
   // 📧 EMAIL VALIDATION
   static validateEmail(email: string): ValidationResult {
-    if (!email) return { isValid: false, errors: ['Email обязателен'] };
+    if (!email) return { isValid: false, errors: [VALIDATION_MESSAGES.EMAIL_REQUIRED] };
     
     const errors: string[] = [];
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.EMAIL.test(email)) {
-      errors.push('Некорректный формат email');
+      errors.push(VALIDATION_MESSAGES.EMAIL_INVALID);
     }
     if (email.length > SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.EMAIL) {
-      errors.push(`Email не должен превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.EMAIL} символов`);
+      errors.push(VALIDATION_MESSAGES.EMAIL_TOO_LONG);
     }
     
     return { isValid: errors.length === 0, errors };
@@ -41,7 +63,7 @@ export class Validators {
     return {
       isValid: result.isValid,
       errors: result.errors,
-      warnings: strength.level === 'weak' ? ['Пароль слишком слабый'] : undefined
+      warnings: strength.level === 'weak' ? [VALIDATION_MESSAGES.PASSWORD_TOO_WEAK] : undefined
     };
   }
 
@@ -80,31 +102,31 @@ export class Validators {
 
   // 📱 PHONE VALIDATION
   static validatePhone(phone: string): ValidationResult {
-    if (!phone) return { isValid: false, errors: ['Номер телефона обязателен'] };
+    if (!phone) return { isValid: false, errors: [VALIDATION_MESSAGES.PHONE_REQUIRED] };
     
     const cleanPhone = phone.replace(/\D/g, '');
     const errors: string[] = [];
     
-    if (cleanPhone.length < 7) errors.push('Номер телефона слишком короткий');
-    if (cleanPhone.length > 15) errors.push('Номер телефона слишком длинный');
+    if (cleanPhone.length < 7) errors.push(VALIDATION_MESSAGES.PHONE_TOO_SHORT);
+    if (cleanPhone.length > 15) errors.push(VALIDATION_MESSAGES.PHONE_TOO_LONG);
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.PHONE.test(phone)) {
-      errors.push('Некорректный формат номера телефона');
+      errors.push(VALIDATION_MESSAGES.PHONE_INVALID);
     }
     
     return { isValid: errors.length === 0, errors };
   }
 
   // 👤 NAME VALIDATION
-  static validateName(name: string, fieldName: string = 'Имя'): ValidationResult {
-    if (!name) return { isValid: false, errors: [`${fieldName} обязательно`] };
+  static validateName(name: string, fieldName: string = 'Name'): ValidationResult {
+    if (!name) return { isValid: false, errors: [`${fieldName} is required`] };
     
     const errors: string[] = [];
-    if (name.length < 2) errors.push(`${fieldName} должно содержать минимум 2 символа`);
+    if (name.length < 2) errors.push(`${fieldName} must contain at least 2 characters`);
     if (name.length > SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME) {
-      errors.push(`${fieldName} не должно превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME} символов`);
+      errors.push(`${fieldName} must not exceed ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME} characters`);
     }
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.NAME.test(name)) {
-      errors.push(`${fieldName} содержит недопустимые символы`);
+      errors.push(`${fieldName} contains invalid characters`);
     }
     
     return { isValid: errors.length === 0, errors };
@@ -120,20 +142,20 @@ export class Validators {
     
     // License validation
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.LICENSE.test(data.licenseNumber)) {
-      errors.push('Некорректный формат номера прав (AZ12345678)');
+      errors.push(VALIDATION_MESSAGES.LICENSE_INVALID);
     }
     
     // Vehicle validation
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.VEHICLE.test(data.vehicleNumber)) {
-      errors.push('Некорректный формат номера автомобиля (12-AB-123)');
+      errors.push(VALIDATION_MESSAGES.VEHICLE_INVALID);
     }
     
     // Expiry validation
     const expiry = new Date(data.licenseExpiry);
     if (isNaN(expiry.getTime())) {
-      errors.push('Некорректная дата');
+      errors.push(VALIDATION_MESSAGES.DATE_INVALID);
     } else if (expiry <= new Date()) {
-      errors.push('Срок действия прав истек');
+      errors.push(VALIDATION_MESSAGES.LICENSE_EXPIRED);
     }
     
     return { isValid: errors.length === 0, errors };
@@ -142,8 +164,8 @@ export class Validators {
   // 🔐 LOGIN VALIDATION
   static validateLogin(data: { email: string; password: string }): ValidationResult {
     const errors: string[] = [];
-    if (!data.email) errors.push('Email обязателен');
-    if (!data.password) errors.push('Пароль обязателен');
+    if (!data.email) errors.push(VALIDATION_MESSAGES.EMAIL_REQUIRED);
+    if (!data.password) errors.push(VALIDATION_MESSAGES.PASSWORD_REQUIRED);
     return { isValid: errors.length === 0, errors };
   }
 
@@ -165,7 +187,7 @@ export class Validators {
     
     // Password confirmation
     if (data.password !== data.confirmPassword) {
-      errors.push('Пароли не совпадают');
+      errors.push(VALIDATION_MESSAGES.PASSWORDS_DONT_MATCH);
     }
     
     return { isValid: errors.length === 0, errors };

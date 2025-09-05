@@ -19,11 +19,10 @@ export interface IOrderRepository {
   completeTrip(orderId: string): Promise<Order>;
   
   // Order calculations
-  calculatePrice(from: Address, to: Address, options?: any): Promise<number>;
+  calculatePrice(from: Address, to: Address, options?: { distance?: number; duration?: number; vehicleType?: string }): Promise<number>;
   estimateDuration(from: Address, to: Address): Promise<number>;
   
   // Order validation
-  validateOrderData(orderData: CreateOrderData): Promise<boolean>;
   canCancelOrder(orderId: string, userId: string): Promise<boolean>;
   
   // Helper methods

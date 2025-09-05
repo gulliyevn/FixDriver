@@ -24,6 +24,11 @@ export const useUserStorageKey = (baseKey: string): string => {
  * 📦 Base storage keys for different data types
  */
 export const STORAGE_KEYS = {
+  // 🔐 Authentication
+  AUTH_TOKEN: 'auth_token',
+  REFRESH_TOKEN: 'refresh_token',
+  CURRENT_USER: 'current_user',
+  
   // 👤 Profile
   USER_PROFILE: 'user_profile',
   
@@ -34,6 +39,7 @@ export const STORAGE_KEYS = {
   DRIVER_BALANCE: 'driver_balance',
   DRIVER_TRANSACTIONS: 'driver_transactions',
   DRIVER_EARNINGS: 'driver_earnings',
+  USER_BALANCE: 'user_balance',
   
   // 📦 Subscriptions & Packages
   USER_SUBSCRIPTION: 'user_subscription',
@@ -42,10 +48,19 @@ export const STORAGE_KEYS = {
   // 💳 Cards
   USER_CARDS: 'cards',
   
+  // 📋 Orders
+  ORDERS_CACHE: 'orders_cache',
+  USER_ORDERS: 'user_orders',
+  OFFLINE_ORDERS: 'offline_orders',
+  
+  // 💳 Payments
+  PAYMENTS_CACHE: 'payments_cache',
+  
   // ⚙️ Settings
   NOTIFICATION_SETTINGS: 'notification_settings',
   THEME: 'theme',
   LANGUAGE: 'language',
+  APP_SETTINGS: 'app_settings',
   
   // 🖼️ Avatars
   USER_AVATAR: 'user_avatar',
@@ -63,6 +78,7 @@ export const STORAGE_KEYS = {
   
   // 🗺️ Cache
   LOCATION_CACHE: 'location_cache',
+  USERS_CACHE: 'users_cache',
   
   // 🚗 Driver specific
   DRIVER_LICENSE: 'driver_license',
@@ -72,7 +88,10 @@ export const STORAGE_KEYS = {
   // 📱 App state
   APP_STATE: 'app_state',
   LAST_SESSION: 'last_session',
-  PREFERENCES: 'preferences'
+  PREFERENCES: 'preferences',
+  
+  // 🔄 Sync
+  PENDING_SYNC: 'pending_sync'
 } as const;
 
 /**

@@ -1,107 +1,116 @@
-import { Location } from '../../../shared/types/user';
+import { Location, User, Order } from '../../../shared/types';
+
+// Additional types for map service
+export interface DriverLocation extends Location {
+  driver: User;
+  isAvailable: boolean;
+  rating: number;
+}
+
+export interface RoutePoint extends Location {
+  address?: string;
+}
+
+export interface RouteResult {
+  coordinates: Location[];
+  distance: number;
+  duration: number;
+}
 
 export interface IMapService {
   /**
-   * Получение текущей локации пользователя
+   * Get current user location
    */
   getCurrentLocation(): Promise<Location>;
 
   /**
-   * Получение текущей локации с повторными попытками
+   * Get current location with retry attempts
    */
   getCurrentLocationWithRetry(retries: number): Promise<Location>;
 
   /**
-   * Поиск водителей поблизости
+   * Find nearby drivers
    */
-  getNearbyDrivers(location: Location, radius: number): Promise<any[]>;
+  getNearbyDrivers(location: Location, radius: number): Promise<DriverLocation[]>;
 
   /**
-   * Поиск заказов в радиусе
+   * Find nearby orders
    */
-  getNearbyOrders(location: Location, radius: number): Promise<any[]>;
+  getNearbyOrders(location: Location, radius: number): Promise<Order[]>;
 
   /**
-   * Геокодирование адреса в координаты
+   * Geocode address to coordinates
    */
   geocodeAddress(address: string): Promise<Location>;
 
   /**
-   * Обратное геокодирование (координаты в адрес)
+   * Reverse geocode coordinates to address
    */
   reverseGeocode(location: Location): Promise<string>;
 
   /**
-   * Построение маршрута между точками
+   * Build route between points
    */
-  buildRoute(points: any[]): Promise<{
-    coordinates: Location[];
-    distance: number;
-    duration: number;
-  }>;
+  buildRoute(points: RoutePoint[]): Promise<RouteResult>;
 
   /**
-   * Расчет расстояния между двумя точками
+   * Calculate distance between two points
    */
   calculateDistance(from: Location, to: Location): Promise<number>;
 
   /**
-   * Расчет времени в пути
+   * Calculate travel time
    */
   calculateTravelTime(from: Location, to: Location, mode: 'driving' | 'walking' | 'transit'): Promise<number>;
 }
 
 export class MapService implements IMapService {
   async getCurrentLocation(): Promise<Location> {
-    // TODO: Реализовать через gRPC
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 
   async getCurrentLocationWithRetry(retries: number): Promise<Location> {
-    // TODO: Реализовать через gRPC
-    // Пока возвращаем моковые координаты для тестирования
+    // TODO: Implement with gRPC
+    // Return mock coordinates for testing
     return {
       latitude: 55.7558,
       longitude: 37.6176
     };
   }
 
-  async getNearbyDrivers(location: Location, radius: number): Promise<any[]> {
-    // TODO: Реализовать через gRPC
-    throw new Error('Not implemented');
+  async getNearbyDrivers(location: Location, radius: number): Promise<DriverLocation[]> {
+    // TODO: Implement with gRPC
+    return [];
   }
 
-  async getNearbyOrders(location: Location, radius: number): Promise<any[]> {
-    // TODO: Реализовать через gRPC
-    throw new Error('Not implemented');
+  async getNearbyOrders(location: Location, radius: number): Promise<Order[]> {
+    // TODO: Implement with gRPC
+    return [];
   }
 
   async geocodeAddress(address: string): Promise<Location> {
-    // TODO: Реализовать через gRPC
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 
   async reverseGeocode(location: Location): Promise<string> {
-    // TODO: Реализовать через gRPC
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 
-  async buildRoute(points: any[]): Promise<{
-    coordinates: Location[];
-    distance: number;
-    duration: number;
-  }> {
-    // TODO: Реализовать через gRPC
+  async buildRoute(points: RoutePoint[]): Promise<RouteResult> {
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 
   async calculateDistance(from: Location, to: Location): Promise<number> {
-    // TODO: Реализовать через gRPC
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 
   async calculateTravelTime(from: Location, to: Location, mode: 'driving' | 'walking' | 'transit'): Promise<number> {
-    // TODO: Реализовать через gRPC
+    // TODO: Implement with gRPC
     throw new Error('Not implemented');
   }
 }

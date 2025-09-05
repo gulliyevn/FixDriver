@@ -17,7 +17,6 @@ export interface IUserRepository {
   
   // User validation
   isUserExists(email: string): Promise<boolean>;
-  validateUserData(userData: Partial<User>): Promise<boolean>;
   
   // Helper methods
   getUserByEmail(email: string): Promise<User | null>;

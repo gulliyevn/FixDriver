@@ -1,5 +1,7 @@
 import { IAuthRepository } from '../../repositories/IAuthRepository';
 import { User, AuthResponse, LoginCredentials, RegisterData, UserRole } from '../../../shared/types';
+import { Validators } from '../../../shared/utils/validators';
+import { VALID_ROLES, isValidRole } from '../../../shared/constants/roles';
 
 export class AuthUseCase {
   private authRepository: IAuthRepository;
@@ -10,22 +12,11 @@ export class AuthUseCase {
 
   async login(email: string, password: string): Promise<AuthResponse> {
     try {
-      // Validate input
-      if (!email || !password) {
-        throw new Error('Email and password are required');
+      const validation = Validators.validateLogin({ email, password });
+      if (!validation.isValid) {
+        throw new Error(validation.errors[0]);
       }
 
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        throw new Error('Invalid email format');
-      }
-
-      if (password.length < 6) {
-        throw new Error('Password must be at least 6 characters long');
-      }
-
-      // Attempt login
       const response = await this.authRepository.login(email, password);
       
       // Store user session
@@ -38,7 +29,6 @@ export class AuthUseCase {
 
       return response;
     } catch (error) {
-      // Pass through the original error message without adding prefix
       if (error instanceof Error) {
         throw error;
       }
@@ -48,32 +38,17 @@ export class AuthUseCase {
 
   async register(userData: RegisterData): Promise<AuthResponse> {
     try {
-      // Validate input
-      if (!userData.email || !userData.password || !userData.firstName || !userData.lastName) {
-        throw new Error('All required fields must be provided');
+      const validation = Validators.validateRegistration({
+        name: `${userData.firstName} ${userData.lastName}`,
+        email: userData.email,
+        phone: userData.phone || '',
+        password: userData.password,
+        confirmPassword: userData.password
+      });
+      if (!validation.isValid) {
+        throw new Error(validation.errors[0]);
       }
 
-      // Validate email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(userData.email)) {
-        throw new Error('Invalid email format');
-      }
-
-      // Validate password strength
-      const policy = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-      if (!policy.test(userData.password)) {
-        throw new Error('Password policy not met');
-      }
-
-      // Validate names
-      if (userData.firstName.length < 2) {
-        throw new Error('First name must be at least 2 characters long');
-      }
-      if (userData.lastName.length < 2) {
-        throw new Error('Last name must be at least 2 characters long');
-      }
-
-      // Attempt registration
       const response = await this.authRepository.register(userData);
       
       // Store user session
@@ -92,7 +67,6 @@ export class AuthUseCase {
 
   async logout(): Promise<void> {
     try {
-      // Clear session
       await this.authRepository.logout();
       await this.authRepository.clearSession();
     } catch (error) {
@@ -111,10 +85,10 @@ export class AuthUseCase {
       
       // Update session
       if (response.user) {
-        this.authRepository.setCurrentUser(response.user);
+        await this.authRepository.setCurrentUser(response.user);
       }
       if (response.token) {
-        this.authRepository.setCurrentToken(response.token);
+        await this.authRepository.setCurrentToken(response.token);
       }
 
       return response;
@@ -141,28 +115,21 @@ export class AuthUseCase {
 
   async switchRole(role: UserRole): Promise<User> {
     try {
-      // Validate role
-      const validRoles: UserRole[] = ['client', 'driver', 'admin'];
-      if (!validRoles.includes(role)) {
+      if (!isValidRole(role)) {
         throw new Error('Invalid role');
       }
 
-      // Get current user
       const currentUser = await this.getCurrentUser();
       if (!currentUser) {
         throw new Error('User not authenticated');
       }
 
-      // Check if user has this role
       if (!currentUser.profiles[role]) {
         throw new Error(`User does not have ${role} profile`);
       }
 
-      // Switch role
       const updatedUser = await this.authRepository.switchRole(role);
-      
-      // Update session
-      this.authRepository.setCurrentUser(updatedUser);
+      await this.authRepository.setCurrentUser(updatedUser);
 
       return updatedUser;
     } catch (error) {
@@ -172,28 +139,21 @@ export class AuthUseCase {
 
   async createProfile(role: UserRole, profileData: any): Promise<User> {
     try {
-      // Validate role
-      const validRoles: UserRole[] = ['client', 'driver', 'admin'];
-      if (!validRoles.includes(role)) {
+      if (!isValidRole(role)) {
         throw new Error('Invalid role');
       }
 
-      // Get current user
       const currentUser = await this.getCurrentUser();
       if (!currentUser) {
         throw new Error('User not authenticated');
       }
 
-      // Check if profile already exists
       if (currentUser.profiles[role]) {
         throw new Error(`${role} profile already exists`);
       }
 
-      // Create profile
       const updatedUser = await this.authRepository.createProfile(role, profileData);
-      
-      // Update session
-      this.authRepository.setCurrentUser(updatedUser);
+      await this.authRepository.setCurrentUser(updatedUser);
 
       return updatedUser;
     } catch (error) {

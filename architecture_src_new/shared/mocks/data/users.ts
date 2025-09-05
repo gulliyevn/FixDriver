@@ -10,102 +10,124 @@ import { User } from '../types';
 const mockUsers: User[] = [
   {
     id: 'user_1',
-    name: 'John Doe',
     email: 'john@example.com',
-    password: 'password123',
+    firstName: 'John',
+    lastName: 'Doe',
     phone: '+1234567890',
     role: 'client',
-    status: 'active',
     avatar: 'https://via.placeholder.com/150',
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01'),
-    rating: {
-      value: 4.8,
-      count: 25,
-      average: 4.8,
-    },
-    preferences: {
-      language: 'en',
-      theme: 'auto',
-      notifications: {
-        push: true,
-        email: true,
-        sms: false,
-        orderUpdates: true,
-        promotions: false,
-      },
-      privacy: {
-        shareLocation: true,
-        shareProfile: false,
-        shareHistory: false,
-      },
-    },
+    isVerified: true,
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z',
+    profiles: {
+      client: {
+        balance: 150.50,
+        rating: 4.8,
+        totalTrips: 25,
+        preferences: {
+          language: 'en',
+          notifications: {
+            email: true,
+            push: true,
+            sms: false,
+          },
+          accessibility: {
+            wheelchairAccess: false,
+            childSeat: false,
+            petFriendly: false,
+          },
+        },
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
+      }
+    }
   },
   {
     id: 'user_2',
-    name: 'Jane Smith',
     email: 'jane@example.com',
-    password: 'password123',
+    firstName: 'Jane',
+    lastName: 'Smith',
     phone: '+1234567891',
     role: 'driver',
-    status: 'active',
     avatar: 'https://via.placeholder.com/150',
-    createdAt: new Date('2024-01-02'),
-    updatedAt: new Date('2024-01-02'),
-    rating: {
-      value: 4.9,
-      count: 150,
-      average: 4.9,
-    },
-    preferences: {
-      language: 'en',
-      theme: 'dark',
-      notifications: {
-        push: true,
-        email: true,
-        sms: true,
-        orderUpdates: true,
-        promotions: false,
-      },
-      privacy: {
-        shareLocation: true,
-        shareProfile: true,
-        shareHistory: false,
-      },
-    },
+    isVerified: true,
+    createdAt: '2024-01-02T00:00:00.000Z',
+    updatedAt: '2024-01-02T00:00:00.000Z',
+    profiles: {
+      driver: {
+        licenseNumber: 'DL123456789',
+        rating: 4.9,
+        totalTrips: 150,
+        isOnline: true,
+        experience: {
+          years: 3,
+          totalDistance: 15000,
+          completedTrips: 150,
+        },
+        earnings: {
+          total: 5000,
+          thisMonth: 800,
+          thisWeek: 200,
+          averagePerTrip: 33.33,
+        },
+        schedule: {
+          workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
+          workingHours: {
+            start: '08:00',
+            end: '18:00',
+          },
+          isFlexible: true,
+        },
+        documents: {
+          license: {
+            id: 'doc_1',
+            type: 'driver_license',
+            number: 'DL123456789',
+            issuedBy: 'DMV',
+            issuedDate: '2021-01-01',
+            expiryDate: '2026-01-01',
+            isVerified: true,
+            verificationDate: '2021-01-15',
+          },
+        },
+        createdAt: '2024-01-02T00:00:00.000Z',
+        updatedAt: '2024-01-02T00:00:00.000Z',
+      }
+    }
   },
   {
     id: 'user_3',
-    name: 'Bob Johnson',
     email: 'bob@example.com',
-    password: 'password123',
+    firstName: 'Bob',
+    lastName: 'Johnson',
     phone: '+1234567892',
     role: 'client',
-    status: 'active',
     avatar: 'https://via.placeholder.com/150',
-    createdAt: new Date('2024-01-03'),
-    updatedAt: new Date('2024-01-03'),
-    rating: {
-      value: 4.5,
-      count: 12,
-      average: 4.5,
-    },
-    preferences: {
-      language: 'en',
-      theme: 'light',
-      notifications: {
-        push: false,
-        email: true,
-        sms: false,
-        orderUpdates: true,
-        promotions: true,
-      },
-      privacy: {
-        shareLocation: false,
-        shareProfile: false,
-        shareHistory: false,
-      },
-    },
+    isVerified: true,
+    createdAt: '2024-01-03T00:00:00.000Z',
+    updatedAt: '2024-01-03T00:00:00.000Z',
+    profiles: {
+      client: {
+        balance: 75.25,
+        rating: 4.5,
+        totalTrips: 12,
+        preferences: {
+          language: 'en',
+          notifications: {
+            email: true,
+            push: false,
+            sms: false,
+          },
+          accessibility: {
+            wheelchairAccess: false,
+            childSeat: false,
+            petFriendly: false,
+          },
+        },
+        createdAt: '2024-01-03T00:00:00.000Z',
+        updatedAt: '2024-01-03T00:00:00.000Z',
+      }
+    }
   },
 ];
 

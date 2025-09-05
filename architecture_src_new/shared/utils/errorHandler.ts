@@ -6,7 +6,7 @@ import {
   ValidationErrorCode,
   ErrorMessages,
   ErrorHandlerService 
-} from '../types/errors';
+} from '../constants/errors';
 
   /**
    * Error handler service implementation

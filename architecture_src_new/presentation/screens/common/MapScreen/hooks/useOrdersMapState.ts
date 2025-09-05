@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MapService } from '../../../../../data/datasources/grpc/MapService';
-import { Location } from '../../../../../shared/mocks/types';
+import { Location } from '../../../../../shared/types/common';
 import { OrdersMapState, OrdersMapActions } from '../types/orders-map.types';
 
 export const useOrdersMapState = (): [OrdersMapState, OrdersMapActions] => {

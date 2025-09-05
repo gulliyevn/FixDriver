@@ -1,17 +1,14 @@
 import { IAuthRepository } from '../../domain/repositories/IAuthRepository';
-import { AuthServiceStub } from '../datasources/grpc/stubs/AuthServiceStub';
-import { storageService, STORAGE_KEYS } from '../datasources/local/AsyncStorageService';
+import { AuthService } from '../datasources/grpc/AuthService';
+import { storageService } from '../datasources/local/AsyncStorageService';
+import { STORAGE_KEYS } from '../../shared/utils/storageKeys';
 import { User, AuthResponse, LoginCredentials, RegisterData, UserRole } from '../../shared/types';
 
 export class AuthRepository implements IAuthRepository {
-  private authService: AuthServiceStub;
-  private static sharedService: AuthServiceStub | null = null;
+  private authService: AuthService;
 
   constructor() {
-    if (!AuthRepository.sharedService) {
-      AuthRepository.sharedService = new AuthServiceStub();
-    }
-    this.authService = AuthRepository.sharedService;
+    this.authService = new AuthService();
   }
 
   async login(email: string, password: string): Promise<AuthResponse> {
@@ -181,9 +178,10 @@ export class AuthRepository implements IAuthRepository {
     }
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean }> {
     try {
-      await this.authService.resetPassword(token, newPassword);
+      const result = await this.authService.resetPassword(token, newPassword);
+      return result;
     } catch (error) {
       throw new Error(`Password reset failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }

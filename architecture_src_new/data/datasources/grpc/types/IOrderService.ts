@@ -1,58 +1,58 @@
-import { Order, CreateOrderData, OrderFilters, OrderResult, PaginationParams, PaginatedResponse } from '../../../../shared/types';
+import { Order, CreateOrderData, OrderFilters, PaginationParams, PaginatedResponse, Address } from '../../../../shared/types';
 
 export interface IOrderService {
   /**
-   * Получение заказов с фильтрами
+   * Get orders with filters
    */
   getOrders(filters?: OrderFilters, params?: PaginationParams): Promise<PaginatedResponse<Order>>;
 
   /**
-   * Получение заказа по ID
+   * Get order by ID
    */
   getOrder(id: string): Promise<Order>;
 
   /**
-   * Создание нового заказа
+   * Create new order
    */
   createOrder(orderData: CreateOrderData): Promise<Order>;
 
   /**
-   * Обновление заказа
+   * Update order
    */
   updateOrder(id: string, updates: Partial<Order>): Promise<Order>;
 
   /**
-   * Отмена заказа
+   * Cancel order
    */
   cancelOrder(id: string, reason?: string): Promise<Order>;
 
   /**
-   * Принятие заказа водителем
+   * Accept order by driver
    */
   acceptOrder(orderId: string, driverId: string): Promise<Order>;
 
   /**
-   * Начало поездки
+   * Start trip
    */
   startTrip(orderId: string): Promise<Order>;
 
   /**
-   * Завершение поездки
+   * Complete trip
    */
   completeTrip(orderId: string): Promise<Order>;
 
   /**
-   * Получение заказов пользователя
+   * Get user orders
    */
   getUserOrders(userId: string, filters?: OrderFilters): Promise<Order[]>;
 
   /**
-   * Получение активных заказов водителя
+   * Get driver active orders
    */
   getDriverActiveOrders(driverId: string): Promise<Order[]>;
 
   /**
-   * Расчет стоимости поездки
+   * Calculate trip price
    */
-  calculatePrice(from: any, to: any, options?: any): Promise<number>;
+  calculatePrice(from: Address, to: Address, options?: { distance?: number; duration?: number; vehicleType?: string }): Promise<number>;
 }

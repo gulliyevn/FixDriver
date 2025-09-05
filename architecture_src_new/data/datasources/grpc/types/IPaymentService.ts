@@ -1,53 +1,53 @@
-import { Payment, Balance, CreatePaymentData, PaymentResult, PaginationParams, PaginatedResponse } from '../../../../shared/types';
+import { Payment, Balance, CreatePaymentData, PaginationParams, PaginatedResponse } from '../../../../shared/types';
 
 export interface IPaymentService {
   /**
-   * Получение платежей пользователя
+   * Get user payments
    */
   getPayments(userId: string, params?: PaginationParams): Promise<PaginatedResponse<Payment>>;
 
   /**
-   * Получение платежа по ID
+   * Get payment by ID
    */
   getPayment(id: string): Promise<Payment>;
 
   /**
-   * Создание платежа
+   * Create payment
    */
   createPayment(paymentData: CreatePaymentData): Promise<Payment>;
 
   /**
-   * Получение баланса пользователя
+   * Get user balance
    */
   getBalance(userId: string): Promise<Balance>;
 
   /**
-   * Пополнение баланса
+   * Top up balance
    */
   topUpBalance(userId: string, amount: number, method: string): Promise<Payment>;
 
   /**
-   * Списание с баланса
+   * Withdraw from balance
    */
   withdrawFromBalance(userId: string, amount: number, description: string): Promise<Payment>;
 
   /**
-   * Возврат средств
+   * Refund payment
    */
   refundPayment(paymentId: string, amount: number, reason: string): Promise<Payment>;
 
   /**
-   * Получение истории транзакций
+   * Get transaction history
    */
   getTransactionHistory(userId: string, params?: PaginationParams): Promise<PaginatedResponse<Payment>>;
 
   /**
-   * Проверка статуса платежа
+   * Check payment status
    */
   checkPaymentStatus(paymentId: string): Promise<Payment>;
 
   /**
-   * Получение доступных методов оплаты
+   * Get available payment methods
    */
   getPaymentMethods(): Promise<string[]>;
 }

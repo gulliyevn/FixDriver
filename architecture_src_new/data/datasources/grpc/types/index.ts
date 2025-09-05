@@ -1,4 +1,4 @@
-// Экспорт всех gRPC интерфейсов
+// Export all gRPC interfaces
 export * from './IAuthService';
 export * from './IUserService';
 export * from './IOrderService';

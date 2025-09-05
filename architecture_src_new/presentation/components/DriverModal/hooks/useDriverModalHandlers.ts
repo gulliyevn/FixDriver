@@ -2,21 +2,20 @@ import { useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Linking } from 'react-native';
 import { DriverModalState, DriverModalActions, DriverModalHandlers } from '../types/driver-modal.types';
-import { mockDrivers } from '../../../mocks/data/users';
-import { getSampleDriverId } from '../../../mocks/driverModalMock';
-import { useLevelProgress } from '../../../context/LevelProgressContext';
-import { useBalance } from '../../../hooks/useBalance';
-import { useVIPTimeTracking } from '../../EarningsScreen/hooks/useVIPTimeTracking';
-import DriverStatusService from '../../../services/DriverStatusService';
-import BillingService from '../../../services/BillingService';
+import MockServices from '../../../../shared/mocks/MockServices';
+import { useLevelProgress } from '../../../../core/context/LevelProgressContext';
+import { useBalance } from '../../../../core/context/BalanceContext';
+import { useVIPTimeTracking } from '../../../../presentation/screens/driver/EarningsScreen/hooks/useVIPTimeTracking';
+import DriverStatusService from '../../../../data/datasources/grpc/DriverStatusService';
+import BillingService from '../../../../data/datasources/grpc/BillingService';
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
   actions: DriverModalActions,
   onChat?: (driver: any) => void
 ): DriverModalHandlers => {
-  const driverId = getSampleDriverId();
-  const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
+  const driverId = MockServices.driver.getSampleDriverId();
+  const driver = MockServices.driver.getDriverInfo(driverId);
   const { driverLevel, incrementProgress } = useLevelProgress();
   const { addEarnings } = useBalance();
   const { registerRide, startOnlineTime } = useVIPTimeTracking(!!driverLevel?.isVIP);
@@ -28,12 +27,7 @@ export const useDriverModalHandlers = (
 
   const completeTripAccounting = useCallback(async () => {
     // 1) Увеличиваем прогресс уровней
-    const result = await incrementProgress();
-
-    // 2) Начисляем бонус за завершенный подуровень (если был ап)
-    if (result && result.hasLevelUp && typeof (result as any).bonusAmount === 'number') {
-      await addEarnings((result as any).bonusAmount);
-    }
+    incrementProgress(50); // Add 50 experience points
 
     // 3) Начисляем стоимость поездки (мок)
     const fare = computeTripFare();
@@ -42,7 +36,7 @@ export const useDriverModalHandlers = (
     }
 
     // 4) Регистрируем поездку для VIP-учета (3 поездки/день)
-    await registerRide();
+    await registerRide({ fare: 500, userId: driverId });
   }, [incrementProgress, addEarnings, computeTripFare, registerRide]);
 
   const handleChatPress = useCallback(() => {
@@ -98,7 +92,7 @@ export const useDriverModalHandlers = (
         await AsyncStorage.setItem('@driver_online_status', 'true');
       } catch {}
       actions.setIsOnline(true);
-      startOnlineTime?.();
+      startOnlineTime?.(driverId);
       DriverStatusService.setOnline(true);
       actions.setButtonColorState(1);
       // Показать информирующий диалог без действий
@@ -202,7 +196,7 @@ export const useDriverModalHandlers = (
       if (!state.isOnline) {
         AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
         actions.setIsOnline(true);
-        startOnlineTime?.();
+        startOnlineTime?.(driverId);
         DriverStatusService.setOnline(true);
         actions.setButtonColorState(1);
         actions.setShowGoOnlineConfirm(true);

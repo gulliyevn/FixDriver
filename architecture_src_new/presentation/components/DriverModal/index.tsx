@@ -3,20 +3,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, TouchableOpacity, Animated, Text, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PanGestureHandler } from 'react-native-gesture-handler';
-import { useTheme } from '../../context/ThemeContext';
-import { t } from '../../i18n';
-import { createDriverModalStyles } from '../../styles/components/DriverModal';
-import DriverTripDialogs from '../driver/DriverTripDialogs';
-import DriverModalHeader from '../driver/DriverModalHeader';
-import DriverInfoBar from '../driver/DriverInfoBar';
-import DriverTrips from '../driver/DriverTrips';
-import { 
-  getClientName as getClientNameMock,
-  getDriverInfo as getDriverInfoMock,
-  getDriverTrips as getDriverTripsMock,
-  getSampleClientId,
-  getSampleDriverId,
-} from '../../mocks/driverModalMock';
+import { useTheme } from '../../../core/context/ThemeContext';
+import { useI18n } from '../../../shared/i18n';
+import { createDriverModalStyles } from '../../../shared/styles/components/DriverModal';
+import DriverTripDialogs from './components/DriverTripDialogs';
+import DriverModalHeader from './components/DriverModalHeader';
+import DriverInfoBar from './components/DriverInfoBar';
+import DriverTrips from './components/DriverTrips';
+import MockServices from '../../../shared/mocks/MockServices';
 
 // Импорты из новой структуры
 import { DriverModalProps } from './types/driver-modal.types';
@@ -34,19 +28,20 @@ const DriverModal: React.FC<DriverModalProps> = ({
   onChat,
 }) => {
   const { isDark } = useTheme();
+  const { t } = useI18n();
   const styles = createDriverModalStyles(isDark, role);
 
   // Централизованные моки
-  const driverId = getSampleDriverId();
+  const driverId = MockServices.driver.getSampleDriverId();
+  const clientId = MockServices.driver.getSampleClientId();
 
   // Используем созданные хуки
   const [state, actions] = useDriverModalState(driverId);
   const handlers = useDriverModalHandlers(state, actions, onChat);
   const callSheet = useCallSheet(actions);
   const slider = useSliderLogic(state, actions);
-  const clientId = getSampleClientId();
-  const driverInfo = getDriverInfoMock(driverId);
-  const driverTrips = getDriverTripsMock(driverId);
+  const driverInfo = MockServices.driver.getDriverInfo(driverId);
+  const driverTrips = MockServices.driver.getDriverTrips(driverId);
 
   // Анимации
   const driverExpandHeight = slider.driverExpandAnim.interpolate({
@@ -336,7 +331,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
       
       <DriverTripDialogs
         styles={styles}
-        clientName={getClientNameMock(clientId)}
+        clientName={MockServices.driver.getClientName(clientId)}
         showStart={state.showDialog1}
         onStartCancel={() => actions.setShowDialog1(false)}
         onStartOk={handlers.handleStartOk}

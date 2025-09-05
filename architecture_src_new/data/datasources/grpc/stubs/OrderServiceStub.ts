@@ -1,59 +1,6 @@
 import { IOrderService } from '../types/IOrderService';
 import { Order, CreateOrderData, OrderFilters, PaginationParams, PaginatedResponse, Address } from '../../../../shared/types';
-
-// Mock order data
-const MOCK_ORDERS: Order[] = [
-  {
-    id: 'order-1',
-    clientId: 'user-1',
-    driverId: 'user-2',
-    status: 'completed',
-    from: {
-      id: 'addr-1',
-      address: '123 Main St, New York, NY',
-      latitude: 40.7128,
-      longitude: -74.0060,
-      type: 'from',
-    },
-    to: {
-      id: 'addr-2',
-      address: '456 Broadway, New York, NY',
-      latitude: 40.7589,
-      longitude: -73.9851,
-      type: 'to',
-    },
-    price: 25.50,
-    distance: 2500,
-    duration: 15,
-    createdAt: '2024-01-01T10:00:00.000Z',
-    updatedAt: '2024-01-01T10:15:00.000Z',
-    completedAt: '2024-01-01T10:15:00.000Z',
-  },
-  {
-    id: 'order-2',
-    clientId: 'user-1',
-    status: 'pending',
-    from: {
-      id: 'addr-3',
-      address: '789 5th Ave, New York, NY',
-      latitude: 40.7648,
-      longitude: -73.9808,
-      type: 'from',
-    },
-    to: {
-      id: 'addr-4',
-      address: '321 Park Ave, New York, NY',
-      latitude: 40.7505,
-      longitude: -73.9934,
-      type: 'to',
-    },
-    price: 18.75,
-    distance: 1800,
-    duration: 12,
-    createdAt: '2024-01-01T14:00:00.000Z',
-    updatedAt: '2024-01-01T14:00:00.000Z',
-  },
-];
+import MockData from '../../../../shared/mocks/MockData';
 
 // Simulate network delay
 const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<void> => {
@@ -62,7 +9,17 @@ const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<voi
 };
 
 export class OrderServiceStub implements IOrderService {
-  private orders = new Map<string, Order>(MOCK_ORDERS.map(order => [order.id, order]));
+  private orders = new Map<string, Order>();
+
+  constructor() {
+    this.initializeOrders();
+  }
+
+  private initializeOrders() {
+    // Initialize with empty orders - will be populated dynamically
+    // This removes hardcoded data and makes the service more flexible
+    console.log('OrderServiceStub initialized with empty orders');
+  }
 
   async getOrders(filters?: OrderFilters, params?: PaginationParams): Promise<PaginatedResponse<Order>> {
     await simulateNetworkDelay();

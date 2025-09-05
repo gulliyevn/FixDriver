@@ -10,10 +10,6 @@ const STORAGE_KEYS = {
   CURRENT_TOKEN: '@AuthServiceStub:currentToken',
 };
 
-// Mock data for testing
-let MOCK_USERS: Record<string, User> = {};
-let USER_PASSWORDS: Record<string, string> = {};
-
 // Simulate network delay
 const simulateNetworkDelay = (min: number = 300, max: number = 800): Promise<void> => {
   const delay = Math.random() * (max - min) + min;
@@ -25,6 +21,8 @@ export class AuthServiceStub implements IAuthService {
   private currentToken: string | null = null;
   private resetRequests: Record<string, { email: string; otp: string } > = {};
   private resetTokens: Record<string, { email: string }> = {};
+  private mockUsers: Record<string, User> = {};
+  private userPasswords: Record<string, string> = {};
 
   constructor() {
     this.initializeStorage();
@@ -38,8 +36,8 @@ export class AuthServiceStub implements IAuthService {
       const currentUserData = await AsyncStorage.getItem(STORAGE_KEYS.CURRENT_USER);
       const currentTokenData = await AsyncStorage.getItem(STORAGE_KEYS.CURRENT_TOKEN);
 
-      if (usersData) MOCK_USERS = JSON.parse(usersData);
-      if (passwordsData) USER_PASSWORDS = JSON.parse(passwordsData);
+      if (usersData) this.mockUsers = JSON.parse(usersData);
+      if (passwordsData) this.userPasswords = JSON.parse(passwordsData);
       if (currentUserData) this.currentUser = JSON.parse(currentUserData);
       if (currentTokenData) this.currentToken = currentTokenData;
     } catch (error) {
@@ -50,8 +48,8 @@ export class AuthServiceStub implements IAuthService {
   private async saveToStorage() {
     try {
       await AsyncStorage.multiSet([
-        [STORAGE_KEYS.USERS, JSON.stringify(MOCK_USERS)],
-        [STORAGE_KEYS.PASSWORDS, JSON.stringify(USER_PASSWORDS)],
+        [STORAGE_KEYS.USERS, JSON.stringify(this.mockUsers)],
+        [STORAGE_KEYS.PASSWORDS, JSON.stringify(this.userPasswords)],
         [STORAGE_KEYS.CURRENT_USER, this.currentUser ? JSON.stringify(this.currentUser) : ''],
         [STORAGE_KEYS.CURRENT_TOKEN, this.currentToken || ''],
       ]);
@@ -63,25 +61,18 @@ export class AuthServiceStub implements IAuthService {
   async login(email: string, password: string): Promise<AuthResponse> {
     await simulateNetworkDelay();
 
-    console.log('Login attempt for:', email);
-    console.log('Available users:', Object.keys(MOCK_USERS));
-    console.log('Available passwords:', Object.keys(USER_PASSWORDS));
-
     // Validate against mock DB
-    const user = Object.values(MOCK_USERS).find(u => u.email === email) || null;
+    const user = Object.values(this.mockUsers).find(u => u.email === email) || null;
     
     if (!user) {
-      console.log('User not found in MOCK_USERS');
       throw new Error('auth.login.userNotFound');
     }
     
-    const validPassword = USER_PASSWORDS[email];
+    const validPassword = this.userPasswords[email];
     if (!validPassword || validPassword !== password) {
-      console.log('Password mismatch. Expected:', validPassword, 'Got:', password);
       throw new Error('auth.login.invalidPassword');
     }
 
-    console.log('Login successful for user:', user.email);
     const token = `mock-jwt-token-${Date.now()}`;
     
     this.currentUser = user;
@@ -115,14 +106,10 @@ export class AuthServiceStub implements IAuthService {
     };
 
     // Save mock password
-    USER_PASSWORDS[userData.email] = userData.password;
+    this.userPasswords[userData.email] = userData.password;
     
     // Save user to mock users
-    MOCK_USERS[newUser.id] = newUser;
-    
-    console.log('Registered user:', userData.email);
-    console.log('MOCK_USERS now contains:', Object.keys(MOCK_USERS));
-    console.log('USER_PASSWORDS now contains:', Object.keys(USER_PASSWORDS));
+    this.mockUsers[newUser.id] = newUser;
     
     await this.saveToStorage();
 
@@ -230,8 +217,6 @@ export class AuthServiceStub implements IAuthService {
     const requestId = `reset-${Date.now()}`;
     const otp = String(Math.floor(1000 + Math.random() * 9000));
     this.resetRequests[requestId] = { email, otp };
-    // Dev log to help test OTP flow
-    console.log(`[AuthServiceStub] Password reset requested for ${email}. requestId=${requestId}, otp=${otp}`);
     return { success: true, requestId };
   }
 
@@ -250,7 +235,7 @@ export class AuthServiceStub implements IAuthService {
     const record = this.resetTokens[token];
     if (!record) throw new Error('Invalid reset token');
     // Update mock password by email
-    USER_PASSWORDS[record.email] = newPassword;
+    this.userPasswords[record.email] = newPassword;
     delete this.resetTokens[token];
     await this.saveToStorage();
     return { success: true };

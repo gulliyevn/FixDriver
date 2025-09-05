@@ -1,84 +1,6 @@
 import { IUserService } from '../types/IUserService';
 import { User, PaginationParams, PaginatedResponse } from '../../../../shared/types';
-
-// Mock user data
-const MOCK_USERS: User[] = [
-  {
-    id: 'user-1',
-    email: 'john@example.com',
-    firstName: 'John',
-    lastName: 'Doe',
-    phone: '+1234567890',
-    role: 'client',
-    avatar: 'https://example.com/avatar1.jpg',
-    isVerified: true,
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
-    profiles: {
-      client: {
-        balance: 500,
-        rating: 4.5,
-        totalTrips: 15,
-        createdAt: '2024-01-01T00:00:00.000Z',
-        updatedAt: '2024-01-01T00:00:00.000Z',
-      },
-    },
-  },
-  {
-    id: 'user-2',
-    email: 'jane@example.com',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    phone: '+1234567891',
-    role: 'driver',
-    avatar: 'https://example.com/avatar2.jpg',
-    isVerified: true,
-    createdAt: '2024-01-02T00:00:00.000Z',
-    updatedAt: '2024-01-02T00:00:00.000Z',
-    profiles: {
-      driver: {
-        licenseNumber: 'DL987654321',
-        vehicleInfo: {
-          id: 'vehicle-2',
-          model: 'Honda Civic',
-          year: 2019,
-          color: 'Black',
-          licensePlate: 'XYZ789',
-        },
-        rating: 4.8,
-        totalTrips: 120,
-        isOnline: true,
-        currentLocation: {
-          latitude: 40.7128,
-          longitude: -74.0060,
-          address: 'New York, USA',
-        },
-        createdAt: '2024-01-02T00:00:00.000Z',
-        updatedAt: '2024-01-02T00:00:00.000Z',
-      },
-    },
-  },
-  {
-    id: 'user-3',
-    email: 'admin@example.com',
-    firstName: 'Admin',
-    lastName: 'System',
-    phone: '+1234567892',
-    role: 'admin',
-    avatar: 'https://example.com/avatar3.jpg',
-    isVerified: true,
-    createdAt: '2024-01-03T00:00:00.000Z',
-    updatedAt: '2024-01-03T00:00:00.000Z',
-    profiles: {
-      admin: {
-        permissions: ['read', 'write', 'delete'],
-        accessLevel: 'super',
-        createdAt: '2024-01-03T00:00:00.000Z',
-        updatedAt: '2024-01-03T00:00:00.000Z',
-      },
-    },
-  },
-];
+import MockData from '../../../../shared/mocks/MockData';
 
 // Simulate network delay
 const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<void> => {
@@ -87,7 +9,14 @@ const simulateNetworkDelay = (min: number = 200, max: number = 600): Promise<voi
 };
 
 export class UserServiceStub implements IUserService {
-  private users = new Map<string, User>(MOCK_USERS.map(user => [user.id, user]));
+  private users = new Map<string, User>();
+
+  constructor() {
+    // Initialize with users from centralized MockData
+    MockData.users.forEach(user => {
+      this.users.set(user.id, user);
+    });
+  }
 
   async getUser(id: string): Promise<User> {
     await simulateNetworkDelay();
@@ -114,7 +43,9 @@ export class UserServiceStub implements IUserService {
       updatedAt: new Date().toISOString(),
     };
 
+    // Update in local map
     this.users.set(id, updatedUser);
+
     return updatedUser;
   }
 
@@ -221,8 +152,99 @@ export class UserServiceStub implements IUserService {
       throw new Error(`User with ID ${id} not found`);
     }
 
-    // In real system, there would be blocking logic here
-    // For stub, just return the user
-    return user;
+    const updatedUser: User = {
+      ...user,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+
+  // Additional methods required by IUserService interface
+  async createUser(userData: any): Promise<User> {
+    await simulateNetworkDelay();
+    throw new Error('createUser not implemented in stub');
+  }
+
+  async getUserById(id: string): Promise<User | null> {
+    await simulateNetworkDelay();
+    return this.users.get(id) || null;
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    await simulateNetworkDelay();
+    const user = Array.from(this.users.values()).find(u => u.email === email);
+    return user || null;
+  }
+
+  async getClientProfile(userId: string): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('getClientProfile not implemented in stub');
+  }
+
+  async getDriverProfile(userId: string): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('getDriverProfile not implemented in stub');
+  }
+
+  async getAdminProfile(userId: string): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('getAdminProfile not implemented in stub');
+  }
+
+  async updateClientProfile(userId: string, updates: any): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('updateClientProfile not implemented in stub');
+  }
+
+  async updateDriverProfile(userId: string, updates: any): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('updateDriverProfile not implemented in stub');
+  }
+
+  async updateAdminProfile(userId: string, updates: any): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('updateAdminProfile not implemented in stub');
+  }
+
+  async switchUserRole(userId: string, newRole: any): Promise<User> {
+    await simulateNetworkDelay();
+    throw new Error('switchUserRole not implemented in stub');
+  }
+
+  async addUserRole(userId: string, role: any): Promise<User> {
+    await simulateNetworkDelay();
+    throw new Error('addUserRole not implemented in stub');
+  }
+
+  async removeUserRole(userId: string, role: any): Promise<User> {
+    await simulateNetworkDelay();
+    throw new Error('removeUserRole not implemented in stub');
+  }
+
+  async getUserRoles(userId: string): Promise<any[]> {
+    await simulateNetworkDelay();
+    throw new Error('getUserRoles not implemented in stub');
+  }
+
+  async getUsersByRole(role: any, filters?: any): Promise<User[]> {
+    await simulateNetworkDelay();
+    throw new Error('getUsersByRole not implemented in stub');
+  }
+
+  async getOnlineDrivers(location?: any, radius?: number): Promise<any[]> {
+    await simulateNetworkDelay();
+    throw new Error('getOnlineDrivers not implemented in stub');
+  }
+
+  async getUserStats(userId: string): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('getUserStats not implemented in stub');
+  }
+
+  async getSystemStats(): Promise<any> {
+    await simulateNetworkDelay();
+    throw new Error('getSystemStats not implemented in stub');
   }
 }

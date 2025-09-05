@@ -12,33 +12,38 @@ export default class MockServices {
   static auth = {
     async login(email: string, password: string): Promise<AuthResult> {
       // Mock login - in real app this would be gRPC call
-      const user = MockData.users.find(u => 
-        u.email === email && u.password === password
-      );
+      // Note: In real app, password would be validated via gRPC
+      // For now, we'll use a simple mock validation
+      const user = MockData.users.find(u => u.email === email);
       
       if (user) {
-        return {
-          success: true,
-          user,
-          token: `mock_token_${user.id}_${Date.now()}`,
-        };
+        // Mock password validation - in real app this would be gRPC call
+        if (password === 'password123') { // Mock password for testing
+          return {
+            success: true,
+            user,
+            token: `mock_token_${user.id}_${Date.now()}`,
+          };
+        }
       }
       
       throw new Error('Invalid credentials');
     },
 
-    async register(userData: Partial<User>): Promise<AuthResult> {
+    async register(userData: any): Promise<AuthResult> {
       // Mock registration - in real app this would be gRPC call
       const newUser: User = {
         id: `user_${Date.now()}`,
-        email: userData.email!,
-        password: userData.password!,
-        name: userData.name || 'New User',
-        role: userData.role || 'client',
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
         phone: userData.phone || '',
-        avatar: userData.avatar || '',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        role: userData.role,
+        avatar: '',
+        isVerified: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        profiles: {},
       };
 
       // In real app, this would be saved to database via gRPC
@@ -71,7 +76,7 @@ export default class MockServices {
       const user = MockData.getUserById(id);
       if (!user) throw new Error('User not found');
       
-      const updatedUser = { ...user, ...updates, updatedAt: new Date() };
+      const updatedUser = { ...user, ...updates, updatedAt: new Date().toISOString() };
       console.log('✏️ Mock user updated:', updatedUser);
       
       return updatedUser;
@@ -96,7 +101,7 @@ export default class MockServices {
       const driver = MockData.getDriverById(id);
       if (!driver) throw new Error('Driver not found');
       
-      const updatedDriver = { ...driver, status, updatedAt: new Date() };
+      const updatedDriver = { ...driver, status, updatedAt: new Date().toISOString() };
       console.log('🚦 Mock driver status updated:', updatedDriver);
       
       return updatedDriver;
@@ -126,20 +131,27 @@ export default class MockServices {
         pickupLocation: orderData.pickupLocation!,
         dropoffLocation: orderData.dropoffLocation!,
         status: 'pending',
-        price: orderData.price || 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        price: orderData.price || {
+          amount: 0,
+          currency: 'USD',
+          formatted: '$0.00'
+        },
+        distance: orderData.distance || 0,
+        duration: orderData.duration || 0,
+        paymentMethod: orderData.paymentMethod || 'card',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       console.log('📦 Mock order created:', newOrder);
       return newOrder;
     },
 
-    async updateStatus(id: string, status: string): Promise<Order> {
+    async updateStatus(id: string, status: OrderStatus): Promise<Order> {
       const order = MockData.getOrderById(id);
       if (!order) throw new Error('Order not found');
       
-      const updatedOrder = { ...order, status, updatedAt: new Date() };
+      const updatedOrder = { ...order, status, updatedAt: new Date().toISOString() };
       console.log('📊 Mock order status updated:', updatedOrder);
       
       return updatedOrder;
@@ -217,6 +229,84 @@ export default class MockServices {
 
   // 👤 PROFILE SERVICE
   static profile = {
+    async getProfile(userId: string): Promise<any> {
+      // Mock profile retrieval - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+      
+      // Return user with extended profile data
+      return {
+        ...user,
+        children: user.role === 'client' ? (user as any).children || [] : undefined,
+        paymentMethods: user.role === 'client' ? (user as any).paymentMethods || [] : undefined,
+        licenseNumber: user.role === 'driver' ? (user as any).licenseNumber || '' : undefined,
+        vehicleNumber: user.role === 'driver' ? (user as any).vehicleNumber || '' : undefined,
+        licenseExpiry: user.role === 'driver' ? (user as any).licenseExpiry || '' : undefined,
+      };
+    },
+
+    async updateProfile(userId: string, updates: any): Promise<any> {
+      // Mock profile update - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      // Update user data
+      Object.assign(user, updates);
+      (user as any).updatedAt = new Date().toISOString();
+
+      return this.getProfile(userId);
+    },
+
+    async addChild(userId: string, childData: any): Promise<any> {
+      // Mock child addition - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user || user.role !== 'client') throw new Error('User not found or not a client');
+
+      const newChild = {
+        id: `child_${Date.now()}`,
+        ...childData,
+      };
+
+      const children = (user as any).children || [];
+      (user as any).children = [...children, newChild];
+
+      return newChild;
+    },
+
+    async removeChild(userId: string, childId: string): Promise<void> {
+      // Mock child removal - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user || user.role !== 'client') throw new Error('User not found or not a client');
+
+      const children = (user as any).children || [];
+      (user as any).children = children.filter((child: any) => child.id !== childId);
+    },
+
+    async addPaymentMethod(userId: string, paymentData: any): Promise<any> {
+      // Mock payment method addition - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user || user.role !== 'client') throw new Error('User not found or not a client');
+
+      const newPaymentMethod = {
+        id: `payment_${Date.now()}`,
+        ...paymentData,
+      };
+
+      const paymentMethods = (user as any).paymentMethods || [];
+      (user as any).paymentMethods = [...paymentMethods, newPaymentMethod];
+
+      return newPaymentMethod;
+    },
+
+    async removePaymentMethod(userId: string, paymentMethodId: string): Promise<void> {
+      // Mock payment method removal - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user || user.role !== 'client') throw new Error('User not found or not a client');
+
+      const paymentMethods = (user as any).paymentMethods || [];
+      (user as any).paymentMethods = paymentMethods.filter((payment: any) => payment.id !== paymentMethodId);
+    },
+
     async getDefaultDate(): Promise<string> {
       // Mock default date - in real app this would come from gRPC
       return '2000-11-06';
@@ -512,6 +602,92 @@ export default class MockServices {
         }
       };
 
+      // 🚗 DRIVER MODAL SERVICE
+      static driver = {
+        getSampleDriverId(): string {
+          return 'driver_001';
+        },
+        getSampleClientId(): string {
+          return 'client_001';
+        },
+        getDriverInfo(driverId: string): any {
+          return {
+            childName: 'Анна',
+            childAge: 8,
+            schedule: 'Ежедневно 8:00',
+            price: '500 ₽',
+            distance: '2.5 км',
+            time: '15 мин',
+            childType: 'Школьник'
+          };
+        },
+        getDriverTrips(driverId: string): any[] {
+          return [
+            { id: '1', date: '2024-01-15', time: '08:00', status: 'completed' },
+            { id: '2', date: '2024-01-14', time: '08:00', status: 'completed' },
+            { id: '3', date: '2024-01-13', time: '08:00', status: 'completed' }
+          ];
+        },
+        getClientName(clientId: string): string {
+          return 'Мария Иванова';
+        }
+      };
+
+      // 🚗 DRIVER STATUS SERVICE
+      static driverStatus = {
+        async updateStatus(driverId: string, status: string): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log(`Driver ${driverId} status updated to: ${status}`);
+        },
+        async getStatus(driverId: string): Promise<string> {
+          await new Promise(resolve => setTimeout(resolve, 50));
+          return 'online';
+        },
+        async setOnlineStatus(driverId: string, isOnline: boolean): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 80));
+          console.log(`Driver ${driverId} online status: ${isOnline}`);
+        },
+        async setOnline(isOnline: boolean): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 80));
+          console.log(`Driver online status: ${isOnline}`);
+        }
+      };
+
+      // 💰 BILLING SERVICE
+      static billing = {
+        async processPayment(paymentData: any): Promise<any> {
+          await new Promise(resolve => setTimeout(resolve, 200));
+          return { success: true, transactionId: `tx_${Date.now()}` };
+        },
+        async getBillingHistory(userId: string): Promise<any[]> {
+          await new Promise(resolve => setTimeout(resolve, 150));
+          return [
+            { id: '1', amount: 500, date: '2024-01-15', status: 'completed' },
+            { id: '2', amount: 300, date: '2024-01-14', status: 'completed' }
+          ];
+        },
+        async calculateFare(tripData: any): Promise<number> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          return 500; // Mock fare calculation
+        },
+        async startEmergency(): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log('Emergency billing started');
+        },
+        async stopEmergency(): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log('Emergency billing stopped');
+        },
+        async startWaiting(): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log('Waiting billing started');
+        },
+        async stopWaiting(): Promise<void> {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log('Waiting billing stopped');
+        }
+      };
+
       // 👤 USER MANAGEMENT SERVICE
       static userManagement = {
         async getUserById(id: string): Promise<User | null> {
@@ -541,6 +717,168 @@ export default class MockServices {
         }
       };
 
+  // 🌐 I18N SERVICE
+  static i18n = {
+    async getCurrentLanguage(): Promise<'en' | 'ru' | 'az'> {
+      // Mock language retrieval - in real app this would be gRPC call
+      return 'en'; // Default to English
+    },
+
+    async setLanguage(language: 'en' | 'ru' | 'az'): Promise<void> {
+      // Mock language setting - in real app this would be gRPC call
+      console.log(`Language changed to: ${language}`);
+    },
+
+    translate(key: string, params?: Record<string, string | number>, language: 'en' | 'ru' | 'az' = 'en'): string {
+      // Mock translation - in real app this would use i18n library
+      // For now, return the key as fallback
+      if (params) {
+        let translation = key;
+        Object.entries(params).forEach(([paramKey, value]) => {
+          translation = translation.replace(`{{${paramKey}}}`, String(value));
+        });
+        return translation;
+      }
+      return key;
+    },
+
+    async getAvailableLanguages(): Promise<Array<{ code: string; name: string; nativeName: string; flag: string }>> {
+      // Mock available languages - in real app this would be gRPC call
+      return [
+        { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+        { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺' },
+        { code: 'az', name: 'Azerbaijani', nativeName: 'Azərbaycan', flag: '🇦🇿' },
+      ];
+    },
+  };
+
+  // 💰 BALANCE SERVICE
+  static balance = {
+    async getBalance(userId: string): Promise<number> {
+      // Mock balance retrieval - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      return user ? (user as any).balance || 0 : 0;
+    },
+
+    async getEarnings(userId: string): Promise<number> {
+      // Mock earnings retrieval - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      return user ? (user as any).earnings || 0 : 0;
+    },
+
+    async getTransactions(userId: string): Promise<any[]> {
+      // Mock transactions retrieval - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      return user ? (user as any).transactions || [] : [];
+    },
+
+    async addEarnings(userId: string, amount: number): Promise<{ newBalance: number; newEarnings: number; transactions: any[] }> {
+      // Mock earnings addition - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      const currentBalance = (user as any).balance || 0;
+      const currentEarnings = (user as any).earnings || 0;
+      const currentTransactions = (user as any).transactions || [];
+
+      const newBalance = currentBalance + amount;
+      const newEarnings = currentEarnings + amount;
+
+      const newTransaction = {
+        id: `tx_${Date.now()}`,
+        type: 'payment',
+        amount: amount,
+        description: `Earnings ${amount} AFc`,
+        date: new Date().toISOString(),
+      };
+
+      const updatedTransactions = [newTransaction, ...currentTransactions];
+
+      // Update mock data
+      (user as any).balance = newBalance;
+      (user as any).earnings = newEarnings;
+      (user as any).transactions = updatedTransactions;
+
+      return { newBalance, newEarnings, transactions: updatedTransactions };
+    },
+
+    async topUpBalance(userId: string, amount: number): Promise<{ newBalance: number; transactions: any[] }> {
+      // Mock balance top-up - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      const currentBalance = (user as any).balance || 0;
+      const currentTransactions = (user as any).transactions || [];
+
+      const newBalance = currentBalance + amount;
+
+      const newTransaction = {
+        id: `tx_${Date.now()}`,
+        type: 'topup',
+        amount: amount,
+        description: `Top-up ${amount} AFc`,
+        date: new Date().toISOString(),
+      };
+
+      const updatedTransactions = [newTransaction, ...currentTransactions];
+
+      // Update mock data
+      (user as any).balance = newBalance;
+      (user as any).transactions = updatedTransactions;
+
+      return { newBalance, transactions: updatedTransactions };
+    },
+
+    async withdrawBalance(userId: string, amount: number): Promise<{ success: boolean; newBalance?: number; transactions?: any[] }> {
+      // Mock balance withdrawal - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      const currentBalance = (user as any).balance || 0;
+      const currentTransactions = (user as any).transactions || [];
+
+      if (currentBalance < amount) {
+        return { success: false };
+      }
+
+      const newBalance = currentBalance - amount;
+
+      const newTransaction = {
+        id: `tx_${Date.now()}`,
+        type: 'withdrawal',
+        amount: -amount,
+        description: `Withdrawal ${amount} AFc`,
+        date: new Date().toISOString(),
+      };
+
+      const updatedTransactions = [newTransaction, ...currentTransactions];
+
+      // Update mock data
+      (user as any).balance = newBalance;
+      (user as any).transactions = updatedTransactions;
+
+      return { success: true, newBalance, transactions: updatedTransactions };
+    },
+
+    async resetBalance(userId: string): Promise<void> {
+      // Mock balance reset - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      (user as any).balance = 0;
+      (user as any).earnings = 0;
+      (user as any).transactions = [];
+    },
+
+    async resetEarnings(userId: string): Promise<void> {
+      // Mock earnings reset - in real app this would be gRPC call
+      const user = MockData.users.find(u => u.id === userId);
+      if (!user) throw new Error('User not found');
+
+      (user as any).earnings = 0;
+    },
+  };
+
       // 📊 GET SERVICE STATS
       static getStats() {
         return {
@@ -560,6 +898,8 @@ export default class MockServices {
             emergency: 'Mock Emergency Service',
             driverData: 'Mock Driver Data Service',
             userManagement: 'Mock User Management Service',
+            balance: 'Mock Balance Service',
+            i18n: 'Mock Internationalization Service',
           },
         };
       }

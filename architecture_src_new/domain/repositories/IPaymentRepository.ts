@@ -25,7 +25,6 @@ export interface IPaymentRepository {
   validatePaymentMethod(method: string): Promise<boolean>;
   
   // Payment validation
-  validatePaymentData(paymentData: CreatePaymentData): Promise<boolean>;
   canProcessRefund(paymentId: string): Promise<boolean>;
   hasSufficientBalance(userId: string, amount: number): Promise<boolean>;
   

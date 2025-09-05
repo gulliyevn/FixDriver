@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DriverModalState, DriverModalActions } from '../types/driver-modal.types';
-import { usePersistentButtonState } from '../../../hooks/usePersistentButtonState';
+import { usePersistentButtonState } from '../../../../shared/hooks/usePersistentButtonState';
 
 export const useDriverModalState = (driverId: string): [DriverModalState, DriverModalActions] => {
   const { buttonState, updateButtonState, resetButtonState, isLoaded } = usePersistentButtonState(driverId);
@@ -39,10 +39,10 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   // Синхронизация с персистентным состоянием при загрузке
   useEffect(() => {
     if (isLoaded && !isInitialized.current) {
-      setButtonColorState(buttonState.buttonColorState);
+      setButtonColorState(buttonState.colorState);
       setIsPaused(buttonState.isPaused);
       setEmergencyActionsUsed(buttonState.emergencyActionsUsed);
-      setEmergencyActionType(buttonState.emergencyActionType);
+      setEmergencyActionType(buttonState.emergencyActionType as "stop" | "end");
       setPauseStartTime(buttonState.pauseStartTime);
       setIsTripTimerActive(buttonState.isTripTimerActive);
       setTripStartTime(buttonState.tripStartTime);
@@ -54,7 +54,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   useEffect(() => {
     if (isLoaded && isInitialized.current) {
       updateButtonState({
-        buttonColorState,
+        colorState: buttonColorState,
         isPaused,
         emergencyActionsUsed,
         emergencyActionType,

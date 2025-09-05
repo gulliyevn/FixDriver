@@ -1,5 +1,6 @@
 import { IOrderRepository } from '../../repositories/IOrderRepository';
 import { Order, CreateOrderData, OrderFilters, PaginationParams, PaginatedResponse, Address } from '../../../shared/types';
+import { validateOrderId, validateAddresses, validateOrderData, validatePaginationParams } from '../../../shared/utils/orderValidators';
 
 export class BookingUseCase {
   private orderRepository: IOrderRepository;
@@ -10,11 +11,7 @@ export class BookingUseCase {
 
   async createOrder(orderData: CreateOrderData): Promise<Order> {
     try {
-      // Validate order data
-      const isValid = await this.orderRepository.validateOrderData(orderData);
-      if (!isValid) {
-        throw new Error('Invalid order data');
-      }
+      validateOrderData(orderData);
 
       // Calculate price if not provided
       if (!orderData.estimatedPrice) {
@@ -34,11 +31,7 @@ export class BookingUseCase {
 
   async getOrder(id: string): Promise<Order> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('Order ID is required');
-      }
-
+      validateOrderId(id);
       return await this.orderRepository.getOrder(id);
     } catch (error) {
       throw new Error(`Failed to get order: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -47,10 +40,7 @@ export class BookingUseCase {
 
   async updateOrder(id: string, updates: Partial<Order>): Promise<Order> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('Order ID is required');
-      }
+      validateOrderId(id);
 
       // Check if order can be updated
       const order = await this.getOrder(id);
@@ -66,11 +56,7 @@ export class BookingUseCase {
 
   async cancelOrder(id: string, userId: string, reason?: string): Promise<Order> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('Order ID is required');
-      }
-
+      validateOrderId(id);
       if (!userId || userId.trim() === '') {
         throw new Error('User ID is required');
       }
@@ -89,11 +75,7 @@ export class BookingUseCase {
 
   async acceptOrder(orderId: string, driverId: string): Promise<Order> {
     try {
-      // Validate input
-      if (!orderId || orderId.trim() === '') {
-        throw new Error('Order ID is required');
-      }
-
+      validateOrderId(orderId);
       if (!driverId || driverId.trim() === '') {
         throw new Error('Driver ID is required');
       }
@@ -112,10 +94,7 @@ export class BookingUseCase {
 
   async startTrip(orderId: string): Promise<Order> {
     try {
-      // Validate input
-      if (!orderId || orderId.trim() === '') {
-        throw new Error('Order ID is required');
-      }
+      validateOrderId(orderId);
 
       // Check if order can be started
       const order = await this.getOrder(orderId);
@@ -131,10 +110,7 @@ export class BookingUseCase {
 
   async completeTrip(orderId: string): Promise<Order> {
     try {
-      // Validate input
-      if (!orderId || orderId.trim() === '') {
-        throw new Error('Order ID is required');
-      }
+      validateOrderId(orderId);
 
       // Check if trip can be completed
       const order = await this.getOrder(orderId);
@@ -150,14 +126,8 @@ export class BookingUseCase {
 
   async getOrders(filters?: OrderFilters, params?: PaginationParams): Promise<PaginatedResponse<Order>> {
     try {
-      // Validate pagination params
       if (params) {
-        if (params.page && params.page < 1) {
-          throw new Error('Page number must be greater than 0');
-        }
-        if (params.limit && (params.limit < 1 || params.limit > 100)) {
-          throw new Error('Limit must be between 1 and 100');
-        }
+        validatePaginationParams(params);
       }
 
       return await this.orderRepository.getOrders(filters, params);
@@ -168,7 +138,6 @@ export class BookingUseCase {
 
   async getUserOrders(userId: string, filters?: OrderFilters): Promise<Order[]> {
     try {
-      // Validate input
       if (!userId || userId.trim() === '') {
         throw new Error('User ID is required');
       }
@@ -181,7 +150,6 @@ export class BookingUseCase {
 
   async getDriverActiveOrders(driverId: string): Promise<Order[]> {
     try {
-      // Validate input
       if (!driverId || driverId.trim() === '') {
         throw new Error('Driver ID is required');
       }
@@ -194,15 +162,7 @@ export class BookingUseCase {
 
   async calculatePrice(from: Address, to: Address, options?: any): Promise<number> {
     try {
-      // Validate addresses
-      if (!from || !to) {
-        throw new Error('From and to addresses are required');
-      }
-
-      if (!from.latitude || !from.longitude || !to.latitude || !to.longitude) {
-        throw new Error('Address coordinates are required');
-      }
-
+      validateAddresses(from, to);
       return await this.orderRepository.calculatePrice(from, to, options);
     } catch (error) {
       throw new Error(`Failed to calculate price: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -211,15 +171,7 @@ export class BookingUseCase {
 
   async estimateDuration(from: Address, to: Address): Promise<number> {
     try {
-      // Validate addresses
-      if (!from || !to) {
-        throw new Error('From and to addresses are required');
-      }
-
-      if (!from.latitude || !from.longitude || !to.latitude || !to.longitude) {
-        throw new Error('Address coordinates are required');
-      }
-
+      validateAddresses(from, to);
       return await this.orderRepository.estimateDuration(from, to);
     } catch (error) {
       throw new Error(`Failed to estimate duration: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -251,13 +203,6 @@ export class BookingUseCase {
     }
   }
 
-  async validateOrderData(orderData: CreateOrderData): Promise<boolean> {
-    try {
-      return await this.orderRepository.validateOrderData(orderData);
-    } catch (error) {
-      return false;
-    }
-  }
 
   // Business logic methods
   async getAvailableOrders(driverId: string): Promise<Order[]> {

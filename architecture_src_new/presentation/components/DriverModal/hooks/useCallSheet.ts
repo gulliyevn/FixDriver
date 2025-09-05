@@ -2,13 +2,12 @@ import { useRef, useCallback } from 'react';
 import { Animated } from 'react-native';
 import { Linking } from 'react-native';
 import { DriverModalActions } from '../types/driver-modal.types';
-import { mockDrivers } from '../../../mocks/data/users';
-import { getSampleDriverId } from '../../../mocks/driverModalMock';
+import MockServices from '../../../../shared/mocks/MockServices';
 
 export const useCallSheet = (actions: DriverModalActions) => {
   const callAnim = useRef(new Animated.Value(0)).current;
-  const driverId = getSampleDriverId();
-  const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
+  const driverId = MockServices.driver.getSampleDriverId();
+  const driver = MockServices.driver.getDriverInfo(driverId);
 
   const openCallSheet = useCallback(() => {
     actions.setCallSheetOpen(true);

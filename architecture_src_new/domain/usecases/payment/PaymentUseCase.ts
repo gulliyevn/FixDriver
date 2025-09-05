@@ -1,5 +1,6 @@
 import { IPaymentRepository } from '../../repositories/IPaymentRepository';
 import { Payment, Balance, CreatePaymentData, PaginationParams, PaginatedResponse } from '../../../shared/types';
+import { validatePaymentId, validateUserId, validateAmount, validatePaymentMethod, validateDescription, validatePaymentData, validatePaginationParams, validateRefundData } from '../../../shared/utils/paymentValidators';
 
 export class PaymentUseCase {
   private paymentRepository: IPaymentRepository;
@@ -10,11 +11,7 @@ export class PaymentUseCase {
 
   async getBalance(userId: string): Promise<Balance> {
     try {
-      // Validate input
-      if (!userId || userId.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(userId);
       return await this.paymentRepository.getBalance(userId);
     } catch (error) {
       throw new Error(`Failed to get balance: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -23,18 +20,9 @@ export class PaymentUseCase {
 
   async topUpBalance(userId: string, amount: number, method: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!userId || userId.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
-      if (!amount || amount <= 0) {
-        throw new Error('Amount must be greater than 0');
-      }
-
-      if (!method || method.trim() === '') {
-        throw new Error('Payment method is required');
-      }
+      validateUserId(userId);
+      validateAmount(amount);
+      validatePaymentMethod(method);
 
       // Validate payment method
       const isValidMethod = await this.paymentRepository.validatePaymentMethod(method);
@@ -50,18 +38,9 @@ export class PaymentUseCase {
 
   async withdrawFromBalance(userId: string, amount: number, description: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!userId || userId.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
-      if (!amount || amount <= 0) {
-        throw new Error('Amount must be greater than 0');
-      }
-
-      if (!description || description.trim() === '') {
-        throw new Error('Description is required');
-      }
+      validateUserId(userId);
+      validateAmount(amount);
+      validateDescription(description);
 
       // Check if user has sufficient balance
       const hasSufficient = await this.paymentRepository.hasSufficientBalance(userId, amount);
@@ -77,11 +56,7 @@ export class PaymentUseCase {
 
   async createPayment(paymentData: CreatePaymentData): Promise<Payment> {
     try {
-      // Validate payment data
-      const isValid = await this.paymentRepository.validatePaymentData(paymentData);
-      if (!isValid) {
-        throw new Error('Invalid payment data');
-      }
+      validatePaymentData(paymentData);
 
       // Check balance for certain payment types
       if (paymentData.type === 'trip_payment') {
@@ -99,11 +74,7 @@ export class PaymentUseCase {
 
   async processPayment(paymentId: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!paymentId || paymentId.trim() === '') {
-        throw new Error('Payment ID is required');
-      }
-
+      validatePaymentId(paymentId);
       return await this.paymentRepository.processPayment(paymentId);
     } catch (error) {
       throw new Error(`Failed to process payment: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -112,18 +83,8 @@ export class PaymentUseCase {
 
   async refundPayment(paymentId: string, amount: number, reason: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!paymentId || paymentId.trim() === '') {
-        throw new Error('Payment ID is required');
-      }
-
-      if (!amount || amount <= 0) {
-        throw new Error('Refund amount must be greater than 0');
-      }
-
-      if (!reason || reason.trim() === '') {
-        throw new Error('Refund reason is required');
-      }
+      validatePaymentId(paymentId);
+      validateRefundData(amount, reason);
 
       // Check if refund can be processed
       const canRefund = await this.paymentRepository.canProcessRefund(paymentId);
@@ -139,11 +100,7 @@ export class PaymentUseCase {
 
   async getPayment(id: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('Payment ID is required');
-      }
-
+      validatePaymentId(id);
       return await this.paymentRepository.getPayment(id);
     } catch (error) {
       throw new Error(`Failed to get payment: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -152,19 +109,9 @@ export class PaymentUseCase {
 
   async getPayments(userId: string, params?: PaginationParams): Promise<PaginatedResponse<Payment>> {
     try {
-      // Validate input
-      if (!userId || userId.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
-      // Validate pagination params
+      validateUserId(userId);
       if (params) {
-        if (params.page && params.page < 1) {
-          throw new Error('Page number must be greater than 0');
-        }
-        if (params.limit && (params.limit < 1 || params.limit > 100)) {
-          throw new Error('Limit must be between 1 and 100');
-        }
+        validatePaginationParams(params);
       }
 
       return await this.paymentRepository.getPayments(userId, params);
@@ -175,11 +122,7 @@ export class PaymentUseCase {
 
   async getTransactionHistory(userId: string, params?: PaginationParams): Promise<PaginatedResponse<Payment>> {
     try {
-      // Validate input
-      if (!userId || userId.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(userId);
       return await this.paymentRepository.getTransactionHistory(userId, params);
     } catch (error) {
       throw new Error(`Failed to get transaction history: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -188,11 +131,7 @@ export class PaymentUseCase {
 
   async checkPaymentStatus(paymentId: string): Promise<Payment> {
     try {
-      // Validate input
-      if (!paymentId || paymentId.trim() === '') {
-        throw new Error('Payment ID is required');
-      }
-
+      validatePaymentId(paymentId);
       return await this.paymentRepository.checkPaymentStatus(paymentId);
     } catch (error) {
       throw new Error(`Failed to check payment status: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -232,13 +171,6 @@ export class PaymentUseCase {
     }
   }
 
-  async validatePaymentMethod(method: string): Promise<boolean> {
-    try {
-      return await this.paymentRepository.validatePaymentMethod(method);
-    } catch (error) {
-      return false;
-    }
-  }
 
   async canProcessRefund(paymentId: string): Promise<boolean> {
     try {

@@ -21,27 +21,6 @@ export interface User {
   };
 }
 
-// Профиль клиента
-export interface ClientProfile {
-  balance: number;
-  rating?: number;
-  totalTrips: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Профиль водителя
-export interface DriverProfile {
-  licenseNumber: string;
-  vehicleInfo?: VehicleInfo;
-  rating: number;
-  totalTrips: number;
-  isOnline: boolean;
-  currentLocation?: Location;
-  createdAt: string;
-  updatedAt: string;
-}
-
 // Профиль администратора
 export interface AdminProfile {
   permissions: string[];
@@ -53,10 +32,22 @@ export interface AdminProfile {
 // Вспомогательные типы
 export interface VehicleInfo {
   id: string;
+  make: string;
   model: string;
   year: number;
   color: string;
   licensePlate: string;
+  vin?: string;
+  fuelType: 'gasoline' | 'diesel' | 'electric' | 'hybrid';
+  transmission: 'manual' | 'automatic';
+  seats: number;
+  features: string[];
+  photos: string[];
+  documents: {
+    registration: DocumentInfo;
+    insurance?: DocumentInfo;
+    inspection?: DocumentInfo;
+  };
 }
 
 export interface Location {
@@ -176,30 +167,4 @@ export interface DocumentInfo {
   isVerified: boolean;
   verificationDate?: string;
   documentUrl?: string;
-}
-
-// Расширенная информация о транспортном средстве
-export interface VehicleInfo {
-  id: string;
-  make: string;
-  model: string;
-  year: number;
-  color: string;
-  licensePlate: string;
-  vin?: string;
-  fuelType: 'gasoline' | 'diesel' | 'electric' | 'hybrid';
-  transmission: 'manual' | 'automatic';
-  seats: number;
-  features: string[];
-  photos: string[];
-  documents: {
-    registration: DocumentInfo;
-    insurance?: DocumentInfo;
-    inspection?: DocumentInfo;
-  };
-  maintenance: {
-    lastService: string;
-    nextService: string;
-    mileage: number;
-  };
 }

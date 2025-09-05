@@ -1,5 +1,6 @@
 import { IUserRepository } from '../../repositories/IUserRepository';
 import { User, PaginationParams, PaginatedResponse } from '../../../shared/types';
+import { validateUserId, validateSearchQuery, validateAvatarUrl, validateUserData, validatePaginationParams } from '../../../shared/utils/userValidators';
 
 export class ProfileUseCase {
   private userRepository: IUserRepository;
@@ -10,11 +11,7 @@ export class ProfileUseCase {
 
   async getUser(id: string): Promise<User> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(id);
       return await this.userRepository.getUser(id);
     } catch (error) {
       throw new Error(`Failed to get user: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -23,16 +20,8 @@ export class ProfileUseCase {
 
   async updateUser(id: string, data: Partial<User>): Promise<User> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
-      // Validate user data
-      const isValid = await this.userRepository.validateUserData(data);
-      if (!isValid) {
-        throw new Error('Invalid user data');
-      }
+      validateUserId(id);
+      validateUserData(data);
 
       // Check if email is being changed
       if (data.email) {
@@ -50,22 +39,8 @@ export class ProfileUseCase {
 
   async updateAvatar(id: string, avatarUrl: string): Promise<User> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
-      if (!avatarUrl || avatarUrl.trim() === '') {
-        throw new Error('Avatar URL is required');
-      }
-
-      // Validate URL format
-      try {
-        new URL(avatarUrl);
-      } catch {
-        throw new Error('Invalid avatar URL format');
-      }
-
+      validateUserId(id);
+      validateAvatarUrl(avatarUrl);
       return await this.userRepository.updateAvatar(id, avatarUrl);
     } catch (error) {
       throw new Error(`Failed to update avatar: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -74,11 +49,7 @@ export class ProfileUseCase {
 
   async verifyUser(id: string): Promise<User> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(id);
       return await this.userRepository.verifyUser(id);
     } catch (error) {
       throw new Error(`Failed to verify user: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -87,15 +58,7 @@ export class ProfileUseCase {
 
   async searchUsers(query: string, params?: PaginationParams): Promise<PaginatedResponse<User>> {
     try {
-      // Validate input
-      if (!query || query.trim() === '') {
-        throw new Error('Search query is required');
-      }
-
-      if (query.length < 2) {
-        throw new Error('Search query must be at least 2 characters long');
-      }
-
+      validateSearchQuery(query);
       return await this.userRepository.searchUsers(query, params);
     } catch (error) {
       throw new Error(`Failed to search users: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -104,16 +67,9 @@ export class ProfileUseCase {
 
   async getUsers(params?: PaginationParams): Promise<PaginatedResponse<User>> {
     try {
-      // Validate pagination params
       if (params) {
-        if (params.page && params.page < 1) {
-          throw new Error('Page number must be greater than 0');
-        }
-        if (params.limit && (params.limit < 1 || params.limit > 100)) {
-          throw new Error('Limit must be between 1 and 100');
-        }
+        validatePaginationParams(params);
       }
-
       return await this.userRepository.getUsers(params);
     } catch (error) {
       throw new Error(`Failed to get users: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -122,11 +78,7 @@ export class ProfileUseCase {
 
   async toggleUserStatus(id: string, isBlocked: boolean): Promise<User> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(id);
       return await this.userRepository.toggleUserStatus(id, isBlocked);
     } catch (error) {
       throw new Error(`Failed to toggle user status: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -135,11 +87,7 @@ export class ProfileUseCase {
 
   async deleteUser(id: string): Promise<void> {
     try {
-      // Validate input
-      if (!id || id.trim() === '') {
-        throw new Error('User ID is required');
-      }
-
+      validateUserId(id);
       await this.userRepository.deleteUser(id);
     } catch (error) {
       throw new Error(`Failed to delete user: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -171,13 +119,6 @@ export class ProfileUseCase {
     }
   }
 
-  async validateUserData(userData: Partial<User>): Promise<boolean> {
-    try {
-      return await this.userRepository.validateUserData(userData);
-    } catch (error) {
-      return false;
-    }
-  }
 
   // Profile-specific methods
   async updateProfile(id: string, profileData: Partial<User>): Promise<User> {

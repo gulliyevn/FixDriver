@@ -66,23 +66,22 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Импорт ThemeProvider
-import { ThemeProvider } from '../architecture_src_new/core/context/ThemeContext';
-
-// Импорт экранов из новой архитектуры
-import LoginScreen from '../architecture_src_new/presentation/screens/auth/LoginScreen';
-import RegisterScreen from '../architecture_src_new/presentation/screens/auth/RegisterScreen';
-import ForgotPasswordScreen from '../architecture_src_new/presentation/screens/auth/ForgotPasswordScreen';
-import ResetPasswordScreen from '../architecture_src_new/presentation/screens/auth/ResetPasswordScreen';
-import RoleSelectScreen from '../architecture_src_new/presentation/screens/auth/RoleSelectScreen';
-import ModalScreen from '../architecture_src_new/presentation/screens/auth/ModalScreen';
-import MainNavigator from '../architecture_src_new/presentation/navigation/MainNavigator';
+// Импорт из нового index.ts
+import { 
+  ThemeProvider, 
+  MainNavigator 
+} from '../architecture_src_new';
 
 const Stack = createNativeStackNavigator();
 
 function AppNew() {
   // TODO: Добавить логику аутентификации
   const isAuthenticated = true; // Пока что true для тестирования навигации
+
+  const handleLogout = () => {
+    console.log('Logout pressed');
+    // TODO: Implement logout logic
+  };
 
   return (
     <SafeAreaProvider>
@@ -97,18 +96,19 @@ function AppNew() {
             // Аутентифицированный пользователь
             <Stack.Screen 
               name="MainApp" 
-              component={MainNavigator}
               options={{ gestureEnabled: false }}
-            />
+            >
+              {() => <MainNavigator onLogout={handleLogout} />}
+            </Stack.Screen>
           ) : (
             // Неаутентифицированный пользователь
             <>
-              <Stack.Screen name="Login" component={LoginScreen} options={{ gestureEnabled: false }} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-              <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-              <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-              <Stack.Screen name="RoleSelect" component={RoleSelectScreen} options={{ gestureEnabled: false }} />
-              <Stack.Screen name="Modal" component={ModalScreen} />
+              <Stack.Screen name="Login" component={() => <></>} options={{ gestureEnabled: false }} />
+              <Stack.Screen name="Register" component={() => <></>} />
+              <Stack.Screen name="ForgotPassword" component={() => <></>} />
+              <Stack.Screen name="ResetPassword" component={() => <></>} />
+              <Stack.Screen name="RoleSelect" component={() => <></>} options={{ gestureEnabled: false }} />
+              <Stack.Screen name="Modal" component={() => <></>} />
             </>
           )}
         </Stack.Navigator>
