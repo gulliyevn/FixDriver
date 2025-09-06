@@ -237,6 +237,9 @@ out/
 
 # ===== СПЕЦИФИЧНЫЕ ДЛЯ FIXDRIVE =====
 
+# Удаленные файлы (заглушки и дубликаты)
+УДАЛИТЬ/
+
 # Конфиденциальные данные
 src/config/environment.prod.ts
 src/config/environment.staging.ts
