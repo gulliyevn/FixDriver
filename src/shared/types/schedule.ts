@@ -1,3 +1,6 @@
+/**
+ * Schedule domain types
+ */
 export interface FlexibleScheduleData {
   selectedDays: string[];
   selectedTime?: string;

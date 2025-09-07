@@ -1,5 +1,15 @@
+/**
+ * Billing domain types
+ */
+
+/**
+ * Allowed billing session types.
+ */
 export type BillingSessionType = 'waiting' | 'emergency';
 
+/**
+ * Single billing session record.
+ */
 export interface BillingRecord {
 	// A unique identifier for the session record (generated locally)
 	id: string;
@@ -10,6 +20,9 @@ export interface BillingRecord {
 	amountAFc: number; // charged amount in AFc
 }
 
+/**
+ * Current live billing state flags and timestamps.
+ */
 export interface BillingLiveState {
 	isWaitingActive: boolean;
 	waitingStartedAt: number | null;

@@ -1,4 +1,5 @@
-import { PaginationParams } from '../types';
+// Local pagination shape to avoid cross-module coupling
+type UserPaginationParams = { page?: number; limit?: number };
 
 /**
  * Validate user ID
@@ -86,7 +87,7 @@ export function validateUserData(userData: any): void {
 /**
  * Validate pagination parameters
  */
-export function validatePaginationParams(params: PaginationParams): void {
+export function validateUserPaginationParams(params: UserPaginationParams): void {
   if (params?.page && (params.page < 1 || !Number.isInteger(params.page))) {
     throw new Error('Page must be a positive integer');
   }

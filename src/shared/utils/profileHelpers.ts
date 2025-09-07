@@ -1,11 +1,11 @@
 import { Alert } from 'react-native';
 
-// Функция для получения дефолтной даты (теперь всегда 06.11.2000)
+// Returns default date (fixed for deterministic UI/tests)
 export const getDefaultDate = (): string => {
   return '2000-11-06';
 };
 
-// Функция для точного расчета возраста
+// Calculate precise age from ISO date string
 export const calculateAge = (birthDate: string): number => {
   const today = new Date();
   const birth = new Date(birthDate);
@@ -13,7 +13,7 @@ export const calculateAge = (birthDate: string): number => {
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
   
-  // Если день рождения еще не наступил в этом году, уменьшаем возраст на 1
+  // Decrease age if birthday hasn't occurred yet in current year
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
     age--;
   }
@@ -21,7 +21,7 @@ export const calculateAge = (birthDate: string): number => {
   return age;
 };
 
-// Функция для проверки изменений в форме
+// Compare profile form data to detect changes
 export const hasChanges = (
   formData: {
     firstName: string;
@@ -47,45 +47,36 @@ export const hasChanges = (
   );
 };
 
-// Функция для обработки нажатия на круг (переключение между клиентом и водителем)
+// Handle circle press (switch from client to driver)
 export const handleCirclePress = (
   navigation: any,
   login: (email: string, password: string) => Promise<boolean>,
   t: (key: string) => string,
   changeRole?: (role: 'client' | 'driver') => void
 ): void => {
-  // После завершения анимации проверяем, есть ли уже аккаунт водителя
-  // TODO: Здесь должна быть проверка статуса водителя
-  const hasDriverAccount = false; // Заглушка, нужно заменить на реальную проверку
+  // TODO: Replace with real driver account status check from state/backend
+  const hasDriverAccount = false;
   
   if (hasDriverAccount) {
-    // Если уже есть аккаунт водителя, переключаемся на профиль водителя
-    console.log('Переключаемся к водительскому профилю...');
+    // Switch to driver profile by changing role
     try {
-      // Просто меняем роль - RootNavigator автоматически переключится
       if (changeRole) {
         changeRole('driver');
       }
-      console.log('Роль изменена на водитель');
     } catch (error) {
-      console.error('Ошибка смены роли:', error);
-      Alert.alert('Ошибка', 'Не удалось переключиться к водительскому профилю');
+      Alert.alert(t('errors.error'), t('profile.errors.roleChangeFailed'));
     }
   } else {
-    // Если нет аккаунта водителя, показываем уведомление
+    // Propose to navigate to driver registration
     Alert.alert(
-      t('profile.becomeDriverModal.title') || 'Стать водителем',
-      t('profile.becomeDriverModal.message') || 'Открыть страницу водителя?',
+      t('profile.becomeDriverModal.title'),
+      t('profile.becomeDriverModal.message'),
       [
-        { text: t('profile.becomeDriverModal.cancel') || 'Отмена', style: 'cancel' },
+        { text: t('profile.becomeDriverModal.cancel'), style: 'cancel' },
         { 
-          text: t('profile.becomeDriverModal.proceed') || 'Перейти',
+          text: t('profile.becomeDriverModal.proceed'),
           onPress: async () => {
-            // Автоматически входим как водитель
-            const success = await login('driver@example.com', 'password123');
-            if (!success) {
-              Alert.alert('Ошибка', 'Не удалось войти как водитель');
-            }
+            navigation?.navigate?.('DriverRegister');
           }
         }
       ]
@@ -93,45 +84,36 @@ export const handleCirclePress = (
   }
 };
 
-// Функция для обработки нажатия на круг в профиле водителя (переключение к клиенту)
+// Handle circle press in driver profile (switch to client)
 export const handleDriverCirclePress = (
   navigation: any,
   login: (email: string, password: string) => Promise<boolean>,
   t: (key: string) => string,
   changeRole?: (role: 'client' | 'driver') => void
 ): void => {
-  // После завершения анимации проверяем, есть ли уже аккаунт клиента
-  // TODO: Здесь должна быть проверка статуса клиента
-  const hasClientAccount = false; // Заглушка, нужно заменить на реальную проверку
+  // TODO: Replace with real client account status check from state/backend
+  const hasClientAccount = false;
   
   if (hasClientAccount) {
-    // Если уже есть аккаунт клиента, переключаемся на профиль клиента
-    console.log('Переключаемся к клиентскому профилю...');
+    // Switch to client profile by changing role
     try {
-      // Просто меняем роль - RootNavigator автоматически переключится
       if (changeRole) {
         changeRole('client');
       }
-      console.log('Роль изменена на клиент');
     } catch (error) {
-      console.error('Ошибка смены роли:', error);
-      Alert.alert('Ошибка', 'Не удалось переключиться к клиентскому профилю');
+      Alert.alert(t('errors.error'), t('profile.errors.roleChangeFailed'));
     }
   } else {
-    // Если нет аккаунта клиента, показываем уведомление
+    // Propose to navigate to client registration
     Alert.alert(
-      t('profile.becomeClientModal.title') || 'Стать клиентом',
-      t('profile.becomeClientModal.message') || 'Открыть страницу клиента?',
+      t('profile.becomeClientModal.title'),
+      t('profile.becomeClientModal.message'),
       [
-        { text: t('profile.becomeClientModal.cancel') || 'Отмена', style: 'cancel' },
+        { text: t('profile.becomeClientModal.cancel'), style: 'cancel' },
         { 
-          text: t('profile.becomeClientModal.proceed') || 'Перейти',
+          text: t('profile.becomeClientModal.proceed'),
           onPress: async () => {
-            // Автоматически входим как клиент
-            const success = await login('client@example.com', 'password123');
-            if (!success) {
-              Alert.alert(t('errors.error'), t('profile.becomeClientModal.loginError') || 'Не удалось войти как клиент');
-            }
+            navigation?.navigate?.('ClientRegister');
           }
         }
       ]

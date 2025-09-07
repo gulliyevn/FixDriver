@@ -8,7 +8,10 @@ const mockOrders: Order[] = [
   {
     id: 'order_1',
     userId: 'user_1',
+    clientId: 'user_1',
     driverId: 'driver_1',
+    from: '123 Main St, New York, NY',
+    to: '456 Broadway, New York, NY',
     pickupLocation: {
       id: 'pickup_1',
       latitude: 40.7128,
@@ -26,7 +29,7 @@ const mockOrders: Order[] = [
       country: 'USA',
     },
     status: 'completed',
-    price: { amount: 25.50, currency: 'USD', formatted: '$25.50' },
+    price: 25.50,
     distance: 2500,
     duration: 15,
     notes: 'Please be on time',

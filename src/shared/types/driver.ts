@@ -1,3 +1,6 @@
+/**
+ * Driver domain entity used across app layers.
+ */
 export interface Driver {
   id: string;
   email: string;
@@ -15,7 +18,7 @@ export interface Driver {
   created_at: string;
   updated_at: string;
   
-  // UI полезные поля
+  // Useful UI fields (optional, derived for presentation)
   isAvailable?: boolean;
   avatar?: string;
   location?: {
@@ -23,18 +26,21 @@ export interface Driver {
     longitude: number;
   };
   
-  // Дополнительные поля для UI
-  name?: string; // Полное имя для отображения
-  carModel?: string; // Модель автомобиля для отображения
-  carNumber?: string; // Номер автомобиля для отображения
-  isOnline?: boolean; // Статус онлайн/офлайн
-  clientsPerDay?: number; // Количество клиентов в день
-  addresses?: string[]; // Адреса маршрута
-  times?: string[]; // Времена для каждого адреса
-  tripDays?: string; // Дни поездок
-  package?: 'base' | 'plus' | 'premium'; // Тип пакета
+  // Additional UI fields
+  name?: string; // Full name for display
+  carModel?: string; // Car model for display
+  carNumber?: string; // Car number for display
+  isOnline?: boolean; // Online/offline status
+  clientsPerDay?: number; // Clients per day
+  addresses?: string[]; // Route addresses
+  times?: string[]; // Times per address
+  tripDays?: string; // Trip days
+  package?: 'base' | 'plus' | 'premium'; // Package type
 }
 
+/**
+ * Driver status lifecycle and availability states.
+ */
 export enum DriverStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
@@ -44,16 +50,18 @@ export enum DriverStatus {
   INACTIVE = 'inactive',
 }
 
-// Данные для регистрации водителя (отправляем на бэк)
+/**
+ * Driver registration payload (sent to backend).
+ */
 export interface DriverRegistrationData {
-  // Обязательные поля
+  // Required fields
   email: string;
   password: string;
   license_number: string;
   license_expiry_date: string; // YYYY-MM-DD format
   vehicle_number: string;
   
-  // Опциональные поля
+  // Optional fields
   phone_number?: string;
   first_name?: string;
   last_name?: string;
@@ -63,7 +71,9 @@ export interface DriverRegistrationData {
   vehicle_year?: number;
 }
 
-// Данные для обновления профиля водителя
+/**
+ * Driver profile update payload.
+ */
 export interface DriverUpdateData {
   phone_number?: string;
   first_name?: string;
@@ -71,36 +81,44 @@ export interface DriverUpdateData {
   vehicle_brand?: string;
   vehicle_model?: string;
   vehicle_year?: number;
-  // Номер прав и номер авто нельзя менять без подтверждения
+  // License number and vehicle number cannot be changed without approval
 }
 
-// Данные для смены документов (требует подтверждения админа)
+/**
+ * Document update payload (requires admin approval).
+ */
 export interface DriverDocumentUpdateData {
   license_number?: string;
   license_expiry_date?: string;
   vehicle_number?: string;
 }
 
-// Ответ от сервера при регистрации
+/**
+ * Registration response from backend.
+ */
 export interface DriverRegistrationResponse {
   success: boolean;
   message: string;
-  driver?: Omit<Driver, 'password_hash'>; // без пароля
-  token?: string; // JWT токен если сразу логинимся
+  driver?: Omit<Driver, 'password_hash'>; // without password
+  token?: string; // JWT token if auto-login
 }
 
-// Данные о местоположении водителя
+/**
+ * Driver location telemetry.
+ */
 export interface DriverLocation {
   driver_id: string;
   latitude: number;
   longitude: number;
-  heading?: number; // направление движения
-  speed?: number; // скорость
-  accuracy?: number; // точность GPS
+  heading?: number; // movement direction
+  speed?: number; // speed
+  accuracy?: number; // GPS accuracy
   timestamp: string;
 }
 
-// Статистика водителя
+/**
+ * Driver aggregated statistics.
+ */
 export interface DriverStats {
   total_trips: number;
   completed_trips: number;
@@ -113,18 +131,22 @@ export interface DriverStats {
   online_hours_month: number;
 }
 
-// Данные для фильтрации водителей
+/**
+ * Driver filtering options.
+ */
 export interface DriverFilters {
   status?: DriverStatus[];
   rating_min?: number;
   rating_max?: number;
   vehicle_year_min?: number;
   vehicle_year_max?: number;
-  location_radius?: number; // радиус поиска в км
+  location_radius?: number; // search radius in km
   is_available?: boolean;
 }
 
-// Сортировка водителей
+/**
+ * Driver sorting options.
+ */
 export interface DriverSort {
   field: 'rating' | 'created_at' | 'total_trips' | 'distance';
   order: 'asc' | 'desc';

@@ -1,5 +1,15 @@
+/**
+ * Payment and balance domain types
+ */
+
+/**
+ * Payment lifecycle status.
+ */
 export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 
+/**
+ * Payment categories.
+ */
 export type PaymentType = 'top_up' | 'trip_payment' | 'refund' | 'bonus' | 'withdrawal';
 
 export interface Payment {

@@ -1,12 +1,10 @@
 import { 
   mockUsers, 
   mockDrivers, 
-  mockOrders, 
-  createMockUser, 
-  createMockDriver,
-  mockEarningsData,
-  mockFilters
+  mockOrders,
 } from '../../mocks';
+import { createMockUser, createMockDriver } from '../../mocks/factories';
+import { mockEarningsData, mockFilters } from '../../mocks/other';
 import { UserRole } from '../../types/user';
 
 describe('Mock Data', () => {

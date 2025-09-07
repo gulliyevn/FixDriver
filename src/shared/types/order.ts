@@ -1,3 +1,21 @@
+/**
+ * Order domain types
+ */
+
+/**
+ * Allowed order status values.
+ */
+export type OrderStatus = 
+  | 'pending'
+  | 'confirmed'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled'
+  | 'no_show';
+
+/**
+ * Order entity used across app layers.
+ */
 export interface Order {
   id: string;
   clientId: string;
@@ -31,11 +49,3 @@ export interface Order {
   createdAt: string;
   updatedAt: string;
 }
-
-export type OrderStatus = 
-  | 'pending'
-  | 'confirmed'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
-  | 'no_show';

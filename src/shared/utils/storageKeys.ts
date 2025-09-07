@@ -1,37 +1,22 @@
-import { useAuth } from '../context/AuthContext';
-
 /**
- * Генерирует ключ AsyncStorage с изоляцией по пользователю
- * @param baseKey - базовый ключ
- * @param userId - ID пользователя (опционально, если не передан - берется из AuthContext)
- * @returns ключ с ID пользователя
+ * Generate namespaced AsyncStorage key per user (if provided)
  */
 export const getUserStorageKey = (baseKey: string, userId?: string): string => {
   if (userId) {
     return `${baseKey}_${userId}`;
   }
-  
-  // Если userId не передан, возвращаем базовый ключ
-  // (для обратной совместимости и случаев, когда пользователь не авторизован)
+  // Fallback to base key for non-authenticated contexts
   return baseKey;
 };
 
 /**
- * Хук для получения ключей с изоляцией по пользователю
- */
-export const useUserStorageKey = (baseKey: string): string => {
-  const { user } = useAuth();
-  return getUserStorageKey(baseKey, user?.id);
-};
-
-/**
- * Базовые ключи для разных типов данных
+ * Base storage keys for different data domains
  */
 export const STORAGE_KEYS = {
-  // Профиль
+  // Profile
   USER_PROFILE: 'user_profile',
   
-  // Баланс
+  // Balance
   CLIENT_BALANCE: 'client_balance',
   CLIENT_TRANSACTIONS: 'client_transactions', 
   CLIENT_CASHBACK: 'client_cashback',
@@ -39,38 +24,42 @@ export const STORAGE_KEYS = {
   DRIVER_TRANSACTIONS: 'driver_transactions',
   DRIVER_EARNINGS: 'driver_earnings',
   
-  // Пакеты и подписки
+  // Packages and subscriptions
   USER_SUBSCRIPTION: 'user_subscription',
   USER_PACKAGE: 'user_package',
   
-  // Карты
+  // Cards
   USER_CARDS: 'cards',
   
-  // Настройки
+  // Settings
   NOTIFICATION_SETTINGS: 'notification_settings',
   THEME: 'theme',
   LANGUAGE: 'language',
   
-  // Аватары
+  // Avatars
   USER_AVATAR: 'user_avatar',
   DRIVER_AVATAR: 'driver_avatar',
   
-  // Адреса
+  // Addresses
   USER_ADDRESSES: 'user_addresses',
   
-  // Верификация
+  // Verification
   VERIFICATION_EMAIL: 'verification_email',
   VERIFICATION_PHONE: 'verification_phone',
   
   // OTP
   OTP_PREFIX: 'otp_',
   
-  // Кэш
+  // Cache
   LOCATION_CACHE: 'location_cache',
+
+  // Schedule
+  SCHEDULE_FLEXIBLE: 'flexibleSchedule',
+  SCHEDULE_CUSTOMIZED: 'customizedSchedule',
 } as const;
 
 /**
- * Получает ключ для конкретного пользователя
+ * Resolve storage key for a given user (optional)
  */
 export const getUserKey = (key: keyof typeof STORAGE_KEYS, userId?: string): string => {
   return getUserStorageKey(STORAGE_KEYS[key], userId);

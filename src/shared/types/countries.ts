@@ -1,3 +1,7 @@
+/**
+ * Country and region domain types
+ */
+
 export interface Country {
   code: string;
   name: string;

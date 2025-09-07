@@ -8,6 +8,10 @@ const mockDrivers: Driver[] = [
   {
     id: 'driver_1',
     userId: 'user_2',
+    email: 'driver@example.com',
+    first_name: 'John',
+    last_name: 'Driver',
+    phone_number: '+994501234568',
     status: 'available',
     currentLocation: {
       id: 'loc_1',
@@ -19,6 +23,11 @@ const mockDrivers: Driver[] = [
     },
     rating: { value: 4.9, count: 150, average: 4.9 },
     vehicleId: 'vehicle_1',
+    vehicle_brand: 'Toyota',
+    vehicle_model: 'Camry',
+    licenseNumber: 'DL123456',
+    license_number: 'AZ123456',
+    vehicle_number: '12-AB-123',
     licenseNumber: 'DL123456',
     experience: 5,
     totalTrips: 1250,

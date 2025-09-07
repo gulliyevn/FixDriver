@@ -3,7 +3,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
-// Типы для маршрутов
+// Route types
 export interface RoutePoint {
   latitude: number;
   longitude: number;
@@ -12,7 +12,7 @@ export interface RoutePoint {
   type?: 'start' | 'waypoint' | 'end';
 }
 
-// Параметры для экранов чата
+// Chat stack params
 export type ChatStackParamList = {
   ChatList: undefined;
   ChatConversation: {
@@ -26,7 +26,7 @@ export type ChatStackParamList = {
   };
 };
 
-// Параметры для экранов аутентификации
+// Auth stack params
 export type AuthStackParamList = {
   RoleSelect: undefined;
   Login: undefined;
@@ -39,7 +39,7 @@ export type AuthStackParamList = {
   };
 };
 
-// Параметры для клиентских экранов
+// Client stack params
 export type ClientStackParamList = {
   Map: undefined;
   Drivers: undefined;
@@ -53,7 +53,7 @@ export type ClientStackParamList = {
       isOnline?: boolean;
     };
   };
-  // Чат экраны (добавляем прямо в ClientStack для упрощения)
+  // Chat screens (inlined into ClientStack for simplicity)
   ChatList: undefined;
   ChatConversation: {
     driverId: string;
@@ -64,14 +64,14 @@ export type ClientStackParamList = {
     driverStatus?: string;
     driverPhoto?: string;
   };
-  // Дополнительные экраны
+  // Additional screens
   Bookings: undefined;
   Schedule: undefined;
   Notifications: undefined;
   Progress: undefined;
   SupportChat: undefined;
 
-  // Профильные экраны
+  // Profile screens
   ClientProfile: undefined;
   EditClientProfile: undefined;
   DriverProfile: undefined;
@@ -81,7 +81,7 @@ export type ClientStackParamList = {
   BecomeDriver: undefined;
   ThemeToggle: undefined;
   FixDrive: undefined;
-  // Новые экраны профиля
+  // New profile screens
   Cards: undefined;
   Debts: undefined;
   Trips: undefined;
@@ -99,7 +99,7 @@ export type ClientStackParamList = {
   ChangePassword: undefined;
 };
 
-// Параметры для водительских экранов
+// Driver stack params
 export type DriverStackParamList = {
   Map: undefined;
   Orders: undefined;
@@ -109,7 +109,7 @@ export type DriverStackParamList = {
     params?: ChatStackParamList[keyof ChatStackParamList];
   };
   Profile: undefined;
-  // Дополнительные экраны
+  // Additional screens
   ClientList: undefined;
   Earnings: undefined;
   Schedule: undefined;
@@ -120,10 +120,10 @@ export type DriverStackParamList = {
   EditDriverProfile: undefined;
 };
 
-// Основные табы приложения
+// Root tabs of the app
 export type RootTabParamList = ClientStackParamList | DriverStackParamList;
 
-// Корневая навигация
+// Root navigation
 export type RootStackParamList = {
   Auth: {
     screen?: keyof AuthStackParamList;
@@ -135,14 +135,14 @@ export type RootStackParamList = {
   };
 };
 
-// Типы для навигации в различных контекстах
+// Navigation prop types
 export type AuthNavigationProp = StackNavigationProp<AuthStackParamList>;
 export type ClientNavigationProp = BottomTabNavigationProp<ClientStackParamList>;
 export type DriverNavigationProp = BottomTabNavigationProp<DriverStackParamList>;
 export type ChatNavigationProp = StackNavigationProp<ChatStackParamList>;
 export type RootNavigationProp = StackNavigationProp<RootStackParamList>;
 
-// Композитные типы навигации для экранов
+// Composite navigation types for screens
 export type ClientScreenNavigationProp<T extends keyof ClientStackParamList> = CompositeNavigationProp<
   BottomTabNavigationProp<ClientStackParamList, T>,
   StackNavigationProp<RootStackParamList>
@@ -157,13 +157,13 @@ export type AuthScreenNavigationProp<T extends keyof AuthStackParamList> = Stack
 
 export type ChatScreenNavigationProp<T extends keyof ChatStackParamList> = StackNavigationProp<ChatStackParamList, T>;
 
-// Типы для route props
+// Route prop types
 export type ClientScreenRouteProp<T extends keyof ClientStackParamList> = RouteProp<ClientStackParamList, T>;
 export type DriverScreenRouteProp<T extends keyof DriverStackParamList> = RouteProp<DriverStackParamList, T>;
 export type AuthScreenRouteProp<T extends keyof AuthStackParamList> = RouteProp<AuthStackParamList, T>;
 export type ChatScreenRouteProp<T extends keyof ChatStackParamList> = RouteProp<ChatStackParamList, T>;
 
-// Типы для screen props (navigation + route)
+// Screen props (navigation + route)
 export type ClientScreenProps<T extends keyof ClientStackParamList> = {
   navigation: ClientScreenNavigationProp<T>;
   route: ClientScreenRouteProp<T>;
@@ -184,7 +184,7 @@ export type ChatScreenProps<T extends keyof ChatStackParamList> = {
   route: ChatScreenRouteProp<T>;
 };
 
-// Устаревшие типы для обратной совместимости
+// Legacy types kept for backward compatibility
 export type RootTabScreenProps<Screen extends keyof ClientStackParamList> = {
   navigation: BottomTabNavigationProp<ClientStackParamList, Screen>;
   route: RouteProp<ClientStackParamList, Screen>;

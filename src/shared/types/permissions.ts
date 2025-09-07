@@ -1,8 +1,8 @@
-// Типы для ролей, разрешений и функций пользователей
+// User roles, permissions and features types
 
 export type UserRole = 'client' | 'driver' | 'admin';
 
-// Детали ролей
+// Role details structure
 export interface RoleDetails {
   client: {
     name: string;
@@ -26,7 +26,7 @@ export interface RoleDetails {
   };
 }
 
-// Разрешения для клиента
+// Client permissions
 export type ClientPermission = 
   | 'create_orders'
   | 'view_orders'
@@ -37,7 +37,7 @@ export type ClientPermission =
   | 'view_trip_history'
   | 'contact_support';
 
-// Разрешения для водителя
+// Driver permissions
 export type DriverPermission = 
   | 'view_available_orders'
   | 'accept_orders'
@@ -48,7 +48,7 @@ export type DriverPermission =
   | 'view_earnings'
   | 'contact_support';
 
-// Разрешения для администратора
+// Admin permissions
 export type AdminPermission = 
   | 'view_all_users'
   | 'manage_users'
@@ -59,7 +59,7 @@ export type AdminPermission =
   | 'view_logs'
   | 'manage_payments';
 
-// Функции для клиента
+// Client features
 export type ClientFeature = 
   | 'order_creation'
   | 'real_time_tracking'
@@ -68,7 +68,7 @@ export type ClientFeature =
   | 'trip_history'
   | 'support_chat';
 
-// Функции для водителя
+// Driver features
 export type DriverFeature = 
   | 'order_management'
   | 'navigation'
@@ -77,7 +77,7 @@ export type DriverFeature =
   | 'trip_history'
   | 'support_chat';
 
-// Функции для администратора
+// Admin features
 export type AdminFeature = 
   | 'user_management'
   | 'order_management'
@@ -86,7 +86,7 @@ export type AdminFeature =
   | 'payment_management'
   | 'support_management';
 
-// Требования для водителя
+// Driver requirements
 export interface DriverRequirement {
   type: 'license' | 'vehicle' | 'insurance' | 'background_check' | 'training';
   required: boolean;
@@ -95,28 +95,17 @@ export interface DriverRequirement {
   expiryDate?: string;
 }
 
-// Уровни доступа администратора
+// Admin access levels
 export type AdminAccessLevel = 'basic' | 'advanced' | 'super';
 
-// Утилиты для работы с ролями
-export const ROLE_LABELS: Record<UserRole, string> = {
-  client: 'Клиент',
-  driver: 'Водитель',
-  admin: 'Администратор',
-};
+// Role i18n keys are defined in shared/constants/roles.ts (ROLE_LABEL_T_KEYS, ROLE_DESCRIPTION_T_KEYS)
 
-export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
-  client: 'Заказывает поездки и управляет своим профилем',
-  driver: 'Выполняет заказы и получает оплату',
-  admin: 'Управляет системой и пользователями',
-};
-
-// Проверка ролей
+// Role checks
 export const isClient = (role: UserRole): boolean => role === 'client';
 export const isDriver = (role: UserRole): boolean => role === 'driver';
 export const isAdmin = (role: UserRole): boolean => role === 'admin';
 
-// Получение разрешений для роли
+// Get permissions for a role
 export const getRolePermissions = (role: UserRole): string[] => {
   const permissions: Record<UserRole, string[]> = {
     client: [
@@ -154,7 +143,7 @@ export const getRolePermissions = (role: UserRole): string[] => {
   return permissions[role] || [];
 };
 
-// Получение функций для роли
+// Get features for a role
 export const getRoleFeatures = (role: UserRole): string[] => {
   const features: Record<UserRole, string[]> = {
     client: [
@@ -186,12 +175,12 @@ export const getRoleFeatures = (role: UserRole): string[] => {
   return features[role] || [];
 };
 
-// Проверка разрешений
+// Check if permission exists
 export const hasPermission = (userPermissions: string[], requiredPermission: string): boolean => {
   return userPermissions.includes(requiredPermission);
 };
 
-// Проверка роли
+// Check if role exists in list
 export const hasRole = (userRoles: UserRole[], requiredRole: UserRole): boolean => {
   return userRoles.includes(requiredRole);
 };

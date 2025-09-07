@@ -1,4 +1,4 @@
-import { CreatePaymentData, PaginationParams } from '../types';
+import { CreatePaymentData } from '../types/payment';
 
 /**
  * Validate payment ID
@@ -59,7 +59,7 @@ export function validatePaymentData(paymentData: CreatePaymentData): void {
   validateDescription(paymentData.description);
 
   // Validate payment type
-  const validTypes = ['top_up', 'trip_payment', 'refund', 'bonus'];
+  const validTypes = ['top_up', 'trip_payment', 'refund', 'bonus', 'withdrawal'];
   if (!validTypes.includes(paymentData.type)) {
     throw new Error('Invalid payment type');
   }
@@ -68,7 +68,7 @@ export function validatePaymentData(paymentData: CreatePaymentData): void {
 /**
  * Validate pagination parameters
  */
-export function validatePaginationParams(params: PaginationParams): void {
+export function validatePaymentPaginationParams(params: { page?: number; limit?: number }): void {
   if (params?.page && (params.page < 1 || !Number.isInteger(params.page))) {
     throw new Error('Page must be a positive integer');
   }

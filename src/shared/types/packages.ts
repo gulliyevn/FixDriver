@@ -1,3 +1,6 @@
+/**
+ * Packages catalog types (visuals and pricing)
+ */
 export enum PackageType {
   FREE = 'free',
   PLUS = 'plus',

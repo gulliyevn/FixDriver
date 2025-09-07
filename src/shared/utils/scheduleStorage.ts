@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from './storageKeys';
 
 export interface FlexibleScheduleData {
   selectedDays: string[];
@@ -18,23 +19,15 @@ export interface CustomizedScheduleData {
  */
 export const getFlexibleSchedule = async (): Promise<FlexibleScheduleData | null> => {
   try {
-    console.log('🔄 scheduleStorage: Получение гибкого расписания из localStorage...');
-    
-    const data = await AsyncStorage.getItem('flexibleSchedule');
+    const data = await AsyncStorage.getItem(STORAGE_KEYS.SCHEDULE_FLEXIBLE);
     
     if (!data) {
-      console.log('⚠️ scheduleStorage: Гибкое расписание не найдено в localStorage');
       return null;
     }
     
     const parsedData = JSON.parse(data) as FlexibleScheduleData;
-    
-    console.log('✅ scheduleStorage: Гибкое расписание получено из localStorage');
-    console.log('📊 Данные гибкого расписания:', JSON.stringify(parsedData, null, 2));
-    
     return parsedData;
   } catch (error) {
-    console.error('❌ scheduleStorage: Ошибка получения гибкого расписания:', error);
     return null;
   }
 };
@@ -44,23 +37,15 @@ export const getFlexibleSchedule = async (): Promise<FlexibleScheduleData | null
  */
 export const getCustomizedSchedule = async (): Promise<CustomizedScheduleData | null> => {
   try {
-    console.log('🔄 scheduleStorage: Получение кастомизированного расписания из localStorage...');
-    
-    const data = await AsyncStorage.getItem('customizedSchedule');
+    const data = await AsyncStorage.getItem(STORAGE_KEYS.SCHEDULE_CUSTOMIZED);
     
     if (!data) {
-      console.log('⚠️ scheduleStorage: Кастомизированное расписание не найдено в localStorage');
       return null;
     }
     
     const parsedData = JSON.parse(data) as CustomizedScheduleData;
-    
-    console.log('✅ scheduleStorage: Кастомизированное расписание получено из localStorage');
-    console.log('📊 Данные кастомизированного расписания:', JSON.stringify(parsedData, null, 2));
-    
     return parsedData;
   } catch (error) {
-    console.error('❌ scheduleStorage: Ошибка получения кастомизированного расписания:', error);
     return null;
   }
 };
@@ -69,8 +54,6 @@ export const getCustomizedSchedule = async (): Promise<CustomizedScheduleData | 
  * Получить все данные расписания
  */
 export const getAllScheduleData = async () => {
-  console.log('🚀 scheduleStorage: Получение ВСЕХ данных расписания для следующей страницы...');
-  
   const flexibleSchedule = await getFlexibleSchedule();
   const customizedSchedule = await getCustomizedSchedule();
   
@@ -79,10 +62,6 @@ export const getAllScheduleData = async () => {
     customizedSchedule,
     timestamp: new Date().toISOString()
   };
-  
-  console.log('📦 scheduleStorage: ВСЕ данные для передачи на следующую страницу:');
-  console.log(JSON.stringify(allData, null, 2));
-  
   return allData;
 };
 
@@ -91,13 +70,9 @@ export const getAllScheduleData = async () => {
  */
 export const clearScheduleData = async () => {
   try {
-    console.log('🧹 scheduleStorage: Очистка данных расписания...');
-    
-    await AsyncStorage.removeItem('flexibleSchedule');
-    await AsyncStorage.removeItem('customizedSchedule');
-    
-    console.log('✅ scheduleStorage: Данные расписания очищены');
+    await AsyncStorage.removeItem(STORAGE_KEYS.SCHEDULE_FLEXIBLE);
+    await AsyncStorage.removeItem(STORAGE_KEYS.SCHEDULE_CUSTOMIZED);
   } catch (error) {
-    console.error('❌ scheduleStorage: Ошибка очистки данных расписания:', error);
+    // Silently ignore cleanup errors
   }
 };

@@ -1,3 +1,7 @@
+/**
+ * Emergency domain types
+ */
+
 export interface EmergencyService {
   code: string;
   name: string;

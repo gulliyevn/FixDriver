@@ -1,3 +1,7 @@
+/**
+ * Family domain types
+ */
+
 export interface FamilyMember {
   id: string;
   name: string;
@@ -9,6 +13,9 @@ export interface FamilyMember {
   phoneVerified?: boolean;
 }
 
+/**
+ * Props for family member UI item component.
+ */
 export interface FamilyMemberItemProps {
   member: FamilyMember;
   isExpanded: boolean;

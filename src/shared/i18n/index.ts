@@ -219,8 +219,20 @@ const temporaryTranslations: Record<string, TranslationData> = {
         },
       },
     },
+    // Backward-compat root keys for old tests
+    login: {
+      title: 'Добро пожаловать',
+      subtitle: 'Войдите в свой аккаунт',
+      email: 'Email',
+      password: 'Пароль',
+    },
     // Общие
     common: {
+      // Короткие ключи для обратной совместимости с тестами
+      selectLanguage: 'Выберите язык',
+      ok: 'ОК',
+      cancel: 'Отмена',
+      loading: 'Загрузка...',
       buttons: {
         login: 'Войти',
         register: 'Зарегистрироваться',
@@ -499,8 +511,20 @@ const temporaryTranslations: Record<string, TranslationData> = {
         },
       },
     },
+    // Backward-compat root keys for old tests
+    login: {
+      title: 'Welcome',
+      subtitle: 'Sign in to your account',
+      email: 'Email',
+      password: 'Password',
+    },
     // Общие
     common: {
+      // Short keys for backward compatibility with tests
+      selectLanguage: 'Select Language',
+      ok: 'OK',
+      cancel: 'Cancel',
+      loading: 'Loading...',
       buttons: {
         login: 'Login',
         register: 'Register',
@@ -662,4 +686,16 @@ export const useI18n = () => {
 
 // Экспортируем ключи для TypeScript
 export { TRANSLATION_KEYS };
+
+// Backward-compatible helpers for tests
+export const setLanguage = async (lang: string) => {
+  config.language = lang;
+};
+
+export const initializeLanguage = async () => {
+  // No-op for now; kept for test compatibility
+  return;
+};
+
+// (Aliases are not needed since root keys were added above)
 

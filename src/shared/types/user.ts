@@ -1,8 +1,14 @@
+/**
+ * User domain types
+ */
 export enum UserRole {
   CLIENT = 'client',
   DRIVER = 'driver',
 }
 
+/**
+ * Base user profile.
+ */
 export interface User {
   id: string;
   email: string;
@@ -17,6 +23,9 @@ export interface User {
   birthDate?: string;
 }
 
+/**
+ * Driver user with vehicle and availability info.
+ */
 export interface UserDriver extends User {
   role: UserRole.DRIVER;
   vehicle: {
@@ -36,12 +45,18 @@ export interface UserDriver extends User {
   clientsPerDay?: number;
 }
 
+/**
+ * Client user with optional children and payment methods.
+ */
 export interface Client extends User {
   role: UserRole.CLIENT;
   children?: Child[];
   paymentMethods?: PaymentMethod[];
 }
 
+/**
+ * Client child record.
+ */
 export interface Child {
   id: string;
   name: string;
@@ -50,6 +65,9 @@ export interface Child {
   address?: string;
 }
 
+/**
+ * Payment method attached to client.
+ */
 export interface PaymentMethod {
   id: string;
   type: 'card' | 'paypal';

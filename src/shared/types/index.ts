@@ -6,7 +6,7 @@ export * from './order';
 export * from './package';
 export * from './user';
 
-// Экспортируем driver отдельно чтобы избежать конфликтов
+// Export driver types explicitly to avoid conflicts
 export type { 
   Driver, 
   DriverStatus, 

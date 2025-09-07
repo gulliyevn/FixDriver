@@ -1,9 +1,12 @@
-// Типы для аутентификации и авторизации
+// Types for authentication and authorization
 
 import { User } from './user';
 import { UserRole, ClientPermission, DriverPermission, AdminPermission } from './permissions';
 
-// Базовые типы для аутентификации
+// Common device type used across auth flows
+export type DeviceType = 'mobile' | 'web' | 'tablet';
+
+// Base auth types
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -18,19 +21,19 @@ export interface RegisterData {
   role: UserRole;
 }
 
-// Внутренний тип для сервисов (с паролем)
+// Internal service type (contains password)
 export interface UserWithPassword extends User {
   password: string;
 }
 
-// Запросы аутентификации
+// Auth requests
 export interface LoginRequest {
   email: string;
   password: string;
   rememberMe?: boolean;
   deviceInfo?: {
     deviceId: string;
-    deviceType: 'mobile' | 'web' | 'tablet';
+    deviceType: DeviceType;
     appVersion: string;
   };
 }
@@ -95,7 +98,7 @@ export interface UpdateProfileRequest {
   };
 }
 
-// Ответы аутентификации
+// Auth responses
 export interface LoginResponse {
   success: boolean;
   token: string;
@@ -166,12 +169,12 @@ export interface UpdateProfileResponse {
   updatedFields?: string[];
 }
 
-// Сессии и устройства
+// Sessions and devices
 export interface UserSession {
   id: string;
   userId: string;
   deviceId: string;
-  deviceType: 'mobile' | 'web' | 'tablet';
+  deviceType: DeviceType;
   appVersion: string;
   ipAddress: string;
   userAgent: string;
@@ -189,7 +192,7 @@ export interface UserSession {
 export interface DeviceInfo {
   id: string;
   name: string;
-  type: 'mobile' | 'web' | 'tablet';
+  type: DeviceType;
   platform: string;
   appVersion: string;
   lastUsed: string;
@@ -197,7 +200,7 @@ export interface DeviceInfo {
   location?: string;
 }
 
-// Безопасность
+// Security
 export interface SecuritySettings {
   twoFactorEnabled: boolean;
   twoFactorMethod: 'sms' | 'email' | 'authenticator';
@@ -217,7 +220,7 @@ export interface TwoFactorSetup {
   isVerified: boolean;
 }
 
-// Ошибки аутентификации
+// Auth errors
 export interface AuthError {
   code: string;
   message: string;
@@ -226,24 +229,4 @@ export interface AuthError {
   retryable: boolean;
   actionRequired?: string;
 }
-
-// Утилиты для аутентификации
-export const isTokenExpired = (expiresAt: string): boolean => {
-  return new Date(expiresAt) < new Date();
-};
-
-export const getTokenExpiryTime = (expiresIn: number): Date => {
-  return new Date(Date.now() + expiresIn * 1000);
-};
-
-export const shouldRefreshToken = (expiresAt: string, thresholdMinutes: number = 5): boolean => {
-  const expiryTime = new Date(expiresAt);
-  const thresholdTime = new Date(Date.now() + thresholdMinutes * 60 * 1000);
-  return expiryTime <= thresholdTime;
-};
-
-export const getSessionDuration = (createdAt: string, expiresAt: string): number => {
-  const created = new Date(createdAt);
-  const expires = new Date(expiresAt);
-  return Math.floor((expires.getTime() - created.getTime()) / 1000);
-};
+ 

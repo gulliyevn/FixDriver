@@ -1,3 +1,8 @@
+/**
+ * Deprecated: use shared/constants/countries.ts
+ * Re-export kept for backward compatibility during refactor.
+ */
+export { } from '../constants/countries';
 export interface Country {
   code: string;
   name: string;

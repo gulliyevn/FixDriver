@@ -1,8 +1,12 @@
-import { ErrorHandler } from '../errorHandler';
+import ErrorHandlerClass from '../errorHandler';
+const ErrorHandler = new ErrorHandlerClass();
 
 describe('ErrorHandler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Ensure logging branch executes in tests
+    // @ts-ignore
+    global.__DEV__ = true;
   });
 
   describe('createAppError', () => {
@@ -94,7 +98,7 @@ describe('ErrorHandler', () => {
 
       expect(result).toEqual({
         code: 'UNKNOWN_ERROR',
-        message: 'Произошла неизвестная ошибка',
+        message: 'Unknown error',
       });
     });
   });
@@ -104,7 +108,7 @@ describe('ErrorHandler', () => {
       const error = { code: 'AUTH_001', message: 'Invalid credentials' };
       const result = ErrorHandler.getUserFriendlyMessage(error);
 
-      expect(result).toBe('Неверный email или пароль');
+      expect(result).toBe('Invalid email or password');
     });
 
     it('returns default message for unknown error code', () => {
@@ -158,7 +162,7 @@ describe('ErrorHandler', () => {
 
       ErrorHandler.logError(error, 'TestComponent');
 
-      expect(consoleSpy).toHaveBeenCalledWith('🚨 Error: TEST_ERROR (TestComponent)');
+      expect(consoleSpy).toHaveBeenCalledWith('Error: TEST_ERROR (TestComponent)');
 
       consoleSpy.mockRestore();
     });
@@ -169,7 +173,7 @@ describe('ErrorHandler', () => {
 
       ErrorHandler.logError(error);
 
-      expect(consoleSpy).toHaveBeenCalledWith('🚨 Error: TEST_ERROR');
+      expect(consoleSpy).toHaveBeenCalledWith('Error: TEST_ERROR');
 
       consoleSpy.mockRestore();
     });

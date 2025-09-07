@@ -1,7 +1,12 @@
+/**
+ * Package and booking domain types
+ */
+
+import { PackageType } from './packages';
 export interface TravelPackage {
   id: string;
   name: string;
-  type: 'single' | 'weekly' | 'monthly' | 'yearly';
+  type: PackageType.SINGLE | PackageType.WEEKLY | PackageType.MONTHLY | PackageType.YEARLY;
   price: number;
   tripsIncluded?: number; // количество поездок для пакетных планов
   kmLimit?: number; // лимит километров
@@ -54,7 +59,7 @@ export interface ActivePackage extends TravelPackage {
   timeUsed: number;
 }
 
-export type PackageType = 'single' | 'weekly' | 'monthly' | 'yearly';
+// Use enum PackageType from './packages'
 
 export interface Package {
   id: string;

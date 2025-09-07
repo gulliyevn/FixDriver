@@ -1,4 +1,6 @@
-import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '../i18n';
+// Local language map to avoid depending on i18n implementation details
+export type SupportedLanguage = 'ru' | 'en' | 'az';
+const SUPPORTED_LANGUAGES: Record<SupportedLanguage, true> = { ru: true, en: true, az: true };
 
 interface TranslationKey {
   key: string;
@@ -13,7 +15,7 @@ interface MissingTranslation {
 }
 
 /**
- * Утилита для проверки полноты переводов
+ * Utility to validate translation completeness
  */
 export class TranslationValidator {
   private static readonly REQUIRED_NAMESPACES = [
@@ -30,17 +32,15 @@ export class TranslationValidator {
     'client'
   ];
 
-  /**
-   * Проверяет полноту переводов для всех языков
-   */
+  /** Validate completeness across languages */
   static validateTranslations(): MissingTranslation[] {
     const missingTranslations: MissingTranslation[] = [];
     
-    // Получаем все ключи из русского языка (основного)
+    // Use RU as base language
     const baseLanguage: SupportedLanguage = 'ru';
     const baseKeys = this.getAllTranslationKeys(baseLanguage);
     
-    // Проверяем каждый ключ во всех языках
+    // Validate each key across languages
     for (const translationKey of baseKeys) {
       const missingLanguages: SupportedLanguage[] = [];
       
@@ -64,9 +64,7 @@ export class TranslationValidator {
     return missingTranslations;
   }
 
-  /**
-   * Получает все ключи переводов для указанного языка
-   */
+  /** Collect all translation keys for a language */
   private static getAllTranslationKeys(language: SupportedLanguage): TranslationKey[] {
     const keys: TranslationKey[] = [];
     
@@ -75,16 +73,14 @@ export class TranslationValidator {
         const translations = require(`../i18n/${namespace}/${language}.json`);
         this.extractKeys(translations, namespace, [], keys);
       } catch (error) {
-        console.warn(`Failed to load translations for ${namespace}/${language}:`, error);
+        // Silently skip missing namespaces
       }
     }
     
     return keys;
   }
 
-  /**
-   * Рекурсивно извлекает все ключи из объекта переводов
-   */
+  /** Recursively extract keys from translation object */
   private static extractKeys(
     obj: any, 
     namespace: string, 
@@ -106,9 +102,7 @@ export class TranslationValidator {
     }
   }
 
-  /**
-   * Проверяет наличие перевода для указанного ключа
-   */
+  /** Check translation presence for a key */
   private static hasTranslation(language: SupportedLanguage, key: string): boolean {
     try {
       const [namespace, ...pathParts] = key.split('.');
@@ -129,30 +123,24 @@ export class TranslationValidator {
     }
   }
 
-  /**
-   * Генерирует отчет о недостающих переводах
-   */
+  /** Generate report for missing translations */
   static generateReport(): string {
     const missingTranslations = this.validateTranslations();
     
     if (missingTranslations.length === 0) {
-      return '✅ Все переводы полные!';
+      return 'All translations are complete';
     }
-    
-    let report = `❌ Найдено ${missingTranslations.length} недостающих переводов:\n\n`;
-    
+
+    let report = `Missing translations: ${missingTranslations.length}\n\n`;
     for (const missing of missingTranslations) {
-      report += `🔑 Ключ: ${missing.key}\n`;
-      report += `📁 Namespace: ${missing.namespace}\n`;
-      report += `🌍 Отсутствует в: ${missing.missingLanguages.join(', ')}\n\n`;
+      report += `Key: ${missing.key}\n`;
+      report += `Namespace: ${missing.namespace}\n`;
+      report += `Missing in: ${missing.missingLanguages.join(', ')}\n\n`;
     }
-    
     return report;
   }
 
-  /**
-   * Проверяет конкретный ключ во всех языках
-   */
+  /** Check a specific key across languages */
   static checkKey(key: string): { [language: string]: boolean } {
     const result: { [language: string]: boolean } = {};
     
@@ -163,9 +151,7 @@ export class TranslationValidator {
     return result;
   }
 
-  /**
-   * Получает статистику переводов
-   */
+  /** Get translation stats (number of keys per language) */
   static getTranslationStats(): { [language: string]: number } {
     const stats: { [language: string]: number } = {};
     

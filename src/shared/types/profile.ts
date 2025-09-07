@@ -1,3 +1,6 @@
+/**
+ * Profile domain types
+ */
 export interface ProfileFormData {
   firstName: string;
   lastName: string;
@@ -6,16 +9,25 @@ export interface ProfileFormData {
   birthDate: string;
 }
 
+/**
+ * Profile actions exposed to UI components.
+ */
 export interface ProfileChangeHandler {
   changeRole?: (role: 'client' | 'driver') => void;
 }
 
+/**
+ * Navigation/context helpers used in profile flows.
+ */
 export interface ProfileNavigation {
   navigation: any;
   login: (email: string, password: string) => Promise<boolean>;
   t: (key: string) => string;
 }
 
+/**
+ * Helper service for profile-specific operations.
+ */
 export interface ProfileHelpersService {
   getDefaultDate(): string;
   calculateAge(birthDate: string): number;
@@ -24,7 +36,7 @@ export interface ProfileHelpersService {
     navigation: any,
     login: (email: string, password: string) => Promise<boolean>,
     t: (key: string) => string,
-    changeRole?: (role: 'client' | 'driver') => void,
-    targetRole: 'client' | 'driver'
+    targetRole: 'client' | 'driver',
+    changeRole?: (role: 'client' | 'driver') => void
   ): void;
 }

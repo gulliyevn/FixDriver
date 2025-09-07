@@ -9,7 +9,7 @@ import { colors } from '../../../constants/colors';
 import Select from '../../../components/Select';
 import PhotoUpload from '../../../components/PhotoUpload';
 
-import vehicleSegments from '../../../utils/vehicleSegments.json';
+import vehicleSegments from '../../../constants/vehicleSegments.json';
 import {
   carBrands,
   carModelsByBrand,

@@ -1,4 +1,17 @@
-import { CreateOrderData, Address } from '../types';
+// Local minimal structural types to avoid tight coupling
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+interface Address extends Coordinates {}
+
+interface CreateOrderData {
+  clientId: string;
+  from: Address;
+  to: Address;
+  scheduledTime?: string;
+}
 
 /**
  * Validate order ID

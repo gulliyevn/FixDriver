@@ -1,10 +1,24 @@
+/**
+ * Chat domain types
+ */
+
+/**
+ * Allowed message authors.
+ */
+export type MessageSender = 'client' | 'driver';
+
+/**
+ * Allowed message content types.
+ */
+export type MessageType = 'text' | 'image' | 'file' | 'location';
+
 export interface Message {
   id: string;
   chatId: string;
   senderId: string;
-  senderType: 'client' | 'driver';
+  senderType: MessageSender;
   content: string;
-  type: 'text' | 'image' | 'file' | 'location';
+  type: MessageType;
   timestamp: string;
   isRead: boolean;
   metadata?: {
@@ -50,7 +64,7 @@ export interface ChatPreview {
 export interface SendMessageRequest {
   chatId: string;
   content: string;
-  type: 'text' | 'image' | 'file' | 'location';
+  type: MessageType;
   metadata?: Message['metadata'];
 }
 
