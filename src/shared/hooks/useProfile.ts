@@ -1,132 +1,82 @@
-import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockUsers } from '../mocks/users';
-import { AvatarService } from '../services/AvatarService';
-import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import { useState, useEffect, useCallback } from 'react';
+import { profileOperations, UserProfile } from '../../domain/usecases/profile/profileOperations';
+import { PROFILE_CONSTANTS } from '../constants/profileConstants';
 
-export interface UserProfile {
-  id: string;
-  name: string;
-  surname: string;
-  phone: string;
-  email: string;
-  birthDate: string;
-  rating: number;
-  address: string;
-  createdAt: string;
-  role: string;
-  avatar?: string;
-}
-
+/**
+ * Hook for managing user profile
+ * Provides comprehensive profile management functionality
+ */
 export const useProfile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // Получаем ключ с изоляцией по пользователю
-  const profileKey = useUserStorageKey(STORAGE_KEYS.USER_PROFILE);
 
-  const loadProfile = async () => {
+  /**
+   * Load profile
+   */
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // Сначала пытаемся загрузить сохраненные данные
-      const savedProfile = await AsyncStorage.getItem(profileKey);
+      // First try to load saved data
+      const savedProfile = await profileOperations.loadProfileFromStorage();
       
       if (savedProfile) {
-        const parsedProfile = JSON.parse(savedProfile);
-        
-        // Загружаем аватар из нового сервиса
-        const avatarUri = await AvatarService.loadAvatar();
-        if (avatarUri) {
-          parsedProfile.avatar = avatarUri;
-        }
-        
-        setProfile(parsedProfile);
+        setProfile(savedProfile);
         setLoading(false);
         return;
       }
       
-      // Если сохраненных данных нет, загружаем из моков
-      const user = mockUsers[0];
+      // If no saved data, create initial profile from mock data
+      const userProfile = await profileOperations.createInitialProfile();
       
-      // Загружаем аватар из нового сервиса
-      const avatarUri = await AvatarService.loadAvatar();
-      
-      const userProfile: UserProfile = {
-        id: user.id,
-        name: user.name,
-        surname: user.surname,
-        phone: user.phone,
-        email: user.email,
-        birthDate: '1990-01-01',
-        rating: user.rating,
-        address: user.address,
-        createdAt: user.createdAt,
-        role: user.role,
-        avatar: avatarUri || user.avatar,
-      };
-      
-      // Сохраняем начальные данные
-      await AsyncStorage.setItem(profileKey, JSON.stringify(userProfile));
+      // Save initial data
+      await profileOperations.saveProfileToStorage(userProfile);
       setProfile(userProfile);
     } catch (err) {
-      setError('Не удалось загрузить профиль');
+      setError(PROFILE_CONSTANTS.ERROR_MESSAGES.LOAD_FAILED);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateProfile = async (updatedData: Partial<UserProfile>) => {
+  /**
+   * Update profile
+   */
+  const updateProfile = useCallback(async (updatedData: Partial<UserProfile>) => {
     try {
       setError(null);
       
-      // Обновляем локальное состояние
       if (profile) {
-        const updatedProfile = {
-          ...profile,
-          ...updatedData
-        };
-        
-        // Сохраняем в AsyncStorage
-        await AsyncStorage.setItem(profileKey, JSON.stringify(updatedProfile));
-        
-        // Обновляем состояние
+        const updatedProfile = await profileOperations.updateProfile(profile, updatedData);
         setProfile(updatedProfile);
-        
-        // Обновляем данные в моках для совместимости
-        const user = mockUsers[0];
-        if (updatedData.name !== undefined) user.name = updatedData.name;
-        if (updatedData.surname !== undefined) user.surname = updatedData.surname;
-        if (updatedData.phone !== undefined) user.phone = updatedData.phone;
-        if (updatedData.email !== undefined) user.email = updatedData.email;
-        if (updatedData.birthDate !== undefined) user.birthDate = updatedData.birthDate;
-        if (updatedData.avatar !== undefined) user.avatar = updatedData.avatar;
-        
         return true;
       } else {
         return false;
       }
     } catch (err) {
-      setError('Не удалось обновить профиль');
+      setError(PROFILE_CONSTANTS.ERROR_MESSAGES.UPDATE_FAILED);
       return false;
     }
-  };
+  }, [profile]);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const clearProfile = async () => {
+  /**
+   * Clear profile
+   */
+  const clearProfile = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem(profileKey);
-      await AvatarService.deleteAvatar();
+      await profileOperations.clearProfile();
       setProfile(null);
     } catch (err) {
-      // Ошибка при очистке профиля
+      // Error clearing profile
     }
-  };
+  }, []);
+
+  // Load profile on mount
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   return {
     profile,

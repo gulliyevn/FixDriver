@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useTheme } from '../../../context/ThemeContext';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
-import { createOrdersMapScreenStyles } from '../../../styles/screens/OrdersMapScreen.styles';
+import { createOrdersMapScreenStyles } from '../../../../shared/styles/screens/OrdersMapScreen.styles';
 import MapViewComponent from '../../../components/MapView';
 
 // Импорты из новой структуры
@@ -13,8 +13,8 @@ import { useMapSettings } from './hooks/useMapSettings';
 import MapControlsComponent from './components/MapControls';
 import ReportModal from './components/ReportModal';
 import SimpleDialog from './components/SimpleDialog';
-import ShareRouteService from '../../../services/ShareRouteService';
-import ClientTripShareService from '../../../services/ClientTripShareService';
+import ShareRouteService from '../../../../data/datasources/ShareRouteService';
+import ClientTripShareService from '../../../../data/datasources/ClientTripShareService';
 
 const OrdersMapScreen: React.FC = () => {
   const { isDark } = useTheme();

@@ -104,7 +104,7 @@ export const truncate = (text: string, maxLength: number): string => {
  * Format balance to show exactly 2 decimal places
  */
 export const formatBalance = (balance: number): string => {
-  // Строго 2 цифры после запятой
+  // Strictly 2 digits after decimal point
   return Number(balance || 0).toFixed(2);
 }; 
 

@@ -1,40 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   DriverVehicle,
-  VehicleFormData,
-  VehicleFormErrors,
   CreateVehicleRequest,
   UpdateVehicleRequest,
 } from '../../types/driver/DriverVehicle';
 import { useI18n } from '../useI18n';
-import { mockDriverVehicles } from '../../mocks/driverVehiclesMock';
+import { useVehicleValidation } from './useVehicleValidation';
+import { vehicleOperations } from '../../../domain/usecases/driver/vehicleOperations';
+import { VEHICLE_CONSTANTS } from '../../constants/vehicleConstants';
 
+/**
+ * Main hook for driver vehicles management
+ */
 export const useDriverVehicles = () => {
   const [vehicles, setVehicles] = useState<DriverVehicle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentVehicle, setCurrentVehicle] = useState<DriverVehicle | null>(null);
+  
   const { t } = useI18n();
+  const { validateVehicleForm } = useVehicleValidation();
 
-  // Загрузка списка автомобилей
+  // Load vehicles list
   const loadVehicles = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Пытаемся загрузить из AsyncStorage
-      const storedVehicles = await AsyncStorage.getItem('driver_vehicles');
-      
-      if (storedVehicles) {
-        // Если есть сохраненные данные, используем их
-        setVehicles(JSON.parse(storedVehicles));
-      } else {
-        // Если нет сохраненных данных, используем мок-данные
-        setVehicles(mockDriverVehicles);
-        // Сохраняем мок-данные в AsyncStorage
-        await AsyncStorage.setItem('driver_vehicles', JSON.stringify(mockDriverVehicles));
-      }
+      const loadedVehicles = await vehicleOperations.loadVehicles();
+      setVehicles(loadedVehicles);
     } catch (err) {
       setError(t('profile.vehicles.loadError'));
     } finally {
@@ -42,15 +36,15 @@ export const useDriverVehicles = () => {
     }
   }, [t]);
 
-  // Загрузка конкретного автомобиля
+  // Load specific vehicle
   const loadVehicle = useCallback(async (vehicleId: string) => {
     setLoading(true);
     setError(null);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, VEHICLE_CONSTANTS.TIMEOUTS.LOAD_VEHICLE));
       
-      const vehicle = mockDriverVehicles.find(v => v.id === vehicleId);
+      const vehicle = vehicles.find(v => v.id === vehicleId);
       if (vehicle) {
         setCurrentVehicle(vehicle);
         return vehicle;
@@ -64,30 +58,16 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, vehicles]);
 
-  // Создание нового автомобиля
+  // Create new vehicle
   const createVehicle = useCallback(async (vehicleData: CreateVehicleRequest) => {
     setLoading(true);
     setError(null);
     
     try {
-      const newVehicle: DriverVehicle = {
-        id: Date.now().toString(),
-        driverId: 'driver-1',
-        ...vehicleData,
-        isActive: true,
-        isVerified: false, // Новые автомобили по умолчанию не верифицированы
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      
-      const updatedVehicles = [...vehicles, newVehicle];
-      setVehicles(updatedVehicles);
-      
-      // Сохраняем в AsyncStorage
-      await AsyncStorage.setItem('driver_vehicles', JSON.stringify(updatedVehicles));
-      
+      const newVehicle = await vehicleOperations.createVehicle(vehicleData, vehicles);
+      setVehicles(prev => [...prev, newVehicle]);
       return newVehicle;
     } catch (err) {
       setError(t('profile.vehicles.createError'));
@@ -97,31 +77,23 @@ export const useDriverVehicles = () => {
     }
   }, [t, vehicles]);
 
-  // Обновление автомобиля
+  // Update vehicle
   const updateVehicle = useCallback(async (vehicleData: UpdateVehicleRequest) => {
     setLoading(true);
     setError(null);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, VEHICLE_CONSTANTS.TIMEOUTS.UPDATE_VEHICLE));
       
-      const updatedVehicle: DriverVehicle = {
-        ...vehicleData,
-        driverId: 'driver-1',
-        isActive: true,
-        isVerified: false, // При обновлении сбрасываем верификацию
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      const updatedVehicle = await vehicleOperations.updateVehicle(vehicleData, vehicles);
+      setVehicles(prev => prev.map(vehicle => 
+        vehicle.id === vehicleData.id ? updatedVehicle : vehicle
+      ));
       
-      setVehicles(prev => 
-        prev.map(vehicle => 
-          vehicle.id === vehicleData.id ? updatedVehicle : vehicle
-        )
-      );
       if (currentVehicle?.id === vehicleData.id) {
         setCurrentVehicle(updatedVehicle);
       }
+      
       return updatedVehicle;
     } catch (err) {
       setError(t('profile.vehicles.updateError'));
@@ -129,23 +101,20 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t, currentVehicle]);
+  }, [t, vehicles, currentVehicle]);
 
-  // Удаление автомобиля
+  // Delete vehicle
   const deleteVehicle = useCallback(async (vehicleId: string) => {
     setLoading(true);
     setError(null);
     
     try {
-      const updatedVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
+      const updatedVehicles = await vehicleOperations.deleteVehicle(vehicleId, vehicles);
       setVehicles(updatedVehicles);
       
       if (currentVehicle?.id === vehicleId) {
         setCurrentVehicle(null);
       }
-      
-      // Сохраняем в AsyncStorage
-      await AsyncStorage.setItem('driver_vehicles', JSON.stringify(updatedVehicles));
       
       return true;
     } catch (err) {
@@ -154,24 +123,23 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t, currentVehicle, vehicles]);
+  }, [t, vehicles, currentVehicle]);
 
-  // Активация/деактивация автомобиля
+  // Activate/deactivate vehicle
   const toggleVehicleActive = useCallback(async (vehicleId: string, isActive: boolean) => {
     setLoading(true);
     setError(null);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, VEHICLE_CONSTANTS.TIMEOUTS.TOGGLE_VEHICLE));
       
-      setVehicles(prev => 
-        prev.map(vehicle => 
-          vehicle.id === vehicleId ? { ...vehicle, isActive } : vehicle
-        )
-      );
+      const updatedVehicles = await vehicleOperations.toggleVehicleActive(vehicleId, isActive, vehicles);
+      setVehicles(updatedVehicles);
+      
       if (currentVehicle?.id === vehicleId) {
         setCurrentVehicle({ ...currentVehicle, isActive });
       }
+      
       return currentVehicle;
     } catch (err) {
       setError(t('profile.vehicles.toggleError'));
@@ -179,26 +147,22 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t, currentVehicle]);
+  }, [t, vehicles, currentVehicle]);
 
-  // Загрузка фото техпаспорта
-  const uploadPassportPhoto = useCallback(async (vehicleId: string, photoFile: File) => {
+  // Upload passport photo
+  const handleUploadPassportPhoto = useCallback(async (vehicleId: string, photoFile: File) => {
     setLoading(true);
     setError(null);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       const photoUrl = URL.createObjectURL(photoFile);
+      const updatedVehicles = await vehicleOperations.uploadPassportPhoto(vehicleId, photoUrl, vehicles);
+      setVehicles(updatedVehicles);
       
-      setVehicles(prev => 
-        prev.map(vehicle => 
-          vehicle.id === vehicleId ? { ...vehicle, passportPhoto: photoUrl } : vehicle
-        )
-      );
       if (currentVehicle?.id === vehicleId) {
         setCurrentVehicle({ ...currentVehicle, passportPhoto: photoUrl });
       }
+      
       return currentVehicle;
     } catch (err) {
       setError(t('profile.vehicles.photoUploadError'));
@@ -206,74 +170,43 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t, currentVehicle]);
+  }, [t, vehicles, currentVehicle]);
 
-  // Валидация формы автомобиля
-  const validateVehicleForm = useCallback((formData: VehicleFormData): VehicleFormErrors => {
-    const errors: VehicleFormErrors = {};
-
-    if (!formData.vehicleNumber?.trim()) {
-      errors.vehicleNumber = t('profile.vehicles.vehicleNumberRequired');
-    }
-
-    if (!formData.tariff?.trim()) {
-      errors.tariff = t('profile.vehicles.tariffRequired');
-    }
-
-    if (!formData.carBrand?.trim()) {
-      errors.carBrand = t('profile.vehicles.carBrandRequired');
-    }
-
-    if (!formData.carModel?.trim()) {
-      errors.carModel = t('profile.vehicles.carModelRequired');
-    }
-
-    if (!formData.carYear?.trim()) {
-      errors.carYear = t('profile.vehicles.carYearRequired');
-    }
-
-    if (!formData.carMileage?.trim()) {
-      errors.carMileage = t('profile.vehicles.carMileageRequired');
-    }
-
-    return errors;
-  }, [t]);
-
-  // Получение активного автомобиля
+  // Get active vehicle
   const getActiveVehicle = useCallback(() => {
     return vehicles.find(vehicle => vehicle.isActive) || null;
   }, [vehicles]);
 
-  // Очистка ошибки
+  // Clear error
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  // Очистка текущего автомобиля
+  // Clear current vehicle
   const clearCurrentVehicle = useCallback(() => {
     setCurrentVehicle(null);
   }, []);
 
-  // Загрузка автомобилей при монтировании
+  // Load vehicles on mount
   useEffect(() => {
     loadVehicles();
   }, [loadVehicles]);
 
   return {
-    // Состояние
+    // State
     vehicles,
     loading,
     error,
     currentVehicle,
     
-    // Методы
+    // Methods
     loadVehicles,
     loadVehicle,
     createVehicle,
     updateVehicle,
     deleteVehicle,
     toggleVehicleActive,
-    uploadPassportPhoto,
+    uploadPassportPhoto: handleUploadPassportPhoto,
     validateVehicleForm,
     getActiveVehicle,
     clearError,

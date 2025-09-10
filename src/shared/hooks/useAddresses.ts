@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Address } from '../mocks/residenceMock';
-import { addressService, CreateAddressRequest, UpdateAddressRequest } from '../services/addressService';
+import { ADDRESS_CONSTANTS } from '../constants/addressConstants';
+import { addressOperations } from '../../domain/usecases/address/addressOperations';
 
 interface UseAddressesReturn {
   addresses: Address[];
   loading: boolean;
   error: string | null;
   refreshAddresses: () => Promise<void>;
-  addAddress: (addressData: CreateAddressRequest) => Promise<boolean>;
-  updateAddress: (id: string, updates: UpdateAddressRequest) => Promise<boolean>;
+  addAddress: (addressData: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>) => Promise<boolean>;
+  updateAddress: (id: string, updates: Partial<Address>) => Promise<boolean>;
   deleteAddress: (id: string) => Promise<boolean>;
   setDefaultAddress: (id: string) => Promise<boolean>;
 }
@@ -23,16 +24,10 @@ export const useAddresses = (): UseAddressesReturn => {
     setError(null);
     
     try {
-      // TODO: Заменить на реальный API вызов
-      // const loadedAddresses = await addressService.getAddresses();
-      
-      // Временно используем моки
-      const { getAddresses } = await import('../mocks/residenceMock');
-      const loadedAddresses = await getAddresses() || [];
-      
+      const loadedAddresses = await addressOperations.getAddresses();
       setAddresses(loadedAddresses);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось загрузить адреса';
+      const errorMessage = err instanceof Error ? err.message : ADDRESS_CONSTANTS.ERROR_MESSAGES.LOAD_FAILED;
       setError(errorMessage);
 
     } finally {
@@ -44,43 +39,35 @@ export const useAddresses = (): UseAddressesReturn => {
     await loadAddresses();
   }, [loadAddresses]);
 
-  const addAddress = useCallback(async (addressData: CreateAddressRequest): Promise<boolean> => {
+  const addAddress = useCallback(async (addressData: Omit<Address, 'id' | 'createdAt' | 'updatedAt'>): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const newAddress = await addressService.createAddress(addressData);
+      const newAddress = await addressOperations.createAddress(addressData);
       
-      // Временно используем моки
-      const { addAddress: mockAddAddress } = await import('../mocks/residenceMock');
-      const newAddress = await mockAddAddress(addressData);
-      
-      setAddresses(prev => [...prev, newAddress]);
-      return true;
+      if (newAddress) {
+        setAddresses(prev => [...prev, newAddress]);
+        return true;
+      }
+      return false;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось добавить адрес';
+      const errorMessage = err instanceof Error ? err.message : ADDRESS_CONSTANTS.ERROR_MESSAGES.ADD_FAILED;
 
       return false;
     }
   }, []);
 
-  const updateAddress = useCallback(async (id: string, updates: UpdateAddressRequest): Promise<boolean> => {
+  const updateAddress = useCallback(async (id: string, updates: Partial<Address>): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const updatedAddress = await addressService.updateAddress(id, updates);
-      
-      // Временно используем моки
-      const { updateAddress: mockUpdateAddress } = await import('../mocks/residenceMock');
-      const updatedAddress = await mockUpdateAddress(id, updates);
+      const updatedAddress = await addressOperations.updateAddress(id, updates);
       
       if (updatedAddress) {
         setAddresses(prev => 
           prev.map(addr => addr.id === id ? updatedAddress : addr)
         );
         return true;
-      } else {
-        return false;
       }
+      return false;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось обновить адрес';
+      const errorMessage = err instanceof Error ? err.message : ADDRESS_CONSTANTS.ERROR_MESSAGES.UPDATE_FAILED;
 
       return false;
     }
@@ -88,21 +75,15 @@ export const useAddresses = (): UseAddressesReturn => {
 
   const deleteAddress = useCallback(async (id: string): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const success = await addressService.deleteAddress(id);
-      
-      // Временно используем моки
-      const { deleteAddress: mockDeleteAddress } = await import('../mocks/residenceMock');
-      const success = await mockDeleteAddress(id);
+      const success = await addressOperations.deleteAddress(id);
       
       if (success) {
         setAddresses(prev => prev.filter(addr => addr.id !== id));
         return true;
-      } else {
-        return false;
       }
+      return false;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось удалить адрес';
+      const errorMessage = err instanceof Error ? err.message : ADDRESS_CONSTANTS.ERROR_MESSAGES.DELETE_FAILED;
 
       return false;
     }
@@ -110,19 +91,14 @@ export const useAddresses = (): UseAddressesReturn => {
 
   const setDefaultAddress = useCallback(async (id: string): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const success = await addressService.setDefaultAddress(id);
-      
-      // Временно используем моки
-      const { setDefaultAddress: mockSetDefault } = await import('../mocks/residenceMock');
-      const success = await mockSetDefault(id);
+      const success = await addressOperations.setDefaultAddress(id);
       
       if (success) {
-        // Находим адрес, который устанавливаем как дефолтный
+        // Find the address we're setting as default
         const targetAddress = addresses.find(addr => addr.id === id);
         if (!targetAddress) return false;
         
-        // Обновляем состояние локально - сбрасываем isDefault только для адресов той же категории
+        // Update state locally - reset isDefault only for addresses of the same category
         setAddresses(prev => 
           prev.map(addr => ({
             ...addr,
@@ -130,17 +106,16 @@ export const useAddresses = (): UseAddressesReturn => {
           }))
         );
         return true;
-      } else {
-        return false;
       }
+      return false;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось установить адрес по умолчанию';
+      const errorMessage = err instanceof Error ? err.message : ADDRESS_CONSTANTS.ERROR_MESSAGES.SET_DEFAULT_FAILED;
 
       return false;
     }
   }, [addresses]);
 
-  // Загружаем адреса при монтировании компонента
+  // Load addresses when component mounts
   useEffect(() => {
     loadAddresses();
   }, [loadAddresses]);

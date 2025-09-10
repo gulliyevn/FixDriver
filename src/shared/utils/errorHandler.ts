@@ -27,14 +27,14 @@ export class ErrorHandler implements ErrorHandlerService {
    * Handle API error
    */
   handleAPIError(error: unknown): AppError {
-    // Если это уже наша ошибка
+    // If this is already our error
     if (ErrorHandler.isAppError(error)) {
       return error;
     }
 
     const extendedError = error as ExtendedError;
 
-    // Обработка HTTP ошибок
+    // Handle HTTP errors
     if (extendedError.status) {
       switch (extendedError.status) {
         case 400:
@@ -92,7 +92,7 @@ export class ErrorHandler implements ErrorHandlerService {
       }
     }
 
-    // Обработка сетевых ошибок
+    // Handle network errors
     if (extendedError.message) {
       if (extendedError.message.includes('Network request failed')) {
         return this.createError(
@@ -114,7 +114,7 @@ export class ErrorHandler implements ErrorHandlerService {
       }
     }
 
-    // Общая ошибка
+    // General error
     return this.createError('UNKNOWN_ERROR', 'Unexpected error', extendedError.message || 'Unknown error', true);
   }
 
@@ -129,7 +129,7 @@ export class ErrorHandler implements ErrorHandlerService {
     const extendedError = error as ExtendedError;
     const message = extendedError.message || '';
 
-    // Обработка специфичных ошибок аутентификации
+    // Handle specific authentication errors
     if (message.includes('Invalid credentials') || message.includes('Wrong password')) {
       return this.createError(AuthErrorCode.INVALID_CREDENTIALS, 'Invalid email or password', 'Check entered data', false, 'check');
     }
@@ -154,7 +154,7 @@ export class ErrorHandler implements ErrorHandlerService {
       return this.createError(AuthErrorCode.PHONE_ALREADY_EXISTS, 'Phone already exists', 'Login or reset password', false, 'login');
     }
 
-    // Общая ошибка аутентификации
+    // General authentication error
     return this.createError('AUTH_ERROR', 'Authentication error', message, true);
   }
 
@@ -211,7 +211,7 @@ export class ErrorHandler implements ErrorHandlerService {
   }
 
   createAppError(error: unknown): AppError {
-    // Проверяем, является ли ошибка объектом с кодом и сообщением
+    // Check if error is an object with code and message
     if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
       const errorObj = error as { code: string; message: string };
       return {
@@ -220,7 +220,7 @@ export class ErrorHandler implements ErrorHandlerService {
       };
     }
 
-    // Проверяем, является ли ошибка объектом со статусом
+    // Check if error is an object with status
     if (error && typeof error === 'object' && 'status' in error) {
       const errorObj = error as { status: number; message?: string };
       switch (errorObj.status) {
@@ -239,7 +239,7 @@ export class ErrorHandler implements ErrorHandlerService {
       }
     }
 
-    // Проверяем, является ли ошибка строкой или объектом с сообщением
+    // Check if error is a string or object with message
     if (error && typeof error === 'object' && 'message' in error) {
       const errorObj = error as { message: string };
       if (errorObj.message.includes('Network request failed')) {
@@ -250,29 +250,29 @@ export class ErrorHandler implements ErrorHandlerService {
       }
     }
 
-    // Обрабатываем строковые ошибки
+    // Handle string errors
     if (typeof error === 'string') {
       return { code: 'GENERAL_ERROR', message: error };
     }
 
-    // Обрабатываем объекты с сообщением
+    // Handle objects with message
     if (error && typeof error === 'object' && 'message' in error) {
       const errorObj = error as { message: string };
       return { code: 'GENERAL_ERROR', message: errorObj.message || 'Unknown error' };
     }
 
-    // Обрабатываем объекты с кодом и сообщением
+    // Handle objects with code and message
     if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
       const errorObj = error as { code: string; message: string };
       return { code: errorObj.code, message: errorObj.message || '' };
     }
 
-    // Fallback для неизвестных ошибок
+    // Fallback for unknown errors
     return { code: 'UNKNOWN_ERROR', message: 'Unknown error' };
   }
 
   /**
-   * Проверяет, является ли ошибка AppError
+   * Check if error is AppError
    */
   private static isAppError(error: unknown): error is AppError {
     return (

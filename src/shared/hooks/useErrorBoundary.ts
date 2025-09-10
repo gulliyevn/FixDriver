@@ -14,7 +14,7 @@ export const useErrorBoundary = () => {
   });
 
   const handleError = useCallback((error: Error, errorInfo?: any) => {
-    console.error('[ErrorBoundary] Ошибка:', error, errorInfo);
+    console.error('[ErrorBoundary] Error:', error, errorInfo);
     
     setErrorState({
       hasError: true,
@@ -22,7 +22,7 @@ export const useErrorBoundary = () => {
       errorInfo,
     });
 
-    // Отправляем ошибку в систему мониторинга (если есть)
+    // Send error to monitoring system (if available)
     if (__DEV__) {
       console.group('Error Details');
       console.error('Error:', error);
@@ -40,7 +40,7 @@ export const useErrorBoundary = () => {
     });
   }, []);
 
-  // Автоматический сброс ошибки при изменении зависимостей
+  // Automatic error reset on dependency change
   const resetErrorOnDependencyChange = useCallback((dependencies: any[]) => {
     useEffect(() => {
       if (errorState.hasError) {

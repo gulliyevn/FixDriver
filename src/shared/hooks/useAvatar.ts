@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
-import { AvatarService } from '../services/AvatarService';
 import { useI18n } from './useI18n';
+import { avatarOperations } from '../../domain/usecases/avatar/avatarOperations';
 
 export const useAvatar = () => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { t } = useI18n();
 
-  // Загружаем аватар при инициализации
+  // Load avatar on initialization
   useEffect(() => {
     loadAvatar();
   }, []);
@@ -16,7 +16,7 @@ export const useAvatar = () => {
   const loadAvatar = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await AvatarService.loadAvatar();
+      const uri = await avatarOperations.loadAvatar();
       setAvatarUri(uri);
     } catch (error) {
       console.error('Error loading avatar:', error);
@@ -28,10 +28,10 @@ export const useAvatar = () => {
   const takePhoto = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await AvatarService.takePhoto();
+      const uri = await avatarOperations.takePhoto();
       
       if (uri) {
-        const success = await AvatarService.saveAvatar(uri);
+        const success = await avatarOperations.saveAvatar(uri);
         if (success) {
           setAvatarUri(uri);
           Alert.alert(
@@ -59,10 +59,10 @@ export const useAvatar = () => {
   const pickFromGallery = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await AvatarService.pickFromGallery();
+      const uri = await avatarOperations.pickFromGallery();
       
       if (uri) {
-        const success = await AvatarService.saveAvatar(uri);
+        const success = await avatarOperations.saveAvatar(uri);
         if (success) {
           setAvatarUri(uri);
           Alert.alert(
@@ -91,7 +91,7 @@ export const useAvatar = () => {
     const confirmDelete = async () => {
       try {
         setLoading(true);
-        const success = await AvatarService.deleteAvatar();
+        const success = await avatarOperations.deleteAvatar();
         if (success) {
           setAvatarUri(null);
           Alert.alert(

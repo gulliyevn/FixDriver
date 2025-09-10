@@ -1,26 +1,31 @@
 import { useEffect, useRef } from 'react';
-import { fixwaveOrderService } from '../services/fixwaveOrderService';
+import { fixdriveOrderService } from '../../data/datasources/fixdriveOrder';
+import { SESSION_CONSTANTS } from '../constants/sessionConstants';
 
+/**
+ * Hook for session cleanup management
+ * Provides automatic and manual session cleanup functionality
+ */
 export const useSessionCleanup = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Функция для проверки и очистки устаревшей сессии
+    // Function to check and clear expired session
     const checkAndClearSession = async () => {
       try {
-        await fixwaveOrderService.checkAndClearExpiredSession();
+        await fixdriveOrderService.checkAndClearExpiredSession();
       } catch (error) {
         console.error('Error in session cleanup:', error);
       }
     };
 
-    // Проверяем сразу при запуске
+    // Check immediately on startup
     checkAndClearSession();
 
-    // Устанавливаем интервал для проверки каждые 5 минут
-    intervalRef.current = setInterval(checkAndClearSession, 5 * 60 * 1000);
+    // Set interval to check every 5 minutes
+    intervalRef.current = setInterval(checkAndClearSession, SESSION_CONSTANTS.INTERVALS.CLEANUP_CHECK);
 
-    // Очистка при размонтировании
+    // Cleanup on unmount
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -28,10 +33,12 @@ export const useSessionCleanup = () => {
     };
   }, []);
 
-  // Функция для принудительной очистки сессии
+  /**
+   * Function for forced session cleanup
+   */
   const forceClearSession = async () => {
     try {
-      await fixwaveOrderService.clearSessionData();
+      await fixdriveOrderService.clearSessionData();
       console.log('Session forcefully cleared');
     } catch (error) {
       console.error('Error forcefully clearing session:', error);

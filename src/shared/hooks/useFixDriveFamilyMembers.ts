@@ -1,150 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFamilyMembersByClientId } from '../mocks/familyMembers';
-import { FamilyMember } from '../types/family';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../../presentation/context/AuthContext';
 import { useProfile } from './useProfile';
 import { useFocusEffect } from '@react-navigation/native';
+import { fixDriveFamilyOperations } from '../../domain/usecases/family/fixDriveFamilyOperations';
+import { FamilyMember } from '../types/family';
 
+/**
+ * Hook for managing family members in FixDrive context
+ * Provides family members with account owner included for FixDrive orders
+ */
 export const useFixDriveFamilyMembers = () => {
   const { user } = useAuth();
   const { profile } = useProfile();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Load family members with account owner
+   */
+  const loadFamilyMembers = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      // Load data directly from AsyncStorage
+      const members = await fixDriveFamilyOperations.loadFamilyMembersFromStorage();
+      
+      // Create account owner as family member
+      const accountOwner = fixDriveFamilyOperations.createAccountOwner(profile, user);
+      
+      // Combine account owner with family members
+      const allMembers = fixDriveFamilyOperations.combineAccountOwnerWithMembers(accountOwner, members);
+      
+      setFamilyMembers(allMembers);
+    } catch (error) {
+      console.error('Error loading family members for FixDrive:', error);
+      setFamilyMembers([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, profile]);
+
+  // Load data on mount
   useEffect(() => {
-    const loadFamilyMembers = async () => {
-      try {
-        setLoading(true);
-        
-        // Загружаем данные напрямую из AsyncStorage
-        const savedMembers = await AsyncStorage.getItem('family_members');
-        
-        let members: FamilyMember[] = [];
-        
-        if (savedMembers) {
-          members = JSON.parse(savedMembers);
-        }
-        
-        // Создаем владельца аккаунта как участника семьи
-        const accountOwner: FamilyMember = {
-          id: 'account-owner',
-          name: profile?.name || user?.name || 'Пользователь',
-          surname: profile?.surname || user?.surname || '',
-          type: 'account_owner',
-          birthDate: profile?.birthDate || '1990-01-01',
-          age: profile?.age || 30,
-          phone: profile?.phone || user?.phone,
-          phoneVerified: profile?.phoneVerified || false
-        };
-        
-        // Если есть добавленные участники семьи, добавляем владельца к ним
-        // Если нет - показываем только владельца
-        const allMembers = members.length > 0 
-          ? [accountOwner, ...members] 
-          : [accountOwner];
-        setFamilyMembers(allMembers);
-      } catch (error) {
-        console.error('Error loading family members for FixDrive:', error);
-        setFamilyMembers([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadFamilyMembers();
-  }, [user?.id, profile]);
+  }, [loadFamilyMembers]);
 
-  // Автоматически обновляем данные при фокусе на экране
+  // Automatically update data when screen is focused
   useFocusEffect(
     React.useCallback(() => {
-      const loadFamilyMembers = async () => {
-        try {
-          setLoading(true);
-          
-          // Загружаем данные напрямую из AsyncStorage
-          const savedMembers = await AsyncStorage.getItem('family_members');
-          
-          let members: FamilyMember[] = [];
-          
-          if (savedMembers) {
-            members = JSON.parse(savedMembers);
-          }
-          
-          // Создаем владельца аккаунта как участника семьи
-          const accountOwner: FamilyMember = {
-            id: 'account-owner',
-            name: profile?.name || user?.name || 'Пользователь',
-            surname: profile?.surname || user?.surname || '',
-            type: 'account_owner',
-            birthDate: profile?.birthDate || '1990-01-01',
-            age: profile?.age || 30,
-            phone: profile?.phone || user?.phone,
-            phoneVerified: profile?.phoneVerified || false
-          };
-          
-          // Если есть добавленные участники семьи, добавляем владельца к ним
-          // Если нет - показываем только владельца
-          const allMembers = members.length > 0 
-            ? [accountOwner, ...members] 
-            : [accountOwner];
-          setFamilyMembers(allMembers);
-        } catch (error) {
-          console.error('Error loading family members on focus:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
       loadFamilyMembers();
-    }, [user?.id, profile])
+    }, [loadFamilyMembers])
   );
 
-  // Функция для получения опций для dropdown
-  const getFamilyMemberOptions = () => {
-    return familyMembers.map(member => ({
-      key: member.id,
-      label: `${member.name} ${member.surname}`,
-      value: member.id,
-      member: member
-    }));
-  };
+  /**
+   * Get family member options for dropdown
+   */
+  const getFamilyMemberOptions = useCallback(() => {
+    return fixDriveFamilyOperations.createFamilyMemberOptions(familyMembers);
+  }, [familyMembers]);
 
-  // Функция для получения участника по ID
-  const getFamilyMemberById = (id: string) => {
-    return familyMembers.find(member => member.id === id);
-  };
+  /**
+   * Get family member by ID
+   */
+  const getFamilyMemberById = useCallback((id: string) => {
+    return fixDriveFamilyOperations.findFamilyMemberById(familyMembers, id);
+  }, [familyMembers]);
 
-  // Функция для принудительного обновления данных из AsyncStorage
-  const refreshFamilyMembers = async () => {
+  /**
+   * Force refresh family members from AsyncStorage
+   */
+  const refreshFamilyMembers = useCallback(async () => {
     try {
-      const savedMembers = await AsyncStorage.getItem('family_members');
+      const members = await fixDriveFamilyOperations.loadFamilyMembersFromStorage();
       
-      if (savedMembers) {
-        const parsedMembers = JSON.parse(savedMembers);
-        
-        // Создаем владельца аккаунта
-        const accountOwner: FamilyMember = {
-          id: 'account-owner',
-          name: profile?.name || user?.name || 'Пользователь',
-          surname: profile?.surname || user?.surname || '',
-          type: 'account_owner',
-          birthDate: profile?.birthDate || '1990-01-01',
-          age: profile?.age || 30,
-          phone: profile?.phone || user?.phone,
-          phoneVerified: profile?.phoneVerified || false
-        };
-        
-        const allMembers = parsedMembers.length > 0 
-          ? [accountOwner, ...parsedMembers] 
-          : [accountOwner];
-        
-        setFamilyMembers(allMembers);
-      }
+      // Create account owner
+      const accountOwner = fixDriveFamilyOperations.createAccountOwner(profile, user);
+      
+      // Combine with members
+      const allMembers = fixDriveFamilyOperations.combineAccountOwnerWithMembers(accountOwner, members);
+      
+      setFamilyMembers(allMembers);
     } catch (error) {
       console.error('Error refreshing family members:', error);
     }
-  };
+  }, [profile, user]);
 
   return {
     familyMembers,

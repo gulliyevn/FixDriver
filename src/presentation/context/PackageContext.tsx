@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useBalance } from '../hooks/useBalance';
-import { useI18n } from '../hooks/useI18n';
+import { useBalance } from '../../shared/hooks/useBalance';
+import { useI18n } from '../../shared/hooks/useI18n';
 import { Alert } from 'react-native';
 
 export type PackageType = 'free' | 'plus' | 'premium' | 'premiumPlus';
@@ -50,7 +50,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const { t } = useI18n();
   const balanceHook = useBalance();
-  const deductBalance = 'deductBalance' in balanceHook ? balanceHook.deductBalance : balanceHook.withdrawBalance;
+  const deductBalance = balanceHook.withdrawBalance;
 
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -149,7 +149,8 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         const price = getPackagePrice(newPackage, period);
         
         // Пытаемся списать средства
-        const success = await deductBalance(price, `${newPackage} package purchase`, newPackage);
+        const result = await deductBalance(price);
+        const success = result.success;
         
         if (!success) {
           // Если списание не удалось, показываем ошибку
@@ -216,7 +217,8 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const extendSubscription = async (packageType: PackageType, period: 'month' | 'year', price: number) => {
     try {
       // Сначала списываем средства
-      const success = await deductBalance(price, `${packageType} subscription extension`, packageType);
+      const result = await deductBalance(price);
+      const success = result.success;
       
       if (!success) {
         // Если списание не удалось, показываем ошибку
@@ -305,11 +307,8 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         const packageName = t(`premium.packages.${subscription.packageType}`);
         
         // Списываем средства с баланса
-        const success = await deductBalance(
-          price, 
-          t('premium.autoRenewal.transactionDescription', { packageName }), 
-          subscription.packageType
-        );
+        const result = await deductBalance(price);
+        const success = result.success;
         
         if (success) {
   
@@ -399,11 +398,8 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       const { price, packageName } = currentSubscription.pendingAutoRenewal;
       
       // Списываем средства с баланса
-      const success = await deductBalance(
-        price, 
-        t('premium.autoRenewal.transactionDescription', { packageName }), 
-        currentSubscription.packageType
-      );
+      const result = await deductBalance(price);
+      const success = result.success;
       
       if (success) {
         // Рассчитываем новую дату биллинга

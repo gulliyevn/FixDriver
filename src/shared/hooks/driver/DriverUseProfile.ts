@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { mockUsers } from '../../mocks/data/users';
-import { DriverAvatarService } from '../../services/driver/DriverAvatarService';
+import { mockUsers } from '../../mocks';
+import { driverAvatarOperations } from '../../../domain/usecases/driver/driverAvatarOperations';
+import { PROFILE_CONSTANTS } from '../../constants/profileConstants';
 
 export interface UserProfile {
   id: string;
@@ -27,14 +28,14 @@ export const useDriverProfile = () => {
       setLoading(true);
       setError(null);
       
-      // Сначала пытаемся загрузить сохраненные данные
-      const savedProfile = await AsyncStorage.getItem('driver_profile');
+      // First try to load saved data
+      const savedProfile = await AsyncStorage.getItem(PROFILE_CONSTANTS.STORAGE_KEYS.DRIVER_PROFILE);
       
       if (savedProfile) {
         const parsedProfile = JSON.parse(savedProfile);
         
-        // Загружаем аватар из нового сервиса
-        const avatarUri = await DriverAvatarService.loadAvatar();
+        // Load avatar from new service
+        const avatarUri = await driverAvatarOperations.loadAvatar();
         if (avatarUri) {
           parsedProfile.avatar = avatarUri;
         }
@@ -44,11 +45,11 @@ export const useDriverProfile = () => {
         return;
       }
       
-      // Если сохраненных данных нет, загружаем из моков
+      // If no saved data, load from mocks
       const user = mockUsers[0];
       
-      // Загружаем аватар из нового сервиса
-      const avatarUri = await DriverAvatarService.loadAvatar();
+      // Load avatar from new service
+      const avatarUri = await driverAvatarOperations.loadAvatar();
       
       const userProfile: UserProfile = {
         id: user.id,
@@ -56,7 +57,7 @@ export const useDriverProfile = () => {
         surname: user.surname,
         phone: user.phone,
         email: user.email,
-        birthDate: '1990-01-01',
+        birthDate: PROFILE_CONSTANTS.DEFAULTS.BIRTH_DATE,
         rating: user.rating,
         address: user.address,
         createdAt: user.createdAt,
@@ -64,11 +65,11 @@ export const useDriverProfile = () => {
         avatar: avatarUri || user.avatar,
       };
       
-      // Сохраняем начальные данные
-      await AsyncStorage.setItem('driver_profile', JSON.stringify(userProfile));
+      // Save initial data
+      await AsyncStorage.setItem(PROFILE_CONSTANTS.STORAGE_KEYS.DRIVER_PROFILE, JSON.stringify(userProfile));
       setProfile(userProfile);
     } catch (err) {
-      setError('Не удалось загрузить профиль');
+      setError('Failed to load profile');
     } finally {
       setLoading(false);
     }
@@ -78,20 +79,20 @@ export const useDriverProfile = () => {
     try {
       setError(null);
       
-      // Обновляем локальное состояние
+      // Update local state
       if (profile) {
         const updatedProfile = {
           ...profile,
           ...updatedData
         };
         
-        // Сохраняем в AsyncStorage
-        await AsyncStorage.setItem('driver_profile', JSON.stringify(updatedProfile));
+        // Save to AsyncStorage
+        await AsyncStorage.setItem(PROFILE_CONSTANTS.STORAGE_KEYS.DRIVER_PROFILE, JSON.stringify(updatedProfile));
         
-        // Обновляем состояние
+        // Update state
         setProfile(updatedProfile);
         
-        // Обновляем данные в моках для совместимости
+        // Update mock data for compatibility
         const user = mockUsers[0];
         if (updatedData.name !== undefined) user.name = updatedData.name;
         if (updatedData.surname !== undefined) user.surname = updatedData.surname;
@@ -105,7 +106,7 @@ export const useDriverProfile = () => {
         return false;
       }
     } catch (err) {
-      setError('Не удалось обновить профиль');
+      setError('Failed to update profile');
       return false;
     }
   };
@@ -116,11 +117,11 @@ export const useDriverProfile = () => {
 
   const clearProfile = async () => {
     try {
-      await AsyncStorage.removeItem('driver_profile');
-      await DriverAvatarService.deleteAvatar();
+      await AsyncStorage.removeItem(PROFILE_CONSTANTS.STORAGE_KEYS.DRIVER_PROFILE);
+      await driverAvatarOperations.deleteAvatar();
       setProfile(null);
     } catch (err) {
-      // Ошибка при очистке профиля
+      // Error clearing profile
     }
   };
 

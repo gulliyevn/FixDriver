@@ -1,9 +1,9 @@
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../presentation/context/AuthContext';
 import { UserRole } from '../types/user';
 
 /**
- * Хук для получения текущей роли пользователя
- * Возвращает 'driver' или 'client'
+ * Hook for getting current user role
+ * Returns 'driver' or 'client'
  */
 export const useRole = (): UserRole => {
   const { user } = useAuth();
@@ -11,7 +11,7 @@ export const useRole = (): UserRole => {
 };
 
 /**
- * Хук для получения префиксов ключей в зависимости от роли
+ * Hook for getting key prefixes based on role
  */
 export const useRoleKeys = () => {
   const role = useRole();

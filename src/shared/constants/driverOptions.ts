@@ -29,4 +29,7 @@ export const getExperienceOptions = (t: (key: string) => string): OptionItem[] =
   ];
 };
 
+// Default pagination size for drivers list
+export const DRIVERS_PAGE_SIZE = 10;
+
 

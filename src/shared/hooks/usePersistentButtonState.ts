@@ -1,34 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { buttonStateOperations, ButtonState } from '../../domain/usecases/button/buttonStateOperations';
 
-interface ButtonState {
-  colorState: number;
-  isExpanded: boolean;
-  isOnline: boolean;
-  isPaused?: boolean;
-  emergencyActionsUsed?: boolean;
-  emergencyActionType?: string;
-  pauseStartTime?: number;
-  isTripTimerActive?: boolean;
-  tripStartTime?: number;
-}
-
+/**
+ * Hook for managing persistent button state
+ * Provides button state management with AsyncStorage persistence
+ */
 export const usePersistentButtonState = (driverId: string) => {
-  const [buttonState, setButtonState] = useState<ButtonState>({
-    colorState: 0,
-    isExpanded: false,
-    isOnline: false
-  });
+  const [buttonState, setButtonState] = useState<ButtonState>(
+    buttonStateOperations.getDefaultButtonState()
+  );
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load state from storage
+  /**
+   * Load state from storage
+   */
   useEffect(() => {
     const loadState = async () => {
       try {
-        const saved = await AsyncStorage.getItem(`@driver_button_state_${driverId}`);
-        if (saved) {
-          setButtonState(JSON.parse(saved));
-        }
+        const savedState = await buttonStateOperations.loadButtonState(driverId);
+        setButtonState(savedState);
       } catch (error) {
         console.error('Error loading button state:', error);
       } finally {
@@ -39,28 +29,25 @@ export const usePersistentButtonState = (driverId: string) => {
     loadState();
   }, [driverId]);
 
-  // Save state to storage
+  /**
+   * Update button state
+   */
   const updateButtonState = useCallback(async (newState: Partial<ButtonState>) => {
-    const updatedState = { ...buttonState, ...newState };
-    setButtonState(updatedState);
-    
     try {
-      await AsyncStorage.setItem(`@driver_button_state_${driverId}`, JSON.stringify(updatedState));
+      const updatedState = await buttonStateOperations.updateButtonState(driverId, buttonState, newState);
+      setButtonState(updatedState);
     } catch (error) {
-      console.error('Error saving button state:', error);
+      console.error('Error updating button state:', error);
     }
   }, [buttonState, driverId]);
 
+  /**
+   * Reset button state to default
+   */
   const resetButtonState = useCallback(async () => {
-    const defaultState = {
-      colorState: 0,
-      isExpanded: false,
-      isOnline: false
-    };
-    setButtonState(defaultState);
-    
     try {
-      await AsyncStorage.setItem(`@driver_button_state_${driverId}`, JSON.stringify(defaultState));
+      const defaultState = await buttonStateOperations.resetButtonState(driverId);
+      setButtonState(defaultState);
     } catch (error) {
       console.error('Error resetting button state:', error);
     }

@@ -4,7 +4,7 @@ import ToggleButton from '../../components/ToggleButton';
 import FixWaveScreen from './FixWaveScreen';
 import FixDriveScreen from './FixDriveScreen';
 import { useTheme } from '../../context/ThemeContext';
-import { getCurrentColors } from '../../constants/colors';
+import { getCurrentColors } from '../../../shared/constants/colors';
 
 const ScheduleScreen: React.FC = () => {
   const { isDark } = useTheme();

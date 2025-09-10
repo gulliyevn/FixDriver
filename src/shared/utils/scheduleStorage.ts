@@ -15,7 +15,7 @@ export interface CustomizedScheduleData {
 }
 
 /**
- * Получить сохраненное гибкое расписание
+ * Get saved flexible schedule
  */
 export const getFlexibleSchedule = async (): Promise<FlexibleScheduleData | null> => {
   try {
@@ -33,7 +33,7 @@ export const getFlexibleSchedule = async (): Promise<FlexibleScheduleData | null
 };
 
 /**
- * Получить сохраненные кастомизированные дни
+ * Get saved customized days
  */
 export const getCustomizedSchedule = async (): Promise<CustomizedScheduleData | null> => {
   try {
@@ -51,7 +51,7 @@ export const getCustomizedSchedule = async (): Promise<CustomizedScheduleData | 
 };
 
 /**
- * Получить все данные расписания
+ * Get all schedule data
  */
 export const getAllScheduleData = async () => {
   const flexibleSchedule = await getFlexibleSchedule();
@@ -66,7 +66,7 @@ export const getAllScheduleData = async () => {
 };
 
 /**
- * Очистить сохраненные данные расписания
+ * Clear saved schedule data
  */
 export const clearScheduleData = async () => {
   try {

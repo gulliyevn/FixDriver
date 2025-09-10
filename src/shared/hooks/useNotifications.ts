@@ -1,73 +1,68 @@
 import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import PushNotificationService, { 
-  NotificationSettings, 
-  NotificationPermissions 
-} from '../services/PushNotificationService';
+import { notificationOperations } from '../../domain/usecases/notification/notificationOperations';
+import { NotificationSettings, NotificationPermissions } from '../types/notificationTypes';
+import { NOTIFICATION_CONSTANTS } from '../constants/notificationConstants';
 
-const NOTIFICATION_SETTINGS_KEY = '@notification_settings';
-const DEFAULT_SETTINGS: NotificationSettings = {
-  pushEnabled: true,
-};
-
+/**
+ * Hook for managing notifications
+ * Provides comprehensive notification management functionality
+ */
 export const useNotifications = () => {
-  const [settings, setSettings] = useState<NotificationSettings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = useState<NotificationSettings>(NOTIFICATION_CONSTANTS.DEFAULTS.SETTINGS);
   const [permissions, setPermissions] = useState<NotificationPermissions | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pushToken, setPushToken] = useState<string | null>(null);
 
-  const notificationService = PushNotificationService.getInstance();
-
-  // Загрузка настроек из AsyncStorage
+  /**
+   * Load settings from storage
+   */
   const loadSettings = useCallback(async () => {
     try {
-      const storedSettings = await AsyncStorage.getItem(NOTIFICATION_SETTINGS_KEY);
-      if (storedSettings) {
-        const parsedSettings = JSON.parse(storedSettings);
-        setSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
-      }
+      const storedSettings = await notificationOperations.loadSettings();
+      setSettings(storedSettings);
     } catch (error) {
       console.error('Error loading notification settings:', error);
     }
   }, []);
 
-  // Сохранение настроек в AsyncStorage
+  /**
+   * Save settings to storage
+   */
   const saveSettings = useCallback(async (newSettings: NotificationSettings) => {
     try {
-      await AsyncStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
+      await notificationOperations.saveSettings(newSettings);
       setSettings(newSettings);
     } catch (error) {
       console.error('Error saving notification settings:', error);
     }
   }, []);
 
-  // Инициализация уведомлений
+  /**
+   * Initialize notifications
+   */
   const initializeNotifications = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Загружаем сохраненные настройки
+      // Load saved settings
       await loadSettings();
 
-      // Настройки обновляются локально
-
-      // Проверяем разрешения
-      const currentPermissions = await notificationService.getCurrentPermissions();
-  
+      // Check permissions
+      const currentPermissions = await notificationOperations.getCurrentPermissions();
       setPermissions(currentPermissions);
 
-      // Если разрешения есть, получаем токен
+      // If permissions exist, get token
       if (currentPermissions.granted) {
-        const token = await notificationService.getExpoPushToken();
+        const token = await notificationOperations.getExpoPushToken();
         setPushToken(token);
       }
 
-      // Настраиваем слушатели
-      notificationService.setupNotificationListeners(
+      // Setup listeners
+      notificationOperations.setupNotificationListeners(
         () => {
-          // Здесь можно добавить логику обработки уведомлений
+          // Here you can add notification handling logic
         },
         () => {
-          // Здесь можно добавить навигацию при нажатии на уведомление
+          // Here you can add navigation logic when notification is tapped
         }
       );
     } catch (error) {
@@ -75,19 +70,21 @@ export const useNotifications = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [loadSettings, notificationService]);
+  }, [loadSettings]);
 
-  // Запрос разрешений
+  /**
+   * Request permissions
+   */
   const requestPermissions = useCallback(async () => {
     try {
-      const result = await notificationService.requestPermissions();
+      const result = await notificationOperations.requestPermissions();
       setPermissions(result);
 
       if (result.granted) {
-        const token = await notificationService.getExpoPushToken();
+        const token = await notificationOperations.getExpoPushToken();
         setPushToken(token);
         
-        // Обновляем настройки
+        // Update settings
         const newSettings = { ...settings, pushEnabled: true };
         await saveSettings(newSettings);
       }
@@ -97,55 +94,59 @@ export const useNotifications = () => {
       console.error('Error requesting permissions:', error);
       return null;
     }
-  }, [settings, saveSettings, notificationService]);
+  }, [settings, saveSettings]);
 
-  // Обновление настроек
+  /**
+   * Update settings
+   */
   const updateSettings = useCallback(async (newSettings: Partial<NotificationSettings>) => {
     const updatedSettings = { ...settings, ...newSettings };
     await saveSettings(updatedSettings);
   }, [settings, saveSettings]);
 
-  // Включение/выключение push-уведомлений
+  /**
+   * Toggle push notifications
+   */
   const togglePushNotifications = useCallback(async () => {
     if (!settings.pushEnabled) {
-      // Включаем - запрашиваем разрешения
+      // Enable - request permissions
       const result = await requestPermissions();
       if (result?.granted) {
         await updateSettings({ pushEnabled: true });
       }
     } else {
-      // Отключаем
+      // Disable
       await updateSettings({ pushEnabled: false });
     }
   }, [settings.pushEnabled, requestPermissions, updateSettings]);
 
-
-
-  // Открытие настроек уведомлений
+  /**
+   * Open notification settings
+   */
   const openNotificationSettings = useCallback(async () => {
-    await notificationService.openNotificationSettings();
-  }, [notificationService]);
+    await notificationOperations.openNotificationSettings();
+  }, []);
 
-  // Очистка при размонтировании
+  // Cleanup on unmount
   useEffect(() => {
     initializeNotifications();
 
     return () => {
-      notificationService.removeNotificationListeners();
+      notificationOperations.removeNotificationListeners();
     };
-  }, [initializeNotifications, notificationService]);
+  }, [initializeNotifications]);
 
   return {
-    // Состояние
+    // State
     settings,
     permissions,
     isLoading,
     pushToken,
     
-    // Методы
+    // Methods
     requestPermissions,
     updateSettings,
     togglePushNotifications,
     openNotificationSettings,
   };
-}; 
+};

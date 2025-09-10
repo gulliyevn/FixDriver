@@ -3,17 +3,17 @@ import { View, Text, ScrollView, TouchableOpacity, Alert, Modal, Image } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
-import { useI18n } from '../../hooks/useI18n';
+import { useI18n } from '../../../shared/hooks/useI18n';
 import { useTheme } from '../../context/ThemeContext';
-import { DriverProfileScreenStyles as styles, getDriverProfileStyles } from '../../styles/screens/driver/DriverProfileScreen.styles';
-import { mockUsers } from '../../mocks/users';
-import { DriverScreenProps } from '../../types/driver/DriverNavigation';
-import { colors } from '../../constants/colors';
+import { DriverProfileScreenStyles as styles, getDriverProfileStyles } from '../../../shared/styles/screens/driver/DriverProfileScreen.styles';
+import { mockUsers } from '../../../shared/mocks';
+import { DriverScreenProps } from '../../../shared/types/navigation';
+import { colors } from '../../../shared/constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { useDriverProfile as useProfile } from '../../hooks/driver/DriverUseProfile';
-import { useBalance } from '../../hooks/useBalance';
-import { formatBalance } from '../../utils/formatters';
+import { useDriverProfile as useProfile } from '../../../shared/hooks/driver/DriverUseProfile';
+import { useBalance } from '../../../shared/hooks/useBalance';
+import { formatBalance } from '../../../shared/utils/formatters';
 
 // TODO: Для подключения бэкенда заменить на:
 // import { useNotifications } from '../../hooks/useNotifications';

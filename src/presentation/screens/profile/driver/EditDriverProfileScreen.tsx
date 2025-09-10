@@ -4,23 +4,23 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert, Image, Anim
 import { Swipeable } from 'react-native-gesture-handler';
 import type { Swipeable as RNSwipeable } from 'react-native-gesture-handler';
 import { useTheme } from '../../../context/ThemeContext';
-import { EditDriverProfileScreenStyles as styles, getEditDriverProfileScreenColors } from '../../../styles/screens/profile/driver/EditDriverProfileScreen.styles';
+import { EditDriverProfileScreenStyles as styles, getEditDriverProfileScreenColors } from '../../../../shared/styles/screens/profile/driver/EditDriverProfileScreen.styles';
 import { Ionicons } from '@expo/vector-icons';
-import { DriverScreenProps } from '../../../types/driver/DriverNavigation';
-import { mockUsers } from '../../../mocks/users';
+import { DriverScreenProps } from '../../../../shared/types/navigation';
+import { mockUsers } from '../../../../shared/mocks';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useDriverProfile as useProfile } from '../../../hooks/driver/DriverUseProfile';
-import { useVerification } from '../../../hooks/useVerification';
-import { getDefaultDate, hasChanges, handleDriverCirclePress } from '../../../utils/profileHelpers';
+import { useDriverProfile as useProfile } from '../../../../shared/hooks/driver/DriverUseProfile';
+import { useVerification } from '../../../../shared/hooks/useVerification';
+import { getDefaultDate, hasChanges, handleDriverCirclePress } from '../../../../shared/utils/profileHelpers';
 import DatePicker from '../../../components/DatePicker';
 import PersonalInfoSection from '../../../components/driver/DriverPersonalInfoSection';
 import ProfileAvatarSection from '../../../components/driver/DriverProfileAvatarSection';
 import VipSection from '../../../components/driver/DriverVipSection';
 import ProfileHeader from '../../../components/driver/DriverProfileHeader';
 import VehicleIdCard from '../../../components/driver/VehicleIdCard';
-import { useI18n } from '../../../hooks/useI18n';
-import { useDriverVehicles } from '../../../hooks/driver/useDriverVehicles';
+import { useI18n } from '../../../../shared/hooks/useI18n';
+import { useDriverVehicles } from '../../../../shared/hooks/driver/useDriverVehicles';
 
 const ACTION_WIDTH = 100; // Keep in sync with styles.swipeAction.width
 

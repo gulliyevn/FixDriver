@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../context/ThemeContext';
-import { useI18n } from '../../../hooks/useI18n';
-import { DriverScreenProps } from '../../../types/driver/DriverNavigation';
-import { DriverVehiclesScreenStyles as styles, getDriverVehiclesScreenColors } from '../../../styles/screens/profile/driver/DriverVehiclesScreen.styles';
-import { colors } from '../../../constants/colors';
+import { useI18n } from '../../../../shared/hooks/useI18n';
+import { DriverScreenProps } from '../../../../shared/types/navigation';
+import { DriverVehiclesScreenStyles as styles, getDriverVehiclesScreenColors } from '../../../../shared/styles/screens/profile/driver/DriverVehiclesScreen.styles';
+import { colors } from '../../../../shared/constants/colors';
 import Select from '../../../components/Select';
 import PhotoUpload from '../../../components/PhotoUpload';
 
-import vehicleSegments from '../../../constants/vehicleSegments.json';
+import vehicleSegments from '../../../../shared/constants/vehicleSegments.json';
 import {
   carBrands,
   carModelsByBrand,
   getYearOptions,
   getTariffOptions,
-} from '../../../utils/driverData';
-import { useDriverVehicles } from '../../../hooks/driver/useDriverVehicles';
-import { VehicleFormData } from '../../../types/driver/DriverVehicle';
+} from '../../../../shared/utils/driverData';
+import { useDriverVehicles } from '../../../../shared/hooks/driver/useDriverVehicles';
+import { VehicleFormData } from '../../../../shared/types/driver/DriverVehicle';
 
 const DriverVehiclesScreen: React.FC<DriverScreenProps<'DriverVehicles'>> = ({ navigation }) => {
   const { isDark } = useTheme();

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapService, MapLocation } from '../../../../services/MapService';
+import { MapService, MapLocation } from '../../../../../data/datasources/map/MapService';
 import { OrdersMapState, OrdersMapActions } from '../types/orders-map.types';
 
 export const useOrdersMapState = (): [OrdersMapState, OrdersMapActions] => {

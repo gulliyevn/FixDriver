@@ -1,8 +1,8 @@
 import { useRef, useCallback } from 'react';
 import { Alert } from 'react-native';
-import { MapService } from '../../../../services/MapService';
+import { MapService } from '../../../../../data/datasources/map/MapService';
 import { OrdersMapState, OrdersMapActions, MapControlHandlers } from '../types/orders-map.types';
-import { callEmergencyService, getCountryCodeByLocation } from '../../../../utils/emergencyNumbers';
+import { callEmergencyService, getCountryCodeByLocation } from '../../../../../shared/utils/emergencyNumbers';
 import { useLanguage } from '../../../../context/LanguageContext';
 
 export const useMapControls = (

@@ -2,15 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
+import { useI18n } from '../../../shared/hooks/useI18n';
 import { useLanguage } from '../../context/LanguageContext';
-import { colors } from '../../constants/colors';
+import { colors } from '../../../shared/constants/colors';
 import VipPackages from '../../components/VipPackages';
 import { usePackage, PackageType } from '../../context/PackageContext';
-import { useBalance } from '../../hooks/useBalance';
+import { useBalance } from '../../../shared/hooks/useBalance';
 import { useAuth } from '../../context/AuthContext';
-import { PremiumPackagesScreenStyles, getPremiumPackagesScreenColors } from '../../styles/screens/profile/PremiumPackagesScreen.styles';
-import { formatBalance, formatDateWithLanguage } from '../../utils/formatters';
+import { PremiumPackagesScreenStyles, getPremiumPackagesScreenColors } from '../../../shared/styles/screens/profile/PremiumPackagesScreen.styles';
+import { formatBalance, formatDateWithLanguage } from '../../../shared/utils/formatters';
 
 interface PremiumPackagesScreenProps {
   navigation: {
@@ -26,7 +26,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
   const { user } = useAuth();
   const currentColors = isDark ? colors.dark : colors.light;
   const { currentPackage, subscription, updatePackage, extendSubscription, cancelSubscription, toggleAutoRenew } = usePackage();
-  const { balance, deductBalance } = useBalance();
+  const { balance, withdrawBalance } = useBalance();
   
   const isDriver = user?.role === 'driver';
   
@@ -197,7 +197,8 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           onPress: async () => {
             
       
-            const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }), packageId as string);
+            const result = await withdrawBalance(price);
+            const success = result.success;
             
             if (success) {
               await updatePackage(packageId as PackageType, selectedPeriod);

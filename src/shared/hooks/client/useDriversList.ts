@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Driver } from '../../types/driver';
-import DriverService from '../../services/DriverService';
+import getDriversPaged from '../../../domain/usecases/driver/getDriversPaged';
+import { DRIVERS_PAGE_SIZE } from '../../constants/driverOptions';
 
 export type UseDriversListResult = {
   drivers: Driver[];
@@ -17,8 +18,6 @@ export type UseDriversListResult = {
   removeDriver: (driverId: string) => void;
   removeDrivers: (ids: Set<string>) => void;
 };
-
-const ITEMS_PER_PAGE = 10;
 
 export const useDriversList = (): UseDriversListResult => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
@@ -45,9 +44,9 @@ export const useDriversList = (): UseDriversListResult => {
         setLoadingMore(true);
       }
 
-      const response = await DriverService.getDriversPaged({
+      const response = await getDriversPaged({
         page: pageNumber,
-        pageSize: ITEMS_PER_PAGE,
+        pageSize: DRIVERS_PAGE_SIZE,
         search: debouncedQuery || undefined,
       });
 
@@ -59,18 +58,18 @@ export const useDriversList = (): UseDriversListResult => {
           setDrivers(prev => [...prev, ...pageData]);
         }
         const total = response.data.total ?? 0;
-        const accumulated = (pageNumber) * ITEMS_PER_PAGE;
+        const accumulated = (pageNumber) * DRIVERS_PAGE_SIZE;
         setHasMore(accumulated < total);
         setPage(pageNumber);
       } else {
-        // В случае ошибки не меняем список, только сбрасываем hasMore
+        // On error, do not change the existing list, just mark hasMore as false
         setHasMore(false);
       }
     } finally {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, []);
+  }, [debouncedQuery]);
 
   useEffect(() => {
     loadDrivers(1, true);
@@ -139,5 +138,3 @@ export const useDriversList = (): UseDriversListResult => {
 };
 
 export default useDriversList;
-
-

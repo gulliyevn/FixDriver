@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUserStorageKey, STORAGE_KEYS } from '../../utils/storageKeys';
+import { getUserStorageKey, STORAGE_KEYS } from '../../utils/storageKeys';
 
 export interface ClientTransaction {
   id: string;
@@ -28,14 +28,14 @@ export interface ClientBalanceContextType {
 }
 
 export const useClientBalance = (): ClientBalanceContextType => {
-  const [balance, setBalance] = useState<number>(50); // Начальный баланс
+  const [balance, setBalance] = useState<number>(50); // Initial balance
   const [transactions, setTransactions] = useState<ClientTransaction[]>([]);
   const [cashback, setCashback] = useState<number>(0);
   
-  // Получаем ключи с изоляцией по пользователю
-  const balanceKey = useUserStorageKey(STORAGE_KEYS.CLIENT_BALANCE);
-  const transactionsKey = useUserStorageKey(STORAGE_KEYS.CLIENT_TRANSACTIONS);
-  const cashbackKey = useUserStorageKey(STORAGE_KEYS.CLIENT_CASHBACK);
+  // Generate user-scoped storage keys (currently base keys; pass userId when available)
+  const balanceKey = getUserStorageKey(STORAGE_KEYS.CLIENT_BALANCE);
+  const transactionsKey = getUserStorageKey(STORAGE_KEYS.CLIENT_TRANSACTIONS);
+  const cashbackKey = getUserStorageKey(STORAGE_KEYS.CLIENT_CASHBACK);
 
   useEffect(() => {
     loadBalance();
@@ -60,7 +60,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
       if (storedTransactions) {
         const parsedTransactions = JSON.parse(storedTransactions);
         
-        // Миграция: добавляем translationKey для старых транзакций пополнения
+        // Migration: add translationKey for legacy top-up transactions
         const migratedTransactions = parsedTransactions.map((transaction: any) => {
           if (transaction.type === 'balance_topup' && !transaction.translationKey) {
             return {
@@ -160,48 +160,48 @@ export const useClientBalance = (): ClientBalanceContextType => {
   };
 
   const getCashback = async (): Promise<number> => {
-    // Здесь можно добавить логику расчета cashback
-    // Пока возвращаем сохраненный cashback
+    // Add cashback calculation logic here if needed
+    // For now, return the stored cashback value
     return cashback;
   };
 
   const resetBalance = async () => {
     try {
-      console.log('🔄 Сброс клиентского баланса...');
+      console.log('Resetting client balance...');
       
-      // Обнуляем баланс
+      // Reset balance value
       setBalance(0);
       await AsyncStorage.setItem(balanceKey, '0');
       
-      // Очищаем транзакции
+      // Clear transactions
       setTransactions([]);
       await AsyncStorage.setItem(transactionsKey, JSON.stringify([]));
       
-      // Обнуляем cashback
+      // Reset cashback value
       setCashback(0);
       await AsyncStorage.setItem(cashbackKey, '0');
       
-      console.log('✅ Клиентский баланс успешно сброшен');
+      console.log('Client balance reset successfully');
     } catch (error) {
-      console.error('❌ Ошибка при сбросе клиентского баланса:', error);
+      console.error('Error resetting client balance:', error);
     }
   };
 
-  // Dummy функция для совместимости с интерфейсом
+  // Dummy for interface compatibility
   const addEarnings = async (amount: number) => {
-    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
+    console.log('Clients cannot earn, function is present for compatibility');
   };
 
-  // Dummy функция для совместимости с интерфейсом
+  // Dummy for interface compatibility
   const loadEarnings = async () => {
-    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
+    console.log('Clients cannot earn, function is present for compatibility');
   };
 
   return {
     balance,
     transactions,
     cashback,
-    earnings: 0, // Клиенты не зарабатывают
+    earnings: 0, // Clients do not earn
     topUpBalance,
     addEarnings,
     deductBalance,

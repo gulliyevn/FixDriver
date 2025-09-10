@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoleKeys } from './useRole';
 import { Card, mockCards } from '../mocks/cardsMock';
-import { CardService } from '../services/cardService';
-import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import { cardOperations } from '../../domain/usecases/card/cardOperations';
 
 export const useCards = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const { getStorageKey, getApiEndpoint, isDriver } = useRoleKeys();
   
-  // Получаем ключ с изоляцией по пользователю
-  const cardsKey = useUserStorageKey(STORAGE_KEYS.USER_CARDS);
+  // Get user ID for operations
+  const userId = 'current-user'; // TODO: Get from auth context
 
-  // Загружаем карты при инициализации
+  // Load cards on initialization
   useEffect(() => {
     loadCards();
   }, []);
@@ -22,19 +21,17 @@ export const useCards = () => {
     try {
       setLoading(true);
       
-      // Используем ключ с изоляцией по пользователю
-      const savedCards = await AsyncStorage.getItem(cardsKey);
+      // Load cards from storage
+      const savedCards = await cardOperations.loadCardsFromStorage(userId);
       
-      if (savedCards) {
-        setCards(JSON.parse(savedCards));
+      if (savedCards.length > 0) {
+        setCards(savedCards);
       } else {
-        // Загружаем моки в зависимости от роли
-        const initialCards = isDriver 
-          ? mockCards.filter(card => card.type !== 'family') // Водители без семейных карт
-          : mockCards;
+        // Load initial cards based on role
+        const initialCards = cardOperations.getInitialCards(isDriver, mockCards);
         
         setCards(initialCards);
-        await AsyncStorage.setItem(cardsKey, JSON.stringify(initialCards));
+        await cardOperations.saveCardsToStorage(userId, initialCards);
       }
     } catch (error) {
       console.error('Error loading cards:', error);
@@ -45,22 +42,19 @@ export const useCards = () => {
 
   const addCard = async (cardData: Omit<Card, 'id'>) => {
     try {
-      const newCard: Card = {
-        ...cardData,
-        id: Date.now().toString(),
-      };
+      // Create new card
+      const newCard = cardOperations.createNewCard(cardData);
       
       const updatedCards = [...cards, newCard];
       setCards(updatedCards);
       
-      // Сохраняем с ключом изоляции по пользователю
-      await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
+      // Save to storage
+      await cardOperations.saveCardsToStorage(userId, updatedCards);
       
-      // API вызов с правильным endpoint
-      const apiEndpoint = getApiEndpoint('/cards');
-      await CardService.addCard(apiEndpoint, newCard);
+      // API call
+      const apiSuccess = await cardOperations.addCard(newCard, userId);
       
-      return true;
+      return apiSuccess;
     } catch (error) {
       console.error('Error adding card:', error);
       return false;
@@ -72,12 +66,13 @@ export const useCards = () => {
       const updatedCards = cards.filter(card => card.id !== cardId);
       setCards(updatedCards);
       
-      await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
+      // Save to storage
+      await cardOperations.saveCardsToStorage(userId, updatedCards);
       
-      const apiEndpoint = getApiEndpoint('/cards');
-      await CardService.deleteCard(apiEndpoint, cardId);
+      // API call
+      const apiSuccess = await cardOperations.deleteCard(cardId, userId);
       
-      return true;
+      return apiSuccess;
     } catch (error) {
       console.error('Error deleting card:', error);
       return false;

@@ -13,10 +13,10 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
+import { useI18n } from '../../../shared/hooks/useI18n';
 import { useAuth } from '../../context/AuthContext';
-import { SupportChatScreenStyles } from '../../styles/screens/SupportChatScreen.styles';
-import { supportService, SupportMessage, SupportTicket } from '../../services/SupportService';
+import { SupportChatScreenStyles } from '../../../shared/styles/screens/SupportChatScreen.styles';
+import { supportService, SupportMessage, SupportTicket } from '../../../data/datasources/SupportService';
 
 interface AttachedFile {
   id: string;

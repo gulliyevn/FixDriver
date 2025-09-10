@@ -1,6 +1,9 @@
-// ===== КОНСТАНТЫ ДЛЯ ВСЕХ МОКОВ =====
+/**
+ * Mock Constants
+ * Centralized constants for all mock services
+ */
 
-// Аватары пользователей
+// User avatars
 export const MOCK_AVATARS = {
   CLIENT_1: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
   DRIVER_1: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
@@ -8,7 +11,7 @@ export const MOCK_AVATARS = {
   DRIVER_3: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
 };
 
-// Локации в Баку
+// Baku locations
 export const MOCK_LOCATIONS = {
   BAKU_CENTER: { latitude: 40.3777, longitude: 49.8920 },
   BAKU_NORTH: { latitude: 40.3953, longitude: 49.8512 },
@@ -16,7 +19,7 @@ export const MOCK_LOCATIONS = {
   BAKU_SOUTH: { latitude: 40.3601, longitude: 49.8350 },
 };
 
-// Цвета для статусов
+// Status colors
 export const MOCK_COLORS = {
   SUCCESS: '#4caf50',
   WARNING: '#ff9800',
@@ -26,7 +29,7 @@ export const MOCK_COLORS = {
   SECONDARY: '#666666',
 };
 
-// Статусы заказов
+// Order statuses
 export const MOCK_ORDER_STATUSES = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
@@ -35,7 +38,7 @@ export const MOCK_ORDER_STATUSES = {
   CANCELLED: 'cancelled',
 };
 
-// Типы уведомлений
+// Notification types
 export const MOCK_NOTIFICATION_TYPES = {
   ORDER: 'order',
   PAYMENT: 'payment',
@@ -43,35 +46,35 @@ export const MOCK_NOTIFICATION_TYPES = {
   PROMO: 'promo',
 };
 
-// Типы платежей
+// Payment types
 export const MOCK_PAYMENT_TYPES = {
   CARD: 'card',
   CASH: 'cash',
   BALANCE: 'balance',
 };
 
-// Валюты
+// Currencies
 export const MOCK_CURRENCIES = {
   AFc: 'AFc',
   USD: 'USD',
   EUR: 'EUR',
 };
 
-// Языки
+// Languages
 export const MOCK_LANGUAGES = {
   RU: 'ru',
   EN: 'en',
   AZ: 'az',
 };
 
-// Роли пользователей
+// User roles
 export const MOCK_USER_ROLES = {
   CLIENT: 'client',
   DRIVER: 'driver',
   ADMIN: 'admin',
 };
 
-// Статусы водителей
+// Driver statuses
 export const MOCK_DRIVER_STATUSES = {
   ACTIVE: 'active',
   INACTIVE: 'inactive',
@@ -79,7 +82,7 @@ export const MOCK_DRIVER_STATUSES = {
   OFFLINE: 'offline',
 };
 
-// Типы автомобилей
+// Car types
 export const MOCK_CAR_TYPES = {
   SEDAN: 'sedan',
   SUV: 'suv',
@@ -87,7 +90,7 @@ export const MOCK_CAR_TYPES = {
   LUXURY: 'luxury',
 };
 
-// Марки автомобилей
+// Car brands
 export const MOCK_CAR_BRANDS = {
   TOYOTA: 'Toyota',
   HONDA: 'Honda',
@@ -97,7 +100,7 @@ export const MOCK_CAR_BRANDS = {
   AUDI: 'Audi',
 };
 
-// Модели автомобилей
+// Car models
 export const MOCK_CAR_MODELS = {
   CAMRY: 'Camry',
   CIVIC: 'Civic',
@@ -107,54 +110,54 @@ export const MOCK_CAR_MODELS = {
   A4: 'A4',
 };
 
-// Цвета автомобилей
+// Car colors
 export const MOCK_CAR_COLORS = {
-  WHITE: 'Белый',
-  BLACK: 'Черный',
-  SILVER: 'Серебристый',
-  RED: 'Красный',
-  BLUE: 'Синий',
-  GRAY: 'Серый',
+  WHITE: 'White',
+  BLACK: 'Black',
+  SILVER: 'Silver',
+  RED: 'Red',
+  BLUE: 'Blue',
+  GRAY: 'Gray',
 };
 
-// Типы карт
+// Card types
 export const MOCK_CARD_TYPES = {
   VISA: 'visa',
   MASTERCARD: 'mastercard',
   AMEX: 'amex',
 };
 
-// Статусы карт
+// Card statuses
 export const MOCK_CARD_STATUSES = {
   ACTIVE: 'active',
   EXPIRED: 'expired',
   BLOCKED: 'blocked',
 };
 
-// Типы долгов
+// Debt types
 export const MOCK_DEBT_TYPES = {
   RIDE: 'ride',
   SUBSCRIPTION: 'subscription',
   PENALTY: 'penalty',
 };
 
-// Статусы долгов
+// Debt statuses
 export const MOCK_DEBT_STATUSES = {
   ACTIVE: 'active',
   PAID: 'paid',
   OVERDUE: 'overdue',
 };
 
-// Типы адресов
+// Address types
 export const MOCK_ADDRESS_TYPES = {
   HOME: 'home',
   WORK: 'work',
   OTHER: 'other',
 };
 
-// Статусы адресов
+// Address statuses
 export const MOCK_ADDRESS_STATUSES = {
   DEFAULT: 'default',
   ACTIVE: 'active',
   INACTIVE: 'inactive',
-}; 
+};

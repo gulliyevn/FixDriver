@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
-import { DriverAvatarService } from '../../services/driver/DriverAvatarService';
+import { driverAvatarOperations } from '../../../domain/usecases/driver/driverAvatarOperations';
 import { useI18n } from '../useI18n';
 
 export const useDriverAvatar = () => {
@@ -8,7 +8,7 @@ export const useDriverAvatar = () => {
   const [loading, setLoading] = useState(false);
   const { t } = useI18n();
 
-  // Загружаем аватар при инициализации
+  // Load avatar on initialization
   useEffect(() => {
     loadAvatar();
   }, []);
@@ -16,7 +16,7 @@ export const useDriverAvatar = () => {
   const loadAvatar = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await DriverAvatarService.loadAvatar();
+      const uri = await driverAvatarOperations.loadAvatar();
       setAvatarUri(uri);
     } catch (error) {
       console.error('Error loading driver avatar:', error);
@@ -28,10 +28,10 @@ export const useDriverAvatar = () => {
   const takePhoto = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await DriverAvatarService.takePhoto();
+      const uri = await driverAvatarOperations.takePhoto();
       
       if (uri) {
-        const success = await DriverAvatarService.saveAvatar(uri);
+        const success = await driverAvatarOperations.saveAvatar(uri);
         if (success) {
           setAvatarUri(uri);
           Alert.alert(
@@ -59,10 +59,10 @@ export const useDriverAvatar = () => {
   const pickFromGallery = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await DriverAvatarService.pickFromGallery();
+      const uri = await driverAvatarOperations.pickFromGallery();
       
       if (uri) {
-        const success = await DriverAvatarService.saveAvatar(uri);
+        const success = await driverAvatarOperations.saveAvatar(uri);
         if (success) {
           setAvatarUri(uri);
           Alert.alert(
@@ -91,7 +91,7 @@ export const useDriverAvatar = () => {
     const confirmDelete = async () => {
       try {
         setLoading(true);
-        const success = await DriverAvatarService.deleteAvatar();
+        const success = await driverAvatarOperations.deleteAvatar();
         if (success) {
           setAvatarUri(null);
           Alert.alert(

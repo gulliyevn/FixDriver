@@ -1,4 +1,4 @@
-import { MapLocation } from '../../../../services/MapService';
+import { MapLocation } from '../../../../../data/datasources/map/MapService';
 
 export interface OrdersMapState {
   currentLocation: MapLocation | undefined;

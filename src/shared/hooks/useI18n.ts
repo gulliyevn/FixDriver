@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { useLanguage } from '../context/LanguageContext';
-import { getLanguageOptions, getLanguageInfo, type SupportedLanguage, t as i18nT } from '../i18n';
+import { useLanguage } from '../../presentation/context/LanguageContext';
+import { t as i18nT } from '../i18n';
 
 export const useI18n = () => {
   const { setLanguage, language, languageOptions, isLoading, error } = useLanguage();
 
-  const changeLanguage = useCallback(async (newLanguage: SupportedLanguage) => {
+  const changeLanguage = useCallback(async (newLanguage: string) => {
     await setLanguage(newLanguage);
   }, [setLanguage]);
 
@@ -31,7 +31,6 @@ export const useI18n = () => {
     languageOptions,
     isLoading,
     error,
-    getLanguageInfo,
     SUPPORTED_LANGUAGES: languageOptions,
   };
 }; 
