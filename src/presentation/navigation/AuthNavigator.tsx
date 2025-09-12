@@ -2,11 +2,10 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import RoleSelectScreen from '../screens/auth/RoleSelectScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import DriverRegisterScreen from '../screens/auth/DriverRegisterScreen';
+import RegisterScreen from '../screens/auth/RegisterScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
-import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
-import ClientRegisterScreen from '../screens/auth/ClientRegisterScreen';
-import { AuthStackParamList } from '../types/navigation';
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
+import { AuthStackParamList } from '../../shared/types/navigation';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
@@ -21,10 +20,10 @@ const AuthNavigator: React.FC = () => {
     >
       <Stack.Screen name="RoleSelect" component={RoleSelectScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="DriverRegister" component={DriverRegisterScreen} />
+      <Stack.Screen name="DriverRegister" component={RegisterScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-      <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
-      <Stack.Screen name="ClientRegister" component={ClientRegisterScreen} />
+      <Stack.Screen name="ClientRegister" component={RegisterScreen} />
+      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     </Stack.Navigator>
   );
 };

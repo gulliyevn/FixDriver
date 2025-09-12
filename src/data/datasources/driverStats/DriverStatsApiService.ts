@@ -1,5 +1,5 @@
 import { DayStats, PeriodStats, EarningsChartData } from './DriverStatsTypes';
-import { DRIVER_STATS_CONSTANTS } from '../../../shared/constants';
+import { DRIVER_STATS_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 
 export class DriverStatsApiService {
   private driverId: string = 'default_driver';

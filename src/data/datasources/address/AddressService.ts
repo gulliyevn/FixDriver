@@ -1,10 +1,10 @@
-import APIClient from '../APIClient';
-import { Address } from '../../../shared/mocks/residenceMock';
-import { ADDRESS_CONSTANTS } from '../../../shared/constants';
+import APIClient from '../api/APIClient';
+import { Address } from '../../../shared/mocks/shared/residenceMock';
+import { ADDRESS_CONSTANTS } from '../../../shared/constants/addressConstants';
 import { IAddressService, AddressValidationResult, GeocodingResponse } from './AddressTypes';
 import { AddressValidationService } from './AddressValidationService';
-import { AddressGeocodingService } from './AddressGeocodingService';
 import { AddressUtils } from './AddressUtils';
+import { t } from '../../../shared/i18n';
 
 export class AddressService implements IAddressService {
   private static instance: AddressService;
@@ -109,26 +109,6 @@ export class AddressService implements IAddressService {
     return AddressValidationService.validateAddressData(addressData);
   }
 
-  /**
-   * Geocode address to coordinates
-   */
-  async geocodeAddress(address: string): Promise<GeocodingResponse> {
-    return AddressGeocodingService.geocodeAddress(address);
-  }
-
-  /**
-   * Reverse geocode coordinates to address
-   */
-  async reverseGeocode(lat: number, lng: number): Promise<GeocodingResponse> {
-    return AddressGeocodingService.reverseGeocode(lat, lng);
-  }
-
-  /**
-   * Get address from coordinates
-   */
-  async getAddressFromCoordinates(lat: number, lng: number): Promise<string> {
-    return AddressGeocodingService.getAddressFromCoordinates(lat, lng);
-  }
 
   /**
    * Format address for display
@@ -180,7 +160,7 @@ export class AddressService implements IAddressService {
       
       return {
         id: Date.now().toString(),
-        title: addressData.title || 'New Address',
+        title: addressData.title || t('address.newAddress'),
         address: addressData.address || '',
         latitude: addressData.latitude || 0,
         longitude: addressData.longitude || 0,

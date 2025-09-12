@@ -1,6 +1,7 @@
-import { Address } from '../../../shared/mocks/residenceMock';
-import { ADDRESS_CONSTANTS } from '../../../shared/constants';
+import { Address } from '../../../shared/mocks/shared/residenceMock';
+import { ADDRESS_CONSTANTS } from '../../../shared/constants/addressConstants';
 import { AddressValidationResult, AddressComponents } from './AddressTypes';
+import { t } from '../../../shared/i18n';
 
 export class AddressValidationService {
   /**
@@ -11,18 +12,18 @@ export class AddressValidationService {
     const warnings: string[] = [];
 
     if (!address || typeof address !== 'string') {
-      errors.push('Address is required and must be a string');
+      errors.push(t('address.validation.required'));
       return { isValid: false, errors, warnings };
     }
 
     const trimmedAddress = address.trim();
     
     if (trimmedAddress.length < ADDRESS_CONSTANTS.VALIDATION.MIN_LENGTH) {
-      errors.push(`Address must be at least ${ADDRESS_CONSTANTS.VALIDATION.MIN_LENGTH} characters long`);
+      errors.push(t('address.validation.minLength', { min: ADDRESS_CONSTANTS.VALIDATION.MIN_LENGTH }));
     }
 
     if (trimmedAddress.length > 500) {
-      warnings.push('Address is very long, consider shortening it');
+      warnings.push(t('address.validation.tooLong'));
     }
 
     // Check for required keywords
@@ -31,16 +32,16 @@ export class AddressValidationService {
     );
 
     if (!hasRequiredKeywords) {
-      warnings.push('Address should contain street, house, or building information');
+      warnings.push(t('address.validation.missingKeywords'));
     }
 
     // Check for suspicious patterns
     if (trimmedAddress.match(/^\d+$/)) {
-      errors.push('Address cannot be only numbers');
+      errors.push(t('address.validation.onlyNumbers'));
     }
 
     if (trimmedAddress.match(/^[a-zA-Z\s]+$/)) {
-      warnings.push('Address should contain more specific location details');
+      warnings.push(t('address.validation.tooGeneric'));
     }
 
     return {
@@ -81,28 +82,28 @@ export class AddressValidationService {
     const warnings: string[] = [];
 
     if (!addressData) {
-      errors.push('Address data is required');
+      errors.push(t('address.validation.dataRequired'));
       return { isValid: false, errors, warnings };
     }
 
     // Validate required fields
     if (!addressData.address || typeof addressData.address !== 'string') {
-      errors.push('Address field is required and must be a string');
+      errors.push(t('address.validation.addressRequired'));
     }
 
     if (!addressData.latitude || typeof addressData.latitude !== 'number') {
-      errors.push('Latitude is required and must be a number');
+      errors.push(t('address.validation.latitudeRequired'));
     }
 
     if (!addressData.longitude || typeof addressData.longitude !== 'number') {
-      errors.push('Longitude is required and must be a number');
+      errors.push(t('address.validation.longitudeRequired'));
     }
 
     // Validate coordinates if provided
     if (addressData.latitude && addressData.longitude) {
       const coordinatesValid = await this.validateCoordinates(addressData.latitude, addressData.longitude);
       if (!coordinatesValid) {
-        errors.push('Invalid coordinates provided');
+        errors.push(t('address.validation.invalidCoordinates'));
       }
     }
 
@@ -117,7 +118,7 @@ export class AddressValidationService {
 
     // Validate optional fields
     if (addressData.title && typeof addressData.title !== 'string') {
-      errors.push('Title must be a string');
+      errors.push(t('address.validation.titleMustBeString'));
     }
 
     // Note: description field removed from Address type

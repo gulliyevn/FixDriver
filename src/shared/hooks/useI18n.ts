@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { useLanguage } from '../../presentation/context/LanguageContext';
+import { useLanguage } from '../../presentation/context/language/LanguageContext';
 import { t as i18nT } from '../i18n';
 
 export const useI18n = () => {
-  const { setLanguage, language, languageOptions, isLoading, error } = useLanguage();
+  const { setLanguage, language, isLoading, error } = useLanguage();
 
   const changeLanguage = useCallback(async (newLanguage: string) => {
-    await setLanguage(newLanguage);
+    await setLanguage(newLanguage as any);
   }, [setLanguage]);
 
   const getCurrentLang = useCallback(() => {
@@ -18,7 +18,7 @@ export const useI18n = () => {
   }, [language]);
 
   const checkRTL = useCallback(() => {
-    return language === 'ar';
+    return language === 'ar' as any;
   }, [language]);
 
   return {
@@ -28,9 +28,9 @@ export const useI18n = () => {
     getStoredLanguage,
     isRTL: checkRTL,
     language,
-    languageOptions,
+    languageOptions: ['en', 'ru', 'az', 'ar'],
     isLoading,
     error,
-    SUPPORTED_LANGUAGES: languageOptions,
+    SUPPORTED_LANGUAGES: ['en', 'ru', 'az', 'ar'],
   };
 }; 

@@ -2,15 +2,15 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/language';
 import TabBar from './TabBar';
 
 // Импорт экранов
-import OrdersMapScreen from '../screens/common/OrdersMapScreen';
-import DriversScreen from '../screens/client/DriversScreen';
-import EarningsScreen from '../components/EarningsScreen';
+import MapScreen from '../screens/common/MapScreen';
+import { OrdersScreen } from '../screens/common/OrdersScreen/OrdersScreen';
+import EarningsScreen from '../screens/driver/EarningsScreen/EarningsScreen';
 import ChatStack from './ChatStack';
-import DriverProfileStack from './driver/DriverProfileStack';
+import ProfileStack from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,11 +37,11 @@ const DriverNavigator: React.FC = () => {
     >
       <Tab.Screen 
         name="Map" 
-        component={OrdersMapScreen}
+        component={MapScreen}
       />
       <Tab.Screen 
         name="Orders" 
-        component={DriversScreen}
+        component={OrdersScreen}
       />
       <Tab.Screen 
         name="Earnings" 
@@ -53,7 +53,7 @@ const DriverNavigator: React.FC = () => {
       />
       <Tab.Screen 
         name="Profile" 
-        component={DriverProfileStack}
+        component={ProfileStack}
         options={{
           tabBarStyle: { display: 'none' }, // Скрываем таббар для экрана профиля
         }}

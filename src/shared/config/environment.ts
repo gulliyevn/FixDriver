@@ -1,15 +1,47 @@
 // Environment configuration for FixDrive
 
+// Configuration constants
+const CONFIG_CONSTANTS = {
+  API: {
+    DEV_BASE_URL: 'http://31.97.76.106:8080',
+    PROD_BASE_URL: 'https://api.fixdrive.com',
+    TIMEOUT: 30000,
+  },
+  JWT: {
+    DEFAULT_SECRET: 'default-secret-change-me',
+    ACCESS_TOKEN_EXPIRY_MINUTES: 30,
+    REFRESH_TOKEN_EXPIRY_DAYS: 30,
+  },
+  REDIS: {
+    DEFAULT_HOST: '31.97.76.106',
+    DEFAULT_PORT: '6379',
+  },
+  SUPPORT: {
+    DEFAULT_EMAIL: 'support@fixdrive.com',
+    DEFAULT_PHONE: '+994501234567',
+  },
+  MAP: {
+    DEFAULT_LATITUDE: 40.3777,
+    DEFAULT_LONGITUDE: 49.8920,
+    DEFAULT_LATITUDE_DELTA: 0.0922,
+    DEFAULT_LONGITUDE_DELTA: 0.0421,
+  },
+  DEV: {
+    MOCK_DELAY: 1000,
+    HEALTH_CHECK_TIMEOUT: 5000,
+  },
+} as const;
+
 export const ENV_CONFIG = {
   // API configuration
   API: {
     // Base URL for API
     BASE_URL: __DEV__ 
-      ? 'http://31.97.76.106:8080'  // Development server
-      : 'https://api.fixdrive.com', // Production URL
+      ? CONFIG_CONSTANTS.API.DEV_BASE_URL  // Development server
+      : CONFIG_CONSTANTS.API.PROD_BASE_URL, // Production URL
     
     // Request timeout (30 seconds)
-    TIMEOUT: 30000,
+    TIMEOUT: CONFIG_CONSTANTS.API.TIMEOUT,
     
     // Default headers
     DEFAULT_HEADERS: {
@@ -21,11 +53,11 @@ export const ENV_CONFIG = {
   // JWT configuration
   JWT: {
     // Secret key (should match backend)
-    SECRET: 'default-secret-change-me',
+    SECRET: CONFIG_CONSTANTS.JWT.DEFAULT_SECRET,
     
     // Token lifetime (should match backend)
-    ACCESS_TOKEN_EXPIRY: 30 * 60, // 30 minutes
-    REFRESH_TOKEN_EXPIRY: 30 * 24 * 60 * 60, // 30 days
+    ACCESS_TOKEN_EXPIRY: CONFIG_CONSTANTS.JWT.ACCESS_TOKEN_EXPIRY_MINUTES * 60, // 30 minutes
+    REFRESH_TOKEN_EXPIRY: CONFIG_CONSTANTS.JWT.REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60, // 30 days
   },
 
   // Twilio configuration for OTP
@@ -37,8 +69,8 @@ export const ENV_CONFIG = {
 
   // Redis configuration
   REDIS: {
-    HOST: process.env.EXPO_PUBLIC_REDIS_HOST || '31.97.76.106',
-    PORT: process.env.EXPO_PUBLIC_REDIS_PORT || '6379',
+    HOST: process.env.EXPO_PUBLIC_REDIS_HOST || CONFIG_CONSTANTS.REDIS.DEFAULT_HOST,
+    PORT: process.env.EXPO_PUBLIC_REDIS_PORT || CONFIG_CONSTANTS.REDIS.DEFAULT_PORT,
     PASSWORD: process.env.EXPO_PUBLIC_REDIS_PASSWORD || '',
     DB: 0,
   },
@@ -51,8 +83,8 @@ export const ENV_CONFIG = {
 
   // Support
   SUPPORT: {
-    EMAIL: process.env.EXPO_PUBLIC_SUPPORT_EMAIL || 'support@fixdrive.com',
-    PHONE: process.env.EXPO_PUBLIC_SUPPORT_PHONE || '+994501234567',
+    EMAIL: process.env.EXPO_PUBLIC_SUPPORT_EMAIL || CONFIG_CONSTANTS.SUPPORT.DEFAULT_EMAIL,
+    PHONE: process.env.EXPO_PUBLIC_SUPPORT_PHONE || CONFIG_CONSTANTS.SUPPORT.DEFAULT_PHONE,
   },
 
   // Maps
@@ -60,10 +92,10 @@ export const ENV_CONFIG = {
     MAPTILER_API_KEY: process.env.EXPO_PUBLIC_MAPTILER_API_KEY || 'your-maptiler-key',
     GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || 'your-google-maps-key',
     DEFAULT_REGION: {
-      latitude: 40.3777,
-      longitude: 49.8920,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitude: CONFIG_CONSTANTS.MAP.DEFAULT_LATITUDE,
+      longitude: CONFIG_CONSTANTS.MAP.DEFAULT_LONGITUDE,
+      latitudeDelta: CONFIG_CONSTANTS.MAP.DEFAULT_LATITUDE_DELTA,
+      longitudeDelta: CONFIG_CONSTANTS.MAP.DEFAULT_LONGITUDE_DELTA,
     },
   },
 
@@ -89,7 +121,7 @@ export const ENV_CONFIG = {
   DEV: {
     ENABLE_LOGGING: __DEV__,
     ENABLE_DEBUG_MENU: __DEV__,
-    MOCK_DELAY: 1000, // Delay for mock API calls
+    MOCK_DELAY: CONFIG_CONSTANTS.DEV.MOCK_DELAY, // Delay for mock API calls
   },
 };
 
@@ -128,7 +160,7 @@ export const ConfigUtils = {
   async checkServerHealth(): Promise<boolean> {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), CONFIG_CONSTANTS.DEV.HEALTH_CHECK_TIMEOUT);
       
       const response = await fetch(this.getApiUrl('/health'), {
         method: 'GET',

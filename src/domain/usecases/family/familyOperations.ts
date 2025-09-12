@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addFamilyMember as addToMockDB, updateFamilyMember as updateInMockDB, deleteFamilyMember as deleteFromMockDB } from '../../../shared/mocks/familyMembers';
+import { addFamilyMember as addToMockDB, updateFamilyMember as updateInMockDB, removeFamilyMember as deleteFromMockDB } from '../../../shared/mocks/shared/familyMembers';
 import { getDefaultDate, calculateAge } from '../../../shared/utils/profileHelpers';
 
 export interface FamilyMember {
@@ -75,7 +75,7 @@ export const familyOperations = {
    */
   addToMockDB(clientId: string, memberData: Omit<FamilyMember, 'id'>): void {
     try {
-      addToMockDB(clientId, memberData);
+      addToMockDB(clientId, { ...memberData, id: Date.now().toString() } as FamilyMember);
     } catch (error) {
       console.error('Error adding family member to mock DB:', error);
       throw error;
@@ -87,7 +87,10 @@ export const familyOperations = {
    */
   updateInMockDB(clientId: string, memberId: string, memberData: Omit<FamilyMember, 'id'>): FamilyMember | null {
     try {
-      return updateInMockDB(clientId, memberId, memberData);
+      updateInMockDB(clientId, memberId, memberData);
+      const { getFamilyMembersByClientId } = require('../../../shared/mocks/shared/familyMembers');
+      const list = getFamilyMembersByClientId(clientId);
+      return list.find((m: FamilyMember) => m.id === memberId) || null;
     } catch (error) {
       console.error('Error updating family member in mock DB:', error);
       return null;

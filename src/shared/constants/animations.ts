@@ -1,9 +1,12 @@
-export const ANIMATION_DURATIONS = {
+// Animation duration constants
+const ANIMATION_DURATION_VALUES = {
   FAST: 200,
   NORMAL: 300,
   SLOW: 400,
   VERY_SLOW: 600,
 } as const;
+
+export const ANIMATION_DURATIONS = ANIMATION_DURATION_VALUES;
 
 export const ANIMATION_EASINGS = {
   LINEAR: 'linear',

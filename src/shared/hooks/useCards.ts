@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoleKeys } from './useRole';
-import { Card, mockCards } from '../mocks/cardsMock';
+import { Card, mockCards } from '../mocks/shared/cardsMock';
 import { cardOperations } from '../../domain/usecases/card/cardOperations';
 
 export const useCards = () => {

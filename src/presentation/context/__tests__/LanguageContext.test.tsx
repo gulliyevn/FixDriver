@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
-import { LanguageProvider, useLanguage } from '../LanguageContext';
-import { AuthProvider } from '../AuthContext';
+import { LanguageProvider, useLanguage } from '../language/LanguageContext';
+import { AuthProvider } from '../auth/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Мокаем AsyncStorage

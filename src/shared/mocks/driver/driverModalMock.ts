@@ -5,7 +5,7 @@
  * Clean implementation with English comments and data.
  */
 
-import { mockClients, mockDrivers } from '../data/users';
+import mockUsers from '../data/users';
 
 export type TripDotStyle = 'default' | 'blue' | 'location';
 

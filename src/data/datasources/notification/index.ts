@@ -1,5 +1,9 @@
-export { NotificationService, notificationService } from './NotificationService';
-export { NotificationMockService } from './NotificationMockService';
-export { NotificationUtils } from './NotificationUtils';
+/**
+ * Notification Services Exports
+ * 
+ * Central export for all notification-related services
+ */
+
+export { NotificationService } from './NotificationService';
 export { NotificationGrpcService } from './NotificationGrpcService';
-export * from './NotificationTypes';
+export { NotificationMockService } from './NotificationMockService';

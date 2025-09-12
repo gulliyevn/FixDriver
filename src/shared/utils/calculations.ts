@@ -1,10 +1,30 @@
-import { Address } from '../types';
+// Address type for calculations
+interface Address {
+  latitude: number;
+  longitude: number;
+}
+
+// Calculation constants
+const CALCULATION_CONSTANTS = {
+  EARTH_RADIUS_METERS: 6371000,
+  DISTANCE_THRESHOLDS: {
+    HIGHWAY_KM: 10,
+    MAIN_ROADS_KM: 5,
+    WALKING_KM: 1,
+  },
+  SPEEDS: {
+    HIGHWAY: 60,
+    MAIN_ROADS: 40,
+    WALKING: 15,
+    DEFAULT_CITY: 25,
+  },
+} as const;
 
 /**
  * Calculate distance between two coordinates using Haversine formula
  */
 export function calculateDistance(from: Address, to: Address): number {
-  const R = 6371000; // Earth's radius in meters
+  const R = CALCULATION_CONSTANTS.EARTH_RADIUS_METERS; // Earth's radius in meters
   const lat1Rad = (from.latitude * Math.PI) / 180;
   const lat2Rad = (to.latitude * Math.PI) / 180;
   const deltaLatRad = ((to.latitude - from.latitude) * Math.PI) / 180;
@@ -22,10 +42,10 @@ export function calculateDistance(from: Address, to: Address): number {
  * Estimate average speed based on distance
  */
 export function getAverageSpeed(distance: number): number {
-  if (distance > 10000) return 60; // > 10km - highway
-  if (distance > 5000) return 40;  // 5-10km - main roads
-  if (distance < 1000) return 15;  // < 1km - walking distance
-  return 25; // Default city speed
+  if (distance > CALCULATION_CONSTANTS.DISTANCE_THRESHOLDS.HIGHWAY_KM * 1000) return CALCULATION_CONSTANTS.SPEEDS.HIGHWAY; // > 10km - highway
+  if (distance > CALCULATION_CONSTANTS.DISTANCE_THRESHOLDS.MAIN_ROADS_KM * 1000) return CALCULATION_CONSTANTS.SPEEDS.MAIN_ROADS;  // 5-10km - main roads
+  if (distance < CALCULATION_CONSTANTS.DISTANCE_THRESHOLDS.WALKING_KM * 1000) return CALCULATION_CONSTANTS.SPEEDS.WALKING;  // < 1km - walking distance
+  return CALCULATION_CONSTANTS.SPEEDS.DEFAULT_CITY; // Default city speed
 }
 
 /**

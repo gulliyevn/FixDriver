@@ -2,6 +2,7 @@ import * as Location from 'expo-location';
 import { MapLocation, DefaultRegion } from './MapTypes';
 import { MapCacheService } from './MapCacheService';
 import { MAP_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
+import { AddressGeocodingService } from '../address/AddressGeocodingService';
 
 export class MapLocationService {
   private cacheService: MapCacheService;
@@ -53,22 +54,15 @@ export class MapLocationService {
       // Get address by coordinates with retry
       let address = 'Determining address...';
       try {
-        const addressResponse = await Location.reverseGeocodeAsync({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
+        const result = await AddressGeocodingService.reverseGeocode(
+          location.coords.latitude,
+          location.coords.longitude
+        );
 
-        if (addressResponse[0]) {
-          const addr = addressResponse[0];
-          const addressParts = [
-            addr.street,
-            addr.streetNumber,
-            addr.city,
-            addr.region,
-            addr.country
-          ].filter(Boolean);
-          
-          address = addressParts.join(', ') || 'Unknown address';
+        if (result.success && result.data) {
+          address = result.data.address;
+        } else {
+          address = 'Unknown address';
         }
       } catch (geocodeError) {
         console.warn('Geocoding error, using coordinates:', geocodeError);
@@ -165,22 +159,15 @@ export class MapLocationService {
             // Get address for new position
             let address = 'Updating address...';
             try {
-              const addressResponse = await Location.reverseGeocodeAsync({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-              });
+              const result = await AddressGeocodingService.reverseGeocode(
+                location.coords.latitude,
+                location.coords.longitude
+              );
 
-              if (addressResponse[0]) {
-                const addr = addressResponse[0];
-                const addressParts = [
-                  addr.street,
-                  addr.streetNumber,
-                  addr.city,
-                  addr.region,
-                  addr.country
-                ].filter(Boolean);
-                
-                address = addressParts.join(', ') || 'Unknown address';
+              if (result.success && result.data) {
+                address = result.data.address;
+              } else {
+                address = 'Unknown address';
               }
             } catch (geocodeError) {
               console.warn('Geocoding error during tracking:', geocodeError);
@@ -215,14 +202,13 @@ export class MapLocationService {
   // Geocode address
   async geocodeAddress(address: string): Promise<MapLocation> {
     try {
-      const geocodeResult = await Location.geocodeAsync(address);
+      const result = await AddressGeocodingService.geocodeAddress(address);
       
-      if (geocodeResult.length > 0) {
-        const { latitude, longitude } = geocodeResult[0];
+      if (result.success && result.data) {
         return {
-          latitude,
-          longitude,
-          address,
+          latitude: result.data.lat,
+          longitude: result.data.lng,
+          address: result.data.address,
         };
       } else {
         throw new Error('Address not found');

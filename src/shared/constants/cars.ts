@@ -37,11 +37,17 @@ export const carModelsByBrand: Record<string, CarModelOption[]> = {
   ],
 };
 
+// Car year constants
+const CAR_YEAR_CONSTANTS = {
+  MIN_YEAR: 1990,
+  CURRENT_YEAR_OFFSET: 1,
+} as const;
+
 // Generate year options from currentYear+1 down to 1990
 export const getYearOptions = () => {
   const currentYear = new Date().getFullYear();
   const yearOptions: { label: string; value: string }[] = [];
-  for (let year = currentYear + 1; year >= 1990; year--) {
+  for (let year = currentYear + CAR_YEAR_CONSTANTS.CURRENT_YEAR_OFFSET; year >= CAR_YEAR_CONSTANTS.MIN_YEAR; year--) {
     yearOptions.push({ label: String(year), value: String(year) });
   }
   return yearOptions;

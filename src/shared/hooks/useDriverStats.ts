@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../presentation/context/AuthContext';
+import { useAuth } from '../../presentation/context/auth/AuthContext';
 import { useDriverStatsState } from './driver/useDriverStatsState';
 import { useDriverStatsActions } from './driver/useDriverStatsActions';
 import { useDriverStatsUtils } from './driver/useDriverStatsUtils';

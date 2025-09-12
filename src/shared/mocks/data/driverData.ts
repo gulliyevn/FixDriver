@@ -8,7 +8,7 @@ import {
   CarCategory,
   TariffType,
   PriceRange
-} from '../types/driver';
+} from '../../types/driver/driver';
 
 /**
  * Driver data service implementation

@@ -1,4 +1,4 @@
-import { Address } from '../../../shared/mocks/residenceMock';
+import { Address } from '../../../shared/mocks/shared/residenceMock';
 import { AddressService } from '../../../data/datasources/address/AddressService';
 
 /**
@@ -16,8 +16,8 @@ export const addressOperations = {
       // return await addressService.getAddresses();
       
       // Temporarily using mocks
-      const { getAddresses } = await import('../../../shared/mocks/residenceMock');
-      return await getAddresses() || [];
+      const { mockAddressStorage } = await import('../../../shared/mocks/shared/residenceMock');
+      return await mockAddressStorage.getAddresses() || [];
     } catch (error) {
       console.error('Error getting addresses:', error);
       return [];
@@ -34,8 +34,16 @@ export const addressOperations = {
       // return await addressService.createAddress(addressData);
       
       // Temporarily using mocks
-      const { addAddress } = await import('../../../shared/mocks/residenceMock');
-      return await addAddress(addressData);
+      const { mockAddressStorage } = await import('../../../shared/mocks/shared/residenceMock');
+      await mockAddressStorage.addAddress({
+        id: Date.now().toString(),
+        isDefault: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        ...addressData,
+      } as any);
+      const updated = await mockAddressStorage.getAddresses();
+      return updated[updated.length - 1] || null;
     } catch (error) {
       console.error('Error creating address:', error);
       return null;
@@ -52,8 +60,10 @@ export const addressOperations = {
       // return await addressService.updateAddress(id, updates);
       
       // Temporarily using mocks
-      const { updateAddress } = await import('../../../shared/mocks/residenceMock');
-      return await updateAddress(id, updates);
+      const { mockAddressStorage } = await import('../../../shared/mocks/shared/residenceMock');
+      await mockAddressStorage.updateAddress(id, updates as any);
+      const list = await mockAddressStorage.getAddresses();
+      return list.find(a => a.id === id) || null;
     } catch (error) {
       console.error('Error updating address:', error);
       return null;
@@ -70,8 +80,9 @@ export const addressOperations = {
       // return await addressService.deleteAddress(id);
       
       // Temporarily using mocks
-      const { deleteAddress } = await import('../../../shared/mocks/residenceMock');
-      return await deleteAddress(id);
+      const { mockAddressStorage } = await import('../../../shared/mocks/shared/residenceMock');
+      await mockAddressStorage.deleteAddress(id);
+      return true;
     } catch (error) {
       console.error('Error deleting address:', error);
       return false;
@@ -88,8 +99,9 @@ export const addressOperations = {
       // return await addressService.setDefaultAddress(id);
       
       // Temporarily using mocks
-      const { setDefaultAddress } = await import('../../../shared/mocks/residenceMock');
-      return await setDefaultAddress(id);
+      const { mockAddressStorage } = await import('../../../shared/mocks/shared/residenceMock');
+      await mockAddressStorage.setDefaultAddress(id);
+      return true;
     } catch (error) {
       console.error('Error setting default address:', error);
       return false;

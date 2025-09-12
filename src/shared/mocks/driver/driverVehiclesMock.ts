@@ -1,6 +1,6 @@
-import { DriverVehicle } from '../types/driver/DriverVehicle';
+// import { DriverVehicle } from '../types/driver/DriverVehicle';
 
-export const mockDriverVehicles: DriverVehicle[] = [
+export const mockDriverVehicles: any[] = [
   {
     id: '1',
     driverId: 'driver-1',

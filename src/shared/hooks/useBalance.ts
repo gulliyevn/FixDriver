@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAuth } from '../../presentation/context/AuthContext';
+import { useAuth } from '../../presentation/context/auth';
 import { useBalanceState } from './balance/useBalanceState';
 import { useBalanceActions } from './balance/useBalanceActions';
 import { useBalanceUtils } from './balance/useBalanceUtils';

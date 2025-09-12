@@ -1,7 +1,7 @@
-import { createAuthMockUser, findAuthUserByCredentials } from '../../../shared/mocks/auth';
-import JWTService from '../JWTService';
+import { createAuthMockUser, findAuthUserByCredentials } from '../../../shared/mocks/shared/auth';
+import { JWTService } from '../jwt';
 import { UserRole } from '../../../shared/types/user';
-import { AUTH_CONSTANTS } from '../../../shared/constants';
+import { AUTH_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 import { AuthResponse } from './AuthTypes';
 
 export class AuthMockService {
@@ -16,12 +16,14 @@ export class AuthMockService {
       const existingUser = findAuthUserByCredentials(email, password);
       
       if (existingUser) {
-        const tokens = await JWTService.forceRefreshTokens({
+        const jwt = new JWTService();
+        const refresh = await jwt.generateToken({
           userId: existingUser.id,
           email: existingUser.email,
-          role: existingUser.role,
+          role: existingUser.role === 'driver' ? 'driver' : 'client',
           phone: existingUser.phone,
-        });
+        } as any);
+        const tokens = await jwt.refreshToken(refresh);
         
         return {
           success: true,
@@ -38,12 +40,14 @@ export class AuthMockService {
       
       const mockUser = createAuthMockUser({ email, role });
       
-      const tokens = await JWTService.forceRefreshTokens({
+      const jwt2 = new JWTService();
+      const refresh2 = await jwt2.generateToken({
         userId: mockUser.id,
         email: mockUser.email,
-        role: mockUser.role,
+        role: mockUser.role === 'driver' ? 'driver' : 'client',
         phone: mockUser.phone,
-      });
+      } as any);
+      const tokens = await jwt2.refreshToken(refresh2);
       
       return {
         success: true,
@@ -73,12 +77,14 @@ export class AuthMockService {
       phone: userData.phone,
     });
 
-    const tokens = await JWTService.forceRefreshTokens({
+    const jwt3 = new JWTService();
+    const refresh3 = await jwt3.generateToken({
       userId: newUser.id,
       email: newUser.email,
-      role: newUser.role,
+      role: newUser.role === 'driver' ? 'driver' : 'client',
       phone: newUser.phone,
-    });
+    } as any);
+    const tokens = await jwt3.refreshToken(refresh3);
 
     return {
       success: true,
@@ -91,15 +97,18 @@ export class AuthMockService {
    * Mock token refresh for development
    */
   static async mockRefreshToken(): Promise<AuthResponse> {
-    const currentUser = await JWTService.getCurrentUser();
+    const jwt4 = new JWTService();
+    const tokensStored = await jwt4.getStoredTokens();
+    const currentUser = tokensStored?.accessToken ? jwt4.decode(tokensStored.accessToken) : null;
     
     if (currentUser) {
-      const tokens = await JWTService.forceRefreshTokens({
+      const newRefresh = await jwt4.generateToken({
         userId: currentUser.userId,
         email: currentUser.email,
         role: currentUser.role,
         phone: currentUser.phone,
-      });
+      } as any);
+      const tokens = await jwt4.refreshToken(newRefresh);
       
       return {
         success: true,

@@ -1,5 +1,5 @@
 import { ENV_CONFIG, ConfigUtils } from '../../../shared/config/environment';
-import { API_CLIENT_CONSTANTS } from '../../../shared/constants';
+import { API_CLIENT_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 import { APIResponse, RequestOptions, RetryConfig } from './APITypes';
 
 export class APIRequestHandler {

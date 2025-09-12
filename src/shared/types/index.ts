@@ -5,6 +5,7 @@ export * from './navigation';
 export * from './order';
 export * from './package';
 export * from './user';
+export * from './driver';
 
 // Export driver types explicitly to avoid conflicts
 export type { 

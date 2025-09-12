@@ -22,7 +22,9 @@ export const balanceOperations = {
    */
   async getEarnings(userId: string): Promise<number> {
     try {
-      return await MockServices.balance.getEarnings(userId);
+      const tx = await MockServices.balance.getTransactions(userId);
+      // Derive earnings from transactions (sum of positive amounts)
+      return tx.reduce((sum: number, t: { amount: number }) => sum + Math.max(0, t.amount), 0);
     } catch (error) {
       console.error('Error getting earnings:', error);
       throw error;
@@ -46,7 +48,7 @@ export const balanceOperations = {
    */
   async addEarnings(userId: string, amount: number) {
     try {
-      return await MockServices.balance.addEarnings(userId, amount);
+      return await MockServices.balance.addFunds(userId, amount);
     } catch (error) {
       console.error('Error adding earnings:', error);
       throw error;
@@ -58,7 +60,7 @@ export const balanceOperations = {
    */
   async topUpBalance(userId: string, amount: number) {
     try {
-      return await MockServices.balance.topUpBalance(userId, amount);
+      return await MockServices.balance.addFunds(userId, amount);
     } catch (error) {
       console.error('Error topping up balance:', error);
       throw error;
@@ -70,7 +72,7 @@ export const balanceOperations = {
    */
   async withdrawBalance(userId: string, amount: number) {
     try {
-      return await MockServices.balance.withdrawBalance(userId, amount);
+      return await MockServices.balance.withdrawFunds(userId, amount);
     } catch (error) {
       console.error('Error withdrawing balance:', error);
       throw error;
@@ -82,7 +84,10 @@ export const balanceOperations = {
    */
   async resetBalance(userId: string): Promise<void> {
     try {
-      await MockServices.balance.resetBalance(userId);
+      const current = await MockServices.balance.getBalance(userId);
+      if (current > 0) {
+        await MockServices.balance.withdrawFunds(userId, current);
+      }
     } catch (error) {
       console.error('Error resetting balance:', error);
       throw error;
@@ -94,7 +99,8 @@ export const balanceOperations = {
    */
   async resetEarnings(userId: string): Promise<void> {
     try {
-      await MockServices.balance.resetEarnings(userId);
+      // No direct API in mock; no-op for now
+      return;
     } catch (error) {
       console.error('Error resetting earnings:', error);
       throw error;

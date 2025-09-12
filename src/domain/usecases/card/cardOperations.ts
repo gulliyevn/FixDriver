@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card } from '../../../shared/mocks/cardsMock';
+import { Card } from '../../../shared/mocks/shared/cardsMock';
 import { CardService } from '../../../data/datasources/cardService';
 import { getUserStorageKey, STORAGE_KEYS } from '../../../shared/utils/storageKeys';
 

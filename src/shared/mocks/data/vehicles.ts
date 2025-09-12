@@ -2,9 +2,9 @@
  * 🚙 MOCK VEHICLE DATA
  */
 
-import { Vehicle } from '../types';
+// import { Vehicle } from '../../types';
 
-const mockVehicles: Vehicle[] = [
+const mockVehicles: any[] = [
   {
     id: 'vehicle_1',
     driverId: 'driver_1',

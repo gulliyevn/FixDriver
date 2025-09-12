@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../../presentation/context/AuthContext';
+import { useAuth } from '../../presentation/context/auth/AuthContext';
 import { useProfile } from './useProfile';
 import { useFocusEffect } from '@react-navigation/native';
 import { fixDriveFamilyOperations } from '../../domain/usecases/family/fixDriveFamilyOperations';

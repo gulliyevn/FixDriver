@@ -7,7 +7,7 @@ import {
   getLevelConfig, 
   isVIPLevel
 } from '../types/levels.config';
-import { useBalanceContext } from '../../../../context/BalanceContext';
+import { useBalanceContext } from '../../../../context/balance';
 import { useI18n } from '../../../../../shared/hooks/useI18n';
 
 const LEVEL_PROGRESS_KEY = '@driver_level_progress';

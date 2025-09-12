@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Address } from '../mocks/residenceMock';
+import { Address } from '../mocks/shared/residenceMock';
 import { ADDRESS_CONSTANTS } from '../constants/addressConstants';
 import { addressOperations } from '../../domain/usecases/address/addressOperations';
 

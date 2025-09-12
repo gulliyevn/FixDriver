@@ -1,4 +1,4 @@
-import { AUTH_CONSTANTS } from '../../../shared/constants';
+import { AUTH_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 import { AuthResponse } from './AuthTypes';
 
 export class AuthGrpcService {

@@ -40,3 +40,16 @@ export interface ProfileHelpersService {
     changeRole?: (role: 'client' | 'driver') => void
   ): void;
 }
+
+/**
+ * Address type for residence management
+ */
+export interface Address {
+  id: string;
+  title: string;
+  address: string;
+  category: 'home' | 'work' | 'other';
+  isDefault: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}

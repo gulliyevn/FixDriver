@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAuth } from '../../presentation/context/AuthContext';
+import { useAuth } from '../../presentation/context/auth/AuthContext';
 import { useFamilyMembersState } from './family/useFamilyMembersState';
 import { useFamilyMembersActions } from './family/useFamilyMembersActions';
 import { useFamilyMembersUtils } from './family/useFamilyMembersUtils';

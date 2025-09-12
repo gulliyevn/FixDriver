@@ -1,18 +1,29 @@
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
-import { PackageProvider, usePackage } from '../PackageContext';
+import { PackageProvider, usePackage } from '../package/PackageContext';
 
-import { LanguageProvider } from '../LanguageContext';
-import { useBalance } from '../../hooks/useBalance';
+import { LanguageProvider } from '../language/LanguageContext';
+import { useBalance } from '../../../shared/hooks/useBalance';
 
 // Мокаем зависимости
-jest.mock('../../hooks/useBalance', () => ({
+jest.mock('../../../shared/hooks/useBalance', () => ({
   useBalance: jest.fn(() => ({
     balance: 1000,
+    earnings: 0,
     transactions: [],
+    isLoading: false,
+    error: null,
+    hasSufficientBalance: jest.fn().mockReturnValue(true),
+    formatBalance: jest.fn().mockReturnValue('$10.00'),
+    formatEarnings: jest.fn().mockReturnValue('$0.00'),
+    addEarnings: jest.fn(),
     topUpBalance: jest.fn(),
-    deductBalance: jest.fn().mockResolvedValue(true),
-    addTransaction: jest.fn(),
+    withdrawBalance: jest.fn().mockResolvedValue({ success: true }),
+    resetBalance: jest.fn(),
+    resetEarnings: jest.fn(),
+    refreshBalance: jest.fn(),
+    refreshEarnings: jest.fn(),
+    refreshTransactions: jest.fn(),
   })),
 }));
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -232,10 +243,21 @@ describe('PackageContext', () => {
       // Обновляем мок для этого теста
       mockUseBalance.mockReturnValue({
         balance: 1000,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$10.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: mockDeductBalance,
-        addTransaction: jest.fn(),
+        withdrawBalance: mockDeductBalance,
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       });
 
       const { result } = renderWithProviders(() => usePackage());
@@ -254,10 +276,21 @@ describe('PackageContext', () => {
       // Обновляем глобальный мок
       mockUseBalance.mockReturnValue({
         balance: 1000,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$10.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: mockDeductBalance,
-        addTransaction: jest.fn(),
+        withdrawBalance: mockDeductBalance,
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       });
 
       const { result } = renderWithProviders(() => usePackage());
@@ -287,10 +320,21 @@ describe('PackageContext', () => {
       // Обновляем мок для этого теста
       mockUseBalance.mockReturnValue({
         balance: 1000,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$10.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: mockDeductBalance,
-        addTransaction: jest.fn(),
+        withdrawBalance: mockDeductBalance,
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       });
 
       const { result } = renderWithProviders(() => usePackage());
@@ -314,10 +358,21 @@ describe('PackageContext', () => {
       // Обновляем мок для этого теста
       mockUseBalance.mockReturnValue({
         balance: 50, // Недостаточно средств
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(false),
+        formatBalance: jest.fn().mockReturnValue('$0.50'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: mockDeductBalance,
-        addTransaction: jest.fn(),
+        withdrawBalance: mockDeductBalance,
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       });
 
       const { result } = renderWithProviders(() => usePackage());
@@ -337,10 +392,21 @@ describe('PackageContext', () => {
       // Обновляем мок для этого теста
       mockUseBalance.mockReturnValue({
         balance: 1000,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$10.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: mockDeductBalance,
-        addTransaction: jest.fn(),
+        withdrawBalance: mockDeductBalance,
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       });
 
       const { result } = renderWithProviders(() => usePackage());
@@ -443,10 +509,21 @@ describe('PackageContext', () => {
     it('should work correctly with client balance hook', async () => {
       const mockClientBalance = {
         balance: 1000,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$10.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: jest.fn().mockResolvedValue(true),
-        addTransaction: jest.fn(),
+        withdrawBalance: jest.fn().mockResolvedValue({ success: true }),
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       };
 
       mockUseBalance.mockReturnValue(mockClientBalance);
@@ -457,16 +534,27 @@ describe('PackageContext', () => {
         await result.current.updatePackage('premium', 'month');
       });
 
-      expect(mockClientBalance.deductBalance).toHaveBeenCalledWith(199, 'premium package purchase', 'premium');
+      expect(mockClientBalance.withdrawBalance).toHaveBeenCalledWith(199);
     });
 
     it('should work correctly with driver balance hook', async () => {
       const mockDriverBalance = {
         balance: 2500,
+        earnings: 0,
         transactions: [],
+        isLoading: false,
+        error: null,
+        hasSufficientBalance: jest.fn().mockReturnValue(true),
+        formatBalance: jest.fn().mockReturnValue('$25.00'),
+        formatEarnings: jest.fn().mockReturnValue('$0.00'),
+        addEarnings: jest.fn(),
         topUpBalance: jest.fn(),
-        deductBalance: jest.fn().mockResolvedValue(true),
-        addTransaction: jest.fn(),
+        withdrawBalance: jest.fn().mockResolvedValue({ success: true }),
+        resetBalance: jest.fn(),
+        resetEarnings: jest.fn(),
+        refreshBalance: jest.fn(),
+        refreshEarnings: jest.fn(),
+        refreshTransactions: jest.fn(),
       };
 
       mockUseBalance.mockReturnValue(mockDriverBalance);
@@ -478,7 +566,7 @@ describe('PackageContext', () => {
       });
 
       // Водители тоже могут покупать пакеты
-      expect(mockDriverBalance.deductBalance).toHaveBeenCalledWith(199, 'premium package purchase', 'premium');
+      expect(mockDriverBalance.withdrawBalance).toHaveBeenCalledWith(199);
     });
   });
 }); 

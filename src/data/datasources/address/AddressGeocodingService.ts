@@ -1,4 +1,4 @@
-import { ADDRESS_CONSTANTS } from '../../../shared/constants';
+import { ADDRESS_CONSTANTS } from '../../../shared/constants/addressConstants';
 import { 
   GeocodingResponse, 
   ExternalGeocodingResponse, 

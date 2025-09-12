@@ -199,7 +199,7 @@ export const mockEarningsSummary = {
   },
   month: {
     totalEarnings: '35,000 AFc',
-    totalRides: 1,260,
+    totalRides: 1260,
     averageEarning: '27.8 AFc',
     workingHours: '238 hours',
     efficiency: '87%'

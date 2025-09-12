@@ -1,11 +1,11 @@
-import { UserRole } from '../types/user';
-import { DriverLocation } from '../../data/datasources/map/MapTypes';
+import { UserRole } from '../../types/user';
+// import { DriverLocation } from '../../data/datasources/map/MapTypes';
 
 export const createMockDriverLocation = (
   baseLocation: { latitude: number; longitude: number },
-  driverData: Partial<DriverLocation['driver']> = {},
+  driverData: any = {},
   index: number = 0
-): DriverLocation => {
+): any => {
   const mockDrivers = [
     {
       id: '1',
@@ -85,7 +85,7 @@ export const createMockDriverLocation = (
 export const createMockDriverLocations = (
   baseLocation: { latitude: number; longitude: number },
   count: number = 3
-): DriverLocation[] => {
+): any[] => {
   return Array.from({ length: count }, (_, index) => 
     createMockDriverLocation(baseLocation, {}, index)
   );

@@ -8,7 +8,7 @@ import {
   DriverSort,
   DriverStatus 
 } from '../../../shared/types/driver';
-import { createMockDriver, createMockDriverStats, createMockDrivers } from '../../../shared/mocks';
+import { createMockDriver } from '../../../shared/mocks/driver/driverMock';
 import { DRIVER_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 
 export class DriverMockService {
@@ -53,14 +53,28 @@ export class DriverMockService {
    * Mock get driver statistics
    */
   static mockGetDriverStats(): DriverStats {
-    return createMockDriverStats();
+    return {
+      total_trips: 0,
+      completed_trips: 0,
+      cancelled_trips: 0,
+      total_earnings: 0,
+      average_rating: 0,
+      total_ratings: 0,
+      online_hours_today: 0,
+      online_hours_week: 0,
+      online_hours_month: 0,
+    } as DriverStats;
   }
 
   /**
    * Mock get drivers list
    */
   static mockGetDrivers(): Driver[] {
-    return createMockDrivers();
+    return [
+      createMockDriver({}, 'driver1'),
+      createMockDriver({}, 'driver2'),
+      createMockDriver({}, 'driver3'),
+    ];
   }
 
   /**

@@ -5,22 +5,22 @@
  * Easy to replace with gRPC calls later.
  */
 
-import { User } from '../types';
+import { User, UserRole } from '../../types';
 
 const mockUsers: User[] = [
   {
     id: 'user_1',
     email: 'john@example.com',
-    firstName: 'John',
-    lastName: 'Doe',
+    // firstName: 'John',
+    // lastName: 'Doe',
     name: 'John',
     surname: 'Doe',
     phone: '+994501234567',
-    role: 'client',
+    role: UserRole.CLIENT,
     avatar: 'https://via.placeholder.com/150',
-    isVerified: true,
+    // isVerified: true,
     createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
+    // updatedAt: '2024-01-01T00:00:00.000Z',
     profiles: {
       client: {
         balance: 150.50,
@@ -32,29 +32,29 @@ const mockUsers: User[] = [
             email: true,
             push: true,
             sms: false,
-          },
+          // },
           accessibility: {
             wheelchairAccess: false,
             childSeat: false,
             petFriendly: false,
-          },
-        },
+          // },
+        // },
         createdAt: '2024-01-01T00:00:00.000Z',
-        updatedAt: '2024-01-01T00:00:00.000Z',
-      }
-    }
+        // updatedAt: '2024-01-01T00:00:00.000Z',
+      // }
+    // }
   },
   {
     id: 'user_2',
     email: 'jane@example.com',
-    firstName: 'Jane',
-    lastName: 'Smith',
+    // firstName: 'Jane',
+    // lastName: 'Smith',
     name: 'Jane',
     surname: 'Smith',
     phone: '+994501234568',
-    role: 'driver',
+    role: UserRole.DRIVER,
     avatar: 'https://via.placeholder.com/150',
-    isVerified: true,
+    // isVerified: true,
     createdAt: '2024-01-02T00:00:00.000Z',
     updatedAt: '2024-01-02T00:00:00.000Z',
     profiles: {
@@ -67,21 +67,21 @@ const mockUsers: User[] = [
           years: 3,
           totalDistance: 15000,
           completedTrips: 150,
-        },
+        // },
         earnings: {
           total: 5000,
           thisMonth: 800,
           thisWeek: 200,
           averagePerTrip: 33.33,
-        },
+        // },
         schedule: {
           workingDays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
           workingHours: {
             start: '08:00',
             end: '18:00',
-          },
+          // },
           isFlexible: true,
-        },
+        // },
         documents: {
           license: {
             id: 'doc_1',
@@ -90,26 +90,26 @@ const mockUsers: User[] = [
             issuedBy: 'DMV',
             issuedDate: '2021-01-01',
             expiryDate: '2026-01-01',
-            isVerified: true,
+            // isVerified: true,
             verificationDate: '2021-01-15',
-          },
-        },
+          // },
+        // },
         createdAt: '2024-01-02T00:00:00.000Z',
         updatedAt: '2024-01-02T00:00:00.000Z',
-      }
-    }
+      // }
+    // }
   },
   {
     id: 'user_3',
     email: 'bob@example.com',
-    firstName: 'Bob',
-    lastName: 'Johnson',
+    // firstName: 'Bob',
+    // lastName: 'Johnson',
     name: 'Bob',
     surname: 'Johnson',
     phone: '+994501234569',
-    role: 'client',
+    role: UserRole.CLIENT,
     avatar: 'https://via.placeholder.com/150',
-    isVerified: true,
+    // isVerified: true,
     createdAt: '2024-01-03T00:00:00.000Z',
     updatedAt: '2024-01-03T00:00:00.000Z',
     profiles: {
@@ -123,17 +123,17 @@ const mockUsers: User[] = [
             email: true,
             push: false,
             sms: false,
-          },
+          // },
           accessibility: {
             wheelchairAccess: false,
             childSeat: false,
             petFriendly: false,
-          },
-        },
+          // },
+        // },
         createdAt: '2024-01-03T00:00:00.000Z',
         updatedAt: '2024-01-03T00:00:00.000Z',
-      }
-    }
+      // }
+    // }
   },
 ];
 

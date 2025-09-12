@@ -1,6 +1,6 @@
 import { Order, OrderStatus } from '../../../shared/types/order';
 import { OrderData } from './OrderTypes';
-import { createMockClientOrder, createMockDriverOrder, createMockAcceptedOrder, createMockUpdatedOrder } from '../../../shared/mocks/orderMock';
+import { createMockClientOrder, createMockDriverOrder, createMockAcceptedOrder, createMockUpdatedOrder } from '../../../shared/mocks/order/orderMock';
 import { ORDER_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 
 export class OrderGrpcService {

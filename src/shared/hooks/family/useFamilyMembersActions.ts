@@ -186,10 +186,10 @@ export const useFamilyMembersActions = ({
                   text: verifyText,
                   onPress: async (code) => {
                     if (code === '1234') {
-                      setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
+                      setFamilyPhoneVerifying((prev: {[key: string]: boolean}) => ({ ...prev, [memberId]: true }));
                       setTimeout(() => {
-                        setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
-                        setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
+                        setFamilyPhoneVerification((prev: {[key: string]: boolean}) => ({ ...prev, [memberId]: true }));
+                        setFamilyPhoneVerifying((prev: {[key: string]: boolean}) => ({ ...prev, [memberId]: false }));
                         // Update status in family member data
                         const updatedMembers = familyMembers.map(member => 
                           member.id === memberId 

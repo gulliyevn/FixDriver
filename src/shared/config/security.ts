@@ -3,6 +3,40 @@
  * Clean, compact, gRPC-ready security settings
  */
 
+// Security constants
+const SECURITY_CONSTANTS = {
+  VALIDATION: {
+    MAX_LENGTHS: {
+      EMAIL: 254,
+      NAME: 50,
+      PHONE: 20,
+    },
+  },
+  PASSWORD: {
+    MIN_LENGTH: 8,
+  },
+  SESSION: {
+    TOKEN_EXPIRY_HOURS: 24,
+    REFRESH_THRESHOLD_MINUTES: 5,
+  },
+  CRYPTO: {
+    RANDOM_BYTES_LENGTH: 16,
+    SALT_LENGTH: 16,
+    HASH_ALGORITHM: 'SHA-256',
+    HEX_PADDING: 2,
+  },
+  TOKEN: {
+    PREFIX: 'token_',
+  },
+  VALIDATION_ERRORS: {
+    MIN_LENGTH: 'minLength',
+    UPPERCASE: 'uppercase',
+    LOWERCASE: 'lowercase',
+    NUMBERS: 'numbers',
+    SPECIAL_CHARS: 'specialChars',
+  },
+} as const;
+
 export const SECURITY_CONFIG = {
   VALIDATION: {
     PATTERNS: {
@@ -13,21 +47,21 @@ export const SECURITY_CONFIG = {
       VEHICLE: /^\d{2}-[A-Z]{2}-\d{3}$/ // 12-AB-123
     },
     MAX_LENGTHS: {
-      EMAIL: 254,
-      NAME: 50,
-      PHONE: 20
+      EMAIL: SECURITY_CONSTANTS.VALIDATION.MAX_LENGTHS.EMAIL,
+      NAME: SECURITY_CONSTANTS.VALIDATION.MAX_LENGTHS.NAME,
+      PHONE: SECURITY_CONSTANTS.VALIDATION.MAX_LENGTHS.PHONE
     }
   },
   PASSWORD: {
-    MIN_LENGTH: 8,
+    MIN_LENGTH: SECURITY_CONSTANTS.PASSWORD.MIN_LENGTH,
     REQUIRE_UPPERCASE: true,
     REQUIRE_LOWERCASE: true,
     REQUIRE_NUMBERS: true,
     REQUIRE_SPECIAL: false
   },
   SESSION: {
-    TOKEN_EXPIRY: 24 * 60 * 60 * 1000, // 24 hours
-    REFRESH_THRESHOLD: 5 * 60 * 1000 // 5 minutes
+    TOKEN_EXPIRY: SECURITY_CONSTANTS.SESSION.TOKEN_EXPIRY_HOURS * 60 * 60 * 1000, // 24 hours
+    REFRESH_THRESHOLD: SECURITY_CONSTANTS.SESSION.REFRESH_THRESHOLD_MINUTES * 60 * 1000 // 5 minutes
   }
 };
 
@@ -36,19 +70,19 @@ export class SecurityUtils {
     const errors: string[] = [];
     
     if (password.length < SECURITY_CONFIG.PASSWORD.MIN_LENGTH) {
-      errors.push('minLength');
+      errors.push(SECURITY_CONSTANTS.VALIDATION_ERRORS.MIN_LENGTH);
     }
     if (SECURITY_CONFIG.PASSWORD.REQUIRE_UPPERCASE && !/[A-Z]/.test(password)) {
-      errors.push('uppercase');
+      errors.push(SECURITY_CONSTANTS.VALIDATION_ERRORS.UPPERCASE);
     }
     if (SECURITY_CONFIG.PASSWORD.REQUIRE_LOWERCASE && !/[a-z]/.test(password)) {
-      errors.push('lowercase');
+      errors.push(SECURITY_CONSTANTS.VALIDATION_ERRORS.LOWERCASE);
     }
     if (SECURITY_CONFIG.PASSWORD.REQUIRE_NUMBERS && !/\d/.test(password)) {
-      errors.push('numbers');
+      errors.push(SECURITY_CONSTANTS.VALIDATION_ERRORS.NUMBERS);
     }
     if (SECURITY_CONFIG.PASSWORD.REQUIRE_SPECIAL && !/[@$!%*?&]/.test(password)) {
-      errors.push('specialChars');
+      errors.push(SECURITY_CONSTANTS.VALIDATION_ERRORS.SPECIAL_CHARS);
     }
     
     return { isValid: errors.length === 0, errors };
@@ -57,19 +91,19 @@ export class SecurityUtils {
   static generateSecureToken(): string {
     // Generate cryptographically secure token
     const timestamp = Date.now().toString(36);
-    const randomBytes = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+    const randomBytes = Array.from(crypto.getRandomValues(new Uint8Array(SECURITY_CONSTANTS.CRYPTO.RANDOM_BYTES_LENGTH)))
       .map(b => b.toString(36))
       .join('');
-    return `token_${timestamp}_${randomBytes}`;
+    return `${SECURITY_CONSTANTS.TOKEN.PREFIX}${timestamp}_${randomBytes}`;
   }
 
   static async hashPassword(password: string): Promise<string> {
     // Use Web Crypto API for secure hashing
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashBuffer = await crypto.subtle.digest(SECURITY_CONSTANTS.CRYPTO.HASH_ALGORITHM, data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashArray.map(b => b.toString(16).padStart(SECURITY_CONSTANTS.CRYPTO.HEX_PADDING, '0')).join('');
   }
 
   static async verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
@@ -108,8 +142,8 @@ export class SecurityUtils {
   }
 
   static generateSalt(): string {
-    const array = new Uint8Array(16);
+    const array = new Uint8Array(SECURITY_CONSTANTS.CRYPTO.SALT_LENGTH);
     crypto.getRandomValues(array);
-    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    return Array.from(array, byte => byte.toString(16).padStart(SECURITY_CONSTANTS.CRYPTO.HEX_PADDING, '0')).join('');
   }
 }

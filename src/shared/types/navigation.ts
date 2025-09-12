@@ -37,6 +37,9 @@ export type AuthStackParamList = {
     phone: string;
     type: 'register' | 'forgot-password';
   };
+  ResetPassword: {
+    token: string;
+  };
 };
 
 // Client stack params

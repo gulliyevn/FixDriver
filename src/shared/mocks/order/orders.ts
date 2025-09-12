@@ -1,5 +1,5 @@
-import { Order } from '../types/order';
-import { Chat, Message } from '../types/chat';
+// import { Order } from '../types/order';
+// import { Chat, Message } from '../types/chat';
 
 const MOCK_LOCATIONS = {
   BAKU_CENTER: { latitude: 40.3777, longitude: 49.8920 },
@@ -9,7 +9,7 @@ const MOCK_LOCATIONS = {
 };
 
 // ===== МОК ЗАКАЗЫ =====
-export const mockOrders: Order[] = [
+export const mockOrders: any[] = [
   {
     id: 'order_1',
     clientId: 'client_1',
@@ -106,7 +106,7 @@ export const mockOrders: Order[] = [
 ];
 
 // ===== МОК ЧАТЫ =====
-export const mockChats: Chat[] = [
+export const mockChats: any[] = [
   {
     id: 'chat_1',
     clientId: 'client_1',
@@ -164,7 +164,7 @@ export const mockChats: Chat[] = [
 ];
 
 // ===== МОК СООБЩЕНИЯ =====
-export const mockMessages: Message[] = [
+export const mockMessages: any[] = [
   {
     id: 'msg_1',
     chatId: 'chat_1',

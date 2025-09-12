@@ -1,6 +1,6 @@
 import { User, UserRole } from '../../../shared/types/user';
 import { GoUserInfo, GoTokenResponse } from './AuthTypes';
-import { TokenResponse } from '../JWTService';
+import { TokenResponse } from '../jwt/JWTTypes';
 
 /**
  * Convert Go API response to frontend format

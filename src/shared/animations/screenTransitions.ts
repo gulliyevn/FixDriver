@@ -2,6 +2,18 @@ import { Animated, Dimensions } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+// Animation constants
+const ANIMATION_DURATION = {
+  FAST: 300,
+  NORMAL: 350,
+} as const;
+
+const ANIMATION_VALUES = {
+  SCALE_START: 0.8,
+  SCALE_MODERN_START: 0.95,
+  SLIDE_OFFSET: 0.3,
+} as const;
+
 export interface TransitionConfig {
   duration?: number;
   easing?: (value: number) => number;
@@ -20,7 +32,7 @@ export class ScreenTransitions {
 
   // Slide from right animation
   slideFromRight(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
     this.slideAnim.setValue(screenWidth);
     return Animated.timing(this.slideAnim, {
@@ -42,10 +54,10 @@ export class ScreenTransitions {
 
   // Modern slide with scale animation
   modernSlide(config: TransitionConfig = {}) {
-    const { duration = 350 } = config;
+    const { duration = ANIMATION_DURATION.NORMAL } = config;
     
-    this.slideAnim.setValue(screenWidth * 0.3);
-    this.scaleAnim.setValue(0.95);
+    this.slideAnim.setValue(screenWidth * ANIMATION_VALUES.SLIDE_OFFSET);
+    this.scaleAnim.setValue(ANIMATION_VALUES.SCALE_MODERN_START);
     
     return Animated.parallel([
       Animated.timing(this.slideAnim, {
@@ -63,7 +75,7 @@ export class ScreenTransitions {
 
   // Slide from left animation
   slideFromLeft(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
     this.slideAnim.setValue(-screenWidth);
     return Animated.timing(this.slideAnim, {
@@ -75,7 +87,7 @@ export class ScreenTransitions {
 
   // Fade in animation
   fadeIn(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
     this.fadeAnim.setValue(0);
     return Animated.timing(this.fadeAnim, {
@@ -87,9 +99,9 @@ export class ScreenTransitions {
 
   // Scale in animation
   scaleIn(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
-    this.scaleAnim.setValue(0.8);
+    this.scaleAnim.setValue(ANIMATION_VALUES.SCALE_START);
     return Animated.timing(this.scaleAnim, {
       toValue: 1,
       duration,
@@ -99,7 +111,7 @@ export class ScreenTransitions {
 
   // Combined slide and fade animation
   slideAndFade(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
     return Animated.parallel([
       this.slideFromRight({ duration }),
@@ -109,7 +121,7 @@ export class ScreenTransitions {
 
   // Modal slide up animation
   slideUp(config: TransitionConfig = {}) {
-    const { duration = 300 } = config;
+    const { duration = ANIMATION_DURATION.FAST } = config;
     
     this.slideAnim.setValue(screenHeight);
     return Animated.timing(this.slideAnim, {

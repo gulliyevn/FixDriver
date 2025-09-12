@@ -15,7 +15,7 @@ import { Address, getAddressCategoryOptions } from '../mocks/residenceMock';
 import { AddressModalStyles as styles, getAddressModalStyles } from '../styles/components/AddressModal.styles';
 import Select from './Select';
 import MapViewComponent from './MapView';
-import * as Location from 'expo-location';
+import { AddressGeocodingService } from '../../data/datasources/address/AddressGeocodingService';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 
@@ -70,103 +70,19 @@ const AddressModal: React.FC<AddressModalProps> = ({
     setSelectedMapLocation(location);
     
     try {
-      // Сначала пробуем Expo Location
-      const reverseGeocode = await Location.reverseGeocodeAsync({
-        latitude: location.latitude,
-        longitude: location.longitude
-      });
+      // Use AddressGeocodingService for reverse geocoding
+      const result = await AddressGeocodingService.reverseGeocode(location.latitude, location.longitude);
       
-      // Если Expo Location не дал номер дома, пробуем OpenStreetMap Nominatim
-      if (!reverseGeocode[0]?.streetNumber) {
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}&addressdetails=1&accept-language=ru`
-          );
-          const data = await response.json();
-          
-          if (data.display_name) {
-            setAddressText(data.display_name);
-            // Автоматически верифицируем адрес, выбранный по карте
-            setAddressValidation('valid');
-            return;
-          }
-        } catch (osmError) {
-  
-          
-          // Пробуем Yandex Geocoding API
-          try {
-            const yandexResponse = await fetch(
-              `https://geocode-maps.yandex.ru/1.x/?apikey=YOUR_YANDEX_API_KEY&format=json&geocode=${location.longitude},${location.latitude}&lang=ru_RU`
-            );
-            const yandexData = await yandexResponse.json();
-            
-            if (yandexData.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.text) {
-              const yandexAddress = yandexData.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
-              setAddressText(yandexAddress);
-              // Автоматически верифицируем адрес, выбранный по карте
-              setAddressValidation('valid');
-              return;
-            }
-          } catch (yandexError) {
-            console.warn('Yandex geocoding error:', yandexError);
-          }
-        }
-      }
-      
-      if (reverseGeocode && reverseGeocode.length > 0) {
-        const addressLocation = reverseGeocode[0];
-
-        
-        // Собираем полный адрес с деталями
-        let streetPart = '';
-        if (addressLocation.street) {
-          if (addressLocation.streetNumber) {
-            streetPart = `${addressLocation.street}, ${addressLocation.streetNumber}`;
-          } else if (addressLocation.name) {
-            // Иногда номер дома приходит в поле name
-            streetPart = `${addressLocation.street}, ${addressLocation.name}`;
-          } else {
-            streetPart = addressLocation.street;
-          }
-        }
-          
-        const cityPart = addressLocation.city 
-          ? `${addressLocation.city}`
-          : '';
-          
-        const regionPart = addressLocation.region 
-          ? `${addressLocation.region}`
-          : '';
-          
-        const postalPart = addressLocation.postalCode 
-          ? `${addressLocation.postalCode}`
-          : '';
-          
-        const countryPart = addressLocation.country 
-          ? `${addressLocation.country}`
-          : '';
-        
-        // Собираем адрес по частям
-        const addressParts = [
-          streetPart,
-          cityPart,
-          regionPart,
-          postalPart,
-          countryPart
-        ].filter(Boolean);
-        
-        const formattedAddress = addressParts.join(', ');
-        setAddressText(formattedAddress || 'Адрес не найден');
-        
-        // Автоматически верифицируем адрес, выбранный по карте
-        if (formattedAddress && formattedAddress !== 'Адрес не найден') {
-          setAddressValidation('valid');
-        }
+      if (result.success && result.data) {
+        setAddressText(result.data.address);
+        // Automatically validate address selected from map
+        setAddressValidation('valid');
       } else {
         setAddressText('Адрес не найден');
         setAddressValidation('invalid');
       }
     } catch (error) {
+      console.warn('Geocoding error:', error);
       setAddressText('Ошибка получения адреса');
       setAddressValidation('invalid');
     }

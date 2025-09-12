@@ -17,7 +17,7 @@ import { DriverMockService } from './DriverMockService';
 import { DriverGrpcService } from './DriverGrpcService';
 import { DriverListParams, DriverListDto, IDriverService } from './DriverTypes';
 
-class DriverService implements IDriverService {
+class DriverService {
   private static BASE_URL = ENV_CONFIG.API.BASE_URL;
 
   // Paginated list of drivers

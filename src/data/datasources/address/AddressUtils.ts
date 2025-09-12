@@ -1,4 +1,4 @@
-import { Address } from '../../../shared/mocks/residenceMock';
+import { Address } from '../../../shared/mocks/shared/residenceMock';
 import { AddressComponents } from './AddressTypes';
 
 export class AddressUtils {

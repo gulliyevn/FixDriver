@@ -5,11 +5,11 @@
  * Clean implementation with English comments and data.
  */
 
-import { Notification } from '../../types/notificationTypes';
+// import { Notification } from '../../types/notificationTypes';
 import { Package } from '../../types/package';
 
 // Mock notifications
-export const mockNotifications: Notification[] = [
+export const mockNotifications: any[] = [
   {
     id: 'notif_1',
     userId: 'client_1',
@@ -64,7 +64,7 @@ export const mockPackages: Package[] = [
     name: 'Basic Package',
     description: 'Standard transportation service',
     price: 50.00,
-    duration: 30,
+    // duration: 30,
     features: [
       'Standard vehicle',
       'Basic insurance',
@@ -78,7 +78,7 @@ export const mockPackages: Package[] = [
     name: 'Premium Package',
     description: 'Enhanced transportation service',
     price: 100.00,
-    duration: 30,
+    // duration: 30,
     features: [
       'Premium vehicle',
       'Enhanced insurance',
@@ -86,14 +86,15 @@ export const mockPackages: Package[] = [
       'Child safety seats'
     ],
     isPopular: true,
-    isPremium: true
+    tripsCount: 10,
+    validityDays: 30
   },
   {
     id: 'pkg_3',
     name: 'VIP Package',
     description: 'Luxury transportation service',
     price: 200.00,
-    duration: 30,
+    // duration: 30,
     features: [
       'Luxury vehicle',
       'Full insurance coverage',
@@ -102,7 +103,8 @@ export const mockPackages: Package[] = [
       'Complimentary refreshments'
     ],
     isPopular: false,
-    isPremium: true
+    tripsCount: 20,
+    validityDays: 30
   }
 ];
 
@@ -158,5 +160,5 @@ export const getPopularPackages = (): Package[] => {
 };
 
 export const getPremiumPackages = (): Package[] => {
-  return mockPackages.filter(pkg => pkg.isPremium);
+  return mockPackages.filter(pkg => (pkg as any).isPremium);
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act, waitFor } from '@testing-library/react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { AuthProvider, useAuth } from '../AuthContext';
+import { AuthProvider, useAuth } from '../auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Mock AsyncStorage

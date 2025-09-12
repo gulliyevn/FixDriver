@@ -1,94 +1,111 @@
-import { Notification, PushNotificationPayload } from './NotificationTypes';
+/**
+ * Notification gRPC Service
+ * 
+ * gRPC implementation for notification operations
+ * Handles backend communication for notifications
+ */
 
 export class NotificationGrpcService {
-  // Send push notification via gRPC
-  async sendPushNotificationGrpc(payload: PushNotificationPayload, userId: string): Promise<boolean> {
-    // TODO: Implement gRPC call to send push notification
-    try {
-      console.log('Sending push notification via gRPC...', payload.title, userId);
-      // Mock implementation - replace with actual gRPC call
-      return true;
-    } catch (error) {
-      console.error('Failed to send push notification via gRPC:', error);
-      return false;
-    }
+  /**
+   * Get all user notifications via gRPC
+   */
+  async getNotifications(): Promise<any[]> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // const response = await client.getNotifications({ userId: currentUserId });
+    // return response.notifications.map(this.mapGrpcNotificationToNotification);
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Get notifications from backend via gRPC
-  async getNotificationsGrpc(userId: string): Promise<Notification[]> {
-    // TODO: Implement gRPC call to get notifications from backend
-    try {
-      console.log('Getting notifications via gRPC...', userId);
-      // Mock implementation - replace with actual gRPC call
-      return [];
-    } catch (error) {
-      console.error('Failed to get notifications via gRPC:', error);
-      return [];
-    }
+  /**
+   * Mark notification as read via gRPC
+   */
+  async markAsRead(notificationId: string): Promise<void> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // await client.markAsRead({ notificationId, userId: currentUserId });
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Mark notification as read via gRPC
-  async markAsReadGrpc(notificationId: string, userId: string): Promise<boolean> {
-    // TODO: Implement gRPC call to mark notification as read
-    try {
-      console.log('Marking notification as read via gRPC...', notificationId, userId);
-      // Mock implementation - replace with actual gRPC call
-      return true;
-    } catch (error) {
-      console.error('Failed to mark notification as read via gRPC:', error);
-      return false;
-    }
+  /**
+   * Mark all notifications as read via gRPC
+   */
+  async markAllAsRead(): Promise<void> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // await client.markAllAsRead({ userId: currentUserId });
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Mark all notifications as read via gRPC
-  async markAllAsReadGrpc(userId: string): Promise<boolean> {
-    // TODO: Implement gRPC call to mark all notifications as read
-    try {
-      console.log('Marking all notifications as read via gRPC...', userId);
-      // Mock implementation - replace with actual gRPC call
-      return true;
-    } catch (error) {
-      console.error('Failed to mark all notifications as read via gRPC:', error);
-      return false;
-    }
+  /**
+   * Delete a notification via gRPC
+   */
+  async deleteNotification(notificationId: string): Promise<void> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // await client.deleteNotification({ notificationId, userId: currentUserId });
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Delete notification via gRPC
-  async deleteNotificationGrpc(notificationId: string, userId: string): Promise<boolean> {
-    // TODO: Implement gRPC call to delete notification
-    try {
-      console.log('Deleting notification via gRPC...', notificationId, userId);
-      // Mock implementation - replace with actual gRPC call
-      return true;
-    } catch (error) {
-      console.error('Failed to delete notification via gRPC:', error);
-      return false;
-    }
+  /**
+   * Delete multiple notifications via gRPC
+   */
+  async deleteNotifications(notificationIds: string[]): Promise<void> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // await client.deleteNotifications({ notificationIds, userId: currentUserId });
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Create notification via gRPC
-  async createNotificationGrpc(notification: Omit<Notification, 'id' | 'createdAt'>): Promise<Notification | null> {
-    // TODO: Implement gRPC call to create notification
-    try {
-      console.log('Creating notification via gRPC...', notification.title);
-      // Mock implementation - replace with actual gRPC call
-      return null;
-    } catch (error) {
-      console.error('Failed to create notification via gRPC:', error);
-      return null;
-    }
+  /**
+   * Get unread notifications count via gRPC
+   */
+  async getUnreadCount(): Promise<number> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // const response = await client.getUnreadCount({ userId: currentUserId });
+    // return response.count;
+    
+    throw new Error('gRPC service not implemented yet');
   }
 
-  // Sync notifications with backend
-  async syncWithBackend(): Promise<boolean> {
-    // TODO: Implement comprehensive gRPC sync
-    try {
-      console.log('Syncing notifications with backend...');
-      // Mock implementation - replace with actual gRPC calls
-      return true;
-    } catch (error) {
-      console.error('Failed to sync with backend:', error);
-      return false;
-    }
+  /**
+   * Create a new notification via gRPC
+   */
+  async createNotification(notification: any): Promise<any> {
+    // TODO: Implement gRPC call to backend
+    // const client = new NotificationClient(grpcEndpoint);
+    // const response = await client.createNotification({ 
+    //   userId: currentUserId,
+    //   title: notification.title,
+    //   message: notification.message,
+    //   type: notification.type,
+    //   data: JSON.stringify(notification.data || {})
+    // });
+    // return this.mapGrpcNotificationToNotification(response.notification);
+    
+    throw new Error('gRPC service not implemented yet');
+  }
+
+  /**
+   * Map gRPC notification to local notification type
+   */
+  private mapGrpcNotificationToNotification(grpcNotification: any): any {
+    return {
+      id: grpcNotification.id,
+      userId: grpcNotification.userId,
+      title: grpcNotification.title,
+      message: grpcNotification.message,
+      type: grpcNotification.type,
+      isRead: grpcNotification.isRead,
+      data: grpcNotification.data ? JSON.parse(grpcNotification.data) : {},
+      createdAt: new Date(grpcNotification.createdAt),
+      updatedAt: new Date(grpcNotification.updatedAt),
+    };
   }
 }

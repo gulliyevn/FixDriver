@@ -1,12 +1,13 @@
-import JWTService from '../JWTService';
+import { JWTService } from '../jwt';
 import { ENV_CONFIG, ConfigUtils } from '../../../shared/config/environment';
-import { AUTH_CONSTANTS } from '../../../shared/constants';
+import { AUTH_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 import { AuthResponse, GoLoginRequest, GoRegisterRequest, GoTokenResponse } from './AuthTypes';
 import { transformGoUserToFrontend, transformGoTokensToFrontend } from './AuthUtils';
 import { AuthMockService } from './AuthMockService';
 import { AuthGrpcService } from './AuthGrpcService';
 
 export class AuthService {
+  private static jwt = new JWTService();
   /**
    * User login
    */
@@ -45,7 +46,7 @@ export class AuthService {
       const tokens = transformGoTokensToFrontend(goResponse);
       
       // Save tokens
-      await JWTService.saveTokens(tokens);
+      await AuthService.jwt.storeTokens(tokens);
       
       return {
         success: true,
@@ -107,7 +108,7 @@ export class AuthService {
       const tokens = transformGoTokensToFrontend(goResponse);
       
       // Save tokens
-      await JWTService.saveTokens(tokens);
+      await AuthService.jwt.storeTokens(tokens);
       
       return {
         success: true,
@@ -129,7 +130,8 @@ export class AuthService {
   static async logout(): Promise<AuthResponse> {
     try {
       // Get refresh token
-      const refreshToken = await JWTService.getRefreshToken();
+      const stored = await AuthService.jwt.getStoredTokens();
+      const refreshToken = stored?.refreshToken || null;
       
       if (refreshToken) {
         // Check server availability
@@ -151,7 +153,7 @@ export class AuthService {
       }
 
       // Clear tokens locally
-      await JWTService.clearTokens();
+      await AuthService.jwt.clearTokens();
       
       return {
         success: true,
@@ -171,7 +173,8 @@ export class AuthService {
    */
   static async refreshToken(): Promise<AuthResponse> {
     try {
-      const refreshToken = await JWTService.getRefreshToken();
+      const stored2 = await AuthService.jwt.getStoredTokens();
+      const refreshToken = stored2?.refreshToken || null;
       
       if (!refreshToken) {
         throw new Error('No refresh token available');
@@ -203,7 +206,7 @@ export class AuthService {
       const tokens = transformGoTokensToFrontend(goResponse);
       
       // Save new tokens
-      await JWTService.saveTokens(tokens);
+      await AuthService.jwt.storeTokens(tokens);
       
       return {
         success: true,

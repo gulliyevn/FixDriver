@@ -1,4 +1,4 @@
-import { useAuth } from '../../presentation/context/AuthContext';
+import { useAuth } from '../../presentation/context/auth/AuthContext';
 import { UserRole } from '../types/user';
 
 /**

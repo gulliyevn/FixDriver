@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card } from '../../shared/mocks/cardsMock';
+import { Card } from '../../shared/mocks/shared/cardsMock';
 import { CARD_CONSTANTS } from '../../shared/constants/adaptiveConstants';
 
 export interface ICardService {

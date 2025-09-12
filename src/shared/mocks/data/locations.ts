@@ -2,9 +2,9 @@
  * 📍 MOCK LOCATION DATA
  */
 
-import { Location } from '../types';
+// import { Location } from '../../types';
 
-const mockLocations: Location[] = [
+const mockLocations: any[] = [
   {
     id: 'loc_1',
     latitude: 40.7128,

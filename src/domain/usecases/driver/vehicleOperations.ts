@@ -1,5 +1,5 @@
 import { DriverVehicle, CreateVehicleRequest, UpdateVehicleRequest } from '../../../shared/types/driver/DriverVehicle';
-import { mockDriverVehicles } from '../../../shared/mocks/driverVehiclesMock';
+import { mockDriverVehicles } from '../../../shared/mocks/driver/driverVehiclesMock';
 import { VEHICLE_CONSTANTS } from '../../../shared/constants/vehicleConstants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

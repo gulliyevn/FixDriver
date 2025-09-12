@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
-import { getCurrentColors } from '../constants/colors';
-import { TabBarStyles as styles } from '../styles/navigation/TabBar.styles';
+import { useLanguage } from '../context/language';
+import { getCurrentColors } from '../../shared/constants/colors';
+import { TabBarStyles as styles } from '../../shared/styles/navigation/TabBar.styles';
 
 interface TabBarProps {
   state: { routes: Array<{ key: string; name: string }>; index: number };
@@ -14,141 +14,63 @@ interface TabBarProps {
 
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const { isDark } = useTheme();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const currentColors = getCurrentColors(isDark);
 
-  // Temporary static translations for debugging
-  const staticTranslations = {
-    ru: {
-      map: 'Карта',
-      drivers: 'Водители',
-      schedule: 'Расписание',
-      chats: 'Чаты',
-      profile: 'Профиль',
-      orders: 'Заказы',
-      earnings: 'Заработок'
-    },
-    en: {
-      map: 'Map',
-      drivers: 'Drivers',
-      schedule: 'Schedule',
-      chats: 'Chats',
-      profile: 'Profile',
-      orders: 'Orders',
-      earnings: 'Earnings'
-    },
-    az: {
-      map: 'Xəritə',
-      drivers: 'Sürücülər',
-      schedule: 'Cədvəl',
-      chats: 'Söhbətlər',
-      profile: 'Profil',
-      orders: 'Sifarişlər',
-      earnings: 'Qazanc'
-    },
-    tr: {
-      map: 'Harita',
-      drivers: 'Sürücüler',
-      schedule: 'Program',
-      chats: 'Sohbetler',
-      profile: 'Profil',
-      orders: 'Siparişler',
-      earnings: 'Kazanç'
-    },
-    es: {
-      map: 'Mapa',
-      drivers: 'Conductores',
-      schedule: 'Horario',
-      chats: 'Chats',
-      profile: 'Perfil',
-      orders: 'Pedidos',
-      earnings: 'Ganancias'
-    },
-    fr: {
-      map: 'Carte',
-      drivers: 'Chauffeurs',
-      schedule: 'Planning',
-      chats: 'Chats',
-      profile: 'Profil',
-      orders: 'Commandes',
-      earnings: 'Gains'
-    },
-    de: {
-      map: 'Karte',
-      drivers: 'Fahrer',
-      schedule: 'Zeitplan',
-      chats: 'Chats',
-      profile: 'Profil',
-      orders: 'Aufträge',
-      earnings: 'Verdienst'
-    },
-    ar: {
-      map: 'الخريطة',
-      drivers: 'السائقين',
-      schedule: 'الجدول',
-      chats: 'الدردشات',
-      profile: 'الملف الشخصي',
-      orders: 'الطلبات',
-      earnings: 'الأرباح'
-    }
-  };
-
-  const currentTranslations = staticTranslations[language] || staticTranslations.ru;
-
   const tabConfig = useMemo(() => [
-    // Клиентские табы
+    // Client tabs
     {
       name: 'Map',
       icon: 'map-outline',
       activeIcon: 'map',
-      label: currentTranslations.map,
+      label: t('navigation.tabs.map'),
     },
     {
       name: 'Drivers',
       icon: 'people-outline',
       activeIcon: 'people',
-      label: currentTranslations.drivers,
+      label: t('navigation.tabs.drivers'),
     },
     {
       name: 'Schedule',
       icon: 'add',
       activeIcon: 'add',
-      label: currentTranslations.schedule,
-      isSpecial: true, // Специальная кнопка в круге
+      label: t('navigation.tabs.schedule'),
+      isSpecial: true,
     },
     {
       name: 'Chat',
       icon: 'chatbubbles-outline',
       activeIcon: 'chatbubbles',
-      label: currentTranslations.chats,
+      label: t('navigation.tabs.chats'),
     },
     {
       name: 'ClientProfile',
       icon: 'person-outline',
       activeIcon: 'person',
-      label: currentTranslations.profile,
+      label: t('navigation.tabs.profile'),
     },
-    // Водительские табы
+    // Driver tabs
     {
       name: 'Orders',
       icon: 'list-outline',
       activeIcon: 'list',
-      label: currentTranslations.orders,
+      label: t('navigation.tabs.orders'),
     },
     {
       name: 'Earnings',
       icon: 'wallet-outline',
       activeIcon: 'wallet',
-      label: currentTranslations.earnings,
-      isSpecial: true, // Специальная кнопка в круге
+      label: t('navigation.tabs.earnings'),
+      isSpecial: true,
     },
     {
       name: 'Profile',
       icon: 'person-outline',
       activeIcon: 'person',
-      label: currentTranslations.profile,
+      label: t('navigation.tabs.profile'),
     },
-  ], [language, currentTranslations]);
+  ], [t]);
 
   return (
     <View style={[
@@ -182,7 +104,7 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
           });
         };
 
-        // Проверяем, является ли это специальной кнопкой в круге
+        // Check if this is a special circular button
         const isSpecialTab = tab?.isSpecial;
 
         return (
@@ -197,24 +119,23 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
             style={[styles.tabItem, isSpecialTab && styles.specialTabContainer]}
           >
             {isSpecialTab ? (
-              // Специальная кнопка в круге
+              // Special circular button
               <View style={[
                 styles.specialTabCircle,
                 {
-                  backgroundColor: isFocused ? currentColors.primary : currentColors.primary,
-                  shadowColor: isFocused ? currentColors.primary : currentColors.primary,
-                  borderColor: isFocused ? currentColors.primary : currentColors.primary,
+                  backgroundColor: currentColors.primary,
+                  shadowColor: currentColors.primary,
+                  borderColor: currentColors.primary,
                 }
               ]}>
                 <Ionicons
                   name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
                   size={30}
                   color="#fff"
-                  style={styles.specialTabIcon}
                 />
               </View>
             ) : (
-              // Обычная иконка
+              // Regular icon
               <Ionicons
                 name={(isFocused ? tab?.activeIcon : tab?.icon) as keyof typeof Ionicons.glyphMap}
                 size={24}

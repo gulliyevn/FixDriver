@@ -1,4 +1,4 @@
-import { API_CLIENT_CONSTANTS } from '../../../shared/constants';
+import { API_CLIENT_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 import { APIResponse, GrpcConfig } from './APITypes';
 
 export class APIGrpcClient {

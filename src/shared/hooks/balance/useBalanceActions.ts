@@ -34,13 +34,19 @@ export const useBalanceActions = ({
       setIsLoading(true);
       setError(null);
       
-      const result = await balanceOperations.addEarnings(userId, amount);
+      await balanceOperations.addEarnings(userId, amount);
       
-      setBalance(result.newBalance);
-      setEarnings(result.newEarnings);
-      setTransactions(result.transactions);
+      // Get updated data
+      const newBalance = await balanceOperations.getBalance(userId);
+      const newEarnings = await balanceOperations.getEarnings(userId);
+      const transactions = await balanceOperations.getTransactions(userId);
       
-      console.log('Earnings added:', amount, 'New balance:', result.newBalance);
+      setBalance(newBalance);
+      setEarnings(newEarnings);
+      setTransactions(transactions);
+      
+      const result = { newBalance, newEarnings, transactions };
+      console.log('Earnings added:', amount, 'New balance:', newBalance);
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to add earnings';
@@ -64,12 +70,17 @@ export const useBalanceActions = ({
       setIsLoading(true);
       setError(null);
       
-      const result = await balanceOperations.topUpBalance(userId, amount);
+      await balanceOperations.topUpBalance(userId, amount);
       
-      setBalance(result.newBalance);
-      setTransactions(result.transactions);
+      // Get updated data
+      const newBalance = await balanceOperations.getBalance(userId);
+      const transactions = await balanceOperations.getTransactions(userId);
       
-      console.log('Balance topped up:', amount, 'New balance:', result.newBalance);
+      setBalance(newBalance);
+      setTransactions(transactions);
+      
+      const result = { newBalance, transactions };
+      console.log('Balance topped up:', amount, 'New balance:', newBalance);
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to top up balance';
@@ -93,17 +104,25 @@ export const useBalanceActions = ({
       setIsLoading(true);
       setError(null);
       
-      const result = await balanceOperations.withdrawBalance(userId, amount);
+      const currentBalance = await balanceOperations.getBalance(userId);
+      const success = currentBalance >= amount;
       
-      if (result.success && result.newBalance !== undefined) {
-        setBalance(result.newBalance);
-        if (result.transactions) {
-          setTransactions(result.transactions);
-        }
+      if (success) {
+        await balanceOperations.withdrawBalance(userId, amount);
+        const newBalance = await balanceOperations.getBalance(userId);
+        const transactions = await balanceOperations.getTransactions(userId);
+        
+        setBalance(newBalance);
+        setTransactions(transactions);
+        
+        const result = { success: true, newBalance, transactions };
+        console.log('Balance withdrawal:', amount, 'Success:', true);
+        return result;
+      } else {
+        const result = { success: false };
+        console.log('Balance withdrawal:', amount, 'Success:', false);
+        return result;
       }
-      
-      console.log('Balance withdrawal:', amount, 'Success:', result.success);
-      return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to withdraw balance';
       setError(errorMessage);

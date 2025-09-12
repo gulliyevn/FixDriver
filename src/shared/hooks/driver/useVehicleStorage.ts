@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DriverVehicle } from '../../types/driver/DriverVehicle';
-import { mockDriverVehicles } from '../../mocks/driverVehiclesMock';
+import { mockDriverVehicles } from '../../mocks/driver/driverVehiclesMock';
 import { VEHICLE_CONSTANTS } from '../../../shared/constants/vehicleConstants';
 
 /**

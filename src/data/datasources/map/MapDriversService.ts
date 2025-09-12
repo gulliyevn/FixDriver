@@ -1,5 +1,5 @@
 import { MapLocation, DriverLocation } from './MapTypes';
-import { createMockDriverLocations } from '../../../shared/mocks/mapMock';
+import { createMockDriverLocations } from '../../../shared/mocks/utils/mapMock';
 import { MAP_CONSTANTS } from '../../../shared/constants/adaptiveConstants';
 
 export class MapDriversService {

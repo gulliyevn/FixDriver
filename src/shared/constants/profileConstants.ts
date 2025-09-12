@@ -1,4 +1,7 @@
 export const PROFILE_CONSTANTS = {
+  STORAGE_KEYS: {
+    DRIVER_PROFILE: 'driver_profile',
+  },
   DEFAULTS: {
     BIRTH_DATE: '1990-01-01',
   },

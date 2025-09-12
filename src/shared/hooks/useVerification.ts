@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
-import { useLanguage } from '../../presentation/context/LanguageContext';
+import { useLanguage } from '../../presentation/context/language/LanguageContext';
 import { verificationOperations, VerificationStatus, IsVerifying } from '../../domain/usecases/verification/verificationOperations';
 
 /**

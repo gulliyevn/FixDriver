@@ -1,4 +1,4 @@
-import { Address } from '../../../shared/mocks/residenceMock';
+import { Address } from '../../../shared/mocks/shared/residenceMock';
 
 export interface IAddressService {
   getAddresses(): Promise<Address[]>;
@@ -8,9 +8,6 @@ export interface IAddressService {
   validateAddress(address: string): Promise<AddressValidationResult>;
   validateCoordinates(lat: number, lng: number): Promise<boolean>;
   validateAddressData(addressData: Partial<Address>): Promise<AddressValidationResult>;
-  geocodeAddress(address: string): Promise<GeocodingResponse>;
-  reverseGeocode(lat: number, lng: number): Promise<GeocodingResponse>;
-  getAddressFromCoordinates(lat: number, lng: number): Promise<string>;
   formatAddress(address: Address): string;
   calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number;
   parseAddressComponents(address: string): AddressComponents;

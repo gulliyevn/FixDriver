@@ -1,9 +1,9 @@
-import { Notification } from '../../data/datasources/notification/NotificationTypes';
+// import { Notification } from '../../data/datasources/notification/NotificationTypes';
 
 export const createMockNotification = (
-  data: Partial<Notification> = {},
+  data: any = {},
   userId: string = 'user1'
-): Notification => ({
+): any => ({
   id: `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
   userId,
   title: data.title || 'Test Notification',
@@ -14,8 +14,8 @@ export const createMockNotification = (
   data: data.data || {},
 });
 
-export const createMockNotifications = (count: number = 5, userId: string = 'user1'): Notification[] => {
-  const types: Notification['type'][] = ['trip', 'payment', 'driver', 'system', 'order'];
+export const createMockNotifications = (count: number = 5, userId: string = 'user1'): any[] => {
+  const types: string[] = ['trip', 'payment', 'driver', 'system', 'order'];
   const titles = [
     'Trip Reminder',
     'Payment Confirmation',
@@ -42,9 +42,9 @@ export const createMockNotifications = (count: number = 5, userId: string = 'use
   );
 };
 
-export const mockNotifications: Notification[] = createMockNotifications(10);
+export const mockNotifications: any[] = createMockNotifications(10);
 
-export const createTimeBasedNotifications = (): Array<Omit<Notification, 'id' | 'createdAt'>> => [
+export const createTimeBasedNotifications = (): Array<any> => [
   {
     userId: 'user1',
     title: 'Trip Reminder',
