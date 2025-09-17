@@ -31,33 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.fixdrive.app",
-      "intentQueries": [
-        {
-          "action": "android.intent.action.VIEW",
-          "data": {
-            "scheme": "comgooglemaps"
-          }
-        },
-        {
-          "action": "android.intent.action.VIEW",
-          "data": {
-            "scheme": "yandexmaps"
-          }
-        },
-        {
-          "action": "android.intent.action.VIEW",
-          "data": {
-            "scheme": "yandexnavi"
-          }
-        },
-        {
-          "action": "android.intent.action.VIEW",
-          "data": {
-            "scheme": "waze"
-          }
-        }
-      ]
+      "package": "com.fixdrive.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -70,10 +44,11 @@
           "icon": "./assets/notification-icon.png",
           "color": "#ffffff"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-localization"
     ],
-    "entryPoint": "./app/App.tsx",
-    "jsEngine": "jsc",
+    "jsEngine": "hermes",
     "scheme": "fixdrive",
     "experiments": {
       "tsconfigPaths": false

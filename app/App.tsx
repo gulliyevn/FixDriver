@@ -3,17 +3,17 @@ import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ThemeProvider } from '../src/presentation/context/ThemeContext';
-import { AuthProvider } from '../src/presentation/context/AuthContext';
-import { ProfileProvider } from '../src/presentation/context/ProfileContext';
-import { PackageProvider } from '../src/presentation/context/PackageContext';
-import { LevelProgressProvider } from '../src/presentation/context/LevelProgressContext';
-import { BalanceProvider } from '../src/presentation/context/BalanceContext';
+import { ThemeProvider } from '../src/context/ThemeContext';
+import { AuthProvider } from '../src/context/AuthContext';
+import { ProfileProvider } from '../src/context/ProfileContext';
+import { PackageProvider } from '../src/context/PackageContext';
+import { LevelProgressProvider } from '../src/context/LevelProgressContext';
+import { BalanceProvider } from '../src/context/BalanceContext';
 
-import RootNavigator from '../src/presentation/navigation/RootNavigator';
-import { LanguageProvider } from '../src/presentation/context/LanguageContext';
-import DynamicStatusBar from '../src/presentation/components/DynamicStatusBar';
-import { NotificationService } from '../src/data/datasources/notification/NotificationService';
+import RootNavigator from '../src/navigation/RootNavigator';
+import { LanguageProvider } from '../src/context/LanguageContext';
+import DynamicStatusBar from '../src/components/DynamicStatusBar';
+import { NotificationService } from '../src/services/NotificationService';
 import 'formdata-polyfill';
 
 function App() {
