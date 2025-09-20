@@ -71,6 +71,7 @@
     "expo-status-bar": "~3.0.8",
     "formdata-polyfill": "^4.0.10",
     "i18n-js": "^4.5.1",
+    "lucide-react-native": "^0.544.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.4",

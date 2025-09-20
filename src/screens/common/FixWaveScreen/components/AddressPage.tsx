@@ -5,6 +5,7 @@ import { useLanguage } from '../../../../context/LanguageContext';
 import { getCurrentColors } from '../../../../constants/colors';
 import FixDriveDropdown from '../../../../components/FixDriveDropdown';
 import FixDriveMapInput from '../../../../components/FixDriveMapInput';
+import UnifiedDateTimePickerModal from './UnifiedDateTimePickerModal';
 import { useFixDriveFamilyMembers } from '../../../../hooks/useFixDriveFamilyMembers';
 import { fixwaveOrderService } from '../../../../services/fixwaveOrderService';
 import { AddressData } from '../types/fix-wave.types';
@@ -25,6 +26,8 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
   const [selectedPackage, setSelectedPackage] = useState<string>(initialData?.packageType || '');
   const [addresses, setAddresses] = useState<any[]>(initialData?.addresses || []);
   const [isSaving, setIsSaving] = useState(false);
+  const [startDateTime, setStartDateTime] = useState<Date | null>(null);
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   // Загружаем данные из сессии при инициализации и при изменении initialData
   useEffect(() => {
@@ -176,10 +179,53 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
         onSelect={handlePackageSelect}
       />
 
+      {/* Дата начала (контейнер, открывающий модалку даты+времени) */}
+      <View style={{ marginBottom: 16 }}>
+        <Text style={{
+          fontSize: 14,
+          fontWeight: '500',
+          marginBottom: 8,
+          color: colors.text
+        }}>
+          {t('new.dateStart')}
+        </Text>
+        <TouchableOpacity
+          onPress={() => setPickerVisible(true)}
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 12,
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: 8,
+            backgroundColor: colors.surface
+          }}
+        >
+          <Text style={{
+            fontSize: 15,
+            color: startDateTime ? colors.text : colors.textSecondary
+          }}>
+            {startDateTime
+              ? `${String(startDateTime.getDate()).padStart(2, '0')}.${String(startDateTime.getMonth()+1).padStart(2, '0')}.${startDateTime.getFullYear()} ${String(startDateTime.getHours()).padStart(2, '0')}:${String(startDateTime.getMinutes()).padStart(2, '0')}`
+              : '00 00 00 00 00'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Ввод адреса через карту */}
       <FixDriveMapInput 
         onAddressesChange={handleAddressesChange}
         initialAddresses={addresses}
+      />
+
+      <UnifiedDateTimePickerModal
+        visible={pickerVisible}
+        title={t('new.dateStart')}
+        value={startDateTime}
+        onCancel={() => setPickerVisible(false)}
+        onConfirm={(d) => { setStartDateTime(d); setPickerVisible(false); }}
+        colors={colors}
+        t={t}
+        isDark={isDark}
       />
       
       {/* Кнопка Сохранить и Продолжить */}

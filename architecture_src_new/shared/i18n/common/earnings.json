@@ -1,0 +1,16 @@
+{
+  "en": {
+    "topDrivers": "Top Drivers",
+    "earnings": "Earnings",
+    "rides": "Rides",
+    "level": "Level",
+    "position": "Position"
+  },
+  "ru": {
+    "topDrivers": "Топ водители",
+    "earnings": "Заработок",
+    "rides": "Поездки",
+    "level": "Уровень",
+    "position": "Позиция"
+  }
+}

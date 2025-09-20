@@ -3,17 +3,19 @@ import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ThemeProvider } from '../src/context/ThemeContext';
-import { AuthProvider } from '../src/context/AuthContext';
-import { ProfileProvider } from '../src/context/ProfileContext';
-import { PackageProvider } from '../src/context/PackageContext';
-import { LevelProgressProvider } from '../src/context/LevelProgressContext';
-import { BalanceProvider } from '../src/context/BalanceContext';
+// Removed legacy providers to avoid mounting old screens/contexts
 
-import RootNavigator from '../src/navigation/RootNavigator';
-import { LanguageProvider } from '../src/context/LanguageContext';
-import DynamicStatusBar from '../src/components/DynamicStatusBar';
-import { NotificationService } from '../src/services/NotificationService';
+import { 
+  AuthNavigator as NewAuthNavigator, 
+  ThemeProvider as NewThemeProvider, 
+  AuthProvider as NewAuthProvider,
+  BalanceProvider as NewBalanceProvider,
+  LevelProgressProvider as NewLevelProgressProvider,
+  LanguageProvider as NewLanguageProvider,
+  ProfileProvider as NewProfileProvider
+} from '../architecture_src_new';
+import { I18nProvider } from '../architecture_src_new/shared/i18n';
+import NotificationService from '../src/services/NotificationService';
 import 'formdata-polyfill';
 
 function App() {
@@ -35,24 +37,23 @@ function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <LanguageProvider>
-          <ThemeProvider>
-            <AuthProvider>
-              <BalanceProvider>
-                <ProfileProvider>
-                  <PackageProvider>
-                    <LevelProgressProvider>
-                      <NavigationContainer>
-                        <RootNavigator />
-                        <DynamicStatusBar />
-                      </NavigationContainer>
-                    </LevelProgressProvider>
-                  </PackageProvider>
-                </ProfileProvider>
-              </BalanceProvider>
-            </AuthProvider>
-          </ThemeProvider>
-        </LanguageProvider>
+        <NavigationContainer>
+          <I18nProvider>
+            <NewThemeProvider>
+              <NewLanguageProvider>
+                <NewAuthProvider>
+                  <NewBalanceProvider>
+                    <NewProfileProvider>
+                      <NewLevelProgressProvider>
+                    <NewAuthNavigator />
+                      </NewLevelProgressProvider>
+                    </NewProfileProvider>
+                  </NewBalanceProvider>
+                </NewAuthProvider>
+              </NewLanguageProvider>
+            </NewThemeProvider>
+          </I18nProvider>
+        </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -1,0 +1,11 @@
+{
+  "levelNames": {
+    "starter": "Starter",
+    "determined": "Determined", 
+    "reliable": "Reliable",
+    "champion": "Champion",
+    "superstar": "Superstar",
+    "emperor": "Emperor",
+    "vip": "VIP"
+  }
+}

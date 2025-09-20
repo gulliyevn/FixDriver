@@ -1,0 +1,11 @@
+{
+  "ru": { "new": { "dateStart": "Дата Начала" } },
+  "en": { "new": { "dateStart": "Start date" } },
+  "tr": { "new": { "dateStart": "Başlangıç tarihi" } },
+  "az": { "new": { "dateStart": "Başlama tarixi" } },
+  "fr": { "new": { "dateStart": "Date de début" } },
+  "es": { "new": { "dateStart": "Fecha de inicio" } },
+  "de": { "new": { "dateStart": "Startdatum" } },
+  "ar": { "new": { "dateStart": "تاريخ البدء" } }
+}
+

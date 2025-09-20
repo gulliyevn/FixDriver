@@ -430,9 +430,9 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
         </View>
       )}
 
-      {/* Список точек */}
+      {/* Список точек (оставляем только верхний) */}
       <View style={{ marginBottom: 12 }}>
-        {addresses.map((address, index) => {
+        {addresses.slice(0, 1).map((address, index) => {
           const status = getPointStatus(address);
           const pointColor = getPointColor(address.type);
           const statusIcon = getStatusIcon(status, address.type);
@@ -450,19 +450,14 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
               borderWidth: 1,
               borderColor: borderColor
             }}>
-              <TouchableOpacity 
-                style={{ marginRight: 12 }}
-                onPress={() => {
-                  setActiveAddressId(address.id);
-                  setShowAddressList(!showAddressList);
-                }}
-              >
+              {/* Отключаем выпадающий список */}
+              <View style={{ marginRight: 12 }}>
                 <Ionicons 
-                  name={showAddressList && activeAddressId === address.id ? "chevron-up" : "chevron-down"} 
+                  name="chevron-down" 
                   size={20} 
                   color={colors.textSecondary} 
                 />
-              </TouchableOpacity>
+              </View>
               
               <View style={{ flex: 1 }}>
                 <Text style={{ 
@@ -511,7 +506,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                           : addr
                       );
                       setAddresses(updatedAddresses);
-                      onAddressesChange(updatedAddresses);
+                      onAddressesChange(updatedAddresses.slice(0, 1));
                       
                       // Очищаем валидацию для очищенного адреса
                       setAddressValidation(prev => {
@@ -529,18 +524,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
 
 
 
-                {address.type === 'to' && (
-                  <TouchableOpacity 
-                    style={{ 
-                      padding: 8,
-                      opacity: addresses.filter(addr => addr.type === 'stop').length >= 2 ? 0.5 : 1
-                    }}
-                    onPress={addStop}
-                    disabled={addresses.filter(addr => addr.type === 'stop').length >= 2}
-                  >
-                    <Ionicons name="add" size={16} color={colors.primary} />
-                  </TouchableOpacity>
-                )}
+                {/* Кнопка добавления остановок/второго адреса скрыта */}
                 
                 {address.type === 'stop' && (
                   <TouchableOpacity 
@@ -552,119 +536,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                 )}
               </View>
 
-              {/* Выпадающий список для каждого контейнера */}
-              {showAddressList && activeAddressId === address.id && (
-                <View style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  backgroundColor: colors.surface,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 5,
-                  elevation: 10,
-                  zIndex: 1000,
-                  maxHeight: 200,
-                  marginTop: 20
-                }}>
-                  <ScrollView style={{ maxHeight: 200 }} showsVerticalScrollIndicator={false}>
-                    {/* Текущая локация */}
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingVertical: 12,
-                        paddingHorizontal: 16,
-                        borderBottomWidth: 1,
-                        borderBottomColor: colors.border
-                      }}
-                      onPress={() => {
-                        setShowAddressList(false);
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Ionicons name="navigate" size={16} color={colors.primary} style={{ marginRight: 8 }} />
-                        <Text style={{ fontSize: 16, color: colors.text }}>
-                          Текущая локация
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    {/* Недавние поездки */}
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingVertical: 12,
-                        paddingHorizontal: 16,
-                        borderBottomWidth: 1,
-                        borderBottomColor: colors.border
-                      }}
-                      onPress={() => {
-                        setShowAddressList(false);
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Ionicons name="time" size={16} color={colors.primary} style={{ marginRight: 8 }} />
-                        <Text style={{ fontSize: 16, color: colors.text }}>
-                          Недавние поездки
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    {/* Домашний адрес */}
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingVertical: 12,
-                        paddingHorizontal: 16,
-                        borderBottomWidth: 1,
-                        borderBottomColor: colors.border
-                      }}
-                      onPress={() => {
-                        setShowAddressList(false);
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Ionicons name="home" size={16} color={colors.primary} style={{ marginRight: 8 }} />
-                        <Text style={{ fontSize: 16, color: colors.text }}>
-                          Домашний адрес
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    {/* Рабочий адрес */}
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingVertical: 12,
-                        paddingHorizontal: 16
-                      }}
-                      onPress={() => {
-                        setShowAddressList(false);
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Ionicons name="business" size={16} color={colors.primary} style={{ marginRight: 8 }} />
-                        <Text style={{ fontSize: 16, color: colors.text }}>
-                          Рабочий адрес
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </ScrollView>
-                </View>
-              )}
+              {/* Выпадающий список отключен */}
             </View>
           );
         })}
