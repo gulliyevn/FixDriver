@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, Image, Modal } from 'react-native';
-import { Bell, Wallet, CreditCard, Clock, FileText, Settings, Home, HelpCircle, Info, Car, ChevronRight, Loader2, User, LogOut } from 'lucide-react-native';
+import { Bell, Wallet, CreditCard, Clock, FileText, Settings, Home, HelpCircle, Info, Car, ChevronRight, LogOut, Loader, UserIcon } from '../../../../shared/components/IconLibrary';
 import { useTheme } from '../../../../core/context/ThemeContext';
 import { useAuth } from '../../../../core/context/AuthContext';
 import { useI18n } from '../../../../shared/i18n';
@@ -65,7 +65,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
     return (
       <View style={styles.container}>
         <View style={styles.loginPrompt}>
-          <Loader2 size={80} color={colors.textSecondary} />
+          <Loader size={80} color={colors.textSecondary} />
           <Text style={styles.loginPromptText}>
             {t('common.loading')}
           </Text>
@@ -79,7 +79,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
     return (
       <View style={styles.container}>
         <View style={styles.loginPrompt}>
-          <User size={80} color={colors.textSecondary} />
+          <UserIcon size={80} color={colors.textSecondary} />
           <Text style={styles.loginPromptText}>
             {t('profile.loginRequired')}
           </Text>
@@ -99,7 +99,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
                 {user?.avatar ? (
                   <Image source={{ uri: user.avatar }} style={styles.avatarImage} />
                 ) : (
-                  <User size={32} color={colors.card} />
+                  <UserIcon size={32} color={colors.card} />
                 )}
               </TouchableOpacity>
               

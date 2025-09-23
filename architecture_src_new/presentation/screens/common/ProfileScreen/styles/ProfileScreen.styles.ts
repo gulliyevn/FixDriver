@@ -203,7 +203,7 @@ export const createProfileScreenStyles = (isDark: boolean) => {
       borderTopColor: colors.border,
     },
     menuIcon: {
-      marginRight: 12,
+      marginRight: 10,
       width: 28,
       alignItems: 'center',
       color: colors.textSecondary,
@@ -212,12 +212,12 @@ export const createProfileScreenStyles = (isDark: boolean) => {
       textShadowRadius: 2,
     },
     balanceIcon: {
-      marginRight: 12,
+      marginRight: 10,
       width: 28,
       alignItems: 'center',
     },
     menuIconDefault: {
-      marginRight: 12,
+      marginRight: 10,
       width: 28,
       alignItems: 'center',
       color: colors.textSecondary,
