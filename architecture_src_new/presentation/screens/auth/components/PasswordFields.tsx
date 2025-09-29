@@ -25,13 +25,13 @@ const PasswordFields: React.FC<Props> = ({ t, styles, errors, values, onChange, 
             value={values.password}
             onChangeText={(text) => onChange('password', text)}
             placeholder={t('auth.register.passwordPlaceholder')}
-            placeholderTextColor="#64748B"
+            placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoCorrect={false}
           />
           <TouchableOpacity style={styles.eyeButton} onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color="#64748B" />
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color={styles.colors?.textSecondary || '#64748B'} />
           </TouchableOpacity>
         </View>
         {(() => {
@@ -42,7 +42,7 @@ const PasswordFields: React.FC<Props> = ({ t, styles, errors, values, onChange, 
           if (!/\d/.test(pwd)) unmet.push(t('auth.register.policy.digit'));
           if (!/[^A-Za-z0-9]/.test(pwd)) unmet.push(t('auth.register.policy.special'));
           return pwd.length > 0 && unmet.length ? (
-            <View style={{ marginTop: 4 }}>
+            <View style={styles.unmetContainer || { marginTop: 4 }}>
               {unmet.map((line, idx) => (
                 <Text key={idx} style={styles.errorText}>• {line}</Text>
               ))}
@@ -60,13 +60,13 @@ const PasswordFields: React.FC<Props> = ({ t, styles, errors, values, onChange, 
             value={values.confirmPassword}
             onChangeText={(text) => onChange('confirmPassword', text)}
             placeholder={t('auth.register.confirmPasswordPlaceholder')}
-            placeholderTextColor="#64748B"
+            placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
             secureTextEntry={!showConfirmPassword}
             autoCapitalize="none"
             autoCorrect={false}
           />
           <TouchableOpacity style={styles.eyeButton} onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={18} color="#64748B" />
+            <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={18} color={styles.colors?.textSecondary || '#64748B'} />
           </TouchableOpacity>
         </View>
         {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}

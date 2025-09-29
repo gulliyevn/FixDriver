@@ -106,9 +106,15 @@ export const LoginScreenStyles = StyleSheet.create({
     marginTop: SIZES.xs,
     lineHeight: SIZES.lineHeight.md,
   },
-  forgotPassword: {
-    alignSelf: 'flex-end',
+  // Контейнер для Remember Me и Forgot Password в одну строку
+  rememberForgotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: SIZES.xl,
+  },
+  forgotPassword: {
+    // Убираем старые стили, теперь в общем контейнере
   },
   forgotPasswordText: {
     color: colors.primary,
@@ -165,5 +171,15 @@ export const LoginScreenStyles = StyleSheet.create({
   },
   langWrap: {
     alignItems: 'center',
+  },
+  // Remember Me стили - убираем margin, будет в общем контейнере
+  rememberMeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rememberMeText: {
+    marginLeft: 8,
+    color: colors.textSecondary,
+    fontSize: 14,
   },
 });

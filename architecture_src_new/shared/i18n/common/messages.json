@@ -1,0 +1,17 @@
+{
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "noOptions": "No options available",
+  "noData": "No data available", 
+  "retry": "Please try again",
+  "networkError": "Network connection error",
+  "serverError": "Server error occurred",
+  "validationError": "Please check your input",
+  "permissionRequired": "Permission required",
+  "mediaPermissionDenied": "Media library permission denied",
+  "permissionDenied": "Permission denied",
+  "sessionExpired": "Session expired. Please login again.",
+  "comingSoon": "Coming soon",
+  "maintenance": "Under maintenance"
+}

@@ -18,7 +18,7 @@ const NameFields: React.FC<Props> = ({ t, styles, errors, values, onChange }) =>
         value={values.firstName}
         onChangeText={(text) => onChange('firstName', text)}
         placeholder={t('auth.register.firstNamePlaceholder')}
-        placeholderTextColor="#64748B"
+        placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
         autoCapitalize="words"
         autoCorrect={false}
       />
@@ -32,7 +32,7 @@ const NameFields: React.FC<Props> = ({ t, styles, errors, values, onChange }) =>
         value={values.lastName}
         onChangeText={(text) => onChange('lastName', text)}
         placeholder={t('auth.register.lastNamePlaceholder')}
-        placeholderTextColor="#64748B"
+        placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
         autoCapitalize="words"
         autoCorrect={false}
       />

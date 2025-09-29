@@ -3,6 +3,7 @@ import { Modal, View, Text, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
 import { createDatePickerModalStyles } from './DatePickerModal.styles';
+import { getColors } from '../../../shared/constants/adaptiveConstants';
 import { Appearance } from 'react-native';
 import { useI18n } from '../../../shared/i18n';
 
@@ -13,12 +14,16 @@ interface Props {
   onClose: () => void;
   onConfirm: (value: string) => void;
   isDark?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  defaultValue?: Date;
 }
 
-const DatePickerModal: React.FC<Props> = ({ visible, title, mode, onClose, onConfirm, isDark }) => {
-  const [value, setValue] = React.useState(new Date());
+const DatePickerModal: React.FC<Props> = ({ visible, title, mode, onClose, onConfirm, isDark, minDate, maxDate, defaultValue }) => {
+  const [value, setValue] = React.useState(defaultValue || new Date());
   const effectiveIsDark = typeof isDark === 'boolean' ? isDark : Appearance.getColorScheme() === 'dark';
-  const S = React.useMemo(() => createDatePickerModalStyles(effectiveIsDark), [effectiveIsDark]);
+  const colors = getColors(effectiveIsDark);
+  const S = React.useMemo(() => createDatePickerModalStyles(effectiveIsDark, colors), [effectiveIsDark]);
   const { t } = useI18n();
 
   const formatDate = (d: Date) => {
@@ -35,15 +40,19 @@ const DatePickerModal: React.FC<Props> = ({ visible, title, mode, onClose, onCon
           <View style={S.header}>
             <Text style={S.title}>{title}</Text>
             <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={20} color={effectiveIsDark ? '#fff' : '#000'} />
+              <Ionicons name="close" size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
-          <DateTimePicker
-            value={value}
-            mode={'date'}
-            display={Platform.OS === 'ios' ? 'inline' : 'spinner'}
-            onChange={(e, d) => d && setValue(d)}
-          />
+          <View style={S.pickerContainer}>
+            <DateTimePicker
+              value={value}
+              mode={'date'}
+              display={Platform.OS === 'ios' ? 'inline' : 'spinner'}
+              minimumDate={minDate}
+              maximumDate={maxDate}
+              onChange={(e, d) => d && setValue(d)}
+            />
+          </View>
           <TouchableOpacity onPress={() => onConfirm(mode === 'year' ? String(value.getFullYear()) : formatDate(value))} style={S.okWrap}>
             <Text style={S.okText}>{t('common.buttons.confirm')}</Text>
           </TouchableOpacity>

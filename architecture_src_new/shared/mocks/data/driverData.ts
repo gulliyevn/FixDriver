@@ -8,7 +8,7 @@ import {
   CarCategory,
   TariffType,
   PriceRange
-} from '../types/driver';
+} from '../../types/driver';
 
 /**
  * Driver data service implementation
@@ -232,7 +232,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Mercedes',
       yearFrom: 2014,
       category: CarCategory.LUXURY,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Flagship luxury', 'Executive comfort', 'Cutting-edge tech'],
       priceRange: PriceRange.PREMIUM
     },
@@ -242,7 +242,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Mercedes',
       yearFrom: 2015,
       category: CarCategory.LUXURY,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Compact luxury', 'Sporty handling', 'Premium features'],
       priceRange: PriceRange.MEDIUM
     },
@@ -262,7 +262,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Mercedes',
       yearFrom: 2016,
       category: CarCategory.SUV,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Full-size luxury SUV', '7-seater', 'Premium comfort'],
       priceRange: PriceRange.PREMIUM
     },
@@ -284,7 +284,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'BMW',
       yearFrom: 2015,
       category: CarCategory.LUXURY,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Flagship luxury', 'Ultimate comfort', 'Advanced technology'],
       priceRange: PriceRange.PREMIUM
     },
@@ -294,7 +294,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'BMW',
       yearFrom: 2019,
       category: CarCategory.LUXURY,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Compact luxury', 'Sporty dynamics', 'Premium quality'],
       priceRange: PriceRange.MEDIUM
     },
@@ -314,7 +314,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'BMW',
       yearFrom: 2019,
       category: CarCategory.SUV,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Full-size luxury SUV', 'Ultimate space', 'Premium comfort'],
       priceRange: PriceRange.PREMIUM
     },
@@ -326,7 +326,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Toyota',
       yearFrom: 2018,
       category: CarCategory.SEDAN,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Reliable sedan', 'Comfortable ride', 'Good fuel economy'],
       priceRange: PriceRange.MEDIUM
     },
@@ -336,7 +336,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Toyota',
       yearFrom: 2020,
       category: CarCategory.COMPACT,
-      tariff: TariffType.STANDARD,
+      tariff: TariffType.ECONOMY,
       features: ['Compact sedan', 'Fuel efficient', 'Reliable'],
       priceRange: PriceRange.LOW
     },
@@ -346,7 +346,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Toyota',
       yearFrom: 2019,
       category: CarCategory.SEDAN,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Full-size sedan', 'Premium comfort', 'Spacious interior'],
       priceRange: PriceRange.MEDIUM
     },
@@ -356,7 +356,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Toyota',
       yearFrom: 2019,
       category: CarCategory.SUV,
-      tariff: TariffType.STANDARD,
+      tariff: TariffType.ECONOMY,
       features: ['Compact SUV', 'Versatile', 'Good fuel economy'],
       priceRange: PriceRange.MEDIUM
     },
@@ -366,7 +366,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Toyota',
       yearFrom: 2020,
       category: CarCategory.SUV,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Midsize SUV', '3-row seating', 'Family friendly'],
       priceRange: PriceRange.MEDIUM
     },
@@ -378,7 +378,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Hyundai',
       yearFrom: 2020,
       category: CarCategory.SEDAN,
-      tariff: TariffType.STANDARD,
+      tariff: TariffType.ECONOMY,
       features: ['Midsize sedan', 'Modern design', 'Good value'],
       priceRange: PriceRange.LOW
     },
@@ -388,7 +388,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Hyundai',
       yearFrom: 2021,
       category: CarCategory.COMPACT,
-      tariff: TariffType.STANDARD,
+      tariff: TariffType.ECONOMY,
       features: ['Compact sedan', 'Stylish design', 'Good features'],
       priceRange: PriceRange.LOW
     },
@@ -398,7 +398,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Hyundai',
       yearFrom: 2017,
       category: CarCategory.LUXURY,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Luxury sedan', 'Premium quality', 'Good value'],
       priceRange: PriceRange.MEDIUM
     },
@@ -408,7 +408,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Hyundai',
       yearFrom: 2022,
       category: CarCategory.SUV,
-      tariff: TariffType.STANDARD,
+      tariff: TariffType.ECONOMY,
       features: ['Compact SUV', 'Modern design', 'Good features'],
       priceRange: PriceRange.MEDIUM
     },
@@ -418,7 +418,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Hyundai',
       yearFrom: 2019,
       category: CarCategory.SUV,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Midsize SUV', 'Spacious', 'Family oriented'],
       priceRange: PriceRange.MEDIUM
     },
@@ -440,7 +440,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Tesla',
       yearFrom: 2012,
       category: CarCategory.ELECTRIC,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Electric luxury', 'Long range', 'Ludicrous mode'],
       priceRange: PriceRange.HIGH
     },
@@ -450,7 +450,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Tesla',
       yearFrom: 2015,
       category: CarCategory.ELECTRIC,
-      tariff: TariffType.LUXURY,
+      tariff: TariffType.BUSINESS,
       features: ['Electric SUV', 'Falcon doors', '7-seater'],
       priceRange: PriceRange.HIGH
     },
@@ -460,7 +460,7 @@ export class DriverDataHelper implements DriverDataService {
       brand: 'Tesla',
       yearFrom: 2020,
       category: CarCategory.ELECTRIC,
-      tariff: TariffType.PLUS,
+      tariff: TariffType.PREMIUM,
       features: ['Electric SUV', 'Compact', 'Good range'],
       priceRange: PriceRange.MEDIUM
     }
@@ -481,13 +481,7 @@ export class DriverDataHelper implements DriverDataService {
       priceMultiplier: 1.0,
       features: ['Стандартное обслуживание', 'Хорошие условия', 'Сбалансированная цена']
     },
-    {
-      label: 'Plus',
-      value: TariffType.PLUS,
-      description: 'Улучшенный тариф с дополнительными услугами',
-      priceMultiplier: 1.3,
-      features: ['Улучшенное обслуживание', 'Дополнительные услуги', 'Комфортные условия']
-    },
+    // Plus tariff removed
     {
       label: 'Premium',
       value: TariffType.PREMIUM,
@@ -502,13 +496,7 @@ export class DriverDataHelper implements DriverDataService {
       priceMultiplier: 1.4,
       features: ['Бизнес обслуживание', 'Профессиональные водители', 'Корпоративные скидки']
     },
-    {
-      label: 'Luxury',
-      value: TariffType.LUXURY,
-      description: 'Люкс тариф для эксклюзивных поездок',
-      priceMultiplier: 2.0,
-      features: ['Люкс обслуживание', 'Элитные автомобили', 'Персональный менеджер']
-    }
+    // Luxury tariff removed
   ];
 
   /**

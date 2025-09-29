@@ -1,0 +1,19 @@
+{
+  "email": "Email",
+  "password": "Password", 
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "phone": "Phone",
+  "address": "Address",
+  "name": "Name",
+  "surname": "Surname",
+  "fullName": "Full Name",
+  "dateOfBirth": "Date of Birth",
+  "gender": "Gender",
+  "city": "City",
+  "country": "Country",
+  "zipCode": "ZIP Code",
+  "notes": "Notes",
+  "description": "Description",
+  "search": "Search"
+}

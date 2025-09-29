@@ -5,8 +5,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../shared/i18n';
 import { Button, LanguageSelector, LanguageButton } from '../../components';
 import { RoleSelectScreenStyles } from './RoleSelectScreen.styles';
+import { ASSETS } from '../../../shared/constants/assets';
 
 type Role = 'client' | 'driver';
+
+type FeatureIconName = 'shield-checkmark' | 'location' | 'card' | 'time' | 'cash' | 'call';
+
+interface RoleFeature {
+  icon: FeatureIconName;
+  text: string;
+  color: string;
+}
 
 interface RoleSelectScreenProps {
   navigation?: any;
@@ -26,14 +35,14 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
   };
 
   const handleContinue = () => {
-    navigation.navigate('Register' as never, { role: selectedRole } as never);
+    navigation.navigate('Register', { role: selectedRole });
   };
 
   const handleLogin = () => {
-    navigation.navigate('Login' as never);
+    navigation.navigate('Login');
   };
 
-  const getRoleFeatures = (role: Role) => {
+  const getRoleFeatures = (role: Role): RoleFeature[] => {
     if (role === 'client') {
       return [
         { icon: 'shield-checkmark', text: t('auth.roleSelect.clientSafe'), color: '#10B981' },
@@ -82,7 +91,7 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
         {/* Logo in center */}
         <View style={styles.headerLogo}>
           <View style={styles.logoContainer}>
-            <Image source={require('../../../../assets/icon.png')} style={styles.logoIcon} />
+            <Image source={ASSETS.LOGO_ICON} style={styles.logoIcon} />
             <View style={styles.logoTextContainer}>
               <Text style={styles.logoText}>FixDrive</Text>
               <Text style={styles.logoSubtext}>by Axivion LLC</Text>
@@ -101,7 +110,7 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
               style={[
                 styles.roleToggleButton,
                 selectedRole === 'client' && styles.roleToggleButtonActive,
-                selectedRole === 'client' && { backgroundColor: '#10B981' }
+                selectedRole === 'client' && styles.roleToggleButtonClient
               ]}
               onPress={() => handleRoleSelect('client')}
             >
@@ -122,7 +131,7 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
               style={[
                 styles.roleToggleButton,
                 selectedRole === 'driver' && styles.roleToggleButtonActive,
-                selectedRole === 'driver' && { backgroundColor: '#3B82F6' }
+                selectedRole === 'driver' && styles.roleToggleButtonDriver
               ]}
               onPress={() => handleRoleSelect('driver')}
             >
@@ -154,7 +163,7 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
             {currentFeatures.map((feature, index) => (
               <View key={index} style={styles.featureItem}>
                 <View style={[styles.featureIcon, { backgroundColor: `${feature.color}15` }]}>
-                  <Ionicons name={feature.icon as any} size={16} color={feature.color} />
+                  <Ionicons name={feature.icon} size={16} color={feature.color} />
                 </View>
                 <Text style={styles.featureText}>
                   {feature.text}
@@ -166,13 +175,9 @@ const RoleSelectScreen: React.FC<RoleSelectScreenProps> = ({ navigation: propNav
           <Button
             title={t('auth.roleSelect.choose')}
             onPress={handleContinue}
-            style={StyleSheet.flatten([
-              styles.chooseBtn, 
-              { backgroundColor: currentRoleInfo.color }
-            ])}
-            textStyle={styles.chooseBtnText}
-            icon="arrow-forward"
-            iconPosition="right"
+            variant="primary"
+            size="large"
+            fullWidth
           />
         </View>
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { useI18n } from '../../../../shared/i18n';
-import { getTariffOptions } from '../../../../shared/constants/driverOptions';
-import { carBrands, carModelsByBrand, getYearOptions } from '../../../../shared/constants/cars';
+import { getTariffOptions, getCarBrandOptions, getCarModelsForTariffAndBrand } from '../../../../shared/constants/driverOptions';
+import { driverData } from '../../../../shared/mocks/data/driverData';
 import { COUNTRIES_FULL } from '../../../../shared/constants/countries';
 import { AuthUseCase } from '../../../../domain/usecases/auth/AuthUseCase';
 import { AuthRepository } from '../../../../data/repositories/AuthRepository';
@@ -58,7 +58,7 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
   const [agree, setAgree] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [brandOptions] = useState(carBrands);
+  const [brandOptions] = useState(getCarBrandOptions());
 
   const updateFormData = (field: keyof RegisterFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -102,21 +102,14 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
     let options: { label: string; value: string }[] = [];
     switch (field) {
       case 'country':
-        options = COUNTRIES_FULL.map(c => ({ label: c.name, value: String(c.code) }));
+        options = COUNTRIES_FULL.map(c => ({ label: t(`common.countries.${c.code}`) || c.name || c.nameEn, value: String(c.code) }));
         break;
       case 'experience':
         options = [
           { label: t('auth.register.experienceUpTo1'), value: '0-1' },
-          { label: t('auth.register.experience1'), value: '1' },
-          { label: t('auth.register.experience2'), value: '2' },
-          { label: t('auth.register.experience3'), value: '3' },
-          { label: t('auth.register.experience4'), value: '4' },
-          { label: t('auth.register.experience5'), value: '5' },
-          { label: t('auth.register.experience6'), value: '6' },
-          { label: t('auth.register.experience7'), value: '7' },
-          { label: t('auth.register.experience8'), value: '8' },
-          { label: t('auth.register.experience9'), value: '9' },
-          { label: t('auth.register.experience10'), value: '10' },
+          { label: t('auth.register.experience1to3'), value: '1-3' },
+          { label: t('auth.register.experience3to5'), value: '3-5' },
+          { label: t('auth.register.experience5to10'), value: '5-10' },
           { label: t('auth.register.experience10plus'), value: '10+' },
         ];
         break;
@@ -130,12 +123,12 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
           break;
         }
         // Brands that have at least one model for the selected tariff
-        const allowedBrands = Object.entries(carModelsByBrand)
-          .filter(([brand, models]) => models.some(m => String(m.tariff) === String(formData.tariff)))
-          .map(([brand]) => brand);
-        options = brandOptions
-          .filter(b => allowedBrands.includes(String(b.value)))
-          .map(o => ({ label: String(o.label), value: String(o.value) }));
+        const allowedBrands = driverData.getCarBrands()
+          .filter(brand => {
+            const models = driverData.getCarModelsByBrand(brand.value);
+            return models.some(m => String(m.tariff) === String(formData.tariff));
+          });
+        options = allowedBrands.map(o => ({ label: String(o.label), value: String(o.value) }));
         break;
       }
       case 'carModel': {
@@ -144,7 +137,7 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
           Alert.alert(title, t('auth.register.carBrandPlaceholder'));
           break;
         }
-        const models = (carModelsByBrand[formData.carBrand || ''] || []);
+        const models = driverData.getCarModelsByBrand(formData.carBrand || '');
         const filteredByTariff = formData.tariff
           ? models.filter(m => !m.tariff || String(m.tariff) === String(formData.tariff))
           : models;
@@ -152,13 +145,13 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
         break;
       }
       case 'carYear':
-        options = getYearOptions().map(o => ({ label: String(o.label), value: String(o.value) }));
+        options = driverData.getYearOptions().map(o => ({ label: String(o.label), value: String(o.value) }));
         break;
       case 'carMileage':
         options = [
           { label: t('auth.register.mileageUpTo50k'), value: '≤50000' },
-          { label: t('auth.register.mileageUpTo100k'), value: '≤100000' },
-          { label: t('auth.register.mileageUpTo150k'), value: '≤150000' },
+          { label: t('auth.register.mileage50kto100k'), value: '50000-100000' },
+          { label: t('auth.register.mileage100kto150k'), value: '100000-150000' },
           { label: t('auth.register.mileage150kPlus'), value: '150000+' },
         ];
         break;
@@ -183,7 +176,10 @@ export const useRegisterForm = (role: 'client' | 'driver') => {
     setLoading(true);
     try {
       const useCase = new AuthUseCase(new AuthRepository());
+      // Register user
       await useCase.register({ ...(formData as any), role } as any);
+      // Auto-login after successful registration
+      await useCase.login(formData.email, formData.password, true);
       setLoading(false);
       onSuccess();
     } catch (e) {

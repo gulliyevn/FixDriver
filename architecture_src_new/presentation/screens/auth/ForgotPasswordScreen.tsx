@@ -5,20 +5,26 @@ import { useI18n } from '../../../shared/i18n';
 import { Button } from '../../components';
 import { ForgotPasswordScreenStyles as styles } from './ForgotPasswordScreen.styles';
 import { AuthRepository } from '../../../data/repositories/AuthRepository';
+import { getCurrentColors } from '../../../shared/constants/colors';
+import { SUPPORT_CONTACTS } from '../../../shared/constants/contacts';
 import OTPModal from '../../components/ui/OTPModal';
 
 interface ForgotPasswordScreenProps {
-  navigation?: any;
+  navigation: {
+    goBack: () => void;
+    navigate: (screen: string, params?: any) => void;
+    canGoBack?: () => boolean;
+  };
 }
 
 const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation }) => {
   const { t } = useI18n();
+  const colors = getCurrentColors(false);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [requestId, setRequestId] = useState<string | null>(null);
-  const [otp, setOtp] = useState('');
   const [otpVisible, setOtpVisible] = useState(false);
   const [otpError, setOtpError] = useState<boolean>(false);
 
@@ -39,20 +45,23 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
     if (!validate()) return;
     setIsLoading(true);
     try {
+      console.log('📧 Sending password reset for:', email);
       const repo = new AuthRepository();
       const { requestId } = await repo.sendPasswordReset(email);
+      console.log('✅ Password reset sent, requestId:', requestId);
       setRequestId(requestId);
       setOtpVisible(true);
       setOtpError(false);
     } catch (e) {
-      setError('Failed to send OTP');
+      console.error('❌ Failed to send password reset:', e);
+      setError(t('auth.forgotPassword.failedToSend'));
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleBack = () => {
-    if ((navigation as any)?.canGoBack?.()) {
+    if (navigation?.canGoBack?.()) {
       navigation.goBack();
     } else {
       navigation.navigate('Login');
@@ -60,13 +69,14 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
   };
 
   const handleContactSupport = () => {
-    const phoneNumber = '+994516995513';
-    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent('Здравствуйте! Нужна помощь с восстановлением пароля.')}`;
+    const phoneNumber = SUPPORT_CONTACTS.WHATSAPP;
+    const message = encodeURIComponent(t('auth.forgotPassword.supportMessage'));
+    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
     Linking.canOpenURL(whatsappUrl).then(supported => {
       if (supported) {
         Linking.openURL(whatsappUrl);
       } else {
-        const webUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent('Здравствуйте! Нужна помощь с восстановлением пароля.')}`;
+        const webUrl = `https://wa.me/${phoneNumber}?text=${message}`;
         Linking.openURL(webUrl);
       }
     }).catch(() => {
@@ -78,15 +88,15 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.scrollContent}>
           <View style={styles.headerRow}>
             <TouchableOpacity onPress={handleBack} style={styles.headerBackButton}>
-              <Ionicons name="chevron-back" size={28} color="#64748B" />
+              <Ionicons name="chevron-back" size={28} color={colors.textSecondary} />
             </TouchableOpacity>
             <View style={styles.headerContent}>
-              <Text style={styles.title}>{t('auth.login.forgotPassword')}</Text>
-              <Text style={styles.subtitle}>{t('auth.login.subtitle')}</Text>
+              <Text style={styles.title}>{t('auth.forgotPassword.title')}</Text>
+              <Text style={styles.subtitle}>{t('auth.forgotPassword.subtitle')}</Text>
             </View>
           </View>
 
@@ -97,7 +107,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
                 <TextInput
                   style={[styles.input, error && styles.inputError]}
                   placeholder={t('auth.login.emailPlaceholder')}
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor={colors.textSecondary}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -108,59 +118,32 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
               </View>
 
               <Button
-                title={isLoading ? t('common.messages.loading') : t('auth.login.forgotPassword')}
+                title={isLoading ? t('auth.forgotPassword.loading') : t('auth.forgotPassword.sendButton')}
                 onPress={handleSend}
                 loading={isLoading}
                 disabled={isLoading}
                 style={styles.submitButton}
               />
 
-              {otpVisible && (
-                <View style={styles.inputContainer}>
-                  <Text style={styles.label}>OTP</Text>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType="number-pad"
-                    maxLength={4}
-                    value={otp}
-                    onChangeText={setOtp}
-                    placeholder="____"
-                  />
-                  <Button
-                    title="Verify"
-                    onPress={async () => {
-                      if (!requestId || otp.length !== 4) return;
-                      try {
-                        const repo = new AuthRepository();
-                        const { token } = await repo.verifyPasswordResetOtp(requestId, otp);
-                        navigation.navigate('ResetPassword', { token } as never);
-                      } catch (e) {
-                        setError('Invalid OTP');
-                      }
-                    }}
-                    style={styles.submitButton}
-                  />
-                </View>
-              )}
             </View>
           ) : (
             <View style={styles.successContainer}>
               <View style={styles.successIcon}>
-                <Ionicons name="checkmark" size={40} color="#FFFFFF" />
+                <Ionicons name="checkmark" size={40} color={colors.card} />
               </View>
-              <Text style={styles.successTitle}>{t('common.messages.success')}</Text>
-              <Text style={styles.successText}>{t('auth.login.forgotPassword')}</Text>
+              <Text style={styles.successTitle}>{t('auth.forgotPassword.successTitle')}</Text>
+              <Text style={styles.successText}>{t('auth.forgotPassword.successMessage')}</Text>
             </View>
           )}
 
           <TouchableOpacity style={styles.supportButton} onPress={handleContactSupport}>
-            <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" style={styles.supportIcon} />
+            <Ionicons name="logo-whatsapp" size={20} color={colors.card} style={styles.supportIcon} />
             <Text style={styles.supportText}>{t('common.buttons.contactSupport')}</Text>
           </TouchableOpacity>
           <OTPModal
             visible={otpVisible}
             onClose={() => setOtpVisible(false)}
-            title="Enter OTP"
+            title={t('auth.forgotPassword.otpTitle')}
             errorMessage={undefined}
             showError={otpError}
             onInputChange={() => otpError && setOtpError(false)}
@@ -169,10 +152,8 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
               try {
                 const repo = new AuthRepository();
                 const { token } = await repo.verifyPasswordResetOtp(requestId, code);
-                console.log('[ForgotPassword] OTP verified, navigating with reset token', token);
-                navigation.navigate('ResetPassword', { token } as never);
+                navigation.navigate('ResetPassword', { token });
               } catch (e) {
-                console.warn('[ForgotPassword] OTP verification failed', e);
                 setOtpError(true);
               }
             }}
@@ -184,5 +165,3 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
 };
 
 export default ForgotPasswordScreen;
-
-

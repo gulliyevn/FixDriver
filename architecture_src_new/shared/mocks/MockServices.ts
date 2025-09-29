@@ -347,7 +347,23 @@ export default class MockServices {
   static profile = {
     async getProfile(userId: string): Promise<any> {
       // Mock profile retrieval - in real app this would be gRPC call
-      const user = MockData.users.find(u => u.id === userId);
+      let user = MockData.users.find(u => u.id === userId);
+      
+      // If user not found in MockData, try to find in AsyncStorage and add to MockData
+      if (!user) {
+        console.log('👀 User not found in MockData, checking AsyncStorage for:', userId);
+        try {
+          const currentUser = await MockData.getCurrentUser();
+          if (currentUser && currentUser.id === userId) {
+            console.log('✅ Found user in AsyncStorage, adding to MockData');
+            MockData.addUser(currentUser);
+            user = currentUser;
+          }
+        } catch (err) {
+          console.log('❌ Error checking AsyncStorage:', err);
+        }
+      }
+      
       if (!user) throw new Error('User not found');
       
       // Return user with extended profile data
@@ -363,7 +379,23 @@ export default class MockServices {
 
     async updateProfile(userId: string, updates: any): Promise<any> {
       // Mock profile update - in real app this would be gRPC call
-      const user = MockData.users.find(u => u.id === userId);
+      let user = MockData.users.find(u => u.id === userId);
+      
+      // If user not found in MockData, try to find in AsyncStorage and add to MockData
+      if (!user) {
+        console.log('👀 UpdateProfile: User not found in MockData, checking AsyncStorage for:', userId);
+        try {
+          const currentUser = await MockData.getCurrentUser();
+          if (currentUser && currentUser.id === userId) {
+            console.log('✅ UpdateProfile: Found user in AsyncStorage, adding to MockData');
+            MockData.addUser(currentUser);
+            user = currentUser;
+          }
+        } catch (err) {
+          console.log('❌ UpdateProfile: Error checking AsyncStorage:', err);
+        }
+      }
+      
       if (!user) throw new Error('User not found');
 
       // Update user data

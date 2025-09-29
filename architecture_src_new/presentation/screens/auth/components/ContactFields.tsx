@@ -18,7 +18,7 @@ const ContactFields: React.FC<Props> = ({ t, styles, errors, values, onChange })
         value={values.email}
         onChangeText={(text) => onChange('email', text)}
         placeholder={t('auth.register.emailPlaceholder')}
-        placeholderTextColor="#64748B"
+        placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -33,7 +33,7 @@ const ContactFields: React.FC<Props> = ({ t, styles, errors, values, onChange })
         value={values.phone}
         onChangeText={(text) => onChange('phone', text)}
         placeholder={t('auth.register.phonePlaceholder')}
-        placeholderTextColor="#64748B"
+        placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
         keyboardType="phone-pad"
         autoCorrect={false}
       />

@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+// ThemeColors not exported; use inferred structure via any
 
-export const createDatePickerModalStyles = (isDark: boolean) => StyleSheet.create({
+export const createDatePickerModalStyles = (isDark: boolean, colors: any) => StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -12,7 +13,7 @@ export const createDatePickerModalStyles = (isDark: boolean) => StyleSheet.creat
     width: '100%',
     maxWidth: 400,
     borderRadius: 24,
-    backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
+    backgroundColor: isDark ? (colors.surface || '#1E293B') : '#FFFFFF',
     padding: 16,
   },
   header: {
@@ -24,7 +25,7 @@ export const createDatePickerModalStyles = (isDark: boolean) => StyleSheet.creat
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: isDark ? '#F8FAFC' : '#1F2937',
+    color: colors.text,
   },
   okWrap: {
     alignSelf: 'flex-end',
@@ -32,12 +33,18 @@ export const createDatePickerModalStyles = (isDark: boolean) => StyleSheet.creat
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 10,
-    backgroundColor: isDark ? '#3B82F6' : '#2563EB',
+    backgroundColor: colors.primary,
   },
   okText: {
-    color: '#FFFFFF',
+    color: colors.onPrimary || '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
+  },
+  pickerContainer: {
+    marginTop: 8,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: isDark ? (colors.surface || '#1E293B') : '#FFFFFF',
   },
 });
 

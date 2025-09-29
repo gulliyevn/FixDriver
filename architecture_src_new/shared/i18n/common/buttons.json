@@ -1,0 +1,19 @@
+{
+  "login": "Sign In",
+  "register": "Sign Up", 
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "back": "Back",
+  "next": "Next",
+  "submit": "Submit",
+  "confirm": "Confirm",
+  "contactSupport": "Contact Support",
+  "ok": "OK",
+  "yes": "Yes",
+  "no": "No",
+  "close": "Close",
+  "retry": "Try Again",
+  "continue": "Continue"
+}

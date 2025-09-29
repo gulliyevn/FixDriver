@@ -16,9 +16,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../../shared/i18n';
 import { Button } from '../../components';
+import { ASSETS } from '../../../shared/constants/assets';
 import { AuthUseCase } from '../../../domain/usecases/auth/AuthUseCase';
 import { AuthRepository } from '../../../data/repositories/AuthRepository';
 import { LoginScreenStyles } from './LoginScreen.styles';
+import { getCurrentColors } from '../../../shared/constants/colors';
 
 interface FormData {
   email: string;
@@ -34,8 +36,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
   
   const { t } = useI18n();
   
-  // Используем простые стили
+  // Используем стили с правильными цветами
   const styles = LoginScreenStyles;
+  const colors = getCurrentColors(false);
   
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -83,9 +86,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
           ]);
         } catch {}
       }
-      Alert.alert(t('common.messages.success'), t('common.messages.success'));
+      Alert.alert(t('common.messages.success'));
       // navigate to Main (with TabBar)
-      // @ts-ignore - simple navigator typing
       navigation.navigate('Main');
     } catch (error) {
       console.log('Login failed with error:', error);
@@ -115,11 +117,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
   };
 
   const handleForgotPassword = () => {
-    navigation.navigate('ForgotPassword' as never);
+    navigation.navigate('ForgotPassword');
   };
 
   const handleRegister = () => {
-    navigation.navigate('RoleSelect' as never);
+    navigation.navigate('RoleSelect');
   };
 
   return (
@@ -155,7 +157,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
                 value={formData.email}
                 onChangeText={(text) => updateFormData('email', text)}
                 placeholder={t('auth.login.emailPlaceholder')}
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textSecondary}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -172,8 +174,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
                   style={[styles.passwordInput, errors.password && styles.inputError]}
                   value={formData.password}
                   onChangeText={(text) => updateFormData('password', text)}
-                  placeholder={t('auth.login.passwordPlaceholder')}
-                  placeholderTextColor="#64748B"
+                placeholder={t('auth.login.passwordPlaceholder')}
+                placeholderTextColor={colors.textSecondary}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -185,7 +187,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
                   <Ionicons 
                     name={showPassword ? 'eye-off' : 'eye'} 
                     size={18} 
-                    color="#64748B" 
+                    color={colors.textSecondary} 
                   />
                 </TouchableOpacity>
               </View>
@@ -194,31 +196,34 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
               )}
             </View>
 
-            {/* Forgot Password */}
-            <TouchableOpacity 
-              style={styles.forgotPassword}
-              onPress={handleForgotPassword}
-            >
-              <Text style={styles.forgotPasswordText}>
-                {t('auth.login.forgotPassword')}
-              </Text>
-            </TouchableOpacity>
+            {/* Remember Me и Forgot Password в одну строку */}
+            <View style={styles.rememberForgotContainer}>
+              {/* Remember Me слева */}
+              <TouchableOpacity
+                style={styles.rememberMeContainer}
+                onPress={() => setRememberMe(!rememberMe)}
+                activeOpacity={0.8}
+              >
+                <Ionicons
+                  name={rememberMe ? 'checkbox' : 'square-outline'}
+                  size={18}
+                  color={rememberMe ? colors.primary : colors.textSecondary}
+                />
+                <Text style={styles.rememberMeText}>
+                  {t('auth.login.rememberMe')}
+                </Text>
+              </TouchableOpacity>
 
-            {/* Remember Me */}
-            <TouchableOpacity
-              style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, marginBottom: 12 }}
-              onPress={() => setRememberMe(!rememberMe)}
-              activeOpacity={0.8}
-            >
-              <Ionicons
-                name={rememberMe ? 'checkbox' : 'square-outline'}
-                size={18}
-                color="#64748B"
-              />
-              <Text style={{ marginLeft: 8, color: '#64748B', fontSize: 14 }}>
-                {t('auth.login.rememberMe')}
-              </Text>
-            </TouchableOpacity>
+              {/* Forgot Password справа */}
+              <TouchableOpacity 
+                style={styles.forgotPassword}
+                onPress={handleForgotPassword}
+              >
+                <Text style={styles.forgotPasswordText}>
+                  {t('auth.login.forgotPassword')}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <Button
               title={t('auth.login.loginButton')}
@@ -230,8 +235,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
 
           </View>
 
-
-
           {/* Register Link */}
           <View style={styles.registerSection}>
             <Text style={styles.registerText}>{t('auth.login.noAccount')} </Text>
@@ -239,13 +242,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation: propNavigation })
               <Text style={styles.registerLink}>{t('auth.login.registerLink')}</Text>
             </TouchableOpacity>
           </View>
-
-          
-
         </ScrollView>
       </KeyboardAvoidingView>
-
-      
     </SafeAreaView>
   );
 };

@@ -229,4 +229,11 @@ export const RoleSelectScreenStyles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
   },
+  // Стили для role-specific кнопок
+  roleToggleButtonClient: {
+    backgroundColor: '#10B981',
+  },
+  roleToggleButtonDriver: {
+    backgroundColor: '#3B82F6',
+  },
 });

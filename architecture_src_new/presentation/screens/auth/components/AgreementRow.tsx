@@ -16,7 +16,7 @@ const AgreementRow: React.FC<Props> = ({ t, styles, agree, setAgree, onOpen }) =
       <Ionicons 
         name={agree ? 'checkbox' : 'square-outline'} 
         size={28} 
-        color={agree ? '#3B82F6' : '#64748B'} 
+        color={agree ? (styles.colors?.primary || '#3B82F6') : (styles.colors?.textSecondary || '#64748B')} 
       />
     </TouchableOpacity>
     <View style={styles.agreementTextContainer}>

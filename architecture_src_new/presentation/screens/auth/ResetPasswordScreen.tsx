@@ -5,14 +5,21 @@ import { useI18n } from '../../../shared/i18n';
 import { Button } from '../../components';
 import { ResetPasswordScreenStyles as styles } from './ResetPasswordScreen.styles';
 import { AuthRepository } from '../../../data/repositories/AuthRepository';
+import { getCurrentColors } from '../../../shared/constants/colors';
 
 interface ResetPasswordScreenProps {
-  navigation?: any;
+  navigation: {
+    goBack: () => void;
+    reset: (state: { index: number; routes: { name: string }[] }) => void;
+    replace?: (screen: string) => void;
+    canGoBack?: () => boolean;
+  };
   route?: { params?: { token: string } };
 }
 
 const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, route }) => {
   const { t } = useI18n();
+  const colors = getCurrentColors(false);
   const token = route?.params?.token || '';
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,13 +37,29 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, r
 
   const handleSubmit = async () => {
     if (!validate()) return;
+    if (!token) {
+      setError(t('auth.resetPassword.invalidToken'));
+      return;
+    }
     setLoading(true);
     try {
+      console.log('🔑 Resetting password with token:', token);
       const repo = new AuthRepository();
       await repo.resetPassword(token, password);
-      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      console.log('✅ Password reset successful, redirecting to login');
+      // Show success message briefly then redirect
+      setError(null);
+      setTimeout(() => {
+        navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      }, 1500);
     } catch (e) {
-      setError('Failed to reset password');
+      console.error('❌ Password reset failed:', e);
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+      if (errorMessage.includes('Invalid reset token')) {
+        setError(t('auth.resetPassword.invalidToken'));
+      } else {
+        setError(t('auth.resetPassword.passwordResetFailed'));
+      }
     } finally {
       setLoading(false);
     }
@@ -45,7 +68,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, r
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.scrollContent}>
           <View style={styles.headerRow}>
             <TouchableOpacity
@@ -58,49 +81,49 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, r
               }}
               style={styles.headerBackButton}
             >
-              <Ionicons name="chevron-back" size={28} color="#64748B" />
+              <Ionicons name="chevron-back" size={28} color={colors.textSecondary} />
             </TouchableOpacity>
             <View style={styles.headerContent}>
-              <Text style={styles.title}>{t('auth.register.password')}</Text>
-              <Text style={styles.subtitle}>{t('auth.register.confirmPassword')}</Text>
+              <Text style={styles.title}>{t('auth.resetPassword.title')}</Text>
+              <Text style={styles.subtitle}>{t('auth.resetPassword.subtitle')}</Text>
             </View>
           </View>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('auth.register.password')}</Text>
+              <Text style={styles.label}>{t('auth.resetPassword.newPassword')}</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={[styles.passwordInput, error && styles.inputError]}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder={t('auth.register.passwordPlaceholder')}
-                  placeholderTextColor="#64748B"
+                  placeholder={t('auth.resetPassword.newPasswordPlaceholder')}
+                  placeholderTextColor={colors.textSecondary}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
                 />
                 <TouchableOpacity style={styles.eyeButton} onPress={() => setShowPassword(!showPassword)}>
-                  <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color="#64748B" />
+                  <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={18} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('auth.register.confirmPassword')}</Text>
+              <Text style={styles.label}>{t('auth.resetPassword.confirmPassword')}</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={[styles.passwordInput, error && styles.inputError]}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
-                  placeholder={t('auth.register.confirmPasswordPlaceholder')}
-                  placeholderTextColor="#64748B"
+                  placeholder={t('auth.resetPassword.confirmPasswordPlaceholder')}
+                  placeholderTextColor={colors.textSecondary}
                   secureTextEntry={!showConfirmPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
                 />
                 <TouchableOpacity style={styles.eyeButton} onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                  <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={18} color="#64748B" />
+                  <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={18} color={colors.textSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -113,7 +136,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ navigation, r
               if (!/\d/.test(pwd)) unmet.push(t('auth.register.policy.digit'));
               if (!/[^A-Za-z0-9]/.test(pwd)) unmet.push(t('auth.register.policy.special'));
               return password.length > 0 && unmet.length ? (
-                <View style={{ marginTop: 4 }}>
+                <View style={styles.unmetContainer}>
                   {unmet.map((line, idx) => (
                     <Text key={idx} style={styles.errorText}>• {line}</Text>
                   ))}

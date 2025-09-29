@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TERMS_CONTENT } from '../../../shared/constants/terms';
 import { PRIVACY_CONTENT } from '../../../shared/constants/privacy';
 import { getColors } from '../../../shared/constants/adaptiveConstants';
+import { useI18n } from '../../../shared/i18n';
 import { ModalScreenStyles } from './ModalScreen.styles';
 
 interface ModalScreenProps {
@@ -24,6 +25,7 @@ interface ModalScreenProps {
 }
 
 const ModalScreen: React.FC<ModalScreenProps> = ({ navigation, route }) => {
+  const { t } = useI18n();
   const styles = ModalScreenStyles;
   const colors = getColors(false); // Light theme for now
   const type = route?.params?.type || 'terms';
@@ -52,12 +54,12 @@ const ModalScreen: React.FC<ModalScreenProps> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.card} />
       
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <Ionicons name="chevron-back" size={28} color="#64748B" />
+          <Ionicons name="chevron-back" size={28} color={colors.textSecondary} />
         </TouchableOpacity>
         
         <View style={styles.headerContent}>

@@ -4,6 +4,9 @@ import { SIZES, SHADOWS, getColors } from '../../../shared/constants/adaptiveCon
 const colors = getColors(false);
 
 export const ForgotPasswordScreenStyles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,

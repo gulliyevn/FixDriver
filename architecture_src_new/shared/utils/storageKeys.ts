@@ -3,8 +3,6 @@
  * Clean, compact AsyncStorage management - gRPC ready!
  */
 
-import { useAuth } from '../../core/context/AuthContext';
-
 /**
  * 🔑 Generates user-isolated AsyncStorage key
  */
@@ -13,12 +11,9 @@ export const getUserStorageKey = (baseKey: string, userId?: string): string => {
 };
 
 /**
- * 🪝 Hook for user-isolated storage keys
+ * 🪝 Hook for user-isolated storage keys - moved to separate file to avoid circular dependency
+ * Use this function directly: getUserStorageKey(key, userId)
  */
-export const useUserStorageKey = (baseKey: string): string => {
-  const { user } = useAuth();
-  return getUserStorageKey(baseKey, user?.id);
-};
 
 /**
  * 📦 Base storage keys for different data types

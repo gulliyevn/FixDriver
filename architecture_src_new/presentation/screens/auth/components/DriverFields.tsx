@@ -71,7 +71,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.country')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => onOpenSelect('country', t('auth.register.country'))}>
           <Text style={driverStyles.selectText}>{formData.country || t('auth.register.countryPlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.country && <Text style={styles.errorText}>{errors.country}</Text>}
       </View>
@@ -83,7 +83,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
           value={formData.licenseNumber}
           onChangeText={(text) => onChange('licenseNumber', text)}
           placeholder={t('auth.register.licenseNumberPlaceholder')}
-          placeholderTextColor="#64748B"
+          placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
           autoCapitalize="characters"
         />
         {errors.licenseNumber && <Text style={styles.errorText}>{errors.licenseNumber}</Text>}
@@ -93,7 +93,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.licenseExpiry')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => setShowExpiry(true)}>
           <Text style={driverStyles.selectText}>{formData.licenseExpiry || t('auth.register.licenseExpiryPlaceholder')}</Text>
-          <Ionicons name="calendar" size={20} color="#64748B" />
+          <Ionicons name="calendar" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.licenseExpiry && <Text style={styles.errorText}>{errors.licenseExpiry}</Text>}
       </View>
@@ -122,7 +122,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
             </>
           ) : (
             <>
-              <Ionicons name="camera" size={24} color="#64748B" />
+              <Ionicons name="camera" size={24} color={styles.colors?.textSecondary || '#64748B'} />
               <Text style={driverStyles.photoText}>{t('auth.register.licensePhotoUpload')}</Text>
             </>
           )}
@@ -154,7 +154,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
             </>
           ) : (
             <>
-              <Ionicons name="camera" size={24} color="#64748B" />
+              <Ionicons name="camera" size={24} color={styles.colors?.textSecondary || '#64748B'} />
               <Text style={driverStyles.photoText}>{t('auth.register.techPassportPhotoUpload')}</Text>
             </>
           )}
@@ -170,7 +170,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
           value={formData.vehicleNumber}
           onChangeText={(text) => onChange('vehicleNumber', text)}
           placeholder={t('auth.register.vehicleNumberPlaceholder')}
-          placeholderTextColor="#64748B"
+          placeholderTextColor={styles.colors?.textSecondary || '#64748B'}
           autoCapitalize="characters"
         />
         {errors.vehicleNumber && <Text style={styles.errorText}>{errors.vehicleNumber}</Text>}
@@ -180,7 +180,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.experience')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => onOpenSelect('experience', t('auth.register.experience'))}>
           <Text style={driverStyles.selectText}>{formData.experience || t('auth.register.experiencePlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.experience && <Text style={styles.errorText}>{errors.experience}</Text>}
       </View>
@@ -189,7 +189,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.tariff')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => onOpenSelect('tariff', t('auth.register.tariff'))}>
           <Text style={driverStyles.selectText}>{formData.tariff || t('auth.register.tariffPlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.tariff && <Text style={styles.errorText}>{errors.tariff}</Text>}
       </View>
@@ -202,7 +202,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
           disabled={!formData.tariff}
         >
           <Text style={driverStyles.selectText}>{formData.carBrand || t('auth.register.carBrandPlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.carBrand && <Text style={styles.errorText}>{errors.carBrand}</Text>}
       </View>
@@ -215,7 +215,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
           disabled={!formData.carBrand}
         >
           <Text style={driverStyles.selectText}>{formData.carModel || t('auth.register.carModelPlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.carModel && <Text style={styles.errorText}>{errors.carModel}</Text>}
       </View>
@@ -224,7 +224,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.carYear')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => setShowYear(true)}>
           <Text style={driverStyles.selectText}>{formData.carYear || t('auth.register.carYearPlaceholder')}</Text>
-          <Ionicons name="calendar" size={20} color="#64748B" />
+          <Ionicons name="calendar" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.carYear && <Text style={styles.errorText}>{errors.carYear}</Text>}
       </View>
@@ -234,6 +234,9 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         title={t('auth.register.licenseExpiry')}
         mode="date"
         onClose={() => setShowExpiry(false)}
+        minDate={(() => { const d = new Date(); d.setMonth(d.getMonth() + 1); return d; })()}
+        maxDate={(() => { const d = new Date(); d.setFullYear(d.getFullYear() + 20); return d; })()}
+        defaultValue={(() => { const d = new Date(); d.setMonth(d.getMonth() + 1); return d; })()}
         onConfirm={(val) => {
           onChange('licenseExpiry', val);
           setShowExpiry(false);
@@ -254,7 +257,7 @@ const DriverFields: React.FC<Props> = ({ t, styles, driverStyles, formData, erro
         <Text style={styles.label}>{t('auth.register.carMileage')}</Text>
         <TouchableOpacity style={driverStyles.selectContainer} onPress={() => onOpenSelect('carMileage', t('auth.register.carMileage'))}>
           <Text style={driverStyles.selectText}>{formData.carMileage || t('auth.register.carMileagePlaceholder')}</Text>
-          <Ionicons name="chevron-down" size={20} color="#64748B" />
+          <Ionicons name="chevron-down" size={20} color={styles.colors?.textSecondary || '#64748B'} />
         </TouchableOpacity>
         {errors.carMileage && <Text style={styles.errorText}>{errors.carMileage}</Text>}
       </View>
