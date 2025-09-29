@@ -108,6 +108,7 @@
   "about": "About App",
   "aboutDesc": "Version 1.0.0",
   "darkTheme": "Dark Theme",
+  "statistics": "Statistics",
   "trips": "Trips",
   "spent": "Spent",
   "rating": "Rating",
@@ -343,5 +344,22 @@
   "photoPickSuccess": "Photo successfully selected from gallery",
   "photoDeleteSuccess": "Photo successfully deleted",
   "photoSaveError": "Failed to save photo",
-  "photoDeleteError": "Failed to delete photo"
+  "photoDeleteError": "Failed to delete photo",
+  "stats": {
+    "title": "Your Statistics",
+    "totalTrips": "Total Trips",
+    "totalEarnings": "Total Earnings",
+    "averageRating": "Average Rating",
+    "totalHours": "Total Hours",
+    "completedTrips": "Completed",
+    "cancelledTrips": "Cancelled",
+    "detailedTitle": "Detailed Statistics",
+    "tripStats": "Trip Statistics",
+    "financialStats": "Financial Statistics",
+    "performanceStats": "Performance Statistics",
+    "averagePerTrip": "Average per Trip",
+    "completionRate": "Completion Rate",
+    "completed": "completed",
+    "cancelled": "cancelled"
+  }
 } 

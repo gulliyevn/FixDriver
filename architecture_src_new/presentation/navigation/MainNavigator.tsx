@@ -18,6 +18,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
   const { t } = useI18n();
   const [currentRole, setCurrentRole] = useState<Role>('client');
   const [activeTab, setActiveTab] = useState('Map');
+  const [isTabBarHidden, setIsTabBarHidden] = useState(false);
   
   // Создаем экземпляр AuthServiceStub
   const authService = new AuthServiceStub();
@@ -78,7 +79,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
         case 'Chat':
           return <ChatScreen />;
         case 'Profile':
-          return <ProfileScreen onLogout={onLogout} />;
+          return <ProfileScreen onLogout={onLogout} onSubScreenChange={setIsTabBarHidden} />;
         default:
           return (
             <View style={styles.content}>
@@ -103,7 +104,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
         case 'Chat':
           return <ChatScreen />;
         case 'Profile':
-          return <ProfileScreen onLogout={onLogout} />;
+          return <ProfileScreen onLogout={onLogout} onSubScreenChange={setIsTabBarHidden} />;
         default:
           return (
             <View style={styles.content}>
@@ -126,6 +127,7 @@ export const MainNavigator: React.FC<MainNavigatorProps> = ({ onLogout }) => {
           onRoleSwitch={handleRoleSwitch}
           activeTab={activeTab}
           onTabPress={handleTabPress}
+          isHidden={isTabBarHidden}
         />
       </View>
     </View>

@@ -351,5 +351,12 @@ export const createProfileScreenStyles = (isDark: boolean) => {
       color: colors.surface,
       fontSize: 16,
     },
+
+    // Logout button container
+    logoutContainer: {
+      marginHorizontal: 20,
+      marginTop: 24,
+      marginBottom: 50,
+    },
   });
 };

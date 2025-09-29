@@ -38,7 +38,7 @@ export const lightColors = {
 
 export const darkColors = {
   // Основные цвета
-  primary: '#083198',
+  primary: '#3B82F6',
   secondary: '#0360bc',
   accent: '#006ac9',
   

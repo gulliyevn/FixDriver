@@ -1,25 +1,44 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Image, Modal } from 'react-native';
-import { Bell, Wallet, CreditCard, Clock, FileText, Settings, Home, HelpCircle, Info, Car, ChevronRight, LogOut, Loader, UserIcon } from '../../../../shared/components/IconLibrary';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+import { Bell, Wallet, CreditCard, Clock, FileText, Settings, Home, HelpCircle, Info, Car, ChevronRight, Loader, UserIcon, TrendingUp, Crown } from '../../../../shared/components/IconLibrary';
+import { StatisticsScreen } from './components/StatisticsScreen';
+import TripsScreen from './components/TripsScreen';
+import PaymentHistoryScreen from './components/PaymentHistoryScreen';
+import ResidenceScreen from './components/ResidenceScreen';
+import HelpScreen from './components/HelpScreen';
+import AboutScreen from './components/AboutScreen';
+import SettingsScreen from './components/SettingsScreen';
+import CardsScreen from './components/CardsScreen';
+import VipScreen from './components/VipScreen';
+import EditProfileScreen from './components/EditProfileScreen';
+import BalanceScreen from './components/BalanceScreen';
 import { useTheme } from '../../../../core/context/ThemeContext';
 import { useAuth } from '../../../../core/context/AuthContext';
 import { useI18n } from '../../../../shared/i18n';
 import { createProfileScreenStyles } from './styles/ProfileScreen.styles';
 import NotificationsModal from '../../../components/notifications/NotificationsModal';
+import Button from '../../../components/ui/Button';
 
 export interface ProfileScreenProps {
   onLogout?: () => void;
+  onSubScreenChange?: (isSubScreen: boolean) => void;
 }
 
-type ActiveScreen = 'main' | 'trips' | 'residence' | 'help' | 'about';
+type ActiveScreen = 'main' | 'statistics' | 'trips' | 'paymentHistory' | 'residence' | 'help' | 'about' | 'settings' | 'cards' | 'balance' | 'vip' | 'editProfile';
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onSubScreenChange }) => {
   const { isDark, colors } = useTheme();
   const { user, logout, isLoading } = useAuth();
   const { t } = useI18n();
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>('main');
   const [isNotificationsModalVisible, setIsNotificationsModalVisible] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
+  
+  // Notify parent about sub-screen changes
+  useEffect(() => {
+    const isSubScreen = activeScreen !== 'main';
+    onSubScreenChange?.(isSubScreen);
+  }, [activeScreen, onSubScreenChange]);
   
   const styles = createProfileScreenStyles(isDark);
 
@@ -41,7 +60,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
     // ScrollView will maintain position automatically with maintainVisibleContentPosition
   };
 
-  // Handle logout
+  // Handle logout with Alert
   const handleLogout = () => {
     Alert.alert(
       t('profile.logout.title'),
@@ -59,6 +78,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
       ]
     );
   };
+
 
   // Show loading screen while checking authentication
   if (isLoading) {
@@ -103,7 +123,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
                 )}
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.profileText}>
+              <TouchableOpacity 
+                style={styles.profileText}
+                onPress={() => setActiveScreen('editProfile')}
+              >
                 <Text style={styles.profileName}>
                   {(user as any)?.name || (user as any)?.firstName || ''} {(user as any)?.surname || (user as any)?.lastName || ''}
                 </Text>
@@ -128,80 +151,89 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
               </View>
             </TouchableOpacity>
 
-            {/* Stats Box */}
-            <View style={styles.statsBox}>
-              <View style={styles.statCol}>
-                <Text style={styles.statValue}>24</Text>
-                <Text style={styles.statLabel}>{t('profile.menu.trips')}</Text>
-              </View>
-              <View style={styles.statsDivider} />
-              <View style={styles.statCol}>
-                <Text style={styles.statValue}>4.8</Text>
-                <Text style={styles.statLabel}>{t('profile.menu.rating')}</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statCol}>
-                <Text style={styles.statValue}>$125</Text>
-                <Text style={styles.statLabel}>{t('profile.menu.balance')}</Text>
-              </View>
-            </View>
 
             {/* Menu Items */}
             <View style={styles.menu}>
               {/* Balance */}
-              <TouchableOpacity style={[styles.menuItem, styles.menuItemFirst]}>
-                <Wallet size={28} color={colors.primary} style={styles.balanceIcon} />
+              <TouchableOpacity 
+                style={[styles.menuItem, styles.menuItemFirst]}
+                onPress={() => setActiveScreen('balance')}
+              >
+                <Wallet size={22} color={colors.primary} style={styles.balanceIcon} />
                 <Text style={styles.menuLabel}>{t('profile.menu.balance')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Cards */}
-              <TouchableOpacity style={styles.menuItem}>
+              <TouchableOpacity 
+                style={styles.menuItem}
+                onPress={() => setActiveScreen('cards')}
+              >
                 <CreditCard size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.cards')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
+              </TouchableOpacity>
+
+              {/* Premium */}
+              <TouchableOpacity 
+                style={styles.menuItem}
+                onPress={() => setActiveScreen('vip')}
+              >
+                <Crown size={22} color={colors.primary} style={styles.menuIconDefault} />
+                <Text style={styles.menuLabel}>{t('profile.menu.premium')}</Text>
+                <ChevronRight size={20} color={colors.primary} />
+              </TouchableOpacity>
+
+              {/* Statistics */}
+              <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('statistics')}>
+                <TrendingUp size={22} color={colors.primary} style={styles.menuIconDefault} />
+                <Text style={styles.menuLabel}>{t('profile.menu.statistics')}</Text>
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Trips */}
               <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('trips')}>
                 <Clock size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.trips')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Payment History */}
-              <TouchableOpacity style={styles.menuItem}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('paymentHistory')}>
                 <FileText size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.paymentHistory')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Settings */}
-              <TouchableOpacity style={styles.menuItem}>
+              <TouchableOpacity 
+                style={styles.menuItem}
+                onPress={() => setActiveScreen('settings')}
+              >
                 <Settings size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.settings')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Residence */}
               <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('residence')}>
                 <Home size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.residence')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Help */}
               <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('help')}>
                 <HelpCircle size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.help')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* About */}
               <TouchableOpacity style={styles.menuItem} onPress={() => setActiveScreen('about')}>
                 <Info size={22} color={colors.primary} style={styles.menuIconDefault} />
                 <Text style={styles.menuLabel}>{t('profile.menu.about')}</Text>
-                <ChevronRight size={20} color={colors.textSecondary} />
+                <ChevronRight size={20} color={colors.primary} />
               </TouchableOpacity>
 
               {/* Driver specific - Vehicles */}
@@ -209,99 +241,80 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
                 <TouchableOpacity style={styles.menuItem}>
                   <Car size={22} color={colors.primary} style={styles.menuIconDefault} />
                   <Text style={styles.menuLabel}>{t('profile.menu.vehicles')}</Text>
-                  <ChevronRight size={20} color={colors.textSecondary} />
+                  <ChevronRight size={20} color={colors.primary} />
                 </TouchableOpacity>
               )}
             </View>
 
             {/* Logout Button */}
-            <TouchableOpacity 
-              style={styles.logout} 
-              onPress={handleLogout}
-            >
-              <LogOut 
-                size={20} 
-                color={colors.card}
+            <View style={styles.logoutContainer}>
+              <Button
+                title={t('profile.logout.title')}
+                onPress={handleLogout}
+                variant="primary"
+                size="medium"
+                icon="log-out-outline"
+                iconPosition="left"
+                fullWidth
               />
-              <Text style={styles.logoutText}>{t('profile.logout.title')}</Text>
-            </TouchableOpacity>
+            </View>
+
           </ScrollView>
+        );
+        
+      case 'statistics':
+        return (
+          <StatisticsScreen />
         );
         
       case 'trips':
         return (
-          <ScrollView style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                {t('profile.menu.trips')}
-              </Text>
-              <Text style={styles.subtitle}>
-                История поездок
-              </Text>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.placeholder}>
-                Здесь будет история ваших поездок
-              </Text>
-            </View>
-          </ScrollView>
+          <TripsScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'paymentHistory':
+        return (
+          <PaymentHistoryScreen onBack={() => setActiveScreen('main')} />
         );
         
       case 'residence':
         return (
-          <ScrollView style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                {t('profile.menu.residence')}
-              </Text>
-              <Text style={styles.subtitle}>
-                Управление адресом
-              </Text>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.placeholder}>
-                Здесь можно изменить адрес
-              </Text>
-            </View>
-          </ScrollView>
+          <ResidenceScreen onBack={() => setActiveScreen('main')} />
         );
         
       case 'help':
         return (
-          <ScrollView style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                {t('profile.menu.help')}
-              </Text>
-              <Text style={styles.subtitle}>
-                Центр поддержки
-              </Text>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.placeholder}>
-                Здесь будет справочная информация
-              </Text>
-            </View>
-          </ScrollView>
+          <HelpScreen onBack={() => setActiveScreen('main')} />
         );
         
       case 'about':
         return (
-          <ScrollView style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                {t('profile.menu.about')}
-              </Text>
-              <Text style={styles.subtitle}>
-                Информация о приложении
-              </Text>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.placeholder}>
-                Здесь будет информация о приложении
-              </Text>
-            </View>
-          </ScrollView>
+          <AboutScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'settings':
+        return (
+          <SettingsScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'cards':
+        return (
+          <CardsScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'vip':
+        return (
+          <VipScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'balance':
+        return (
+          <BalanceScreen onBack={() => setActiveScreen('main')} />
+        );
+        
+      case 'editProfile':
+        return (
+          <EditProfileScreen onBack={() => setActiveScreen('main')} />
         );
         
       default:

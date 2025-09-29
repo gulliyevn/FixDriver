@@ -108,6 +108,7 @@
   "about": "О приложении",
   "aboutDesc": "Версия 1.0.0",
   "darkTheme": "Темная тема",
+  "statistics": "Статистика",
   "trips": "Поездок",
   "spent": "Потрачено",
   "rating": "Рейтинг",
@@ -343,5 +344,22 @@
   "photoPickSuccess": "Фото успешно выбрано из галереи",
   "photoDeleteSuccess": "Фото успешно удалено",
   "photoSaveError": "Не удалось сохранить фото",
-  "photoDeleteError": "Не удалось удалить фото"
+  "photoDeleteError": "Не удалось удалить фото",
+  "stats": {
+    "title": "Ваша статистика",
+    "totalTrips": "Всего поездок",
+    "totalEarnings": "Общий доход",
+    "averageRating": "Средняя оценка",
+    "totalHours": "Всего часов",
+    "completedTrips": "Завершено",
+    "cancelledTrips": "Отменено",
+    "detailedTitle": "Подробная статистика",
+    "tripStats": "Статистика поездок",
+    "financialStats": "Финансовая статистика",
+    "performanceStats": "Статистика производительности",
+    "averagePerTrip": "Среднее за поездку",
+    "completionRate": "Процент завершения",
+    "completed": "завершено",
+    "cancelled": "отменено"
+  }
 } 

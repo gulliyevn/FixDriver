@@ -12,6 +12,7 @@ interface TabBarProps {
   onRoleSwitch: (role: Role) => void;
   activeTab: string;
   onTabPress: (tabName: string) => void;
+  isHidden?: boolean;
 }
 
 export const TabBar: React.FC<TabBarProps> = ({
@@ -19,6 +20,7 @@ export const TabBar: React.FC<TabBarProps> = ({
   onRoleSwitch,
   activeTab,
   onTabPress,
+  isHidden = false,
 }) => {
   const { t } = useI18n();
   const { isDark, colors } = useTheme();
@@ -51,6 +53,10 @@ export const TabBar: React.FC<TabBarProps> = ({
       onTabPress(tabName);
     }
   };
+
+  if (isHidden) {
+    return null;
+  }
 
   return (
     <View style={styles.tabBar}>

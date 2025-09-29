@@ -1,0 +1,345 @@
+import { StyleSheet } from 'react-native';
+
+export const VipPackagesStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  discountHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    borderRadius: 12,
+  },
+  discountHeaderText: {
+    fontSize: 13,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  periodSwitchContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 12,
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 24,
+    padding: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  periodButtonWrapLeft: {
+    flex: 0.9,
+    marginRight: 4,
+  },
+  periodButtonWrapRight: {
+    flex: 0.9,
+    marginLeft: 4,
+  },
+  periodButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  periodButtonInactive: {
+    borderWidth: 0,
+  },
+  periodButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    opacity: 1,
+    letterSpacing: 0.2,
+  },
+  yearButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  yearDiscountBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    shadowColor: '#00FFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 4,
+    marginLeft: 20,
+  },
+  yearDiscountText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.3,
+    textShadowColor: '#000000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 1,
+  },
+  packagesContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  packagesScrollContent: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  packageCard: {
+    borderRadius: 20,
+    paddingTop: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    borderWidth: 1,
+    width: 370,
+    height: 580,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  selectedPackageCard: {
+    borderWidth: 2,
+    borderColor: '#3B82F6',
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  packageHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  packageTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    textAlign: 'left',
+    flex: 1,
+    letterSpacing: -0.5,
+    color: '#FFFFFF',
+  },
+  selectedIndicator: {
+    marginLeft: 8,
+  },
+  packageDescription: {
+    fontSize: 14,
+    marginBottom: 20,
+    lineHeight: 20,
+    textAlign: 'center',
+    opacity: 0.8,
+    color: '#FFFFFF',
+  },
+  // Стили для таблицы функций
+  featuresContainer: {
+    flex: 1,
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+  featureRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  featureNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 12,
+  },
+  iconWrapper: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  featureName: {
+    fontSize: 12,
+    fontWeight: '500',
+    flex: 1,
+    lineHeight: 16,
+    color: '#FFFFFF',
+  },
+  featureValueContainer: {
+    alignItems: 'flex-end',
+    minWidth: 60,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+    height: 24,
+  },
+  crossContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  crossCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.3)',
+  },
+  featureValue: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  priceButton: {
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginTop: 8,
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  priceText: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  discountContainer: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  discountLabelText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#10B981',
+  },
+  savingsContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    shadowColor: '#00FFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  savingsText: {
+    color: '#000000',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    textShadowColor: '#FFFFFF',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 2,
+  },
+  yearDiscountContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+    shadowColor: '#00FFFF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  yearDiscountLabelText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    textShadowColor: '#000000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 2,
+  },
+  carouselContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  carouselContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#E5E7EB',
+  },
+  activeDot: {
+    backgroundColor: '#3B82F6',
+    width: 24,
+  },
+});
+
+export const getVipPackagesColors = (isDark: boolean) => {
+  const colors = isDark ? {
+    surface: '#1F2937',
+    card: '#1F2937',
+    border: '#374151',
+    text: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    primary: '#3B82F6',
+    priceButton: '#3B82F6',
+  } : {
+    surface: '#f9f9f9',
+    card: '#ffffff',
+    border: '#f0f0f0',
+    text: '#003366',
+    textSecondary: '#666666',
+    primary: '#083198',
+    priceButton: '#083198',
+  };
+
+  return {
+    periodSwitchContainer: { backgroundColor: colors.surface },
+    packageCard: {
+      backgroundColor: colors.card,
+      borderColor: colors.border,
+    },
+    packageTitle: { color: colors.text },
+    packageDescription: { color: colors.textSecondary },
+    priceButton: {
+      backgroundColor: colors.priceButton,
+      borderColor: colors.priceButton,
+    },
+  };
+};
+
+// Функция для получения цветов карт (как бесплатная версия)
+export const getPackageCardColors = (packageId: string, isDark: boolean) => {
+  // Все пакеты используют одинаковые цвета как бесплатный
+  return {
+    backgroundColor: isDark ? '#1F2937' : '#ffffff',
+    borderColor: isDark ? '#FFFFFF' : '#000000',
+  };
+};
+
+

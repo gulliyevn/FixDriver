@@ -7,7 +7,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Icon } from '../../../shared/components/IconLibrary';
 import { ButtonStyles } from './Button.styles';
 import { useTheme } from '../../../core/context/ThemeContext';
 
@@ -18,7 +18,7 @@ export interface ButtonProps {
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   loading?: boolean;
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: string;
   iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
   style?: ViewStyle;
@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   children,
 }) => {
-  const { isDark } = useTheme();
+  const { isDark, colors } = useTheme();
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
@@ -88,44 +88,86 @@ const Button: React.FC<ButtonProps> = ({
     const baseStyle = [
       ButtonStyles.button,
       ButtonStyles[size],
-      ButtonStyles[variant],
       fullWidth && ButtonStyles.fullWidth,
       disabled && ButtonStyles.disabled,
       loading && ButtonStyles.loading,
       style,
     ];
 
-    return baseStyle as unknown as ViewStyle;
+    // Add dynamic colors based on variant and theme
+    const dynamicStyle: ViewStyle = {};
+    
+    switch (variant) {
+      case 'primary':
+        dynamicStyle.backgroundColor = colors.primary;
+        break;
+      case 'secondary':
+        dynamicStyle.backgroundColor = colors.secondary;
+        break;
+      case 'outline':
+        dynamicStyle.backgroundColor = 'transparent';
+        dynamicStyle.borderWidth = 2;
+        dynamicStyle.borderColor = colors.primary;
+        break;
+      case 'ghost':
+        dynamicStyle.backgroundColor = 'transparent';
+        break;
+      case 'danger':
+        dynamicStyle.backgroundColor = colors.error;
+        break;
+    }
+
+    return [...baseStyle, dynamicStyle] as unknown as ViewStyle;
   };
 
   const getTextStyle = (): TextStyle => {
     const baseTextStyle = [
       ButtonStyles.text,
       ButtonStyles[`${size}Text`],
-      ButtonStyles[`${variant}Text`],
       disabled && ButtonStyles.disabledText,
       textStyle,
     ];
 
-    return baseTextStyle as unknown as TextStyle;
-  };
-
-  const getIconColor = (): string => {
-    if (disabled) return isDark ? '#6B7280' : '#9CA3AF';
+    // Add dynamic text colors based on variant and theme
+    const dynamicTextStyle: TextStyle = {};
     
     switch (variant) {
       case 'primary':
-        return '#FFFFFF';
+        dynamicTextStyle.color = colors.card;
+        break;
       case 'secondary':
-        return isDark ? '#F9FAFB' : '#1F2937';
+        dynamicTextStyle.color = colors.text;
+        break;
       case 'outline':
-        return isDark ? '#F9FAFB' : '#1F2937';
+        dynamicTextStyle.color = colors.primary;
+        break;
       case 'ghost':
-        return isDark ? '#F9FAFB' : '#1F2937';
+        dynamicTextStyle.color = colors.primary;
+        break;
       case 'danger':
-        return '#FFFFFF';
+        dynamicTextStyle.color = colors.card;
+        break;
+    }
+
+    return [...baseTextStyle, dynamicTextStyle] as unknown as TextStyle;
+  };
+
+  const getIconColor = (): string => {
+    if (disabled) return colors.textTertiary;
+    
+    switch (variant) {
+      case 'primary':
+        return colors.card;
+      case 'secondary':
+        return colors.text;
+      case 'outline':
+        return colors.primary;
+      case 'ghost':
+        return colors.primary;
+      case 'danger':
+        return colors.card;
       default:
-        return '#FFFFFF';
+        return colors.card;
     }
   };
 
@@ -133,7 +175,7 @@ const Button: React.FC<ButtonProps> = ({
     if (!icon) return null;
 
     return (
-      <Ionicons
+      <Icon
         name={icon}
         size={size === 'small' ? 16 : size === 'large' ? 24 : 20}
         color={getIconColor()}
