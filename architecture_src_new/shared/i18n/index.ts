@@ -11,7 +11,6 @@ const commonButtons = require('./common/buttons.json');
 const commonMessages = require('./common/messages.json');
 const commonLabels = require('./common/labels.json');
 const navigationTabs = require('./navigation/tabs.json');
-const commonCountries = require('./common/countries.json');
 const earningsCommon = require('./common/earnings.json');
 const levelsCommon = require('./common/levels.json');
 const premiumCommon = require('./common/premium.json');
@@ -55,7 +54,6 @@ const translations: Record<string, TranslationData> = {
       buttons: commonButtons,
       messages: commonMessages,
       labels: commonLabels,
-      countries: commonCountries,
       earnings: earningsCommon,
       levels: levelsCommon,
       premium: premiumCommon,
