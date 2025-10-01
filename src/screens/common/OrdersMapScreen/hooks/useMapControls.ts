@@ -1,8 +1,8 @@
-import { useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { MapService } from '../../../../services/MapService';
 import { OrdersMapState, OrdersMapActions, MapControlHandlers } from '../types/orders-map.types';
-import { callEmergencyService, getCountryCodeByLocation } from '../../../../utils/emergencyNumbers';
+import { callEmergencyService } from '../../../../utils/countryHelpers';
 import { useLanguage } from '../../../../context/LanguageContext';
 
 export const useMapControls = (
@@ -41,8 +41,8 @@ export const useMapControls = (
     actions.setIsSimpleDialogVisible(false);
     
     try {
-      // Получаем код страны (в реальном приложении здесь будет определение по геолокации)
-      const countryCode = await getCountryCodeByLocation();
+      // Получаем код страны (по умолчанию RU, в реальном приложении определяется по геолокации)
+      const countryCode = 'RU'; // TODO: получать из настроек пользователя или геолокации
       
       // Совершаем звонок в экстренную службу
       await callEmergencyService(countryCode);
@@ -53,7 +53,7 @@ export const useMapControls = (
         t('common.emergency.error')
       );
     }
-  }, [actions]);
+  }, [actions, t]);
 
   const handleSimpleDialogNo = useCallback(() => {
     actions.setIsSimpleDialogVisible(false);

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { fixwaveOrderService } from '../services/fixwaveOrderService';
 
 export const useSessionCleanup = () => {
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     // Функция для проверки и очистки устаревшей сессии

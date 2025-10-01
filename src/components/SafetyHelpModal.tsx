@@ -1,17 +1,55 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { RulesModalStyles as styles, getRulesModalStyles } from '../styles/components/RulesModal.styles';
 import { RulesSlidesStyles as slideStyles } from '../styles/components/RulesSlides.styles';
-import { SafetyHelpSlide } from '../mocks/safetyHelpMock';
 import { createSlideAnimation, slideAnimationConfig } from '../styles/animations';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
+
+interface SafetyHelpSlide {
+  id: number;
+  title: string;
+  icon: string;
+  content: string;
+  description: string;
+}
 
 interface SafetyHelpModalProps {
   visible: boolean;
   onClose: () => void;
 }
+
+const safetySlides: SafetyHelpSlide[] = [
+  {
+    id: 1,
+    title: 'help.safety.driverCheck.title',
+    icon: 'shield-checkmark',
+    content: 'help.safety.driverCheck.content',
+    description: 'help.safety.driverCheck.description',
+  },
+  {
+    id: 2,
+    title: 'help.safety.routeTracking.title',
+    icon: 'location',
+    content: 'help.safety.routeTracking.content',
+    description: 'help.safety.routeTracking.description',
+  },
+  {
+    id: 3,
+    title: 'help.safety.emergencyButton.title',
+    icon: 'warning',
+    content: 'help.safety.emergencyButton.content',
+    description: 'help.safety.emergencyButton.description',
+  },
+  {
+    id: 4,
+    title: 'help.safety.ratingSystem.title',
+    icon: 'star',
+    content: 'help.safety.ratingSystem.content',
+    description: 'help.safety.ratingSystem.description',
+  },
+];
 
 const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) => {
   const { isDark } = useTheme();
@@ -19,42 +57,15 @@ const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) =
   const dynamicStyles = getRulesModalStyles(isDark);
   const [activeSlide, setActiveSlide] = useState(0);
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const slides: SafetyHelpSlide[] = [
-    {
-      id: 1,
-      title: t('help.safety.driverCheck.title'),
-      icon: 'shield-checkmark',
-      content: t('help.safety.driverCheck.content'),
-      description: t('help.safety.driverCheck.description')
-    },
-    {
-      id: 2,
-      title: t('help.safety.routeTracking.title'),
-      icon: 'location',
-      content: t('help.safety.routeTracking.content'),
-      description: t('help.safety.routeTracking.description')
-    },
-    {
-      id: 3,
-      title: t('help.safety.emergencyButton.title'),
-      icon: 'warning',
-      content: t('help.safety.emergencyButton.content'),
-      description: t('help.safety.emergencyButton.description')
-    },
-    {
-      id: 4,
-      title: t('help.safety.ratingSystem.title'),
-      icon: 'star',
-      content: t('help.safety.ratingSystem.content'),
-      description: t('help.safety.ratingSystem.description')
-    }
-  ];
+  const slides = useMemo(() => safetySlides, []);
 
-  // Мемоизируем функции анимации
-  const openSlide = useCallback((slideIndex: number) => {
-    setActiveSlide(slideIndex);
-    Animated.spring(slideAnim, slideAnimationConfig.open).start();
-  }, [slideAnim]);
+  const openSlide = useCallback(
+    (slideIndex: number) => {
+      setActiveSlide(slideIndex);
+      Animated.spring(slideAnim, slideAnimationConfig.open).start();
+    },
+    [slideAnim]
+  );
 
   const closeSlide = useCallback(() => {
     Animated.spring(slideAnim, slideAnimationConfig.close).start(() => {
@@ -63,27 +74,19 @@ const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) =
   }, [slideAnim]);
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <View style={[styles.modalContainer, dynamicStyles.modalContainer]}>
         <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
-          <TouchableOpacity 
-            onPress={onClose} 
-            style={styles.modalCloseButton}
-          >
+          <TouchableOpacity onPress={onClose} style={styles.modalCloseButton}>
             <Ionicons name="close" size={24} color={isDark ? '#fff' : '#003366'} />
           </TouchableOpacity>
           <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('help.safetyTitle')}</Text>
           <View style={styles.placeholder} />
         </View>
-        
+
         <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
           {slides.map((slide, index) => (
-            <TouchableOpacity 
+            <TouchableOpacity
               key={slide.id}
               style={[slideStyles.slideItem, dynamicStyles.slideItem]}
               onPress={() => openSlide(index)}
@@ -93,21 +96,16 @@ const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) =
                 <Ionicons name={slide.icon as any} size={24} color={isDark ? '#fff' : '#003366'} />
               </View>
               <View style={slideStyles.slideInfo}>
-                <Text style={[slideStyles.slideTitle, dynamicStyles.slideTitle]}>{slide.title}</Text>
-                <Text style={[slideStyles.slideDescription, dynamicStyles.slideContent]}>{slide.description}</Text>
+                <Text style={[slideStyles.slideTitle, dynamicStyles.slideTitle]}>{t(slide.title)}</Text>
+                <Text style={[slideStyles.slideDescription, dynamicStyles.slideContent]}>{t(slide.description)}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={isDark ? '#666' : '#ccc'} />
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        {/* Подокно слайда */}
-        <Animated.View 
-          style={[
-            slideStyles.slideOverlay,
-            dynamicStyles.slideOverlay,
-            createSlideAnimation(slideAnim)
-          ]}
+        <Animated.View
+          style={[slideStyles.slideOverlay, dynamicStyles.slideOverlay, createSlideAnimation(slideAnim)]}
         >
           {activeSlide >= 0 && (
             <View style={slideStyles.slideContent}>
@@ -115,12 +113,14 @@ const SafetyHelpModal: React.FC<SafetyHelpModalProps> = ({ visible, onClose }) =
                 <TouchableOpacity onPress={closeSlide} style={slideStyles.backButton}>
                   <Ionicons name="arrow-back" size={24} color={isDark ? '#fff' : '#003366'} />
                 </TouchableOpacity>
-                <Text style={[slideStyles.slideHeaderTitle, dynamicStyles.slideHeaderTitle]}>{slides[activeSlide]?.title}</Text>
+                <Text style={[slideStyles.slideHeaderTitle, dynamicStyles.slideHeaderTitle]}>
+                  {t(slides[activeSlide]?.title)}
+                </Text>
                 <View style={styles.placeholder} />
               </View>
               <ScrollView style={slideStyles.slideScroll}>
                 <Text style={[slideStyles.slideText, dynamicStyles.slideText]}>
-                  {slides[activeSlide]?.content}
+                  {t(slides[activeSlide]?.content)}
                 </Text>
               </ScrollView>
             </View>

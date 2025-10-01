@@ -75,6 +75,7 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   }, [buttonColorState, isPaused]);
 
   const state: DriverModalState = {
+    driverId,
     isDriverExpanded,
     buttonColorState,
     isOnline,

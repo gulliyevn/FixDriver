@@ -1,15 +1,5 @@
-import { mockOrders, mockUsers, mockDrivers } from '../mocks';
+import APIClient from './APIClient';
 import { Order, OrderStatus } from '../types/order';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// Отключено для production - только для разработки
-const ENABLE_ORDER_LOGS = false;
-
-const log = (message: string, data?: unknown) => {
-  if (ENABLE_ORDER_LOGS) {
-
-  }
-};
 
 export interface OrderData {
   id: string;
@@ -31,13 +21,8 @@ export interface OrderData {
 
 export class OrderService {
   private static instance: OrderService;
-  private orders: Order[] = [];
-  private trackingInterval: ReturnType<typeof setInterval> | null = null;
-  private storageKey = 'fixwave_order_data';
 
-  private constructor() {
-    this.orders = mockOrders;
-  }
+  private constructor() {}
 
   static getInstance(): OrderService {
     if (!OrderService.instance) {
@@ -47,328 +32,140 @@ export class OrderService {
   }
 
   async getOrders(userId: string): Promise<Order[]> {
-    return this.orders.filter(order => order.clientId === userId);
+    try {
+      const response = await APIClient.get<Order[]>(`/orders/client/${userId}`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get orders error:', error);
+      return [];
+    }
   }
 
   async getOrder(orderId: string): Promise<Order | null> {
-    return this.orders.find(order => order.id === orderId) || null;
-  }
-
-  async createOrder(orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>): Promise<Order> {
-    const order: Order = {
-      id: `order_${Date.now()}`,
-      ...orderData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    this.orders.push(order);
-    this.notifySubscribers();
-    return order;
-  }
-
-  async updateOrder(orderId: string, updates: Partial<Order>): Promise<Order | null> {
-    const orderIndex = this.orders.findIndex(order => order.id === orderId);
-    if (orderIndex === -1) return null;
-
-    this.orders[orderIndex] = {
-      ...this.orders[orderIndex],
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    };
-    this.notifySubscribers();
-    return this.orders[orderIndex];
-  }
-
-  async cancelOrder(orderId: string): Promise<Order | null> {
-    const order = this.orders.find(o => o.id === orderId);
-    if (order && order.status !== 'completed') {
-      order.status = 'cancelled';
-      order.updatedAt = new Date().toISOString();
-      this.notifySubscribers();
-      return order;
-    }
-    return null;
-  }
-
-  async completeOrder(orderId: string): Promise<Order | null> {
-    return this.updateOrder(orderId, { status: 'completed' });
-  }
-
-  async getOrdersByStatus(userId: string, status: OrderStatus): Promise<Order[]> {
-    return this.orders.filter(order => order.clientId === userId && order.status === status);
-  }
-
-  async getActiveOrders(userId: string): Promise<Order[]> {
-    return this.orders.filter(order => 
-      order.clientId === userId && 
-      ['pending', 'confirmed', 'in_progress'].includes(order.status)
-    );
-  }
-
-  async getCompletedOrders(userId: string): Promise<Order[]> {
-    return this.orders.filter(order => 
-      order.clientId === userId && 
-      order.status === 'completed'
-    );
-  }
-
-  // Симуляция отслеживания водителя
-  startDriverTracking(driverId: string, destination: { latitude: number; longitude: number }): void {
-    log('Начинается слежение за водителем');
-    
-    const startPosition = {
-      latitude: 40.414300000000004,
-      longitude: 49.8721,
-    };
-    
-    log('Водитель стартует с позиции:', startPosition);
-    log('Водитель начал движение к клиенту');
-
-    let step = 0;
-    const totalSteps = 12;
-    
-    this.trackingInterval = setInterval(() => {
-      step++;
-      if (step <= totalSteps) {
-        const progress = step / totalSteps;
-        const currentLat = startPosition.latitude - (startPosition.latitude - destination.latitude) * progress;
-        const currentLng = startPosition.longitude + (destination.longitude - startPosition.longitude) * progress;
-        
-        log(`Шаг ${step}/${totalSteps}, позиция: ${currentLat.toFixed(6)}, ${currentLng.toFixed(6)}`);
-        
-        if (step === totalSteps) {
-          log('Водитель прибыл к клиенту, начинается поездка');
-          this.stopDriverTracking();
-        }
-      }
-    }, 2000);
-  }
-
-  // Остановка отслеживания
-  stopDriverTracking(): void {
-    if (this.trackingInterval) {
-      clearInterval(this.trackingInterval);
-      this.trackingInterval = null;
-    }
-  }
-
-  static async getClientOrders(clientId: string): Promise<Order[]> {
-    // TODO: заменить на реальный API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            ...mockOrders[0],
-            id: '1',
-            clientId: clientId,
-            driverId: mockDrivers[0].id,
-            from: 'Москва, Красная площадь',
-            to: 'Москва, ул. Тверская',
-            status: 'completed',
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-            updatedAt: new Date(Date.now() - 82800000).toISOString(),
-          },
-        ]);
-      }, 500);
-    });
-  }
-
-  static async getDriverOrders(driverId: string): Promise<Order[]> {
-    // TODO: заменить на реальный API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            ...mockOrders[0],
-            id: '1',
-            clientId: mockUsers[0].id,
-            driverId: driverId,
-            from: 'Москва, Красная площадь',
-            to: 'Москва, ул. Тверская',
-            status: 'in_progress',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        ]);
-      }, 500);
-    });
-  }
-
-  static async acceptOrder(orderId: string, driverId: string): Promise<Order> {
-    // TODO: заменить на реальный API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          ...mockOrders[0],
-          id: orderId,
-          clientId: mockUsers[0].id,
-          driverId: driverId,
-          from: 'Москва, Красная площадь',
-          to: 'Москва, ул. Тверская',
-          status: 'in_progress',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
-      }, 500);
-    });
-  }
-
-  static async updateOrderStatus(orderId: string): Promise<Order> {
-    // TODO: заменить на реальный API запрос
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: orderId,
-          clientId: 'client_1',
-          driverId: 'driver_1',
-          from: 'ул. Низами, 23, Баку',
-          to: 'пр. Нефтяников, 45, Баку',
-          departureTime: '2024-01-15T10:30:00Z',
-          passenger: {
-            name: 'Алиса Петрова',
-            relationship: 'daughter',
-            phone: '+994501234567',
-          },
-          route: [
-            {
-              id: 'route_1_1',
-              address: 'ул. Низами, 23, Баку',
-              coordinates: { latitude: 40.3777, longitude: 49.8920 },
-            },
-            {
-              id: 'route_1_2',
-              address: 'пр. Нефтяников, 45, Баку',
-              coordinates: { latitude: 40.4093, longitude: 49.8671 },
-            },
-          ],
-          status: 'completed',
-          price: 15,
-          distance: 3.2,
-          duration: 12,
-          createdAt: '2024-01-15T10:00:00Z',
-          updatedAt: '2024-01-15T10:45:00Z',
-        });
-      }, 1000);
-    });
-  }
-
-  // Сохранение данных заказа
-  async saveOrderData(orderData: Omit<OrderData, 'id' | 'createdAt'>): Promise<OrderData> {
     try {
-      const order: OrderData = {
-        ...orderData,
-        id: `order_${Date.now()}`,
-        createdAt: Date.now(),
-      };
-
-      await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
-      return order;
+      const response = await APIClient.get<Order>(`/orders/${orderId}`);
+      return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Error saving order data:', error);
-      throw new Error('Не удалось сохранить данные заказа');
-    }
-  }
-
-  // Загрузка данных заказа
-  async loadOrderData(): Promise<OrderData | null> {
-    try {
-      const data = await AsyncStorage.getItem(this.storageKey);
-      return data ? JSON.parse(data) : null;
-    } catch (error) {
-      console.error('Error loading order data:', error);
+      console.error('Get order error:', error);
       return null;
     }
   }
 
-  // Обновление данных заказа
-  async updateOrderData(updates: Partial<OrderData>): Promise<OrderData | null> {
+  async createOrder(orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>): Promise<Order> {
     try {
-      const currentData = await this.loadOrderData();
-      if (!currentData) {
-        throw new Error('Нет сохраненных данных заказа');
+      const response = await APIClient.post<Order>('/orders', orderData);
+      if (response.success && response.data) {
+        return response.data;
       }
-
-      const updatedData: OrderData = {
-        ...currentData,
-        ...updates,
-      };
-
-      await AsyncStorage.setItem(this.storageKey, JSON.stringify(updatedData));
-      return updatedData;
+      throw new Error(response.error || 'Failed to create order');
     } catch (error) {
-      console.error('Error updating order data:', error);
-      throw new Error('Не удалось обновить данные заказа');
+      console.error('Create order error:', error);
+      throw error;
     }
   }
 
-  // Очистка данных заказа
-  async clearOrderData(): Promise<void> {
+  async updateOrder(orderId: string, updates: Partial<Order>): Promise<Order | null> {
     try {
-      await AsyncStorage.removeItem(this.storageKey);
+      const response = await APIClient.put<Order>(`/orders/${orderId}`, updates);
+      return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Error clearing order data:', error);
-      throw new Error('Не удалось очистить данные заказа');
+      console.error('Update order error:', error);
+      return null;
     }
   }
 
-  // Проверка валидности данных заказа
-  validateOrderData(data: {
-    familyMemberId: string;
-    packageType: string;
-    addresses: Array<{
-      type: string;
-      address: string;
-      coordinates?: any;
-    }>;
-  }): { isValid: boolean; errors: string[] } {
-    const errors: string[] = [];
-
-    // Проверка участника семьи
-    if (!data.familyMemberId) {
-      errors.push('Не выбран участник семьи');
+  async cancelOrder(orderId: string): Promise<Order | null> {
+    try {
+      const response = await APIClient.post<Order>(`/orders/${orderId}/cancel`, {});
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Cancel order error:', error);
+      return null;
     }
-
-    // Проверка пакета
-    if (!data.packageType) {
-      errors.push('Не выбран пакет');
-    }
-
-    // Проверка адресов
-    if (!data.addresses || data.addresses.length === 0) {
-      errors.push('Не указаны адреса');
-    } else {
-      const fromAddress = data.addresses.find(addr => addr.type === 'from');
-      const toAddress = data.addresses.find(addr => addr.type === 'to');
-
-      if (!fromAddress || !fromAddress.address) {
-        errors.push('Не указан адрес отправления');
-      }
-
-      if (!toAddress || !toAddress.address) {
-        errors.push('Не указан адрес назначения');
-      }
-
-      // Проверка координат для основных адресов
-      if (fromAddress && !fromAddress.coordinates) {
-        errors.push('Не удалось определить координаты адреса отправления');
-      }
-
-      if (toAddress && !toAddress.coordinates) {
-        errors.push('Не удалось определить координаты адреса назначения');
-      }
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors,
-    };
   }
 
-  notifySubscribers(): void {
-    // Implementation of notifySubscribers method
+  async completeOrder(orderId: string): Promise<Order | null> {
+    try {
+      const response = await APIClient.post<Order>(`/orders/${orderId}/complete`, {});
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Complete order error:', error);
+      return null;
+    }
+  }
+
+  // Методы для водителей
+  async getDriverOrders(driverId: string): Promise<Order[]> {
+    try {
+      const response = await APIClient.get<Order[]>(`/orders/driver/${driverId}`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get driver orders error:', error);
+      return [];
+    }
+  }
+
+  async acceptOrder(orderId: string, driverId: string): Promise<Order | null> {
+    try {
+      const response = await APIClient.post<Order>(`/orders/${orderId}/accept`, { driverId });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Accept order error:', error);
+      return null;
+    }
+  }
+
+  async updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order | null> {
+    try {
+      const response = await APIClient.post<Order>(`/orders/${orderId}/status`, { status });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Update order status error:', error);
+      return null;
+    }
+  }
+
+  // Методы для отслеживания
+  async trackOrder(orderId: string): Promise<{ location: { latitude: number; longitude: number }; status: string } | null> {
+    try {
+      const response = await APIClient.get<{ location: { latitude: number; longitude: number }; status: string }>(`/orders/${orderId}/track`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Track order error:', error);
+      return null;
+    }
+  }
+
+  async updateOrderLocation(orderId: string, location: { latitude: number; longitude: number }): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/orders/${orderId}/location`, { location });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Update order location error:', error);
+      return false;
+    }
+  }
+
+  // Поиск и фильтрация
+  async searchOrders(query: string, userId: string): Promise<Order[]> {
+    try {
+      const response = await APIClient.get<Order[]>(`/orders/search`, { q: query, userId });
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Search orders error:', error);
+      return [];
+    }
+  }
+
+  async getOrdersByStatus(status: OrderStatus, userId: string): Promise<Order[]> {
+    try {
+      const response = await APIClient.get<Order[]>(`/orders/status/${status}`, { userId });
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get orders by status error:', error);
+      return [];
+    }
   }
 }
 
-export const orderService = OrderService.getInstance();
 export default OrderService;

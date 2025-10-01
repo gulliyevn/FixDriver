@@ -12,6 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { createDriverRegisterScreenStyles, getPlaceholderColor } from '../../styles/screens/DriverRegisterScreen.styles';
@@ -21,7 +22,7 @@ import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicato
 import PhotoUpload from '../../components/PhotoUpload';
 import AgreementCheckbox from '../../components/AgreementCheckbox';
 import vehicleSegments from '../../utils/vehicleSegments.json';
-import { COUNTRIES } from '../../utils/countries';
+import { COUNTRIES_FULL } from '../../utils/countries';
 import {
   experienceOptions,
   carBrands,
@@ -29,6 +30,7 @@ import {
   getYearOptions,
   getTariffOptions,
 } from '../../utils/driverData';
+import DevRegistrationService from '../../services/DevRegistrationService';
 
 const DriverRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -143,11 +145,79 @@ const DriverRegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     if (!validate()) return;
     setLoading(true);
+    
     try {
-      Alert.alert(t('register.successTitle'), t('register.successText'));
+      // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
+      if (__DEV__) {
+        console.log('[DEV] 🔧 Using DevRegistrationService for driver registration');
+        
+        const driver = await DevRegistrationService.saveDriverRegistration({
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          country: form.country,
+          licenseNumber: form.licenseNumber,
+          licenseExpiry: form.licenseExpiry,
+          vehicleNumber: form.vehicleNumber,
+          experience: form.experience,
+          carBrand: form.carBrand,
+          carModel: form.carModel,
+          carYear: form.carYear,
+          carMileage: form.carMileage,
+          tariff: form.tariff,
+          licensePhoto: licensePhoto || undefined,
+          passportPhoto: passportPhoto || undefined,
+        });
+        
+        console.log('[DEV] ✅ Driver registered locally:', driver.id);
+        
+        // Создаем профиль для нового водителя
+        const profile = {
+          id: driver.id,
+          email: driver.email,
+          firstName: driver.firstName,
+          lastName: driver.lastName,
+          phone: driver.phone,
+          role: driver.role,
+          country: driver.country,
+          licenseNumber: driver.licenseNumber,
+          licenseExpiry: driver.licenseExpiry,
+          vehicleNumber: driver.vehicleNumber,
+          experience: driver.experience,
+          carBrand: driver.carBrand,
+          carModel: driver.carModel,
+          carYear: driver.carYear,
+          carMileage: driver.carMileage,
+          tariff: driver.tariff,
+          createdAt: driver.registeredAt,
+        };
+        await AsyncStorage.setItem(`@profile_${driver.id}`, JSON.stringify(profile));
+        console.log('[DEV] 💾 Profile created for:', driver.id);
+        
+        // Показываем статистику
+        await DevRegistrationService.logDevRegistrationStats();
+      } else {
+        // TODO: PROD: Отправить регистрацию на сервер
+        // await AuthService.registerDriver(form);
+        console.log('[PROD] Sending driver registration to server...');
+      }
+      
+      Alert.alert(
+        t('register.successTitle'), 
+        __DEV__ 
+          ? '✅ Водитель зарегистрирован локально (DEV режим)' 
+          : t('register.successText')
+      );
+      
       navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } catch (e) {
-      Alert.alert(t('register.errorTitle'), t('register.errorText'));
+      console.error('[ERROR] Driver registration failed:', e);
+      Alert.alert(
+        t('register.errorTitle'), 
+        e instanceof Error ? e.message : t('register.errorText')
+      );
     } finally {
       setLoading(false);
     }
@@ -190,7 +260,7 @@ const DriverRegisterScreen: React.FC = () => {
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>{t('register.countryOfIssue')} <Text style={styles.requiredStar}>*</Text></Text>
-              <Select value={form.country} onSelect={handleCountryChange} options={COUNTRIES.map(country => ({ label: country.name, value: country.code }))} placeholder={t('register.countryOfIssuePlaceholder')} searchable={true} />
+              <Select value={form.country} onSelect={handleCountryChange} options={COUNTRIES_FULL.map(country => ({ label: country.name, value: country.code }))} placeholder={t('register.countryOfIssuePlaceholder')} searchable={true} />
               {errors.country && <Text style={styles.errorText}>{errors.country}</Text>}
             </View>
             <View style={styles.inputContainer}>

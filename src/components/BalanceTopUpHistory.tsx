@@ -43,7 +43,9 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
   // Фильтруем транзакции в зависимости от роли и выбранного типа
   const filteredTransactions = transactions
     .filter(transaction => {
-      if (!isDriver) return transaction.type === 'balance_topup';
+      if (!isDriver) {
+        return transaction.type === 'balance_topup';
+      }
       return showWithdrawals ? transaction.type === 'withdrawal' : transaction.type === 'topup';
     })
     .slice(0, maxItems);

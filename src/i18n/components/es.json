@@ -181,6 +181,38 @@
   },
   "input": {
     "address": "Ingrese dirección...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Desde dónde salimos",
+        "to": "Hacia dónde vamos",
+        "stop": "Parada intermedia"
+      },
+      "quick": {
+        "current": "Ubicación actual",
+        "recent": "Viajes recientes",
+        "home": "Dirección de casa",
+        "work": "Dirección de trabajo"
+      },
+      "sections": {
+        "suggestions": "Sugerencias",
+        "history": "Historial"
+      },
+      "states": {
+        "noResults": "No se encontró la dirección",
+        "searching": "Buscando direcciones..."
+      },
+      "errors": {
+        "select": "No se pudo procesar la dirección seleccionada",
+        "details": "No se pudieron cargar las coordenadas",
+        "tooShort": "La dirección es demasiado corta",
+        "noNumber": "La dirección debe incluir un número",
+        "noStreet": "La dirección debe incluir el nombre de la calle"
+      },
+      "alerts": {
+        "infoTitle": "Información",
+        "infoMessage": "La función se añadirá más adelante"
+      }
+    },
     "comment": "Ingrese comentario...",
     "email": "Ingrese email...",
     "error": "Error",

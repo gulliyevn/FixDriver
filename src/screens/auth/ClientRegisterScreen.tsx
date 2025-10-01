@@ -14,11 +14,13 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { createClientRegisterScreenStyles, getPlaceholderColor } from '../../styles/screens/ClientRegisterScreen.styles';
 import PasswordStrengthIndicator from '../../components/PasswordStrengthIndicator';
 import SocialAuthButtons from '../../components/SocialAuthButtons';
+import DevRegistrationService from '../../services/DevRegistrationService';
 
 const ClientRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -73,12 +75,57 @@ const ClientRegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     if (!validate()) return;
     setLoading(true);
+    
     try {
-      // Здесь должна быть логика регистрации через API
-      Alert.alert(t('register.successTitle'), t('register.successText'));
+      // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
+      if (__DEV__) {
+        console.log('[DEV] 🔧 Using DevRegistrationService for client registration');
+        
+        const user = await DevRegistrationService.saveClientRegistration({
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          firstName: form.firstName,
+          lastName: form.lastName,
+        });
+        
+        console.log('[DEV] ✅ Client registered locally:', user.id);
+        
+        // Создаем профиль для нового пользователя
+        const profile = {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          role: user.role,
+          createdAt: user.registeredAt,
+        };
+        await AsyncStorage.setItem(`@profile_${user.id}`, JSON.stringify(profile));
+        console.log('[DEV] 💾 Profile created for:', user.id);
+        
+        // Показываем статистику
+        await DevRegistrationService.logDevRegistrationStats();
+      } else {
+        // TODO: PROD: Отправить регистрацию на сервер
+        // await AuthService.registerClient(form);
+        console.log('[PROD] Sending client registration to server...');
+      }
+      
+      Alert.alert(
+        t('register.successTitle'), 
+        __DEV__ 
+          ? '✅ Клиент зарегистрирован локально (DEV режим)' 
+          : t('register.successText')
+      );
+      
       navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } catch (e) {
-      Alert.alert(t('register.errorTitle'), t('register.errorText'));
+      console.error('[ERROR] Client registration failed:', e);
+      Alert.alert(
+        t('register.errorTitle'), 
+        e instanceof Error ? e.message : t('register.errorText')
+      );
     } finally {
       setLoading(false);
     }

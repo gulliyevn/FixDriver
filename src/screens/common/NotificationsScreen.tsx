@@ -12,27 +12,23 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
-import { mockNotifications } from '../../mocks/notificationsMock';
+import NotificationService, { Notification as ApiNotification } from '../../services/NotificationService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../context/AuthContext';
 import { NotificationsScreenStyles } from '../../styles/screens/NotificationsScreen.styles';
 
-interface Notification {
-  id: string;
-  userId: string;
-  title: string;
-  message: string;
-  type: string;
-  isRead: boolean;
-  createdAt: string;
-}
+type Notification = ApiNotification;
 
 const NotificationsScreen: React.FC = () => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
   const [fadeAnim] = useState(new Animated.Value(0));
+  const storageKey = user?.id ? `@notifications_${user.id}` : '@notifications_anonymous';
 
   useEffect(() => {
     // Анимация появления
@@ -43,9 +39,29 @@ const NotificationsScreen: React.FC = () => {
     }).start();
   }, [fadeAnim]);
 
+  const loadNotifications = async () => {
+    try {
+      setRefreshing(true);
+      if (__DEV__) {
+        const saved = await AsyncStorage.getItem(storageKey);
+        setNotifications(saved ? JSON.parse(saved) : []);
+      } else {
+        if (!user?.id) {
+          setNotifications([]);
+        } else {
+          const list = await NotificationService.getInstance().getNotifications(user.id, 1, 50);
+          setNotifications(list);
+        }
+      }
+    } catch (e) {
+      setNotifications([]);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
+    loadNotifications();
   };
 
   const handleNotificationPress = (notification: Notification) => {
@@ -62,6 +78,13 @@ const NotificationsScreen: React.FC = () => {
       // Обычный режим - отмечаем как прочитанное
       if (!notification.isRead) {
         setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n));
+        if (__DEV__) {
+          AsyncStorage.setItem(storageKey, JSON.stringify(
+            notifications.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
+          ));
+        } else {
+          NotificationService.getInstance().markAsRead(notification.id).catch(() => {});
+        }
       }
       // Здесь можно добавить навигацию в зависимости от типа уведомления
   
@@ -107,6 +130,15 @@ const NotificationsScreen: React.FC = () => {
           style: 'destructive',
           onPress: () => {
             setNotifications(prev => prev.filter(n => !selectedNotifications.has(n.id)));
+            if (__DEV__) {
+              const updated = notifications.filter(n => !selectedNotifications.has(n.id));
+              AsyncStorage.setItem(storageKey, JSON.stringify(updated));
+            } else {
+              // удаляем по одному, без ожидания
+              [...selectedNotifications].forEach(id => {
+                NotificationService.getInstance().deleteNotification(id).catch(() => {});
+              });
+            }
             setIsSelectionMode(false);
             setSelectedNotifications(new Set());
           },
@@ -126,6 +158,12 @@ const NotificationsScreen: React.FC = () => {
           style: 'destructive',
           onPress: () => {
             setNotifications(prev => prev.filter(n => n.id !== notificationId));
+            if (__DEV__) {
+              const updated = notifications.filter(n => n.id !== notificationId);
+              AsyncStorage.setItem(storageKey, JSON.stringify(updated));
+            } else {
+              NotificationService.getInstance().deleteNotification(notificationId).catch(() => {});
+            }
           },
         },
       ]
@@ -134,6 +172,13 @@ const NotificationsScreen: React.FC = () => {
 
   const handleMarkAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    if (__DEV__) {
+      AsyncStorage.setItem(storageKey, JSON.stringify(
+        notifications.map(n => ({ ...n, isRead: true }))
+      ));
+    } else if (user?.id) {
+      NotificationService.getInstance().markAllAsRead(user.id).catch(() => {});
+    }
   };
 
   const getNotificationIcon = (type: string) => {
@@ -345,6 +390,11 @@ const NotificationsScreen: React.FC = () => {
           notifications.map(renderNotificationItem)
         )}
       </ScrollView>
+      {/* Первичная загрузка */}
+      {notifications.length === 0 && !refreshing && (
+        <></>
+      )}
+      {useEffect(() => { loadNotifications(); }, [user?.id]) as any}
     </SafeAreaView>
   );
 };

@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../hooks/useI18n';
 import { useTheme } from '../../context/ThemeContext';
 import { ClientProfileScreenStyles as styles, getClientProfileStyles } from '../../styles/screens/ClientProfileScreen.styles';
-import { mockUsers } from '../../mocks/users';
 import { ClientScreenProps } from '../../types/navigation';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,14 +77,14 @@ const ClientProfileScreen: React.FC<ClientScreenProps<'ClientProfile'>> = ({ nav
     avatar: '',
   };
 
-// Обработка ошибок
-if (error || !profile) {
-  return (
-    <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={[styles.profileName, dynamicStyles.profileName]}>{error || t('profile.failedToLoadProfile')}</Text>
-    </View>
-  );
-}
+  // Обработка ошибок
+  if (error || !profile) {
+    return (
+      <View style={[styles.container, dynamicStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={[styles.profileName, dynamicStyles.profileName]}>{error || t('profile.failedToLoadProfile')}</Text>
+      </View>
+    );
+  }
 
   return (
     <>
@@ -104,20 +103,8 @@ if (error || !profile) {
             <Text style={[styles.profileName, dynamicStyles.profileName]}>{profile?.name || ''} {profile?.surname || ''}</Text>
             <Text style={[styles.profilePhone, dynamicStyles.profilePhone]}>{profile?.phone || ''}</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.premiumButtonContainer} 
-            onPress={() => navigation.navigate('PremiumPackages' as any)}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#FFFFFF', '#E6F3FF', '#B3D9FF', '#80BFFF', '#FFFFFF']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.premiumButton, dynamicStyles.premiumButton]}
-            >
-              <Ionicons name="diamond" size={24} color="#0066CC" />
-            </LinearGradient>
-          </TouchableOpacity>
+          {/* Premium button temporarily disabled to fix render error */}
+          <View style={{ width: 40, height: 40 }} />
         </View>
         {/* Блок статистики */}
         <View style={[styles.statsBox, dynamicStyles.statsBox]}>

@@ -71,6 +71,29 @@ export const HelpScreenStyles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
   },
+  loadingContainer: {
+    flex: 1,
+    paddingVertical: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: '#FEE2E2',
+    marginBottom: 12,
+    gap: 8,
+  },
+  errorText: {
+    flex: 1,
+    color: '#B91C1C',
+    fontSize: 14,
+  },
+  errorIcon: {
+    marginRight: 4,
+  },
   contactSection: {
     marginTop: 32,
     alignItems: 'center',
@@ -95,6 +118,10 @@ export const HelpScreenStyles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 32,
+    gap: 8,
+  },
+  contactButtonDisabled: {
+    opacity: 0.6,
   },
   supportIcon: {
     marginRight: 8,

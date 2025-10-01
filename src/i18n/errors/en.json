@@ -8,5 +8,7 @@
   "notFound": "Not found",
   "validationError": "Validation error",
   "unknownError": "An unknown error occurred",
-  "permissionDenied": "Access Denied"
+  "permissionDenied": "Access Denied",
+  "helpContentLoadFailed": "Failed to load help information",
+  "paymentHistoryLoadFailed": "Failed to load payment history"
 } 

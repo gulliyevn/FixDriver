@@ -6,7 +6,8 @@ import { getCurrentColors } from '../../constants/colors';
 import { ClientScreenProps } from '../../types/navigation';
 import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { ResidenceScreenStyles as styles, getResidenceScreenStyles } from '../../styles/screens/profile/ResidenceScreen.styles';
-import { Address, getAddressCategoryOptions } from '../../mocks/residenceMock';
+import AddressService, { Address } from '../../services/addressService';
+import { useAddressCategories } from '../../shared/hooks/useAddressCategories';
 import AddressModal from '../../components/AddressModal';
 import { useAddresses } from '../../hooks/useAddresses';
 import { useI18n } from '../../hooks/useI18n';
@@ -29,6 +30,7 @@ const ResidenceScreen: React.FC<ResidenceScreenProps> = ({ navigation, route }) 
   const { isDark } = useTheme();
   const { t } = useI18n();
   const { user } = useAuth();
+  const { categories } = useAddressCategories();
   const dynamicStyles = getResidenceScreenStyles(isDark);
   const currentColors = getCurrentColors(isDark);
   
@@ -55,8 +57,7 @@ const ResidenceScreen: React.FC<ResidenceScreenProps> = ({ navigation, route }) 
 
   // Функция для получения переведенного названия категории
   const getCategoryLabel = (categoryKey: string): string => {
-    const categoryOptions = getAddressCategoryOptions(t);
-    const category = categoryOptions.find(opt => opt.value === categoryKey);
+    const category = categories.find(opt => opt.id === categoryKey);
     return category ? category.label : categoryKey;
   };
 

@@ -14,14 +14,14 @@ const CACHE_TTL = 5 * 60 * 1000;
 // Дебаунс для запросов (300ms)
 const DEBOUNCE_DELAY = 300;
 
-export const useEarningsChartData = (period: 'today' | 'week' | 'month' | 'year') => {
+export const useEarningsChartData = (driverId: string, period: 'today' | 'week' | 'month' | 'year') => {
   const [chartData, setChartData] = useState<EarningsChartData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<number>(0);
   
   // Рефы для дебаунсинга и отмены запросов
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Ключ кэша
@@ -78,7 +78,8 @@ export const useEarningsChartData = (period: 'today' | 'week' | 'month' | 'year'
     setError(null);
     
     try {
-      const data = await DriverStatsService.getEarningsChartData(period);
+      const service = DriverStatsService.getInstance();
+      const data = await service.getEarningsChartData(driverId, period);
       
       // Проверяем, не был ли запрос отменен
       if (abortControllerRef.current?.signal.aborted) {

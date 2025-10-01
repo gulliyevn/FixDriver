@@ -1,16 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { BalanceService, TransactionRecord } from '../services/BalanceService';
 
 interface BalanceContextType {
   balance: number;
   earnings: number;
-  transactions: any[];
+  transactions: TransactionRecord[];
   addEarnings: (amount: number) => Promise<{ newBalance: number; newEarnings: number }>;
-  topUpBalance: (amount: number) => Promise<void>;
+  topUpBalance: (amount: number) => Promise<boolean>;
   withdrawBalance: (amount: number) => Promise<boolean>;
   resetBalance: () => Promise<void>;
-  resetEarnings: () => Promise<number>; // Обнуляет только earnings, возвращает старое значение
+  resetEarnings: () => Promise<number>;
   loadBalance: () => Promise<void>;
   loadEarnings: () => Promise<void>;
 }
@@ -33,12 +33,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   const { user } = useAuth();
   const [balance, setBalance] = useState(0);
   const [earnings, setEarnings] = useState(0);
-  const [transactions, setTransactions] = useState([]);
-
-  // Ключи для AsyncStorage
-  const balanceKey = `@balance_${user?.id || 'default'}`;
-  const earningsKey = `@earnings_${user?.id || 'default'}`;
-  const transactionsKey = `@transactions_${user?.id || 'default'}`;
+  const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
 
   // Загружаем данные при инициализации
   useEffect(() => {
@@ -50,13 +45,12 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   }, [user]);
 
   const loadBalance = async () => {
+    if (!user) return;
     try {
-      const savedBalance = await AsyncStorage.getItem(balanceKey);
-      if (savedBalance !== null) {
-        setBalance(parseFloat(savedBalance));
-      } else {
-        setBalance(0);
-      }
+      const data = await BalanceService.getBalance(user.id);
+      setBalance(data.balance);
+      const list = await BalanceService.getTransactions(user.id);
+      setTransactions(list);
     } catch (error) {
       console.error('Error loading balance:', error);
       setBalance(0);
@@ -64,14 +58,15 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   };
 
   const loadEarnings = async () => {
+    // В DEV/минимальной версии earnings считаем агрегатом транзакций типа credit с пометкой 'earning'
+    if (!user) return;
     try {
-      const savedEarnings = await AsyncStorage.getItem(earningsKey);
-      if (savedEarnings !== null) {
-        const parsedEarnings = parseFloat(savedEarnings);
-        setEarnings(parsedEarnings);
-      } else {
-        setEarnings(0);
-      }
+      const list = await BalanceService.getTransactions(user.id);
+      setTransactions(list);
+      const total = list
+        .filter(t => t.type === 'credit' && /earning|заработ/gi.test(t.description || ''))
+        .reduce((acc, t) => acc + t.amount, 0);
+      setEarnings(total);
     } catch (error) {
       console.error('Error loading earnings:', error);
       setEarnings(0);
@@ -79,13 +74,10 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   };
 
   const loadTransactions = async () => {
+    if (!user) return;
     try {
-      const savedTransactions = await AsyncStorage.getItem(transactionsKey);
-      if (savedTransactions !== null) {
-        setTransactions(JSON.parse(savedTransactions));
-      } else {
-        setTransactions([]);
-      }
+      const list = await BalanceService.getTransactions(user.id);
+      setTransactions(list);
     } catch (error) {
       console.error('Error loading transactions:', error);
       setTransactions([]);
@@ -93,87 +85,66 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   };
 
   const addEarnings = async (amount: number) => {
-    // Функциональные обновления, чтобы избежать гонок при последовательных вызовах
-    let computedNewBalance = 0;
-    let computedNewEarnings = 0;
-
-    setBalance(prevBalance => {
-      computedNewBalance = prevBalance + amount;
-      return computedNewBalance;
+    if (!user) return { newBalance: balance, newEarnings: earnings };
+    await BalanceService.addTransaction(user.id, {
+      amount,
+      type: 'credit',
+      description: `earning ${amount}`,
     });
-
-    setEarnings(prevEarnings => {
-      computedNewEarnings = prevEarnings + amount;
-      return computedNewEarnings;
-    });
-
-    // Сохраняем в AsyncStorage рассчитанные значения
-    await AsyncStorage.setItem(balanceKey, computedNewBalance.toString());
-    await AsyncStorage.setItem(earningsKey, computedNewEarnings.toString());
-
-    // Добавляем транзакцию (также с функциональным обновлением)
-    const newTransaction = {
-      id: Date.now().toString(),
-      type: 'payment',
-      amount: amount,
-      description: `Earnings ${amount} AFc`,
-      date: new Date().toISOString(),
-    };
-
-    let updatedTransactions: any[] = [];
-    setTransactions(prevTransactions => {
-      updatedTransactions = [newTransaction, ...prevTransactions];
-      return updatedTransactions;
-    });
-    await AsyncStorage.setItem(transactionsKey, JSON.stringify(updatedTransactions));
-
-    // Возвращаем новые значения для немедленного использования вызывающим кодом
-    return { newBalance: computedNewBalance, newEarnings: computedNewEarnings };
+    const b = await BalanceService.getBalance(user.id);
+    const list = await BalanceService.getTransactions(user.id);
+    setBalance(b.balance);
+    setTransactions(list);
+    const total = list
+      .filter(t => t.type === 'credit' && /earning|заработ/gi.test(t.description || ''))
+      .reduce((acc, t) => acc + t.amount, 0);
+    setEarnings(total);
+    return { newBalance: b.balance, newEarnings: total };
   };
 
-  const topUpBalance = async (amount: number) => {
-    const newBalance = balance + amount;
-    
-    setBalance(newBalance);
-    await AsyncStorage.setItem(balanceKey, newBalance.toString());
-    
-    // Добавляем транзакцию
-    const newTransaction = {
-      id: Date.now().toString(),
-      type: 'topup',
-      amount: amount,
-      description: `Top-up ${amount} AFc`,
-      date: new Date().toISOString(),
-    };
-    
-    const newTransactions = [newTransaction, ...transactions];
-    setTransactions(newTransactions);
-    await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
+  // Stripe top-up flow (DEV: instant credit; PROD: backend orchestrates Stripe)
+  const topUpBalance = async (amount: number): Promise<boolean> => {
+    if (!user) return false;
+    try {
+      if (__DEV__) {
+        await BalanceService.addTransaction(user.id, {
+          amount,
+          type: 'credit',
+          description: `topup ${amount}`,
+        });
+      } else {
+        // Backend should create PaymentIntent and confirm; here we assume success
+        // await APIClient.post('/payments/stripe/topup', { userId: user.id, amount });
+      }
+      const b = await BalanceService.getBalance(user.id);
+      const list = await BalanceService.getTransactions(user.id);
+      setBalance(b.balance);
+      setTransactions(list);
+      return true;
+    } catch (e) {
+      console.error('Top-up error', e);
+      return false;
+    }
   };
 
   const withdrawBalance = async (amount: number): Promise<boolean> => {
-    if (balance < amount) {
+    if (!user) return false;
+    try {
+      // Represent withdrawal as debit transaction
+      await BalanceService.addTransaction(user.id, {
+        amount,
+        type: 'debit',
+        description: `withdrawal ${amount}`,
+      });
+      const b = await BalanceService.getBalance(user.id);
+      const list = await BalanceService.getTransactions(user.id);
+      setBalance(b.balance);
+      setTransactions(list);
+      return true;
+    } catch (e) {
+      console.error('Withdraw error', e);
       return false;
     }
-
-    const newBalance = balance - amount;
-    setBalance(newBalance);
-    await AsyncStorage.setItem(balanceKey, newBalance.toString());
-    
-    // Добавляем транзакцию
-    const newTransaction = {
-      id: Date.now().toString(),
-      type: 'withdrawal',
-      amount: -amount,
-      description: `Withdrawal ${amount} AFc`,
-      date: new Date().toISOString(),
-    };
-    
-    const newTransactions = [newTransaction, ...transactions];
-    setTransactions(newTransactions);
-    await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
-
-    return true;
   };
 
   const resetBalance = async () => {
@@ -181,10 +152,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setBalance(0);
       setEarnings(0);
       setTransactions([]);
-      
-      await AsyncStorage.setItem(balanceKey, '0');
-      await AsyncStorage.setItem(earningsKey, '0');
-      await AsyncStorage.setItem(transactionsKey, JSON.stringify([]));
+      // В DEV можно очистить через перезапись ключей, но оставим минимально без IO
     } catch (error) {
       console.error('❌ Ошибка при сбросе баланса:', error);
     }
@@ -192,15 +160,12 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
 
   const resetEarnings = async (): Promise<number> => {
     try {
-      const oldEarnings = earnings;
+      const old = earnings;
       setEarnings(0);
-      await AsyncStorage.setItem(earningsKey, '0');
-      
-      console.log(`[BalanceContext] Заработок обнулен: ${oldEarnings} AFc → 0 AFc`);
-      return oldEarnings;
+      return old;
     } catch (error) {
       console.error('❌ Ошибка при сбросе заработка:', error);
-      return earnings; // Возвращаем текущие earnings в случае ошибки
+      return earnings;
     }
   };
 

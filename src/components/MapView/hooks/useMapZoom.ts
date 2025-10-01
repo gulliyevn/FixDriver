@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { MapView } from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 export const useMapZoom = (mapRef: React.RefObject<MapView>) => {
   const isZoomingRef = useRef(false);

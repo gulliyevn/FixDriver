@@ -17,7 +17,7 @@ import MapMarkersComponent from './components/MapMarkers';
 import { useDirections } from './hooks/useDirections';
 import { useOsrmDirections } from './hooks/useOsrmDirections';
 
-const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
+const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({ 
   initialLocation,
   onLocationSelect,
   onDriverVisibilityToggle,
@@ -80,6 +80,14 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
     initialLocation,
     onDriverVisibilityToggle
   );
+
+  const selectedDriverId = useMemo(() => {
+    if (!isDriverModalVisible) {
+      return null;
+    }
+    const driverMarker = markers.find((marker) => marker.type === 'driver');
+    return driverMarker?.id ?? null;
+  }, [isDriverModalVisible, markers]);
 
   // Экспортируем методы карты через ref
   useImperativeHandle(ref, () => ({
@@ -308,13 +316,16 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
       </MapView>
 
       {/* Модальное окно водителя */}
-      <DriverModal
-        isVisible={isDriverModalVisible}
-        onClose={handleDriverModalClose}
-        onOverlayClose={handleDriverModalClose}
-        role={role}
-        onChat={handleChatPress}
-      />
+      {selectedDriverId && (
+        <DriverModal
+          isVisible={isDriverModalVisible}
+          onClose={handleDriverModalClose}
+          onOverlayClose={handleDriverModalClose}
+          role={role}
+          onChat={handleChatPress}
+          driverId={selectedDriverId}
+        />
+      )}
 
       {/* Дополнительные кнопки управления */}
       <MapControls
@@ -326,5 +337,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
     </View>
   );
 });
+
+MapViewComponent.displayName = 'MapViewComponent';
 
 export default memo(MapViewComponent);

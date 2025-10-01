@@ -3,8 +3,8 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDefaultDate, calculateAge } from '../utils/profileHelpers';
 import { useI18n } from '../hooks/useI18n';
-import { addFamilyMember as addToMockDB, updateFamilyMember as updateInMockDB, deleteFamilyMember as deleteFromMockDB } from '../mocks/familyMembers';
 import { useAuth } from '../context/AuthContext';
+import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
 
 interface FamilyMember {
   id: string;
@@ -31,66 +31,34 @@ export const useFamilyMembers = () => {
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Получаем clientId для мок БД
-  const clientId = user?.id || 'client1';
+  // Получаем ключ с изоляцией по пользователю
+  const familyMembersKey = useUserStorageKey('@family_members');
 
   // Загружаем семейных членов из AsyncStorage
   const loadFamilyMembers = useCallback(async () => {
     try {
-      const savedMembers = await AsyncStorage.getItem('family_members');
+      const savedMembers = await AsyncStorage.getItem(familyMembersKey);
       if (savedMembers) {
         setFamilyMembers(JSON.parse(savedMembers));
       } else {
-        // Если сохраненных данных нет, устанавливаем начальные значения
-        const initialMembers: FamilyMember[] = [
-          { 
-            id: '1', 
-            name: t('profile.family.defaultMembers.child.name'), 
-            surname: t('profile.family.defaultMembers.child.surname'),
-            type: 'child', 
-            birthDate: '2015-03-15',
-            age: 8,
-            phone: '+7 999 123-45-67',
-            phoneVerified: true
-          },
-          { 
-            id: '2', 
-            name: t('profile.family.defaultMembers.spouse.name'), 
-            surname: t('profile.family.defaultMembers.spouse.surname'),
-            type: 'spouse', 
-            birthDate: '1988-07-22',
-            age: 35,
-            phone: undefined,
-            phoneVerified: false
-          },
-        ];
-        setFamilyMembers(initialMembers);
-        await AsyncStorage.setItem('family_members', JSON.stringify(initialMembers));
+        // Если сохраненных данных нет, начинаем с пустого массива
+        setFamilyMembers([]);
       }
     } catch (error) {
       console.error('Error loading family members:', error);
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [familyMembersKey]);
 
-  // Сохраняем семейных членов в AsyncStorage и мок БД
+  // Сохраняем семейных членов в AsyncStorage
   const saveFamilyMembers = useCallback(async (members: FamilyMember[]) => {
     try {
-      // Сохраняем в AsyncStorage
-      await AsyncStorage.setItem('family_members', JSON.stringify(members));
-      
-      // Синхронизируем с мок БД
-      // Сначала очищаем существующих участников для этого clientId
-      members.forEach(member => {
-        // Обновляем или добавляем в мок БД
-        const { id, ...memberData } = member;
-        updateInMockDB(clientId, id, memberData) || addToMockDB(clientId, memberData);
-      });
+      await AsyncStorage.setItem(familyMembersKey, JSON.stringify(members));
     } catch (error) {
       console.error('Error saving family members:', error);
     }
-  }, [clientId]);
+  }, [familyMembersKey]);
 
   // Загружаем данные при монтировании
   useEffect(() => {
@@ -159,11 +127,6 @@ export const useFamilyMembers = () => {
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
     
-    // Также добавляем в мок БД напрямую
-    const { id, ...memberData } = newMember;
-    console.log('useFamilyMembers - adding to mock DB:', { clientId, memberData });
-    addToMockDB(clientId, memberData);
-    
     // Закрываем модальное окно
     closeAddFamilyModal();
     
@@ -193,14 +156,6 @@ export const useFamilyMembers = () => {
     );
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
-    
-    // Также обновляем в мок БД
-    const member = updatedMembers.find(m => m.id === memberId);
-    if (member) {
-      const { id, ...memberData } = member;
-      updateInMockDB(clientId, id, memberData);
-    }
-    
     setEditingFamilyMember(null);
   };
 
@@ -208,10 +163,6 @@ export const useFamilyMembers = () => {
     const updatedMembers = familyMembers.filter(member => member.id !== memberId);
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
-    
-    // Также удаляем из мок БД
-    deleteFromMockDB(clientId, memberId);
-    
     setExpandedFamilyMember(null);
     setEditingFamilyMember(null);
   };

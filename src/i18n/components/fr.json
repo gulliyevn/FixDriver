@@ -181,6 +181,38 @@
   },
   "input": {
     "address": "Entrez adresse...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Point de départ",
+        "to": "Destination",
+        "stop": "Arrêt intermédiaire"
+      },
+      "quick": {
+        "current": "Position actuelle",
+        "recent": "Trajets récents",
+        "home": "Adresse domicile",
+        "work": "Adresse travail"
+      },
+      "sections": {
+        "suggestions": "Suggestions",
+        "history": "Historique"
+      },
+      "states": {
+        "noResults": "Adresse introuvable",
+        "searching": "Recherche d'adresses..."
+      },
+      "errors": {
+        "select": "Impossible de traiter l'adresse sélectionnée",
+        "details": "Impossible de charger les coordonnées",
+        "tooShort": "Adresse trop courte",
+        "noNumber": "L'adresse doit contenir un numéro",
+        "noStreet": "L'adresse doit contenir un nom de rue"
+      },
+      "alerts": {
+        "infoTitle": "Information",
+        "infoMessage": "La fonctionnalité sera ajoutée plus tard"
+      }
+    },
     "comment": "Entrez commentaire...",
     "email": "Entrez email...",
     "error": "Erreur",

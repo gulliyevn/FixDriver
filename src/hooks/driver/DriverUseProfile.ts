@@ -34,9 +34,9 @@ export const useDriverProfile = () => {
         const parsedProfile = JSON.parse(savedProfile);
         
         // Загружаем аватар из нового сервиса
-        const avatarUri = await DriverAvatarService.loadAvatar();
-        if (avatarUri) {
-          parsedProfile.avatar = avatarUri;
+        const avatar = await DriverAvatarService.getAvatar(userId);
+        if (avatar?.url) {
+          parsedProfile.avatar = avatar.url;
         }
         
         setProfile(parsedProfile);
@@ -48,7 +48,8 @@ export const useDriverProfile = () => {
       const user = mockUsers[0];
       
       // Загружаем аватар из нового сервиса
-      const avatarUri = await DriverAvatarService.loadAvatar();
+      const avatar = await DriverAvatarService.getAvatar(userId);
+      const avatarUri = avatar?.url || null;
       
       const userProfile: UserProfile = {
         id: user.id,
@@ -117,7 +118,7 @@ export const useDriverProfile = () => {
   const clearProfile = async () => {
     try {
       await AsyncStorage.removeItem('driver_profile');
-      await DriverAvatarService.deleteAvatar();
+      await DriverAvatarService.deleteAvatar(userId);
       setProfile(null);
     } catch (err) {
       // Ошибка при очистке профиля

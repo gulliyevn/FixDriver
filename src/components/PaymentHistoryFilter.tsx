@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, Modal, ScrollView, Animated } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { PaymentHistoryFilterStyles as styles, getPaymentHistoryFilterStyles } from '../styles/components/PaymentHistoryFilter.styles';
 
 export interface PaymentFilter {
-  type: 'all' | 'trip' | 'refund' | 'fee';
+  type: 'all' | 'trip' | 'topup' | 'refund' | 'fee' | 'package_purchase' | 'subscription_renewal' | 'withdrawal' | 'earnings';
   status: 'all' | 'completed' | 'pending' | 'failed';
   dateRange: 'all' | 'today' | 'week' | 'month' | 'year';
 }
@@ -26,17 +27,27 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
+  const { user } = useAuth();
   const dynamicStyles = getPaymentHistoryFilterStyles(isDark);
   const [filter, setFilter] = useState<PaymentFilter>(currentFilter);
   
   const slideAnim = useRef(new Animated.Value(300)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const isDriver = user?.role === 'driver';
+
   const paymentTypes = [
     { key: 'all', label: t('client.paymentHistory.filter.allTypes'), icon: 'list' },
     { key: 'trip', label: t('client.paymentHistory.filter.trips'), icon: 'car' },
+    { key: 'topup', label: t('client.paymentHistory.filter.topups'), icon: 'add-circle' },
     { key: 'refund', label: t('client.paymentHistory.filter.refunds'), icon: 'refresh-circle' },
-    { key: 'fee', label: t('client.paymentHistory.filter.fees'), icon: 'card' }
+    { key: 'fee', label: t('client.paymentHistory.filter.fees'), icon: 'card' },
+    { key: 'package_purchase', label: t('client.paymentHistory.filter.packages'), icon: 'cube' },
+    { key: 'subscription_renewal', label: t('client.paymentHistory.filter.subscriptions'), icon: 'refresh' },
+    ...(isDriver ? [
+      { key: 'withdrawal', label: t('driver.balance.transactions.withdrawal'), icon: 'cash' },
+      { key: 'earnings', label: t('driver.balance.transactions.earnings'), icon: 'trending-up' },
+    ] : []),
   ];
 
   const statuses = [

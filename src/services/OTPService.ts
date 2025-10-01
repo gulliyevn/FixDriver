@@ -1,15 +1,24 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import APIClient from './APIClient';
 
 export interface OTPResponse {
   success: boolean;
   message: string;
   otpId?: string;
+  expiresAt?: string;
 }
 
 export interface VerifyOTPResponse {
   success: boolean;
   message: string;
   isValid: boolean;
+  token?: string;
+}
+
+export interface ResendOTPResponse {
+  success: boolean;
+  message: string;
+  otpId?: string;
+  expiresAt?: string;
 }
 
 export class OTPService {
@@ -19,28 +28,20 @@ export class OTPService {
   /**
    * Отправляет OTP код на указанный номер телефона
    */
-  static async sendOTP(phoneNumber: string): Promise<OTPResponse> {
+  static async sendOTP(phoneNumber: string, purpose: 'registration' | 'password_reset' | 'phone_verification' = 'phone_verification'): Promise<OTPResponse> {
     try {
-      // Генерируем mock OTP код для разработки
-      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const response = await APIClient.post<OTPResponse>('/otp/send', {
+        phoneNumber,
+        purpose
+      });
       
-      // В реальном приложении код будет отправлен через SMS API
-  
+      if (response.success && response.data) {
+        return response.data;
+      }
       
-      // Сохраняем в AsyncStorage для mock проверки (в реальном приложении будет на сервере)
-      await AsyncStorage.setItem(`otp_${phoneNumber}`, JSON.stringify({
-        code: otpCode,
-        timestamp: Date.now(),
-        attempts: 0
-      }));
-
-      // Симуляция задержки отправки SMS
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
       return {
-        success: true,
-        message: `OTP код отправлен на номер ${phoneNumber}`,
-        otpId: `otp_${phoneNumber}`
+        success: false,
+        message: response.error || 'Ошибка при отправке OTP кода'
       };
     } catch (error) {
       console.error('Error sending OTP:', error);
@@ -54,82 +55,28 @@ export class OTPService {
   /**
    * Проверяет введенный OTP код
    */
-  static async verifyOTP(phoneNumber: string, code: string): Promise<VerifyOTPResponse> {
+  static async verifyOTP(phoneNumber: string, otpCode: string, otpId?: string): Promise<VerifyOTPResponse> {
     try {
-      // В режиме разработки - спеиальный мок-код
-      if (__DEV__ && code === '123456') {
-
-        return {
-          success: true,
-          message: 'Телефон успешно подтвержден (DEV мок)',
-          isValid: true
-        };
-      }
-
-      // Симуляция задержки проверки
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      const storedData = await AsyncStorage.getItem(`otp_${phoneNumber}`);
+      const response = await APIClient.post<VerifyOTPResponse>('/otp/verify', {
+        phoneNumber,
+        otpCode,
+        otpId
+      });
       
-      if (!storedData) {
-        return {
-          success: false,
-          message: 'OTP код не найден. Запросите новый код.',
-          isValid: false
-        };
+      if (response.success && response.data) {
+        return response.data;
       }
-
-      const { code: storedCode, timestamp, attempts } = JSON.parse(storedData);
       
-      // Проверяем срок действия (10 минут)
-      const isExpired = Date.now() - timestamp > this.OTP_EXPIRY_MINUTES * 60 * 1000;
-      
-      if (isExpired) {
-        await AsyncStorage.removeItem(`otp_${phoneNumber}`);
-        return {
-          success: false,
-          message: 'OTP код истек. Запросите новый код.',
-          isValid: false
-        };
-      }
-
-      // Проверяем количество попыток (максимум 3)
-      if (attempts >= 3) {
-        await AsyncStorage.removeItem(`otp_${phoneNumber}`);
-        return {
-          success: false,
-          message: 'Превышено количество попыток. Запросите новый код.',
-          isValid: false
-        };
-      }
-
-      // Проверяем код
-      if (code === storedCode) {
-        await AsyncStorage.removeItem(`otp_${phoneNumber}`);
-        return {
-          success: true,
-          message: 'Телефон успешно подтвержден',
-          isValid: true
-        };
-      } else {
-        // Увеличиваем счетчик попыток
-        await AsyncStorage.setItem(`otp_${phoneNumber}`, JSON.stringify({
-          code: storedCode,
-          timestamp,
-          attempts: attempts + 1
-        }));
-
-        return {
-          success: false,
-          message: `Неверный код. Осталось попыток: ${2 - attempts}`,
-          isValid: false
-        };
-      }
+      return {
+        success: false,
+        message: response.error || 'Ошибка при проверке OTP кода',
+        isValid: false
+      };
     } catch (error) {
       console.error('Error verifying OTP:', error);
       return {
         success: false,
-        message: 'Ошибка при проверке кода',
+        message: 'Ошибка при проверке OTP кода',
         isValid: false
       };
     }
@@ -138,43 +85,97 @@ export class OTPService {
   /**
    * Повторно отправляет OTP код
    */
-  static async resendOTP(phoneNumber: string): Promise<OTPResponse> {
+  static async resendOTP(phoneNumber: string, otpId?: string): Promise<ResendOTPResponse> {
     try {
-      // Удаляем старый код
-      await AsyncStorage.removeItem(`otp_${phoneNumber}`);
+      const response = await APIClient.post<ResendOTPResponse>('/otp/resend', {
+        phoneNumber,
+        otpId
+      });
       
-      // Отправляем новый
-      return this.sendOTP(phoneNumber);
+      if (response.success && response.data) {
+        return response.data;
+      }
+      
+      return {
+        success: false,
+        message: response.error || 'Ошибка при повторной отправке OTP кода'
+      };
     } catch (error) {
       console.error('Error resending OTP:', error);
       return {
         success: false,
-        message: 'Ошибка при повторной отправке кода'
+        message: 'Ошибка при повторной отправке OTP кода'
       };
     }
   }
 
   /**
-   * Форматирует номер телефона для отображения
+   * Проверяет статус OTP (активен ли, сколько попыток осталось)
    */
-  static formatPhoneForDisplay(phoneNumber: string): string {
-    // Убираем все символы кроме цифр и +
-    const cleaned = phoneNumber.replace(/[^\d+]/g, '');
-    
-    if (cleaned.startsWith('+7')) {
-      return `+7 (***) ***-**-${cleaned.slice(-2)}`;
+  static async checkOTPStatus(otpId: string): Promise<{ isActive: boolean; attemptsLeft: number; expiresAt: string } | null> {
+    try {
+      const response = await APIClient.get<{ isActive: boolean; attemptsLeft: number; expiresAt: string }>(`/otp/status/${otpId}`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Error checking OTP status:', error);
+      return null;
     }
-    
-    // Для других стран показываем последние 2 цифры
-    return `${cleaned.slice(0, 3)}***-**-${cleaned.slice(-2)}`;
   }
 
   /**
-   * Проверяет валидность OTP кода (6 цифр)
+   * Отменяет OTP код
    */
-  static isValidOTPFormat(code: string): boolean {
-    return /^\d{6}$/.test(code);
+  static async cancelOTP(otpId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/otp/cancel/${otpId}`, {});
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Error canceling OTP:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Валидация номера телефона
+   */
+  static validatePhoneNumber(phoneNumber: string): boolean {
+    // Простая валидация - можно расширить
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    return phoneRegex.test(phoneNumber.replace(/\s/g, ''));
+  }
+
+  /**
+   * Валидация OTP кода
+   */
+  static validateOTPCode(otpCode: string): boolean {
+    return /^\d{6}$/.test(otpCode);
+  }
+
+  /**
+   * Форматирование номера телефона для отображения
+   */
+  static formatPhoneNumber(phoneNumber: string): string {
+    // Убираем все символы кроме цифр и +
+    const cleaned = phoneNumber.replace(/[^\d+]/g, '');
+    
+    // Если номер начинается с +, оставляем как есть
+    if (cleaned.startsWith('+')) {
+      return cleaned;
+    }
+    
+    // Если номер начинается с 994 (Азербайджан), добавляем +
+    if (cleaned.startsWith('994')) {
+      return '+' + cleaned;
+    }
+    
+    // Если номер начинается с 0, заменяем на +994
+    if (cleaned.startsWith('0')) {
+      return '+994' + cleaned.substring(1);
+    }
+    
+    // По умолчанию добавляем +994
+    return '+994' + cleaned;
   }
 }
 
-export default OTPService; 
+export default OTPService;

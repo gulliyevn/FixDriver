@@ -6,7 +6,23 @@ import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../hooks/useI18n';
 import { colors } from '../constants/colors';
 import { VipPackagesStyles, getVipPackagesColors, getPackageCardColors } from '../styles/components/VipPackages.styles';
-import { getPremiumPackages } from '../mocks/premiumPackagesMock';
+// getPremiumPackages removed - using hardcoded packages
+const getPremiumPackages = () => [
+  {
+    id: 'basic',
+    name: 'Basic Package',
+    price: 9.99,
+    period: 'month',
+    features: ['Feature 1', 'Feature 2']
+  },
+  {
+    id: 'premium',
+    name: 'Premium Package', 
+    price: 19.99,
+    period: 'month',
+    features: ['Feature 1', 'Feature 2', 'Feature 3']
+  }
+];
 import { 
   PACKAGE_FEATURE_ICONS, 
   CAROUSEL_CONFIG, 

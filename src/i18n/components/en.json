@@ -178,6 +178,38 @@
   },
   "input": {
     "address": "Enter address...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Where from",
+        "to": "Where to",
+        "stop": "Intermediate stop"
+      },
+      "quick": {
+        "current": "Current location",
+        "recent": "Recent trips",
+        "home": "Home address",
+        "work": "Work address"
+      },
+      "sections": {
+        "suggestions": "Suggestions",
+        "history": "History"
+      },
+      "states": {
+        "noResults": "Address not found",
+        "searching": "Searching addresses..."
+      },
+      "errors": {
+        "select": "Failed to process selected address",
+        "details": "Failed to load address coordinates",
+        "tooShort": "Address is too short",
+        "noNumber": "Address must include a house number",
+        "noStreet": "Address must include a street name"
+      },
+      "alerts": {
+        "infoTitle": "Information",
+        "infoMessage": "Feature will be added later"
+      }
+    },
     "comment": "Enter comment...",
     "email": "Enter email...",
     "error": "Error",

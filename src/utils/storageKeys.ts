@@ -57,6 +57,8 @@ export const STORAGE_KEYS = {
   
   // Адреса
   USER_ADDRESSES: 'user_addresses',
+  ADDRESS_AUTOCOMPLETE_HISTORY: 'address_autocomplete_history',
+  HELP_CONTENT_CACHE: 'help_content_cache',
   
   // Верификация
   VERIFICATION_EMAIL: 'verification_email',

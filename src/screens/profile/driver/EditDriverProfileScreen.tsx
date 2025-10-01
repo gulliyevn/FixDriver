@@ -277,7 +277,9 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
     if (openSwipeRef.current) {
       try {
         openSwipeRef.current.close();
-      } catch {}
+      } catch (error) {
+        console.error('Error closing swipe:', error);
+      }
       openSwipeRef.current = null;
     }
   };
@@ -446,7 +448,9 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
               overshootRight={false}
               onSwipeableWillOpen={() => {
                 if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[vehicle.id]) {
-                  try { openSwipeRef.current.close(); } catch {}
+                  try { openSwipeRef.current.close(); } catch (error) {
+                    console.error('Error closing previous swipe:', error);
+                  }
                 }
                 openSwipeRef.current = swipeRefs.current[vehicle.id] ?? null;
               }}

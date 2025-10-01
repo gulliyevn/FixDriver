@@ -179,6 +179,38 @@
   },
   "input": {
     "address": "Adres girin...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Nereden gidiyoruz",
+        "to": "Nereye gidiyoruz",
+        "stop": "Ara durak"
+      },
+      "quick": {
+        "current": "Mevcut konum",
+        "recent": "Son yolculuklar",
+        "home": "Ev adresi",
+        "work": "İş adresi"
+      },
+      "sections": {
+        "suggestions": "Öneriler",
+        "history": "Geçmiş"
+      },
+      "states": {
+        "noResults": "Adres bulunamadı",
+        "searching": "Adresler aranıyor..."
+      },
+      "errors": {
+        "select": "Seçilen adres işlenemedi",
+        "details": "Adres koordinatları alınamadı",
+        "tooShort": "Adres çok kısa",
+        "noNumber": "Adres bir kapı numarası içermelidir",
+        "noStreet": "Adres bir sokak adı içermelidir"
+      },
+      "alerts": {
+        "infoTitle": "Bilgi",
+        "infoMessage": "Özellik daha sonra eklenecek"
+      }
+    },
     "comment": "Yorum girin...",
     "email": "E-posta girin...",
     "error": "Hata",

@@ -8,5 +8,7 @@
   "notFound": "Не найдено",
   "validationError": "Ошибка валидации",
   "unknownError": "Произошла неизвестная ошибка",
-  "permissionDenied": "Доступ запрещен"
+  "permissionDenied": "Доступ запрещен",
+  "helpContentLoadFailed": "Не удалось загрузить раздел помощи",
+  "paymentHistoryLoadFailed": "Не удалось загрузить историю платежей"
 } 

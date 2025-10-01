@@ -3,10 +3,21 @@ import { View, Text, TouchableOpacity, Animated, Easing, Pressable, Linking, Mod
 import { Ionicons } from '@expo/vector-icons';
 import { useI18n } from '../../hooks/useI18n';
 import { Driver } from '../../types/driver';
-import { getDriverInfo as getDriverInfoMock, getDriverTrips as getDriverTripsMock } from '../../mocks/driverModalMock';
+import { DriverTrip } from '../../services/DriverService';
 
 export type DriverListItemProps = {
-  driver: Driver & { isFavorite?: boolean; isPaused?: boolean };
+  driver: Driver & {
+    isFavorite?: boolean;
+    isPaused?: boolean;
+    schedule?: string;
+    price?: string;
+    distance?: string;
+    time?: string;
+    childName?: string;
+    childAge?: number;
+    childType?: string;
+    trips?: DriverTrip[];
+  };
   isDark: boolean;
   styles: any;
   actionWidth: number;
@@ -92,9 +103,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     }
   }, [onTogglePause, driver.id]);
 
-  const getDriverInfo = useCallback((driverId: string) => getDriverInfoMock(driverId), []);
-
-  const getDriverTrips = useCallback((driverId: string) => getDriverTripsMock(driverId), []);
+  const driverTrips = useMemo<DriverTrip[]>(() => driver.trips ?? [], [driver.trips]);
 
   const renderLeftActions = (progress: any, dragX: any) => {
     const scale = dragX.interpolate({ inputRange: [0, actionWidth], outputRange: [0, 1], extrapolate: 'clamp' });
@@ -202,7 +211,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
                 )}
                 <Text style={styles.vehicleInfo}>
                   {role === 'driver' 
-                    ? `${getDriverInfo(driver.id).childName} • ${getDriverInfo(driver.id).childAge} лет`
+                    ? `${driver.childName ?? ''} • ${driver.childAge ?? ''} лет`
                     : `${driver.vehicle_brand} ${driver.vehicle_model} • ${driver.vehicle_number}`
                   }
                 </Text>
@@ -225,7 +234,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
         <View style={styles.driverInfoBar}>
           <View style={styles.scheduleInfo}>
             <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
-            <Text style={styles.scheduleText}>{getDriverInfo(driver.id).schedule}</Text>
+            <Text style={styles.scheduleText}>{driver.schedule ?? ''}</Text>
           </View>
           <View style={styles.priceInfo}>
             <Ionicons 
@@ -233,11 +242,11 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
               size={16} 
               color="#9CA3AF" 
             />
-            <Text style={styles.priceText}>{getDriverInfo(driver.id).price}</Text>
+            <Text style={styles.priceText}>{driver.price ?? ''}</Text>
           </View>
           <View style={styles.distanceInfo}>
             <Ionicons name="location" size={16} color="#9CA3AF" />
-            <Text style={styles.distanceText}>{getDriverInfo(driver.id).distance}</Text>
+            <Text style={styles.distanceText}>{driver.distance ?? ''}</Text>
           </View>
           <View style={styles.timeInfo}>
             <Ionicons 
@@ -247,8 +256,8 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
             />
             <Text style={styles.timeText}>
               {role === 'driver' 
-                ? getDriverInfo(driver.id).time 
-                : getDriverInfo(driver.id).childType
+                ? driver.time ?? ''
+                : driver.childType ?? ''
               }
             </Text>
           </View>
@@ -264,7 +273,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
           ]}
         >
           <View style={styles.tripsContainer}>
-            {getDriverTrips(driver.id).map((trip, index) => (
+            {driverTrips.map((trip, index) => (
               <React.Fragment key={`trip-${driver.id}-${index}`}>
                 <View style={styles.tripItem}>
                   <View

@@ -12,6 +12,7 @@ export type UseDriversListResult = {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
   toggleFavorite: (driverId: string) => void;
+  restoreFavorites: (ids: string[]) => void;
   loadMoreDrivers: () => Promise<void>;
   handleRefresh: () => Promise<void>;
   removeDriver: (driverId: string) => void;
@@ -87,21 +88,32 @@ export const useDriversList = (): UseDriversListResult => {
   }, [loadDrivers]);
 
   const filteredDrivers = useMemo(() => {
-    const base = drivers.map(d => ({ ...d, isFavorite: favorites.has(d.id) }));
-    const list = !debouncedQuery
-      ? base
-      : base.filter(driver =>
-          driver.first_name?.toLowerCase().includes(debouncedQuery) ||
-          driver.last_name?.toLowerCase().includes(debouncedQuery) ||
-          driver.vehicle_brand?.toLowerCase().includes(debouncedQuery) ||
-          driver.vehicle_model?.toLowerCase().includes(debouncedQuery)
-        );
-    const sorted = list.sort((a, b) => {
-      if (a.isFavorite && !b.isFavorite) return -1;
-      if (!a.isFavorite && b.isFavorite) return 1;
-      return b.rating - a.rating;
+    const query = debouncedQuery;
+    const list = !query
+      ? drivers
+      : drivers.filter((driver) => {
+          const firstName = driver.first_name?.toLowerCase() ?? '';
+          const lastName = driver.last_name?.toLowerCase() ?? '';
+          const brand = driver.vehicle_brand?.toLowerCase() ?? '';
+          const model = driver.vehicle_model?.toLowerCase() ?? '';
+          return (
+            firstName.includes(query) ||
+            lastName.includes(query) ||
+            brand.includes(query) ||
+            model.includes(query)
+          );
+        });
+    const sorted = [...list].sort((a, b) => {
+      const aFav = favorites.has(a.id);
+      const bFav = favorites.has(b.id);
+      if (aFav && !bFav) return -1;
+      if (!aFav && bFav) return 1;
+      return (b.rating ?? 0) - (a.rating ?? 0);
     });
-    return sorted;
+    return sorted.map((driver) => ({
+      ...driver,
+      isFavorite: favorites.has(driver.id),
+    }));
   }, [drivers, debouncedQuery, favorites]);
 
   const toggleFavorite = useCallback((driverId: string) => {
@@ -110,6 +122,10 @@ export const useDriversList = (): UseDriversListResult => {
       if (next.has(driverId)) next.delete(driverId); else next.add(driverId);
       return next;
     });
+  }, []);
+
+  const restoreFavorites = useCallback((ids: string[]) => {
+    setFavorites(new Set(ids));
   }, []);
 
   const removeDriver = useCallback((driverId: string) => {
@@ -131,6 +147,7 @@ export const useDriversList = (): UseDriversListResult => {
     searchQuery,
     setSearchQuery,
     toggleFavorite,
+    restoreFavorites,
     loadMoreDrivers,
     handleRefresh,
     removeDriver,

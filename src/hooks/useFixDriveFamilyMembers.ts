@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFamilyMembersByClientId } from '../mocks/familyMembers';
 import { FamilyMember } from '../types/family';
 import { useAuth } from '../context/AuthContext';
 import { useProfile } from './useProfile';
 import { useFocusEffect } from '@react-navigation/native';
+import { useUserStorageKey } from '../utils/storageKeys';
 
 export const useFixDriveFamilyMembers = () => {
   const { user } = useAuth();
   const { profile } = useProfile();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const familyMembersKey = useUserStorageKey('@family_members');
 
   useEffect(() => {
     const loadFamilyMembers = async () => {
       try {
         setLoading(true);
         
-        // Загружаем данные напрямую из AsyncStorage
-        const savedMembers = await AsyncStorage.getItem('family_members');
+        // Загружаем данные напрямую из AsyncStorage с изоляцией по user.id
+        const savedMembers = await AsyncStorage.getItem(familyMembersKey);
         
         let members: FamilyMember[] = [];
         
@@ -33,9 +34,9 @@ export const useFixDriveFamilyMembers = () => {
           surname: profile?.surname || user?.surname || '',
           type: 'account_owner',
           birthDate: profile?.birthDate || '1990-01-01',
-          age: profile?.age || 30,
+          age: 30, // Default age since User type doesn't have age property
           phone: profile?.phone || user?.phone,
-          phoneVerified: profile?.phoneVerified || false
+          phoneVerified: false // Default since User type doesn't have phoneVerified property
         };
         
         // Если есть добавленные участники семьи, добавляем владельца к ним
@@ -53,7 +54,7 @@ export const useFixDriveFamilyMembers = () => {
     };
 
     loadFamilyMembers();
-  }, [user?.id, profile]);
+  }, [user?.id, profile, familyMembersKey]);
 
   // Автоматически обновляем данные при фокусе на экране
   useFocusEffect(
@@ -62,8 +63,8 @@ export const useFixDriveFamilyMembers = () => {
         try {
           setLoading(true);
           
-          // Загружаем данные напрямую из AsyncStorage
-          const savedMembers = await AsyncStorage.getItem('family_members');
+          // Загружаем данные напрямую из AsyncStorage с изоляцией по user.id
+          const savedMembers = await AsyncStorage.getItem(familyMembersKey);
           
           let members: FamilyMember[] = [];
           
@@ -78,9 +79,9 @@ export const useFixDriveFamilyMembers = () => {
             surname: profile?.surname || user?.surname || '',
             type: 'account_owner',
             birthDate: profile?.birthDate || '1990-01-01',
-            age: profile?.age || 30,
+            age: 30, // Default age since User type doesn't have age property
             phone: profile?.phone || user?.phone,
-            phoneVerified: profile?.phoneVerified || false
+            phoneVerified: false // Default since User type doesn't have phoneVerified property
           };
           
           // Если есть добавленные участники семьи, добавляем владельца к ним
@@ -97,7 +98,7 @@ export const useFixDriveFamilyMembers = () => {
       };
 
       loadFamilyMembers();
-    }, [user?.id, profile])
+    }, [user?.id, profile, familyMembersKey])
   );
 
   // Функция для получения опций для dropdown
@@ -118,7 +119,7 @@ export const useFixDriveFamilyMembers = () => {
   // Функция для принудительного обновления данных из AsyncStorage
   const refreshFamilyMembers = async () => {
     try {
-      const savedMembers = await AsyncStorage.getItem('family_members');
+      const savedMembers = await AsyncStorage.getItem(familyMembersKey);
       
       if (savedMembers) {
         const parsedMembers = JSON.parse(savedMembers);
@@ -130,9 +131,9 @@ export const useFixDriveFamilyMembers = () => {
           surname: profile?.surname || user?.surname || '',
           type: 'account_owner',
           birthDate: profile?.birthDate || '1990-01-01',
-          age: profile?.age || 30,
+          age: 30, // Default age since User type doesn't have age property
           phone: profile?.phone || user?.phone,
-          phoneVerified: profile?.phoneVerified || false
+          phoneVerified: false // Default since User type doesn't have phoneVerified property
         };
         
         const allMembers = parsedMembers.length > 0 

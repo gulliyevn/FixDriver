@@ -1,7 +1,19 @@
-import { Address } from '../mocks/residenceMock';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// TODO: Заменить на реальный базовый URL API
-const API_BASE_URL = 'https://api.fixdrive.com/v1';
+import APIClient from './APIClient';
+import { ADDRESS_CATEGORY_CONFIG } from '../shared/constants/addressCategories';
+
+export interface Address {
+  id: string;
+  title: string;
+  address: string;
+  category?: string;
+  isDefault: boolean;
+  latitude?: number;
+  longitude?: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface AddressResponse {
   success: boolean;
@@ -16,6 +28,7 @@ export interface CreateAddressRequest {
   isDefault: boolean;
   latitude?: number;
   longitude?: number;
+  category?: string;
 }
 
 export interface UpdateAddressRequest {
@@ -24,347 +37,283 @@ export interface UpdateAddressRequest {
   isDefault?: boolean;
   latitude?: number;
   longitude?: number;
+  category?: string;
 }
+
+export interface GeocodeResponse {
+  success: boolean;
+  data?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+    formattedAddress: string;
+  };
+  error?: string;
+}
+
+export interface AddressCategory {
+  id: string;
+  name: string;
+  icon?: string;
+  color?: string;
+}
+
+const DEV_ADDRESS_CATEGORIES: AddressCategory[] = ADDRESS_CATEGORY_CONFIG.map(({ id, translationKey, icon }) => ({
+  id,
+  name: translationKey,
+  icon,
+}));
+
+const DEV_ADDRESS_HISTORY_KEY = 'address_history';
 
 class AddressService {
-  private async makeRequest<T>(
-    endpoint: string, 
-    options: RequestInit = {}
-  ): Promise<T> {
-    try {
-      // TODO: Добавить токен авторизации
-      const token = await this.getAuthToken();
-      
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          ...options.headers,
-        },
-        ...options,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  private async getAuthToken(): Promise<string> {
-    // TODO: Реализовать получение токена из хранилища
-    return 'your-auth-token-here';
-  }
-
   /**
-   * Получить все адреса пользователя
+   * Получает все адреса пользователя
    */
-  async getAddresses(): Promise<Address[]> {
+  async getAddresses(userId: string): Promise<Address[]> {
     try {
-      const response = await this.makeRequest<AddressResponse>('/addresses');
-      
-      if (response.success && Array.isArray(response.data)) {
-        return response.data;
-      }
-      
-      throw new Error(response.message || 'Failed to fetch addresses');
+      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}`);
+      return response.success && response.data ? response.data : [];
     } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Создать новый адрес
-   */
-  async createAddress(addressData: CreateAddressRequest): Promise<Address> {
-    try {
-      const response = await this.makeRequest<AddressResponse>('/addresses', {
-        method: 'POST',
-        body: JSON.stringify(addressData),
-      });
-      
-      if (response.success && response.data && !Array.isArray(response.data)) {
-        return response.data;
-      }
-      
-      throw new Error(response.message || 'Failed to create address');
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Обновить существующий адрес
-   */
-  async updateAddress(id: string, updates: UpdateAddressRequest): Promise<Address> {
-    try {
-      const response = await this.makeRequest<AddressResponse>(`/addresses/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updates),
-      });
-      
-      if (response.success && response.data && !Array.isArray(response.data)) {
-        return response.data;
-      }
-      
-      throw new Error(response.message || 'Failed to update address');
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Удалить адрес
-   */
-  async deleteAddress(id: string): Promise<boolean> {
-    try {
-      const response = await this.makeRequest<AddressResponse>(`/addresses/${id}`, {
-        method: 'DELETE',
-      });
-      
-      return response.success;
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Установить адрес по умолчанию
-   */
-  async setDefaultAddress(id: string): Promise<boolean> {
-    try {
-      const response = await this.makeRequest<AddressResponse>(`/addresses/${id}/default`, {
-        method: 'PATCH',
-      });
-      
-      return response.success;
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Получить адрес по умолчанию
-   */
-  async getDefaultAddress(): Promise<Address | null> {
-    try {
-      const response = await this.makeRequest<AddressResponse>('/addresses/default');
-      
-      if (response.success && response.data && !Array.isArray(response.data)) {
-        return response.data;
-      }
-      
-      return null;
-    } catch (error) {
-      
-      return null;
-    }
-  }
-
-  /**
-   * Поиск адресов по геолокации
-   */
-  async searchAddresses(query: string): Promise<Address[]> {
-    try {
-      const response = await this.makeRequest<AddressResponse>(`/addresses/search?q=${encodeURIComponent(query)}`);
-      
-      if (response.success && Array.isArray(response.data)) {
-        return response.data;
-      }
-      
-      return [];
-    } catch (error) {
-      
+      console.error('Get addresses error:', error);
       return [];
     }
   }
 
   /**
-   * Получить координаты по адресу (геокодирование)
+   * Получает адрес по ID
    */
-  async geocodeAddress(address: string): Promise<{ latitude: number; longitude: number } | null> {
+  async getAddress(addressId: string): Promise<Address | null> {
     try {
-      const response = await this.makeRequest<{
-        success: boolean;
-        data?: { latitude: number; longitude: number };
-        message?: string;
-      }>(`/geocode?address=${encodeURIComponent(address)}`);
+      const response = await APIClient.get<Address>(`/addresses/${addressId}`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Get address error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Создает новый адрес
+   */
+  async createAddress(userId: string, addressData: CreateAddressRequest): Promise<Address | null> {
+    try {
+      const response = await APIClient.post<Address>('/addresses', {
+        ...addressData,
+        userId
+      });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Create address error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Обновляет адрес
+   */
+  async updateAddress(addressId: string, updates: UpdateAddressRequest): Promise<Address | null> {
+    try {
+      const response = await APIClient.put<Address>(`/addresses/${addressId}`, updates);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Update address error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Удаляет адрес
+   */
+  async deleteAddress(addressId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.delete<{ success: boolean }>(`/addresses/${addressId}`);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Delete address error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Устанавливает адрес по умолчанию
+   */
+  async setDefaultAddress(userId: string, addressId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/addresses/user/${userId}/default`, { addressId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Set default address error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Получает адрес по умолчанию
+   */
+  async getDefaultAddress(userId: string): Promise<Address | null> {
+    try {
+      const response = await APIClient.get<Address>(`/addresses/user/${userId}/default`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Get default address error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Геокодирование адреса (получение координат)
+   */
+  async geocodeAddress(address: string): Promise<GeocodeResponse> {
+    try {
+      const response = await APIClient.post<GeocodeResponse['data']>('/addresses/geocode', { address });
       
       if (response.success && response.data) {
-        return response.data;
+        return {
+          success: true,
+          data: response.data
+        };
       }
       
-      return null;
+      return {
+        success: false,
+        error: response.error || 'Ошибка при геокодировании адреса'
+      };
     } catch (error) {
-      
-      return null;
+      console.error('Geocode address error:', error);
+      return {
+        success: false,
+        error: 'Ошибка при геокодировании адреса'
+      };
     }
   }
 
   /**
-   * Верифицировать адрес
+   * Обратное геокодирование (получение адреса по координатам)
    */
-  async verifyAddress(address: string): Promise<boolean> {
+  async reverseGeocode(latitude: number, longitude: number): Promise<GeocodeResponse> {
     try {
-      // Проверяем минимальную длину
-      if (address.length < 8) {
-        return false;
-      }
-
-      // Проверяем наличие цифр (номер дома/квартиры)
-      const hasNumbers = /\d/.test(address);
-      if (!hasNumbers) {
-        return false;
-      }
-
-      // Проверяем наличие ключевых слов адреса
-      const addressKeywords = [
-        'улица', 'ул', 'проспект', 'пр', 'переулок', 'пер', 'шоссе', 'ш', 'набережная', 'наб',
-        'street', 'st', 'avenue', 'ave', 'road', 'rd', 'boulevard', 'blvd', 'lane', 'ln',
-        'straße', 'str', 'allee', 'weg', 'platz', 'platz',
-        'calle', 'avenida', 'carrera', 'carr',
-        'rue', 'avenue', 'boulevard', 'place',
-        'via', 'corso', 'piazza', 'viale',
-        'sokak', 'cadde', 'mahalle', 'bulvar'
-      ];
+      const response = await APIClient.post<GeocodeResponse['data']>('/addresses/reverse-geocode', { latitude, longitude });
       
-      const hasAddressKeyword = addressKeywords.some(keyword => 
-        address.toLowerCase().includes(keyword.toLowerCase())
-      );
+      if (response.success && response.data) {
+        return {
+          success: true,
+          data: response.data
+        };
+      }
       
-      // Проверяем наличие запятых или других разделителей
-      const hasSeparators = /[,;]/.test(address);
-      
-      // Должен быть хотя бы один из признаков хорошего адреса
-      if (!hasAddressKeyword && !hasSeparators) {
-        return false;
-      }
-
-      // Проверяем, что есть буквы (не только цифры)
-      const hasLetters = /[а-яёa-z]/i.test(address);
-      if (!hasLetters) {
-        return false;
-      }
-
-      // Сначала пробуем наш API
-      const coordinates = await this.geocodeAddress(address);
-      if (coordinates) {
-        return true;
-      }
-
-      // Если наш API не сработал, пробуем OpenStreetMap Nominatim с более строгими параметрами
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&accept-language=ru&addressdetails=1&extratags=1`
-        );
-        const data = await response.json();
-        
-        if (data && data.length > 0 && data[0].display_name) {
-          const result = data[0];
-          
-          // Проверяем, что это действительно адрес, а не город/страна
-          const type = result.type;
-          if (type !== 'house' && type !== 'street' && type !== 'address') {
-            return false;
-          }
-          
-          // Проверяем наличие компонентов адреса
-          const addressDetails = result.address;
-          if (!addressDetails) {
-            return false;
-          }
-          
-          // Должны быть улица и номер дома
-          const hasStreet = addressDetails.road || addressDetails.street || addressDetails.house_number;
-          const hasHouseNumber = addressDetails.house_number || /\d+/.test(result.display_name);
-          
-          if (!hasStreet || !hasHouseNumber) {
-            return false;
-          }
-          
-          // Проверяем, что найденный адрес похож на введенный
-          const foundAddress = result.display_name.toLowerCase();
-          const inputAddress = address.toLowerCase();
-          
-          // Должно быть хотя бы 40% совпадения слов ИЛИ точное совпадение улицы с номером
-          const inputWords = inputAddress.split(/\s+/).filter(word => word.length > 2);
-          const foundWords = foundAddress.split(/\s+/).filter(word => word.length > 2);
-          
-          const matchingWords = inputWords.filter(word => 
-            foundWords.some(foundWord => foundWord.includes(word) || word.includes(foundWord))
-          );
-          
-          const similarity = matchingWords.length / Math.max(inputWords.length, foundWords.length);
-          
-          // Проверяем совпадение ключевых частей (улица, номер)
-          const hasStreetMatch = inputWords.some(word => 
-            foundWords.some(foundWord => 
-              foundWord.toLowerCase().includes(word.toLowerCase()) && word.length > 3
-            )
-          );
-          
-          const hasNumberMatch = /\d+/.test(inputAddress) && /\d+/.test(foundAddress);
-          
-          // Должно быть либо хорошее совпадение слов, либо точное совпадение улицы с номером
-          return similarity >= 0.4 || (hasStreetMatch && hasNumberMatch);
-        }
-      } catch (osmError) {
-        // Игнорируем ошибку и пробуем следующий сервис
-      }
-
-      // Пробуем Google Geocoding API (если есть ключ)
-      try {
-        const googleResponse = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=YOUR_GOOGLE_API_KEY`
-        );
-        const googleData = await googleResponse.json();
-        
-        if (googleData.results && googleData.results.length > 0) {
-          // Проверяем тип результата
-          const result = googleData.results[0];
-          const isAddress = result.types.includes('street_address') || 
-                           result.types.includes('route') ||
-                           result.types.includes('premise');
-          
-          return isAddress;
-        }
-      } catch (googleError) {
-        // Игнорируем ошибку
-      }
-
-      // Пробуем Yandex Geocoding API (если есть ключ)
-      try {
-        const yandexResponse = await fetch(
-          `https://geocode-maps.yandex.ru/1.x/?apikey=YOUR_YANDEX_API_KEY&format=json&geocode=${encodeURIComponent(address)}&lang=ru_RU`
-        );
-        const yandexData = await yandexResponse.json();
-        
-        if (yandexData.response?.GeoObjectCollection?.featureMember?.length > 0) {
-          const geoObject = yandexData.response.GeoObjectCollection.featureMember[0].GeoObject;
-          const kind = geoObject.metaDataProperty?.GeocoderMetaData?.kind;
-          
-          // Проверяем, что это действительно адрес
-          return kind === 'house' || kind === 'street';
-        }
-      } catch (yandexError) {
-        // Игнорируем ошибку
-      }
-
-      return false;
+      return {
+        success: false,
+        error: response.error || 'Ошибка при обратном геокодировании'
+      };
     } catch (error) {
+      console.error('Reverse geocode error:', error);
+      return {
+        success: false,
+        error: 'Ошибка при обратном геокодировании'
+      };
+    }
+  }
+
+  /**
+   * Поиск адресов
+   */
+  async searchAddresses(userId: string, query: string): Promise<Address[]> {
+    try {
+      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/search`, { q: query });
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Search addresses error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Получает категории адресов
+   */
+  async fetchAddressCategories(): Promise<AddressCategory[]> {
+    if (__DEV__) {
+      return DEV_ADDRESS_CATEGORIES;
+    }
+
+    try {
+      const response = await APIClient.get<AddressCategory[]>('/addresses/categories');
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get address categories error:', error);
+      return [];
+    }
+  }
+
+  async verifyAddress(address: string): Promise<boolean> {
+    if (!address.trim()) {
       return false;
+    }
+
+    if (__DEV__) {
+      return address.trim().length > 5;
+    }
+
+    try {
+      const response = await APIClient.post<{ success: boolean }>('/addresses/verify', { address });
+      return response.success && response.data?.success === true;
+    } catch (error) {
+      console.error('Verify address error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Получает популярные адреса
+   */
+  async getPopularAddresses(userId: string): Promise<Address[]> {
+    try {
+      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/popular`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get popular addresses error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Получает историю адресов
+   */
+  async getAddressHistory(userId: string): Promise<Address[]> {
+    if (__DEV__) {
+      try {
+        const history = await AsyncStorage.getItem(`${DEV_ADDRESS_HISTORY_KEY}_${userId}`);
+        return history ? JSON.parse(history) : [];
+      } catch (error) {
+        console.error('Get address history error:', error);
+        return [];
+      }
+    }
+
+    try {
+      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/history`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get address history error:', error);
+      return [];
+    }
+  }
+
+  async saveAddressToHistory(userId: string, address: Address): Promise<void> {
+    if (!__DEV__) {
+      return;
+    }
+
+    try {
+      const storageKey = `${DEV_ADDRESS_HISTORY_KEY}_${userId}`;
+      const history = await AsyncStorage.getItem(storageKey);
+      const parsed: Address[] = history ? JSON.parse(history) : [];
+      const updated = [address, ...parsed.filter(item => item.id !== address.id)].slice(0, 10);
+      await AsyncStorage.setItem(storageKey, JSON.stringify(updated));
+    } catch (error) {
+      console.error('Save address history error:', error);
     }
   }
 }
 
-export const addressService = new AddressService(); 
+export default AddressService;

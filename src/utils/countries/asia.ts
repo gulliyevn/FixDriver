@@ -1,0 +1,485 @@
+import { Country } from '../../types/countries';
+
+export const ASIA: Country[] = [
+  // === ASIA ===
+  {
+    code: 'AF',
+    name: 'افغانستان', // Afghanistan
+    flag: '🇦🇫',
+    dialCode: '+93',
+    format: '## ### ####',
+    emergencyNumber: '119',
+    currency: 'AFN',
+    timezone: 'Asia/Kabul'
+  },
+  {
+    code: 'AM',
+    name: 'Հայաստան', // Armenia
+    flag: '🇦🇲',
+    dialCode: '+374',
+    format: '(##) ###-###',
+    emergencyNumber: '112',
+    currency: 'AMD',
+    timezone: 'Asia/Yerevan'
+  },
+  {
+    code: 'AZ',
+    name: 'Azərbaycan', // Azerbaijan
+    flag: '🇦🇿',
+    dialCode: '+994',
+    format: '(##) ###-##-##',
+    emergencyNumber: '112',
+    currency: 'AZN',
+    timezone: 'Asia/Baku'
+  },
+  {
+    code: 'BH',
+    name: 'البحرين', // Bahrain
+    flag: '🇧🇭',
+    dialCode: '+973',
+    format: '#### ####',
+    emergencyNumber: '999',
+    currency: 'BHD',
+    timezone: 'Asia/Bahrain'
+  },
+  {
+    code: 'BD',
+    name: 'বাংলাদেশ', // Bangladesh
+    flag: '🇧🇩',
+    dialCode: '+880',
+    format: '##-###-###',
+    emergencyNumber: '999',
+    currency: 'BDT',
+    timezone: 'Asia/Dhaka'
+  },
+  {
+    code: 'BT',
+    name: 'འབྲུག་ཡུལ་', // Bhutan (Druk Yul)
+    flag: '🇧🇹',
+    dialCode: '+975',
+    format: '##-###-###',
+    emergencyNumber: '112',
+    currency: 'BTN',
+    timezone: 'Asia/Thimphu'
+  },
+  {
+    code: 'BN',
+    name: 'Brunei Darussalam', // Brunei
+    flag: '🇧🇳',
+    dialCode: '+673',
+    format: '### ####',
+    emergencyNumber: '993',
+    currency: 'BND',
+    timezone: 'Asia/Brunei'
+  },
+  {
+    code: 'KH',
+    name: 'កម្ពុជា', // Cambodia
+    flag: '🇰🇭',
+    dialCode: '+855',
+    format: '## ### ###',
+    emergencyNumber: '117',
+    currency: 'KHR',
+    timezone: 'Asia/Phnom_Penh'
+  },
+  {
+    code: 'CN',
+    name: '中国', // China
+    flag: '🇨🇳',
+    dialCode: '+86',
+    format: '### #### ####',
+    emergencyNumber: '110',
+    currency: 'CNY',
+    timezone: 'Asia/Shanghai'
+  },
+  {
+    code: 'CY',
+    name: 'Κύπρος / Kıbrıs', // Cyprus (Greek/Turkish)
+    flag: '🇨🇾',
+    dialCode: '+357',
+    format: '## ######',
+    emergencyNumber: '112',
+    currency: 'EUR',
+    timezone: 'Asia/Nicosia'
+  },
+  {
+    code: 'GE',
+    name: 'საქართველო', // Georgia
+    flag: '🇬🇪',
+    dialCode: '+995',
+    format: '(###) ###-###',
+    emergencyNumber: '112',
+    currency: 'GEL',
+    timezone: 'Asia/Tbilisi'
+  },
+  {
+    code: 'IN',
+    name: 'भारत', // India
+    flag: '🇮🇳',
+    dialCode: '+91',
+    format: '##### #####',
+    emergencyNumber: '100',
+    currency: 'INR',
+    timezone: 'Asia/Kolkata'
+  },
+  {
+    code: 'ID',
+    name: 'Indonesia',
+    flag: '🇮🇩',
+    dialCode: '+62',
+    format: '##-###-###',
+    emergencyNumber: '112',
+    currency: 'IDR',
+    timezone: 'Asia/Jakarta'
+  },
+  {
+    code: 'IR',
+    name: 'ایران', // Iran
+    flag: '🇮🇷',
+    dialCode: '+98',
+    format: '###-###-####',
+    emergencyNumber: '110',
+    currency: 'IRR',
+    timezone: 'Asia/Tehran'
+  },
+  {
+    code: 'IQ',
+    name: 'العراق', // Iraq
+    flag: '🇮🇶',
+    dialCode: '+964',
+    format: '###-###-####',
+    emergencyNumber: '104',
+    currency: 'IQD',
+    timezone: 'Asia/Baghdad'
+  },
+  {
+    code: 'IL',
+    name: 'ישראל', // Israel
+    flag: '🇮🇱',
+    dialCode: '+972',
+    format: '##-###-####',
+    emergencyNumber: '100',
+    currency: 'ILS',
+    timezone: 'Asia/Jerusalem'
+  },
+  {
+    code: 'JP',
+    name: '日本', // Japan
+    flag: '🇯🇵',
+    dialCode: '+81',
+    format: '## #### ####',
+    emergencyNumber: '110',
+    currency: 'JPY',
+    timezone: 'Asia/Tokyo'
+  },
+  {
+    code: 'JO',
+    name: 'الأردن', // Jordan
+    flag: '🇯🇴',
+    dialCode: '+962',
+    format: '## #### ####',
+    emergencyNumber: '911',
+    currency: 'JOD',
+    timezone: 'Asia/Amman'
+  },
+  {
+    code: 'KZ',
+    name: 'Қазақстан', // Kazakhstan
+    flag: '🇰🇿',
+    dialCode: '+7',
+    format: '(###) ###-##-##',
+    emergencyNumber: '112',
+    currency: 'KZT',
+    timezone: 'Asia/Almaty'
+  },
+  {
+    code: 'KW',
+    name: 'الكويت', // Kuwait
+    flag: '🇰🇼',
+    dialCode: '+965',
+    format: '#### ####',
+    emergencyNumber: '112',
+    currency: 'KWD',
+    timezone: 'Asia/Kuwait'
+  },
+  {
+    code: 'KG',
+    name: 'Кыргызстан', // Kyrgyzstan
+    flag: '🇰🇬',
+    dialCode: '+996',
+    format: '(###) ###-###',
+    emergencyNumber: '112',
+    currency: 'KGS',
+    timezone: 'Asia/Bishkek'
+  },
+  {
+    code: 'LA',
+    name: 'ປະເທດລາວ', // Laos
+    flag: '🇱🇦',
+    dialCode: '+856',
+    format: '##-###-###',
+    emergencyNumber: '1191',
+    currency: 'LAK',
+    timezone: 'Asia/Vientiane'
+  },
+  {
+    code: 'LB',
+    name: 'لبنان', // Lebanon
+    flag: '🇱🇧',
+    dialCode: '+961',
+    format: '##-###-###',
+    emergencyNumber: '112',
+    currency: 'LBP',
+    timezone: 'Asia/Beirut'
+  },
+  {
+    code: 'MY',
+    name: 'Malaysia',
+    flag: '🇲🇾',
+    dialCode: '+60',
+    format: '##-### ####',
+    emergencyNumber: '999',
+    currency: 'MYR',
+    timezone: 'Asia/Kuala_Lumpur'
+  },
+  {
+    code: 'MV',
+    name: 'Maldives',
+    flag: '🇲🇻',
+    dialCode: '+960',
+    format: '###-####',
+    emergencyNumber: '119',
+    currency: 'MVR',
+    timezone: 'Indian/Maldives'
+  },
+  {
+    code: 'MN',
+    name: 'Монгол Улс', // Mongolia
+    flag: '🇲🇳',
+    dialCode: '+976',
+    format: '##-##-####',
+    emergencyNumber: '105',
+    currency: 'MNT',
+    timezone: 'Asia/Ulaanbaatar'
+  },
+  {
+    code: 'MM',
+    name: 'မြန်မာ', // Myanmar
+    flag: '🇲🇲',
+    dialCode: '+95',
+    format: '###-###',
+    emergencyNumber: '199',
+    currency: 'MMK',
+    timezone: 'Asia/Yangon'
+  },
+  {
+    code: 'NP',
+    name: 'नेपाल', // Nepal
+    flag: '🇳🇵',
+    dialCode: '+977',
+    format: '##-###-###',
+    emergencyNumber: '100',
+    currency: 'NPR',
+    timezone: 'Asia/Kathmandu'
+  },
+  {
+    code: 'KP',
+    name: '조선민주주의인민공화국', // North Korea
+    flag: '🇰🇵',
+    dialCode: '+850',
+    format: '###-###',
+    emergencyNumber: '119',
+    currency: 'KPW',
+    timezone: 'Asia/Pyongyang'
+  },
+  {
+    code: 'OM',
+    name: 'عُمان', // Oman
+    flag: '🇴🇲',
+    dialCode: '+968',
+    format: '## ### ###',
+    emergencyNumber: '9999',
+    currency: 'OMR',
+    timezone: 'Asia/Muscat'
+  },
+  {
+    code: 'PK',
+    name: 'پاکستان', // Pakistan
+    flag: '🇵🇰',
+    dialCode: '+92',
+    format: '###-#######',
+    emergencyNumber: '15',
+    currency: 'PKR',
+    timezone: 'Asia/Karachi'
+  },
+  {
+    code: 'PS',
+    name: 'فلسطين', // Palestine
+    flag: '🇵🇸',
+    dialCode: '+970',
+    format: '##-###-####',
+    emergencyNumber: '100',
+    currency: 'ILS',
+    timezone: 'Asia/Hebron'
+  },
+  {
+    code: 'PH',
+    name: 'Pilipinas', // Philippines
+    flag: '🇵🇭',
+    dialCode: '+63',
+    format: '####-###-####',
+    emergencyNumber: '117',
+    currency: 'PHP',
+    timezone: 'Asia/Manila'
+  },
+  {
+    code: 'QA',
+    name: 'قطر', // Qatar
+    flag: '🇶🇦',
+    dialCode: '+974',
+    format: '#### ####',
+    emergencyNumber: '999',
+    currency: 'QAR',
+    timezone: 'Asia/Qatar'
+  },
+  {
+    code: 'SA',
+    name: 'المملكة العربية السعودية', // Saudi Arabia
+    flag: '🇸🇦',
+    dialCode: '+966',
+    format: '5########',
+    emergencyNumber: '999',
+    currency: 'SAR',
+    timezone: 'Asia/Riyadh'
+  },
+  {
+    code: 'SG',
+    name: 'Singapore',
+    flag: '🇸🇬',
+    dialCode: '+65',
+    format: '#### ####',
+    emergencyNumber: '999',
+    currency: 'SGD',
+    timezone: 'Asia/Singapore'
+  },
+  {
+    code: 'KR',
+    name: '대한민국', // South Korea
+    flag: '🇰🇷',
+    dialCode: '+82',
+    format: '##-###-####',
+    emergencyNumber: '112',
+    currency: 'KRW',
+    timezone: 'Asia/Seoul'
+  },
+  {
+    code: 'LK',
+    name: 'ශ්‍රී ලංකා', // Sri Lanka
+    flag: '🇱🇰',
+    dialCode: '+94',
+    format: '##-###-####',
+    emergencyNumber: '119',
+    currency: 'LKR',
+    timezone: 'Asia/Colombo'
+  },
+  {
+    code: 'SY',
+    name: 'سوريا', // Syria
+    flag: '🇸🇾',
+    dialCode: '+963',
+    format: '##-#######',
+    emergencyNumber: '112',
+    currency: 'SYP',
+    timezone: 'Asia/Damascus'
+  },
+  {
+    code: 'TJ',
+    name: 'Тоҷикистон', // Tajikistan
+    flag: '🇹🇯',
+    dialCode: '+992',
+    format: '(###) ###-###',
+    emergencyNumber: '112',
+    currency: 'TJS',
+    timezone: 'Asia/Dushanbe'
+  },
+  {
+    code: 'TH',
+    name: 'ประเทศไทย', // Thailand
+    flag: '🇹🇭',
+    dialCode: '+66',
+    format: '##-###-####',
+    emergencyNumber: '191',
+    currency: 'THB',
+    timezone: 'Asia/Bangkok'
+  },
+  {
+    code: 'TL',
+    name: 'Timor-Leste',
+    flag: '🇹🇱',
+    dialCode: '+670',
+    format: '###-#####',
+    emergencyNumber: '112',
+    currency: 'USD',
+    timezone: 'Asia/Dili'
+  },
+  {
+    code: 'TR',
+    name: 'Türkiye',
+    flag: '🇹🇷',
+    dialCode: '+90',
+    format: '(###) ### ## ##',
+    emergencyNumber: '112',
+    currency: 'TRY',
+    timezone: 'Europe/Istanbul'
+  },
+  {
+    code: 'TM',
+    name: 'Türkmenistan',
+    flag: '🇹🇲',
+    dialCode: '+993',
+    format: '(##) ###-###',
+    emergencyNumber: '112',
+    currency: 'TMT',
+    timezone: 'Asia/Ashgabat'
+  },
+  {
+    code: 'AE',
+    name: 'الإمارات العربية المتحدة', // UAE
+    flag: '🇦🇪',
+    dialCode: '+971',
+    format: '## ### ####',
+    emergencyNumber: '999',
+    currency: 'AED',
+    timezone: 'Asia/Dubai'
+  },
+  {
+    code: 'UZ',
+    name: 'O‘zbekiston', // Uzbekistan
+    flag: '🇺🇿',
+    dialCode: '+998',
+    format: '(##) ###-##-##',
+    emergencyNumber: '112',
+    currency: 'UZS',
+    timezone: 'Asia/Tashkent'
+  },
+  {
+    code: 'VN',
+    name: 'Việt Nam', // Vietnam
+    flag: '🇻🇳',
+    dialCode: '+84',
+    format: '## #### ###',
+    emergencyNumber: '113',
+    currency: 'VND',
+    timezone: 'Asia/Ho_Chi_Minh'
+  },
+  {
+    code: 'YE',
+    name: 'اليمن', // Yemen
+    flag: '🇾🇪',
+    dialCode: '+967',
+    format: '###-###-###',
+    emergencyNumber: '199',
+    currency: 'YER',
+    timezone: 'Asia/Aden'
+  }
+];

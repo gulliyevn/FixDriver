@@ -1,86 +1,33 @@
-export interface Country {
-  code: string;
-  name: string;
-  flag: string;
-  dialCode: string;
-  format?: string;
+import { Country } from '../types/countries';
+import { ASIA } from './countries/asia';
+import { EUROPE } from './countries/europe';
+import { AFRICA } from './countries/africa';
+import { AMERICA } from './countries/america';
+import { OCEANIA } from './countries/oceania';
+
+const withContinent = (list: Country[], continent: string): Country[] =>
+  list.map(c => ({ ...c, continent }));
+
+// Merge and deduplicate by ISO code. Preference order keeps Europe over Asia where duplicates exist (e.g., CY, TR).
+const merged: Country[] = [
+  ...withContinent(AFRICA, 'Africa'),
+  ...withContinent(AMERICA, 'America'),
+  ...withContinent(ASIA, 'Asia'),
+  ...withContinent(EUROPE, 'Europe'),
+  ...withContinent(OCEANIA, 'Oceania'),
+];
+
+const byCode = new Map<string, Country>();
+for (const c of merged) {
+  // Later continents in the list overwrite earlier ones to prefer Europe over Asia for duplicates
+  byCode.set(c.code, c);
 }
 
-export const COUNTRIES: Country[] = [
-  { code: 'AU', name: 'Австралия', flag: '🇦🇺', dialCode: '+61', format: '# #### ####' },
-  { code: 'AT', name: 'Австрия', flag: '🇦🇹', dialCode: '+43', format: '### ### ###' },
-  { code: 'AZ', name: 'Азербайджан', flag: '🇦🇿', dialCode: '+994', format: '(##) ###-##-##' },
-  { code: 'AL', name: 'Албания', flag: '🇦🇱', dialCode: '+355', format: '## ### ###' },
-  { code: 'DZ', name: 'Алжир', flag: '🇩🇿', dialCode: '+213', format: '## ### ####' },
-  { code: 'AR', name: 'Аргентина', flag: '🇦🇷', dialCode: '+54', format: '(##) ####-####' },
-  { code: 'AF', name: 'Афганистан', flag: '🇦🇫', dialCode: '+93', format: '## ### ####' },
-  { code: 'BD', name: 'Бангладеш', flag: '🇧🇩', dialCode: '+880', format: '## ### ###' },
-  { code: 'BY', name: 'Беларусь', flag: '🇧🇾', dialCode: '+375', format: '(##) ###-##-##' },
-  { code: 'BE', name: 'Бельгия', flag: '🇧🇪', dialCode: '+32', format: '### ### ###' },
-  { code: 'BG', name: 'Болгария', flag: '🇧🇬', dialCode: '+359', format: '## ### ###' },
-  { code: 'BA', name: 'Босния и Герцеговина', flag: '🇧🇦', dialCode: '+387', format: '## ### ###' },
-  { code: 'BR', name: 'Бразилия', flag: '🇧🇷', dialCode: '+55', format: '(##) #####-####' },
-  { code: 'GB', name: 'Великобритания', flag: '🇬🇧', dialCode: '+44', format: '#### ######' },
-  { code: 'HU', name: 'Венгрия', flag: '🇭🇺', dialCode: '+36', format: '## ### ####' },
-  { code: 'VN', name: 'Вьетнам', flag: '🇻🇳', dialCode: '+84', format: '## #### ####' },
-  { code: 'DE', name: 'Германия', flag: '🇩🇪', dialCode: '+49', format: '### #######' },
-  { code: 'GR', name: 'Греция', flag: '🇬🇷', dialCode: '+30', format: '### ### ####' },
-  { code: 'GE', name: 'Грузия', flag: '🇬🇪', dialCode: '+995', format: '(###) ###-###' },
-  { code: 'DK', name: 'Дания', flag: '🇩🇰', dialCode: '+45', format: '#### ####' },
-  { code: 'EG', name: 'Египет', flag: '🇪🇬', dialCode: '+20', format: '## #### ####' },
-  { code: 'IL', name: 'Израиль', flag: '🇮🇱', dialCode: '+972', format: '#-###-####' },
-  { code: 'IN', name: 'Индия', flag: '🇮🇳', dialCode: '+91', format: '##### #####' },
-  { code: 'ID', name: 'Индонезия', flag: '🇮🇩', dialCode: '+62', format: '## ### ####' },
-  { code: 'IE', name: 'Ирландия', flag: '🇮🇪', dialCode: '+353', format: '## ### ####' },
-  { code: 'ES', name: 'Испания', flag: '🇪🇸', dialCode: '+34', format: '### ### ###' },
-  { code: 'IT', name: 'Италия', flag: '🇮🇹', dialCode: '+39', format: '### ### ####' },
-  { code: 'KZ', name: 'Казахстан', flag: '🇰🇿', dialCode: '+7', format: '(###) ###-##-##' },
-  { code: 'CA', name: 'Канада', flag: '🇨🇦', dialCode: '+1', format: '(###) ###-####' },
-  { code: 'KG', name: 'Кыргызстан', flag: '🇰🇬', dialCode: '+996', format: '(###) ###-###' },
-  { code: 'CN', name: 'Китай', flag: '🇨🇳', dialCode: '+86', format: '### #### ####' },
-  { code: 'CO', name: 'Колумбия', flag: '🇨🇴', dialCode: '+57', format: '### ### ####' },
-  { code: 'CR', name: 'Коста-Рика', flag: '🇨🇷', dialCode: '+506', format: '#### ####' },
-  { code: 'CU', name: 'Куба', flag: '🇨🇺', dialCode: '+53', format: '## ### ####' },
-  { code: 'KW', name: 'Кувейт', flag: '🇰🇼', dialCode: '+965', format: '#### ####' },
-  { code: 'LV', name: 'Латвия', flag: '🇱🇻', dialCode: '+371', format: '## ### ###' },
-  { code: 'LT', name: 'Литва', flag: '🇱🇹', dialCode: '+370', format: '## ### ###' },
-  { code: 'MY', name: 'Малайзия', flag: '🇲🇾', dialCode: '+60', format: '## ### ####' },
-  { code: 'MT', name: 'Мальта', flag: '🇲🇹', dialCode: '+356', format: '#### ####' },
-  { code: 'MA', name: 'Марокко', flag: '🇲🇦', dialCode: '+212', format: '## ### ####' },
-  { code: 'MX', name: 'Мексика', flag: '🇲🇽', dialCode: '+52', format: '### ### ####' },
-  { code: 'MD', name: 'Молдова', flag: '🇲🇩', dialCode: '+373', format: '(##) ###-###' },
-  { code: 'NL', name: 'Нидерланды', flag: '🇳🇱', dialCode: '+31', format: '# ########' },
-  { code: 'NZ', name: 'Новая Зеландия', flag: '🇳🇿', dialCode: '+64', format: '## ### ####' },
-  { code: 'NO', name: 'Норвегия', flag: '🇳🇴', dialCode: '+47', format: '### ## ###' },
-  { code: 'AE', name: 'ОАЭ', flag: '🇦🇪', dialCode: '+971', format: '# ### ####' },
-  { code: 'PK', name: 'Пакистан', flag: '🇵🇰', dialCode: '+92', format: '## ### ####' },
-  { code: 'PL', name: 'Польша', flag: '🇵🇱', dialCode: '+48', format: '### ### ###' },
-  { code: 'PT', name: 'Португалия', flag: '🇵🇹', dialCode: '+351', format: '### ### ###' },
-  { code: 'RO', name: 'Румыния', flag: '🇷🇴', dialCode: '+40', format: '## ### ####' },
-  { code: 'RU', name: 'Россия', flag: '🇷🇺', dialCode: '+7', format: '(###) ###-##-##' },
-  { code: 'SA', name: 'Саудовская Аравия', flag: '🇸🇦', dialCode: '+966', format: '# #### ####' },
-  { code: 'RS', name: 'Сербия', flag: '🇷🇸', dialCode: '+381', format: '## ### ####' },
-  { code: 'SG', name: 'Сингапур', flag: '🇸🇬', dialCode: '+65', format: '#### ####' },
-  { code: 'SK', name: 'Словакия', flag: '🇸🇰', dialCode: '+421', format: '### ### ###' },
-  { code: 'SI', name: 'Словения', flag: '🇸🇮', dialCode: '+386', format: '## ### ###' },
-  { code: 'US', name: 'США', flag: '🇺🇸', dialCode: '+1', format: '(###) ###-####' },
-  { code: 'TH', name: 'Таиланд', flag: '🇹🇭', dialCode: '+66', format: '## ### ####' },
-  { code: 'TJ', name: 'Таджикистан', flag: '🇹🇯', dialCode: '+992', format: '(##) ###-##-##' },
-  { code: 'TM', name: 'Туркменистан', flag: '🇹🇲', dialCode: '+993', format: '(##) ##-##-##' },
-  { code: 'TR', name: 'Турция', flag: '🇹🇷', dialCode: '+90', format: '(###) ###-##-##' },
-  { code: 'UA', name: 'Украина', flag: '🇺🇦', dialCode: '+380', format: '(##) ###-##-##' },
-  { code: 'UZ', name: 'Узбекистан', flag: '🇺🇿', dialCode: '+998', format: '(##) ###-##-##' },
-  { code: 'PH', name: 'Филиппины', flag: '🇵🇭', dialCode: '+63', format: '## ### ####' },
-  { code: 'FI', name: 'Финляндия', flag: '🇫🇮', dialCode: '+358', format: '## ### ####' },
-  { code: 'FR', name: 'Франция', flag: '🇫🇷', dialCode: '+33', format: '# ## ## ## ##' },
-  { code: 'HR', name: 'Хорватия', flag: '🇭🇷', dialCode: '+385', format: '## ### ###' },
-  { code: 'CZ', name: 'Чехия', flag: '🇨🇿', dialCode: '+420', format: '### ### ###' },
-  { code: 'CL', name: 'Чили', flag: '🇨🇱', dialCode: '+56', format: '## #### ####' },
-  { code: 'CH', name: 'Швейцария', flag: '🇨🇭', dialCode: '+41', format: '## ### ####' },
-  { code: 'SE', name: 'Швеция', flag: '🇸🇪', dialCode: '+46', format: '## ### ####' },
-  { code: 'LK', name: 'Шри-Ланка', flag: '🇱🇰', dialCode: '+94', format: '## ### ####' },
-  { code: 'EE', name: 'Эстония', flag: '🇪🇪', dialCode: '+372', format: '#### ####' },
-  { code: 'ZA', name: 'ЮАР', flag: '🇿🇦', dialCode: '+27', format: '## ### ####' },
-  { code: 'JP', name: 'Япония', flag: '🇯🇵', dialCode: '+81', format: '##-####-####' },
-  { code: 'KR', name: 'Южная Корея', flag: '🇰🇷', dialCode: '+82', format: '##-###-####' },
-].sort((a, b) => a.name.localeCompare(b.name, 'ru')); 
+export const COUNTRIES_FULL: Country[] = Array.from(byCode.values());
+
+export type CountryItem = { code: string; name: string };
+
+export const COUNTRIES_SIMPLE: CountryItem[] = COUNTRIES_FULL.map(country => ({
+  code: country.code,
+  name: country.name
+}));

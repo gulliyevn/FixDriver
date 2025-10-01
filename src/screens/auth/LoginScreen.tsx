@@ -73,7 +73,7 @@ const LoginScreen: React.FC = () => {
       const success = await login(formData.email, formData.password);
       
       if (success) {
-  
+        // Успешный вход - навигация происходит автоматически через AuthContext
       } else {
         Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
       }
@@ -89,48 +89,6 @@ const LoginScreen: React.FC = () => {
       ...prev,
       [field]: value,
     }));
-  };
-
-  const handleAutoFill = (type: 'client' | 'driver') => {
-    if (type === 'client') {
-      setFormData({
-        email: 'client@example.com',
-        password: 'password123',
-      });
-    } else {
-      setFormData({
-        email: 'driver@example.com',
-        password: 'password123',
-      });
-    }
-    setErrors({});
-  };
-
-  const handleAutoLogin = async (type: 'client' | 'driver') => {
-    
-    setLoading(true);
-    try {
-      const email = type === 'client' ? 'client@example.com' : 'driver@example.com';
-      const password = 'password123';
-      
-      
-      
-      const success = await login(email, password);
-      
-      
-      
-      if (success) {
-        
-      } else {
-        
-        Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
-      }
-    } catch (error) {
-      console.error('💥 Auto login error:', error);
-      Alert.alert(t('login.loginError'), t('login.loginErrorGeneric'));
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -204,16 +162,6 @@ const LoginScreen: React.FC = () => {
               disabled={loading}
               style={styles.loginButton}
             />
-
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
-              <TouchableOpacity onPress={() => handleAutoLogin('client')}>
-                <Text style={styles.registerLinkUnderlineDark}>Клиент</Text>
-                  </TouchableOpacity>
-              <Text style={{ marginHorizontal: 12 }}>|</Text>
-              <TouchableOpacity onPress={() => handleAutoLogin('driver')}>
-                <Text style={styles.registerLinkUnderlineDark}>Водитель</Text>
-                  </TouchableOpacity>
-                </View>
           </View>
 
           {/* Divider */}

@@ -6,4 +6,4 @@
 // - src/mocks/factories.ts - фабрики для создания моков
 
 export * from './data/users';
-export * from './factories'; 
+// factories.ts was removed - no longer needed 

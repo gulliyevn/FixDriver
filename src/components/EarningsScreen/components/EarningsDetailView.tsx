@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 import { getCurrentColors, SIZES } from '../../../constants/colors';
-import { 
-  getRideHistoryByPeriod, 
-  getHourlyActivityByPeriod, 
-  getDistanceMetricsByPeriod, 
-  getRoutePointsByPeriod 
-} from '../../../mocks/earningsDetailsMock';
+// Mock functions removed - using hardcoded data
+const getRideHistoryByPeriod = (period: string) => [];
+const getHourlyActivityByPeriod = (period: string) => [];
+const getDistanceMetricsByPeriod = (period: string) => [];
+const getRoutePointsByPeriod = (period: string) => [];
 
 interface EarningsDetailViewProps {
   selectedStat: 'totalRides' | 'workHours' | 'totalDistance' | 'routePoints' | null;
@@ -317,5 +317,12 @@ const styles = StyleSheet.create({
 });
 
 EarningsDetailView.displayName = 'EarningsDetailView';
+
+EarningsDetailView.propTypes = {
+  selectedStat: PropTypes.object,
+  isDark: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  period: PropTypes.oneOf(['today', 'week', 'month', 'year']).isRequired,
+};
 
 export default EarningsDetailView;

@@ -313,5 +313,10 @@
       "resume": "Resume trip",
       "resumeMessage": "Continue trip with {clientName}?"
     }
+  },
+  "paymentHistory": {
+    "title": "Payment History",
+    "noPayments": "No payments",
+    "emptyDescription": "Payment history is empty"
   }
 }

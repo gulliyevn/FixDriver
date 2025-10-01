@@ -11,7 +11,8 @@ export const useDriverStats = () => {
     setError(null);
     
     try {
-      const stats = await DriverStatsService.getPeriodStats(startDate, endDate);
+      const service = DriverStatsService.getInstance();
+      const stats = await service.getPeriodStats(startDate, endDate);
       return stats;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка получения статистики';
@@ -28,7 +29,8 @@ export const useDriverStats = () => {
     setError(null);
     
     try {
-      const stats = await DriverStatsService.getLastNDaysStats(days);
+      const service = DriverStatsService.getInstance();
+      const stats = await service.getLastNDaysStats(days);
       return stats;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка получения статистики';
@@ -45,7 +47,8 @@ export const useDriverStats = () => {
     setError(null);
     
     try {
-      const stats = await DriverStatsService.getCurrentMonthStats();
+      const service = DriverStatsService.getInstance();
+      const stats = await service.getCurrentMonthStats();
       return stats;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка получения статистики';

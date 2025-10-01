@@ -71,7 +71,7 @@ export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate
       let stats: PeriodStats | null = null;
       
       switch (selectedPeriod) {
-        case 'today':
+        case 'today': {
           const todayStats = await getTodayStats();
           if (todayStats) {
             stats = {
@@ -84,6 +84,7 @@ export const useEarningsData = (selectedPeriod: PeriodType = 'week', forceUpdate
             };
           }
           break;
+        }
         case 'week':
           stats = await getWeekStats();
           break;

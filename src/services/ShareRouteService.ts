@@ -98,7 +98,9 @@ export const ShareRouteService = {
           if (!chosen) return;
           try {
             await Linking.openURL(chosen.url);
-          } catch {}
+          } catch (error) {
+      console.error('Error sharing route:', error);
+    }
         }
       );
       return;

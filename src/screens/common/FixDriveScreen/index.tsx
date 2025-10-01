@@ -48,17 +48,19 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
 
     // Строгие проверки в зависимости от типа расписания
     switch (selectedScheduleType) {
-      case 'oneWay':
+      case 'oneWay': {
         // Нужно: время туда
         const oneWayReady = !!selectedTime;
         console.log('🎯 oneWay готов:', oneWayReady, '(нужно только selectedTime)');
         return oneWayReady;
+      }
 
-      case 'thereAndBack':
+      case 'thereAndBack': {
         // Нужно: время туда И время обратно (всегда)
         const thereAndBackReady = !!selectedTime && !!returnTime;
         console.log('🔄 thereAndBack готов:', thereAndBackReady, '(нужно selectedTime + returnTime)');
         return thereAndBackReady;
+      }
 
       case 'weekdays':
         // Нужно: selectedTime + (returnWeekdaysTime если включена обратная поездка)

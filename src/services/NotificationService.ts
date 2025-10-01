@@ -1,4 +1,4 @@
-import { mockNotifications } from '../mocks';
+import APIClient from './APIClient';
 
 export interface Notification {
   id: string;
@@ -17,16 +17,23 @@ export interface PushNotificationPayload {
   data?: Record<string, unknown>;
 }
 
+export interface NotificationSettings {
+  userId: string;
+  pushEnabled: boolean;
+  emailEnabled: boolean;
+  smsEnabled: boolean;
+  tripNotifications: boolean;
+  paymentNotifications: boolean;
+  driverNotifications: boolean;
+  systemNotifications: boolean;
+  orderNotifications: boolean;
+}
+
 class NotificationService {
   private static instance: NotificationService;
-  private notifications: Notification[] = [];
   private listeners: ((notifications: Notification[]) => void)[] = [];
 
-  private constructor() {
-    this.notifications = mockNotifications;
-    this.initializeMockNotifications();
-    this.startTimeBasedNotifications();
-  }
+  private constructor() {}
 
   static getInstance(): NotificationService {
     if (!NotificationService.instance) {
@@ -35,221 +42,143 @@ class NotificationService {
     return NotificationService.instance;
   }
 
-  // Инициализация с моковыми уведомлениями
-  private initializeMockNotifications() {
-    this.notifications = [...this.notifications, ...mockNotifications];
-  }
-
-  // Запуск уведомлений по времени
-  private startTimeBasedNotifications() {
-    // Симуляция уведомлений в реальном времени
-    setInterval(() => {
-      const randomNotifications = [
-        {
-          userId: 'user1',
-          title: 'Напоминание о поездке',
-          message: 'Не забудьте о запланированной поездке завтра',
-          type: 'trip' as const,
-          isRead: false,
-        },
-        {
-          userId: 'user1',
-          title: 'Новый водитель поблизости',
-          message: 'В вашем районе появился новый водитель',
-          type: 'driver' as const,
-          isRead: false,
-        },
-        {
-          userId: 'user1',
-          title: 'Системное обновление',
-          message: 'Доступны новые функции в приложении',
-          type: 'system' as const,
-          isRead: false,
-        },
-      ];
-
-      const randomNotification = randomNotifications[Math.floor(Math.random() * randomNotifications.length)];
-      
-      if (Math.random() > 0.7) { // 30% шанс появления уведомления
-        this.createNotificationAsync(randomNotification);
-      }
-    }, 30000); // Каждые 30 секунд
-  }
-
-  // Добавление нового уведомления
-  addNotification(notificationData: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) {
-    const notification: Notification = {
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-      isRead: false,
-      ...notificationData
-    };
-
-    this.notifications.unshift(notification); // Добавляем в начало
-    this.sortNotifications();
-    this.notifyListeners();
-  }
-
-  // Сортировка уведомлений (непрочитанные сверху, затем по времени)
-  private sortNotifications() {
-    this.notifications.sort((a, b) => {
-      if (a.isRead !== b.isRead) {
-        return a.isRead ? 1 : -1; // Непрочитанные сверху
-      }
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // Новые сверху
-    });
-  }
-
-  // Получение всех уведомлений
-  getNotifications(): Notification[] {
-    return this.notifications;
-  }
-
-  // Получение количества непрочитанных уведомлений
-  getUnreadCount(): number {
-    return this.notifications.filter(n => !n.isRead).length;
-  }
-
-  // Отметить уведомление как прочитанное
-  markAsRead(notificationId: string) {
-    const notification = this.notifications.find(n => n.id === notificationId);
-    if (notification) {
-      notification.isRead = true;
-      this.sortNotifications();
-      this.notifyListeners();
+  async getNotifications(userId: string, page: number = 1, limit: number = 20): Promise<Notification[]> {
+    try {
+      const response = await APIClient.get<Notification[]>(`/notifications/user/${userId}`, { page, limit });
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get notifications error:', error);
+      return [];
     }
   }
 
-  // Отметить все уведомления как прочитанные
-  markAllAsRead() {
-    this.notifications.forEach(n => n.isRead = true);
-    this.notifyListeners();
+  async getUnreadCount(userId: string): Promise<number> {
+    try {
+      const response = await APIClient.get<{ count: number }>(`/notifications/user/${userId}/unread-count`);
+      return response.success && response.data?.count || 0;
+    } catch (error) {
+      console.error('Get unread count error:', error);
+      return 0;
+    }
   }
 
-  // Удаление уведомления
-  removeNotification(notificationId: string) {
-    this.notifications = this.notifications.filter(n => n.id !== notificationId);
-    this.notifyListeners();
+  async markAsRead(notificationId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/${notificationId}/read`, {});
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Mark notification as read error:', error);
+      return false;
+    }
   }
 
-  // Подписка на изменения уведомлений
-  subscribe(listener: (notifications: Notification[]) => void) {
+  async markAllAsRead(userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/user/${userId}/mark-all-read`, {});
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Mark all notifications as read error:', error);
+      return false;
+    }
+  }
+
+  async deleteNotification(notificationId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.delete<{ success: boolean }>(`/notifications/${notificationId}`);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Delete notification error:', error);
+      return false;
+    }
+  }
+
+  async clearAll(userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.delete<{ success: boolean }>(`/notifications/user/${userId}/clear-all`);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Clear all notifications error:', error);
+      return false;
+    }
+  }
+
+  async getNotificationSettings(userId: string): Promise<NotificationSettings | null> {
+    try {
+      const response = await APIClient.get<NotificationSettings>(`/notifications/settings/${userId}`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Get notification settings error:', error);
+      return null;
+    }
+  }
+
+  async updateNotificationSettings(userId: string, settings: Partial<NotificationSettings>): Promise<boolean> {
+    try {
+      const response = await APIClient.put<{ success: boolean }>(`/notifications/settings/${userId}`, settings);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Update notification settings error:', error);
+      return false;
+    }
+  }
+
+  async sendPushNotification(userId: string, payload: PushNotificationPayload): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/push/${userId}`, payload);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Send push notification error:', error);
+      return false;
+    }
+  }
+
+  async registerPushToken(userId: string, token: string, platform: 'ios' | 'android'): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/register-token`, {
+        userId,
+        token,
+        platform
+      });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Register push token error:', error);
+      return false;
+    }
+  }
+
+  async unregisterPushToken(userId: string, token: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/unregister-token`, {
+        userId,
+        token
+      });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Unregister push token error:', error);
+      return false;
+    }
+  }
+
+  // Подписка на обновления уведомлений
+  subscribe(listener: (notifications: Notification[]) => void): () => void {
     this.listeners.push(listener);
     return () => {
-      this.listeners = this.listeners.filter(l => l !== listener);
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
     };
   }
 
-  // Уведомление всех подписчиков об изменениях
-  private notifyListeners() {
-    this.listeners.forEach(listener => listener(this.notifications));
+  // Уведомление подписчиков об изменениях
+  private notifyListeners(notifications: Notification[]): void {
+    this.listeners.forEach(listener => listener(notifications));
   }
 
-  // Форматирование времени для отображения
-  formatTime(dateString: string, language: string = 'ru'): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMinutes < 1) {
-      return 'Только что';
-    } else if (diffMinutes < 60) {
-      return `${diffMinutes} мин назад`;
-    } else if (diffHours < 24) {
-      return `${diffHours} ч назад`;
-    } else if (diffDays === 1) {
-      return 'Вчера';
-    } else {
-      // Map language to locale
-      const localeMap: Record<string, string> = {
-        'ru': 'ru-RU',
-        'en': 'en-US',
-        'az': 'az-AZ',
-        'de': 'de-DE',
-        'es': 'es-ES',
-        'fr': 'fr-FR',
-        'tr': 'tr-TR',
-        'ar': 'ar-SA'
-      };
-      
-      const locale = localeMap[language] || 'ru-RU';
-      
-      return date.toLocaleDateString(locale, {
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-  }
-
-  // Асинхронные методы для API
-  async getNotificationsAsync(userId: string): Promise<Notification[]> {
-    return this.notifications.filter(n => n.userId === userId);
-  }
-
-  async markAsReadAsync(notificationId: string): Promise<void> {
-    const notification = this.notifications.find(n => n.id === notificationId);
-    if (notification) {
-      notification.isRead = true;
-    }
-  }
-
-  async markAllAsReadAsync(userId: string): Promise<void> {
-    this.notifications
-      .filter(n => n.userId === userId && !n.isRead)
-      .forEach(n => n.isRead = true);
-  }
-
-  async deleteNotificationAsync(notificationId: string): Promise<void> {
-    this.notifications = this.notifications.filter(n => n.id !== notificationId);
-  }
-
-  async deleteMultipleNotificationsAsync(notificationIds: string[]): Promise<void> {
-    this.notifications = this.notifications.filter(n => !notificationIds.includes(n.id));
-  }
-
-  async createNotificationAsync(notification: Omit<Notification, 'id' | 'createdAt'>): Promise<Notification> {
-    const newNotification: Notification = {
-      ...notification,
-      id: `notification_${Date.now()}`,
-      createdAt: new Date().toISOString(),
-    };
-    this.notifications.push(newNotification);
-    this.notifyListeners();
-    return newNotification;
-  }
-
-  getUnreadCountByUser(userId: string): number {
-    return this.notifications.filter(n => n.userId === userId && !n.isRead).length;
-  }
-
-  // Получение уведомлений с сортировкой
-  getNotificationsSorted(userId: string): Notification[] {
-    return this.notifications
-      .filter(n => n.userId === userId)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }
-
-  // Фильтрация по типу
-  getNotificationsByType(userId: string, type: Notification['type']): Notification[] {
-    return this.notifications.filter(n => n.userId === userId && n.type === type);
-  }
-
-  // Поиск уведомлений
-  searchNotifications(userId: string, query: string): Notification[] {
-    const lowerQuery = query.toLowerCase();
-    return this.notifications.filter(n => 
-      n.userId === userId && 
-      (n.title.toLowerCase().includes(lowerQuery) || 
-       n.message.toLowerCase().includes(lowerQuery))
-    );
+  // Метод для обновления уведомлений (вызывается извне при получении новых уведомлений)
+  updateNotifications(notifications: Notification[]): void {
+    this.notifyListeners(notifications);
   }
 }
 
-// Синглтон для использования во всем приложении
-export const notificationService = NotificationService.getInstance();
 export default NotificationService;

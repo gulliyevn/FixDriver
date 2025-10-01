@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, UserRole } from '../types/user';
 import JWTService from '../services/JWTService';
-import { createAuthMockUser } from '../mocks/auth';
+import { AuthService } from '../services/AuthService';
+import DevRegistrationService from '../services/DevRegistrationService';
 
 interface AuthContextType {
   user: User | null;
@@ -46,23 +47,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsRefreshing(true);
       
-      const newToken = await JWTService.refreshAccessToken();
-      if (newToken) {
-        // Проверяем, что пользователь все еще существует
-        const userData = await AsyncStorage.getItem('user');
-        if (userData) {
-          const user = JSON.parse(userData);
-          setUser(user);
-          return true;
-        }
+      const result = await AuthService.refreshToken();
+      if (result.success && result.user && result.tokens) {
+        // Сохраняем новые токены и обновляем пользователя
+        await Promise.all([
+          JWTService.saveTokens(result.tokens),
+          AsyncStorage.setItem('user', JSON.stringify(result.user)),
+        ]);
+        
+        setUser(result.user);
+        return true;
       }
-      
-      // Если обновление не удалось - НЕ выходим автоматически
       
       return false;
     } catch (error) {
-      
-      // Не выходим автоматически при ошибках обновления
+      console.error('Refresh auth error:', error);
       return false;
     } finally {
       setIsRefreshing(false);
@@ -76,7 +75,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // Проверяем наличие валидного токена
+      // ⚠️ DEV ONLY: Проверяем DEV-режим логина
+      if (__DEV__) {
+        const isDevLogin = await AsyncStorage.getItem('dev_mode_login');
+        const savedUser = await AsyncStorage.getItem('user');
+        
+        if (isDevLogin === 'true' && savedUser) {
+          const user = JSON.parse(savedUser);
+          setUser(user);
+          console.log('[DEV] 🔄 Restored DEV session:', user.email);
+          setIsLoading(false);
+          return; // Выходим, не проверяем токены
+        }
+      }
+      
+      // PROD: Проверяем наличие валидного токена
       const hasToken = await JWTService.hasValidToken();
       
       if (hasToken) {
@@ -105,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       }
     } catch (error) {
-      
+      console.error('[AuthContext] Init error:', error);
       // Не выходим автоматически при ошибках инициализации
     } finally {
       setIsLoading(false);
@@ -123,9 +136,84 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // Используем AuthService для входа
-      const authService = await import('../services/AuthService');
-      const result = await authService.AuthService.login(email, password, authMethod);
+      // ⚠️ DEV ONLY: Проверяем локальных пользователей
+      if (__DEV__) {
+        console.log('[DEV] 🔍 Checking local users for:', email);
+        
+        const devUsers = await DevRegistrationService.getAllDevUsers();
+        console.log(`[DEV] 📦 Found ${devUsers.length} total users in storage`);
+        
+        if (devUsers.length > 0) {
+          console.log('[DEV] 👥 Users:', devUsers.map(u => `${u.email} (${u.role})`).join(', '));
+          
+          // Детальный вывод всех пользователей
+          devUsers.forEach((u, index) => {
+            console.log(`\n[DEV] User ${index + 1}:`);
+            console.log(`  Email: "${u.email}"`);
+            console.log(`  Email length: ${u.email.length}`);
+            console.log(`  Password: "${u.password}"`);
+            console.log(`  Password length: ${u.password.length}`);
+            console.log(`  Role: ${u.role}`);
+          });
+          
+          console.log(`\n[DEV] Looking for:`);
+          console.log(`  Email: "${email}"`);
+          console.log(`  Email length: ${email.length}`);
+          console.log(`  Password: "${password}"`);
+          console.log(`  Password length: ${password.length}`);
+        }
+        
+        // Показываем сохраненные пароли для отладки
+        const userWithEmail = devUsers.find(u => u.email === email);
+        if (userWithEmail) {
+          console.log(`\n[DEV] 📧 Found user with email: ${email}`);
+          console.log(`[DEV] 🔒 Saved password: "${userWithEmail.password}"`);
+          console.log(`[DEV] 🔑 Entered password: "${password}"`);
+          console.log(`[DEV] ⚖️ Match: ${userWithEmail.password === password}`);
+        } else {
+          console.log(`\n[DEV] ❌ No user found with email: "${email}"`);
+        }
+        
+        const devUser = devUsers.find(u => u.email === email && u.password === password);
+        
+        if (devUser) {
+          console.log('[DEV] ✅ Found local user:', devUser.id);
+          
+          // Создаем объект User из DevRegisteredUser
+          const user: User = {
+            id: devUser.id,
+            email: devUser.email,
+            name: devUser.firstName || devUser.name || '',
+            surname: devUser.lastName || devUser.surname || '',
+            role: devUser.role,
+            phone: devUser.phone,
+            avatar: null,
+            rating: 5,
+            address: '',
+            createdAt: devUser.registeredAt,
+            birthDate: devUser.birthDate,
+          };
+          
+          // Сохраняем пользователя
+          await AsyncStorage.setItem('user', JSON.stringify(user));
+          await AsyncStorage.setItem('dev_mode_login', 'true');
+          
+          // Сохраняем профиль для ProfileContext
+          await AsyncStorage.setItem(`@profile_${user.id}`, JSON.stringify(user));
+          
+          setUser(user);
+          
+          console.log('[DEV] 🎉 Local login successful!');
+          console.log('[DEV] 💾 Profile saved for:', user.id);
+          return true;
+        } else {
+          console.log('[DEV] ❌ User not found in local storage');
+          console.log(`[DEV] 🔑 Looking for: email="${email}", password="${password}"`);
+        }
+      }
+      
+      // PROD: Используем AuthService для входа
+      const result = await AuthService.login(email, password, authMethod);
       
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
@@ -164,8 +252,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
       
       // Используем AuthService для регистрации
-      const authService = await import('../services/AuthService');
-      const result = await authService.AuthService.register(userData, password);
+      const result = await AuthService.register(userData, password);
       
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
@@ -195,31 +282,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // В реальном приложении отправляем запрос на сервер для инвалидации токена
-      if (!__DEV__) {
-        try {
-          const authHeader = await JWTService.getAuthHeader();
-          if (authHeader) {
-            await fetch('/api/auth/logout', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                ...authHeader,
-              },
-            });
-          }
-        } catch (error) {
-          console.warn('Logout API error:', error);
-        }
+      // Отправляем запрос на сервер для инвалидации токена (только если не DEV)
+      const isDevLogin = await AsyncStorage.getItem('dev_mode_login');
+      if (isDevLogin !== 'true') {
+        await AuthService.logout();
       }
 
       // Очищаем все данные
       await Promise.all([
         JWTService.clearTokens(),
         AsyncStorage.removeItem('user'),
+        AsyncStorage.removeItem('dev_mode_login'), // Очищаем DEV флаг
       ]);
 
       setUser(null);
+      console.log('[AuthContext] ✅ Logged out');
     } catch (error) {
       console.warn('Logout error:', error);
     } finally {

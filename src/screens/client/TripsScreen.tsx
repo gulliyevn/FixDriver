@@ -7,7 +7,8 @@ import { useI18n } from '../../hooks/useI18n';
 import { ClientScreenProps } from '../../types/navigation';
 import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { TripsScreenStyles as styles, getTripsScreenStyles } from '../../styles/screens/profile/TripsScreen.styles';
-import { getMockTrips } from '../../mocks/tripsMock';
+import OrderService from '../../services/OrderService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import TripsFilter, { TripFilter } from '../../components/TripsFilter';
 import { colors } from '../../constants/colors';
 
@@ -61,7 +62,38 @@ const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
     dateRange: 'all'
   });
   
-  const allTrips = useMemo(() => getMockTrips(t), [t]);
+  const [allTrips, setAllTrips] = useState<any[]>([]);
+
+  const storageKey = user?.id ? `@trips_${user.id}` : '@trips_anonymous';
+
+  const loadTrips = async () => {
+    try {
+      if (__DEV__) {
+        const saved = await AsyncStorage.getItem(storageKey);
+        setAllTrips(saved ? JSON.parse(saved) : []);
+      } else {
+        if (!user?.id) { setAllTrips([]); return; }
+        const service = OrderService.getInstance();
+        const orders = await service.getOrders(user.id);
+        const mapped = orders.map(o => ({
+          id: o.id,
+          title: o.addresses?.[0]?.address || 'Trip',
+          date: new Date(o.createdAt).toLocaleDateString(),
+          time: new Date(o.createdAt).toLocaleTimeString(),
+          amount: o.totalAmount ? `${o.totalAmount} ₼` : '',
+          status: o.status,
+          type: o.status === 'completed' ? 'completed' : o.status === 'cancelled' ? 'cancelled' : 'scheduled',
+          description: o.notes || '',
+          driver: o.driverName || undefined,
+        }));
+        setAllTrips(mapped);
+      }
+    } catch (e) {
+      setAllTrips([]);
+    }
+  };
+
+  useEffect(() => { loadTrips(); }, [user?.id]);
   
   const filteredTrips = useMemo(() => {
     let filtered = allTrips;

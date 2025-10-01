@@ -204,6 +204,8 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
               setSelectedPackageInfo({ name: packageName, id: packageId });
               setSuccessModalVisible(true);
             } else {
+              // Покупка не удалась - показываем ошибку
+              Alert.alert(t('premium.purchaseError'), t('premium.insufficientBalance'));
             }
           }
         }

@@ -181,6 +181,38 @@
   },
   "input": {
     "address": "Adresse eingeben...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Wo starten wir",
+        "to": "Wohin fahren wir",
+        "stop": "Zwischenstopp"
+      },
+      "quick": {
+        "current": "Aktueller Standort",
+        "recent": "Letzte Fahrten",
+        "home": "Heimatadresse",
+        "work": "Arbeitsadresse"
+      },
+      "sections": {
+        "suggestions": "Vorschläge",
+        "history": "Verlauf"
+      },
+      "states": {
+        "noResults": "Adresse nicht gefunden",
+        "searching": "Adressen werden gesucht..."
+      },
+      "errors": {
+        "select": "Ausgewählte Adresse konnte nicht verarbeitet werden",
+        "details": "Adresskoordinaten konnten nicht geladen werden",
+        "tooShort": "Adresse ist zu kurz",
+        "noNumber": "Adresse muss eine Hausnummer enthalten",
+        "noStreet": "Adresse muss einen Straßennamen enthalten"
+      },
+      "alerts": {
+        "infoTitle": "Information",
+        "infoMessage": "Funktion wird später hinzugefügt"
+      }
+    },
     "comment": "Kommentar eingeben...",
     "email": "E-Mail eingeben...",
     "error": "Fehler",

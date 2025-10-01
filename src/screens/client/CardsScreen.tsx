@@ -8,7 +8,7 @@ import { ClientScreenProps } from '../../types/navigation';
 import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { CardsScreenStyles as styles, getCardsScreenStyles } from '../../styles/screens/profile/CardsScreen.styles';
 import { colors } from '../../constants/colors';
-import { mockCards, Card } from '../../mocks/cardsMock';
+import { Card } from '../../services/cardService';
 import VisaIcon from '../../components/VisaIcon';
 import MastercardIcon from '../../components/MastercardIcon';
 import { useI18n } from '../../hooks/useI18n';

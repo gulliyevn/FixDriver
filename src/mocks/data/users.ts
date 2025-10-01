@@ -1,6 +1,19 @@
 import { User, UserRole } from '../../types/user';
 import { Driver, DriverStats, DriverStatus } from '../../types/driver';
-import { MOCK_AVATARS, MOCK_LOCATIONS } from '../constants';
+// MOCK_AVATARS and MOCK_LOCATIONS removed - using hardcoded values
+const MOCK_AVATARS = {
+  CLIENT_1: 'avatar1.jpg',
+  DRIVER_1: 'avatar2.jpg',
+  DRIVER_2: 'avatar3.jpg',
+  DRIVER_3: 'avatar4.jpg'
+};
+
+const MOCK_LOCATIONS = {
+  BAKU_CENTER: 'Baku, Azerbaijan',
+  BAKU_NORTH: 'Sumgait, Azerbaijan',
+  BAKU_EAST: 'Mingachevir, Azerbaijan',
+  BAKU_SOUTH: 'Ganja, Azerbaijan'
+};
 
 // ===== ДАННЫЕ ПОЛЬЗОВАТЕЛЕЙ =====
 

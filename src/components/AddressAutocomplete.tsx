@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -6,17 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { getCurrentColors } from '../constants/colors';
-import { placesService, PlacePrediction, PlaceDetails, AddressHistory } from '../services/placesService';
+import { placesService, PlacePrediction, AddressHistory } from '../services/placesService';
 import { MapLocation } from './MapView/types/map.types';
+import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import AddressService from '../services/addressService';
+import { useAddressGeocoding } from '../shared/hooks/useAddressGeocoding';
 
 interface AddressAutocompleteProps {
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
   onAddressSelect: (address: string, coordinates: MapLocation) => void;
@@ -35,68 +37,67 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const colors = getCurrentColors(isDark);
-  
+  const historyKey = useUserStorageKey(STORAGE_KEYS.ADDRESS_AUTOCOMPLETE_HISTORY);
+  const addressService = useMemo(() => new AddressService(), []);
+  const { verifyAddress } = useAddressGeocoding(addressService);
+
   const [predictions, setPredictions] = useState<PlacePrediction[]>([]);
   const [history, setHistory] = useState<AddressHistory[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
-  
-  const debounceRef = useRef<NodeJS.Timeout>();
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<TextInput>(null);
 
-  // Загрузка истории при монтировании
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  // Загрузка истории адресов
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
     try {
-      const historyData = await placesService.getHistory();
+      const historyData = await placesService.getHistory(historyKey);
       setHistory(historyData);
     } catch (error) {
       console.error('Error loading history:', error);
     }
-  };
+  }, [historyKey]);
 
-  // Debounced поиск предсказаний
-  const searchPredictions = useCallback(async (input: string) => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
 
-    debounceRef.current = setTimeout(async () => {
-      if (input.trim().length < 2) {
-        setPredictions([]);
-        setIsLoading(false);
-        return;
+  const searchPredictions = useCallback(
+    async (input: string) => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
       }
 
-      setIsLoading(true);
-      try {
-        // Поиск по всему миру
-        const predictionsData = await placesService.getPlacePredictions(input);
-        setPredictions(predictionsData);
-      } catch (error) {
-        console.error('Error searching predictions:', error);
-        setPredictions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
-  }, []);
+      debounceRef.current = setTimeout(async () => {
+        if (input.trim().length < 2) {
+          setPredictions([]);
+          setIsLoading(false);
+          return;
+        }
 
-  // Обработка изменения текста
+        setIsLoading(true);
+        try {
+          const predictionsData = await placesService.getPlacePredictions(input);
+          setPredictions(predictionsData);
+        } catch (error) {
+          console.error('Error searching predictions:', error);
+          setPredictions([]);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 300);
+    },
+    []
+  );
+
   const handleTextChange = (text: string) => {
     onChangeText(text);
-    
-    // Валидация
+
     const validation = placesService.validateAddress(text);
     setValidationError(validation.error || null);
     onValidationChange(validation.isValid);
-    
-    // Поиск предсказаний
+
     if (text.trim().length >= 2) {
       setShowDropdown(true);
       searchPredictions(text);
@@ -106,14 +107,11 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     }
   };
 
-  // Обработка выбора адреса из предсказаний
   const handlePredictionSelect = async (prediction: PlacePrediction) => {
     try {
       setIsLoading(true);
-      
       const details = await placesService.getPlaceDetails(prediction.place_id);
       if (!details) {
-        Alert.alert('Ошибка', 'Не удалось получить координаты адреса');
         return;
       }
 
@@ -122,33 +120,24 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
         longitude: details.geometry.location.lng,
       };
 
-      // Сохраняем в историю
-      await placesService.saveToHistory(
-        details.formatted_address,
-        details.place_id,
-        coordinates
-      );
+      if (__DEV__) {
+        await placesService.saveToHistory(historyKey, details.formatted_address, details.place_id, coordinates);
+        await loadHistory();
+      }
 
-      // Обновляем историю
-      await loadHistory();
-
-      // Вызываем callback
       onAddressSelect(details.formatted_address, coordinates);
       onChangeText(details.formatted_address);
       setShowDropdown(false);
       setPredictions([]);
       setValidationError(null);
       onValidationChange(true);
-      
     } catch (error) {
       console.error('Error selecting prediction:', error);
-      Alert.alert('Ошибка', 'Не удалось обработать выбранный адрес');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Обработка выбора адреса из истории
   const handleHistorySelect = (historyItem: AddressHistory) => {
     const coordinates: MapLocation = {
       latitude: historyItem.coordinates.latitude,
@@ -162,22 +151,23 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     onValidationChange(true);
   };
 
-  // Быстрые опции
   const handleQuickOption = (option: string) => {
     setShowDropdown(false);
-    // Здесь можно добавить логику для быстрых опций
-    Alert.alert('Информация', `Функция "${option}" будет добавлена позже`);
+    console.log('Quick option selected:', option);
   };
 
-  // Определение цвета бордера
   const getBorderColor = () => {
     if (validationError) return colors.error;
     if (value.trim() && !validationError) {
       switch (type) {
-        case 'from': return colors.success;
-        case 'to': return colors.primary;
-        case 'stop': return colors.textSecondary;
-        default: return colors.border;
+        case 'from':
+          return colors.success;
+        case 'to':
+          return colors.primary;
+        case 'stop':
+          return colors.textSecondary;
+        default:
+          return colors.border;
       }
     }
     return colors.border;
@@ -195,7 +185,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           borderBottomWidth: 1,
           borderBottomColor: getBorderColor(),
         }}
-        placeholder={placeholder}
+        placeholder={placeholder || t(`components:common.autocomplete.placeholder.${type}`)}
         value={value}
         onChangeText={handleTextChange}
         placeholderTextColor={colors.textSecondary}
@@ -205,45 +195,44 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           }
         }}
         onBlur={() => {
-          // Не скрываем сразу, чтобы пользователь мог кликнуть на опцию
           setTimeout(() => setShowDropdown(false), 200);
         }}
       />
 
-      {/* Ошибка валидации */}
       {validationError && (
-        <Text style={{
-          fontSize: 10,
-          color: colors.error,
-          marginTop: 2,
-        }}>
+        <Text
+          style={{
+            fontSize: 10,
+            color: colors.error,
+            marginTop: 2,
+          }}
+        >
           {validationError}
         </Text>
       )}
 
-      {/* Dropdown */}
       {showDropdown && (
-        <View style={{
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          right: 0,
-          backgroundColor: colors.surface,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: colors.border,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.2,
-          shadowRadius: 5,
-          elevation: 10,
-          zIndex: 1000,
-          maxHeight: 300,
-          marginTop: 4,
-        }}>
+        <View
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            backgroundColor: colors.surface,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: colors.border,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 5,
+            elevation: 10,
+            zIndex: 1000,
+            maxHeight: 300,
+            marginTop: 4,
+          }}
+        >
           <ScrollView style={{ maxHeight: 300 }} showsVerticalScrollIndicator={false}>
-            
-            {/* Быстрые опции */}
             <TouchableOpacity
               style={{
                 flexDirection: 'row',
@@ -254,12 +243,12 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 borderBottomWidth: 1,
                 borderBottomColor: colors.border,
               }}
-              onPress={() => handleQuickOption('Текущая локация')}
+              onPress={() => handleQuickOption('current')}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="navigate" size={16} color={colors.primary} style={{ marginRight: 8 }} />
                 <Text style={{ fontSize: 16, color: colors.text }}>
-                  Текущая локация
+                  {t('components:common.autocomplete.quick.current')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -274,12 +263,12 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 borderBottomWidth: 1,
                 borderBottomColor: colors.border,
               }}
-              onPress={() => handleQuickOption('Недавние поездки')}
+              onPress={() => handleQuickOption('recent')}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="time" size={16} color={colors.primary} style={{ marginRight: 8 }} />
                 <Text style={{ fontSize: 16, color: colors.text }}>
-                  Недавние поездки
+                  {t('components:common.autocomplete.quick.recent')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -294,12 +283,12 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 borderBottomWidth: 1,
                 borderBottomColor: colors.border,
               }}
-              onPress={() => handleQuickOption('Домашний адрес')}
+              onPress={() => handleQuickOption('home')}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="home" size={16} color={colors.primary} style={{ marginRight: 8 }} />
                 <Text style={{ fontSize: 16, color: colors.text }}>
-                  Домашний адрес
+                  {t('components:common.autocomplete.quick.home')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -314,39 +303,32 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 borderBottomWidth: 1,
                 borderBottomColor: colors.border,
               }}
-              onPress={() => handleQuickOption('Рабочий адрес')}
+              onPress={() => handleQuickOption('work')}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="business" size={16} color={colors.primary} style={{ marginRight: 8 }} />
                 <Text style={{ fontSize: 16, color: colors.text }}>
-                  Рабочий адрес
+                  {t('components:common.autocomplete.quick.work')}
                 </Text>
               </View>
             </TouchableOpacity>
 
-            {/* Разделитель */}
-            <View style={{
-              height: 1,
-              backgroundColor: colors.border,
-              marginVertical: 8,
-            }} />
+            <View style={{ height: 1, backgroundColor: colors.border, marginVertical: 8 }} />
 
-            {/* Предложения Google */}
             {predictions.length > 0 && (
               <>
-                <View style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                }}>
-                  <Text style={{
-                    fontSize: 12,
-                    color: colors.textSecondary,
-                    fontWeight: '500',
-                  }}>
-                    Предложения Google:
+                <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.textSecondary,
+                      fontWeight: '500',
+                    }}
+                  >
+                    {t('components:common.autocomplete.sections.suggestions')}
                   </Text>
                 </View>
-                
+
                 {predictions.map((prediction, index) => (
                   <TouchableOpacity
                     key={prediction.place_id}
@@ -362,43 +344,33 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                     onPress={() => handlePredictionSelect(prediction)}
                   >
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, color: colors.text }}>
-                        {prediction.structured_formatting.main_text}
-                      </Text>
+                      <Text style={{ fontSize: 16, color: colors.text }}>{prediction.structured_formatting.main_text}</Text>
                       <Text style={{ fontSize: 14, color: colors.textSecondary }}>
                         {prediction.structured_formatting.secondary_text}
                       </Text>
                     </View>
-                    {isLoading && (
-                      <ActivityIndicator size="small" color={colors.primary} />
-                    )}
+                    {isLoading && <ActivityIndicator size="small" color={colors.primary} />}
                   </TouchableOpacity>
                 ))}
               </>
             )}
 
-            {/* История */}
             {history.length > 0 && (
               <>
-                <View style={{
-                  height: 1,
-                  backgroundColor: colors.border,
-                  marginVertical: 8,
-                }} />
-                
-                <View style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                }}>
-                  <Text style={{
-                    fontSize: 12,
-                    color: colors.textSecondary,
-                    fontWeight: '500',
-                  }}>
-                    История:
+                <View style={{ height: 1, backgroundColor: colors.border, marginVertical: 8 }} />
+
+                <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.textSecondary,
+                      fontWeight: '500',
+                    }}
+                  >
+                    {t('components:common.autocomplete.sections.history')}
                   </Text>
                 </View>
-                
+
                 {history.map((historyItem, index) => (
                   <TouchableOpacity
                     key={historyItem.id}
@@ -414,9 +386,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                     onPress={() => handleHistorySelect(historyItem)}
                   >
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, color: colors.text }}>
-                        {historyItem.address}
-                      </Text>
+                      <Text style={{ fontSize: 16, color: colors.text }}>{historyItem.address}</Text>
                     </View>
                     <Ionicons name="time" size={16} color={colors.textSecondary} />
                   </TouchableOpacity>
@@ -424,36 +394,35 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
               </>
             )}
 
-            {/* Сообщение если нет результатов */}
             {predictions.length === 0 && history.length === 0 && !isLoading && value.trim().length >= 2 && (
               <View style={{
                 paddingVertical: 16,
                 paddingHorizontal: 16,
                 alignItems: 'center',
               }}>
-                <Text style={{
-                  fontSize: 14,
-                  color: colors.textSecondary,
-                }}>
-                  Адрес не найден
+                <Text style={{ fontSize: 14, color: colors.textSecondary }}>
+                  {t('components:common.autocomplete.states.noResults')}
                 </Text>
               </View>
             )}
 
-            {/* Индикатор загрузки */}
             {isLoading && predictions.length === 0 && (
-              <View style={{
-                paddingVertical: 16,
-                paddingHorizontal: 16,
-                alignItems: 'center',
-              }}>
+              <View
+                style={{
+                  paddingVertical: 16,
+                  paddingHorizontal: 16,
+                  alignItems: 'center',
+                }}
+              >
                 <ActivityIndicator size="small" color={colors.primary} />
-                <Text style={{
-                  fontSize: 14,
-                  color: colors.textSecondary,
-                  marginTop: 8,
-                }}>
-                  Поиск адресов...
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: colors.textSecondary,
+                    marginTop: 8,
+                  }}
+                >
+                  {t('components:common.autocomplete.states.searching')}
                 </Text>
               </View>
             )}

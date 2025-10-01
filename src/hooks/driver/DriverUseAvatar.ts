@@ -16,7 +16,8 @@ export const useDriverAvatar = () => {
   const loadAvatar = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await DriverAvatarService.loadAvatar();
+      const avatar = await DriverAvatarService.getAvatar(userId);
+      const uri = avatar?.url || null;
       setAvatarUri(uri);
     } catch (error) {
       console.error('Error loading driver avatar:', error);
@@ -31,8 +32,8 @@ export const useDriverAvatar = () => {
       const uri = await DriverAvatarService.takePhoto();
       
       if (uri) {
-        const success = await DriverAvatarService.saveAvatar(uri);
-        if (success) {
+        const result = await DriverAvatarService.uploadAvatar(userId, uri);
+        if (result.success) {
           setAvatarUri(uri);
           Alert.alert(
             t('profile.photoSuccess'),
@@ -59,10 +60,11 @@ export const useDriverAvatar = () => {
   const pickFromGallery = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await DriverAvatarService.pickFromGallery();
+      const uri = await DriverAvatarService.pickImageFromGallery();
       
       if (uri) {
-        const success = await DriverAvatarService.saveAvatar(uri);
+        const result = await DriverAvatarService.uploadAvatar(userId, uri);
+        const success = result.success;
         if (success) {
           setAvatarUri(uri);
           Alert.alert(

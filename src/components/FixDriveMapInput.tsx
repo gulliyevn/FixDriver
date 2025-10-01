@@ -479,7 +479,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                   </Text>
                 ) : (
                   <AddressAutocomplete
-                    placeholder={address.placeholder}
                     value={address.address}
                     onChangeText={(text) => handleAddressChange(address.id, text)}
                     onAddressSelect={(addressText, coordinates) => 
@@ -489,6 +488,10 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                       handleValidationChange(address.id, isValid)
                     }
                     type={address.type}
+                    placeholder={
+                      (address.placeholder && t(address.placeholder)) ||
+                      t(`components:common.autocomplete.placeholder.${address.type}`)
+                    }
                   />
                 )}
               </View>

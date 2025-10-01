@@ -261,14 +261,10 @@ export class JWTService {
    * Сохраняет токены в AsyncStorage
    */
   static async saveTokens(tokens: TokenResponse): Promise<void> {
-    try {
-      await AsyncStorage.multiSet([
-        [this.ACCESS_TOKEN_KEY, tokens.accessToken],
-        [this.REFRESH_TOKEN_KEY, tokens.refreshToken],
-      ]);
-    } catch (error) {
-      throw error;
-    }
+    await AsyncStorage.multiSet([
+      [this.ACCESS_TOKEN_KEY, tokens.accessToken],
+      [this.REFRESH_TOKEN_KEY, tokens.refreshToken],
+    ]);
   }
 
   /**

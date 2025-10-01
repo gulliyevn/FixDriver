@@ -4,9 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { ClientScreenProps } from '../../types/navigation';
 import { DriverStackParamList } from '../../types/driver/DriverNavigation';
 import { BalanceScreenStyles as styles, getBalanceScreenStyles, getBalanceScreenColors } from '../../styles/screens/profile/BalanceScreen.styles';
-import { 
-  mockQuickAmounts 
-} from '../../mocks/balanceMock';
+// mockQuickAmounts removed - using hardcoded values
+const mockQuickAmounts = [10, 25, 50, 100, 200, 500];
 
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';

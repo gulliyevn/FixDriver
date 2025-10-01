@@ -181,6 +181,38 @@
   },
   "input": {
     "address": "Ünvan daxil edin...",
+    "autocomplete": {
+      "placeholder": {
+        "from": "Haradan yola çıxırıq",
+        "to": "Haraya gedirik",
+        "stop": "Aralıq dayanacaq"
+      },
+      "quick": {
+        "current": "Cari mövqe",
+        "recent": "Son səfərlər",
+        "home": "Ev ünvanı",
+        "work": "İş ünvanı"
+      },
+      "sections": {
+        "suggestions": "Tövsiyələr",
+        "history": "Tarixçə"
+      },
+      "states": {
+        "noResults": "Ünvan tapılmadı",
+        "searching": "Ünvanlar axtarılır..."
+      },
+      "errors": {
+        "select": "Seçilmiş ünvan emal edilə bilmədi",
+        "details": "Ünvan koordinatları gətirilə bilmədi",
+        "tooShort": "Ünvan çox qısadır",
+        "noNumber": "Ünvan ev nömrəsini ehtiva etməlidir",
+        "noStreet": "Ünvan küçə adını ehtiva etməlidir"
+      },
+      "alerts": {
+        "infoTitle": "Məlumat",
+        "infoMessage": "Funksiya daha sonra əlavə olunacaq"
+      }
+    },
     "comment": "Şərh daxil edin...",
     "email": "E-poçt daxil edin...",
     "error": "Xəta",

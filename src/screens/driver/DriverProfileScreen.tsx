@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useI18n } from '../../hooks/useI18n';
 import { useTheme } from '../../context/ThemeContext';
 import { DriverProfileScreenStyles as styles, getDriverProfileStyles } from '../../styles/screens/driver/DriverProfileScreen.styles';
-import { mockUsers } from '../../mocks/users';
 import { DriverScreenProps } from '../../types/driver/DriverNavigation';
 import { colors } from '../../constants/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';

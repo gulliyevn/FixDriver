@@ -16,7 +16,8 @@ export const useAvatar = () => {
   const loadAvatar = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await AvatarService.loadAvatar();
+      const avatar = await AvatarService.getAvatar(userId);
+      const uri = avatar?.url || null;
       setAvatarUri(uri);
     } catch (error) {
       console.error('Error loading avatar:', error);
@@ -31,7 +32,8 @@ export const useAvatar = () => {
       const uri = await AvatarService.takePhoto();
       
       if (uri) {
-        const success = await AvatarService.saveAvatar(uri);
+        const result = await AvatarService.uploadAvatar(userId, uri);
+        const success = result.success;
         if (success) {
           setAvatarUri(uri);
           Alert.alert(
@@ -59,10 +61,11 @@ export const useAvatar = () => {
   const pickFromGallery = useCallback(async () => {
     try {
       setLoading(true);
-      const uri = await AvatarService.pickFromGallery();
+      const uri = await AvatarService.pickImageFromGallery();
       
       if (uri) {
-        const success = await AvatarService.saveAvatar(uri);
+        const result = await AvatarService.uploadAvatar(userId, uri);
+        const success = result.success;
         if (success) {
           setAvatarUri(uri);
           Alert.alert(

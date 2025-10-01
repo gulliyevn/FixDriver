@@ -243,20 +243,6 @@
       "subscriptionRenewal": "Subscription renewal \"{{packageName}}\""
     },
     "package": "Package: {{packageType}}",
-    "mock": {
-      "tripToCityCenter": "Trip to city center",
-      "routeLeninGagarin": "Route: Lenin St. - Gagarin St.",
-      "balanceTopUp": "Top-up",
-      "tripToAirport": "Trip to airport",
-      "routeCenterAirport": "Route: center - Heydar Aliyev airport",
-      "refund": "Refund",
-      "refundForCancelledTrip": "Refund for cancelled trip",
-      "balanceTopUpTitle": "Balance top-up",
-      "tripToCityCenterTitle": "Trip to city center",
-      "tripToAirportTitle": "Trip to airport",
-      "refundTitle": "Refund",
-      "refundDescription": "Refund for cancelled trip"
-    },
     "filter": {
       "title": "Filter",
       "paymentType": "Payment type",
@@ -264,9 +250,11 @@
       "period": "Period",
       "allTypes": "All types",
       "trips": "Trips",
-      "topUps": "Top-ups",
+      "topups": "Top-ups",
       "refunds": "Refunds",
       "fees": "Fees",
+      "packages": "Packages",
+      "subscriptions": "Subscriptions",
       "allStatuses": "All statuses",
       "allTime": "All time",
       "today": "Today",

@@ -102,7 +102,7 @@ export const useEarningsLevel = () => {
       setDriverLevel(progress);
       // Прогресс сохранен
     } catch (error) {
-      
+      console.error('Error saving level progress:', error);
     }
   };
 
@@ -148,7 +148,7 @@ export const useEarningsLevel = () => {
       await saveLevelProgress(initialLevel);
       
     } catch (error) {
-      
+      console.error('Error resetting level progress:', error);
     }
   };
 

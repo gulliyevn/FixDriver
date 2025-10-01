@@ -111,7 +111,9 @@ const ChatListScreen: React.FC = () => {
 
   const closeOpenSwipe = useCallback(() => {
     if (openSwipeRef.current) {
-      try { openSwipeRef.current.close(); } catch {}
+      try { openSwipeRef.current.close(); } catch (error) {
+        console.error('Error closing swipe:', error);
+      }
       openSwipeRef.current = null;
     }
   }, []);
@@ -195,7 +197,9 @@ const ChatListScreen: React.FC = () => {
         overshootRight={false}
         onSwipeableWillOpen={() => {
           if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[item.id]) {
-            try { openSwipeRef.current.close(); } catch {}
+            try { openSwipeRef.current.close(); } catch (error) {
+        console.error('Error closing swipe:', error);
+      }
           }
           openSwipeRef.current = swipeRefs.current[item.id] ?? null;
         }}

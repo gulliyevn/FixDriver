@@ -1,35 +1,64 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card } from '../mocks/cardsMock';
-import { getUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import APIClient from './APIClient';
+
+export interface Card {
+  id: string;
+  type: 'card';
+  last4: string;
+  brand: 'Visa' | 'Mastercard' | 'American Express';
+  isDefault: boolean;
+  expiryMonth: number;
+  expiryYear: number;
+  holderName: string;
+}
 
 export const CardService = {
-  async getCards(userId?: string): Promise<Card[]> {
-    const storageKey = getUserStorageKey(STORAGE_KEYS.USER_CARDS, userId);
-    const stored = await AsyncStorage.getItem(storageKey);
-    if (stored) return JSON.parse(stored);
-    return [];
+  async getCards(userId: string): Promise<Card[]> {
+    try {
+      const response = await APIClient.get<Card[]>(`/cards/user/${userId}`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get cards error:', error);
+      return [];
+    }
   },
-  async saveCards(cards: Card[], userId?: string): Promise<void> {
-    const storageKey = getUserStorageKey(STORAGE_KEYS.USER_CARDS, userId);
-    await AsyncStorage.setItem(storageKey, JSON.stringify(cards));
+
+  async addCard(cardData: Omit<Card, 'id'>, userId: string): Promise<Card | null> {
+    try {
+      const response = await APIClient.post<Card>('/cards', { ...cardData, userId });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Add card error:', error);
+      return null;
+    }
   },
-  async addCard(card: Card, userId?: string): Promise<void> {
-    const cards = await this.getCards(userId);
-    cards.push(card);
-    await this.saveCards(cards, userId);
+
+  async updateCard(cardId: string, updates: Partial<Card>): Promise<Card | null> {
+    try {
+      const response = await APIClient.put<Card>(`/cards/${cardId}`, updates);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Update card error:', error);
+      return null;
+    }
   },
-  async deleteCard(cardId: string, userId?: string): Promise<void> {
-    const cards = await this.getCards(userId);
-    const filtered = cards.filter(c => c.id !== cardId);
-    await this.saveCards(filtered, userId);
+
+  async deleteCard(cardId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.delete<{ success: boolean }>(`/cards/${cardId}`);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Delete card error:', error);
+      return false;
+    }
   },
-  async setDefault(cardId: string, userId?: string): Promise<void> {
-    const cards = await this.getCards(userId);
-    const updated = cards.map(c => ({ ...c, isDefault: c.id === cardId }));
-    await this.saveCards(updated, userId);
-  },
-  async initMockIfEmpty(mock: Card[], userId?: string): Promise<void> {
-    const cards = await this.getCards(userId);
-    if (!cards.length) await this.saveCards(mock, userId);
+
+  async setDefault(cardId: string, userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/cards/${cardId}/default`, { userId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Set default card error:', error);
+      return false;
+    }
   }
 }; 

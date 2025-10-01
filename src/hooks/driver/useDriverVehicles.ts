@@ -8,7 +8,9 @@ import {
   UpdateVehicleRequest,
 } from '../../types/driver/DriverVehicle';
 import { useI18n } from '../useI18n';
-import { mockDriverVehicles } from '../../mocks/driverVehiclesMock';
+import { useAuth } from '../../context/AuthContext';
+import { useUserStorageKey } from '../../utils/storageKeys';
+import { DriverVehicleService } from '../../services/driver/DriverVehicleService';
 
 export const useDriverVehicles = () => {
   const [vehicles, setVehicles] = useState<DriverVehicle[]>([]);
@@ -16,6 +18,8 @@ export const useDriverVehicles = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentVehicle, setCurrentVehicle] = useState<DriverVehicle | null>(null);
   const { t } = useI18n();
+  const { user } = useAuth();
+  const vehiclesKey = useUserStorageKey('@driver_vehicles');
 
   // Загрузка списка автомобилей
   const loadVehicles = useCallback(async () => {
@@ -23,24 +27,28 @@ export const useDriverVehicles = () => {
     setError(null);
     
     try {
-      // Пытаемся загрузить из AsyncStorage
-      const storedVehicles = await AsyncStorage.getItem('driver_vehicles');
-      
-      if (storedVehicles) {
-        // Если есть сохраненные данные, используем их
-        setVehicles(JSON.parse(storedVehicles));
+      if (__DEV__) {
+        // DEV: загружаем из AsyncStorage
+        const storedVehicles = await AsyncStorage.getItem(vehiclesKey);
+        setVehicles(storedVehicles ? JSON.parse(storedVehicles) : []);
       } else {
-        // Если нет сохраненных данных, используем мок-данные
-        setVehicles(mockDriverVehicles);
-        // Сохраняем мок-данные в AsyncStorage
-        await AsyncStorage.setItem('driver_vehicles', JSON.stringify(mockDriverVehicles));
+        // PROD: загружаем из API
+        if (user?.id) {
+          const service = DriverVehicleService.getInstance();
+          const response = await service.getDriverVehicles();
+          const apiVehicles = response.data?.vehicles || [];
+          setVehicles(apiVehicles);
+        } else {
+          setVehicles([]);
+        }
       }
     } catch (err) {
       setError(t('profile.vehicles.loadError'));
+      setVehicles([]);
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, user?.id, vehiclesKey]);
 
   // Загрузка конкретного автомобиля
   const loadVehicle = useCallback(async (vehicleId: string) => {
@@ -48,15 +56,28 @@ export const useDriverVehicles = () => {
     setError(null);
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const vehicle = mockDriverVehicles.find(v => v.id === vehicleId);
-      if (vehicle) {
-        setCurrentVehicle(vehicle);
-        return vehicle;
+      if (__DEV__) {
+        // DEV: ищем в локальном массиве
+        const vehicle = vehicles.find(v => v.id === vehicleId);
+        if (vehicle) {
+          setCurrentVehicle(vehicle);
+          return vehicle;
+        } else {
+          setError(t('profile.vehicles.loadError'));
+          return null;
+        }
       } else {
-        setError(t('profile.vehicles.loadError'));
-        return null;
+        // PROD: загружаем из API
+        const service = DriverVehicleService.getInstance();
+        const response = await service.getDriverVehicle(vehicleId);
+        const vehicle = response.data?.vehicle;
+        if (vehicle) {
+          setCurrentVehicle(vehicle);
+          return vehicle;
+        } else {
+          setError(t('profile.vehicles.loadError'));
+          return null;
+        }
       }
     } catch (err) {
       setError(t('profile.vehicles.loadError'));
@@ -64,7 +85,7 @@ export const useDriverVehicles = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, vehicles]);
 
   // Создание нового автомобиля
   const createVehicle = useCallback(async (vehicleData: CreateVehicleRequest) => {
@@ -72,30 +93,44 @@ export const useDriverVehicles = () => {
     setError(null);
     
     try {
-      const newVehicle: DriverVehicle = {
-        id: Date.now().toString(),
-        driverId: 'driver-1',
-        ...vehicleData,
-        isActive: true,
-        isVerified: false, // Новые автомобили по умолчанию не верифицированы
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      
-      const updatedVehicles = [...vehicles, newVehicle];
-      setVehicles(updatedVehicles);
-      
-      // Сохраняем в AsyncStorage
-      await AsyncStorage.setItem('driver_vehicles', JSON.stringify(updatedVehicles));
-      
-      return newVehicle;
+      if (__DEV__) {
+        // DEV: создаём локально и сохраняем в AsyncStorage
+        const newVehicle: DriverVehicle = {
+          id: Date.now().toString(),
+          driverId: user?.id || 'driver-1',
+          ...vehicleData,
+          isActive: true,
+          isVerified: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        
+        const updatedVehicles = [...vehicles, newVehicle];
+        setVehicles(updatedVehicles);
+        await AsyncStorage.setItem(vehiclesKey, JSON.stringify(updatedVehicles));
+        return newVehicle;
+      } else {
+        // PROD: создаём через API
+        if (!user?.id) {
+          setError(t('profile.vehicles.createError'));
+          return null;
+        }
+        const service = DriverVehicleService.getInstance();
+        const response = await service.createVehicle(vehicleData);
+        const newVehicle = response.data?.vehicle;
+        if (newVehicle) {
+          setVehicles(prev => [...prev, newVehicle]);
+          return newVehicle;
+        }
+        return null;
+      }
     } catch (err) {
       setError(t('profile.vehicles.createError'));
       return null;
     } finally {
       setLoading(false);
     }
-  }, [t, vehicles]);
+  }, [t, vehicles, user?.id, vehiclesKey]);
 
   // Обновление автомобиля
   const updateVehicle = useCallback(async (vehicleData: UpdateVehicleRequest) => {
@@ -137,24 +172,34 @@ export const useDriverVehicles = () => {
     setError(null);
     
     try {
-      const updatedVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
-      setVehicles(updatedVehicles);
-      
-      if (currentVehicle?.id === vehicleId) {
-        setCurrentVehicle(null);
+      if (__DEV__) {
+        // DEV: удаляем локально и сохраняем в AsyncStorage
+        const updatedVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
+        setVehicles(updatedVehicles);
+        if (currentVehicle?.id === vehicleId) {
+          setCurrentVehicle(null);
+        }
+        await AsyncStorage.setItem(vehiclesKey, JSON.stringify(updatedVehicles));
+        return true;
+      } else {
+        // PROD: удаляем через API
+        const success = await DriverVehicleService.deleteVehicle(vehicleId);
+        if (success) {
+          setVehicles(prev => prev.filter(vehicle => vehicle.id !== vehicleId));
+          if (currentVehicle?.id === vehicleId) {
+            setCurrentVehicle(null);
+          }
+          return true;
+        }
+        return false;
       }
-      
-      // Сохраняем в AsyncStorage
-      await AsyncStorage.setItem('driver_vehicles', JSON.stringify(updatedVehicles));
-      
-      return true;
     } catch (err) {
       setError(t('profile.vehicles.deleteError'));
       return false;
     } finally {
       setLoading(false);
     }
-  }, [t, currentVehicle, vehicles]);
+  }, [t, currentVehicle, vehicles, vehiclesKey]);
 
   // Активация/деактивация автомобиля
   const toggleVehicleActive = useCallback(async (vehicleId: string, isActive: boolean) => {

@@ -51,6 +51,11 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const { t } = useI18n();
   const balanceHook = useBalance();
   const deductBalance = 'deductBalance' in balanceHook ? balanceHook.deductBalance : balanceHook.withdrawBalance;
+  
+  // Проверяем, что deductBalance является функцией
+  if (typeof deductBalance !== 'function') {
+    console.error('deductBalance is not a function:', typeof deductBalance);
+  }
 
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -149,6 +154,10 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         const price = getPackagePrice(newPackage, period);
         
         // Пытаемся списать средства
+        if (typeof deductBalance !== 'function') {
+          console.error('deductBalance is not a function');
+          return false;
+        }
         const success = await deductBalance(price, `${newPackage} package purchase`, newPackage);
         
         if (!success) {
@@ -216,6 +225,10 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const extendSubscription = async (packageType: PackageType, period: 'month' | 'year', price: number) => {
     try {
       // Сначала списываем средства
+      if (typeof deductBalance !== 'function') {
+        console.error('deductBalance is not a function');
+        return false;
+      }
       const success = await deductBalance(price, `${packageType} subscription extension`, packageType);
       
       if (!success) {
@@ -305,6 +318,10 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         const packageName = t(`premium.packages.${subscription.packageType}`);
         
         // Списываем средства с баланса
+        if (typeof deductBalance !== 'function') {
+          console.error('deductBalance is not a function');
+          return false;
+        }
         const success = await deductBalance(
           price, 
           t('premium.autoRenewal.transactionDescription', { packageName }), 
@@ -399,6 +416,10 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       const { price, packageName } = currentSubscription.pendingAutoRenewal;
       
       // Списываем средства с баланса
+      if (typeof deductBalance !== 'function') {
+        console.error('deductBalance is not a function');
+        return false;
+      }
       const success = await deductBalance(
         price, 
         t('premium.autoRenewal.transactionDescription', { packageName }), 

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 export type DriverTrip = {
   text: string;
   time: string;
-  dotStyle: 'default' | 'blue' | 'location';
+  dotStyle?: 'default' | 'blue' | 'location';
 };
 
 export type DriverTripsProps = {

@@ -1,0 +1,455 @@
+import { Country } from '../../types/countries';
+
+export const EUROPE: Country[] = [
+    // === EUROPE ===
+    {
+      code: 'AL',
+      name: 'Shqipëria',
+      flag: '🇦🇱',
+      dialCode: '+355',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'ALL',
+      timezone: 'Europe/Tirane'
+    },
+    {
+      code: 'AD',
+      name: 'Andorra',
+      flag: '🇦🇩',
+      dialCode: '+376',
+      format: '### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Andorra'
+    },
+    {
+      code: 'AT',
+      name: 'Österreich',
+      flag: '🇦🇹',
+      dialCode: '+43',
+      format: '(###) ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Vienna'
+    },
+    {
+      code: 'BY',
+      name: 'Беларусь',
+      flag: '🇧🇾',
+      dialCode: '+375',
+      format: '(##) ###-##-##',
+      emergencyNumber: '112',
+      currency: 'BYN',
+      timezone: 'Europe/Minsk'
+    },
+    {
+      code: 'BE',
+      name: 'België / Belgique / Belgien',
+      flag: '🇧🇪',
+      dialCode: '+32',
+      format: '### ## ## ##',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Brussels'
+    },
+    {
+      code: 'BA',
+      name: 'Bosna i Hercegovina',
+      flag: '🇧🇦',
+      dialCode: '+387',
+      format: '## ######',
+      emergencyNumber: '112',
+      currency: 'BAM',
+      timezone: 'Europe/Sarajevo'
+    },
+    {
+      code: 'BG',
+      name: 'България',
+      flag: '🇧🇬',
+      dialCode: '+359',
+      format: '### ### ###',
+      emergencyNumber: '112',
+      currency: 'BGN',
+      timezone: 'Europe/Sofia'
+    },
+    {
+      code: 'HR',
+      name: 'Hrvatska',
+      flag: '🇭🇷',
+      dialCode: '+385',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Zagreb'
+    },
+    {
+      code: 'CY',
+      name: 'Κύπρος / Kıbrıs',
+      flag: '🇨🇾',
+      dialCode: '+357',
+      format: '## ######',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Asia/Nicosia'
+    },
+    {
+      code: 'CZ',
+      name: 'Česko',
+      flag: '🇨🇿',
+      dialCode: '+420',
+      format: '### ### ###',
+      emergencyNumber: '112',
+      currency: 'CZK',
+      timezone: 'Europe/Prague'
+    },
+    {
+      code: 'DK',
+      name: 'Danmark',
+      flag: '🇩🇰',
+      dialCode: '+45',
+      format: '## ## ## ##',
+      emergencyNumber: '112',
+      currency: 'DKK',
+      timezone: 'Europe/Copenhagen'
+    },
+    {
+      code: 'EE',
+      name: 'Eesti',
+      flag: '🇪🇪',
+      dialCode: '+372',
+      format: '#### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Tallinn'
+    },
+    {
+      code: 'FI',
+      name: 'Suomi',
+      flag: '🇫🇮',
+      dialCode: '+358',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Helsinki'
+    },
+    {
+      code: 'FR',
+      name: 'France',
+      flag: '🇫🇷',
+      dialCode: '+33',
+      format: '## ## ## ## ##',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Paris'
+    },
+    {
+      code: 'DE',
+      name: 'Deutschland',
+      flag: '🇩🇪',
+      dialCode: '+49',
+      format: '### #######',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Berlin'
+    },
+    {
+      code: 'GR',
+      name: 'Ελλάδα',
+      flag: '🇬🇷',
+      dialCode: '+30',
+      format: '### ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Athens'
+    },
+    {
+      code: 'HU',
+      name: 'Magyarország',
+      flag: '🇭🇺',
+      dialCode: '+36',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'HUF',
+      timezone: 'Europe/Budapest'
+    },
+    {
+      code: 'IS',
+      name: 'Ísland',
+      flag: '🇮🇸',
+      dialCode: '+354',
+      format: '### ####',
+      emergencyNumber: '112',
+      currency: 'ISK',
+      timezone: 'Atlantic/Reykjavik'
+    },
+    {
+      code: 'IE',
+      name: 'Éire',
+      flag: '🇮🇪',
+      dialCode: '+353',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Dublin'
+    },
+    {
+      code: 'IT',
+      name: 'Italia',
+      flag: '🇮🇹',
+      dialCode: '+39',
+      format: '### ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Rome'
+    },
+    {
+      code: 'LV',
+      name: 'Latvija',
+      flag: '🇱🇻',
+      dialCode: '+371',
+      format: '## ######',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Riga'
+    },
+    {
+      code: 'LT',
+      name: 'Lietuva',
+      flag: '🇱🇹',
+      dialCode: '+370',
+      format: '## #####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Vilnius'
+    },
+    {
+      code: 'LU',
+      name: 'Lëtzebuerg',
+      flag: '🇱🇺',
+      dialCode: '+352',
+      format: '### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Luxembourg'
+    },
+    {
+      code: 'MT',
+      name: 'Malta',
+      flag: '🇲🇹',
+      dialCode: '+356',
+      format: '#### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Malta'
+    },
+    {
+      code: 'MD',
+      name: 'Republica Moldova',
+      flag: '🇲🇩',
+      dialCode: '+373',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'MDL',
+      timezone: 'Europe/Chisinau'
+    },
+    {
+      code: 'MC',
+      name: 'Monaco',
+      flag: '🇲🇨',
+      dialCode: '+377',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Monaco'
+    },
+    {
+      code: 'ME',
+      name: 'Crna Gora',
+      flag: '🇲🇪',
+      dialCode: '+382',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Podgorica'
+    },
+    {
+      code: 'NL',
+      name: 'Nederland',
+      flag: '🇳🇱',
+      dialCode: '+31',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Amsterdam'
+    },
+    {
+      code: 'MK',
+      name: 'Северна Македонија',
+      flag: '🇲🇰',
+      dialCode: '+389',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'MKD',
+      timezone: 'Europe/Skopje'
+    },
+    {
+      code: 'NO',
+      name: 'Norge',
+      flag: '🇳🇴',
+      dialCode: '+47',
+      format: '### ## ###',
+      emergencyNumber: '112',
+      currency: 'NOK',
+      timezone: 'Europe/Oslo'
+    },
+    {
+      code: 'PL',
+      name: 'Polska',
+      flag: '🇵🇱',
+      dialCode: '+48',
+      format: '### ### ###',
+      emergencyNumber: '112',
+      currency: 'PLN',
+      timezone: 'Europe/Warsaw'
+    },
+    {
+      code: 'PT',
+      name: 'Portugal',
+      flag: '🇵🇹',
+      dialCode: '+351',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Lisbon'
+    },
+    {
+      code: 'RO',
+      name: 'România',
+      flag: '🇷🇴',
+      dialCode: '+40',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'RON',
+      timezone: 'Europe/Bucharest'
+    },
+    {
+      code: 'RU',
+      name: 'Россия',
+      flag: '🇷🇺',
+      dialCode: '+7',
+      format: '(###) ###-##-##',
+      emergencyNumber: '112',
+      currency: 'RUB',
+      timezone: 'Europe/Moscow'
+    },
+    {
+      code: 'SM',
+      name: 'San Marino',
+      flag: '🇸🇲',
+      dialCode: '+378',
+      format: '#### ######',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/San_Marino'
+    },
+    {
+      code: 'RS',
+      name: 'Србија',
+      flag: '🇷🇸',
+      dialCode: '+381',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'RSD',
+      timezone: 'Europe/Belgrade'
+    },
+    {
+      code: 'SK',
+      name: 'Slovensko',
+      flag: '🇸🇰',
+      dialCode: '+421',
+      format: '### ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Bratislava'
+    },
+    {
+      code: 'SI',
+      name: 'Slovenija',
+      flag: '🇸🇮',
+      dialCode: '+386',
+      format: '## ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Ljubljana'
+    },
+    {
+      code: 'ES',
+      name: 'España',
+      flag: '🇪🇸',
+      dialCode: '+34',
+      format: '### ### ###',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Madrid'
+    },
+    {
+      code: 'SE',
+      name: 'Sverige',
+      flag: '🇸🇪',
+      dialCode: '+46',
+      format: '##-### ###',
+      emergencyNumber: '112',
+      currency: 'SEK',
+      timezone: 'Europe/Stockholm'
+    },
+    {
+      code: 'CH',
+      name: 'Schweiz / Suisse / Svizzera / Svizra',
+      flag: '🇨🇭',
+      dialCode: '+41',
+      format: '## ### ####',
+      emergencyNumber: '112',
+      currency: 'CHF',
+      timezone: 'Europe/Zurich'
+    },
+    {
+      code: 'TR',
+      name: 'Türkiye',
+      flag: '🇹🇷',
+      dialCode: '+90',
+      format: '(###) ### ## ##',
+      emergencyNumber: '112',
+      currency: 'TRY',
+      timezone: 'Europe/Istanbul'
+    },
+    {
+      code: 'UA',
+      name: 'Україна',
+      flag: '🇺🇦',
+      dialCode: '+380',
+      format: '## ### ## ##',
+      emergencyNumber: '112',
+      currency: 'UAH',
+      timezone: 'Europe/Kiev'
+    },
+    {
+      code: 'GB',
+      name: 'United Kingdom',
+      flag: '🇬🇧',
+      dialCode: '+44',
+      format: '#### ######',
+      emergencyNumber: '999',
+      currency: 'GBP',
+      timezone: 'Europe/London'
+    },
+    {
+      code: 'VA',
+      name: 'Vaticano',
+      flag: '🇻🇦',
+      dialCode: '+379',
+      format: '### ### ####',
+      emergencyNumber: '112',
+      currency: 'EUR',
+      timezone: 'Europe/Vatican'
+    }
+  ];

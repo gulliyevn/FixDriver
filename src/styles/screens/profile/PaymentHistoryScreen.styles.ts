@@ -108,6 +108,49 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e5e5e5',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    fontSize: 16,
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  loadingMoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+    gap: 8,
+  },
+  loadingMoreText: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffebee',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginHorizontal: 16,
+    marginTop: 8,
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#e53935',
+    gap: 8,
+  },
+  errorText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#e53935',
+  },
+  errorCloseButton: {
+    padding: 4,
+  },
 });
 
 // Функция для получения динамических стилей в зависимости от темы
@@ -142,6 +185,18 @@ export const getPaymentHistoryScreenStyles = (isDark: boolean) => {
     paymentDescription: {
       color: currentColors.textSecondary,
       borderTopColor: currentColors.border,
+    },
+    loadingText: {
+      color: currentColors.textSecondary,
+    },
+    loadingMoreText: {
+      color: currentColors.textSecondary,
+    },
+    errorBox: {
+      backgroundColor: isDark ? '#2d1b1b' : '#ffebee',
+    },
+    errorText: {
+      color: '#e53935',
     },
   };
 }; 

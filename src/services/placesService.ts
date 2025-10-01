@@ -35,7 +35,6 @@ export interface AddressHistory {
 
 class PlacesService {
   private baseUrl = 'https://nominatim.openstreetmap.org';
-  private historyKey = 'address_history';
   private maxHistoryItems = 5;
 
   constructor() {}
@@ -124,9 +123,9 @@ class PlacesService {
   }
 
   // Сохранение адреса в историю
-  async saveToHistory(address: string, placeId: string, coordinates: { latitude: number; longitude: number }) {
+  async saveToHistory(storageKey: string, address: string, placeId: string, coordinates: { latitude: number; longitude: number }) {
     try {
-      const history = await this.getHistory();
+      const history = await this.getHistory(storageKey);
       
       // Проверяем, есть ли уже такой адрес
       const existingIndex = history.findIndex(item => item.placeId === placeId);
@@ -154,16 +153,20 @@ class PlacesService {
         }
       }
       
-      await AsyncStorage.setItem(this.historyKey, JSON.stringify(history));
+      await AsyncStorage.setItem(storageKey, JSON.stringify(history));
     } catch (error) {
       console.error('Error saving to history:', error);
     }
   }
 
   // Получение истории адресов
-  async getHistory(): Promise<AddressHistory[]> {
+  async getHistory(storageKey: string): Promise<AddressHistory[]> {
+    if (!__DEV__) {
+      return [];
+    }
+
     try {
-      const history = await AsyncStorage.getItem(this.historyKey);
+      const history = await AsyncStorage.getItem(storageKey);
       return history ? JSON.parse(history) : [];
     } catch (error) {
       console.error('Error getting history:', error);
@@ -172,9 +175,13 @@ class PlacesService {
   }
 
   // Очистка истории
-  async clearHistory(): Promise<void> {
+  async clearHistory(storageKey: string): Promise<void> {
+    if (!__DEV__) {
+      return;
+    }
+
     try {
-      await AsyncStorage.removeItem(this.historyKey);
+      await AsyncStorage.removeItem(storageKey);
     } catch (error) {
       console.error('Error clearing history:', error);
     }
@@ -185,20 +192,20 @@ class PlacesService {
     const trimmed = address.trim();
     
     if (trimmed.length < 5) {
-      return { isValid: false, error: 'Адрес слишком короткий' };
+      return { isValid: false, error: 'components:common.autocomplete.errors.tooShort' };
     }
     
     // Проверяем наличие номера дома (цифры)
     const hasNumber = /\d/.test(trimmed);
     if (!hasNumber) {
-      return { isValid: false, error: 'Адрес должен содержать номер дома' };
+      return { isValid: false, error: 'components:common.autocomplete.errors.noNumber' };
     }
     
     // Проверяем наличие улицы (минимум 3 символа)
     const words = trimmed.split(/\s+/);
     const hasStreet = words.some(word => word.length >= 3 && !/\d/.test(word));
     if (!hasStreet) {
-      return { isValid: false, error: 'Адрес должен содержать название улицы' };
+      return { isValid: false, error: 'components:common.autocomplete.errors.noStreet' };
     }
     
     return { isValid: true };

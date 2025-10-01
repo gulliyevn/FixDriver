@@ -1,271 +1,184 @@
-import { Chat, Message, ChatPreview } from '../types/chat';
-import { mockChats, mockMessages } from '../mocks';
+import APIClient from './APIClient';
 
-// Отключено для production - только для разработки
-const ENABLE_CHAT_LOGS = false;
+export interface Chat {
+  id: string;
+  clientId: string;
+  driverId: string;
+  clientName: string;
+  driverName: string;
+  clientAvatar?: string;
+  driverAvatar?: string;
+  lastMessage?: string;
+  lastMessageTime?: string;
+  unreadCount: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const log = (message: string, data?: unknown) => {
-  if (ENABLE_CHAT_LOGS) {
+export interface Message {
+  id: string;
+  chatId: string;
+  senderId: string;
+  senderName: string;
+  content: string;
+  messageType: 'text' | 'image' | 'file' | 'location';
+  timestamp: string;
+  isRead: boolean;
+  metadata?: {
+    latitude?: number;
+    longitude?: number;
+    fileName?: string;
+    fileSize?: number;
+    imageUrl?: string;
+  };
+}
 
-  }
-};
+export interface ChatPreview {
+  id: string;
+  participantName: string;
+  participantAvatar?: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  isOnline: boolean;
+}
 
-export class ChatService {
+class ChatServiceInternal {
   private static instance: ChatService;
-  private chats: Chat[] = [];
-  private messages: Message[] = [];
-  private chatPreviews: ChatPreview[] = [];
-  private subscribers: ((chats: ChatPreview[]) => void)[] = [];
 
-  static getInstance(): ChatService {
-    if (!ChatService.instance) {
-      ChatService.instance = new ChatService();
+  static getInstance(): ChatServiceInternal {
+    if (!(ChatServiceInternal as any).instance) {
+      (ChatServiceInternal as any).instance = new ChatServiceInternal();
     }
-    return ChatService.instance;
+    return (ChatServiceInternal as any).instance;
   }
 
-  constructor() {
-    this.initializeMockData();
+  async getChats(userId: string): Promise<ChatPreview[]> {
+    try {
+      const response = await APIClient.get<ChatPreview[]>(`/chats/user/${userId}`);
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get chats error:', error);
+      return [];
+    }
   }
 
-  private initializeMockData(): void {
-    this.chats = mockChats;
-    this.messages = mockMessages;
-    // Если есть chatPreviews, можно оставить или убрать, если не используется.
+  async getChat(chatId: string): Promise<Chat | null> {
+    try {
+      const response = await APIClient.get<Chat>(`/chats/${chatId}`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Get chat error:', error);
+      return null;
+    }
   }
 
-  getChats(userId: string): ChatPreview[] {
-    log(`получение списка чатов для пользователя ${userId}`);
-    return this.chatPreviews;
-  }
-
-  getMessages(chatId: string): Message[] {
-    log(`получение сообщений для чата ${chatId}`);
-    return this.messages.filter(message => message.chatId === chatId);
+  async getMessages(chatId: string, page: number = 1, limit: number = 50): Promise<Message[]> {
+    try {
+      const response = await APIClient.get<Message[]>(`/chats/${chatId}/messages`, { page, limit });
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Get messages error:', error);
+      return [];
+    }
   }
 
   async sendMessage(
     chatId: string,
     content: string,
     messageType: 'text' | 'image' | 'file' | 'location' = 'text',
-    metadata?: Message['metadata']
-  ): Promise<Message> {
-    const newMessage: Message = {
-      id: `msg_${Date.now()}`,
-      chatId,
-      senderId: 'me',
-      senderType: 'client',
-      content,
-      timestamp: new Date().toISOString(),
-      type: messageType,
-      isRead: false,
-      metadata,
-    };
-
-    this.messages.push(newMessage);
-    
-    // Обновляем чат
-    const chat = this.chats.find(c => c.id === chatId);
-    if (chat) {
-      chat.lastMessage = newMessage;
-      chat.updatedAt = newMessage.timestamp;
-      chat.unreadCount = (chat.unreadCount || 0) + 1;
+    metadata?: any
+  ): Promise<Message | null> {
+    try {
+      const response = await APIClient.post<Message>('/messages', {
+        chatId,
+        content,
+        messageType,
+        metadata
+      });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Send message error:', error);
+      return null;
     }
+  }
 
-    // Обновляем превью чата
-    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
-    if (chatPreview) {
-      chatPreview.lastMessage = newMessage.content;
-      chatPreview.lastMessageTime = new Date();
-      chatPreview.unreadCount = (chatPreview.unreadCount || 0) + 1;
+  async createChat(clientId: string, driverId: string): Promise<Chat | null> {
+    try {
+      const response = await APIClient.post<Chat>('/chats', { clientId, driverId });
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Create chat error:', error);
+      return null;
     }
-
-    this.notifySubscribers();
-    
-    return newMessage;
   }
 
-  markAsRead(chatId: string): void {
-    this.messages.forEach(message => {
-      if (message.chatId === chatId && message.senderId !== 'me') {
-        message.isRead = true;
-      }
-    });
-
-    // Обновляем счетчик непрочитанных
-    const chat = this.chats.find(c => c.id === chatId);
-    if (chat) {
-      chat.unreadCount = 0;
+  async markMessagesAsRead(chatId: string, userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/read`, { userId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Mark messages as read error:', error);
+      return false;
     }
+  }
 
-    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
-    if (chatPreview) {
-      chatPreview.unreadCount = 0;
+  async getUnreadCount(userId: string): Promise<number> {
+    try {
+      const response = await APIClient.get<{ count: number }>(`/chats/unread-count/${userId}`);
+      return response.success && response.data?.count || 0;
+    } catch (error) {
+      console.error('Get unread count error:', error);
+      return 0;
     }
-
-    this.notifySubscribers();
   }
 
-  deleteChat(chatId: string): boolean {
-    log(`удаление чата ${chatId}`);
-    const initialLength = this.chats.length;
-    this.chats = this.chats.filter(chat => chat.id !== chatId);
-    this.messages = this.messages.filter(message => message.chatId !== chatId);
-    this.chatPreviews = this.chatPreviews.filter(chat => chat.id !== chatId);
-    
-    const deleted = initialLength > this.chats.length;
-    if (deleted) {
-      log(`✅ Чат удален: ${chatId}`);
-      this.notifySubscribers();
+  async deleteChat(chatId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.delete<{ success: boolean }>(`/chats/${chatId}`);
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Delete chat error:', error);
+      return false;
     }
-    
-    return deleted;
   }
 
-  clearChat(chatId: string): void {
-    // Удаляем только сообщения внутри чата, сам чат сохраняем
-    this.messages = this.messages.filter(message => message.chatId !== chatId);
-    const chat = this.chats.find(c => c.id === chatId);
-    if (chat) {
-      chat.lastMessage = undefined;
-      chat.unreadCount = 0;
-      chat.updatedAt = new Date().toISOString();
+  async blockUser(chatId: string, userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/block`, { userId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Block user error:', error);
+      return false;
     }
-    const chatPreview = this.chatPreviews.find(c => c.id === chatId);
-    if (chatPreview) {
-      chatPreview.lastMessage = '';
-      chatPreview.unreadCount = 0;
-      chatPreview.lastMessageTime = new Date();
+  }
+
+  async unblockUser(chatId: string, userId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/unblock`, { userId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Unblock user error:', error);
+      return false;
     }
-    this.notifySubscribers();
   }
 
-  subscribe(callback: (chats: ChatPreview[]) => void): () => void {
-    this.subscribers.push(callback);
-    return () => {
-      this.subscribers = this.subscribers.filter(sub => sub !== callback);
-    };
-  }
+  async uploadFile(file: any, chatId: string): Promise<{ url: string; fileName: string } | null> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('chatId', chatId);
 
-  private notifySubscribers(): void {
-    this.subscribers.forEach(callback => callback(this.chatPreviews));
-  }
-
-  // Статические методы для совместимости
-  static async getChats(): Promise<Chat[]> {
-    ChatService.getInstance();
-    // Создаем мок данные для чатов
-    const mockChats: Chat[] = [
-      {
-        id: 'chat_1',
-        clientId: 'client_1',
-        driverId: 'driver_1',
-        lastMessage: {
-          id: 'msg_1',
-          chatId: 'chat_1',
-          senderId: 'driver_1',
-          senderType: 'driver',
-          content: 'Привет! Готов к поездке.',
-          type: 'text',
-          timestamp: new Date().toISOString(),
-          isRead: false,
-        },
-        unreadCount: 2,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        participant: {
-          id: 'driver_1',
-          name: 'Дмитрий Петров',
-          avatar: 'https://via.placeholder.com/150',
-          isOnline: true,
-        },
-      },
-      {
-        id: 'chat_2',
-        clientId: 'client_1',
-        driverId: 'driver_2',
-        lastMessage: {
-          id: 'msg_2',
-          chatId: 'chat_2',
-          senderId: 'client_1',
-          senderType: 'client',
-          content: 'Спасибо за поездку!',
-          type: 'text',
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-          isRead: true,
-        },
-        unreadCount: 0,
-        createdAt: new Date(Date.now() - 7200000).toISOString(),
-        updatedAt: new Date(Date.now() - 3600000).toISOString(),
-        participant: {
-          id: 'driver_2',
-          name: 'Алексей Сидоров',
-          avatar: 'https://via.placeholder.com/150',
-          isOnline: false,
-        },
-      },
-    ];
-    return mockChats;
-  }
-
-  static async getMessages(chatId: string): Promise<Message[]> {
-    const instance = ChatService.getInstance();
-    return instance.getMessages(chatId);
-  }
-
-  static async sendMessage(chatId: string, text: string, metadata?: Message['metadata']): Promise<Message> {
-    const instance = ChatService.getInstance();
-    return instance.sendMessage(chatId, text, 'text', metadata);
-  }
-
-  static async markMessagesAsRead(chatId: string): Promise<void> {
-    const instance = ChatService.getInstance();
-    instance.markAsRead(chatId);
-  }
-
-  static async createChat(clientId: string, driverId: string): Promise<Chat> {
-    const instance = ChatService.getInstance();
-    const newChat: Chat = {
-      id: `chat_${Date.now()}`,
-      clientId,
-      driverId,
-      unreadCount: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    instance.chats.push(newChat);
-    return newChat;
-  }
-
-  static formatMessageTime(timestamp: string | Date): string {
-    const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (minutes < 1) return 'сейчас';
-    if (minutes < 60) return `${minutes}м`;
-    if (hours < 24) return `${hours}ч`;
-    if (days < 7) return `${days}д`;
-    return date.toLocaleDateString('ru-RU');
-  }
-
-  static resetToMockData(): void {
-    const instance = ChatService.getInstance();
-    instance.initializeMockData();
-  }
-
-  static async deleteChat(chatId: string): Promise<boolean> {
-    const instance = ChatService.getInstance();
-    return instance.deleteChat(chatId);
-  }
-
-  static async clearChat(chatId: string): Promise<void> {
-    const instance = ChatService.getInstance();
-    instance.clearChat(chatId);
+      const response = await APIClient.post<{ url: string; fileName: string }>('/chats/upload', formData);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Upload file error:', error);
+      return null;
+    }
   }
 }
 
-export default ChatService.getInstance();
+// Export a ready-to-use instance to avoid "getChats is not a function" import mismatches
+export const ChatService = ChatServiceInternal.getInstance();
+export default ChatService;

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Address } from '../mocks/residenceMock';
-import { addressService, CreateAddressRequest, UpdateAddressRequest } from '../services/addressService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AddressService, { Address, CreateAddressRequest, UpdateAddressRequest } from '../services/addressService';
+import { useAuth } from '../context/AuthContext';
+import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
 
 interface UseAddressesReturn {
   addresses: Address[];
@@ -13,32 +15,41 @@ interface UseAddressesReturn {
   setDefaultAddress: (id: string) => Promise<boolean>;
 }
 
+const addressServiceInstance = new AddressService();
+
 export const useAddresses = (): UseAddressesReturn => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const addressesKey = useUserStorageKey(STORAGE_KEYS.USER_ADDRESSES);
 
   const loadAddresses = useCallback(async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // TODO: Заменить на реальный API вызов
-      // const loadedAddresses = await addressService.getAddresses();
-      
-      // Временно используем моки
-      const { getAddresses } = await import('../mocks/residenceMock');
-      const loadedAddresses = await getAddresses() || [];
-      
-      setAddresses(loadedAddresses);
+      if (__DEV__) {
+        // DEV: загружаем из AsyncStorage
+        const saved = await AsyncStorage.getItem(addressesKey);
+        setAddresses(saved ? JSON.parse(saved) : []);
+      } else {
+        // PROD: загружаем из API
+        if (user?.id) {
+          const loadedAddresses = await addressServiceInstance.getAddresses(user.id);
+          setAddresses(loadedAddresses);
+        } else {
+          setAddresses([]);
+        }
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Не удалось загрузить адреса';
       setError(errorMessage);
-
+      setAddresses([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user?.id, addressesKey]);
 
   const refreshAddresses = useCallback(async () => {
     await loadAddresses();
@@ -46,99 +57,114 @@ export const useAddresses = (): UseAddressesReturn => {
 
   const addAddress = useCallback(async (addressData: CreateAddressRequest): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const newAddress = await addressService.createAddress(addressData);
-      
-      // Временно используем моки
-      const { addAddress: mockAddAddress } = await import('../mocks/residenceMock');
-      const newAddress = await mockAddAddress(addressData);
-      
-      setAddresses(prev => [...prev, newAddress]);
-      return true;
+      if (__DEV__) {
+        // DEV: сохраняем в AsyncStorage
+        const newAddress: Address = {
+          id: Date.now().toString(),
+          ...addressData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        const updated = [...addresses, newAddress];
+        setAddresses(updated);
+        await AsyncStorage.setItem(addressesKey, JSON.stringify(updated));
+        return true;
+      } else {
+        // PROD: отправляем в API
+        if (!user?.id) return false;
+        const newAddress = await addressServiceInstance.createAddress(user.id, addressData);
+        if (newAddress) {
+          setAddresses(prev => [...prev, newAddress]);
+          return true;
+        }
+        return false;
+      }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось добавить адрес';
-
+      console.error('Error adding address:', err instanceof Error ? err.message : 'Не удалось добавить адрес');
       return false;
     }
-  }, []);
+  }, [addresses, addressesKey, user?.id]);
 
   const updateAddress = useCallback(async (id: string, updates: UpdateAddressRequest): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const updatedAddress = await addressService.updateAddress(id, updates);
-      
-      // Временно используем моки
-      const { updateAddress: mockUpdateAddress } = await import('../mocks/residenceMock');
-      const updatedAddress = await mockUpdateAddress(id, updates);
-      
-      if (updatedAddress) {
-        setAddresses(prev => 
-          prev.map(addr => addr.id === id ? updatedAddress : addr)
+      if (__DEV__) {
+        // DEV: обновляем в AsyncStorage
+        const updated = addresses.map(addr => 
+          addr.id === id ? { ...addr, ...updates, updatedAt: new Date().toISOString() } : addr
         );
+        setAddresses(updated);
+        await AsyncStorage.setItem(addressesKey, JSON.stringify(updated));
         return true;
       } else {
+        // PROD: обновляем через API
+        const updatedAddress = await addressServiceInstance.updateAddress(id, updates);
+        if (updatedAddress) {
+          setAddresses(prev => prev.map(addr => addr.id === id ? updatedAddress : addr));
+          return true;
+        }
         return false;
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось обновить адрес';
-
+      console.error('Error updating address:', err instanceof Error ? err.message : 'Не удалось обновить адрес');
       return false;
     }
-  }, []);
+  }, [addresses, addressesKey]);
 
   const deleteAddress = useCallback(async (id: string): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const success = await addressService.deleteAddress(id);
-      
-      // Временно используем моки
-      const { deleteAddress: mockDeleteAddress } = await import('../mocks/residenceMock');
-      const success = await mockDeleteAddress(id);
-      
-      if (success) {
-        setAddresses(prev => prev.filter(addr => addr.id !== id));
+      if (__DEV__) {
+        // DEV: удаляем из AsyncStorage
+        const updated = addresses.filter(addr => addr.id !== id);
+        setAddresses(updated);
+        await AsyncStorage.setItem(addressesKey, JSON.stringify(updated));
         return true;
       } else {
+        // PROD: удаляем через API
+        const success = await addressServiceInstance.deleteAddress(id);
+        if (success) {
+          setAddresses(prev => prev.filter(addr => addr.id !== id));
+          return true;
+        }
         return false;
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось удалить адрес';
-
+      console.error('Error deleting address:', err instanceof Error ? err.message : 'Не удалось удалить адрес');
       return false;
     }
-  }, []);
+  }, [addresses, addressesKey]);
 
   const setDefaultAddress = useCallback(async (id: string): Promise<boolean> => {
     try {
-      // TODO: Заменить на реальный API вызов
-      // const success = await addressService.setDefaultAddress(id);
-      
-      // Временно используем моки
-      const { setDefaultAddress: mockSetDefault } = await import('../mocks/residenceMock');
-      const success = await mockSetDefault(id);
-      
-      if (success) {
-        // Находим адрес, который устанавливаем как дефолтный
-        const targetAddress = addresses.find(addr => addr.id === id);
-        if (!targetAddress) return false;
-        
-        // Обновляем состояние локально - сбрасываем isDefault только для адресов той же категории
-        setAddresses(prev => 
-          prev.map(addr => ({
-            ...addr,
-            isDefault: addr.id === id || (addr.category === targetAddress.category && addr.isDefault && addr.id !== id ? false : addr.isDefault)
-          }))
-        );
+      const targetAddress = addresses.find(addr => addr.id === id);
+      if (!targetAddress) return false;
+
+      if (__DEV__) {
+        // DEV: обновляем в AsyncStorage
+        const updated = addresses.map(addr => ({
+          ...addr,
+          isDefault: addr.id === id || (addr.category === targetAddress.category && addr.isDefault && addr.id !== id ? false : addr.isDefault)
+        }));
+        setAddresses(updated);
+        await AsyncStorage.setItem(addressesKey, JSON.stringify(updated));
         return true;
       } else {
+        // PROD: обновляем через API
+        if (!user?.id) return false;
+        const success = await addressServiceInstance.setDefaultAddress(user.id, id);
+        if (success) {
+          setAddresses(prev => prev.map(addr => ({
+            ...addr,
+            isDefault: addr.id === id || (addr.category === targetAddress.category && addr.isDefault && addr.id !== id ? false : addr.isDefault)
+          })));
+          return true;
+        }
         return false;
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Не удалось установить адрес по умолчанию';
-
+      console.error('Error setting default address:', err instanceof Error ? err.message : 'Не удалось установить адрес по умолчанию');
       return false;
     }
-  }, [addresses]);
+  }, [addresses, addressesKey, user?.id]);
 
   // Загружаем адреса при монтировании компонента
   useEffect(() => {

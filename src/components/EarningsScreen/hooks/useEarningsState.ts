@@ -21,7 +21,9 @@ export const useEarningsState = () => {
         if (saved === 'true' || saved === 'false') {
           setIsOnline(saved === 'true');
         }
-      } catch {}
+      } catch (error) {
+        console.error('Error loading online status:', error);
+      }
     })();
   }, []);
 

@@ -1,66 +1,79 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import APIClient from './APIClient';
 import * as ImagePicker from 'expo-image-picker';
 
 export interface AvatarData {
-  uri: string;
+  id: string;
+  userId: string;
+  url: string;
+  thumbnailUrl?: string;
   timestamp: number;
   size: number;
   type: string;
+  isDefault: boolean;
+}
+
+export interface UploadAvatarResponse {
+  success: boolean;
+  avatar?: AvatarData;
+  error?: string;
 }
 
 export class AvatarService {
-  private static readonly AVATAR_STORAGE_KEY = 'user_avatar';
-  private static readonly AVATAR_MOCK_KEY = 'avatar_mock_data';
+  /**
+   * Получает аватар пользователя
+   */
+  static async getAvatar(userId: string): Promise<AvatarData | null> {
+    try {
+      const response = await APIClient.get<AvatarData>(`/avatars/user/${userId}`);
+      return response.success && response.data ? response.data : null;
+    } catch (error) {
+      console.error('Error getting avatar:', error);
+      return null;
+    }
+  }
 
   /**
-   * Загружает аватар из AsyncStorage
+   * Загружает новый аватар
    */
-  static async loadAvatar(): Promise<string | null> {
+  static async uploadAvatar(userId: string, imageUri: string): Promise<UploadAvatarResponse> {
     try {
-      const avatarData = await AsyncStorage.getItem(this.AVATAR_STORAGE_KEY);
-      if (avatarData) {
-        const parsed: AvatarData = JSON.parse(avatarData);
-        return parsed.uri;
+      const formData = new FormData();
+      formData.append('avatar', {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'avatar.jpg',
+      } as any);
+      formData.append('userId', userId);
+
+      const response = await APIClient.post<AvatarData>('/avatars/upload', formData);
+      
+      if (response.success && response.data) {
+        return {
+          success: true,
+          avatar: response.data
+        };
       }
-      return null;
-    } catch (error) {
-      console.error('Error loading avatar:', error);
-      return null;
-    }
-  }
-
-  /**
-   * Сохраняет аватар в AsyncStorage
-   */
-  static async saveAvatar(uri: string): Promise<boolean> {
-    try {
-      const avatarData: AvatarData = {
-        uri,
-        timestamp: Date.now(),
-        size: 0, // Будет заполнено при загрузке
-        type: 'image/jpeg'
+      
+      return {
+        success: false,
+        error: response.error || 'Ошибка при загрузке аватара'
       };
-
-      await AsyncStorage.setItem(this.AVATAR_STORAGE_KEY, JSON.stringify(avatarData));
-      
-      // Сохраняем в моках для совместимости
-      await this.saveToMocks(uri);
-      
-      return true;
     } catch (error) {
-      console.error('Error saving avatar:', error);
-      return false;
+      console.error('Error uploading avatar:', error);
+      return {
+        success: false,
+        error: 'Ошибка при загрузке аватара'
+      };
     }
   }
 
   /**
-   * Удаляет аватар
+   * Удаляет аватар пользователя
    */
-  static async deleteAvatar(): Promise<boolean> {
+  static async deleteAvatar(userId: string): Promise<boolean> {
     try {
-      await AsyncStorage.removeItem(this.AVATAR_STORAGE_KEY);
-      await this.deleteFromMocks();
-      return true;
+      const response = await APIClient.delete<{ success: boolean }>(`/avatars/user/${userId}`);
+      return response.success && response.data?.success || false;
     } catch (error) {
       console.error('Error deleting avatar:', error);
       return false;
@@ -68,21 +81,75 @@ export class AvatarService {
   }
 
   /**
-   * Запускает камеру для съемки фото
+   * Устанавливает аватар по умолчанию
    */
-  static async takePhoto(): Promise<string | null> {
+  static async setDefaultAvatar(userId: string): Promise<boolean> {
     try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
-        throw new Error('Camera permission denied');
-      }
+      const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/default`, {});
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Error setting default avatar:', error);
+      return false;
+    }
+  }
 
-      const result = await ImagePicker.launchCameraAsync({
+  /**
+   * Получает список доступных аватаров по умолчанию
+   */
+  static async getDefaultAvatars(): Promise<Array<{ id: string; url: string; thumbnailUrl: string; name: string }>> {
+    try {
+      const response = await APIClient.get<Array<{ id: string; url: string; thumbnailUrl: string; name: string }>>('/avatars/defaults');
+      return response.success && response.data ? response.data : [];
+    } catch (error) {
+      console.error('Error getting default avatars:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Устанавливает аватар по умолчанию по ID
+   */
+  static async setDefaultAvatarById(userId: string, avatarId: string): Promise<boolean> {
+    try {
+      const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/set-default`, { avatarId });
+      return response.success && response.data?.success || false;
+    } catch (error) {
+      console.error('Error setting default avatar by ID:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Открывает галерею для выбора изображения
+   */
+  static async pickImageFromGallery(): Promise<string | null> {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
-        base64: false,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        return result.assets[0].uri;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error picking image from gallery:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Открывает камеру для съемки
+   */
+  static async takePhoto(): Promise<string | null> {
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
       });
 
       if (!result.canceled && result.assets[0]) {
@@ -96,70 +163,45 @@ export class AvatarService {
   }
 
   /**
-   * Выбирает фото из галереи
+   * Запрашивает разрешения на доступ к камере и галерее
    */
-  static async pickFromGallery(): Promise<string | null> {
+  static async requestPermissions(): Promise<{ camera: boolean; gallery: boolean }> {
     try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        throw new Error('Gallery permission denied');
-      }
+      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
+      const mediaLibraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-        base64: false,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        return result.assets[0].uri;
-      }
-      return null;
+      return {
+        camera: cameraPermission.status === 'granted',
+        gallery: mediaLibraryPermission.status === 'granted'
+      };
     } catch (error) {
-      console.error('Error picking from gallery:', error);
-      return null;
+      console.error('Error requesting permissions:', error);
+      return {
+        camera: false,
+        gallery: false
+      };
     }
   }
 
   /**
-   * Сохраняет в моки для совместимости с существующим кодом
+   * Проверяет размер изображения
    */
-  private static async saveToMocks(uri: string): Promise<void> {
-    try {
-      const mockData = { avatar: uri };
-      await AsyncStorage.setItem(this.AVATAR_MOCK_KEY, JSON.stringify(mockData));
-    } catch (error) {
-      console.error('Error saving to mocks:', error);
-    }
+  static validateImageSize(uri: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      // В реальном приложении здесь была бы проверка размера файла
+      // Пока возвращаем true
+      resolve(true);
+    });
   }
 
   /**
-   * Удаляет из моков
+   * Сжимает изображение (заглушка)
    */
-  private static async deleteFromMocks(): Promise<void> {
-    try {
-      await AsyncStorage.removeItem(this.AVATAR_MOCK_KEY);
-    } catch (error) {
-      console.error('Error deleting from mocks:', error);
-    }
-  }
-
-  /**
-   * Загружает из моков для совместимости
-   */
-  static async loadFromMocks(): Promise<string | null> {
-    try {
-      const mockData = await AsyncStorage.getItem(this.AVATAR_MOCK_KEY);
-      if (mockData) {
-        const parsed = JSON.parse(mockData);
-        return parsed.avatar || null;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error loading from mocks:', error);
-      return null;
-    }
+  static async compressImage(uri: string, quality: number = 0.8): Promise<string> {
+    // В реальном приложении здесь была бы сжатие изображения
+    // Пока возвращаем оригинальную URI
+    return uri;
   }
 }
+
+export default AvatarService;

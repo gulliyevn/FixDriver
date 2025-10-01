@@ -1,7 +1,7 @@
 import apiClient, { APIResponse } from './APIClient';
-import { 
-  Driver, 
-  DriverRegistrationData, 
+import {
+  Driver,
+  DriverRegistrationData,
   DriverRegistrationResponse,
   DriverUpdateData,
   DriverDocumentUpdateData,
@@ -9,7 +9,7 @@ import {
   DriverLocation,
   DriverFilters,
   DriverSort,
-  DriverStatus 
+  DriverStatus,
 } from '../types/driver';
 import { ENV_CONFIG } from '../config/environment';
 
@@ -26,6 +26,25 @@ export interface DriverListDto {
   total: number;
   page: number;
   pageSize: number;
+}
+
+export interface DriverTrip {
+  text: string;
+  time: string;
+  dotStyle: 'default' | 'blue' | 'location';
+}
+
+export interface DriverProfileResponse extends Driver {
+  schedule?: string;
+  price?: string;
+  distance?: string;
+  time?: string;
+  client?: {
+    name: string;
+    childName: string;
+    childAge: number;
+    childType: string;
+  };
 }
 
 class DriverService {
@@ -132,19 +151,14 @@ class DriverService {
   }
 
   // Получить профиль водителя
-  static async getDriverProfile(driverId: string): Promise<Driver> {
+  static async getDriverProfile(driverId: string): Promise<DriverProfileResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/drivers/${driverId}`, {
-        headers: {
-          'Authorization': `Bearer ${this.getToken()}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при получении профиля');
+      const response = await apiClient.get<DriverProfileResponse>(`/drivers/${driverId}`);
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to load driver profile');
       }
 
-      return await response.json();
+      return response.data;
     } catch (error) {
       if (__DEV__) {
         return this.mockGetDriverProfile(driverId);
@@ -313,6 +327,21 @@ class DriverService {
     }
   }
 
+  static async getDriverTrips(driverId: string): Promise<DriverTrip[]> {
+    try {
+      const response = await apiClient.get<{ items: DriverTrip[] }>(`/drivers/${driverId}/trips`);
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to load driver trips');
+      }
+      return response.data.items;
+    } catch (error) {
+      if (__DEV__) {
+        return this.mockGetDriverTrips(driverId);
+      }
+      throw error;
+    }
+  }
+
   // Утилиты
   private static getToken(): string | null {
     // Здесь должна быть логика получения токена из AsyncStorage
@@ -320,23 +349,30 @@ class DriverService {
   }
 
   // Мок методы для разработки
-  private static mockGetDriverProfile(driverId: string): Driver {
+  private static mockGetDriverProfile(driverId: string): DriverProfileResponse {
     return {
       id: driverId,
       email: 'driver@example.com',
-      phone_number: '+994501234567',
-      first_name: 'Джон',
-      last_name: 'Доу',
-      license_number: 'AZ12345678',
-      license_expiry_date: '2027-12-31',
-      vehicle_model: 'Toyota Camry',
-      vehicle_number: '12-AB-123',
-      vehicle_year: 2020,
-      status: DriverStatus.APPROVED,
-      rating: 4.8,
-      created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z',
-      isAvailable: true,
+      phone_number: '+7 900 000-00-00',
+      first_name: 'Иван',
+      last_name: 'Иванов',
+      license_number: 'AB1234567',
+      license_expiry_date: '2030-01-01',
+      vehicle_number: 'A001AA777',
+      status: DriverStatus.ACTIVE,
+      rating: 4.9,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      schedule: '08:00 — 18:00',
+      price: '₽1500',
+      distance: '5 км',
+      time: '30 мин',
+      client: {
+        name: 'Анна Петрова',
+        childName: 'Маша',
+        childAge: 8,
+        childType: 'VIP',
+      },
     };
   }
 
@@ -367,6 +403,14 @@ class DriverService {
       this.mockGetDriverProfile('driver1'),
       this.mockGetDriverProfile('driver2'),
       this.mockGetDriverProfile('driver3'),
+    ];
+  }
+
+  private static mockGetDriverTrips(driverId: string): DriverTrip[] {
+    return [
+      { text: 'Школа', time: '08:30', dotStyle: 'location' },
+      { text: 'Музыкальная школа', time: '15:00', dotStyle: 'blue' },
+      { text: 'Дом', time: '18:00', dotStyle: 'default' },
     ];
   }
 }

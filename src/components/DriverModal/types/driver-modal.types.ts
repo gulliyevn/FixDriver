@@ -3,10 +3,12 @@ export interface DriverModalProps {
   onClose: () => void;
   onOverlayClose: () => void;
   role?: 'client' | 'driver';
-  onChat?: (driver: any) => void;
+  onChat?: (driverId: string) => void;
+  driverId: string;
 }
 
 export interface DriverModalState {
+  driverId: string;
   isDriverExpanded: boolean;
   buttonColorState: number; // 0: primary, 1: yellow (ожидание клиента), 2: cyan (поездка началась), 3: green (поездка окончилась), 4: stopped (остановлено/экстренное)
   isOnline: boolean;

@@ -7,13 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useI18n } from '../../hooks/useI18n';
 import { createDriversScreenStyles } from '../../styles/screens/drivers/DriversScreen.styles';
-import { mockDrivers, mockClients } from '../../mocks/data/users';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList, DriverStackParamList } from '../../types/navigation';
-import { Driver } from '../../types/driver';
-import { getDriverInfo } from '../../mocks/driverModalMock';
+import useDriversList from '../../hooks/client/useDriversList';
 import NotificationsModal from '../../components/NotificationsModal';
 import DriverListItem from '../../components/driver/DriverListItem';
 import DriversHeader from '../../components/DriversHeader';
@@ -29,17 +27,26 @@ const DriversScreen: React.FC = () => {
   const styles = useMemo(() => createDriversScreenStyles(isDark), [isDark]);
   const { t } = useI18n();
   const { user } = useAuth();
+  const {
+    drivers,
+    filteredDrivers,
+    favorites,
+    loading,
+    loadingMore,
+    hasMore,
+    searchQuery,
+    setSearchQuery,
+    toggleFavorite,
+    restoreFavorites,
+    loadMoreDrivers,
+    handleRefresh,
+    removeDriver,
+    removeDrivers,
+  } = useDriversList();
   const navigation = useNavigation<StackNavigationProp<ClientStackParamList | DriverStackParamList>>();
-  // Используем моки в зависимости от роли
-  const [drivers] = useState<Driver[]>(user?.role === 'driver' ? mockClients : mockDrivers);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [lastBookmarkedId, setLastBookmarkedId] = useState<string | null>(null);
   const [pausedDrivers, setPausedDrivers] = useState<Set<string>>(new Set());
   const [deletedDrivers, setDeletedDrivers] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const loadingMore = false;
-  const hasMore = false;
 
   // Фильтры/сортировки для чипов в хедере
   const [activeFilters, setActiveFilters] = useState<{ 
@@ -100,7 +107,7 @@ const DriversScreen: React.FC = () => {
       ]);
 
       if (savedFavorites) {
-        setFavorites(new Set(JSON.parse(savedFavorites)));
+        restoreFavorites(JSON.parse(savedFavorites));
       }
       if (savedPaused) {
         setPausedDrivers(new Set(JSON.parse(savedPaused)));
@@ -125,29 +132,25 @@ const DriversScreen: React.FC = () => {
     return map;
   }, [drivers]);
 
-  const parsePrice = (driverId: string): number => {
-    try {
-      const priceStr = getDriverInfo(driverId).price; // например: "25.5 AFc"
-      const match = priceStr.match(/\d+(?:[\.,]\d+)?/);
-      return match ? parseFloat(match[0].replace(',', '.')) : Number.POSITIVE_INFINITY;
-    } catch {
-      return Number.POSITIVE_INFINITY;
-    }
+  const parsePrice = (driver: Driver): number => {
+    const priceStr = (driver as any).price ?? '';
+    const match = priceStr.match(/\d+(?:[.,]\d+)?/);
+    return match ? parseFloat(match[0].replace(',', '.')) : Number.POSITIVE_INFINITY;
   };
 
-  const filteredDrivers = useMemo(() => {
+  const filteredDriversWithFilters = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
-    const filtered = query 
-      ? drivers.filter(driver =>
+    const filtered = query
+      ? filteredDrivers.filter((driver) =>
           driver.first_name?.toLowerCase().includes(query) ||
           driver.last_name?.toLowerCase().includes(query) ||
           driver.vehicle_brand?.toLowerCase().includes(query) ||
           driver.vehicle_model?.toLowerCase().includes(query)
         )
-      : drivers;
+      : filteredDrivers;
 
     // Исключаем удаленных водителей
-    let notDeleted = filtered.filter(driver => !deletedDrivers.has(driver.id));
+    let notDeleted = filtered.filter((driver) => !deletedDrivers.has(driver.id));
 
     // Фильтр по онлайн, если активен
     if (activeFilters.online) {
@@ -166,16 +169,15 @@ const DriversScreen: React.FC = () => {
 
     // Фильтр Ежедневные поездки (по расписанию из моков)
     if (activeFilters.dailyTrips) {
-      notDeleted = notDeleted.filter(driver => {
-        const schedule = getDriverInfo(driver.id).schedule?.toLowerCase?.() ?? '';
-        // считаем ежедневными диапазоны типа "пн-пт", "пн-сб"
+      notDeleted = notDeleted.filter((driver) => {
+        const schedule = (driver as any).schedule?.toLowerCase?.() ?? '';
         return schedule.includes('пн-пт') || schedule.includes('пн-сб') || schedule.includes('-');
       });
     }
 
     // Эконом — низкая цена по мок-цене
     if (activeFilters.economy) {
-      notDeleted = notDeleted.filter(driver => parsePrice(driver.id) <= 20);
+      notDeleted = notDeleted.filter((driver) => parsePrice(driver) <= 20);
     }
 
     const mapped = notDeleted.map(d => ({ 
@@ -187,8 +189,8 @@ const DriversScreen: React.FC = () => {
     // Сортировка по цене при активных чипах
     if (activeFilters.priceAsc || activeFilters.priceDesc) {
       mapped.sort((a, b) => {
-        const pa = parsePrice(a.id);
-        const pb = parsePrice(b.id);
+        const pa = parsePrice(a);
+        const pb = parsePrice(b);
         return activeFilters.priceAsc ? pa - pb : pb - pa;
       });
     } else {
@@ -202,38 +204,7 @@ const DriversScreen: React.FC = () => {
     }
 
     return mapped;
-  }, [drivers, searchQuery, favorites, pausedDrivers, deletedDrivers, activeFilters, lastBookmarkedId, originalIndexById]);
-
-  const loadMoreDrivers = async () => {};
-  const handleRefresh = async () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 500);
-  };
-  
-  const toggleFavorite = useCallback(async (driverId: string) => {
-    setFavorites(prev => {
-      const next = new Set(prev);
-      if (next.has(driverId)) {
-        next.delete(driverId);
-      } else {
-        next.add(driverId);
-        setLastBookmarkedId(driverId);
-      }
-      return next;
-    });
-
-    // Сохраняем в AsyncStorage
-    try {
-      const newFavorites = favorites.has(driverId) 
-        ? new Set([...favorites].filter(id => id !== driverId))
-        : new Set([...favorites, driverId]);
-      
-      await AsyncStorage.setItem('driver_favorites', JSON.stringify([...newFavorites]));
-      await AsyncStorage.setItem('driver_last_bookmarked', JSON.stringify(driverId));
-    } catch (error) {
-      console.error('Error saving favorites:', error);
-    }
-  }, [favorites]);
+  }, [filteredDrivers, searchQuery, favorites, pausedDrivers, deletedDrivers, activeFilters, lastBookmarkedId, originalIndexById]);
 
   const togglePause = useCallback((driverId: string) => {
     const driver = drivers.find(d => d.id === driverId);
@@ -288,7 +259,9 @@ const DriversScreen: React.FC = () => {
             // TODO: Обновить статус в БД
             console.log(`${isCurrentlyPaused ? 'Resume' : 'Pause'} trip for ${isDriver ? 'client' : 'driver'}:`, driverId);
             // Закрываем свайп после подтверждения
-            try { swipeRefs.current[driverId]?.close?.(); } catch {}
+            try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
+              console.error('Error closing swipe:', error);
+            }
           }
         }
       ]
@@ -372,7 +345,9 @@ const DriversScreen: React.FC = () => {
 
   const closeOpenSwipe = useCallback(() => {
     if (openSwipeRef.current) {
-      try { openSwipeRef.current.close(); } catch {}
+      try { openSwipeRef.current.close(); } catch (error) {
+        console.error('Error closing open swipe:', error);
+      }
       openSwipeRef.current = null;
     }
   }, []);
@@ -432,7 +407,9 @@ const DriversScreen: React.FC = () => {
         if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[id]) {
           try {
             openSwipeRef.current.close();
-          } catch {}
+          } catch (error) {
+            console.error('Error closing previous swipe:', error);
+          }
         }
         openSwipeRef.current = swipeRefs.current[id] ?? null;
       }}
@@ -443,11 +420,15 @@ const DriversScreen: React.FC = () => {
       }}
       onToggleFavorite={(driverId) => {
         toggleFavorite(driverId);
-        try { swipeRefs.current[driverId]?.close?.(); } catch {}
+        try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
+          console.error('Error closing swipe on toggle favorite:', error);
+        }
       }}
       onDelete={(driverId) => {
         deleteDriver(driverId);
-        try { swipeRefs.current[driverId]?.close?.(); } catch {}
+        try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
+          console.error('Error closing swipe on toggle favorite:', error);
+        }
       }}
       onChat={handleChatWithDriver}
       onTogglePause={togglePause}

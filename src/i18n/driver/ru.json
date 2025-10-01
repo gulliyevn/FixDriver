@@ -186,5 +186,10 @@
       "resume": "Возобновить поездку",
       "resumeMessage": "Продолжить поездку с {clientName}?"
     }
+  },
+  "paymentHistory": {
+    "title": "История выплат",
+    "noPayments": "Нет выплат",
+    "emptyDescription": "История выплат пуста"
   }
 }

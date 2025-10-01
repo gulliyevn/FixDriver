@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User, Client, Child, PaymentMethod } from '../types/user';
+import { ProfileService } from '../services/ProfileService';
+import { useAuth } from './AuthContext';
 
 interface ProfileContextType {
   profile: User | null;
@@ -10,9 +12,10 @@ interface ProfileContextType {
   addPaymentMethod: (paymentMethod: Omit<PaymentMethod, 'id'>) => Promise<boolean>;
   removePaymentMethod: (paymentMethodId: string) => Promise<boolean>;
   loading: boolean;
+  loadProfile: () => Promise<void>;
 }
 
-const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+export const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const useProfile = () => {
   const context = useContext(ProfileContext);
@@ -27,23 +30,78 @@ interface ProfileProviderProps {
 }
 
 export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Загружаем профиль при изменении пользователя
   useEffect(() => {
-    loadProfile();
-  }, []);
+    if (user) {
+      loadProfile(user.id);
+    } else {
+      setProfile(null);
+      setLoading(false);
+    }
+  }, [user]);
 
-  const loadProfile = async () => {
+  const loadProfile = async (userId: string) => {
     try {
-      const profileData = await AsyncStorage.getItem('profile');
-      if (profileData) {
-        setProfile(JSON.parse(profileData));
+      setLoading(true);
+      console.log('[ProfileContext] Loading profile for user:', userId);
+      
+      // Используем ProfileService (поддерживает DEV/PROD)
+      const loadedProfile = await ProfileService.getProfile(userId);
+      
+      if (loadedProfile) {
+        // Normalize/merge with current auth user to fill missing fields
+        const normalized: User = {
+          id: loadedProfile.id || user?.id || '',
+          email: loadedProfile.email || user?.email || '',
+          name: (loadedProfile as any).name || (user as any)?.name || (user as any)?.firstName || '',
+          surname: (loadedProfile as any).surname || (user as any)?.surname || (user as any)?.lastName || '',
+          role: loadedProfile.role || user?.role || 'client',
+          phone: loadedProfile.phone || user?.phone || '',
+          avatar: loadedProfile.avatar ?? null,
+          rating: loadedProfile.rating ?? 5,
+          address: loadedProfile.address || '',
+          createdAt: loadedProfile.createdAt || user?.createdAt || new Date().toISOString(),
+          birthDate: loadedProfile.birthDate || user?.birthDate,
+        } as User;
+
+        // If we filled any missing fields, persist back
+        const changed = JSON.stringify(loadedProfile) !== JSON.stringify(normalized);
+        if (changed) {
+          await AsyncStorage.setItem(`@profile_${userId}`, JSON.stringify(normalized));
+        }
+
+        setProfile(normalized);
+        console.log('[ProfileContext] ✅ Profile loaded');
+      } else {
+        // Если профиль не найден, создаем из данных user
+        if (user) {
+          const newProfile: User = {
+            ...user,
+            createdAt: user.createdAt || new Date().toISOString(),
+          };
+          
+          // Сохраняем профиль напрямую в AsyncStorage
+          await AsyncStorage.setItem(`@profile_${userId}`, JSON.stringify(newProfile));
+          setProfile(newProfile);
+          
+          console.log('[ProfileContext] ✅ Profile created from user data and saved');
+        }
       }
     } catch (error) {
-      console.warn('Profile load error:', error);
+      console.warn('[ProfileContext] Profile load error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Публичный метод для загрузки профиля текущего пользователя
+  const loadProfilePublic = async (): Promise<void> => {
+    if (user?.id) {
+      await loadProfile(user.id);
     }
   };
 
@@ -59,10 +117,26 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   };
 
   const updateProfile = async (updates: Partial<User>): Promise<boolean> => {
-    if (!profile) return false;
+    if (!profile || !user) return false;
     
-    const updatedProfile = { ...profile, ...updates };
-    return await saveProfile(updatedProfile);
+    try {
+      console.log('[ProfileContext] Updating profile...');
+      
+      // Используем ProfileService (поддерживает DEV/PROD)
+      const result = await ProfileService.updateProfile(user.id, updates);
+      
+      if (result.success && result.profile) {
+        setProfile(result.profile);
+        console.log('[ProfileContext] ✅ Profile updated');
+        return true;
+      }
+      
+      console.error('[ProfileContext] ❌ Profile update failed:', result.error);
+      return false;
+    } catch (error) {
+      console.error('[ProfileContext] Profile update error:', error);
+      return false;
+    }
   };
 
   const addChild = async (childData: Omit<Child, 'id'>): Promise<boolean> => {
@@ -137,6 +211,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     addPaymentMethod,
     removePaymentMethod,
     loading,
+    loadProfile: loadProfilePublic,
   };
 
   return (

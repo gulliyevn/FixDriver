@@ -1,14 +1,11 @@
 import { useRef, useCallback } from 'react';
-import { Animated } from 'react-native';
-import { Linking } from 'react-native';
-import { DriverModalActions } from '../types/driver-modal.types';
-import { mockDrivers } from '../../../mocks/data/users';
-import { getSampleDriverId } from '../../../mocks/driverModalMock';
+import { Animated, Linking } from 'react-native';
 
-export const useCallSheet = (actions: DriverModalActions) => {
+import { DriverModalActions } from '../types/driver-modal.types';
+import { DriverDetails } from '../../../hooks/driver/useDriverDetails';
+
+export const useCallSheet = (actions: DriverModalActions, driver: DriverDetails['driver']) => {
   const callAnim = useRef(new Animated.Value(0)).current;
-  const driverId = getSampleDriverId();
-  const driver = mockDrivers.find((d) => d.id === driverId) ?? mockDrivers[0];
 
   const openCallSheet = useCallback(() => {
     actions.setCallSheetOpen(true);
@@ -29,15 +26,14 @@ export const useCallSheet = (actions: DriverModalActions) => {
 
   const handleNetworkCall = useCallback(() => {
     try {
-      Linking.openURL(`tel:${driver.phone_number}`);
+      Linking.openURL(`tel:${driver.phone}`);
     } finally {
       closeCallSheet();
     }
-  }, [closeCallSheet, driver.phone_number]);
+  }, [closeCallSheet, driver.phone]);
 
   const handleInternetCall = useCallback(() => {
     closeCallSheet();
-    // Здесь можно добавить логику для интернет-звонка
   }, [closeCallSheet]);
 
   return {

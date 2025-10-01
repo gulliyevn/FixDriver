@@ -42,11 +42,11 @@ export const useErrorBoundary = () => {
 
   // Автоматический сброс ошибки при изменении зависимостей
   const resetErrorOnDependencyChange = useCallback((dependencies: any[]) => {
-    useEffect(() => {
-      if (errorState.hasError) {
-        resetError();
-      }
-    }, dependencies);
+    // Этот callback не должен содержать useEffect
+    // useEffect должен вызываться на верхнем уровне компонента
+    if (errorState.hasError) {
+      resetError();
+    }
   }, [errorState.hasError, resetError]);
 
   return {

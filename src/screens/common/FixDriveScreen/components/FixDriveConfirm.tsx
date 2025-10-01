@@ -5,7 +5,6 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
 import { getCurrentColors } from '../../../../constants/colors';
 import { createDriversScreenStyles } from '../../../../styles/screens/drivers/DriversScreen.styles';
-import { mockDrivers } from '../../../../mocks/data/users';
 import { AddressData } from '../types/fix-drive.types';
 
 interface FixDriveConfirmProps {
