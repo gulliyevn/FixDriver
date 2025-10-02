@@ -5,7 +5,6 @@ const ENABLE_SOCIAL_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_SOCIAL_LOGS) {
-    console.log(message, data);
   }
 };
 
@@ -83,7 +82,6 @@ export class SocialAuthService {
       
       throw new Error('Google Sign-In не настроен');
     } catch (error) {
-      console.error('Google Sign-In error:', error);
       return {
         success: false,
         error: 'Ошибка входа через Google'
@@ -144,7 +142,6 @@ export class SocialAuthService {
       
       throw new Error('Facebook Login не настроен');
     } catch (error) {
-      console.error('Facebook Login error:', error);
       return {
         success: false,
         error: 'Ошибка входа через Facebook'
@@ -204,7 +201,6 @@ export class SocialAuthService {
       
       throw new Error('Apple Sign-In не настроен');
     } catch (error) {
-      console.error('Apple Sign-In error:', error);
       return {
         success: false,
         error: 'Ошибка входа через Apple'
@@ -230,7 +226,6 @@ export class SocialAuthService {
       
   
     } catch (error) {
-      console.error('Social sign out error:', error);
     }
   }
 

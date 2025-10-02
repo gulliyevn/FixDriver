@@ -87,7 +87,6 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
 
   const selectFromMap = (id: string) => {
     // Здесь будет логика выбора адреса из карты
-    console.log('Select from map for:', id);
   };
 
   const getAddressIcon = (type: 'from' | 'to' | 'stop') => {

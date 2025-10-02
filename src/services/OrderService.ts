@@ -36,7 +36,6 @@ export class OrderService {
       const response = await APIClient.get<Order[]>(`/orders/client/${userId}`);
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get orders error:', error);
       return [];
     }
   }
@@ -46,7 +45,6 @@ export class OrderService {
       const response = await APIClient.get<Order>(`/orders/${orderId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get order error:', error);
       return null;
     }
   }
@@ -59,7 +57,6 @@ export class OrderService {
       }
       throw new Error(response.error || 'Failed to create order');
     } catch (error) {
-      console.error('Create order error:', error);
       throw error;
     }
   }
@@ -69,7 +66,6 @@ export class OrderService {
       const response = await APIClient.put<Order>(`/orders/${orderId}`, updates);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Update order error:', error);
       return null;
     }
   }
@@ -79,7 +75,6 @@ export class OrderService {
       const response = await APIClient.post<Order>(`/orders/${orderId}/cancel`, {});
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Cancel order error:', error);
       return null;
     }
   }
@@ -89,7 +84,6 @@ export class OrderService {
       const response = await APIClient.post<Order>(`/orders/${orderId}/complete`, {});
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Complete order error:', error);
       return null;
     }
   }
@@ -100,7 +94,6 @@ export class OrderService {
       const response = await APIClient.get<Order[]>(`/orders/driver/${driverId}`);
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get driver orders error:', error);
       return [];
     }
   }
@@ -110,7 +103,6 @@ export class OrderService {
       const response = await APIClient.post<Order>(`/orders/${orderId}/accept`, { driverId });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Accept order error:', error);
       return null;
     }
   }
@@ -120,7 +112,6 @@ export class OrderService {
       const response = await APIClient.post<Order>(`/orders/${orderId}/status`, { status });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Update order status error:', error);
       return null;
     }
   }
@@ -131,7 +122,6 @@ export class OrderService {
       const response = await APIClient.get<{ location: { latitude: number; longitude: number }; status: string }>(`/orders/${orderId}/track`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Track order error:', error);
       return null;
     }
   }
@@ -141,7 +131,6 @@ export class OrderService {
       const response = await APIClient.post<{ success: boolean }>(`/orders/${orderId}/location`, { location });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Update order location error:', error);
       return false;
     }
   }
@@ -152,7 +141,6 @@ export class OrderService {
       const response = await APIClient.get<Order[]>(`/orders/search`, { q: query, userId });
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Search orders error:', error);
       return [];
     }
   }
@@ -162,7 +150,6 @@ export class OrderService {
       const response = await APIClient.get<Order[]>(`/orders/status/${status}`, { userId });
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get orders by status error:', error);
       return [];
     }
   }

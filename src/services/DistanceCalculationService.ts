@@ -19,7 +19,6 @@ export class DistanceCalculationService {
     departureTime?: Date
   ): Promise<DistanceCalculationResult> {
     try {
-      console.log('🗺️ Используем OSRM для расчета маршрута');
       
       // Используем OSRM API (бесплатный, без ключа)
       const coordinates = `${from.coordinate.longitude},${from.coordinate.latitude};${to.coordinate.longitude},${to.coordinate.latitude}`;
@@ -63,8 +62,6 @@ export class DistanceCalculationService {
         estimatedTime,
       };
           } catch (error) {
-        console.error('OSRM error:', error);
-        console.log('⚠️ Используем fallback расчет');
         // Fallback на примерные расчеты при ошибке
         return this.calculateFallback(from, to);
       }

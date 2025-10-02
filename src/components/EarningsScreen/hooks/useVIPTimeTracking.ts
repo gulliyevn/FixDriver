@@ -91,7 +91,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     // Принудительно проверяем день при загрузке
     setTimeout(() => {
       performDayCheck().catch(error => {
-        console.error('Ошибка при принудительной проверке дня:', error);
       });
     }, 1000);
   }, []);
@@ -173,10 +172,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
           
           // Сохраняем в БД асинхронно
           DriverStatsService.saveDayStats(previousDayStats).catch(error => {
-            console.error('Ошибка сохранения статистики в БД:', error);
           });
           
-          console.log(`[VIPTimeTracking] День завершен: ${vipTimeData.currentDay}, часы: ${previousDayStats.hoursOnline.toFixed(1)}, поездки: ${previousDayStats.ridesCount}, заработок: ${(previousDayEarnings || 0).toFixed(1)} AFc`);
           
           return; // Выходим из функции, диалог обработает дальнейшие действия
         }
@@ -270,7 +267,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   useEffect(() => {
     const interval = setInterval(() => {
       performDayCheck().catch(error => {
-        console.error('Ошибка при проверке дня:', error);
       });
     }, 60000);
     return () => clearInterval(interval);
@@ -318,7 +314,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(initialData));
       }
     } catch (error) {
-      console.error('Ошибка при загрузке VIP времени:', error);
     }
   };
 
@@ -326,7 +321,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     try {
       await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(data));
     } catch (error) {
-      console.error('Ошибка при сохранении VIP времени:', error);
     }
   };
 
@@ -336,7 +330,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
       const saved = await AsyncStorage.getItem(DAILY_STATS_KEY);
       return saved ? JSON.parse(saved) : {};
     } catch (error) {
-      console.error('Ошибка при загрузке дневной статистики:', error);
       return {};
     }
   };
@@ -345,7 +338,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     try {
       await AsyncStorage.setItem(DAILY_STATS_KEY, JSON.stringify(stats));
     } catch (error) {
-      console.error('Ошибка при сохранении дневной статистики:', error);
     }
   };
 
@@ -578,7 +570,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     DriverStatusService.setOnline(true);
     AsyncStorage.setItem('@driver_online_status', 'true').catch(() => {});
     
-    console.log('[VIPTimeTracking] Водитель продолжил работу в новом дне');
   }, [vipTimeData, saveVIPTimeData]);
 
   const handleDayEndCancel = useCallback(() => {
@@ -602,7 +593,6 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     DriverStatusService.setOnline(false);
     AsyncStorage.setItem('@driver_online_status', 'false').catch(() => {});
     
-    console.log('[VIPTimeTracking] Водитель завершил работу на день');
   }, [vipTimeData, saveVIPTimeData]);
 
   return {

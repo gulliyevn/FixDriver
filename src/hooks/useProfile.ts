@@ -42,7 +42,6 @@ export const useProfile = () => {
   // clearProfile не нужен, так как ProfileContext управляет профилем автоматически
   const clearProfile = async () => {
     // Профиль очищается через AuthContext.logout()
-    console.log('[useProfile] clearProfile called - profile will be cleared on logout');
   };
 
   return {

@@ -60,7 +60,6 @@ class HelpService {
       if (!raw) return null;
       return JSON.parse(raw) as HelpContent;
     } catch (error) {
-      console.warn('Failed to parse cached help content', error);
       return null;
     }
   }

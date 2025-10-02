@@ -10,7 +10,6 @@ export const useSessionCleanup = () => {
       try {
         await fixwaveOrderService.checkAndClearExpiredSession();
       } catch (error) {
-        console.error('Error in session cleanup:', error);
       }
     };
 
@@ -32,9 +31,7 @@ export const useSessionCleanup = () => {
   const forceClearSession = async () => {
     try {
       await fixwaveOrderService.clearSessionData();
-      console.log('Session forcefully cleared');
     } catch (error) {
-      console.error('Error forcefully clearing session:', error);
     }
   };
 

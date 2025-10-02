@@ -50,7 +50,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
         setBalance(parseFloat(storedBalance));
       }
     } catch (error) {
-      console.error('Error loading client balance:', error);
     }
   };
 
@@ -75,7 +74,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
         setTransactions(migratedTransactions);
       }
     } catch (error) {
-      console.error('Error loading client transactions:', error);
     }
   };
 
@@ -86,7 +84,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
         setCashback(parseFloat(storedCashback));
       }
     } catch (error) {
-      console.error('Error loading client cashback:', error);
     }
   };
 
@@ -95,7 +92,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
       await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
     } catch (error) {
-      console.error('Error saving client balance:', error);
     }
   };
 
@@ -104,7 +100,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
       await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
-      console.error('Error saving client transactions:', error);
     }
   };
 
@@ -113,7 +108,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
       await AsyncStorage.setItem(cashbackKey, newCashback.toString());
       setCashback(newCashback);
     } catch (error) {
-      console.error('Error saving client cashback:', error);
     }
   };
 
@@ -167,7 +161,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const resetBalance = async () => {
     try {
-      console.log('🔄 Сброс клиентского баланса...');
       
       // Обнуляем баланс
       setBalance(0);
@@ -181,20 +174,16 @@ export const useClientBalance = (): ClientBalanceContextType => {
       setCashback(0);
       await AsyncStorage.setItem(cashbackKey, '0');
       
-      console.log('✅ Клиентский баланс успешно сброшен');
     } catch (error) {
-      console.error('❌ Ошибка при сбросе клиентского баланса:', error);
     }
   };
 
   // Dummy функция для совместимости с интерфейсом
   const addEarnings = async (amount: number) => {
-    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
   };
 
   // Dummy функция для совместимости с интерфейсом
   const loadEarnings = async () => {
-    console.log('💵 Клиент не может зарабатывать, но функция добавлена для совместимости');
   };
 
   return {

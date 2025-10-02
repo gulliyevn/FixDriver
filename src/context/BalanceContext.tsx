@@ -52,7 +52,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       const list = await BalanceService.getTransactions(user.id);
       setTransactions(list);
     } catch (error) {
-      console.error('Error loading balance:', error);
       setBalance(0);
     }
   };
@@ -68,7 +67,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
         .reduce((acc, t) => acc + t.amount, 0);
       setEarnings(total);
     } catch (error) {
-      console.error('Error loading earnings:', error);
       setEarnings(0);
     }
   };
@@ -79,7 +77,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       const list = await BalanceService.getTransactions(user.id);
       setTransactions(list);
     } catch (error) {
-      console.error('Error loading transactions:', error);
       setTransactions([]);
     }
   };
@@ -122,7 +119,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setTransactions(list);
       return true;
     } catch (e) {
-      console.error('Top-up error', e);
       return false;
     }
   };
@@ -142,7 +138,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setTransactions(list);
       return true;
     } catch (e) {
-      console.error('Withdraw error', e);
       return false;
     }
   };
@@ -154,7 +149,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setTransactions([]);
       // В DEV можно очистить через перезапись ключей, но оставим минимально без IO
     } catch (error) {
-      console.error('❌ Ошибка при сбросе баланса:', error);
     }
   };
 
@@ -164,7 +158,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setEarnings(0);
       return old;
     } catch (error) {
-      console.error('❌ Ошибка при сбросе заработка:', error);
       return earnings;
     }
   };

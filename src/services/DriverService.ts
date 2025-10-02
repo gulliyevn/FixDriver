@@ -103,7 +103,6 @@ class DriverService {
 
       return result;
     } catch (error) {
-      console.error('Driver registration error:', error);
       
       // В режиме разработки возвращаем мок данные
       if (__DEV__) {

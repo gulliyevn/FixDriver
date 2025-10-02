@@ -79,7 +79,6 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
       await setLanguage(selectedLanguage as SupportedLanguage);
       onClose();
     } catch (error) {
-      console.warn('Language change error:', error);
     }
   };
 

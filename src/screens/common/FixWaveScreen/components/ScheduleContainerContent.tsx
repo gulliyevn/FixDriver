@@ -66,19 +66,15 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
 
     // Если нужно показать рассчитанное время и время не выбирается пользователем
     if (shouldShowCalculatedTime && !allowTimeSelection) {
-      console.log('📊 Показываем рассчитанное время:', calculatedTime);
       return calculatedTime;
     }
 
     // Иначе показываем время, введенное пользователем
     if (fixedMode) {
-      console.log('📊 Показываем фиксированное время:', fixedTime);
       return fixedTime || '--:--';
     } else if (weekdaysMode) {
-      console.log('📊 Показываем время будней:', weekdayTime);
       return weekdayTime || '--:--';
     } else {
-      console.log('📊 Показываем время выходных:', weekendTime);
       return weekendTime || '--:--';
     }
   };

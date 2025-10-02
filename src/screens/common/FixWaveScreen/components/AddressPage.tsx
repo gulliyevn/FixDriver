@@ -43,7 +43,6 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
           console.log('Addresses restored:', addressData.addresses); // Добавляем лог для отладки
         }
       } catch (error) {
-        console.error('Error loading session data:', error);
       }
     };
     loadSessionData();
@@ -101,7 +100,6 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
       await fixwaveOrderService.saveSessionData(sessionData);
       console.log('Session saved:', sessionData); // Добавляем лог для отладки
     } catch (error) {
-      console.error('Error saving to session:', error);
     }
   };
 
@@ -142,7 +140,6 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
       onNext(addressData);
 
     } catch (error) {
-      console.error('Error saving order:', error);
       Alert.alert(
         'Ошибка',
         'Не удалось сохранить данные заказа. Попробуйте еще раз.',

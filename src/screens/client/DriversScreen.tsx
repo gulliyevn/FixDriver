@@ -119,7 +119,6 @@ const DriversScreen: React.FC = () => {
         setLastBookmarkedId(JSON.parse(savedLastBookmarked));
       }
     } catch (error) {
-      console.error('Error loading saved statuses:', error);
     }
   };
 
@@ -253,14 +252,11 @@ const DriversScreen: React.FC = () => {
               
               await AsyncStorage.setItem('driver_paused', JSON.stringify([...newPausedDrivers]));
             } catch (error) {
-              console.error('Error saving paused status:', error);
             }
 
             // TODO: Обновить статус в БД
-            console.log(`${isCurrentlyPaused ? 'Resume' : 'Pause'} trip for ${isDriver ? 'client' : 'driver'}:`, driverId);
             // Закрываем свайп после подтверждения
             try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
-              console.error('Error closing swipe:', error);
             }
           }
         }
@@ -270,7 +266,6 @@ const DriversScreen: React.FC = () => {
 
   const removeDriver = useCallback((driverId: string) => {
     // В режиме моков просто скрываем
-    console.log('Remove driver:', driverId);
   }, []);
 
   const removeDrivers = useCallback(async (ids: Set<string>) => {
@@ -285,10 +280,8 @@ const DriversScreen: React.FC = () => {
       const newDeletedDrivers = new Set([...deletedDrivers, ...ids]);
       await AsyncStorage.setItem('driver_deleted', JSON.stringify([...newDeletedDrivers]));
     } catch (error) {
-      console.error('Error saving deleted status:', error);
     }
 
-    console.log('Remove drivers:', Array.from(ids));
   }, [deletedDrivers]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -346,7 +339,6 @@ const DriversScreen: React.FC = () => {
   const closeOpenSwipe = useCallback(() => {
     if (openSwipeRef.current) {
       try { openSwipeRef.current.close(); } catch (error) {
-        console.error('Error closing open swipe:', error);
       }
       openSwipeRef.current = null;
     }
@@ -386,7 +378,6 @@ const DriversScreen: React.FC = () => {
         });
       }, 100);
     } catch (error) {
-      console.warn('Chat navigation failed, falling back to Chat tab:', error);
       navigation.navigate('Chat' as any);
     }
   }, [navigation]);
@@ -408,7 +399,6 @@ const DriversScreen: React.FC = () => {
           try {
             openSwipeRef.current.close();
           } catch (error) {
-            console.error('Error closing previous swipe:', error);
           }
         }
         openSwipeRef.current = swipeRefs.current[id] ?? null;
@@ -421,13 +411,11 @@ const DriversScreen: React.FC = () => {
       onToggleFavorite={(driverId) => {
         toggleFavorite(driverId);
         try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
-          console.error('Error closing swipe on toggle favorite:', error);
         }
       }}
       onDelete={(driverId) => {
         deleteDriver(driverId);
         try { swipeRefs.current[driverId]?.close?.(); } catch (error) {
-          console.error('Error closing swipe on toggle favorite:', error);
         }
       }}
       onChat={handleChatWithDriver}
@@ -508,10 +496,8 @@ const DriversScreen: React.FC = () => {
               const newDeletedDrivers = new Set([...deletedDrivers, driverId]);
               await AsyncStorage.setItem('driver_deleted', JSON.stringify([...newDeletedDrivers]));
             } catch (error) {
-              console.error('Error saving deleted status:', error);
             }
 
-            console.log('Driver deleted:', driverId);
           }
         }
       ]

@@ -32,17 +32,9 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
 
   // Проверяем готовность данных для отображения кнопки сохранения
   const isScheduleReadyToSave = () => {
-    console.log('🔍 Проверка готовности кнопки "Сохранить":');
-    console.log('  - scheduleType:', `"${selectedScheduleType}" (type: ${typeof selectedScheduleType})`);
-    console.log('  - selectedDays:', selectedDays);
-    console.log('  - selectedTime:', selectedTime);
-    console.log('  - returnTime:', returnTime);
-    console.log('  - isReturnTrip:', isReturnTrip);
-    console.log('  - returnWeekdaysTime:', returnWeekdaysTime);
 
     // Базовые проверки
     if (!selectedScheduleType || selectedDays.length === 0) {
-      console.log('❌ Базовые поля не заполнены');
       return false;
     }
 
@@ -51,47 +43,38 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
       case 'oneWay': {
         // Нужно: время туда
         const oneWayReady = !!selectedTime;
-        console.log('🎯 oneWay готов:', oneWayReady, '(нужно только selectedTime)');
         return oneWayReady;
       }
 
       case 'thereAndBack': {
         // Нужно: время туда И время обратно (всегда)
         const thereAndBackReady = !!selectedTime && !!returnTime;
-        console.log('🔄 thereAndBack готов:', thereAndBackReady, '(нужно selectedTime + returnTime)');
         return thereAndBackReady;
       }
 
       case 'weekdays':
         // Нужно: selectedTime + (returnWeekdaysTime если включена обратная поездка)
         if (!selectedTime) {
-          console.log('❌ weekdays: нет selectedTime');
           return false;
         }
         // Если пользователь включил обратную поездку - нужно время обратно
         if (isReturnTrip && !returnWeekdaysTime) {
-          console.log('❌ weekdays: включена обратная поездка, но нет returnWeekdaysTime');
           return false;
         }
-        console.log('📅 weekdays готов: true (все поля заполнены)');
         return true;
 
       case 'flexible':
         // Нужно: selectedTime + (returnTime если включена обратная поездка)
         if (!selectedTime) {
-          console.log('❌ flexible: нет selectedTime');
           return false;
         }
         // Если пользователь включил обратную поездку - нужно время обратно
         if (isReturnTrip && !returnTime) {
-          console.log('❌ flexible: включена обратная поездка, но нет returnTime');
           return false;
         }
-        console.log('🔧 flexible готов: true (все поля заполнены)');
         return true;
 
       default:
-        console.log('❌ Неизвестный тип расписания:', selectedScheduleType);
         return false;
     }
   };
@@ -118,10 +101,6 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
     const hasButton = isScheduleReadyToSave();
     const hasCheckbox = hasVisibleCheckbox();
     
-    console.log('🔍 Проверка отступа снизу:');
-    console.log('  - hasButton (кнопка Сохранить):', hasButton);
-    console.log('  - hasCheckbox (чекбокс виден):', hasCheckbox);
-    console.log('  - needsPadding:', !hasButton && !hasCheckbox);
     
     // Если нет кнопки "Сохранить" И нет чекбокса = нужен отступ
     return !hasButton && !hasCheckbox;
@@ -142,12 +121,6 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
 
   // Универсальная валидация расписания
   const validateSchedule = () => {
-    console.log('🔍 Универсальная валидация расписания...');
-    console.log('📋 Тип расписания:', selectedScheduleType);
-    console.log('📅 Выбранные дни:', selectedDays);
-    console.log('⏰ Время туда:', selectedTime);
-    console.log('🔄 Время обратно:', returnTime);
-    console.log('🚌 Обратная поездка:', isReturnTrip);
 
     // Проверяем базовые поля
     if (!selectedScheduleType) {
@@ -207,14 +180,12 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
         return false;
     }
 
-    console.log('✅ Валидация пройдена успешно');
     return true;
   };
 
   // Универсальное сохранение расписания
   const saveScheduleToStorage = async () => {
     try {
-      console.log('💾 Сохранение расписания в localStorage...');
       
       const scheduleData = {
         scheduleType: selectedScheduleType,
@@ -227,21 +198,17 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
         timestamp: new Date().toISOString(),
       };
 
-      console.log('📊 Данные для сохранения:', JSON.stringify(scheduleData, null, 2));
 
       await AsyncStorage.setItem('universalSchedule', JSON.stringify(scheduleData));
       
-      console.log('✅ Расписание успешно сохранено в localStorage');
       return true;
     } catch (error) {
-      console.error('❌ Ошибка сохранения расписания:', error);
       Alert.alert('Ошибка', 'Не удалось сохранить расписание');
       return false;
     }
   };
 
   const handleSaveAndNext = async () => {
-    console.log('🔘 Универсальная кнопка "Сохранить" нажата!');
     
     if (currentPage === 'timeSchedule') {
       // Валидируем расписание
@@ -256,7 +223,6 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
       }
 
       // Переходим к следующей странице
-      console.log('🚀 Переход к странице адресов');
       setCurrentPage('addresses');
       
     } else if (currentPage === 'addresses') {

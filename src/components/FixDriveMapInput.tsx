@@ -81,7 +81,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                    t('common.fixDrive.address.stopPlaceholder')
       }));
       setAddresses(updatedAddresses);
-      console.log('Addresses restored in FixDriveMapInput:', updatedAddresses);
       console.log('Coordinates mapping:', updatedAddresses.map(addr => ({
         id: addr.id,
         type: addr.type,
@@ -122,7 +121,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
 
   // Логируем обновления mapRoutePoints
   useEffect(() => {
-    console.log('Map route points updated:', mapRoutePoints);
   }, [mapRoutePoints]);
 
   const handleMapPress = useCallback((location: MapLocation) => {
@@ -196,9 +194,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
       return newValidation;
     });
     
-    console.log('Address removed:', id, 'Type:', addressToRemove?.type);
-    console.log('Updated addresses:', updatedAddresses);
-    console.log('Map route points will be:', updatedAddresses.filter(addr => addr.coordinate));
     
     // Логируем привязку булавок
     const remainingRoutePoints = updatedAddresses.filter(addr => addr.coordinate);
@@ -222,8 +217,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     // Очищаем всю валидацию
     setAddressValidation({});
     
-    console.log('All points cleared');
-    console.log('Cleared addresses:', clearedAddresses);
   };
 
   const toggleMapMode = () => {
@@ -254,7 +247,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     );
     setAddresses(updatedAddresses);
     onAddressesChange(updatedAddresses);
-    console.log('Address selected:', id, 'coordinates:', coordinates);
   };
 
   const handleValidationChange = (id: string, isValid: boolean) => {
@@ -518,7 +510,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
                         return newValidation;
                       });
                       
-                      console.log('Address cleared:', address.id, 'Type:', address.type);
                     }}
                   >
                     <Ionicons name="close-circle" size={16} color={colors.error} />

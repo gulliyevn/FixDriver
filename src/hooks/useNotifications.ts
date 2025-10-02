@@ -27,7 +27,6 @@ export const useNotifications = () => {
         setSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
       }
     } catch (error) {
-      console.error('Error loading notification settings:', error);
     }
   }, []);
 
@@ -37,7 +36,6 @@ export const useNotifications = () => {
       await AsyncStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
       setSettings(newSettings);
     } catch (error) {
-      console.error('Error saving notification settings:', error);
     }
   }, []);
 
@@ -71,7 +69,6 @@ export const useNotifications = () => {
         }
       );
     } catch (error) {
-      console.error('Error initializing notifications:', error);
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +91,6 @@ export const useNotifications = () => {
 
       return result;
     } catch (error) {
-      console.error('Error requesting permissions:', error);
       return null;
     }
   }, [settings, saveSettings, notificationService]);

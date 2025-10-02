@@ -119,7 +119,6 @@ export const usePaymentHistory = (): UsePaymentHistoryResult => {
       setHasMore(response.hasMore);
       setCurrentPage(page);
     } catch (error) {
-      console.error('Error loading payment history:', error);
       setErrorKey('errors.paymentHistoryLoadFailed');
     } finally {
       setLoading(false);
@@ -135,7 +134,6 @@ export const usePaymentHistory = (): UsePaymentHistoryResult => {
       const newStats = await PaymentHistoryService.getPaymentStats(user.id, userRole);
       setStats(newStats);
     } catch (error) {
-      console.error('Error loading payment stats:', error);
     }
   }, [user?.id, userRole]);
 

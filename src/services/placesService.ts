@@ -74,7 +74,6 @@ class PlacesService {
         },
       }));
     } catch (error) {
-      console.error('Error fetching place predictions:', error);
       return [];
     }
   }
@@ -117,7 +116,6 @@ class PlacesService {
         name: item.name || item.display_name,
       };
     } catch (error) {
-      console.error('Error fetching place details:', error);
       return null;
     }
   }
@@ -155,7 +153,6 @@ class PlacesService {
       
       await AsyncStorage.setItem(storageKey, JSON.stringify(history));
     } catch (error) {
-      console.error('Error saving to history:', error);
     }
   }
 
@@ -169,7 +166,6 @@ class PlacesService {
       const history = await AsyncStorage.getItem(storageKey);
       return history ? JSON.parse(history) : [];
     } catch (error) {
-      console.error('Error getting history:', error);
       return [];
     }
   }
@@ -183,7 +179,6 @@ class PlacesService {
     try {
       await AsyncStorage.removeItem(storageKey);
     } catch (error) {
-      console.error('Error clearing history:', error);
     }
   }
 

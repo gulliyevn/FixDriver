@@ -82,7 +82,6 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
   const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {
-    console.log('🔄 selectedDriverId changed to:', selectedDriverId);
   }, [selectedDriverId]);
 
   // Детерминированное расстояние (Haversine) и мемоизированная цена
@@ -132,12 +131,10 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
 
 
   const selectDriver = useCallback((driverId: number) => {
-    console.log('Selecting driver:', driverId);
     setSelectedDriverId(driverId);
   }, []);
 
   const deselectDriver = useCallback(() => {
-    console.log('Deselecting driver');
     setSelectedDriverId(null);
   }, []);
 
@@ -173,7 +170,6 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
           }}
           activeOpacity={0.8}
           onPress={() => {
-            console.log('Подтверждение выбора водителя:', selectedDriverId);
             // Здесь будет логика подтверждения
           }}
         >
@@ -378,7 +374,6 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
                 zIndex: 10
               }]}
               onPress={() => {
-                console.log('Button pressed for driver:', driver.id, 'Current selected:', selectedDriverId);
                 toggleDriverSelection(driver.id);
               }}
               activeOpacity={0.8}

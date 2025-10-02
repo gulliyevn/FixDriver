@@ -53,7 +53,6 @@ export const useSessionData = (
           }
         }
       } catch (error) {
-        console.error('Error loading session data:', error);
       }
     };
     

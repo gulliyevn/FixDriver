@@ -115,7 +115,6 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     notifyLanguageChange(language);
   } catch (error) {
-    console.warn('Language set error:', error);
     throw error;
   }
 };
@@ -169,7 +168,6 @@ export const t = (key: string, params?: Record<string, string | number>): string
     
     return result;
   } catch (error) {
-    console.error('Translation error:', error, 'for key:', key);
     return key;
   }
 };

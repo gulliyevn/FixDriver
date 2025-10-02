@@ -22,7 +22,6 @@ export const useEarningsState = () => {
           setIsOnline(saved === 'true');
         }
       } catch (error) {
-        console.error('Error loading online status:', error);
       }
     })();
   }, []);
@@ -34,6 +33,7 @@ export const useEarningsState = () => {
       // Принудительно обновляем UI при изменении статуса
       setUiUpdateTrigger(prev => prev + 1);
     });
+    
     return unsub;
   }, []);
 

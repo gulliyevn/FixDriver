@@ -40,7 +40,6 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
           console.log('Addresses restored:', addressData.addresses); // Добавляем лог для отладки
         }
       } catch (error) {
-        console.error('Error loading session data:', error);
       }
     };
     loadSessionData();
@@ -98,7 +97,6 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
       await fixdriveOrderService.saveSessionData(sessionData);
       console.log('Session saved:', sessionData); // Добавляем лог для отладки
     } catch (error) {
-      console.error('Error saving to session:', error);
     }
   };
 
@@ -139,7 +137,6 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
       onNext(addressData);
 
     } catch (error) {
-      console.error('Error saving order:', error);
       Alert.alert(
         'Ошибка',
         'Не удалось сохранить данные заказа. Попробуйте еще раз.',

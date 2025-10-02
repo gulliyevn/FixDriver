@@ -47,7 +47,6 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const loadProfile = async (userId: string) => {
     try {
       setLoading(true);
-      console.log('[ProfileContext] Loading profile for user:', userId);
       
       // Используем ProfileService (поддерживает DEV/PROD)
       const loadedProfile = await ProfileService.getProfile(userId);
@@ -75,7 +74,6 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
         }
 
         setProfile(normalized);
-        console.log('[ProfileContext] ✅ Profile loaded');
       } else {
         // Если профиль не найден, создаем из данных user
         if (user) {
@@ -88,11 +86,9 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
           await AsyncStorage.setItem(`@profile_${userId}`, JSON.stringify(newProfile));
           setProfile(newProfile);
           
-          console.log('[ProfileContext] ✅ Profile created from user data and saved');
         }
       }
     } catch (error) {
-      console.warn('[ProfileContext] Profile load error:', error);
     } finally {
       setLoading(false);
     }
@@ -111,7 +107,6 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
       setProfile(newProfile);
       return true;
     } catch (error) {
-      console.warn('Profile save error:', error);
       return false;
     }
   };
@@ -120,21 +115,17 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     if (!profile || !user) return false;
     
     try {
-      console.log('[ProfileContext] Updating profile...');
       
       // Используем ProfileService (поддерживает DEV/PROD)
       const result = await ProfileService.updateProfile(user.id, updates);
       
       if (result.success && result.profile) {
         setProfile(result.profile);
-        console.log('[ProfileContext] ✅ Profile updated');
         return true;
       }
       
-      console.error('[ProfileContext] ❌ Profile update failed:', result.error);
       return false;
     } catch (error) {
-      console.error('[ProfileContext] Profile update error:', error);
       return false;
     }
   };

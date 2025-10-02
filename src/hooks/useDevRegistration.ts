@@ -24,7 +24,6 @@ export const useDevRegistration = () => {
     lastName: string;
   }): Promise<DevRegisteredUser | null> => {
     if (!__DEV__) {
-      console.warn('[DEV] useDevRegistration: not in dev mode');
       return null;
     }
 
@@ -41,7 +40,6 @@ export const useDevRegistration = () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка регистрации';
       setError(errorMessage);
-      console.error('[DEV] Client registration error:', err);
       return null;
     } finally {
       setIsLoading(false);
@@ -71,7 +69,6 @@ export const useDevRegistration = () => {
     passportPhoto?: string;
   }): Promise<DevRegisteredUser | null> => {
     if (!__DEV__) {
-      console.warn('[DEV] useDevRegistration: not in dev mode');
       return null;
     }
 
@@ -88,7 +85,6 @@ export const useDevRegistration = () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Ошибка регистрации';
       setError(errorMessage);
-      console.error('[DEV] Driver registration error:', err);
       return null;
     } finally {
       setIsLoading(false);
@@ -104,7 +100,6 @@ export const useDevRegistration = () => {
     try {
       return await DevRegistrationService.getAllDevUsers();
     } catch (err) {
-      console.error('[DEV] Error getting users:', err);
       return [];
     }
   }, []);
@@ -119,7 +114,6 @@ export const useDevRegistration = () => {
       await DevRegistrationService.clearAllDevRegistrations();
       return true;
     } catch (err) {
-      console.error('[DEV] Error clearing registrations:', err);
       return false;
     }
   }, []);

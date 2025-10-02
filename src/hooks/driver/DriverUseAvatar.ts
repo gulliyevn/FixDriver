@@ -20,7 +20,6 @@ export const useDriverAvatar = () => {
       const uri = avatar?.url || null;
       setAvatarUri(uri);
     } catch (error) {
-      console.error('Error loading driver avatar:', error);
     } finally {
       setLoading(false);
     }
@@ -47,7 +46,6 @@ export const useDriverAvatar = () => {
         }
       }
     } catch (error) {
-      console.error('Error taking driver photo:', error);
       Alert.alert(
         t('profile.photoError'),
         t('profile.photoTakeError')
@@ -79,7 +77,6 @@ export const useDriverAvatar = () => {
         }
       }
     } catch (error) {
-      console.error('Error picking driver photo from gallery:', error);
       Alert.alert(
         t('profile.photoError'),
         t('profile.photoPickError')
@@ -107,7 +104,6 @@ export const useDriverAvatar = () => {
           );
         }
       } catch (error) {
-        console.error('Error deleting driver avatar:', error);
         Alert.alert(
           t('profile.photoError'),
           t('profile.photoDeleteError')

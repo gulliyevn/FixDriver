@@ -41,6 +41,14 @@ jest.mock('expo-asset', () => ({
   },
 }));
 
+// Мокаем @expo/vector-icons
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: 'Ionicons',
+  MaterialIcons: 'MaterialIcons',
+  FontAwesome: 'FontAwesome',
+  FontAwesome5: 'FontAwesome5',
+}));
+
 // Мокаем react-native компоненты
 jest.mock('react-native/Libraries/Components/StatusBar/StatusBar', () => 'StatusBar');
 

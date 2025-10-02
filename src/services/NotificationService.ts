@@ -47,7 +47,6 @@ class NotificationService {
       const response = await APIClient.get<Notification[]>(`/notifications/user/${userId}`, { page, limit });
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get notifications error:', error);
       return [];
     }
   }
@@ -57,7 +56,6 @@ class NotificationService {
       const response = await APIClient.get<{ count: number }>(`/notifications/user/${userId}/unread-count`);
       return response.success && response.data?.count || 0;
     } catch (error) {
-      console.error('Get unread count error:', error);
       return 0;
     }
   }
@@ -67,7 +65,6 @@ class NotificationService {
       const response = await APIClient.post<{ success: boolean }>(`/notifications/${notificationId}/read`, {});
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Mark notification as read error:', error);
       return false;
     }
   }
@@ -77,7 +74,6 @@ class NotificationService {
       const response = await APIClient.post<{ success: boolean }>(`/notifications/user/${userId}/mark-all-read`, {});
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Mark all notifications as read error:', error);
       return false;
     }
   }
@@ -87,7 +83,6 @@ class NotificationService {
       const response = await APIClient.delete<{ success: boolean }>(`/notifications/${notificationId}`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Delete notification error:', error);
       return false;
     }
   }
@@ -97,7 +92,6 @@ class NotificationService {
       const response = await APIClient.delete<{ success: boolean }>(`/notifications/user/${userId}/clear-all`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Clear all notifications error:', error);
       return false;
     }
   }
@@ -107,7 +101,6 @@ class NotificationService {
       const response = await APIClient.get<NotificationSettings>(`/notifications/settings/${userId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get notification settings error:', error);
       return null;
     }
   }
@@ -117,7 +110,6 @@ class NotificationService {
       const response = await APIClient.put<{ success: boolean }>(`/notifications/settings/${userId}`, settings);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Update notification settings error:', error);
       return false;
     }
   }
@@ -127,7 +119,6 @@ class NotificationService {
       const response = await APIClient.post<{ success: boolean }>(`/notifications/push/${userId}`, payload);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Send push notification error:', error);
       return false;
     }
   }
@@ -141,7 +132,6 @@ class NotificationService {
       });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Register push token error:', error);
       return false;
     }
   }
@@ -154,7 +144,6 @@ class NotificationService {
       });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Unregister push token error:', error);
       return false;
     }
   }

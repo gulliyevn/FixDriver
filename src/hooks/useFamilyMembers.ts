@@ -45,7 +45,6 @@ export const useFamilyMembers = () => {
         setFamilyMembers([]);
       }
     } catch (error) {
-      console.error('Error loading family members:', error);
     } finally {
       setLoading(false);
     }
@@ -56,7 +55,6 @@ export const useFamilyMembers = () => {
     try {
       await AsyncStorage.setItem(familyMembersKey, JSON.stringify(members));
     } catch (error) {
-      console.error('Error saving family members:', error);
     }
   }, [familyMembersKey]);
 

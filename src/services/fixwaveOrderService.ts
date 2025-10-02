@@ -34,7 +34,6 @@ class FixWaveOrderService {
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
       return order;
     } catch (error) {
-      console.error('Error saving order data:', error);
       throw new Error('Не удалось сохранить данные заказа');
     }
   }
@@ -45,7 +44,6 @@ class FixWaveOrderService {
       const data = await AsyncStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error('Error loading order data:', error);
       return null;
     }
   }
@@ -66,7 +64,6 @@ class FixWaveOrderService {
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(updatedData));
       return updatedData;
     } catch (error) {
-      console.error('Error updating order data:', error);
       throw new Error('Не удалось обновить данные заказа');
     }
   }
@@ -84,7 +81,6 @@ class FixWaveOrderService {
       };
       await AsyncStorage.setItem(this.sessionKey, JSON.stringify(sessionDataWithTimestamp));
     } catch (error) {
-      console.error('Error saving session data:', error);
       throw new Error('Не удалось сохранить данные сессии');
     }
   }
@@ -108,9 +104,7 @@ class FixWaveOrderService {
         lastUpdate: Date.now(),
       };
       await AsyncStorage.setItem(containerTimesKey, JSON.stringify(containerTimesWithTimestamp));
-      console.log('Container times saved:', containerData);
     } catch (error) {
-      console.error('Error saving container times:', error);
       throw new Error('Не удалось сохранить данные контейнеров');
     }
   }
@@ -126,7 +120,6 @@ class FixWaveOrderService {
       const data = await AsyncStorage.getItem(this.sessionKey);
       return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error('Error loading session data:', error);
       return null;
     }
   }
@@ -136,7 +129,6 @@ class FixWaveOrderService {
     try {
       await AsyncStorage.removeItem(this.storageKey);
     } catch (error) {
-      console.error('Error clearing order data:', error);
       throw new Error('Не удалось очистить данные заказа');
     }
   }
@@ -146,7 +138,6 @@ class FixWaveOrderService {
     try {
       await AsyncStorage.removeItem(this.sessionKey);
     } catch (error) {
-      console.error('Error clearing session data:', error);
       throw new Error('Не удалось очистить данные сессии');
     }
   }
@@ -156,7 +147,6 @@ class FixWaveOrderService {
     try {
       await AsyncStorage.multiRemove([this.storageKey, this.sessionKey]);
     } catch (error) {
-      console.error('Error clearing all data:', error);
       throw new Error('Не удалось очистить все данные');
     }
   }
@@ -167,7 +157,6 @@ class FixWaveOrderService {
       const sessionData = await this.loadSessionData();
       return sessionData?.lastUpdate || null;
     } catch (error) {
-      console.error('Error getting session last update:', error);
       return null;
     }
   }
@@ -181,12 +170,10 @@ class FixWaveOrderService {
         const fiveMinutes = 5 * 60 * 1000; // 5 минут в миллисекундах
         
         if (now - lastUpdate > fiveMinutes) {
-          console.log('Session expired, clearing...');
           await this.clearSessionData();
         }
       }
     } catch (error) {
-      console.error('Error checking expired session:', error);
     }
   }
 

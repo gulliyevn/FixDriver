@@ -64,7 +64,6 @@ export const useScheduleContainer = (
             departureTime
           );
           
-          console.log('📈 useScheduleContainer - Результат расчета:', result);
           
           // Для GREEN контейнера (ОТКУДА) время отбытия = время прибытия минус время маршрута
           let finalTime = result.estimatedTime;
@@ -87,7 +86,6 @@ export const useScheduleContainer = (
           
           setCalculatedTime(finalTime);
         } catch (error) {
-          console.error('Error calculating time:', error);
           setCalculatedTime('--:--');
         } finally {
           setIsCalculating(false);

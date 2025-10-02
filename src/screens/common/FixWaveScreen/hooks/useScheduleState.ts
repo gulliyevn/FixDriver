@@ -48,7 +48,6 @@ export const useScheduleState = (initialData?: TimeScheduleData) => {
       weekend: {},
     });
     setSelectedDays([]);
-    console.log('All data reset due to mode change');
   };
 
   // Функция для безопасного обновления состояния

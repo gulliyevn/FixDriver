@@ -116,7 +116,6 @@ export const PaymentHistoryService = {
         nextCursor: endIndex < filteredTransactions.length ? endIndex.toString() : undefined,
       };
     } catch (error) {
-      console.error('Error loading payment history from DEV storage:', error);
       return {
         transactions: [],
         stats: this.getEmptyStats(),
@@ -154,7 +153,6 @@ export const PaymentHistoryService = {
 
       return this.calculateStats(transactions);
     } catch (error) {
-      console.error('Error loading payment stats from DEV storage:', error);
       return this.getEmptyStats();
     }
   },
@@ -176,7 +174,6 @@ export const PaymentHistoryService = {
 
       await AsyncStorage.setItem(storageKey, JSON.stringify(transactions));
     } catch (error) {
-      console.error('Error updating payment history cache:', error);
     }
   },
 

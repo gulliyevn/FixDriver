@@ -85,7 +85,6 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         onError(undefined);
       }
     } catch (error) {
-      console.error('Error picking image:', error);
       onError(t('register.photoPickError'));
     } finally {
       onUploadingChange(false);

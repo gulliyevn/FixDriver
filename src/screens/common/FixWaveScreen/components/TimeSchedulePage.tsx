@@ -78,7 +78,6 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
     };
     state.forceSetSwitchStates(newSwitchStates);
     
-    console.log(`Switch ${switchKey} toggled, all data reset`);
   };
   
   const saveToSession = async (data: TimeScheduleData) => {
@@ -89,7 +88,6 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
       };
       await fixwaveOrderService.saveSessionData(sessionData);
     } catch (error) {
-      console.error('Error saving to session:', error);
     }
   };
   
@@ -276,7 +274,6 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({ onNext, onBack, ini
                 
                 state.forceSetTimes(newTimes);
                 
-                console.log(`💾 Сохранено время для дня ${dayKey} (${dayNumber}) в ${timeKey}:`, time);
               }
               
               // Логируем для режима "Будни/Выходные" (переключатель 3)

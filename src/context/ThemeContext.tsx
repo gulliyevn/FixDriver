@@ -39,7 +39,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         // Use default theme
       }
     } catch (error) {
-      console.warn('Theme load error:', error);
     }
   };
 
@@ -50,7 +49,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     try {
       await AsyncStorage.setItem('theme', newTheme);
     } catch (error) {
-      console.warn('Theme save error:', error);
     }
   };
 

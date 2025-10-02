@@ -80,7 +80,6 @@ export const useAddresses = (): UseAddressesReturn => {
         return false;
       }
     } catch (err) {
-      console.error('Error adding address:', err instanceof Error ? err.message : 'Не удалось добавить адрес');
       return false;
     }
   }, [addresses, addressesKey, user?.id]);
@@ -105,7 +104,6 @@ export const useAddresses = (): UseAddressesReturn => {
         return false;
       }
     } catch (err) {
-      console.error('Error updating address:', err instanceof Error ? err.message : 'Не удалось обновить адрес');
       return false;
     }
   }, [addresses, addressesKey]);
@@ -128,7 +126,6 @@ export const useAddresses = (): UseAddressesReturn => {
         return false;
       }
     } catch (err) {
-      console.error('Error deleting address:', err instanceof Error ? err.message : 'Не удалось удалить адрес');
       return false;
     }
   }, [addresses, addressesKey]);
@@ -161,7 +158,6 @@ export const useAddresses = (): UseAddressesReturn => {
         return false;
       }
     } catch (err) {
-      console.error('Error setting default address:', err instanceof Error ? err.message : 'Не удалось установить адрес по умолчанию');
       return false;
     }
   }, [addresses, addressesKey, user?.id]);

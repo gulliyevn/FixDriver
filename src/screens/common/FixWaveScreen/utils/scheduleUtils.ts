@@ -152,7 +152,6 @@ export const getBlueContainerTime = (
   // Ищем первое доступное время
   for (const time of allTimes) {
     if (time && time !== '') {
-      console.log('✅ getBlueContainerTime - Найдено время:', time);
       return time;
     }
   }
@@ -163,7 +162,6 @@ export const getBlueContainerTime = (
     const fixedTimes = Object.values(times.fixed);
     for (const time of fixedTimes) {
       if (time && time !== '') {
-        console.log('✅ getBlueContainerTime - Найдено время в fixed (fallback):', time);
         return time;
       }
     }
@@ -172,7 +170,6 @@ export const getBlueContainerTime = (
     const weekdayTimes = Object.values(times.weekday);
     for (const time of weekdayTimes) {
       if (time && time !== '') {
-        console.log('✅ getBlueContainerTime - Найдено время в weekday (fallback):', time);
         return time;
       }
     }
@@ -180,13 +177,11 @@ export const getBlueContainerTime = (
     const weekendTimes = Object.values(times.weekend);
     for (const time of weekendTimes) {
       if (time && time !== '') {
-        console.log('✅ getBlueContainerTime - Найдено время в weekend (fallback):', time);
         return time;
       }
     }
   }
   
-  console.log('❌ getBlueContainerTime - Время не найдено');
   return undefined;
 };
 
@@ -229,7 +224,6 @@ export const getDepartureTime = (
       const today = new Date();
       const [hours, minutes] = blueTime.split(':').map(Number);
       today.setHours(hours, minutes, 0, 0);
-      console.log('✅ getDepartureTime - GREEN контейнер, время отбытия:', today.toISOString());
       return today;
     }
   }
@@ -243,7 +237,6 @@ export const getDepartureTime = (
       const today = new Date();
       const [hours, minutes] = blueTime.split(':').map(Number);
       today.setHours(hours, minutes, 0, 0);
-      console.log('✅ getDepartureTime - GREY контейнер, время отбытия:', today.toISOString());
       return today;
     }
   }
@@ -277,12 +270,10 @@ export const getDepartureTime = (
       const today = new Date();
       const [hours, minutes] = blueTime.split(':').map(Number);
       today.setHours(hours, minutes, 0, 0);
-      console.log('✅ getDepartureTime - BLUE контейнер, время:', today.toISOString());
       return today;
     }
     
     // Если не найдено в основном источнике, используем fallback
-    console.log('⚠️ getDepartureTime - BLUE контейнер, используем fallback');
     return getBlueContainerTime(times, isSmooth, isWeekdaysMode, isWeekendMode, activeTimeField) ? 
       (() => {
         const fallbackTime = getBlueContainerTime(times, isSmooth, isWeekdaysMode, isWeekendMode, activeTimeField);
@@ -290,20 +281,17 @@ export const getDepartureTime = (
           const today = new Date();
           const [hours, minutes] = fallbackTime.split(':').map(Number);
           today.setHours(hours, minutes, 0, 0);
-          console.log('✅ getDepartureTime - BLUE контейнер, fallback время:', today.toISOString());
           return today;
         }
         return undefined;
       })() : undefined;
   }
   
-  console.log('❌ getDepartureTime - Время не найдено');
   return undefined;
 };
 
 // Функция для проверки разрешения выбора времени
 export const canSelectTime = (color: string): boolean => {
   const result = color === CONTAINER_COLORS.BLUE || color === CONTAINER_COLORS.YELLOW;
-  console.log('🔍 canSelectTime:', { color, result });
   return result;
 };

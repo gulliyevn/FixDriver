@@ -61,7 +61,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       return false;
     } catch (error) {
-      console.error('Refresh auth error:', error);
       return false;
     } finally {
       setIsRefreshing(false);
@@ -83,7 +82,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (isDevLogin === 'true' && savedUser) {
           const user = JSON.parse(savedUser);
           setUser(user);
-          console.log('[DEV] 🔄 Restored DEV session:', user.email);
           setIsLoading(false);
           return; // Выходим, не проверяем токены
         }
@@ -118,7 +116,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('[AuthContext] Init error:', error);
       // Не выходим автоматически при ошибках инициализации
     } finally {
       setIsLoading(false);
@@ -138,46 +135,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // ⚠️ DEV ONLY: Проверяем локальных пользователей
       if (__DEV__) {
-        console.log('[DEV] 🔍 Checking local users for:', email);
         
         const devUsers = await DevRegistrationService.getAllDevUsers();
-        console.log(`[DEV] 📦 Found ${devUsers.length} total users in storage`);
         
         if (devUsers.length > 0) {
-          console.log('[DEV] 👥 Users:', devUsers.map(u => `${u.email} (${u.role})`).join(', '));
           
           // Детальный вывод всех пользователей
           devUsers.forEach((u, index) => {
-            console.log(`\n[DEV] User ${index + 1}:`);
-            console.log(`  Email: "${u.email}"`);
-            console.log(`  Email length: ${u.email.length}`);
-            console.log(`  Password: "${u.password}"`);
-            console.log(`  Password length: ${u.password.length}`);
-            console.log(`  Role: ${u.role}`);
           });
           
-          console.log(`\n[DEV] Looking for:`);
-          console.log(`  Email: "${email}"`);
-          console.log(`  Email length: ${email.length}`);
-          console.log(`  Password: "${password}"`);
-          console.log(`  Password length: ${password.length}`);
         }
         
         // Показываем сохраненные пароли для отладки
         const userWithEmail = devUsers.find(u => u.email === email);
         if (userWithEmail) {
-          console.log(`\n[DEV] 📧 Found user with email: ${email}`);
-          console.log(`[DEV] 🔒 Saved password: "${userWithEmail.password}"`);
-          console.log(`[DEV] 🔑 Entered password: "${password}"`);
-          console.log(`[DEV] ⚖️ Match: ${userWithEmail.password === password}`);
         } else {
-          console.log(`\n[DEV] ❌ No user found with email: "${email}"`);
         }
         
         const devUser = devUsers.find(u => u.email === email && u.password === password);
         
         if (devUser) {
-          console.log('[DEV] ✅ Found local user:', devUser.id);
           
           // Создаем объект User из DevRegisteredUser
           const user: User = {
@@ -203,12 +180,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           
           setUser(user);
           
-          console.log('[DEV] 🎉 Local login successful!');
-          console.log('[DEV] 💾 Profile saved for:', user.id);
           return true;
         } else {
-          console.log('[DEV] ❌ User not found in local storage');
-          console.log(`[DEV] 🔑 Looking for: email="${email}", password="${password}"`);
         }
       }
       
@@ -225,11 +198,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(result.user);
         return true;
       } else {
-        console.error('Login failed:', result.message);
         return false;
       }
     } catch (error) {
-      console.error('Login error:', error);
       return false;
     } finally {
       setIsLoading(false);
@@ -264,11 +235,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(result.user);
         return true;
       } else {
-        console.error('Registration failed:', result.message);
         return false;
       }
     } catch (error) {
-      console.error('Registration error:', error);
       return false;
     } finally {
       setIsLoading(false);
@@ -296,9 +265,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       ]);
 
       setUser(null);
-      console.log('[AuthContext] ✅ Logged out');
     } catch (error) {
-      console.warn('Logout error:', error);
     } finally {
       setIsLoading(false);
     }

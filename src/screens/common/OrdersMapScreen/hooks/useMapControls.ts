@@ -47,7 +47,6 @@ export const useMapControls = (
       // Совершаем звонок в экстренную службу
       await callEmergencyService(countryCode);
     } catch (error) {
-      console.error('Ошибка при звонке в экстренную службу:', error);
       Alert.alert(
         t('common.error'),
         t('common.emergency.error')
@@ -117,7 +116,6 @@ export const useMapControls = (
       }
       
     } catch (error) {
-      console.error('Error refreshing map:', error);
     } finally {
       actions.setIsRefreshing(false);
     }
@@ -134,7 +132,6 @@ export const useMapControls = (
         actions.setCurrentLocation(location);
       }
     } catch (error) {
-      console.error('Error getting current location:', error);
       Alert.alert('Ошибка', 'Не удалось получить текущее местоположение');
     }
   }, [actions]);
@@ -151,7 +148,6 @@ export const useMapControls = (
         actions.setIsClientLocationActive(false);
       }
     } catch (error) {
-      console.error('Error toggling client location:', error);
       Alert.alert('Ошибка', 'Не удалось обновить локацию');
     }
   }, [state.isClientLocationActive, actions]);

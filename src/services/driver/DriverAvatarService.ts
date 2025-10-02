@@ -27,7 +27,6 @@ export class DriverAvatarService {
       const response = await APIClient.get<AvatarData>(`/drivers/${driverId}/avatar`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Error getting driver avatar:', error);
       return null;
     }
   }
@@ -59,7 +58,6 @@ export class DriverAvatarService {
         error: response.error || 'Ошибка при загрузке аватара'
       };
     } catch (error) {
-      console.error('Error uploading driver avatar:', error);
       return {
         success: false,
         error: 'Ошибка при загрузке аватара'
@@ -75,7 +73,6 @@ export class DriverAvatarService {
       const response = await APIClient.delete<{ success: boolean }>(`/drivers/${driverId}/avatar`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Error deleting driver avatar:', error);
       return false;
     }
   }
@@ -97,7 +94,6 @@ export class DriverAvatarService {
       }
       return null;
     } catch (error) {
-      console.error('Error picking image from gallery:', error);
       return null;
     }
   }
@@ -118,7 +114,6 @@ export class DriverAvatarService {
       }
       return null;
     } catch (error) {
-      console.error('Error taking photo:', error);
       return null;
     }
   }
@@ -136,7 +131,6 @@ export class DriverAvatarService {
         gallery: mediaLibraryPermission.status === 'granted'
       };
     } catch (error) {
-      console.error('Error requesting permissions:', error);
       return {
         camera: false,
         gallery: false

@@ -53,7 +53,6 @@ const ChatListScreen: React.FC = () => {
       const list = await ChatService.getChats();
       setChats(list);
     } catch (error) {
-      console.error('Error loading chats:', error);
     } finally {
       setLoading(false);
     }
@@ -112,7 +111,6 @@ const ChatListScreen: React.FC = () => {
   const closeOpenSwipe = useCallback(() => {
     if (openSwipeRef.current) {
       try { openSwipeRef.current.close(); } catch (error) {
-        console.error('Error closing swipe:', error);
       }
       openSwipeRef.current = null;
     }
@@ -198,7 +196,6 @@ const ChatListScreen: React.FC = () => {
         onSwipeableWillOpen={() => {
           if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[item.id]) {
             try { openSwipeRef.current.close(); } catch (error) {
-        console.error('Error closing swipe:', error);
       }
           }
           openSwipeRef.current = swipeRefs.current[item.id] ?? null;

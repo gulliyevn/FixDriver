@@ -97,7 +97,6 @@ export const useEarningsChartData = (driverId: string, period: 'today' | 'week' 
 
       const errorMessage = err instanceof Error ? err.message : 'Ошибка получения данных графика';
       setError(errorMessage);
-      console.error('[useEarningsChartData] Ошибка:', errorMessage);
     } finally {
       setLoading(false);
     }

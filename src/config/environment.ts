@@ -78,10 +78,8 @@ export const logError = (error: Error | string, context?: string) => {
   if (ENV_CONFIG.LOGGING.ENABLE_ERROR_LOGS) {
     const timestamp = new Date().toISOString();
     const errorMessage = error instanceof Error ? error.message : error;
-    console.error(`[${timestamp}] ${context ? `[${context}] ` : ''}${errorMessage}`);
     
     if (error instanceof Error && error.stack) {
-      console.error(error.stack);
     }
   }
 };
@@ -123,7 +121,6 @@ export const ConfigUtils = {
       clearTimeout(timeoutId);
       return response.ok;
     } catch (error) {
-      console.error('Server health check failed:', error);
       return false;
     }
   },

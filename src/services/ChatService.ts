@@ -59,7 +59,6 @@ class ChatServiceInternal {
       const response = await APIClient.get<ChatPreview[]>(`/chats/user/${userId}`);
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get chats error:', error);
       return [];
     }
   }
@@ -69,7 +68,6 @@ class ChatServiceInternal {
       const response = await APIClient.get<Chat>(`/chats/${chatId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get chat error:', error);
       return null;
     }
   }
@@ -79,7 +77,6 @@ class ChatServiceInternal {
       const response = await APIClient.get<Message[]>(`/chats/${chatId}/messages`, { page, limit });
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get messages error:', error);
       return [];
     }
   }
@@ -99,7 +96,6 @@ class ChatServiceInternal {
       });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Send message error:', error);
       return null;
     }
   }
@@ -109,7 +105,6 @@ class ChatServiceInternal {
       const response = await APIClient.post<Chat>('/chats', { clientId, driverId });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Create chat error:', error);
       return null;
     }
   }
@@ -119,7 +114,6 @@ class ChatServiceInternal {
       const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/read`, { userId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Mark messages as read error:', error);
       return false;
     }
   }
@@ -129,7 +123,6 @@ class ChatServiceInternal {
       const response = await APIClient.get<{ count: number }>(`/chats/unread-count/${userId}`);
       return response.success && response.data?.count || 0;
     } catch (error) {
-      console.error('Get unread count error:', error);
       return 0;
     }
   }
@@ -139,7 +132,6 @@ class ChatServiceInternal {
       const response = await APIClient.delete<{ success: boolean }>(`/chats/${chatId}`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Delete chat error:', error);
       return false;
     }
   }
@@ -149,7 +141,6 @@ class ChatServiceInternal {
       const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/block`, { userId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Block user error:', error);
       return false;
     }
   }
@@ -159,7 +150,6 @@ class ChatServiceInternal {
       const response = await APIClient.post<{ success: boolean }>(`/chats/${chatId}/unblock`, { userId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Unblock user error:', error);
       return false;
     }
   }
@@ -173,7 +163,6 @@ class ChatServiceInternal {
       const response = await APIClient.post<{ url: string; fileName: string }>('/chats/upload', formData);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Upload file error:', error);
       return null;
     }
   }

@@ -46,7 +46,6 @@ export const useFixDriveFamilyMembers = () => {
           : [accountOwner];
         setFamilyMembers(allMembers);
       } catch (error) {
-        console.error('Error loading family members for FixDrive:', error);
         setFamilyMembers([]);
       } finally {
         setLoading(false);
@@ -91,7 +90,6 @@ export const useFixDriveFamilyMembers = () => {
             : [accountOwner];
           setFamilyMembers(allMembers);
         } catch (error) {
-          console.error('Error loading family members on focus:', error);
         } finally {
           setLoading(false);
         }
@@ -143,7 +141,6 @@ export const useFixDriveFamilyMembers = () => {
         setFamilyMembers(allMembers);
       }
     } catch (error) {
-      console.error('Error refreshing family members:', error);
     }
   };
 

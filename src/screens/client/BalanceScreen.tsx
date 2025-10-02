@@ -280,7 +280,6 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                 AsyncStorage.setItem(CASHBACK_KEY, '0');
                 Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
               } catch (error) {
-                console.error('Error using cashback:', error);
                 Alert.alert(t('client.balance.error'), 'Failed to use cashback');
               }
             }
@@ -313,7 +312,6 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
       setTopUpModalVisible(false);
       Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
     } catch (error) {
-      console.error('Error topping up balance:', error);
       Alert.alert(t('client.balance.error'), 'Failed to top up balance');
     }
   };

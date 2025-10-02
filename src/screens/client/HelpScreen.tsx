@@ -78,7 +78,6 @@ const HelpScreen: React.FC<HelpScreenProps> = ({ navigation }) => {
             await Linking.openURL(contact.fallbackUrl);
           }
         } catch (linkError) {
-          console.error('Help link open failed', linkError);
           setSupportErrorKey('errors.unknownError');
         }
       }
@@ -113,7 +112,6 @@ const HelpScreen: React.FC<HelpScreenProps> = ({ navigation }) => {
         await Linking.openURL(fallbackUrl);
       }
     } catch (error) {
-      console.error('Support contact failed', error);
       setSupportErrorKey('support.whatsappError');
     } finally {
       setSupportLoading(false);

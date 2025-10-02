@@ -74,7 +74,6 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
       }
 
     } catch (error) {
-      console.error('Ошибка получения локации:', error);
       setLocationError('Не удалось получить местоположение. Проверьте настройки геолокации.');
       
       // Показываем дефолтную локацию
@@ -98,7 +97,6 @@ const AddressPickerScreen: React.FC<ClientScreenProps<'AddressPicker'>> = ({
       setAddress(locationData.address || 'Адрес не найден');
       
     } catch (error) {
-      console.warn('Ошибка получения адреса:', error);
       setAddress('Адрес не найден');
     } finally {
       setLoading(false);

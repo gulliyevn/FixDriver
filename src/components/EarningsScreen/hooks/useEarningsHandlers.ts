@@ -72,7 +72,6 @@ export const useEarningsHandlers = (
         });
       }, 100);
     } catch (error) {
-      console.warn('Balance navigation failed, falling back to Profile tab:', error);
       navigation.navigate('Profile' as any);
     }
   }, [navigation]);

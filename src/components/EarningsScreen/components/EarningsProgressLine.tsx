@@ -103,7 +103,6 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({ isDark, vip
 
   // Проверяем, есть ли данные
   if (!driverLevel || !driverLevel.subLevelTitle) {
-    console.log('EarningsProgressLine - нет данных driverLevel');
     return (
       <View style={styles.container}>
         <View style={styles.progressBar}>

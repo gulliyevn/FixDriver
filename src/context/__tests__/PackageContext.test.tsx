@@ -51,8 +51,6 @@ describe('PackageContext', () => {
     it('should update package correctly', async () => {
       const { result } = renderWithProviders(() => usePackage());
       
-      console.log('🔍 usePackage result:', result.current);
-      console.log('🔍 updatePackage function:', typeof result.current.updatePackage);
 
       await act(async () => {
         await result.current.updatePackage('premium', 'month');
@@ -279,10 +277,8 @@ describe('PackageContext', () => {
 
     // Отладочный тест
     it('DEBUG: should check if deductBalance is called', async () => {
-      console.log('🔍 Starting debug test...');
       
       const mockDeductBalance = jest.fn().mockResolvedValue(true);
-      console.log('🔍 Mock deductBalance created:', mockDeductBalance);
       
       // Обновляем мок для этого теста
       mockUseBalance.mockReturnValue({
@@ -294,16 +290,11 @@ describe('PackageContext', () => {
       });
 
       const { result } = renderWithProviders(() => usePackage());
-      console.log('🔍 Package context rendered');
 
       await act(async () => {
-        console.log('🔍 Calling updatePackage...');
         await result.current.updatePackage('premium', 'month');
-        console.log('🔍 updatePackage completed');
       });
 
-      console.log('🔍 Mock calls:', mockDeductBalance.mock.calls);
-      console.log('🔍 Mock call count:', mockDeductBalance.mock.calls.length);
       
       expect(mockDeductBalance).toHaveBeenCalled();
     });

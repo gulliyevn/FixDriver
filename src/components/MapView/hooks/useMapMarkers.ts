@@ -50,7 +50,6 @@ export const useMapMarkers = (
       }
       
     } catch (error) {
-      console.error('Error refreshing map markers:', error);
     }
   }, [onDriverVisibilityToggle, initialLocation]);
 

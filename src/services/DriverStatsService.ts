@@ -61,7 +61,6 @@ export class DriverStatsService {
       const response = await APIClient.get<EarningsChartData>(`/driver-stats/${driverId}/earnings-chart`, { period });
       return response.success && response.data ? response.data : { labels: [], data: [], period };
     } catch (error) {
-      console.error('Get earnings chart data error:', error);
       return { labels: [], data: [], period };
     }
   }
@@ -71,7 +70,6 @@ export class DriverStatsService {
       const response = await APIClient.get<DayStats>(`/driver-stats/${driverId}/day`, { date });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get day stats error:', error);
       return null;
     }
   }
@@ -85,7 +83,6 @@ export class DriverStatsService {
       const response = await APIClient.get<PeriodStats>(`/driver-stats/${driverId}/period`, params);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get period stats error:', error);
       return null;
     }
   }
@@ -95,7 +92,6 @@ export class DriverStatsService {
       const response = await APIClient.get<DriverStats>(`/driver-stats/${driverId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get driver stats error:', error);
       return null;
     }
   }
@@ -105,7 +101,6 @@ export class DriverStatsService {
       const response = await APIClient.post<{ success: boolean }>(`/driver-stats/${driverId}/status`, { isOnline });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Update driver status error:', error);
       return false;
     }
   }
@@ -115,7 +110,6 @@ export class DriverStatsService {
       const response = await APIClient.post<{ shiftId: string; startTime: string }>(`/driver-stats/${driverId}/shift/start`, {});
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Start shift error:', error);
       return null;
     }
   }
@@ -125,7 +119,6 @@ export class DriverStatsService {
       const response = await APIClient.post<{ earnings: number; hours: number; rides: number }>(`/driver-stats/${driverId}/shift/end`, { shiftId });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('End shift error:', error);
       return null;
     }
   }
@@ -135,7 +128,6 @@ export class DriverStatsService {
       const response = await APIClient.get<Array<{ driverId: string; name: string; earnings: number; rides: number; position: number }>>(`/driver-stats/leaderboard`, { period, driverId });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get leaderboard error:', error);
       return null;
     }
   }
@@ -145,7 +137,6 @@ export class DriverStatsService {
       const response = await APIClient.get<Array<{ id: string; name: string; description: string; icon: string; unlockedAt?: string; progress?: number; maxProgress?: number }>>(`/driver-stats/${driverId}/achievements`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get achievements error:', error);
       return null;
     }
   }
@@ -155,7 +146,6 @@ export class DriverStatsService {
       const response = await APIClient.post<{ success: boolean }>(`/driver-stats/${driverId}/location`, { latitude, longitude });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Update location error:', error);
       return false;
     }
   }
@@ -165,7 +155,6 @@ export class DriverStatsService {
       const response = await APIClient.get<{ targetEarnings: number; currentEarnings: number; targetRides: number; currentRides: number; daysLeft: number }>(`/driver-stats/${driverId}/weekly-goal`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get weekly goal error:', error);
       return null;
     }
   }
@@ -175,7 +164,6 @@ export class DriverStatsService {
       const response = await APIClient.post<{ success: boolean }>(`/driver-stats/${driverId}/weekly-goal`, { targetEarnings, targetRides });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Update weekly goal error:', error);
       return false;
     }
   }

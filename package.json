@@ -18,7 +18,13 @@
     "test:schedule:watch": "node scripts/test-schedule.js --watch",
     "test:schedule:coverage": "node scripts/test-schedule.js --coverage",
     "check-translations": "node scripts/check-translations.js",
-    "fill-translations": "node scripts/fill-missing-translations.js"
+    "fill-translations": "node scripts/fill-missing-translations.js",
+    "quality": "node scripts/code-quality.js",
+    "security": "node scripts/security-audit.js",
+    "performance": "node scripts/performance-check.js",
+    "ci": "npm run quality && npm run security && npm run performance && npm test",
+    "build:prod": "expo build --platform all",
+    "analyze": "npm run build:prod && npx @expo/bundle-analyzer"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -40,7 +46,7 @@
     "jest": "~29.7.0",
     "jest-expo": "~54.0.0",
     "prettier": "^3.6.2",
-    "react-test-renderer": "^19.0.0",
+    "react-test-renderer": "^19.1.0",
     "typescript": "^5.0.4"
   },
   "private": true,

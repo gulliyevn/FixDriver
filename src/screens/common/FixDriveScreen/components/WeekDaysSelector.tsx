@@ -72,10 +72,6 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
   };
 
   const renderSection = () => {
-    console.log('🔍 WeekDaysSelector Debug:');
-    console.log('  - scheduleType:', scheduleType);
-    console.log('  - selectedDays:', selectedDays);
-    console.log('  - selectedDays.length:', selectedDays.length);
     
     switch (scheduleType) {
       case 'weekdays':
@@ -96,8 +92,6 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
           />
         );
       case 'flexible':
-        console.log('🎯 WeekDaysSelector: Режим flexible активирован');
-        console.log('🔢 WeekDaysSelector: Проверка условия selectedDays.length >= 2:', selectedDays.length >= 2);
         
         return selectedDays.length >= 2 ? (
           <FlexibleScheduleSection
@@ -119,7 +113,6 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
       
       // Добавляем кнопку сохранения для режима flexible
       case 'flexible-with-button':
-        console.log('🎯 WeekDaysSelector: Режим flexible с кнопкой активирован');
         
         return selectedDays.length >= 2 ? (
           <View>
@@ -139,8 +132,6 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
                             </View>
         ) : null;
       case 'oneWay':
-        console.log('🎯 WeekDaysSelector: Режим oneWay активирован');
-        console.log('⏰ selectedTime:', selectedTime);
         
         return (
           <View>
@@ -182,7 +173,6 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
           </>
         );
       default:
-        console.log('⚠️ WeekDaysSelector: Неизвестный scheduleType или null');
         return null;
     }
   };

@@ -8,7 +8,6 @@ class DriverStatusServiceImpl {
     this.current = isOnline;
     for (const cb of this.listeners) {
       try { cb(isOnline); } catch (error) {
-        console.error('Error in driver status callback:', error);
       }
     }
   }

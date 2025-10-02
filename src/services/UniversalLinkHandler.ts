@@ -101,7 +101,6 @@ export const UniversalLinkHandler = {
 
     // TODO: В продакшене открыть экран карты с маршрутом
     // navigation.navigate('OrdersMapScreen', { routePoints: points });
-    console.log('Получен маршрут:', points);
   },
 };
 

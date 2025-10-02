@@ -52,7 +52,6 @@ export class MapService {
       };
       await AsyncStorage.setItem(this.LOCATION_CACHE_KEY, JSON.stringify(cachedLocation));
     } catch (error) {
-      console.warn('Не удалось кэшировать локацию:', error);
     }
   }
 
@@ -70,7 +69,6 @@ export class MapService {
 
       return cachedLocation.location;
     } catch (error) {
-      console.warn('Ошибка получения кэшированной локации:', error);
       return null;
     }
   }
@@ -128,7 +126,6 @@ export class MapService {
           address = addressParts.join(', ') || 'Неизвестный адрес';
         }
       } catch (geocodeError) {
-        console.warn('Ошибка геокодинга, используем координаты:', geocodeError);
         address = `${location.coords.latitude.toFixed(6)}, ${location.coords.longitude.toFixed(6)}`;
       }
 
@@ -144,7 +141,6 @@ export class MapService {
 
       return result;
     } catch (error) {
-      console.error('Ошибка получения локации:', error);
       
       // Возвращаем кэшированную локацию или регион по умолчанию
       const cachedLocation = await this.getCachedLocation();
@@ -283,7 +279,6 @@ export class MapService {
         throw new Error('Адрес не найден');
       }
     } catch (error) {
-      console.error('Ошибка геокодинга:', error);
       // Возвращаем дефолтную локацию в случае ошибки
       return {
         latitude: 55.7558,
@@ -334,7 +329,6 @@ export class MapService {
                 address = addressParts.join(', ') || 'Неизвестный адрес';
               }
             } catch (geocodeError) {
-              console.warn('Ошибка геокодинга при отслеживании:', geocodeError);
               address = `${location.coords.latitude.toFixed(6)}, ${location.coords.longitude.toFixed(6)}`;
             }
 
@@ -351,14 +345,12 @@ export class MapService {
             // Вызываем callback
             callback(newLocation);
           } catch (error) {
-            console.warn('Ошибка обработки новой локации:', error);
           }
         }
       );
 
       return () => subscription.remove();
     } catch (error) {
-      console.error('Ошибка отслеживания локации:', error);
       return () => {};
     }
   }
@@ -369,7 +361,6 @@ export class MapService {
       try {
         return await this.getCurrentLocation();
       } catch (error) {
-        console.warn(`Попытка ${attempt}/${maxRetries} получения локации не удалась:`, error);
         
         if (attempt === maxRetries) {
           // Последняя попытка - возвращаем кэш или дефолт
@@ -405,7 +396,6 @@ export class MapService {
     try {
       await AsyncStorage.removeItem(this.LOCATION_CACHE_KEY);
     } catch (error) {
-      console.warn('Ошибка очистки кэша локации:', error);
     }
   }
 }

@@ -146,7 +146,6 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(({
         });
       }, 100);
     } catch (error) {
-      console.warn('Chat navigation failed, falling back to Chat tab:', error);
       navigation.navigate('Chat');
     }
   }, [navigation, handleDriverModalClose]);

@@ -42,16 +42,13 @@ export class ProfileService {
     try {
       // ⚠️ DEV ONLY: Загружаем из локального хранилища
       if (__DEV__) {
-        console.log('[DEV] 📂 Loading profile from AsyncStorage:', userId);
         
         const profileJson = await AsyncStorage.getItem(`${this.STORAGE_KEY}${userId}`);
         if (profileJson) {
           const profile = JSON.parse(profileJson);
-          console.log('[DEV] ✅ Profile loaded:', profile.email);
           return profile;
         }
         
-        console.log('[DEV] ℹ️ No profile in AsyncStorage');
         return null;
       }
 
@@ -69,7 +66,6 @@ export class ProfileService {
 
       return null;
     } catch (error) {
-      console.error('[ProfileService] getProfile error:', error);
       return null;
     }
   }
@@ -83,7 +79,6 @@ export class ProfileService {
     try {
       // ⚠️ DEV ONLY: Обновляем в локальном хранилище
       if (__DEV__) {
-        console.log('[DEV] 💾 Updating profile in AsyncStorage:', userId);
         
         // Получаем текущий профиль
         const currentProfile = await this.getProfile(userId);
@@ -103,7 +98,6 @@ export class ProfileService {
           JSON.stringify(updatedProfile)
         );
 
-        console.log('[DEV] ✅ Profile updated');
         return { success: true, profile: updatedProfile };
       }
 
@@ -122,7 +116,6 @@ export class ProfileService {
 
       return { success: false, error: response.error || 'Update failed' };
     } catch (error) {
-      console.error('[ProfileService] updateProfile error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Update failed',
@@ -139,7 +132,6 @@ export class ProfileService {
     try {
       // ⚠️ DEV ONLY: Сохраняем URI локально
       if (__DEV__) {
-        console.log('[DEV] 📸 Saving avatar URI locally');
         
         const profile = await this.getProfile(userId);
         if (!profile) {
@@ -156,7 +148,6 @@ export class ProfileService {
           JSON.stringify(updatedProfile)
         );
 
-        console.log('[DEV] ✅ Avatar saved');
         return { success: true, avatarUrl: imageUri };
       }
 
@@ -189,7 +180,6 @@ export class ProfileService {
 
       return { success: false, error: response.error || 'Upload failed' };
     } catch (error) {
-      console.error('[ProfileService] uploadAvatar error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Upload failed',

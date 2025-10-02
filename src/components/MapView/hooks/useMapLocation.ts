@@ -37,7 +37,6 @@ export const useMapLocation = (initialLocation?: MapLocation) => {
           });
         }
       } catch (error) {
-        console.error('Error getting current location:', error);
       }
     };
 

@@ -9,10 +9,10 @@ const MOCK_AVATARS = {
 };
 
 const MOCK_LOCATIONS = {
-  BAKU_CENTER: 'Baku, Azerbaijan',
-  BAKU_NORTH: 'Sumgait, Azerbaijan',
-  BAKU_EAST: 'Mingachevir, Azerbaijan',
-  BAKU_SOUTH: 'Ganja, Azerbaijan'
+  BAKU_CENTER: { latitude: 40.4093, longitude: 49.8671 },
+  BAKU_NORTH: { latitude: 40.5897, longitude: 49.6686 },
+  BAKU_EAST: { latitude: 40.7706, longitude: 47.0596 },
+  BAKU_SOUTH: { latitude: 40.6828, longitude: 46.3606 }
 };
 
 // ===== ДАННЫЕ ПОЛЬЗОВАТЕЛЕЙ =====

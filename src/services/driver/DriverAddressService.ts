@@ -51,7 +51,6 @@ export class DriverAddressService {
       const response = await APIClient.get<Address[]>(`/drivers/${driverId}/addresses`);
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get driver addresses error:', error);
       return [];
     }
   }
@@ -64,7 +63,6 @@ export class DriverAddressService {
       const response = await APIClient.get<Address>(`/drivers/addresses/${addressId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get driver address error:', error);
       return null;
     }
   }
@@ -80,7 +78,6 @@ export class DriverAddressService {
       });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Create driver address error:', error);
       return null;
     }
   }
@@ -93,7 +90,6 @@ export class DriverAddressService {
       const response = await APIClient.put<Address>(`/drivers/addresses/${addressId}`, updates);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Update driver address error:', error);
       return null;
     }
   }
@@ -106,7 +102,6 @@ export class DriverAddressService {
       const response = await APIClient.delete<{ success: boolean }>(`/drivers/addresses/${addressId}`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Delete driver address error:', error);
       return false;
     }
   }
@@ -119,7 +114,6 @@ export class DriverAddressService {
       const response = await APIClient.post<{ success: boolean }>(`/drivers/${driverId}/addresses/default`, { addressId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Set default driver address error:', error);
       return false;
     }
   }
@@ -132,7 +126,6 @@ export class DriverAddressService {
       const response = await APIClient.get<Address>(`/drivers/${driverId}/addresses/default`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Get default driver address error:', error);
       return null;
     }
   }
@@ -156,7 +149,6 @@ export class DriverAddressService {
         error: response.error || 'Ошибка при геокодировании адреса'
       };
     } catch (error) {
-      console.error('Geocode driver address error:', error);
       return {
         success: false,
         error: 'Ошибка при геокодировании адреса'
@@ -183,7 +175,6 @@ export class DriverAddressService {
         error: response.error || 'Ошибка при обратном геокодировании'
       };
     } catch (error) {
-      console.error('Reverse geocode driver address error:', error);
       return {
         success: false,
         error: 'Ошибка при обратном геокодировании'
@@ -199,7 +190,6 @@ export class DriverAddressService {
       const response = await APIClient.get<Address[]>(`/drivers/${driverId}/addresses/search`, { q: query });
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Search driver addresses error:', error);
       return [];
     }
   }
@@ -212,7 +202,6 @@ export class DriverAddressService {
       const response = await APIClient.get<Array<{ id: string; name: string; icon: string; color: string }>>('/drivers/addresses/categories');
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get driver address categories error:', error);
       return [];
     }
   }

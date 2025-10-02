@@ -58,7 +58,6 @@ class SecureJWT {
       // Используем более стабильное представление
       return Math.abs(hash).toString(16).padStart(8, '0');
     } catch (error) {
-      console.error('HMAC-SHA256 error:', error);
       // Fallback к простой хеш-функции
       return this.simpleHash(message + secret);
     }
@@ -341,7 +340,6 @@ export class JWTService {
       
       return tokens;
     } catch (error) {
-      console.error('❌ forceRefreshTokens error:', error);
       throw error;
     }
   }
@@ -374,7 +372,6 @@ export class JWTService {
       const userData = await AsyncStorage.getItem('user');
       return userData ? JSON.parse(userData) : null;
     } catch (error) {
-      console.error('Error getting user data from storage:', error);
       return null;
     }
   }

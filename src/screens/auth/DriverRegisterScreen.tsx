@@ -149,7 +149,6 @@ const DriverRegisterScreen: React.FC = () => {
     try {
       // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
       if (__DEV__) {
-        console.log('[DEV] 🔧 Using DevRegistrationService for driver registration');
         
         const driver = await DevRegistrationService.saveDriverRegistration({
           email: form.email,
@@ -171,7 +170,6 @@ const DriverRegisterScreen: React.FC = () => {
           passportPhoto: passportPhoto || undefined,
         });
         
-        console.log('[DEV] ✅ Driver registered locally:', driver.id);
         
         // Создаем профиль для нового водителя
         const profile = {
@@ -194,14 +192,12 @@ const DriverRegisterScreen: React.FC = () => {
           createdAt: driver.registeredAt,
         };
         await AsyncStorage.setItem(`@profile_${driver.id}`, JSON.stringify(profile));
-        console.log('[DEV] 💾 Profile created for:', driver.id);
         
         // Показываем статистику
         await DevRegistrationService.logDevRegistrationStats();
       } else {
         // TODO: PROD: Отправить регистрацию на сервер
         // await AuthService.registerDriver(form);
-        console.log('[PROD] Sending driver registration to server...');
       }
       
       Alert.alert(
@@ -213,7 +209,6 @@ const DriverRegisterScreen: React.FC = () => {
       
       navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } catch (e) {
-      console.error('[ERROR] Driver registration failed:', e);
       Alert.alert(
         t('register.errorTitle'), 
         e instanceof Error ? e.message : t('register.errorText')

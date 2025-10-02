@@ -97,7 +97,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       }
       
     } catch (error) {
-      console.error('Ошибка инициализации чата поддержки:', error);
       Alert.alert(t('errors.error'), t('support.initError'));
     } finally {
       setIsLoading(false);
@@ -152,7 +151,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       }
       
     } catch (error) {
-      console.error('Ошибка отправки сообщения:', error);
       Alert.alert(t('errors.error'), t('support.sendError'));
     }
   };
@@ -198,7 +196,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
       }
       
     } catch (error) {
-      console.error('Ошибка выбора быстрого вопроса:', error);
       Alert.alert(t('errors.error'), t('support.quickQuestionError'));
     }
   };
@@ -259,7 +256,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         setAttachedFiles(prev => [...prev, newFile]);
       }
     } catch (error) {
-      console.error('Ошибка фотографирования:', error);
       Alert.alert(t('errors.error'), t('support.cameraError'));
     }
   };
@@ -291,7 +287,6 @@ const SupportChatScreen: React.FC<SupportChatScreenProps> = ({ navigation, route
         setAttachedFiles(prev => [...prev, newFile]);
       }
     } catch (error) {
-      console.error('Ошибка выбора изображения:', error);
       Alert.alert(t('errors.error'), t('support.photoSelectionError'));
     }
   };

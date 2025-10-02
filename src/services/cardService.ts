@@ -17,7 +17,6 @@ export const CardService = {
       const response = await APIClient.get<Card[]>(`/cards/user/${userId}`);
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Get cards error:', error);
       return [];
     }
   },
@@ -27,7 +26,6 @@ export const CardService = {
       const response = await APIClient.post<Card>('/cards', { ...cardData, userId });
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Add card error:', error);
       return null;
     }
   },
@@ -37,7 +35,6 @@ export const CardService = {
       const response = await APIClient.put<Card>(`/cards/${cardId}`, updates);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Update card error:', error);
       return null;
     }
   },
@@ -47,7 +44,6 @@ export const CardService = {
       const response = await APIClient.delete<{ success: boolean }>(`/cards/${cardId}`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Delete card error:', error);
       return false;
     }
   },
@@ -57,7 +53,6 @@ export const CardService = {
       const response = await APIClient.post<{ success: boolean }>(`/cards/${cardId}/default`, { userId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Set default card error:', error);
       return false;
     }
   }

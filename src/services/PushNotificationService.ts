@@ -91,7 +91,6 @@ class PushNotificationService {
     try {
       const projectId = Constants.expoConfig?.extra?.eas?.projectId;
       if (!projectId) {
-        console.warn('Project ID not found in app config');
         return null;
       }
 
@@ -102,7 +101,6 @@ class PushNotificationService {
       this.expoPushToken = token.data;
       return token.data;
     } catch (error) {
-      console.error('Error getting push token:', error);
       return null;
     }
   }
@@ -159,7 +157,6 @@ class PushNotificationService {
         await Linking.openSettings();
       }
     } catch (error) {
-      console.warn('Could not open notification settings:', error);
     }
   }
 
@@ -178,7 +175,6 @@ class PushNotificationService {
         sound: undefined,
       });
     } catch (error) {
-      console.error('Error creating notification channel:', error);
     }
   }
 }

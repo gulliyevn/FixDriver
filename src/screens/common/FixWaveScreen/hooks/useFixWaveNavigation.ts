@@ -20,7 +20,6 @@ export const useFixWaveNavigation = () => {
           updateProgress('addresses');
         }
       } catch (error) {
-        console.error('Error loading session:', error);
       }
     };
     loadSession();
@@ -44,7 +43,6 @@ export const useFixWaveNavigation = () => {
       await fixwaveOrderService.saveSessionData(sessionData);
       setSessionData(sessionData);
     } catch (error) {
-      console.error('Error saving session:', error);
     }
   }, []);
 
@@ -77,7 +75,6 @@ export const useFixWaveNavigation = () => {
       await fixwaveOrderService.clearSessionData();
       setSessionData(null);
     } catch (error) {
-      console.error('Error clearing session:', error);
     }
   }, []);
 

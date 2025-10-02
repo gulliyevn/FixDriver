@@ -52,11 +52,6 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
   
   // Логирование для отладки кнопки сохранения
   const shouldShowSaveButton = selectedTime || customizedKeys.length > 0;
-  console.log('🔍 FlexibleScheduleSection Debug:');
-  console.log('  - selectedTime:', selectedTime);
-  console.log('  - customizedKeys:', customizedKeys);
-  console.log('  - customizedKeys.length:', customizedKeys.length);
-  console.log('  - shouldShowSaveButton:', shouldShowSaveButton);
 
   // Функция для получения цвета дня
   const getDayColor = (dayKey: string) => {

@@ -92,12 +92,8 @@ export const familyMembersMock: { [clientId: string]: FamilyMember[] } = {
 
 // Функция для получения участников семьи по clientId
 export const getFamilyMembersByClientId = (clientId: string): FamilyMember[] => {
-  console.log('Mock DB - getting members for clientId:', clientId);
-  console.log('Mock DB - available clientIds:', Object.keys(familyMembersMock));
-  console.log('Mock DB - all data:', familyMembersMock);
   
   const members = familyMembersMock[clientId] || [];
-  console.log('Mock DB - returned members:', members);
   
   return members;
 };
@@ -110,15 +106,12 @@ export const addFamilyMember = (clientId: string, member: Omit<FamilyMember, 'id
     id: newId
   };
   
-  console.log('Mock DB - adding member:', { clientId, newMember });
   
   if (!familyMembersMock[clientId]) {
     familyMembersMock[clientId] = [];
-    console.log('Mock DB - created new array for clientId:', clientId);
   }
   
   familyMembersMock[clientId].push(newMember);
-  console.log('Mock DB - current members for clientId:', clientId, familyMembersMock[clientId]);
   
   return newMember;
 };

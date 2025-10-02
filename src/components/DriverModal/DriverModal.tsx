@@ -52,7 +52,6 @@ const DriverModal: React.FC<DriverModalProps> = ({
         const saved = await AsyncStorage.getItem('@driver_online_status');
         actions.setIsOnline(saved === 'true');
       } catch (error) {
-        console.error('Error loading online status:', error);
       }
     })();
   }, [isVisible, actions]);

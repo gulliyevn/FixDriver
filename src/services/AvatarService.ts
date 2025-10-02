@@ -27,7 +27,6 @@ export class AvatarService {
       const response = await APIClient.get<AvatarData>(`/avatars/user/${userId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Error getting avatar:', error);
       return null;
     }
   }
@@ -59,7 +58,6 @@ export class AvatarService {
         error: response.error || 'Ошибка при загрузке аватара'
       };
     } catch (error) {
-      console.error('Error uploading avatar:', error);
       return {
         success: false,
         error: 'Ошибка при загрузке аватара'
@@ -75,7 +73,6 @@ export class AvatarService {
       const response = await APIClient.delete<{ success: boolean }>(`/avatars/user/${userId}`);
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Error deleting avatar:', error);
       return false;
     }
   }
@@ -88,7 +85,6 @@ export class AvatarService {
       const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/default`, {});
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Error setting default avatar:', error);
       return false;
     }
   }
@@ -101,7 +97,6 @@ export class AvatarService {
       const response = await APIClient.get<Array<{ id: string; url: string; thumbnailUrl: string; name: string }>>('/avatars/defaults');
       return response.success && response.data ? response.data : [];
     } catch (error) {
-      console.error('Error getting default avatars:', error);
       return [];
     }
   }
@@ -114,7 +109,6 @@ export class AvatarService {
       const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/set-default`, { avatarId });
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Error setting default avatar by ID:', error);
       return false;
     }
   }
@@ -136,7 +130,6 @@ export class AvatarService {
       }
       return null;
     } catch (error) {
-      console.error('Error picking image from gallery:', error);
       return null;
     }
   }
@@ -157,7 +150,6 @@ export class AvatarService {
       }
       return null;
     } catch (error) {
-      console.error('Error taking photo:', error);
       return null;
     }
   }
@@ -175,7 +167,6 @@ export class AvatarService {
         gallery: mediaLibraryPermission.status === 'granted'
       };
     } catch (error) {
-      console.error('Error requesting permissions:', error);
       return {
         camera: false,
         gallery: false

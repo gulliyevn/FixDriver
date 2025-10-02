@@ -48,7 +48,6 @@ export const usePersistentButtonState = (driverId: string) => {
         setButtonState(parsedState);
       }
     } catch (error) {
-      console.error('Ошибка при загрузке состояния кнопки:', error);
     } finally {
       setIsLoaded(true);
     }
@@ -59,7 +58,6 @@ export const usePersistentButtonState = (driverId: string) => {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.setItem(key, JSON.stringify(buttonState));
     } catch (error) {
-      console.error('Ошибка при сохранении состояния кнопки:', error);
     }
   };
 
@@ -84,7 +82,6 @@ export const usePersistentButtonState = (driverId: string) => {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.removeItem(key);
     } catch (error) {
-      console.error('Ошибка при сбросе состояния кнопки:', error);
     }
   };
 

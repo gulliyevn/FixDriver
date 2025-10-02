@@ -101,7 +101,6 @@ export class AuthService {
         tokens,
       };
     } catch (error) {
-      console.error('Login error:', error);
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Login failed',
@@ -146,7 +145,6 @@ export class AuthService {
         tokens,
       };
     } catch (error) {
-      console.error('Registration error:', error);
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Registration failed',
@@ -166,7 +164,6 @@ export class AuthService {
         try {
           await APIClient.post('/auth/client/logout', { refresh_token: refreshToken });
         } catch (error) {
-          console.warn('Server logout failed, but continuing with local cleanup');
         }
       }
 
@@ -178,7 +175,6 @@ export class AuthService {
         message: 'Logged out successfully',
       };
     } catch (error) {
-      console.error('Logout error:', error);
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Logout failed',
@@ -217,7 +213,6 @@ export class AuthService {
         tokens,
       };
     } catch (error) {
-      console.error('Token refresh error:', error);
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Token refresh failed',

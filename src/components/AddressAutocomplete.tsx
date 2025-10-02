@@ -55,7 +55,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       const historyData = await placesService.getHistory(historyKey);
       setHistory(historyData);
     } catch (error) {
-      console.error('Error loading history:', error);
     }
   }, [historyKey]);
 
@@ -81,7 +80,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           const predictionsData = await placesService.getPlacePredictions(input);
           setPredictions(predictionsData);
         } catch (error) {
-          console.error('Error searching predictions:', error);
           setPredictions([]);
         } finally {
           setIsLoading(false);
@@ -132,7 +130,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       setValidationError(null);
       onValidationChange(true);
     } catch (error) {
-      console.error('Error selecting prediction:', error);
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +150,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 
   const handleQuickOption = (option: string) => {
     setShowDropdown(false);
-    console.log('Quick option selected:', option);
   };
 
   const getBorderColor = () => {

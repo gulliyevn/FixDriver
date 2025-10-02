@@ -84,20 +84,13 @@ export const saveClientRegistration = async (data: {
     // Сохраняем обратно
     await AsyncStorage.setItem(DEV_STORAGE_KEYS.USERS, JSON.stringify(existingUsers));
     
-    console.log(`[DEV] 👤 Client registered locally: ${user.email}`);
-    console.log(`[DEV] 🆔 User ID: ${user.id}`);
-    console.log(`[DEV] 🔑 Password saved: ${user.password}`);
-    console.log(`[DEV] 📦 Total users in storage: ${existingUsers.length}`);
-    console.log(`[DEV] 💾 Storage key: ${DEV_STORAGE_KEYS.USERS}`);
     
     // Проверяем что сохранилось
     const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
     const verifyUsers = verifyJson ? JSON.parse(verifyJson) : [];
-    console.log(`[DEV] ✅ Verification: ${verifyUsers.length} users in AsyncStorage`);
     
     return user;
   } catch (error) {
-    console.error('[DEV] Error saving client registration:', error);
     throw error;
   }
 };
@@ -153,20 +146,13 @@ export const saveDriverRegistration = async (data: {
     // Сохраняем обратно
     await AsyncStorage.setItem(DEV_STORAGE_KEYS.DRIVERS, JSON.stringify(existingDrivers));
     
-    console.log(`[DEV] 🚗 Driver registered locally: ${driver.email}`);
-    console.log(`[DEV] 🆔 Driver ID: ${driver.id}`);
-    console.log(`[DEV] 🔑 Password saved: ${driver.password}`);
-    console.log(`[DEV] 📦 Total drivers in storage: ${existingDrivers.length}`);
-    console.log(`[DEV] 💾 Storage key: ${DEV_STORAGE_KEYS.DRIVERS}`);
     
     // Проверяем что сохранилось
     const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
     const verifyDrivers = verifyJson ? JSON.parse(verifyJson) : [];
-    console.log(`[DEV] ✅ Verification: ${verifyDrivers.length} drivers in AsyncStorage`);
     
     return driver;
   } catch (error) {
-    console.error('[DEV] Error saving driver registration:', error);
     throw error;
   }
 };
@@ -184,7 +170,6 @@ export const getAllDevUsers = async (): Promise<DevRegisteredUser[]> => {
     
     return [...users, ...drivers];
   } catch (error) {
-    console.error('[DEV] Error getting all users:', error);
     return [];
   }
 };
@@ -198,9 +183,7 @@ export const clearAllDevRegistrations = async (): Promise<void> => {
       DEV_STORAGE_KEYS.USERS,
       DEV_STORAGE_KEYS.DRIVERS,
     ]);
-    console.log('[DEV] 🗑️ All dev registrations cleared');
   } catch (error) {
-    console.error('[DEV] Error clearing registrations:', error);
     throw error;
   }
 };
@@ -223,22 +206,12 @@ export const logDevRegistrationStats = async (): Promise<void> => {
     const clients = users.filter(u => u.role === 'client');
     const drivers = users.filter(u => u.role === 'driver');
     
-    console.log('╔════════════════════════════════════════╗');
-    console.log('║   DEV REGISTRATION STATS               ║');
-    console.log('╠════════════════════════════════════════╣');
-    console.log(`║ 👥 Total Users:    ${users.length.toString().padEnd(20)}║`);
-    console.log(`║ 👤 Clients:        ${clients.length.toString().padEnd(20)}║`);
-    console.log(`║ 🚗 Drivers:        ${drivers.length.toString().padEnd(20)}║`);
-    console.log('╚════════════════════════════════════════╝');
     
     if (users.length > 0) {
-      console.log('\nRecent registrations:');
       users.slice(-5).forEach((user, index) => {
-        console.log(`${index + 1}. [${user.role.toUpperCase()}] ${user.email} (${user.firstName} ${user.lastName})`);
       });
     }
   } catch (error) {
-    console.error('[DEV] Error logging stats:', error);
   }
 };
 

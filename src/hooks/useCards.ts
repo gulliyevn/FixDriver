@@ -40,7 +40,6 @@ export const useCards = () => {
         }
       }
     } catch (error) {
-      console.error('Error loading cards:', error);
       setCards([]);
     } finally {
       setLoading(false);
@@ -71,7 +70,6 @@ export const useCards = () => {
         return false;
       }
     } catch (error) {
-      console.error('Error adding card:', error);
       return false;
     }
   };
@@ -94,7 +92,6 @@ export const useCards = () => {
         return false;
       }
     } catch (error) {
-      console.error('Error deleting card:', error);
       return false;
     }
   };

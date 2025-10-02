@@ -44,7 +44,6 @@ export class OTPService {
         message: response.error || 'Ошибка при отправке OTP кода'
       };
     } catch (error) {
-      console.error('Error sending OTP:', error);
       return {
         success: false,
         message: 'Ошибка при отправке OTP кода'
@@ -73,7 +72,6 @@ export class OTPService {
         isValid: false
       };
     } catch (error) {
-      console.error('Error verifying OTP:', error);
       return {
         success: false,
         message: 'Ошибка при проверке OTP кода',
@@ -101,7 +99,6 @@ export class OTPService {
         message: response.error || 'Ошибка при повторной отправке OTP кода'
       };
     } catch (error) {
-      console.error('Error resending OTP:', error);
       return {
         success: false,
         message: 'Ошибка при повторной отправке OTP кода'
@@ -117,7 +114,6 @@ export class OTPService {
       const response = await APIClient.get<{ isActive: boolean; attemptsLeft: number; expiresAt: string }>(`/otp/status/${otpId}`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
-      console.error('Error checking OTP status:', error);
       return null;
     }
   }
@@ -130,7 +126,6 @@ export class OTPService {
       const response = await APIClient.post<{ success: boolean }>(`/otp/cancel/${otpId}`, {});
       return response.success && response.data?.success || false;
     } catch (error) {
-      console.error('Error canceling OTP:', error);
       return false;
     }
   }

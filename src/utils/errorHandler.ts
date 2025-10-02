@@ -336,10 +336,6 @@ export class ErrorHandler {
   static logError(error: AppError, context?: string): void {
     if (__DEV__) {
       console.group(`🚨 Error: ${error.code}${context ? ` (${context})` : ''}`);
-      console.error('Message:', error.message);
-      console.error('Details:', error.details);
-      console.error('Retryable:', error.retryable);
-      console.error('Action:', error.action);
       console.groupEnd();
     }
   }

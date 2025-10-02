@@ -20,7 +20,6 @@ export const useAvatar = () => {
       const uri = avatar?.url || null;
       setAvatarUri(uri);
     } catch (error) {
-      console.error('Error loading avatar:', error);
     } finally {
       setLoading(false);
     }
@@ -48,7 +47,6 @@ export const useAvatar = () => {
         }
       }
     } catch (error) {
-      console.error('Error taking photo:', error);
       Alert.alert(
         t('profile.photoError'),
         t('profile.photoTakeError')
@@ -80,7 +78,6 @@ export const useAvatar = () => {
         }
       }
     } catch (error) {
-      console.error('Error picking from gallery:', error);
       Alert.alert(
         t('profile.photoError'),
         t('profile.photoPickError')
@@ -108,7 +105,6 @@ export const useAvatar = () => {
           );
         }
       } catch (error) {
-        console.error('Error deleting avatar:', error);
         Alert.alert(
           t('profile.photoError'),
           t('profile.photoDeleteError')

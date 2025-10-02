@@ -268,7 +268,6 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   useFocusEffect(
     useCallback(() => {
       loadVehicles(); // Перезагружаем автомобили при каждом фокусе
-      console.log('EditDriverProfile: vehicles loaded:', vehicles.length);
     }, [loadVehicles])
   );
 
@@ -278,7 +277,6 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
       try {
         openSwipeRef.current.close();
       } catch (error) {
-        console.error('Error closing swipe:', error);
       }
       openSwipeRef.current = null;
     }
@@ -449,7 +447,6 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
               onSwipeableWillOpen={() => {
                 if (openSwipeRef.current && openSwipeRef.current !== swipeRefs.current[vehicle.id]) {
                   try { openSwipeRef.current.close(); } catch (error) {
-                    console.error('Error closing previous swipe:', error);
                   }
                 }
                 openSwipeRef.current = swipeRefs.current[vehicle.id] ?? null;

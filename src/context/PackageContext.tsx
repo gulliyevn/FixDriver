@@ -54,7 +54,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   
   // Проверяем, что deductBalance является функцией
   if (typeof deductBalance !== 'function') {
-    console.error('deductBalance is not a function:', typeof deductBalance);
   }
 
 
@@ -108,7 +107,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         setCurrentPackage('free');
       }
     } catch (error) {
-      console.error('❌ Error loading package:', error);
     }
   };
 
@@ -134,7 +132,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         // No subscription found
       }
     } catch (error) {
-      console.error('❌ Error loading subscription:', error);
     }
   };
 
@@ -145,7 +142,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       // Проверяем валидность пакета
       if (!['free', 'plus', 'premium', 'premiumPlus'].includes(newPackage)) {
-        console.error('❌ Invalid package type:', newPackage);
         return; // Прерываем обновление пакета
       }
 
@@ -155,7 +151,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         // Пытаемся списать средства
         if (typeof deductBalance !== 'function') {
-          console.error('deductBalance is not a function');
           return false;
         }
         const success = await deductBalance(price, `${newPackage} package purchase`, newPackage);
@@ -170,7 +165,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
           return; // Прерываем обновление пакета
         }
         
-        console.log('✅ Balance deducted successfully:', price);
       }
       
       // Сохраняем только базовое название пакета без суффикса
@@ -194,23 +188,17 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         };
         
         await AsyncStorage.setItem(SUBSCRIPTION_KEY, JSON.stringify(newSubscription));
-        console.log('✅ Subscription saved to AsyncStorage:', newSubscription);
         
         setSubscription(newSubscription);
-        console.log('✅ Subscription state updated');
       } else {
         // Если выбран бесплатный пакет, отменяем подписку
         await AsyncStorage.removeItem(SUBSCRIPTION_KEY);
-        console.log('✅ Subscription removed from AsyncStorage');
         
         setSubscription(null);
-        console.log('✅ Subscription state cleared');
       }
       
-      console.log('🎉 Package update completed successfully!');
 
     } catch (error) {
-      console.error('❌ Error saving package:', error);
       Alert.alert(
         t('package.error.title'),
         t('package.error.message'),
@@ -226,7 +214,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       // Сначала списываем средства
       if (typeof deductBalance !== 'function') {
-        console.error('deductBalance is not a function');
         return false;
       }
       const success = await deductBalance(price, `${packageType} subscription extension`, packageType);
@@ -241,7 +228,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         return; // Прерываем продление подписки
       }
       
-      console.log('✅ Balance deducted for subscription extension:', price);
       
       if (subscription) {
         // Рассчитываем дату активации (следующий день после истечения текущей подписки)
@@ -262,7 +248,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         setSubscription(updatedSubscription);
       }
     } catch (error) {
-      console.error('Error extending subscription:', error);
       Alert.alert(
         t('package.error.title'),
         t('package.error.message'),
@@ -281,7 +266,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       await AsyncStorage.setItem(PACKAGE_KEY, 'free');
       setCurrentPackage('free');
     } catch (error) {
-      console.error('Error canceling subscription:', error);
     }
   };
 
@@ -297,7 +281,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         setSubscription(updatedSubscription);
       }
     } catch (error) {
-      console.error('Error toggling auto renew:', error);
     }
   };
 
@@ -319,7 +302,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         // Списываем средства с баланса
         if (typeof deductBalance !== 'function') {
-          console.error('deductBalance is not a function');
           return false;
         }
         const success = await deductBalance(
@@ -394,7 +376,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       
       return false;
     } catch (error) {
-      console.log('Error processing auto renewal:', error);
       return false;
     }
   };
@@ -417,7 +398,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       
       // Списываем средства с баланса
       if (typeof deductBalance !== 'function') {
-        console.error('deductBalance is not a function');
         return false;
       }
       const success = await deductBalance(
@@ -453,7 +433,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       
       return false;
     } catch (error) {
-      console.log('Error checking pending auto renewal:', error);
       return false;
     }
   };
@@ -511,7 +490,6 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         );
       }
     } catch (error) {
-      console.log('Error checking daily notification:', error);
     }
   };
 

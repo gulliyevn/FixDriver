@@ -79,7 +79,6 @@ const ClientRegisterScreen: React.FC = () => {
     try {
       // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
       if (__DEV__) {
-        console.log('[DEV] 🔧 Using DevRegistrationService for client registration');
         
         const user = await DevRegistrationService.saveClientRegistration({
           email: form.email,
@@ -89,7 +88,6 @@ const ClientRegisterScreen: React.FC = () => {
           lastName: form.lastName,
         });
         
-        console.log('[DEV] ✅ Client registered locally:', user.id);
         
         // Создаем профиль для нового пользователя
         const profile = {
@@ -102,14 +100,12 @@ const ClientRegisterScreen: React.FC = () => {
           createdAt: user.registeredAt,
         };
         await AsyncStorage.setItem(`@profile_${user.id}`, JSON.stringify(profile));
-        console.log('[DEV] 💾 Profile created for:', user.id);
         
         // Показываем статистику
         await DevRegistrationService.logDevRegistrationStats();
       } else {
         // TODO: PROD: Отправить регистрацию на сервер
         // await AuthService.registerClient(form);
-        console.log('[PROD] Sending client registration to server...');
       }
       
       Alert.alert(
@@ -121,7 +117,6 @@ const ClientRegisterScreen: React.FC = () => {
       
       navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } catch (e) {
-      console.error('[ERROR] Client registration failed:', e);
       Alert.alert(
         t('register.errorTitle'), 
         e instanceof Error ? e.message : t('register.errorText')

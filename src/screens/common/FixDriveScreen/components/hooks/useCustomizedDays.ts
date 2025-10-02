@@ -48,32 +48,22 @@ export const useCustomizedDays = (initial: CustomizedMap = {}) => {
 
   const saveToLocalStorage = async (data: CustomizedMap) => {
     try {
-      console.log('🔄 useCustomizedDays: Сохранение кастомизированных дней...');
-      console.log('📊 Кастомизированные дни:', JSON.stringify(data, null, 2));
       
       await AsyncStorage.setItem('customizedSchedule', JSON.stringify(data));
       
-      console.log('✅ useCustomizedDays: Кастомизированные дни сохранены в localStorage');
     } catch (error) {
-      console.error('❌ useCustomizedDays: Ошибка сохранения в localStorage:', error);
     }
   };
 
   const saveModal = async (isReturnTrip: boolean = false) => {
-    console.log('🔄 useCustomizedDays: Начинаем валидацию модального окна...');
-    console.log('📋 Выбранные дни для кастомизации:', selectedCustomDays);
-    console.log('📊 Временные данные:', JSON.stringify(tempCustomizedDays, null, 2));
-    console.log('🔄 Обратная поездка:', isReturnTrip);
     
     const error = validateSchedule(isReturnTrip);
     
     if (error) {
-      console.log('❌ useCustomizedDays: Ошибка валидации:', error);
       setValidationError(error);
       return false;
     }
     
-    console.log('✅ useCustomizedDays: Валидация пройдена успешно');
     
     const newCustomizedDays = { ...tempCustomizedDays };
     setCustomizedDays(newCustomizedDays);
@@ -81,7 +71,6 @@ export const useCustomizedDays = (initial: CustomizedMap = {}) => {
     setValidationError(null);
     setShowCustomizationModal(false);
     
-    console.log('💾 useCustomizedDays: Применяем кастомизацию к основному состоянию');
     
     // Сохраняем в localStorage
     await saveToLocalStorage(newCustomizedDays);

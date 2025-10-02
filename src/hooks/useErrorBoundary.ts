@@ -14,7 +14,6 @@ export const useErrorBoundary = () => {
   });
 
   const handleError = useCallback((error: Error, errorInfo?: any) => {
-    console.error('[ErrorBoundary] Ошибка:', error, errorInfo);
     
     setErrorState({
       hasError: true,
@@ -25,9 +24,6 @@ export const useErrorBoundary = () => {
     // Отправляем ошибку в систему мониторинга (если есть)
     if (__DEV__) {
       console.group('Error Details');
-      console.error('Error:', error);
-      console.error('Error Info:', errorInfo);
-      console.error('Stack:', error.stack);
       console.groupEnd();
     }
   }, []);

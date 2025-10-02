@@ -45,7 +45,6 @@ const useHelpContent = (): UseHelpContentResult => {
       setContent(result);
       setErrorKey(null);
     } catch (error) {
-      console.error('Help content load failed', error);
       setErrorKey('errors.helpContentLoadFailed');
     } finally {
       setLoading(false);

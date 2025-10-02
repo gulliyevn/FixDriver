@@ -33,7 +33,6 @@ export const callEmergencyService = async (countryCode?: string): Promise<void> 
       throw new Error('Cannot make emergency call');
     }
   } catch (error) {
-    console.error('Error calling emergency service:', error);
     throw error;
   }
 };

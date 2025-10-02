@@ -52,7 +52,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
         setBalance(0);
       }
     } catch (error) {
-      console.error('Error loading driver balance:', error);
       setBalance(0);
     }
   };
@@ -67,40 +66,30 @@ export const useDriverBalance = (): DriverBalanceContextType => {
         setTransactions([]);
       }
     } catch (error) {
-      console.error('Error loading driver transactions:', error);
       setTransactions([]);
     }
   };
 
   const loadEarnings = async () => {
     try {
-      console.log('🔄 loadEarnings вызван');
       // Загружаем сохраненные заработки
       const savedEarnings = await AsyncStorage.getItem(earningsKey);
-      console.log('🔄 Загруженные earnings из AsyncStorage:', savedEarnings);
-      console.log('🔄 Текущие earnings в состоянии:', earnings);
       if (savedEarnings !== null) {
         const parsedEarnings = parseFloat(savedEarnings);
-        console.log('🔄 Устанавливаем earnings:', parsedEarnings);
         setEarnings(parsedEarnings);
       } else {
-        console.log('🔄 Устанавливаем earnings: 0 (нет сохраненных)');
         setEarnings(0);
       }
     } catch (error) {
-      console.error('Error loading driver earnings:', error);
       setEarnings(0);
     }
   };
 
   const saveBalance = async (newBalance: number) => {
     try {
-      console.log('💾 saveBalance вызван с балансом:', newBalance);
       await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
-      console.log('💾 Баланс обновлен в состоянии:', newBalance);
     } catch (error) {
-      console.error('Error saving driver balance:', error);
     }
   };
 
@@ -109,7 +98,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
-      console.error('Error saving driver transactions:', error);
     }
   };
 
@@ -118,26 +106,18 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       await AsyncStorage.setItem(earningsKey, newEarnings.toString());
       setEarnings(newEarnings);
     } catch (error) {
-      console.error('Error saving driver earnings:', error);
     }
   };
 
   const topUpBalance = async (amount: number) => {
-    console.log('💰 topUpBalance вызван с суммой:', amount);
-    console.log('💰 Текущий баланс:', balance);
-    console.log('💰 Тип amount:', typeof amount);
-    console.log('💰 Тип balance:', typeof balance);
     
     const newBalance = balance + amount;
-    console.log('💰 Новый баланс будет:', newBalance);
     
     // Сначала обновляем состояние
     setBalance(newBalance);
-    console.log('💰 Баланс обновлен в состоянии:', newBalance);
     
     // Затем сохраняем в AsyncStorage
     await AsyncStorage.setItem(balanceKey, newBalance.toString());
-    console.log('💰 Баланс сохранен в AsyncStorage');
     
     await addTransaction({
       type: 'topup',
@@ -147,7 +127,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       translationParams: { amount: amount.toString() },
     });
     
-    console.log('💰 Транзакция добавлена');
     
     // Принудительно перезагружаем баланс для синхронизации
     setTimeout(() => {
@@ -156,25 +135,18 @@ export const useDriverBalance = (): DriverBalanceContextType => {
   };
 
   const addEarnings = async (amount: number) => {
-    console.log('💵 addEarnings вызван с суммой:', amount);
-    console.log('💵 Текущий баланс:', balance);
-    console.log('💵 Текущие заработки:', earnings);
     
     const newBalance = balance + amount;
     const newEarnings = earnings + amount;
     
-    console.log('💵 Новый баланс будет:', newBalance);
-    console.log('💵 Новые заработки будут:', newEarnings);
     
     // Обновляем состояние
     setBalance(newBalance);
     setEarnings(newEarnings);
     
     // Сохраняем в AsyncStorage
-    console.log('💾 Сохраняем в AsyncStorage - balance:', newBalance, 'earnings:', newEarnings);
     await AsyncStorage.setItem(balanceKey, newBalance.toString());
     await AsyncStorage.setItem(earningsKey, newEarnings.toString());
-    console.log('💾 Сохранено в AsyncStorage');
     
     await addTransaction({
       type: 'payment',
@@ -184,8 +156,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       translationParams: { amount: amount.toString() },
     });
     
-    console.log('💵 Заработки добавлены');
-    console.log('💵 Состояние обновлено - баланс:', newBalance, 'earnings:', newEarnings);
   };
 
   const withdrawBalance = async (amount: number): Promise<boolean> => {
@@ -226,7 +196,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
 
   const resetBalance = async () => {
     try {
-      console.log('🔄 Сброс баланса...');
       
       // Обнуляем баланс
       setBalance(0);
@@ -240,9 +209,7 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       setEarnings(0);
       await AsyncStorage.setItem(earningsKey, '0');
       
-      console.log('✅ Баланс и earnings успешно сброшены');
     } catch (error) {
-      console.error('❌ Ошибка при сбросе баланса:', error);
     }
   };
 

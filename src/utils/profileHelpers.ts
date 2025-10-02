@@ -60,15 +60,12 @@ export const handleCirclePress = (
   
   if (hasDriverAccount) {
     // Если уже есть аккаунт водителя, переключаемся на профиль водителя
-    console.log('Переключаемся к водительскому профилю...');
     try {
       // Просто меняем роль - RootNavigator автоматически переключится
       if (changeRole) {
         changeRole('driver');
       }
-      console.log('Роль изменена на водитель');
     } catch (error) {
-      console.error('Ошибка смены роли:', error);
       Alert.alert('Ошибка', 'Не удалось переключиться к водительскому профилю');
     }
   } else {
@@ -106,15 +103,12 @@ export const handleDriverCirclePress = (
   
   if (hasClientAccount) {
     // Если уже есть аккаунт клиента, переключаемся на профиль клиента
-    console.log('Переключаемся к клиентскому профилю...');
     try {
       // Просто меняем роль - RootNavigator автоматически переключится
       if (changeRole) {
         changeRole('client');
       }
-      console.log('Роль изменена на клиент');
     } catch (error) {
-      console.error('Ошибка смены роли:', error);
       Alert.alert('Ошибка', 'Не удалось переключиться к клиентскому профилю');
     }
   } else {
