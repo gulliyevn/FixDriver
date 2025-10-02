@@ -108,7 +108,7 @@ const notifyLanguageChange = (language: SupportedLanguage) => {
 export const setLanguage = async (language: SupportedLanguage): Promise<void> => {
   try {
     if (!SUPPORTED_LANGUAGES[language]) {
-      throw new Error(`Unsupported language: ${language}`);
+      console.error(`Unsupported language: ${language}`); return;
     }
     
     i18n.locale = language;

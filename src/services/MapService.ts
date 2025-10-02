@@ -276,7 +276,7 @@ export class MapService {
           address,
         };
       } else {
-        throw new Error('Адрес не найден');
+        console.error('Адрес не найден'); return;
       }
     } catch (error) {
       // Возвращаем дефолтную локацию в случае ошибки
@@ -293,7 +293,7 @@ export class MapService {
       const { status } = await Location.requestForegroundPermissionsAsync();
       
       if (status !== 'granted') {
-        throw new Error('Разрешение на геолокацию не предоставлено');
+        console.error('Разрешение на геолокацию не предоставлено'); return;
       }
 
       // Сначала вызываем callback с текущей локацией

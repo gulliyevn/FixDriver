@@ -80,7 +80,7 @@ export class SocialAuthService {
         };
       }
       
-      throw new Error('Google Sign-In не настроен');
+      console.error('Google Sign-In не настроен'); return;
     } catch (error) {
       return {
         success: false,
@@ -140,7 +140,7 @@ export class SocialAuthService {
         };
       }
       
-      throw new Error('Facebook Login не настроен');
+      console.error('Facebook Login не настроен'); return;
     } catch (error) {
       return {
         success: false,
@@ -199,7 +199,7 @@ export class SocialAuthService {
         };
       }
       
-      throw new Error('Apple Sign-In не настроен');
+      console.error('Apple Sign-In не настроен'); return;
     } catch (error) {
       return {
         success: false,

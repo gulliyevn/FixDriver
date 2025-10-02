@@ -16,13 +16,13 @@ export const useSessionData = (
           
           // Восстанавливаем состояние
           if (sessionData.timeScheduleData.fixedTimes) {
-            state.setTimes(prev => ({ ...prev, fixed: sessionData.timeScheduleData.fixedTimes }));
+            state.setTimes({ ...state.times, fixed: sessionData.timeScheduleData.fixedTimes });
           }
           if (sessionData.timeScheduleData.weekdayTimes) {
-            state.setTimes(prev => ({ ...prev, weekday: sessionData.timeScheduleData.weekdayTimes }));
+            state.setTimes({ ...state.times, weekday: sessionData.timeScheduleData.weekdayTimes });
           }
           if (sessionData.timeScheduleData.weekendTimes) {
-            state.setTimes(prev => ({ ...prev, weekend: sessionData.timeScheduleData.weekendTimes }));
+            state.setTimes({ ...state.times, weekend: sessionData.timeScheduleData.weekendTimes });
           }
           if (sessionData.timeScheduleData.selectedDays) {
             state.setSelectedDays(sessionData.timeScheduleData.selectedDays);

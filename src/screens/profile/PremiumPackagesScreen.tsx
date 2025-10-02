@@ -197,7 +197,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({ navigatio
           onPress: async () => {
             
       
-            const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }), packageId as string);
+            const success = await deductBalance(price, t('client.paymentHistory.transactions.packagePurchase', { packageName }));
             
             if (success) {
               await updatePackage(packageId as PackageType, selectedPeriod);

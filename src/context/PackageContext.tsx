@@ -50,7 +50,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const { t } = useI18n();
   const balanceHook = useBalance();
-  const deductBalance = 'deductBalance' in balanceHook ? balanceHook.deductBalance : balanceHook.withdrawBalance;
+  const deductBalance = balanceHook.deductBalance;
   
   // Проверяем, что deductBalance является функцией
   if (typeof deductBalance !== 'function') {
@@ -151,9 +151,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         // Пытаемся списать средства
         if (typeof deductBalance !== 'function') {
-          return false;
+          return;
         }
-        const success = await deductBalance(price, `${newPackage} package purchase`, newPackage);
+        const success = await deductBalance(price, `${newPackage} package purchase`);
         
         if (!success) {
           // Если списание не удалось, показываем ошибку
@@ -214,9 +214,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       // Сначала списываем средства
       if (typeof deductBalance !== 'function') {
-        return false;
+        return;
       }
-      const success = await deductBalance(price, `${packageType} subscription extension`, packageType);
+      const success = await deductBalance(price, `${packageType} subscription extension`);
       
       if (!success) {
         // Если списание не удалось, показываем ошибку
@@ -287,7 +287,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
   const processAutoRenewal = async (): Promise<boolean> => {
     try {
       if (!subscription || !subscription.autoRenew || subscription.packageType === 'free') {
-        return false;
+        return;
       }
 
       const now = new Date();
@@ -302,12 +302,11 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
         
         // Списываем средства с баланса
         if (typeof deductBalance !== 'function') {
-          return false;
+          return;
         }
         const success = await deductBalance(
           price, 
-          t('premium.autoRenewal.transactionDescription', { packageName }), 
-          subscription.packageType
+          t('premium.autoRenewal.transactionDescription', { packageName })
         );
         
         if (success) {
@@ -334,7 +333,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
             [{ text: t('common.ok') }]
           );
           
-          return true;
+          return;
         } else {
           // Недостаточно средств - сохраняем информацию о pending автообновлении
           const updatedSubscription = {
@@ -370,13 +369,13 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
             ]
           );
           
-          return false;
+          return;
         }
       }
       
-      return false;
+      return;
     } catch (error) {
-      return false;
+      return;
     }
   };
 
@@ -386,24 +385,23 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
       // Загружаем актуальные данные из AsyncStorage
       const storedSubscription = await AsyncStorage.getItem(SUBSCRIPTION_KEY);
       if (!storedSubscription) {
-        return false;
+        return;
       }
       
       const currentSubscription = JSON.parse(storedSubscription);
       if (!currentSubscription || !currentSubscription.pendingAutoRenewal) {
-        return false;
+        return;
       }
 
       const { price, packageName } = currentSubscription.pendingAutoRenewal;
       
       // Списываем средства с баланса
       if (typeof deductBalance !== 'function') {
-        return false;
+        return;
       }
       const success = await deductBalance(
         price, 
-        t('premium.autoRenewal.transactionDescription', { packageName }), 
-        currentSubscription.packageType
+        t('premium.autoRenewal.transactionDescription', { packageName })
       );
       
       if (success) {
@@ -428,12 +426,12 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
           [{ text: t('common.ok') }]
         );
         
-        return true;
+        return;
       }
       
-      return false;
+      return;
     } catch (error) {
-      return false;
+      return;
     }
   };
 
@@ -561,7 +559,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({ children })
 export const usePackage = (): PackageContextType => {
   const context = useContext(PackageContext);
   if (context === undefined) {
-    throw new Error('usePackage must be used within a PackageProvider');
+    console.error('usePackage must be used within a PackageProvider'); return;
   }
   return context;
 }; 

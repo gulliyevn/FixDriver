@@ -74,7 +74,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
           
           <View style={styles.messageStatus}>
             <Text style={styles.messageTime}>
-              {ChatService.formatMessageTime(item.timestamp)}
+              {new Date(item.timestamp).toLocaleTimeString()}
             </Text>
             {isMine && (
               <Ionicons 
@@ -152,7 +152,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
       });
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
-        const msg = await ChatService.getInstance().sendMessage(
+        const msg = await ChatService.sendMessage(
           chatId,
           t('client.chat.camera'),
           'image',
@@ -181,7 +181,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
       });
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
-        const msg = await ChatService.getInstance().sendMessage(
+        const msg = await ChatService.sendMessage(
           chatId,
           t('client.chat.gallery'),
           'image',
@@ -207,7 +207,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
         return;
       }
       const pos = await Location.getCurrentPositionAsync({});
-      const msg = await ChatService.getInstance().sendMessage(
+      const msg = await ChatService.sendMessage(
         chatId,
         t('client.chat.location'),
         'location',
@@ -291,7 +291,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   };
 
   const handleClearChat = async () => {
-    await ChatService.clearChat(chatId);
+      await ChatService.deleteChat(chatId);
     setMessages([]);
     closeActionsSheet();
   };
@@ -299,7 +299,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const handleExportChat = async () => {
     try {
       const msgs = await ChatService.getMessages(chatId);
-      const text = msgs.map(m => `${ChatService.formatMessageTime(m.timestamp)}: ${m.content}`).join('\n');
+      const text = msgs.map(m => `${new Date(m.timestamp).toLocaleTimeString()}: ${m.content}`).join('\n');
       Alert.alert(t('client.chat.title'), t('common.success'));
     } catch {
       Alert.alert(t('errors.error'));

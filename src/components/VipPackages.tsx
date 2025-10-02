@@ -77,7 +77,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
     }
   }, [selectedPeriod, onPeriodChange, periodAnim]);
 
-  const packages = getPremiumPackages(selectedPeriod, currentColors, t);
+  const packages = getPremiumPackages();
 
   // Функции для каждого пакета
   const packageFeatures = getPackageFeatures(t);
@@ -254,7 +254,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
                 <View style={VipPackagesStyles.packageHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
                     <Ionicons 
-                      name={pkg.icon as keyof typeof Ionicons.glyphMap} 
+                      name="star" 
                       size={28} 
                       color={getPackageColor(pkg.id)} 
                       style={{ marginRight: 10 }}

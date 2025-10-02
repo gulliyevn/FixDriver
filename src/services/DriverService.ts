@@ -62,28 +62,28 @@ class DriverService {
       const requiredFields = ['email', 'password', 'license_number', 'license_expiry_date', 'vehicle_number'];
       for (const field of requiredFields) {
         if (!data[field as keyof DriverRegistrationData]) {
-          throw new Error(`Поле ${field} обязательно для заполнения`);
+          console.error(`Поле ${field} обязательно для заполнения`); return;
         }
       }
 
       // Валидация email
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(data.email)) {
-        throw new Error('Некорректный email адрес');
+        console.error('Некорректный email адрес'); return;
       }
 
       // Валидация даты истечения прав
       const expiryDate = new Date(data.license_expiry_date);
       const today = new Date();
       if (expiryDate <= today) {
-        throw new Error('Срок действия водительских прав истек');
+        console.error('Срок действия водительских прав истек'); return;
       }
 
       // Валидация года выпуска автомобиля
       if (data.vehicle_year) {
         const currentYear = new Date().getFullYear();
         if (data.vehicle_year < 1900 || data.vehicle_year > currentYear + 1) {
-          throw new Error('Некорректный год выпуска автомобиля');
+          console.error('Некорректный год выпуска автомобиля'); return;
         }
       }
 
@@ -98,7 +98,7 @@ class DriverService {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Ошибка при регистрации');
+        console.error(result.message || 'Ошибка при регистрации'); return;
       }
 
       return result;
@@ -154,7 +154,7 @@ class DriverService {
     try {
       const response = await apiClient.get<DriverProfileResponse>(`/drivers/${driverId}`);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to load driver profile');
+        console.error(response.error || 'Failed to load driver profile'); return;
       }
 
       return response.data;
@@ -179,7 +179,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при обновлении профиля');
+        console.error('Ошибка при обновлении профиля'); return;
       }
 
       return await response.json();
@@ -204,7 +204,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при обновлении документов');
+        console.error('Ошибка при обновлении документов'); return;
       }
 
       return await response.json();
@@ -229,7 +229,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при получении статистики');
+        console.error('Ошибка при получении статистики'); return;
       }
 
       return await response.json();
@@ -254,7 +254,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при обновлении местоположения');
+        console.error('Ошибка при обновлении местоположения'); return;
       }
     } catch (error) {
       if (__DEV__) {
@@ -290,7 +290,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при получении списка водителей');
+        console.error('Ошибка при получении списка водителей'); return;
       }
 
       return await response.json();
@@ -315,7 +315,7 @@ class DriverService {
       });
 
       if (!response.ok) {
-        throw new Error('Ошибка при изменении статуса');
+        console.error('Ошибка при изменении статуса'); return;
       }
     } catch (error) {
       if (__DEV__) {
@@ -330,7 +330,7 @@ class DriverService {
     try {
       const response = await apiClient.get<{ items: DriverTrip[] }>(`/drivers/${driverId}/trips`);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to load driver trips');
+        console.error(response.error || 'Failed to load driver trips'); return;
       }
       return response.data.items;
     } catch (error) {

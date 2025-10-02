@@ -106,7 +106,7 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
 
     return (
       <FlatList
-        ref={(r) => (listRef = r)}
+        ref={(r) => { listRef = r; }}
         data={data}
         keyExtractor={(n) => String(n)}
         initialScrollIndex={initialIndex === -1 ? 0 : initialIndex}

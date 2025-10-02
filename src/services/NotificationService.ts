@@ -116,7 +116,7 @@ class NotificationService {
 
   async sendPushNotification(userId: string, payload: PushNotificationPayload): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/push/${userId}`, payload);
+      const response = await APIClient.post<{ success: boolean }>(`/notifications/push/${userId}`, payload as any);
       return response.success && response.data?.success || false;
     } catch (error) {
       return false;

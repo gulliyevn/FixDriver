@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ClientStackParamList, DriverStackParamList } from '../../types/navigation';
 import useDriversList from '../../hooks/client/useDriversList';
+import { Driver } from '../../types/driver';
 import NotificationsModal from '../../components/NotificationsModal';
 import DriverListItem from '../../components/driver/DriverListItem';
 import DriversHeader from '../../components/DriversHeader';
@@ -40,8 +41,8 @@ const DriversScreen: React.FC = () => {
     restoreFavorites,
     loadMoreDrivers,
     handleRefresh,
-    removeDriver,
-    removeDrivers,
+    removeDriver: removeDriverFromList,
+    removeDrivers: removeDriversFromList,
   } = useDriversList();
   const navigation = useNavigation<StackNavigationProp<ClientStackParamList | DriverStackParamList>>();
   const [lastBookmarkedId, setLastBookmarkedId] = useState<string | null>(null);
@@ -264,11 +265,11 @@ const DriversScreen: React.FC = () => {
     );
   }, [drivers, pausedDrivers, t, user?.role]);
 
-  const removeDriver = useCallback((driverId: string) => {
+  const removeDriverLocal = useCallback((driverId: string) => {
     // В режиме моков просто скрываем
   }, []);
 
-  const removeDrivers = useCallback(async (ids: Set<string>) => {
+  const removeDriversLocal = useCallback(async (ids: Set<string>) => {
     setDeletedDrivers(prev => {
       const next = new Set(prev);
       ids.forEach(id => next.add(id));
@@ -464,7 +465,7 @@ const DriversScreen: React.FC = () => {
           text: t('common.delete'),
           style: 'destructive',
           onPress: () => {
-            removeDrivers(selectedIds);
+            removeDriversLocal(selectedIds);
             setSelectionMode(false);
             setSelectedIds(new Set());
           }

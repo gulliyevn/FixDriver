@@ -50,7 +50,7 @@ const ChatListScreen: React.FC = () => {
   const loadChats = async () => {
     try {
       setLoading(true);
-      const list = await ChatService.getChats();
+      const list = await ChatService.getChats('current_user_id');
       setChats(list);
     } catch (error) {
     } finally {
@@ -256,7 +256,7 @@ const ChatListScreen: React.FC = () => {
 
           <View style={styles.rightSection}>
             <Text style={styles.chatTime}>
-              {ChatService.formatMessageTime(item.updatedAt)}
+              {new Date(item.updatedAt).toLocaleTimeString()}
             </Text>
             {item.unreadCount > 0 && (
               <View style={styles.unreadBadge}>

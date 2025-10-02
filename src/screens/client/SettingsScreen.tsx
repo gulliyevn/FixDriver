@@ -210,7 +210,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                            : await ProfileService.deleteAccount();
                          
                          if (!result.success) {
-                           throw new Error(result.message || 'Failed to delete account');
+                           console.error(result.message || 'Failed to delete account'); return;
                          }
                          
                                                  Alert.alert(

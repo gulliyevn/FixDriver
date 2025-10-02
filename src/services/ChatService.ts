@@ -45,7 +45,7 @@ export interface ChatPreview {
 }
 
 class ChatServiceInternal {
-  private static instance: ChatService;
+  private static instance: ChatServiceInternal;
 
   static getInstance(): ChatServiceInternal {
     if (!(ChatServiceInternal as any).instance) {
@@ -160,7 +160,7 @@ class ChatServiceInternal {
       formData.append('file', file);
       formData.append('chatId', chatId);
 
-      const response = await APIClient.post<{ url: string; fileName: string }>('/chats/upload', formData);
+      const response = await APIClient.post<{ url: string; fileName: string }>('/chats/upload', formData as any);
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;

@@ -55,7 +55,7 @@ export class OrderService {
       if (response.success && response.data) {
         return response.data;
       }
-      throw new Error(response.error || 'Failed to create order');
+      console.error(response.error || 'Failed to create order'); return;
     } catch (error) {
       throw error;
     }

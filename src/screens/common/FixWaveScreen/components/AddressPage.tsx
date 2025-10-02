@@ -134,7 +134,7 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
       }
 
       // Сохраняем данные в заказ (финальное сохранение)
-      await fixwaveOrderService.saveOrderData(addressData);
+      await fixwaveOrderService.saveOrderData({...addressData, status: 'draft'});
 
       // Переходим к следующей странице
       onNext(addressData);

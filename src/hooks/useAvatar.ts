@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { AvatarService } from '../services/AvatarService';
 import { useI18n } from './useI18n';
 
-export const useAvatar = () => {
+export const useAvatar = (userId: string) => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { t } = useI18n();
@@ -91,7 +91,7 @@ export const useAvatar = () => {
     const confirmDelete = async () => {
       try {
         setLoading(true);
-        const success = await AvatarService.deleteAvatar();
+        const success = await AvatarService.deleteAvatar(userId);
         if (success) {
           setAvatarUri(null);
           Alert.alert(

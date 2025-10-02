@@ -88,7 +88,7 @@ export class AuthService {
       const response = await APIClient.post<GoTokenResponse>('/auth/client/login', requestBody);
       
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Login failed');
+        console.error(response.error || 'Login failed'); return;
       }
       
       // Преобразуем данные в формат фронтенда
@@ -132,7 +132,7 @@ export class AuthService {
       const response = await APIClient.post<GoTokenResponse>('/auth/client/register', requestBody);
       
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Registration failed');
+        console.error(response.error || 'Registration failed'); return;
       }
       
       // Преобразуем данные в формат фронтенда
@@ -199,7 +199,7 @@ export class AuthService {
       const response = await APIClient.post<GoTokenResponse>('/auth/client/refresh', { refresh_token: refreshToken });
       
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Token refresh failed');
+        console.error(response.error || 'Token refresh failed'); return;
       }
       
       // Преобразуем данные в формат фронтенда

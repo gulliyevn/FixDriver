@@ -75,7 +75,7 @@ export const saveClientRegistration = async (data: {
     // Проверяем дубликаты по email
     const duplicate = existingUsers.find(u => u.email === data.email);
     if (duplicate) {
-      throw new Error('Пользователь с таким email уже зарегистрирован');
+      console.error('Пользователь с таким email уже зарегистрирован'); return;
     }
     
     // Добавляем нового пользователя
@@ -137,7 +137,7 @@ export const saveDriverRegistration = async (data: {
     // Проверяем дубликаты по email
     const duplicate = existingDrivers.find(d => d.email === data.email);
     if (duplicate) {
-      throw new Error('Водитель с таким email уже зарегистрирован');
+      console.error('Водитель с таким email уже зарегистрирован'); return;
     }
     
     // Добавляем нового водителя

@@ -68,6 +68,25 @@ export const BalanceService = {
     const res = await APIClient.post<TransactionRecord>(`/balance/${userId}/transactions`, tx as any);
     return res.data as TransactionRecord;
   },
+
+  async withdrawBalance(userId: string, amount: number, description: string): Promise<BalanceRecord> {
+    if (__DEV__) {
+      const key = devKeyFor('BALANCE', userId);
+      const current = await this.getBalance(userId);
+      const newBalance = Math.max(0, current.balance - amount);
+      const updated: BalanceRecord = { balance: newBalance, updatedAt: new Date().toISOString() };
+      await AsyncStorage.setItem(key, JSON.stringify(updated));
+      await this.addTransaction(userId, {
+        amount: -amount,
+        type: 'debit',
+        description,
+        createdAt: new Date().toISOString(),
+      });
+      return updated;
+    }
+    const res = await APIClient.post<BalanceRecord>(`/balance/${userId}/withdraw`, { amount, description });
+    return res.data as BalanceRecord;
+  },
 };
 
 

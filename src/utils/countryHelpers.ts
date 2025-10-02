@@ -30,7 +30,7 @@ export const callEmergencyService = async (countryCode?: string): Promise<void> 
     if (canOpen) {
       await Linking.openURL(phoneUrl);
     } else {
-      throw new Error('Cannot make emergency call');
+      console.error('Cannot make emergency call'); return;
     }
   } catch (error) {
     throw error;

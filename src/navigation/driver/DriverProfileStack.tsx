@@ -19,7 +19,8 @@ import DriverProfileScreen from '../../screens/driver/DriverProfileScreen';
 import PremiumPackagesScreen from '../../screens/profile/PremiumPackagesScreen';
 
 import NotificationsScreen from '../../screens/common/NotificationsScreen';
-import { DriverStackParamList } from '../types/driver/DriverNavigation';
+// import { DriverStackParamList } from '../types/driver/DriverNavigation'; // Файл не найден
+type DriverStackParamList = any; // Временный тип
 
 const Stack = createStackNavigator<DriverStackParamList>();
 

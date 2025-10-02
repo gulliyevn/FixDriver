@@ -119,7 +119,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={styles.scrollContent}>
+      <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.title}>Verify Your Phone</Text>
           <Text style={styles.subtitle}>
@@ -128,7 +128,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
         </View>
 
         <View style={styles.otpContainer}>
-          <Text style={styles.otpLabel}>Enter OTP</Text>
+          <Text style={styles.subtitle}>Enter OTP</Text>
           <TextInput
             value={otp}
             onChangeText={setOtp}
@@ -163,7 +163,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.changeNumberText}>Back to Login</Text>
+          <Text style={styles.subtitle}>Back to Login</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

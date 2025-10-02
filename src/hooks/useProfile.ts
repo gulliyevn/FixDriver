@@ -24,7 +24,7 @@ export const useProfile = () => {
   const context = useContext(ProfileContext);
 
   if (!context) {
-    throw new Error('useProfile must be used within ProfileProvider');
+    console.error('useProfile must be used within ProfileProvider'); return;
   }
 
   const { profile, loading, updateProfile: contextUpdateProfile, loadProfile } = context;

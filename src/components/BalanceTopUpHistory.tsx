@@ -44,7 +44,7 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
   const filteredTransactions = transactions
     .filter(transaction => {
       if (!isDriver) {
-        return transaction.type === 'balance_topup';
+        return transaction.type === 'topup';
       }
       return showWithdrawals ? transaction.type === 'withdrawal' : transaction.type === 'topup';
     })
@@ -139,7 +139,7 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({ maxItems = 5 
                     {t(isWithdraw ? 'client.balance.withdrawal' : 'client.balance.balanceTopUp')}
                   </Text>
                   <Text style={[styles.transactionDate, dynamicStyles.transactionDate]}>
-                    {formatDate(transaction.date)} • {new Date(transaction.date).toTimeString().split(' ')[0].substring(0, 5)}
+                    {formatDate('createdAt' in transaction ? transaction.createdAt : transaction.date)} • {new Date('createdAt' in transaction ? transaction.createdAt : transaction.date).toTimeString().split(' ')[0].substring(0, 5)}
                   </Text>
                 </View>
               </View>

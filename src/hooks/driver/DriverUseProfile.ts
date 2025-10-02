@@ -17,7 +17,7 @@ export interface UserProfile {
   avatar?: string;
 }
 
-export const useDriverProfile = () => {
+export const useDriverProfile = (userId: string) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

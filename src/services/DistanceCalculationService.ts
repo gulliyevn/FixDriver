@@ -32,13 +32,13 @@ export class DistanceCalculationService {
       });
 
       if (!response.ok) {
-        throw new Error(`OpenRouteService error: ${response.status}`);
+        console.error(`OpenRouteService error: ${response.status}`); return;
       }
 
       const data = await response.json();
       
       if (!data.routes || !data.routes[0]) {
-        throw new Error('No route found');
+        console.error('No route found'); return;
       }
 
       const route = data.routes[0];

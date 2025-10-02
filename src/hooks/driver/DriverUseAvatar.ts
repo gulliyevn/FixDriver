@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { DriverAvatarService } from '../../services/driver/DriverAvatarService';
 import { useI18n } from '../useI18n';
 
-export const useDriverAvatar = () => {
+export const useDriverAvatar = (userId: string) => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { t } = useI18n();
@@ -90,7 +90,7 @@ export const useDriverAvatar = () => {
     const confirmDelete = async () => {
       try {
         setLoading(true);
-        const success = await DriverAvatarService.deleteAvatar();
+        const success = await DriverAvatarService.deleteAvatar(userId);
         if (success) {
           setAvatarUri(null);
           Alert.alert(

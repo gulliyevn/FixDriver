@@ -593,7 +593,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                     { width: '48%', marginBottom: 12 }
                   ]}
                   onPress={() => {
-                    setTopUpAmount(amount);
+                    setTopUpAmount(amount.toString());
                     setQuickTopUpModalVisible(false);
                     setTopUpModalVisible(true);
                   }}

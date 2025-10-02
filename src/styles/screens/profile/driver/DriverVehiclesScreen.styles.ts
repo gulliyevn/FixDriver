@@ -234,7 +234,7 @@ export const getDriverVehiclesScreenColors = (isDark: boolean) => {
     errorText: { color: currentColors.error },
     vehicleCard: { 
       backgroundColor: currentColors.surface,
-      shadowColor: currentColors.shadow 
+      shadowColor: '#000' 
     },
     vehicleTitle: { color: currentColors.text },
     detailLabel: { color: currentColors.textSecondary },

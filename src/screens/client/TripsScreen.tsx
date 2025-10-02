@@ -77,14 +77,14 @@ const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
         const orders = await service.getOrders(user.id);
         const mapped = orders.map(o => ({
           id: o.id,
-          title: o.addresses?.[0]?.address || 'Trip',
+          title: o.from || o.to || 'Trip',
           date: new Date(o.createdAt).toLocaleDateString(),
           time: new Date(o.createdAt).toLocaleTimeString(),
-          amount: o.totalAmount ? `${o.totalAmount} ₼` : '',
+          amount: o.price ? `${o.price} ₼` : '',
           status: o.status,
           type: o.status === 'completed' ? 'completed' : o.status === 'cancelled' ? 'cancelled' : 'scheduled',
-          description: o.notes || '',
-          driver: o.driverName || undefined,
+          description: o.driverNotes || '',
+          driver: o.driverId || undefined,
         }));
         setAllTrips(mapped);
       }

@@ -41,6 +41,7 @@ export type AuthStackParamList = {
 
 // Параметры для клиентских экранов
 export type ClientStackParamList = {
+  MainTabs: undefined;
   Map: undefined;
   Drivers: undefined;
   Plus: undefined;

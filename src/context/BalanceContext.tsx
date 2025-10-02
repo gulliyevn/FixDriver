@@ -9,6 +9,7 @@ interface BalanceContextType {
   addEarnings: (amount: number) => Promise<{ newBalance: number; newEarnings: number }>;
   topUpBalance: (amount: number) => Promise<boolean>;
   withdrawBalance: (amount: number) => Promise<boolean>;
+  deductBalance: (amount: number, description?: string) => Promise<boolean>;
   resetBalance: () => Promise<void>;
   resetEarnings: () => Promise<number>;
   loadBalance: () => Promise<void>;
@@ -20,7 +21,7 @@ const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 export const useBalanceContext = () => {
   const context = useContext(BalanceContext);
   if (!context) {
-    throw new Error('useBalanceContext must be used within a BalanceProvider');
+    console.error('useBalanceContext must be used within a BalanceProvider'); return;
   }
   return context;
 };
@@ -162,6 +163,19 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     }
   };
 
+  const deductBalance = async (amount: number, description?: string): Promise<boolean> => {
+    try {
+      if (balance < amount) {
+        return false;
+      }
+      await BalanceService.withdrawBalance(user?.id || '', amount, description || 'Balance deduction');
+      setBalance(prev => prev - amount);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const value: BalanceContextType = {
     balance,
     earnings,
@@ -169,6 +183,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     addEarnings,
     topUpBalance,
     withdrawBalance,
+    deductBalance,
     resetBalance,
     resetEarnings,
     loadBalance,

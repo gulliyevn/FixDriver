@@ -1,4 +1,4 @@
-import { APIClient } from '../APIClient';
+import APIClient from '../APIClient';
 import {
   DriverVehicle,
   CreateVehicleRequest,
@@ -9,10 +9,10 @@ import {
 
 export class DriverVehicleService {
   private static instance: DriverVehicleService;
-  private apiClient: APIClient;
+  private apiClient: any;
 
   private constructor() {
-    this.apiClient = APIClient.getInstance();
+    this.apiClient = APIClient;
   }
 
   public static getInstance(): DriverVehicleService {

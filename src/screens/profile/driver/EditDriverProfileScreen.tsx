@@ -32,7 +32,7 @@ const EditDriverProfileScreen: React.FC<DriverScreenProps<'EditDriverProfile'>> 
   const dynamicStyles = getEditDriverProfileScreenColors(isDark);
   const currentColors = isDark ? { primary: '#3B82F6' } : { primary: '#083198' };
   
-  const { profile, updateProfile, loadProfile } = useProfile();
+  const { profile, updateProfile, loadProfile } = useProfile('current_driver_id');
   const { currentPackage } = usePackage();
   const user = profile || mockUsers[0];
   

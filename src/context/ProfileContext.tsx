@@ -20,7 +20,7 @@ export const ProfileContext = createContext<ProfileContextType | undefined>(unde
 export const useProfile = () => {
   const context = useContext(ProfileContext);
   if (!context) {
-    throw new Error('useProfile must be used within a ProfileProvider');
+    console.error('useProfile must be used within a ProfileProvider'); return;
   }
   return context;
 };

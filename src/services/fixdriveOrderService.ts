@@ -35,7 +35,7 @@ class FixDriveOrderService {
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
       return order;
     } catch (error) {
-      throw new Error('Не удалось сохранить данные заказа');
+      console.error('Не удалось сохранить данные заказа'); return;
     }
   }
 
@@ -54,7 +54,7 @@ class FixDriveOrderService {
     try {
       const currentData = await this.loadOrderData();
       if (!currentData) {
-        throw new Error('Нет сохраненных данных заказа');
+        console.error('Нет сохраненных данных заказа'); return;
       }
 
       const updatedData: OrderData = {
@@ -65,7 +65,7 @@ class FixDriveOrderService {
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(updatedData));
       return updatedData;
     } catch (error) {
-      throw new Error('Не удалось обновить данные заказа');
+      console.error('Не удалось обновить данные заказа'); return;
     }
   }
 
@@ -82,7 +82,7 @@ class FixDriveOrderService {
       };
       await AsyncStorage.setItem(this.sessionKey, JSON.stringify(sessionDataWithTimestamp));
     } catch (error) {
-      throw new Error('Не удалось сохранить данные сессии');
+      console.error('Не удалось сохранить данные сессии'); return;
     }
   }
 
@@ -106,7 +106,7 @@ class FixDriveOrderService {
       };
       await AsyncStorage.setItem(containerTimesKey, JSON.stringify(containerTimesWithTimestamp));
     } catch (error) {
-      throw new Error('Не удалось сохранить данные контейнеров');
+      console.error('Не удалось сохранить данные контейнеров'); return;
     }
   }
 
@@ -130,7 +130,7 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.removeItem(this.storageKey);
     } catch (error) {
-      throw new Error('Не удалось очистить данные заказа');
+      console.error('Не удалось очистить данные заказа'); return;
     }
   }
 
@@ -139,7 +139,7 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.removeItem(this.sessionKey);
     } catch (error) {
-      throw new Error('Не удалось очистить данные сессии');
+      console.error('Не удалось очистить данные сессии'); return;
     }
   }
 
@@ -148,7 +148,7 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.multiRemove([this.storageKey, this.sessionKey]);
     } catch (error) {
-      throw new Error('Не удалось очистить все данные');
+      console.error('Не удалось очистить все данные'); return;
     }
   }
 

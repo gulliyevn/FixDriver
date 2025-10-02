@@ -224,7 +224,7 @@ export class ProfileService {
     try {
       const authHeader = await JWTService.getAuthHeader();
       if (!authHeader) {
-        throw new Error('No authentication token');
+        console.error('No authentication token'); return;
       }
 
       const response = await APIClient.delete<{ message: string }>('/profile/account');
@@ -232,7 +232,7 @@ export class ProfileService {
       if (response.success) {
         return { success: true };
       } else {
-        throw new Error(response.error || 'Failed to delete account');
+        console.error(response.error || 'Failed to delete account'); return;
       }
     } catch (error) {
       

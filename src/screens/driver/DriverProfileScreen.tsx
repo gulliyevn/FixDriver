@@ -27,7 +27,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<'DriverProfile'>> = ({ nav
 
 
   // Используем хук для работы с профилем
-  const { profile, loading, error, loadProfile } = useProfile();
+  const { profile, loading, error, loadProfile } = useProfile('current_driver_id');
   
 
 

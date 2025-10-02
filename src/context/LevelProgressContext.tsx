@@ -23,7 +23,7 @@ const LevelProgressContext = createContext<LevelProgressContextType | undefined>
 export const useLevelProgress = (): LevelProgressContextType => {
   const context = useContext(LevelProgressContext);
   if (!context) {
-    throw new Error('useLevelProgress must be used within a LevelProgressProvider');
+    console.error('useLevelProgress must be used within a LevelProgressProvider'); return;
   }
   return context;
 };

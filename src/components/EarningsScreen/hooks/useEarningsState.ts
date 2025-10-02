@@ -34,7 +34,11 @@ export const useEarningsState = () => {
       setUiUpdateTrigger(prev => prev + 1);
     });
     
-    return unsub;
+    return () => {
+      if (typeof unsub === 'function') {
+        unsub();
+      }
+    };
   }, []);
 
   return {

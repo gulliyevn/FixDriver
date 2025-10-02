@@ -53,7 +53,7 @@ export const useDirections = (
         let url = buildDirectionsUrl(points!, { optimize: false, avoidTolls: true, avoidHighways: true });
         let resp = await fetch(url);
         let data = await resp.json();
-        if (data.status !== 'OK' || !data.routes?.length) throw new Error(data.status || 'Directions failed');
+        if (data.status !== 'OK' || !data.routes?.length) console.error(data.status || 'Directions failed'); return;
         let best = data.routes[0];
         const decoded = polyline.decode(best.overview_polyline.points).map((p: number[]) => ({ latitude: p[0], longitude: p[1] }));
         const durationInTrafficSec = best.legs.reduce((acc: number, leg: any) => acc + (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0), 0);

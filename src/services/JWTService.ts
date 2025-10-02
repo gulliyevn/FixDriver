@@ -103,7 +103,7 @@ class SecureJWT {
     try {
       const parts = token.split('.');
       if (parts.length !== 3) {
-        throw new Error('Invalid token format');
+        console.error('Invalid token format'); return;
       }
 
       const [encodedHeader, encodedPayload, signature] = parts;
@@ -115,7 +115,7 @@ class SecureJWT {
       );
 
       if (signature !== expectedSignature) {
-        throw new Error('Invalid signature');
+        console.error('Invalid signature'); return;
       }
 
       // Декодируем payload
@@ -124,12 +124,12 @@ class SecureJWT {
       // Проверяем срок действия
       const now = Math.floor(Date.now() / 1000);
       if (payload.exp && payload.exp < now) {
-        throw new Error('Token expired');
+        console.error('Token expired'); return;
       }
 
       return payload;
     } catch (error) {
-      throw new Error(`Token verification failed: ${error.message}`);
+      console.error(`Token verification failed: ${error.message}`); return;
     }
   }
 
@@ -229,13 +229,13 @@ export class JWTService {
       const decoded = await SecureJWT.verify(refreshToken, SECURITY_CONFIG.JWT.SECRET) as unknown as Record<string, unknown>;
 
       if (decoded.type !== 'refresh') {
-        throw new Error('Invalid refresh token type');
+        console.error('Invalid refresh token type'); return;
       }
 
       // Получаем данные пользователя из базы или кэша
       const userData = await this.getUserDataFromStorage();
       if (!userData) {
-        throw new Error('User data not found');
+        console.error('User data not found'); return;
       }
 
       // Генерируем новый access token

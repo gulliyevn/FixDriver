@@ -67,7 +67,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
           <View style={[styles.appIcon, dynamicStyles.appIcon]}>
             <Image 
               source={require('../../../assets/icon.png')} 
-              style={styles.appLogo}
+              style={styles.appIcon}
               resizeMode="contain"
             />
           </View>

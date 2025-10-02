@@ -168,11 +168,12 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
     const cardType = getCardType(newCard.number);
     const newCardData: Card = {
       id,
-      name: newCard.holderName,
       holderName: newCard.holderName,
-      lastFour,
-      type: cardType,
-      expiry: newCard.expiry,
+      last4: lastFour,
+      type: 'card' as const,
+      expiryMonth: parseInt(newCard.expiry.split('/')[0]),
+      expiryYear: parseInt(newCard.expiry.split('/')[1]),
+      brand: cardType === 'visa' ? 'Visa' : cardType === 'mastercard' ? 'Mastercard' : 'Visa',
       isDefault: cards.length === 0, // Если это первая карта, делаем её по умолчанию
     };
     // Используем универсальный хук
@@ -184,7 +185,7 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
     
     // Если это первая карта, устанавливаем её как карту по умолчанию
     if (cards.length === 1) { // Теперь карта уже добавлена
-      await CardService.setDefault(id);
+      await CardService.setDefault(id, 'current_user_id');
     }
     setDefaultCardId(newCardData.isDefault ? id : defaultCardId);
     setShowAddModal(false);
@@ -213,7 +214,7 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
             if (cards.length > 1) {
               const newDefaultId = cards.find(c => c.id !== cardId)?.id;
               if (newDefaultId) {
-                await CardService.setDefault(newDefaultId);
+                await CardService.setDefault(newDefaultId, 'current_user_id');
                 setDefaultCardId(newDefaultId);
               }
             } else {
@@ -226,7 +227,7 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   };
 
   const handleSetDefault = async (cardId: string) => {
-    await CardService.setDefault(cardId);
+    await CardService.setDefault(cardId, 'current_user_id');
     setDefaultCardId(cardId);
   };
 
@@ -424,10 +425,10 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
                       />
                     )}
                     <View style={styles.cardDetails}>
-                      <Text style={[styles.cardName, dynamicStyles.cardName]}>{card.holderName || card.name}</Text>
+                      <Text style={[styles.cardName, dynamicStyles.cardName]}>{card.holderName}</Text>
                       <View style={styles.cardNumberRow}>
-                        <Text style={[styles.cardNumber, dynamicStyles.cardNumber]}>•••• {card.lastFour}</Text>
-                        <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry, styles.cardExpiryWithMargin]}> {card.expiry}</Text>
+                        <Text style={[styles.cardNumber, dynamicStyles.cardNumber]}>•••• {card.last4 || '****'}</Text>
+                        <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry, styles.cardExpiryWithMargin]}> {card.expiryMonth ? `${card.expiryMonth.toString().padStart(2, '0')}/${card.expiryYear}` : '**/**'}</Text>
                       </View>
                       <TouchableOpacity
                         style={[

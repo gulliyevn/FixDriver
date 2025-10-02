@@ -17,7 +17,7 @@ const Stack = createStackNavigator<ClientStackParamList>();
 const TabNavigator: React.FC = () => {
   const { isDark } = useTheme();
   const { createBottomTabNavigator } = require('@react-navigation/bottom-tabs');
-  const Tab = createBottomTabNavigator<ClientStackParamList>();
+  const Tab = createBottomTabNavigator();
 
   // Обёртка для TabBar, чтобы подписаться на смену языка
   function TabBarWithLanguage(props: any) {
@@ -54,7 +54,7 @@ const TabNavigator: React.FC = () => {
 
 const ClientNavigator: React.FC = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} id={undefined}>
       <Stack.Screen name="MainTabs" component={TabNavigator} />
 
     </Stack.Navigator>

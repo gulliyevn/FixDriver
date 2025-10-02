@@ -171,8 +171,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
           };
           
           // Сохраняем в БД асинхронно
-          DriverStatsService.saveDayStats(previousDayStats).catch(error => {
-          });
+          // DriverStatsService.saveDayStats(previousDayStats).catch(error => {
+          // }); // Метод будет добавлен при подключении к бэкенду
           
           
           return; // Выходим из функции, диалог обработает дальнейшие действия

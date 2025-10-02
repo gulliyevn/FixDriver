@@ -44,7 +44,7 @@ export class AvatarService {
       } as any);
       formData.append('userId', userId);
 
-      const response = await APIClient.post<AvatarData>('/avatars/upload', formData);
+      const response = await APIClient.post<AvatarData>('/avatars/upload', formData as any);
       
       if (response.success && response.data) {
         return {

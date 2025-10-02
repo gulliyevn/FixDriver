@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    console.error('useAuth must be used within an AuthProvider'); return;
   }
   return context;
 };
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (result.success && result.user && result.tokens) {
         // Сохраняем новые токены и обновляем пользователя
         await Promise.all([
-          JWTService.saveTokens(result.tokens),
+          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
           AsyncStorage.setItem('user', JSON.stringify(result.user)),
         ]);
         
@@ -160,15 +160,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           const user: User = {
             id: devUser.id,
             email: devUser.email,
-            name: devUser.firstName || devUser.name || '',
-            surname: devUser.lastName || devUser.surname || '',
-            role: devUser.role,
+            name: devUser.firstName || '',
+            surname: devUser.lastName || '',
+            role: devUser.role as UserRole,
             phone: devUser.phone,
             avatar: null,
             rating: 5,
             address: '',
             createdAt: devUser.registeredAt,
-            birthDate: devUser.birthDate,
+            birthDate: undefined,
           };
           
           // Сохраняем пользователя
@@ -191,7 +191,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens(result.tokens),
+          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
           AsyncStorage.setItem('user', JSON.stringify(result.user)),
         ]);
 
@@ -228,7 +228,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens(result.tokens),
+          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
           AsyncStorage.setItem('user', JSON.stringify(result.user)),
         ]);
 
