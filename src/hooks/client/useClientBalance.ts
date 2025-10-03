@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUserStorageKey, STORAGE_KEYS } from '../../utils/storageKeys';
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUserStorageKey, STORAGE_KEYS } from "../../utils/storageKeys";
 
 export interface ClientTransaction {
   id: string;
-  type: 'balance_topup' | 'package_purchase' | 'trip_payment' | 'cashback';
+  type: "balance_topup" | "package_purchase" | "trip_payment" | "cashback";
   amount: number;
   description: string;
   date: string;
@@ -20,8 +20,14 @@ export interface ClientBalanceContextType {
   earnings?: number;
   topUpBalance: (amount: number) => Promise<void>;
   addEarnings?: (amount: number) => Promise<void>;
-  deductBalance: (amount: number, description: string, packageType?: string) => Promise<boolean>;
-  addTransaction: (transaction: Omit<ClientTransaction, 'id' | 'date'>) => Promise<void>;
+  deductBalance: (
+    amount: number,
+    description: string,
+    packageType?: string,
+  ) => Promise<boolean>;
+  addTransaction: (
+    transaction: Omit<ClientTransaction, "id" | "date">,
+  ) => Promise<void>;
   getCashback: () => Promise<number>;
   resetBalance?: () => Promise<void>;
   loadEarnings?: () => Promise<void>;
@@ -31,7 +37,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
   const [balance, setBalance] = useState<number>(50); // Начальный баланс
   const [transactions, setTransactions] = useState<ClientTransaction[]>([]);
   const [cashback, setCashback] = useState<number>(0);
-  
+
   // Получаем ключи с изоляцией по пользователю
   const balanceKey = useUserStorageKey(STORAGE_KEYS.CLIENT_BALANCE);
   const transactionsKey = useUserStorageKey(STORAGE_KEYS.CLIENT_TRANSACTIONS);
@@ -49,8 +55,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
       if (storedBalance) {
         setBalance(parseFloat(storedBalance));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const loadTransactions = async () => {
@@ -58,23 +63,29 @@ export const useClientBalance = (): ClientBalanceContextType => {
       const storedTransactions = await AsyncStorage.getItem(transactionsKey);
       if (storedTransactions) {
         const parsedTransactions = JSON.parse(storedTransactions);
-        
+
         // Миграция: добавляем translationKey для старых транзакций пополнения
-        const migratedTransactions = parsedTransactions.map((transaction: any) => {
-          if (transaction.type === 'balance_topup' && !transaction.translationKey) {
-            return {
-              ...transaction,
-              translationKey: 'client.paymentHistory.transactions.topUp',
-              translationParams: { amount: Math.abs(transaction.amount).toString() }
-            };
-          }
-          return transaction;
-        });
-        
+        const migratedTransactions = parsedTransactions.map(
+          (transaction: any) => {
+            if (
+              transaction.type === "balance_topup" &&
+              !transaction.translationKey
+            ) {
+              return {
+                ...transaction,
+                translationKey: "client.paymentHistory.transactions.topUp",
+                translationParams: {
+                  amount: Math.abs(transaction.amount).toString(),
+                },
+              };
+            }
+            return transaction;
+          },
+        );
+
         setTransactions(migratedTransactions);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const loadCashback = async () => {
@@ -83,57 +94,60 @@ export const useClientBalance = (): ClientBalanceContextType => {
       if (storedCashback) {
         setCashback(parseFloat(storedCashback));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const saveBalance = async (newBalance: number) => {
     try {
       await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const saveTransactions = async (newTransactions: ClientTransaction[]) => {
     try {
-      await AsyncStorage.setItem(transactionsKey, JSON.stringify(newTransactions));
+      await AsyncStorage.setItem(
+        transactionsKey,
+        JSON.stringify(newTransactions),
+      );
       setTransactions(newTransactions);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const saveCashback = async (newCashback: number) => {
     try {
       await AsyncStorage.setItem(cashbackKey, newCashback.toString());
       setCashback(newCashback);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const topUpBalance = async (amount: number) => {
     const newBalance = balance + amount;
     await saveBalance(newBalance);
-    
+
     await addTransaction({
-      type: 'balance_topup',
+      type: "balance_topup",
       amount: amount,
       description: `Balance top-up ${amount} AFc`,
-      translationKey: 'client.paymentHistory.transactions.topUp',
+      translationKey: "client.paymentHistory.transactions.topUp",
       translationParams: { amount: amount.toString() },
     });
   };
 
-  const deductBalance = async (amount: number, description: string, packageType?: string): Promise<boolean> => {
+  const deductBalance = async (
+    amount: number,
+    description: string,
+    packageType?: string,
+  ): Promise<boolean> => {
     if (balance < amount) {
       return false; // Insufficient funds
     }
 
     const newBalance = balance - amount;
     await saveBalance(newBalance);
-    
+
     await addTransaction({
-      type: 'package_purchase',
+      type: "package_purchase",
       amount: -amount,
       description,
       packageType,
@@ -142,7 +156,9 @@ export const useClientBalance = (): ClientBalanceContextType => {
     return true;
   };
 
-  const addTransaction = async (transaction: Omit<ClientTransaction, 'id' | 'date'>) => {
+  const addTransaction = async (
+    transaction: Omit<ClientTransaction, "id" | "date">,
+  ) => {
     const newTransaction: ClientTransaction = {
       ...transaction,
       id: Date.now().toString(),
@@ -161,30 +177,25 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
   const resetBalance = async () => {
     try {
-      
       // Обнуляем баланс
       setBalance(0);
-      await AsyncStorage.setItem(balanceKey, '0');
-      
+      await AsyncStorage.setItem(balanceKey, "0");
+
       // Очищаем транзакции
       setTransactions([]);
       await AsyncStorage.setItem(transactionsKey, JSON.stringify([]));
-      
+
       // Обнуляем cashback
       setCashback(0);
-      await AsyncStorage.setItem(cashbackKey, '0');
-      
-    } catch (error) {
-    }
+      await AsyncStorage.setItem(cashbackKey, "0");
+    } catch (error) {}
   };
 
   // Dummy функция для совместимости с интерфейсом
-  const addEarnings = async (amount: number) => {
-  };
+  const addEarnings = async (amount: number) => {};
 
   // Dummy функция для совместимости с интерфейсом
-  const loadEarnings = async () => {
-  };
+  const loadEarnings = async () => {};
 
   return {
     balance,
@@ -199,4 +210,4 @@ export const useClientBalance = (): ClientBalanceContextType => {
     resetBalance,
     loadEarnings,
   };
-}; 
+};

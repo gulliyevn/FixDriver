@@ -303,8 +303,7 @@
       "tripToWork": "Trip to work",
       "routeToWork": "Route: home - office"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Search drivers...",
     "loadingMore": "Loading more drivers...",

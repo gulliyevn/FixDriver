@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../constants/colors";
 
 export const createEarningsStatsStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
@@ -14,22 +14,22 @@ export const createEarningsStatsStyles = (isDark: boolean) => {
     },
     title: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
       marginBottom: SIZES.lg,
     },
     statsGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
     },
     statCard: {
-      width: '48%',
+      width: "48%",
       backgroundColor: colors.background,
       borderRadius: SIZES.radius.md,
       padding: SIZES.lg,
       marginBottom: SIZES.md,
-      alignItems: 'center',
+      alignItems: "center",
       borderWidth: 1,
       borderColor: colors.border,
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
@@ -38,40 +38,40 @@ export const createEarningsStatsStyles = (isDark: boolean) => {
       width: 40,
       height: 40,
       borderRadius: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       marginBottom: SIZES.sm,
     },
     statValue: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
       marginBottom: SIZES.xs,
-      textAlign: 'center',
+      textAlign: "center",
     },
     statSubtitle: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
       marginBottom: SIZES.xs,
-      textAlign: 'center',
+      textAlign: "center",
     },
     statTitle: {
       fontSize: SIZES.fontSize.sm,
       color: colors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.xs,
     },
     trendContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
     },
     trendIcon: {
       marginRight: SIZES.xs / 2,
     },
     trendText: {
       fontSize: SIZES.fontSize.xs,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     trendPositive: {
       color: colors.success,

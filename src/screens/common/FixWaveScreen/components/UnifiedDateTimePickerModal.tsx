@@ -1,9 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Platform, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Picker } from '@react-native-picker/picker';
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import { createTimePickerModalStyles, platformSpecificStyles } from './TimePickerModal.styles';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  Platform,
+  Dimensions,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Picker } from "@react-native-picker/picker";
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from "react-native";
+import {
+  createTimePickerModalStyles,
+  platformSpecificStyles,
+} from "./TimePickerModal.styles";
 
 interface UnifiedDateTimePickerModalProps {
   visible: boolean;
@@ -16,13 +30,15 @@ interface UnifiedDateTimePickerModalProps {
   isDark?: boolean;
 }
 
-const pad = (num: number, size = 2) => String(num).padStart(size, '0');
+const pad = (num: number, size = 2) => String(num).padStart(size, "0");
 
 const getDaysInMonth = (year: number, monthIndex0: number) => {
   return new Date(year, monthIndex0 + 1, 0).getDate();
 };
 
-export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProps> = ({
+export const UnifiedDateTimePickerModal: React.FC<
+  UnifiedDateTimePickerModalProps
+> = ({
   visible,
   title,
   value,
@@ -51,7 +67,10 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
 
   const styles = useMemo(() => {
     const base = createTimePickerModalStyles(isDark, colors.primary);
-    const platform = platformSpecificStyles[Platform.OS as keyof typeof platformSpecificStyles];
+    const platform =
+      platformSpecificStyles[
+        Platform.OS as keyof typeof platformSpecificStyles
+      ];
     return {
       ...base,
       modalContainer: [base.modalContainer, platform?.modalContainer],
@@ -59,12 +78,15 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
     };
   }, [isDark, colors.primary]);
 
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get("window").width;
   const isSmall = screenWidth < 360;
-  const labelColor = isDark ? '#FFFFFF' : '#003366';
-  const itemColor = isDark ? '#F3F4F6' : '#0A0A0A';
+  const labelColor = isDark ? "#FFFFFF" : "#003366";
+  const itemColor = isDark ? "#F3F4F6" : "#0A0A0A";
   const labelFont = isSmall ? 12 : 13;
-  const pickerItemStyle = Platform.select({ ios: { color: itemColor, fontSize: isSmall ? 20 : 22, fontWeight: '600' }, android: undefined });
+  const pickerItemStyle = Platform.select({
+    ios: { color: itemColor, fontSize: isSmall ? 20 : 22, fontWeight: "600" },
+    android: undefined,
+  });
   const highlightHeight = isSmall ? 40 : 44;
   const itemHeight = isSmall ? 36 : 40;
 
@@ -74,7 +96,7 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
     onChange: (v: number) => void;
   }> = ({ data, value, onChange }) => {
     // iOS: нативный барабан для идеального UX
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       return (
         <Picker
           selectedValue={value}
@@ -90,7 +112,10 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
     }
 
     // Android/веб: унифицированное колесо на базе FlatList
-    const initialIndex = Math.max(0, data.findIndex(v => v === value));
+    const initialIndex = Math.max(
+      0,
+      data.findIndex((v) => v === value),
+    );
     let listRef: FlatList<number> | null = null;
 
     const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -99,26 +124,53 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
       const clamped = Math.max(0, Math.min(index, data.length - 1));
       const selected = data[clamped];
       if (selected !== undefined) onChange(selected);
-      listRef?.scrollToOffset({ offset: clamped * itemHeight, animated: false });
+      listRef?.scrollToOffset({
+        offset: clamped * itemHeight,
+        animated: false,
+      });
     };
 
-    const topBottomPadding = (highlightHeight - itemHeight) / 2 + itemHeight * 2;
+    const topBottomPadding =
+      (highlightHeight - itemHeight) / 2 + itemHeight * 2;
 
     return (
       <FlatList
-        ref={(r) => { listRef = r; }}
+        ref={(r) => {
+          listRef = r;
+        }}
         data={data}
         keyExtractor={(n) => String(n)}
         initialScrollIndex={initialIndex === -1 ? 0 : initialIndex}
-        getItemLayout={(_d, index) => ({ length: itemHeight, offset: itemHeight * index, index })}
+        getItemLayout={(_d, index) => ({
+          length: itemHeight,
+          offset: itemHeight * index,
+          index,
+        })}
         showsVerticalScrollIndicator={false}
         snapToInterval={itemHeight}
         decelerationRate="fast"
         onMomentumScrollEnd={onMomentumEnd}
-        contentContainerStyle={{ paddingTop: topBottomPadding, paddingBottom: topBottomPadding }}
+        contentContainerStyle={{
+          paddingTop: topBottomPadding,
+          paddingBottom: topBottomPadding,
+        }}
         renderItem={({ item }) => (
-          <View style={{ height: itemHeight, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: itemColor, fontSize: isSmall ? 18 : 20, fontWeight: '600' }}>{pad(item)}</Text>
+          <View
+            style={{
+              height: itemHeight,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: itemColor,
+                fontSize: isSmall ? 18 : 20,
+                fontWeight: "600",
+              }}
+            >
+              {pad(item)}
+            </Text>
           </View>
         )}
       />
@@ -149,21 +201,30 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
   if (!visible) return null;
 
   return (
-    <Modal transparent animationType="fade" visible={visible} statusBarTranslucent>
+    <Modal
+      transparent
+      animationType="fade"
+      visible={visible}
+      statusBarTranslucent
+    >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={[styles.modalTitle, { color: labelColor }]}>{title}</Text>
+          <Text style={[styles.modalTitle, { color: labelColor }]}>
+            {title}
+          </Text>
 
-          <View style={{ position: 'relative' }}>
+          <View style={{ position: "relative" }}>
             <View
               pointerEvents="none"
               style={{
-                position: 'absolute',
-                top: '50%',
+                position: "absolute",
+                top: "50%",
                 left: 0,
                 right: 0,
                 height: highlightHeight,
-                backgroundColor: isDark ? 'rgba(156,163,175,0.10)' : 'rgba(8,49,152,0.08)',
+                backgroundColor: isDark
+                  ? "rgba(156,163,175,0.10)"
+                  : "rgba(8,49,152,0.08)",
                 transform: [{ translateY: -highlightHeight / 2 }],
                 borderRadius: 10,
                 zIndex: 0,
@@ -172,53 +233,141 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
 
             <LinearGradient
               pointerEvents="none"
-              colors={[ (isDark ? colors.surface : colors.background), (isDark ? 'rgba(31,41,55,0.0)' : 'rgba(255,255,255,0.0)') ]}
-              style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 24, zIndex: 0 }}
+              colors={[
+                isDark ? colors.surface : colors.background,
+                isDark ? "rgba(31,41,55,0.0)" : "rgba(255,255,255,0.0)",
+              ]}
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: 24,
+                zIndex: 0,
+              }}
             />
             <LinearGradient
               pointerEvents="none"
-              colors={[ (isDark ? 'rgba(31,41,55,0.0)' : 'rgba(255,255,255,0.0)'), (isDark ? colors.surface : colors.background) ]}
-              style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, zIndex: 0 }}
+              colors={[
+                isDark ? "rgba(31,41,55,0.0)" : "rgba(255,255,255,0.0)",
+                isDark ? colors.surface : colors.background,
+              ]}
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: 24,
+                zIndex: 0,
+              }}
             />
 
-            <View style={[styles.pickerContainer, { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: isDark ? colors.surface : colors.background, borderRadius: 12, borderWidth: 1, borderColor: colors.border, paddingVertical: 8, zIndex: 1 }]}> 
-            <View style={{ flex: 1, marginHorizontal: 4 }}>
-              <Text style={[styles.modalTitle, { fontSize: labelFont, marginBottom: 4, color: labelColor }]}>DD</Text>
+            <View
+              style={[
+                styles.pickerContainer,
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  backgroundColor: isDark ? colors.surface : colors.background,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  paddingVertical: 8,
+                  zIndex: 1,
+                },
+              ]}
+            >
+              <View style={{ flex: 1, marginHorizontal: 4 }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    { fontSize: labelFont, marginBottom: 4, color: labelColor },
+                  ]}
+                >
+                  DD
+                </Text>
                 <WheelColumn data={days} value={day} onChange={setDay} />
-            </View>
-            <View style={{ flex: 1, marginHorizontal: 4 }}>
-              <Text style={[styles.modalTitle, { fontSize: labelFont, marginBottom: 4, color: labelColor }]}>MM</Text>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 4 }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    { fontSize: labelFont, marginBottom: 4, color: labelColor },
+                  ]}
+                >
+                  MM
+                </Text>
                 <WheelColumn data={months} value={month} onChange={setMonth} />
-            </View>
-            <View style={{ flex: 1.2, marginHorizontal: 4 }}>
-              <Text style={[styles.modalTitle, { fontSize: labelFont, marginBottom: 4, color: labelColor }]}>YY</Text>
+              </View>
+              <View style={{ flex: 1.2, marginHorizontal: 4 }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    { fontSize: labelFont, marginBottom: 4, color: labelColor },
+                  ]}
+                >
+                  YY
+                </Text>
                 <WheelColumn data={years} value={year} onChange={setYear} />
-            </View>
-            <View style={{ flex: 1, marginHorizontal: 4 }}>
-              <Text style={[styles.modalTitle, { fontSize: labelFont, marginBottom: 4, color: labelColor }]}>HH</Text>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 4 }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    { fontSize: labelFont, marginBottom: 4, color: labelColor },
+                  ]}
+                >
+                  HH
+                </Text>
                 <WheelColumn data={hours} value={hour} onChange={setHour} />
-            </View>
-            <View style={{ flex: 1, marginHorizontal: 4 }}>
-              <Text style={[styles.modalTitle, { fontSize: labelFont, marginBottom: 4, color: labelColor }]}>MM</Text>
-                <WheelColumn data={minutes} value={minute} onChange={setMinute} />
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 4 }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    { fontSize: labelFont, marginBottom: 4, color: labelColor },
+                  ]}
+                >
+                  MM
+                </Text>
+                <WheelColumn
+                  data={minutes}
+                  value={minute}
+                  onChange={setMinute}
+                />
+              </View>
             </View>
           </View>
-          </View>
-
 
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={onCancel} activeOpacity={0.7}>
-              <Text style={styles.cancelButtonText}>{t('common.cancel') || 'Отмена'}</Text>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={onCancel}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.cancelButtonText}>
+                {t("common.cancel") || "Отмена"}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={() => {
-                const result = new Date(year, month - 1, day, hour, minute, 0, 0);
+                const result = new Date(
+                  year,
+                  month - 1,
+                  day,
+                  hour,
+                  minute,
+                  0,
+                  0,
+                );
                 onConfirm(result);
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.confirmButtonText}>{t('common.done') || 'Готово'}</Text>
+              <Text style={styles.confirmButtonText}>
+                {t("common.done") || "Готово"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -228,5 +377,3 @@ export const UnifiedDateTimePickerModal: React.FC<UnifiedDateTimePickerModalProp
 };
 
 export default UnifiedDateTimePickerModal;
-
-

@@ -1,28 +1,28 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../../../constants/colors";
 
 export const DriverVehiclesScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 45, // Устанавливаем отступ сверху
     paddingBottom: 6, // Отступ снизу
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   backButton: {
     padding: 8,
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
   },
   addButton: {
     padding: 8,
@@ -37,21 +37,21 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
   // Пустое состояние
   emptyState: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 60,
   },
   emptyTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginTop: 16,
     marginBottom: 8,
   },
   emptyDescription: {
     fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
+    color: "#888",
+    textAlign: "center",
     marginBottom: 32,
     paddingHorizontal: 32,
   },
@@ -64,24 +64,24 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginBottom: 8,
   },
   requiredStar: {
-    color: '#e53935',
+    color: "#e53935",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   errorText: {
     fontSize: 12,
-    color: '#e53935',
+    color: "#e53935",
     marginTop: 4,
     marginLeft: 4,
   },
@@ -90,11 +90,11 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
     flex: 1,
   },
   vehicleCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -104,36 +104,36 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
     elevation: 5,
   },
   vehicleHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
   },
   vehicleTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginLeft: 8,
   },
   vehicleDetails: {
     marginBottom: 16,
   },
   detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   detailLabel: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    color: "#666",
+    fontWeight: "500",
   },
   detailValue: {
     fontSize: 14,
-    color: '#003366',
-    fontWeight: '600',
+    color: "#003366",
+    fontWeight: "600",
   },
   photoContainer: {
     marginTop: 8,
@@ -141,47 +141,47 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
   photoPreview: {
     width: 80,
     height: 80,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 8,
   },
   // Кнопка сохранения
   saveButton: {
-    backgroundColor: '#003366',
+    backgroundColor: "#003366",
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 24,
     marginBottom: 16,
   },
   saveButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#ffffff',
+    fontWeight: "600",
+    color: "#ffffff",
   },
   // Состояния загрузки и ошибок
   loadingContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 60,
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
   errorContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 60,
     paddingHorizontal: 32,
   },
   retryButton: {
-    backgroundColor: '#003366',
+    backgroundColor: "#003366",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -189,52 +189,52 @@ export const DriverVehiclesScreenStyles = StyleSheet.create({
   },
   retryButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#ffffff',
+    fontWeight: "600",
+    color: "#ffffff",
   },
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 60,
     paddingHorizontal: 32,
   },
   emptyText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
 });
 
 export const getDriverVehiclesScreenColors = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   return {
     container: { backgroundColor: currentColors.background },
-    header: { 
+    header: {
       backgroundColor: currentColors.background,
-      borderBottomColor: currentColors.border 
+      borderBottomColor: currentColors.border,
     },
     title: { color: currentColors.text },
     emptyTitle: { color: currentColors.text },
     emptyDescription: { color: currentColors.textSecondary },
     label: { color: currentColors.text },
-    input: { 
+    input: {
       backgroundColor: currentColors.surface,
       borderColor: currentColors.border,
-      color: currentColors.text 
+      color: currentColors.text,
     },
     errorText: { color: currentColors.error },
-    vehicleCard: { 
+    vehicleCard: {
       backgroundColor: currentColors.surface,
-      shadowColor: '#000' 
+      shadowColor: "#000",
     },
     vehicleTitle: { color: currentColors.text },
     detailLabel: { color: currentColors.textSecondary },
@@ -242,10 +242,10 @@ export const getDriverVehiclesScreenColors = (isDark: boolean) => {
     photoPreview: { backgroundColor: currentColors.border },
     detailRow: { borderBottomColor: currentColors.border },
     saveButton: { backgroundColor: currentColors.primary },
-    saveButtonText: { color: '#ffffff' },
+    saveButtonText: { color: "#ffffff" },
     loadingText: { color: currentColors.textSecondary },
     retryButton: { backgroundColor: currentColors.primary },
-    retryButtonText: { color: '#ffffff' },
+    retryButtonText: { color: "#ffffff" },
     emptyText: { color: currentColors.text },
     emptySubtext: { color: currentColors.textSecondary },
   };

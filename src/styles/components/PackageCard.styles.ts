@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const PackageCardStyles = StyleSheet.create({
   container: {
     padding: 16,
     borderRadius: 12,
     marginVertical: 6,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -15,8 +15,8 @@ export const PackageCardStyles = StyleSheet.create({
     opacity: 0.6,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   icon: {
@@ -25,12 +25,12 @@ export const PackageCardStyles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginRight: 8,
   },
   activeLabel: {
@@ -38,12 +38,12 @@ export const PackageCardStyles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
     fontSize: 10,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
   price: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   description: {
     fontSize: 14,
@@ -51,14 +51,14 @@ export const PackageCardStyles = StyleSheet.create({
     marginBottom: 12,
   },
   details: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 16,
     marginBottom: 8,
   },
   detailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   detailLabel: {
     fontSize: 12,
@@ -66,16 +66,16 @@ export const PackageCardStyles = StyleSheet.create({
   },
   detailValue: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   expiry: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: "#E5E7EB",
     paddingTop: 8,
     marginTop: 8,
   },
   expiryText: {
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
-}); 
+});

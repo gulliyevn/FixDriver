@@ -14,7 +14,7 @@ export interface Driver {
   rating: number;
   created_at: string;
   updated_at: string;
-  
+
   // UI полезные поля
   isAvailable?: boolean;
   avatar?: string;
@@ -22,7 +22,7 @@ export interface Driver {
     latitude: number;
     longitude: number;
   };
-  
+
   // Дополнительные поля для UI
   name?: string; // Полное имя для отображения
   carModel?: string; // Модель автомобиля для отображения
@@ -32,16 +32,16 @@ export interface Driver {
   addresses?: string[]; // Адреса маршрута
   times?: string[]; // Времена для каждого адреса
   tripDays?: string; // Дни поездок
-  package?: 'base' | 'plus' | 'premium'; // Тип пакета
+  package?: "base" | "plus" | "premium"; // Тип пакета
 }
 
 export enum DriverStatus {
-  PENDING = 'pending',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
-  SUSPENDED = 'suspended',
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
+  PENDING = "pending",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+  SUSPENDED = "suspended",
+  ACTIVE = "active",
+  INACTIVE = "inactive",
 }
 
 // Данные для регистрации водителя (отправляем на бэк)
@@ -52,7 +52,7 @@ export interface DriverRegistrationData {
   license_number: string;
   license_expiry_date: string; // YYYY-MM-DD format
   vehicle_number: string;
-  
+
   // Опциональные поля
   phone_number?: string;
   first_name?: string;
@@ -85,7 +85,7 @@ export interface DriverDocumentUpdateData {
 export interface DriverRegistrationResponse {
   success: boolean;
   message: string;
-  driver?: Omit<Driver, 'password_hash'>; // без пароля
+  driver?: Omit<Driver, "password_hash">; // без пароля
   token?: string; // JWT токен если сразу логинимся
 }
 
@@ -126,8 +126,8 @@ export interface DriverFilters {
 
 // Сортировка водителей
 export interface DriverSort {
-  field: 'rating' | 'created_at' | 'total_trips' | 'distance';
-  order: 'asc' | 'desc';
+  field: "rating" | "created_at" | "total_trips" | "distance";
+  order: "asc" | "desc";
 }
 
 export default Driver;

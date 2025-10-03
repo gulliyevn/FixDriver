@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { FixDriveDropdownStyles as styles, getFixDriveDropdownColors } from '../styles/components/FixDriveDropdown.styles';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import {
+  FixDriveDropdownStyles as styles,
+  getFixDriveDropdownColors,
+} from "../styles/components/FixDriveDropdown.styles";
 
 interface DropdownOption {
   key: string;
@@ -29,7 +32,9 @@ const FixDriveDropdown: React.FC<FixDriveDropdownProps> = ({
   const dynamicStyles = getFixDriveDropdownColors(isDark);
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectedOption = options.find(option => option.value === selectedValue);
+  const selectedOption = options.find(
+    (option) => option.value === selectedValue,
+  );
 
   const handleSelect = (value: string) => {
     onSelect(value);
@@ -45,56 +50,67 @@ const FixDriveDropdown: React.FC<FixDriveDropdownProps> = ({
       <Text style={[styles.dropdownLabel, dynamicStyles.dropdownLabel]}>
         {label}
       </Text>
-      
+
       <TouchableOpacity
         style={[styles.dropdownButton, dynamicStyles.dropdownButton]}
         onPress={toggleDropdown}
       >
-        <Text style={[
-          selectedOption 
-            ? styles.dropdownButtonText 
-            : styles.dropdownButtonPlaceholder,
-          selectedOption 
-            ? dynamicStyles.dropdownButtonText 
-            : dynamicStyles.dropdownButtonPlaceholder
-        ]}>
+        <Text
+          style={[
+            selectedOption
+              ? styles.dropdownButtonText
+              : styles.dropdownButtonPlaceholder,
+            selectedOption
+              ? dynamicStyles.dropdownButtonText
+              : dynamicStyles.dropdownButtonPlaceholder,
+          ]}
+        >
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
-        <Ionicons 
-          name={isOpen ? "chevron-up" : "chevron-down"} 
-          size={16} 
-          color={isDark ? '#9CA3AF' : '#666666'} 
+        <Ionicons
+          name={isOpen ? "chevron-up" : "chevron-down"}
+          size={16}
+          color={isDark ? "#9CA3AF" : "#666666"}
         />
       </TouchableOpacity>
-      
+
       {isOpen && (
         <View style={[styles.dropdownList, dynamicStyles.dropdownList]}>
-          <ScrollView style={{ maxHeight: 200 }} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={{ maxHeight: 200 }}
+            showsVerticalScrollIndicator={false}
+          >
             {options.map((option, index) => (
               <TouchableOpacity
                 key={option.key}
                 style={[
-                  styles.dropdownOption, 
+                  styles.dropdownOption,
                   dynamicStyles.dropdownOption,
-                  selectedValue === option.value && styles.dropdownOptionSelected,
-                  selectedValue === option.value && dynamicStyles.dropdownOptionSelected,
-                  index === options.length - 1 && styles.dropdownOptionLast
+                  selectedValue === option.value &&
+                    styles.dropdownOptionSelected,
+                  selectedValue === option.value &&
+                    dynamicStyles.dropdownOptionSelected,
+                  index === options.length - 1 && styles.dropdownOptionLast,
                 ]}
                 onPress={() => handleSelect(option.value)}
               >
-                <Text style={[
-                  styles.dropdownOptionText, 
-                  dynamicStyles.dropdownOptionText,
-                  selectedValue === option.value && styles.dropdownOptionTextSelected,
-                  selectedValue === option.value && dynamicStyles.dropdownOptionTextSelected
-                ]}>
+                <Text
+                  style={[
+                    styles.dropdownOptionText,
+                    dynamicStyles.dropdownOptionText,
+                    selectedValue === option.value &&
+                      styles.dropdownOptionTextSelected,
+                    selectedValue === option.value &&
+                      dynamicStyles.dropdownOptionTextSelected,
+                  ]}
+                >
                   {option.label}
                 </Text>
                 {selectedValue === option.value && (
-                  <Ionicons 
-                    name="checkmark" 
-                    size={16} 
-                    color={isDark ? '#3B82F6' : '#083198'} 
+                  <Ionicons
+                    name="checkmark"
+                    size={16}
+                    color={isDark ? "#3B82F6" : "#083198"}
                   />
                 )}
               </TouchableOpacity>

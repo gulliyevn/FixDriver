@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useI18n } from '../../../hooks/useI18n';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
-import { useLevelProgress } from '../../../context/LevelProgressContext';
+import React, { useEffect, useRef } from "react";
+import { View, Text, StyleSheet, Animated } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useI18n } from "../../../hooks/useI18n";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../constants/colors";
+import { useLevelProgress } from "../../../context/LevelProgressContext";
 
 interface EarningsLevelProps {
   isDark: boolean;
@@ -19,7 +19,8 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
   const barProgressAnim = useRef(new Animated.Value(0)).current;
   const prevProgress = useRef(driverLevel.currentProgress);
 
-  const progressPercentage = (driverLevel.currentProgress / driverLevel.maxProgress) * 100;
+  const progressPercentage =
+    (driverLevel.currentProgress / driverLevel.maxProgress) * 100;
 
   // Анимация при изменении прогресса
   useEffect(() => {
@@ -37,14 +38,20 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
         duration: 800,
         useNativeDriver: false,
       }).start();
-      
+
       prevProgress.current = driverLevel.currentProgress;
     } else {
       // Устанавливаем начальные значения без анимации
       circleProgressAnim.setValue(progressPercentage);
       barProgressAnim.setValue(progressPercentage);
     }
-  }, [driverLevel.currentProgress, driverLevel.maxProgress, progressPercentage, circleProgressAnim, barProgressAnim]);
+  }, [
+    driverLevel.currentProgress,
+    driverLevel.maxProgress,
+    progressPercentage,
+    circleProgressAnim,
+    barProgressAnim,
+  ]);
 
   const styles = StyleSheet.create({
     container: {
@@ -56,13 +63,13 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
     levelContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
     progressSection: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
     },
     progressCircle: {
       width: 80,
@@ -70,23 +77,23 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       borderRadius: 40,
       borderWidth: 6,
       borderColor: colors.border,
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
     },
     progressFill: {
-      position: 'absolute',
+      position: "absolute",
       width: 80,
       height: 80,
       borderRadius: 40,
       borderWidth: 6,
-      borderColor: 'transparent',
-      borderTopColor: '#10B981',
-      borderRightColor: '#10B981',
+      borderColor: "transparent",
+      borderTopColor: "#10B981",
+      borderRightColor: "#10B981",
     },
     progressText: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
     },
     levelInfo: {
@@ -95,7 +102,7 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
     },
     levelTitle: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
       marginBottom: SIZES.xs,
     },
@@ -105,34 +112,33 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
       marginBottom: SIZES.sm,
     },
     rewardSection: {
-      alignItems: 'flex-end',
+      alignItems: "flex-end",
     },
     rewardIcon: {
-      position: 'absolute',
+      position: "absolute",
       top: -8,
       right: -8,
       width: 20,
       height: 20,
       borderRadius: 10,
-      backgroundColor: colors.success + '15',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: colors.success + "15",
+      justifyContent: "center",
+      alignItems: "center",
     },
     rewardText: {
       fontSize: SIZES.fontSize.xs,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.success,
       marginTop: 2,
     },
     progressBar: {
-      width: '100%',
+      width: "100%",
       height: 4,
       backgroundColor: colors.border,
       borderRadius: 2,
       marginTop: SIZES.sm,
-      overflow: 'hidden',
+      overflow: "hidden",
     },
-    
   });
 
   return (
@@ -149,7 +155,7 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
                     {
                       rotate: circleProgressAnim.interpolate({
                         inputRange: [0, 100],
-                        outputRange: ['-90deg', '270deg'], // От -90 до 270 градусов для полного круга
+                        outputRange: ["-90deg", "270deg"], // От -90 до 270 градусов для полного круга
                       }),
                     },
                   ],
@@ -161,7 +167,7 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
             </Text>
             <Text style={styles.rewardText}>{driverLevel.nextReward}</Text>
           </View>
-          
+
           {/* Информация об уровне */}
           <View style={styles.levelInfo}>
             <Text style={styles.levelTitle}>{driverLevel.subLevelTitle}</Text>
@@ -173,19 +179,19 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
                 style={{
                   width: barProgressAnim.interpolate({
                     inputRange: [0, 100],
-                    outputRange: ['0%', '100%'],
+                    outputRange: ["0%", "100%"],
                   }),
-                  height: '100%',
+                  height: "100%",
                   borderRadius: 2,
                 }}
               >
                 <LinearGradient
-                  colors={['#10B981', '#059669']}
+                  colors={["#10B981", "#059669"]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={{
-                    width: '100%',
-                    height: '100%',
+                    width: "100%",
+                    height: "100%",
                     borderRadius: 2,
                   }}
                 />
@@ -194,7 +200,6 @@ const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
           </View>
         </View>
       </View>
-      
     </View>
   );
 };

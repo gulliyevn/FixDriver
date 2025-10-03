@@ -315,8 +315,7 @@
       "tripToWork": "İşe yolculuk",
       "routeToWork": "Rota: ev - ofis"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Sürücüleri ara...",
     "loadingMore": "Daha fazla sürücü yükleniyor...",

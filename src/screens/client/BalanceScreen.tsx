@@ -1,27 +1,44 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, Animated, Modal, TextInput, Dimensions, Clipboard } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { ClientScreenProps } from '../../types/navigation';
-import { DriverStackParamList } from '../../types/driver/DriverNavigation';
-import { BalanceScreenStyles as styles, getBalanceScreenStyles, getBalanceScreenColors } from '../../styles/screens/profile/BalanceScreen.styles';
+import React, { useState, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  Animated,
+  Modal,
+  TextInput,
+  Dimensions,
+  Clipboard,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { ClientScreenProps } from "../../types/navigation";
+import { DriverStackParamList } from "../../types/driver/DriverNavigation";
+import {
+  BalanceScreenStyles as styles,
+  getBalanceScreenStyles,
+  getBalanceScreenColors,
+} from "../../styles/screens/profile/BalanceScreen.styles";
 // mockQuickAmounts removed - using hardcoded values
 const mockQuickAmounts = [10, 25, 50, 100, 200, 500];
 
-import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
-import { colors } from '../../constants/colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createCVVStickAnimation } from '../../styles/animations';
-import BalanceCardDecoration from '../../components/BalanceCardDecoration';
-import BalanceTopUpHistory from '../../components/BalanceTopUpHistory';
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../hooks/useI18n";
+import { colors } from "../../constants/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createCVVStickAnimation } from "../../styles/animations";
+import BalanceCardDecoration from "../../components/BalanceCardDecoration";
+import BalanceTopUpHistory from "../../components/BalanceTopUpHistory";
 
-import { usePackage } from '../../context/PackageContext';
-import { useBalance } from '../../hooks/useBalance';
-import { useDriverBalance, DriverBalanceContextType } from '../../hooks/driver/useDriverBalance';
-import { useAuth } from '../../context/AuthContext';
-import { formatBalance } from '../../utils/formatters';
-import { getPackageIcon, getPackageColor } from '../../utils/packageVisuals';
-
+import { usePackage } from "../../context/PackageContext";
+import { useBalance } from "../../hooks/useBalance";
+import {
+  useDriverBalance,
+  DriverBalanceContextType,
+} from "../../hooks/driver/useDriverBalance";
+import { useAuth } from "../../context/AuthContext";
+import { formatBalance } from "../../utils/formatters";
+import { getPackageIcon, getPackageColor } from "../../utils/packageVisuals";
 
 import {
   balanceCardAnimated,
@@ -52,11 +69,11 @@ import {
   copiedIconStyle,
   flipIconColor,
   backIconColor,
-} from '../../styles/screens/profile/BalanceScreen.styles';
+} from "../../styles/screens/profile/BalanceScreen.styles";
 
 /**
  * Экран баланса пользователя
- * 
+ *
  * TODO для интеграции с бэкендом:
  * 1. Заменить useState на useBalance hook
  * 2. Подключить BalanceService для API вызовов
@@ -66,7 +83,7 @@ import {
  * 6. Подключить уведомления о транзакциях
  */
 
-type BalanceScreenProps = ClientScreenProps<'Balance'> | { navigation: any };
+type BalanceScreenProps = ClientScreenProps<"Balance"> | { navigation: any };
 
 const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -75,21 +92,21 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const currentColors = isDark ? colors.dark : colors.light;
   const dynamicStyles = getBalanceScreenStyles(isDark);
   const balanceColors = getBalanceScreenColors(isDark);
-  
+
   // Проверяем роль пользователя
-  const isDriver = user?.role === 'driver';
-  
+  const isDriver = user?.role === "driver";
+
   // Условная логика для разных ролей
   const getScreenTitle = () => {
-    return t('client.balance.title'); // Одинаковый заголовок для обеих ролей
+    return t("client.balance.title"); // Одинаковый заголовок для обеих ролей
   };
-  
+
   const getTopUpButtonText = () => {
-    return isDriver ? t('client.balance.topUp') : t('client.balance.topUp');
+    return isDriver ? t("client.balance.topUp") : t("client.balance.topUp");
   };
-  
+
   const getTopUpModalTitle = () => {
-    return isDriver ? t('client.balance.topUp') : t('client.balance.topUp');
+    return isDriver ? t("client.balance.topUp") : t("client.balance.topUp");
   };
 
   // Цвета и стили для кнопок и карты
@@ -99,32 +116,28 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const flipIconColorValue = flipIconColor(isDark);
   const backIconColorValue = backIconColor(isDark);
 
-  const CASHBACK_KEY = 'user_cashback';
-  const [cashback, setCashback] = useState('0');
+  const CASHBACK_KEY = "user_cashback";
+  const [cashback, setCashback] = useState("0");
   const { currentPackage } = usePackage();
   // Используем разные хуки для клиента и водителя
   const clientBalanceHook = useBalance();
   const driverBalanceHook = useDriverBalance();
-  
+
   // Выбираем нужный хук в зависимости от роли
   const balanceHook = isDriver ? driverBalanceHook : clientBalanceHook;
   const userBalance = balanceHook.balance;
-  
+
   // Для водителей показываем общую сумму (баланс + заработок)
-  const totalBalance = isDriver 
+  const totalBalance = isDriver
     ? userBalance + (driverBalanceHook as DriverBalanceContextType).earnings
     : userBalance;
-  const topUpBalance = isDriver 
-    ? (driverBalanceHook as DriverBalanceContextType).topUpBalance 
+  const topUpBalance = isDriver
+    ? (driverBalanceHook as DriverBalanceContextType).topUpBalance
     : clientBalanceHook.topUpBalance;
-  const withdrawBalance = isDriver 
-    ? (driverBalanceHook as DriverBalanceContextType).withdrawBalance 
+  const withdrawBalance = isDriver
+    ? (driverBalanceHook as DriverBalanceContextType).withdrawBalance
     : null;
-  
 
-  
-
-  
   React.useEffect(() => {
     (async () => {
       const storedCashback = await AsyncStorage.getItem(CASHBACK_KEY);
@@ -134,13 +147,12 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     quickTopUpHeight.setValue(0);
   }, []);
 
-
   // Вместо flipAnim._value используем ref
   const flipAnim = useRef(new Animated.Value(0)).current;
   const isFlippedRef = useRef(false);
   const [topUpModalVisible, setTopUpModalVisible] = useState(false);
   const [quickTopUpModalVisible, setQuickTopUpModalVisible] = useState(false);
-  const [topUpAmount, setTopUpAmount] = useState('');
+  const [topUpAmount, setTopUpAmount] = useState("");
 
   const handleFlip = () => {
     const toValue = isFlippedRef.current ? 0 : 1;
@@ -155,11 +167,11 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
 
   const frontInterpolate = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: ['0deg', '90deg', '180deg'],
+    outputRange: ["0deg", "90deg", "180deg"],
   });
   const backInterpolate = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
-    outputRange: ['180deg', '90deg', '0deg'],
+    outputRange: ["180deg", "90deg", "0deg"],
   });
   const frontOpacity = flipAnim.interpolate({
     inputRange: [0, 0.5, 1],
@@ -170,7 +182,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     outputRange: [0, 0, 1],
   });
 
-    const handleTopUp = (amount?: string) => {
+  const handleTopUp = (amount?: string) => {
     if (amount) {
       setTopUpAmount(amount);
     }
@@ -188,26 +200,29 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     } else {
       // Если сумма не передана, показываем диалог для ввода
       Alert.prompt(
-        t('client.balance.withdraw'),
-        t('client.balance.enterWithdrawAmount'),
+        t("client.balance.withdraw"),
+        t("client.balance.enterWithdrawAmount"),
         [
-          { text: t('client.balance.cancel'), style: 'cancel' },
+          { text: t("client.balance.cancel"), style: "cancel" },
           {
-            text: t('client.balance.withdraw'),
+            text: t("client.balance.withdraw"),
             onPress: (inputAmount) => {
               if (inputAmount) {
                 const amountNum = parseFloat(inputAmount);
                 if (!isNaN(amountNum) && amountNum > 0) {
                   handleWithdrawAmount(amountNum);
                 } else {
-                  Alert.alert(t('client.balance.error'), t('client.balance.enterValidAmount'));
+                  Alert.alert(
+                    t("client.balance.error"),
+                    t("client.balance.enterValidAmount"),
+                  );
                 }
               }
-            }
-          }
+            },
+          },
         ],
-        'plain-text',
-        ''
+        "plain-text",
+        "",
       );
     }
   };
@@ -215,104 +230,123 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const handleWithdrawAmount = async (amount: number) => {
     // Проверяем минимальную сумму вывода
     if (amount < 20) {
-      Alert.alert(t('client.balance.error'), t('client.balance.minimumWithdrawal'));
+      Alert.alert(
+        t("client.balance.error"),
+        t("client.balance.minimumWithdrawal"),
+      );
       return;
     }
 
     if (withdrawBalance) {
       const success = await withdrawBalance(amount);
       if (success) {
-        Alert.alert(t('client.balance.success'), t('client.balance.withdrawRequestSent', { 0: amount }));
+        Alert.alert(
+          t("client.balance.success"),
+          t("client.balance.withdrawRequestSent", { 0: amount }),
+        );
       } else {
-        Alert.alert(t('client.balance.error'), t('client.balance.insufficientFunds'));
+        Alert.alert(
+          t("client.balance.error"),
+          t("client.balance.insufficientFunds"),
+        );
       }
     }
   };
 
-
-
   const handleUseCashback = () => {
     const cashbackNum = parseFloat(cashback);
-    
+
     if (cashbackNum < 20) {
       Alert.alert(
-        t('client.balance.insufficientFunds'),
-        t('client.balance.minimumWithdrawal')
+        t("client.balance.insufficientFunds"),
+        t("client.balance.minimumWithdrawal"),
       );
       return;
     }
-    
-        if (isDriver && withdrawBalance) {
+
+    if (isDriver && withdrawBalance) {
       // Для водителей - снятие средств
       Alert.alert(
-        t('client.balance.withdraw'),
-        t('client.balance.useCashbackConfirm'),
+        t("client.balance.withdraw"),
+        t("client.balance.useCashbackConfirm"),
         [
-          { text: t('client.balance.cancel'), style: 'cancel' },
+          { text: t("client.balance.cancel"), style: "cancel" },
           {
-            text: t('client.balance.yes'),
+            text: t("client.balance.yes"),
             onPress: async () => {
               const success = await withdrawBalance(cashbackNum);
               if (success) {
-                setCashback('0');
-                AsyncStorage.setItem(CASHBACK_KEY, '0');
-                Alert.alert(t('client.balance.success'), 'Withdrawal request submitted');
+                setCashback("0");
+                AsyncStorage.setItem(CASHBACK_KEY, "0");
+                Alert.alert(
+                  t("client.balance.success"),
+                  "Withdrawal request submitted",
+                );
               } else {
-                Alert.alert(t('client.balance.error'), 'Insufficient funds for withdrawal');
+                Alert.alert(
+                  t("client.balance.error"),
+                  "Insufficient funds for withdrawal",
+                );
               }
-            }
-          }
-        ]
+            },
+          },
+        ],
       );
     } else {
       // Для клиентов - использование cashback
       Alert.alert(
-        t('client.balance.useCashback'),
-        t('client.balance.useCashbackConfirm'),
+        t("client.balance.useCashback"),
+        t("client.balance.useCashbackConfirm"),
         [
-          { text: t('client.balance.cancel'), style: 'cancel' },
+          { text: t("client.balance.cancel"), style: "cancel" },
           {
-            text: t('client.balance.yes'),
+            text: t("client.balance.yes"),
             onPress: async () => {
               try {
                 await topUpBalance(cashbackNum);
-                setCashback('0');
-                AsyncStorage.setItem(CASHBACK_KEY, '0');
-                Alert.alert(t('client.balance.success'), t('client.balance.cashbackAdded', { 0: cashbackNum }));
+                setCashback("0");
+                AsyncStorage.setItem(CASHBACK_KEY, "0");
+                Alert.alert(
+                  t("client.balance.success"),
+                  t("client.balance.cashbackAdded", { 0: cashbackNum }),
+                );
               } catch (error) {
-                Alert.alert(t('client.balance.error'), 'Failed to use cashback');
+                Alert.alert(
+                  t("client.balance.error"),
+                  "Failed to use cashback",
+                );
               }
-            }
-          }
-        ]
+            },
+          },
+        ],
       );
     }
   };
 
-
-
-
-
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get("window").width;
 
   // История транзакций теперь управляется через BalanceContext
 
-
-
   const handleFakeStripePayment = async () => {
-    const amountNum = parseFloat(topUpAmount.replace(',', '.'));
+    const amountNum = parseFloat(topUpAmount.replace(",", "."));
     if (isNaN(amountNum) || amountNum <= 0) {
-      Alert.alert(t('client.balance.error'), t('client.balance.enterValidAmount'));
+      Alert.alert(
+        t("client.balance.error"),
+        t("client.balance.enterValidAmount"),
+      );
       return;
     }
-    
+
     // Для всех - пополнение
     try {
       await topUpBalance(amountNum);
       setTopUpModalVisible(false);
-      Alert.alert(t('client.balance.paymentSuccess'), t('client.balance.balanceToppedUp', { 0: amountNum }));
+      Alert.alert(
+        t("client.balance.paymentSuccess"),
+        t("client.balance.balanceToppedUp", { 0: amountNum }),
+      );
     } catch (error) {
-      Alert.alert(t('client.balance.error'), 'Failed to top up balance');
+      Alert.alert(t("client.balance.error"), "Failed to top up balance");
     }
   };
 
@@ -328,7 +362,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
 
   const handleCopyCardNumber = async () => {
     try {
-      await Clipboard.setString('9876 5432 1098 7654');
+      await Clipboard.setString("9876 5432 1098 7654");
       setShowCopied(true);
       setTimeout(() => setShowCopied(false), 2000);
     } catch (error) {
@@ -338,8 +372,14 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
 
   const handleToggleCVV = () => {
     createCVVStickAnimation(
-      { cvvOpacity, stickerOpacity, stickerTranslateX, stickerTranslateY, stickerRotate },
-      setShowCVV
+      {
+        cvvOpacity,
+        stickerOpacity,
+        stickerTranslateX,
+        stickerTranslateY,
+        stickerRotate,
+      },
+      setShowCVV,
     )(showCVV);
   };
 
@@ -354,99 +394,138 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     });
   };
 
-
-
   return (
     <View style={[styles.container, balanceColors.container]}>
       <View style={[styles.header, balanceColors.header]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <Ionicons name="arrow-back" size={24} color={backIconColorValue} />
         </TouchableOpacity>
         <Text style={[styles.title, balanceColors.title]}>
           {getScreenTitle()}
         </Text>
-        <View style={[styles.backButton, { flexDirection: 'row', alignItems: 'center' }]}>
+        <View
+          style={[
+            styles.backButton,
+            { flexDirection: "row", alignItems: "center" },
+          ]}
+        >
           <TouchableOpacity onPress={() => setQuickTopUpModalVisible(true)}>
-            <Ionicons 
-              name="flash" 
-              size={24} 
+            <Ionicons
+              name="flash"
+              size={24}
               color={currentColors.primary}
               style={{ marginRight: 8 }}
             />
           </TouchableOpacity>
-          <Ionicons 
+          <Ionicons
             name={getPackageIcon(currentPackage) as any}
-            size={24} 
+            size={24}
             color={getPackageColor(currentPackage)}
           />
         </View>
       </View>
-      
-      <ScrollView style={styles.content} 
+
+      <ScrollView
+        style={styles.content}
         contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         {/* Основной баланс с анимацией */}
         <View style={mainBalanceContainer}>
-          <View style={cardContainerWithDynamicWidth(screenWidth)}>  
+          <View style={cardContainerWithDynamicWidth(screenWidth)}>
             {/* Front side - всегда в DOM */}
             <Animated.View
               style={[
                 styles.balanceCard,
                 styles.balanceCardBorder,
-                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors, isDark) },
+                {
+                  ...dynamicStyles.balanceCard,
+                  ...balanceCardWithTheme(currentColors, isDark),
+                },
                 balanceCardAnimated,
                 animatedCardFront,
-                { 
+                {
                   transform: [{ rotateY: frontInterpolate }],
                   opacity: frontOpacity,
                 },
               ]}
             >
               {/* Декорация в верхней части карты */}
-              <BalanceCardDecoration isDark={isDark} packageType={currentPackage} />
+              <BalanceCardDecoration
+                isDark={isDark}
+                packageType={currentPackage}
+              />
               <View style={balanceCardFrontRow}>
                 <View>
                   <Text style={styles.balanceLabel}>
-                    {isDriver ? 'Total Balance' : t('client.balance.currentBalance')}
+                    {isDriver
+                      ? "Total Balance"
+                      : t("client.balance.currentBalance")}
                   </Text>
                   <View style={styles.balanceRow}>
-                    <Text style={styles.balanceAmount}>{formatBalance(totalBalance)}</Text>
-                    {!String(totalBalance).includes('AFc') && (
+                    <Text style={styles.balanceAmount}>
+                      {formatBalance(totalBalance)}
+                    </Text>
+                    {!String(totalBalance).includes("AFc") && (
                       <Text style={styles.balanceCurrency}>AFc</Text>
                     )}
                   </View>
                   <Text style={cashbackText}>
-                    {isDriver 
+                    {isDriver
                       ? `Balance: ${formatBalance(userBalance)} | Earnings: ${formatBalance((driverBalanceHook as DriverBalanceContextType).earnings)}`
-                      : 'FixCash: ' + cashback + ' AFc'
-                    }
+                      : "FixCash: " + cashback + " AFc"}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleFlip} style={flipButtonFront}>
-                  <Ionicons name="swap-horizontal" size={32} color={flipIconColorValue} />
+                  <Ionicons
+                    name="swap-horizontal"
+                    size={32}
+                    color={flipIconColorValue}
+                  />
                 </TouchableOpacity>
               </View>
-              <View style={[styles.balanceActions, balanceActionsMargin]}> 
+              <View style={[styles.balanceActions, balanceActionsMargin]}>
                 <TouchableOpacity
                   style={[
                     styles.cardFrontButton,
                     cardFrontButtonWithTheme(cardBg, topUpBtnColor),
                   ]}
-                  onPress={() => isDriver ? handleTopUp() : handleTopUp()}
+                  onPress={() => (isDriver ? handleTopUp() : handleTopUp())}
                 >
                   <Ionicons name="add-circle" size={24} color={topUpBtnColor} />
-                  <Text style={[styles.cardFrontBtnText, cardFrontBtnTextWithColor(topUpBtnColor)]}>{getTopUpButtonText()}</Text>
+                  <Text
+                    style={[
+                      styles.cardFrontBtnText,
+                      cardFrontBtnTextWithColor(topUpBtnColor),
+                    ]}
+                  >
+                    {getTopUpButtonText()}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
                     styles.cardFrontButton2,
                     cardFrontButton2WithTheme(cardBg, cashbackBtnColor),
                   ]}
-                  onPress={() => isDriver ? handleWithdraw() : handleUseCashback}
+                  onPress={() =>
+                    isDriver ? handleWithdraw() : handleUseCashback
+                  }
                 >
-                  <Ionicons name={isDriver ? "card" : "gift"} size={24} color={cashbackBtnColor} />
-                  <Text style={[styles.cardFrontBtnText, cardFrontBtnTextWithColor(cashbackBtnColor)]}>
-                    {isDriver ? t('client.balance.withdraw') : 'FixCash'}
+                  <Ionicons
+                    name={isDriver ? "card" : "gift"}
+                    size={24}
+                    color={cashbackBtnColor}
+                  />
+                  <Text
+                    style={[
+                      styles.cardFrontBtnText,
+                      cardFrontBtnTextWithColor(cashbackBtnColor),
+                    ]}
+                  >
+                    {isDriver ? t("client.balance.withdraw") : "FixCash"}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -456,7 +535,10 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
               style={[
                 styles.balanceCard,
                 styles.balanceCardBorder,
-                { ...dynamicStyles.balanceCard, ...balanceCardWithTheme(currentColors, isDark) },
+                {
+                  ...dynamicStyles.balanceCard,
+                  ...balanceCardWithTheme(currentColors, isDark),
+                },
                 balanceCardAnimated,
                 animatedCardBack,
                 {
@@ -466,38 +548,63 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
               ]}
             >
               {/* Декорация обратной стороны карты */}
-              <BalanceCardDecoration isDark={isDark} packageType={currentPackage} isBackSide={true} />
+              <BalanceCardDecoration
+                isDark={isDark}
+                packageType={currentPackage}
+                isBackSide={true}
+              />
               <View style={balanceCardBack}>
                 <View style={styles.cardBackBtnContainer}>
                   <TouchableOpacity onPress={handleFlip} style={flipButtonBack}>
-                    <Ionicons name="swap-horizontal" size={32} color={flipIconColorValue} />
+                    <Ionicons
+                      name="swap-horizontal"
+                      size={32}
+                      color={flipIconColorValue}
+                    />
                   </TouchableOpacity>
                 </View>
-                <Text style={[cardBackText, styles.cardBackTextCenter]}>DIGITAL AFc CARD</Text>
+                <Text style={[cardBackText, styles.cardBackTextCenter]}>
+                  DIGITAL AFc CARD
+                </Text>
                 <View style={styles.cardNumberContainer}>
-                  <Text style={[cardBackText, styles.cardNumberText]} numberOfLines={1}>9876 5432 1098 7654</Text>
-                  <TouchableOpacity style={styles.copyButton} onPress={handleCopyCardNumber}>
+                  <Text
+                    style={[cardBackText, styles.cardNumberText]}
+                    numberOfLines={1}
+                  >
+                    9876 5432 1098 7654
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.copyButton}
+                    onPress={handleCopyCardNumber}
+                  >
                     <Ionicons name="copy-outline" size={16} color="#fff" />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.cardDetailsContainer}>
-                  <Text style={[cardBackText, styles.cardDetailsText]}>12/25</Text>
+                  <Text style={[cardBackText, styles.cardDetailsText]}>
+                    12/25
+                  </Text>
                   <View style={styles.cvvContainer}>
                     <TouchableOpacity onPress={handleToggleCVV}>
-                      <Animated.Text 
+                      <Animated.Text
                         style={[
-                          cardBackText, 
-                          styles.cardDetailsText, 
-                          cvvTextWithOpacity(cvvOpacity)
+                          cardBackText,
+                          styles.cardDetailsText,
+                          cvvTextWithOpacity(cvvOpacity),
                         ]}
                       >
                         123
                       </Animated.Text>
                     </TouchableOpacity>
-                    <Animated.View 
+                    <Animated.View
                       style={[
-                        styles.cvvSticker, 
-                        cvvStickerWithAnimation(stickerOpacity, stickerTranslateX, stickerTranslateY, stickerRotate)
+                        styles.cvvSticker,
+                        cvvStickerWithAnimation(
+                          stickerOpacity,
+                          stickerTranslateX,
+                          stickerTranslateY,
+                          stickerRotate,
+                        ),
                       ]}
                     >
                       <TouchableOpacity onPress={handleToggleCVV}>
@@ -507,15 +614,24 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                   </View>
                 </View>
                 <View style={styles.cardNameContainer}>
-                  {/* TODO: Получать имя держателя карты из БД/профиля пользователя */}
-                  <Text style={[cardBackText, styles.cardNameText]}>IVAN IVANOV</Text>
+                  {}
+                  <Text style={[cardBackText, styles.cardNameText]}>
+                    IVAN IVANOV
+                  </Text>
                 </View>
                 {showCopied && (
                   <View style={styles.copiedNotification}>
-                                      <View style={styles.copiedContainer}>
-                    <Ionicons name="checkmark-circle" size={16} color="#fff" style={copiedIconStyle} />
-                    <Text style={styles.copiedText}>{t('client.balance.copied')}</Text>
-                  </View>
+                    <View style={styles.copiedContainer}>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={16}
+                        color="#fff"
+                        style={copiedIconStyle}
+                      />
+                      <Text style={styles.copiedText}>
+                        {t("client.balance.copied")}
+                      </Text>
+                    </View>
                   </View>
                 )}
               </View>
@@ -525,11 +641,8 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
           </View>
         </View>
 
-
-
         {/* История пополнений */}
         <BalanceTopUpHistory maxItems={5} />
-
       </ScrollView>
       {/* Модальное окно пополнения */}
       <Modal
@@ -539,13 +652,26 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
         onRequestClose={() => setTopUpModalVisible(false)}
       >
         <View style={[styles.modalOverlay, isDark && styles.modalOverlayDark]}>
-          <View style={[styles.modalContainer, modalContainerWithTheme(currentColors)]}> 
-            <Text style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}>{getTopUpModalTitle()}</Text>
-            <Text style={[styles.modalLabel, modalLabelWithTheme(currentColors)]}>{t('client.balance.amountInAFc')}</Text>
+          <View
+            style={[
+              styles.modalContainer,
+              modalContainerWithTheme(currentColors),
+            ]}
+          >
+            <Text
+              style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}
+            >
+              {getTopUpModalTitle()}
+            </Text>
+            <Text
+              style={[styles.modalLabel, modalLabelWithTheme(currentColors)]}
+            >
+              {t("client.balance.amountInAFc")}
+            </Text>
             <TextInput
               value={topUpAmount}
               onChangeText={setTopUpAmount}
-              placeholder={t('client.balance.enterAmount')}
+              placeholder={t("client.balance.enterAmount")}
               placeholderTextColor={currentColors.textSecondary}
               keyboardType="numeric"
               style={[styles.modalInput, modalInputWithTheme(currentColors)]}
@@ -554,19 +680,36 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
               style={[styles.modalPayBtn, modalPayBtnWithTheme(currentColors)]}
               onPress={() => {
                 Alert.alert(
-                  t('client.balance.confirm'),
-                  t('client.balance.confirmTopUp', { 0: topUpAmount }),
+                  t("client.balance.confirm"),
+                  t("client.balance.confirmTopUp", { 0: topUpAmount }),
                   [
-                    { text: t('client.balance.cancel'), style: 'cancel' },
-                    { text: t('client.balance.topUpBalance'), onPress: handleFakeStripePayment }
-                  ]
+                    { text: t("client.balance.cancel"), style: "cancel" },
+                    {
+                      text: t("client.balance.topUpBalance"),
+                      onPress: handleFakeStripePayment,
+                    },
+                  ],
                 );
               }}
             >
-              <Text style={styles.modalPayBtnText}>{isDriver ? t('client.balance.payButton') : t('client.balance.payButton')}</Text>
+              <Text style={styles.modalPayBtnText}>
+                {isDriver
+                  ? t("client.balance.payButton")
+                  : t("client.balance.payButton")}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setTopUpModalVisible(false)} style={styles.modalCancelBtn}>
-              <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>{t('client.balance.cancel')}</Text>
+            <TouchableOpacity
+              onPress={() => setTopUpModalVisible(false)}
+              style={styles.modalCancelBtn}
+            >
+              <Text
+                style={[
+                  styles.modalCancelBtnText,
+                  modalCancelBtnTextWithTheme(currentColors),
+                ]}
+              >
+                {t("client.balance.cancel")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -580,17 +723,33 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
         onRequestClose={() => setQuickTopUpModalVisible(false)}
       >
         <View style={[styles.modalOverlay, isDark && styles.modalOverlayDark]}>
-          <View style={[styles.modalContainer, modalContainerWithTheme(currentColors)]}> 
-            <Text style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}>{t('client.balance.quickTopUp')}</Text>
-            
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 20 }}>
+          <View
+            style={[
+              styles.modalContainer,
+              modalContainerWithTheme(currentColors),
+            ]}
+          >
+            <Text
+              style={[styles.modalTitle, modalTitleWithTheme(currentColors)]}
+            >
+              {t("client.balance.quickTopUp")}
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                marginTop: 20,
+              }}
+            >
               {mockQuickAmounts.map((amount) => (
                 <TouchableOpacity
                   key={amount}
                   style={[
-                    styles.quickAmountButtonLarge, 
+                    styles.quickAmountButtonLarge,
                     dynamicStyles.quickAmountButtonLarge,
-                    { width: '48%', marginBottom: 12 }
+                    { width: "48%", marginBottom: 12 },
                   ]}
                   onPress={() => {
                     setTopUpAmount(amount.toString());
@@ -599,13 +758,30 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
                   }}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.quickAmountTextLarge, dynamicStyles.quickAmountTextLarge]}>{amount}</Text>
+                  <Text
+                    style={[
+                      styles.quickAmountTextLarge,
+                      dynamicStyles.quickAmountTextLarge,
+                    ]}
+                  >
+                    {amount}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
 
-            <TouchableOpacity onPress={() => setQuickTopUpModalVisible(false)} style={styles.modalCancelBtn}>
-              <Text style={[styles.modalCancelBtnText, modalCancelBtnTextWithTheme(currentColors)]}>{t('client.balance.cancel')}</Text>
+            <TouchableOpacity
+              onPress={() => setQuickTopUpModalVisible(false)}
+              style={styles.modalCancelBtn}
+            >
+              <Text
+                style={[
+                  styles.modalCancelBtnText,
+                  modalCancelBtnTextWithTheme(currentColors),
+                ]}
+              >
+                {t("client.balance.cancel")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -614,4 +790,4 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   );
 };
 
-export default BalanceScreen; 
+export default BalanceScreen;

@@ -1,15 +1,15 @@
-import DriverStatsService, { DayStats } from '../DriverStatsService';
+import DriverStatsService, { DayStats } from "../DriverStatsService";
 
-describe('DriverStatsService', () => {
+describe("DriverStatsService", () => {
   beforeEach(() => {
     // Сбрасываем моковую БД перед каждым тестом
     DriverStatsService.resetMockDatabase();
   });
 
-  describe('Сохранение статистики', () => {
-    it('сохраняет статистику за день', async () => {
+  describe("Сохранение статистики", () => {
+    it("сохраняет статистику за день", async () => {
       const dayStats = {
-        date: '2024-08-20',
+        date: "2024-08-20",
         hoursOnline: 8.5,
         ridesCount: 12,
         earnings: 45.5,
@@ -18,16 +18,16 @@ describe('DriverStatsService', () => {
 
       await DriverStatsService.saveDayStats(dayStats);
 
-      const savedStats = await DriverStatsService.getDayStats('2024-08-20');
+      const savedStats = await DriverStatsService.getDayStats("2024-08-20");
       expect(savedStats).toEqual({
         ...dayStats,
         timestamp: expect.any(Number),
       });
     });
 
-    it('перезаписывает статистику за тот же день', async () => {
+    it("перезаписывает статистику за тот же день", async () => {
       const dayStats1 = {
-        date: '2024-08-20',
+        date: "2024-08-20",
         hoursOnline: 8.5,
         ridesCount: 12,
         earnings: 45.5,
@@ -35,7 +35,7 @@ describe('DriverStatsService', () => {
       };
 
       const dayStats2 = {
-        date: '2024-08-20',
+        date: "2024-08-20",
         hoursOnline: 10.2,
         ridesCount: 15,
         earnings: 58.3,
@@ -45,7 +45,7 @@ describe('DriverStatsService', () => {
       await DriverStatsService.saveDayStats(dayStats1);
       await DriverStatsService.saveDayStats(dayStats2);
 
-      const savedStats = await DriverStatsService.getDayStats('2024-08-20');
+      const savedStats = await DriverStatsService.getDayStats("2024-08-20");
       expect(savedStats).toEqual({
         ...dayStats2,
         timestamp: expect.any(Number),
@@ -53,13 +53,13 @@ describe('DriverStatsService', () => {
     });
   });
 
-  describe('Получение статистики за период', () => {
+  describe("Получение статистики за период", () => {
     beforeEach(async () => {
       // Заполняем тестовыми данными
       await DriverStatsService.populateTestData();
     });
 
-    it('получает статистику за период', async () => {
+    it("получает статистику за период", async () => {
       // Получаем актуальные даты из тестовых данных
       const today = new Date();
       const yesterday = new Date(today);
@@ -69,10 +69,13 @@ describe('DriverStatsService', () => {
       const threeDaysAgo = new Date(today);
       threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
-      const startDate = threeDaysAgo.toISOString().split('T')[0];
-      const endDate = yesterday.toISOString().split('T')[0];
+      const startDate = threeDaysAgo.toISOString().split("T")[0];
+      const endDate = yesterday.toISOString().split("T")[0];
 
-      const periodStats = await DriverStatsService.getPeriodStats(startDate, endDate);
+      const periodStats = await DriverStatsService.getPeriodStats(
+        startDate,
+        endDate,
+      );
 
       expect(periodStats).toEqual({
         totalHours: expect.closeTo(24.8, 1), // 8.5 + 6.2 + 10.1
@@ -84,8 +87,11 @@ describe('DriverStatsService', () => {
       });
     });
 
-    it('возвращает нулевую статистику для пустого периода', async () => {
-      const periodStats = await DriverStatsService.getPeriodStats('2024-01-01', '2024-01-31');
+    it("возвращает нулевую статистику для пустого периода", async () => {
+      const periodStats = await DriverStatsService.getPeriodStats(
+        "2024-01-01",
+        "2024-01-31",
+      );
 
       expect(periodStats).toEqual({
         totalHours: 0,
@@ -98,22 +104,22 @@ describe('DriverStatsService', () => {
     });
   });
 
-  describe('Получение статистики за последние дни', () => {
+  describe("Получение статистики за последние дни", () => {
     beforeEach(async () => {
       await DriverStatsService.populateTestData();
     });
 
-    it('получает статистику за последние 3 дня', async () => {
+    it("получает статистику за последние 3 дня", async () => {
       const lastNDaysStats = await DriverStatsService.getLastNDaysStats(3);
 
       expect(lastNDaysStats).toHaveLength(3);
-      
+
       // Проверяем, что данные отсортированы по дате (новые сначала)
-      const dates = lastNDaysStats.map(stat => stat.date);
+      const dates = lastNDaysStats.map((stat) => stat.date);
       expect(dates).toEqual(dates.sort().reverse());
     });
 
-    it('возвращает пустой массив для несуществующих данных', async () => {
+    it("возвращает пустой массив для несуществующих данных", async () => {
       DriverStatsService.resetMockDatabase();
       const lastNDaysStats = await DriverStatsService.getLastNDaysStats(5);
 
@@ -121,26 +127,28 @@ describe('DriverStatsService', () => {
     });
   });
 
-  describe('Получение статистики за месяц', () => {
+  describe("Получение статистики за месяц", () => {
     beforeEach(async () => {
       await DriverStatsService.populateTestData();
     });
 
-    it('получает статистику за текущий месяц', async () => {
+    it("получает статистику за текущий месяц", async () => {
       const monthStats = await DriverStatsService.getCurrentMonthStats();
 
       // Проверяем, что данные есть и все относятся к текущему месяцу
       expect(monthStats.length).toBeGreaterThan(0);
       const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-      expect(monthStats.every(stat => stat.date.startsWith(currentMonth))).toBe(true);
+      expect(
+        monthStats.every((stat) => stat.date.startsWith(currentMonth)),
+      ).toBe(true);
     });
   });
 
-  describe('Очистка старых данных', () => {
-    it('очищает данные старше года', async () => {
+  describe("Очистка старых данных", () => {
+    it("очищает данные старше года", async () => {
       // Добавляем старые данные
       const oldStats: DayStats = {
-        date: '2022-08-20',
+        date: "2022-08-20",
         hoursOnline: 5.0,
         ridesCount: 8,
         earnings: 25.0,
@@ -149,9 +157,9 @@ describe('DriverStatsService', () => {
       };
 
       await DriverStatsService.saveDayStats(oldStats);
-      
+
       // Добавляем новые данные
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date().toISOString().split("T")[0];
       const newStats: DayStats = {
         date: today,
         hoursOnline: 8.5,
@@ -167,7 +175,7 @@ describe('DriverStatsService', () => {
       await DriverStatsService.cleanupOldData();
 
       // Проверяем, что старые данные удалены
-      const oldData = await DriverStatsService.getDayStats('2022-08-20');
+      const oldData = await DriverStatsService.getDayStats("2022-08-20");
       expect(oldData).toBeNull();
 
       // Проверяем, что новые данные остались
@@ -176,10 +184,10 @@ describe('DriverStatsService', () => {
     });
   });
 
-  describe('Работа с разными водителями', () => {
-    it('изолирует данные разных водителей', async () => {
+  describe("Работа с разными водителями", () => {
+    it("изолирует данные разных водителей", async () => {
       const driver1Stats = {
-        date: '2024-08-20',
+        date: "2024-08-20",
         hoursOnline: 8.5,
         ridesCount: 12,
         earnings: 45.5,
@@ -187,7 +195,7 @@ describe('DriverStatsService', () => {
       };
 
       const driver2Stats = {
-        date: '2024-08-20',
+        date: "2024-08-20",
         hoursOnline: 6.2,
         ridesCount: 8,
         earnings: 32.1,
@@ -195,23 +203,23 @@ describe('DriverStatsService', () => {
       };
 
       // Сохраняем данные для первого водителя
-      DriverStatsService.setDriverId('driver1');
+      DriverStatsService.setDriverId("driver1");
       await DriverStatsService.saveDayStats(driver1Stats);
 
       // Сохраняем данные для второго водителя
-      DriverStatsService.setDriverId('driver2');
+      DriverStatsService.setDriverId("driver2");
       await DriverStatsService.saveDayStats(driver2Stats);
 
       // Проверяем, что данные изолированы
-      DriverStatsService.setDriverId('driver1');
-      const driver1Data = await DriverStatsService.getDayStats('2024-08-20');
+      DriverStatsService.setDriverId("driver1");
+      const driver1Data = await DriverStatsService.getDayStats("2024-08-20");
       expect(driver1Data).toEqual({
         ...driver1Stats,
         timestamp: expect.any(Number),
       });
 
-      DriverStatsService.setDriverId('driver2');
-      const driver2Data = await DriverStatsService.getDayStats('2024-08-20');
+      DriverStatsService.setDriverId("driver2");
+      const driver2Data = await DriverStatsService.getDayStats("2024-08-20");
       expect(driver2Data).toEqual({
         ...driver2Stats,
         timestamp: expect.any(Number),

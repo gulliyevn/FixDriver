@@ -1,15 +1,25 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User, UserRole } from '../types/user';
-import JWTService from '../services/JWTService';
-import { AuthService } from '../services/AuthService';
-import DevRegistrationService from '../services/DevRegistrationService';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { User, UserRole } from "../types/user";
+import JWTService from "../services/JWTService";
+import { AuthService } from "../services/AuthService";
+import DevRegistrationService from "../services/DevRegistrationService";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string, authMethod?: string) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    authMethod?: string,
+  ) => Promise<boolean>;
   register: (userData: Partial<User>, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
@@ -22,7 +32,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    console.error('useAuth must be used within an AuthProvider'); return;
+    console.error("useAuth must be used within an AuthProvider");
+    return;
   }
   return context;
 };
@@ -46,19 +57,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       setIsRefreshing(true);
-      
+
       const result = await AuthService.refreshToken();
       if (result.success && result.user && result.tokens) {
         // Сохраняем новые токены и обновляем пользователя
         await Promise.all([
-          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
-          AsyncStorage.setItem('user', JSON.stringify(result.user)),
+          JWTService.saveTokens({
+            ...result.tokens,
+            tokenType: "Bearer" as const,
+          }),
+          AsyncStorage.setItem("user", JSON.stringify(result.user)),
         ]);
-        
+
         setUser(result.user);
         return true;
       }
-      
+
       return false;
     } catch (error) {
       return false;
@@ -73,45 +87,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const initializeAuth = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       // ⚠️ DEV ONLY: Проверяем DEV-режим логина
       if (__DEV__) {
-        const isDevLogin = await AsyncStorage.getItem('dev_mode_login');
-        const savedUser = await AsyncStorage.getItem('user');
-        
-        if (isDevLogin === 'true' && savedUser) {
+        const isDevLogin = await AsyncStorage.getItem("dev_mode_login");
+        const savedUser = await AsyncStorage.getItem("user");
+
+        if (isDevLogin === "true" && savedUser) {
           const user = JSON.parse(savedUser);
           setUser(user);
           setIsLoading(false);
           return; // Выходим, не проверяем токены
         }
       }
-      
+
       // PROD: Проверяем наличие валидного токена
       const hasToken = await JWTService.hasValidToken();
-      
+
       if (hasToken) {
         // Получаем данные пользователя из токена
         const tokenUser = await JWTService.getCurrentUser();
-        
+
         if (tokenUser) {
           // Загружаем полные данные пользователя из AsyncStorage
-          const userData = await AsyncStorage.getItem('user');
+          const userData = await AsyncStorage.getItem("user");
           if (userData) {
             const fullUser = JSON.parse(userData);
             setUser(fullUser);
           } else {
             // Если данных пользователя нет, но токен валиден - пытаемся восстановить
-    
             // Не выходим автоматически, даем пользователю остаться в приложении
           }
         } else {
           // Токен невалиден - пытаемся обновить
-  
+
           const refreshed = await refreshAuth();
           if (!refreshed) {
             // Если обновление не удалось, НЕ выходим автоматически
-    
           }
         }
       }
@@ -129,70 +141,77 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Вход в систему
    */
-  const login = async (email: string, password: string, authMethod?: 'google' | 'facebook' | 'apple'): Promise<boolean> => {
+  const login = async (
+    email: string,
+    password: string,
+    authMethod?: "google" | "facebook" | "apple",
+  ): Promise<boolean> => {
     try {
       setIsLoading(true);
-      
+
       // ⚠️ DEV ONLY: Проверяем локальных пользователей
       if (__DEV__) {
-        
         const devUsers = await DevRegistrationService.getAllDevUsers();
-        
+
         if (devUsers.length > 0) {
-          
           // Детальный вывод всех пользователей
-          devUsers.forEach((u, index) => {
-          });
-          
+          devUsers.forEach((u, index) => {});
         }
-        
+
         // Показываем сохраненные пароли для отладки
-        const userWithEmail = devUsers.find(u => u.email === email);
+        const userWithEmail = devUsers.find((u) => u.email === email);
         if (userWithEmail) {
         } else {
         }
-        
-        const devUser = devUsers.find(u => u.email === email && u.password === password);
-        
+
+        const devUser = devUsers.find(
+          (u) => u.email === email && u.password === password,
+        );
+
         if (devUser) {
-          
           // Создаем объект User из DevRegisteredUser
           const user: User = {
             id: devUser.id,
             email: devUser.email,
-            name: devUser.firstName || '',
-            surname: devUser.lastName || '',
+            name: devUser.firstName || "",
+            surname: devUser.lastName || "",
             role: devUser.role as UserRole,
             phone: devUser.phone,
             avatar: null,
             rating: 5,
-            address: '',
+            address: "",
             createdAt: devUser.registeredAt,
             birthDate: undefined,
           };
-          
+
           // Сохраняем пользователя
-          await AsyncStorage.setItem('user', JSON.stringify(user));
-          await AsyncStorage.setItem('dev_mode_login', 'true');
-          
+          await AsyncStorage.setItem("user", JSON.stringify(user));
+          await AsyncStorage.setItem("dev_mode_login", "true");
+
           // Сохраняем профиль для ProfileContext
-          await AsyncStorage.setItem(`@profile_${user.id}`, JSON.stringify(user));
-          
+          await AsyncStorage.setItem(
+            `@profile_${user.id}`,
+            JSON.stringify(user),
+          );
+
           setUser(user);
-          
+
           return true;
         } else {
         }
       }
-      
+
       // PROD: Используем AuthService для входа
       const result = await AuthService.login(email, password, authMethod);
-      
+
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
-          AsyncStorage.setItem('user', JSON.stringify(result.user)),
+          JWTService.saveTokens({
+            ...result.tokens,
+            tokenType: "Bearer" as const,
+          }),
+          AsyncStorage.setItem("user", JSON.stringify(result.user)),
         ]);
 
         setUser(result.user);
@@ -210,26 +229,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Регистрация пользователя
    */
-  const register = async (userData: {
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    country: string;
-    role: UserRole;
-    children?: Array<{ name: string; age: number; relationship: string }>;
-  }, password: string): Promise<boolean> => {
+  const register = async (
+    userData: {
+      name: string;
+      surname: string;
+      email: string;
+      phone: string;
+      country: string;
+      role: UserRole;
+      children?: Array<{ name: string; age: number; relationship: string }>;
+    },
+    password: string,
+  ): Promise<boolean> => {
     try {
       setIsLoading(true);
-      
+
       // Используем AuthService для регистрации
       const result = await AuthService.register(userData, password);
-      
+
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя
         await Promise.all([
-          JWTService.saveTokens({ ...result.tokens, tokenType: 'Bearer' as const }),
-          AsyncStorage.setItem('user', JSON.stringify(result.user)),
+          JWTService.saveTokens({
+            ...result.tokens,
+            tokenType: "Bearer" as const,
+          }),
+          AsyncStorage.setItem("user", JSON.stringify(result.user)),
         ]);
 
         setUser(result.user);
@@ -250,18 +275,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       // Отправляем запрос на сервер для инвалидации токена (только если не DEV)
-      const isDevLogin = await AsyncStorage.getItem('dev_mode_login');
-      if (isDevLogin !== 'true') {
+      const isDevLogin = await AsyncStorage.getItem("dev_mode_login");
+      if (isDevLogin !== "true") {
         await AuthService.logout();
       }
 
       // Очищаем все данные
       await Promise.all([
         JWTService.clearTokens(),
-        AsyncStorage.removeItem('user'),
-        AsyncStorage.removeItem('dev_mode_login'), // Очищаем DEV флаг
+        AsyncStorage.removeItem("user"),
+        AsyncStorage.removeItem("dev_mode_login"), // Очищаем DEV флаг
       ]);
 
       setUser(null);
@@ -281,14 +306,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Изменение роли пользователя
    */
-  const changeRole = useCallback((role: UserRole) => {
-    if (user) {
-      const updatedUser = { ...user, role };
-      setUser(updatedUser);
-      // Сохраняем обновленного пользователя в AsyncStorage
-      AsyncStorage.setItem('user', JSON.stringify(updatedUser));
-    }
-  }, [user]);
+  const changeRole = useCallback(
+    (role: UserRole) => {
+      if (user) {
+        const updatedUser = { ...user, role };
+        setUser(updatedUser);
+        // Сохраняем обновленного пользователя в AsyncStorage
+        AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+      }
+    },
+    [user],
+  );
 
   const value: AuthContextType = {
     user,
@@ -302,9 +330,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     changeRole,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -1,19 +1,19 @@
-const en = require('./en.json');
-const ru = require('./ru.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const themeEn = require("./en.json");
+const themeRu = require("./ru.json");
+const themeTr = require("./tr.json");
+const themeAz = require("./az.json");
+const themeFr = require("./fr.json");
+const themeAr = require("./ar.json");
+const themeEs = require("./es.json");
+const themeDe = require("./de.json");
 
 module.exports = {
-  en,
-  ru,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  en: themeEn,
+  ru: themeRu,
+  tr: themeTr,
+  az: themeAz,
+  fr: themeFr,
+  ar: themeAr,
+  es: themeEs,
+  de: themeDe,
+};

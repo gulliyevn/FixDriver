@@ -1,4 +1,4 @@
-import { MapLocation } from '../../../../services/MapService';
+import { MapLocation } from "../../../../services/MapService";
 
 export interface OrdersMapState {
   currentLocation: MapLocation | undefined;
@@ -11,7 +11,7 @@ export interface OrdersMapState {
   isReportModalVisible: boolean;
   reportComment: string;
   isSimpleDialogVisible: boolean;
-  mapType: 'standard' | 'satellite' | 'hybrid';
+  mapType: "standard" | "satellite" | "hybrid";
   isSettingsExpanded: boolean;
 }
 
@@ -26,7 +26,7 @@ export interface OrdersMapActions {
   setIsReportModalVisible: (visible: boolean) => void;
   setReportComment: (comment: string) => void;
   setIsSimpleDialogVisible: (visible: boolean) => void;
-  setMapType: (type: 'standard' | 'satellite' | 'hybrid') => void;
+  setMapType: (type: "standard" | "satellite" | "hybrid") => void;
   setIsSettingsExpanded: (expanded: boolean) => void;
 }
 

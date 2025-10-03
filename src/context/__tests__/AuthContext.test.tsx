@@ -1,23 +1,23 @@
-import React from 'react';
-import { render, act, waitFor } from '@testing-library/react-native';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { AuthProvider, useAuth } from '../AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { render, act, waitFor } from "../../test-utils/testWrapper";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { AuthProvider, useAuth } from "../AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
+jest.mock("@react-native-async-storage/async-storage", () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
   removeItem: jest.fn(),
 }));
 
 // Mock JWTService
-jest.mock('../../services/JWTService', () => ({
+jest.mock("../../services/JWTService", () => ({
   generateTokens: jest.fn().mockResolvedValue({
-    accessToken: 'mock-access-token',
-    refreshToken: 'mock-refresh-token',
+    accessToken: "mock-access-token",
+    refreshToken: "mock-refresh-token",
     expiresIn: 3600,
-    tokenType: 'Bearer',
+    tokenType: "Bearer",
   }),
   saveTokens: jest.fn(),
   getAccessToken: jest.fn(),
@@ -28,18 +28,18 @@ jest.mock('../../services/JWTService', () => ({
 }));
 
 // Mock createAuthMockUser
-jest.mock('../../mocks/auth', () => ({
+jest.mock("../../mocks/auth", () => ({
   createAuthMockUser: jest.fn().mockReturnValue({
-    id: '123',
-    email: 'test@example.com',
-    name: 'Test User',
-    surname: 'Test',
-    role: 'client',
-    phone: '+1234567890',
+    id: "123",
+    email: "test@example.com",
+    name: "Test User",
+    surname: "Test",
+    role: "client",
+    phone: "+1234567890",
     avatar: null,
     rating: 4.5,
-    createdAt: '2024-01-01T00:00:00Z',
-    address: 'Test Address',
+    createdAt: "2024-01-01T00:00:00Z",
+    address: "Test Address",
   }),
   findAuthUserByCredentials: jest.fn(),
 }));
@@ -47,12 +47,15 @@ jest.mock('../../mocks/auth', () => ({
 // Test component to access context
 const TestComponent = () => {
   const { user, isLoading, login, logout } = useAuth();
-  
+
   return (
     <View>
-      <Text testID="user">{user ? user.email : 'no-user'}</Text>
-      <Text testID="loading">{isLoading ? 'loading' : 'not-loading'}</Text>
-      <TouchableOpacity testID="login-btn" onPress={() => login('test@example.com', 'password')}>
+      <Text testID="user">{user ? user.email : "no-user"}</Text>
+      <Text testID="loading">{isLoading ? "loading" : "not-loading"}</Text>
+      <TouchableOpacity
+        testID="login-btn"
+        onPress={() => login("test@example.com", "password")}
+      >
         <Text>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity testID="logout-btn" onPress={logout}>
@@ -62,108 +65,110 @@ const TestComponent = () => {
   );
 };
 
-describe('AuthContext', () => {
+describe("AuthContext", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
   });
 
-  it('provides initial state', () => {
+  it("provides initial state", () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
-    expect(getByTestId('user').props.children).toBe('no-user');
-    expect(getByTestId('loading').props.children).toBe('not-loading');
+    expect(getByTestId("user").props.children).toBe("no-user");
+    expect(getByTestId("loading").props.children).toBe("not-loading");
   });
 
-  it('handles login successfully', async () => {
+  it("handles login successfully", async () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await act(async () => {
-      getByTestId('login-btn').props.onPress();
+      getByTestId("login-btn").props.onPress();
     });
 
     await waitFor(() => {
-      expect(getByTestId('user').props.children).toBe('test@example.com');
+      expect(getByTestId("user").props.children).toBe("test@example.com");
     });
   });
 
-  it('handles logout', async () => {
+  it("handles logout", async () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // First login
     await act(async () => {
-      getByTestId('login-btn').props.onPress();
+      getByTestId("login-btn").props.onPress();
     });
 
     await waitFor(() => {
-      expect(getByTestId('user').props.children).toBe('test@example.com');
+      expect(getByTestId("user").props.children).toBe("test@example.com");
     });
 
     // Then logout
     await act(async () => {
-      getByTestId('logout-btn').props.onPress();
+      getByTestId("logout-btn").props.onPress();
     });
 
     await waitFor(() => {
-      expect(getByTestId('user').props.children).toBe('no-user');
+      expect(getByTestId("user").props.children).toBe("no-user");
     });
   });
 
-  it('loads user from storage on mount', async () => {
+  it("loads user from storage on mount", async () => {
     const mockUser = {
-      id: '123',
-      email: 'stored@example.com',
-      name: 'Stored User',
-      surname: 'Test',
-      role: 'client',
-      phone: '+1234567890',
+      id: "123",
+      email: "stored@example.com",
+      name: "Stored User",
+      surname: "Test",
+      role: "client",
+      phone: "+1234567890",
       avatar: null,
       rating: 4.5,
-      createdAt: '2024-01-01T00:00:00Z',
-      address: 'Test Address',
+      createdAt: "2024-01-01T00:00:00Z",
+      address: "Test Address",
     };
 
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(JSON.stringify(mockUser));
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+      JSON.stringify(mockUser),
+    );
 
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {
-      expect(getByTestId('user').props.children).toBe('stored@example.com');
+      expect(getByTestId("user").props.children).toBe("stored@example.com");
     });
   });
 
-  it('handles loading state during login', async () => {
+  it("handles loading state during login", async () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     act(() => {
-      getByTestId('login-btn').props.onPress();
+      getByTestId("login-btn").props.onPress();
     });
 
     // Should show loading state
-    expect(getByTestId('loading').props.children).toBe('loading');
+    expect(getByTestId("loading").props.children).toBe("loading");
 
     await waitFor(() => {
-      expect(getByTestId('loading').props.children).toBe('not-loading');
+      expect(getByTestId("loading").props.children).toBe("not-loading");
     });
   });
-}); 
+});

@@ -1,10 +1,10 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useAuth } from '../context/AuthContext';
-import AuthNavigator from './AuthNavigator';
-import ClientNavigator from './ClientNavigator';
-import DriverNavigator from './DriverNavigator';
-import { UserRole } from '../types/user';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { useAuth } from "../context/AuthContext";
+import AuthNavigator from "./AuthNavigator";
+import ClientNavigator from "./ClientNavigator";
+import DriverNavigator from "./DriverNavigator";
+import { UserRole } from "../types/user";
 
 const Stack = createStackNavigator();
 

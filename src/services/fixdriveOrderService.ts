@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface OrderData {
   id: string;
@@ -7,7 +7,7 @@ export interface OrderData {
   packageType: string;
   addresses: Array<{
     id: string;
-    type: 'from' | 'to' | 'stop';
+    type: "from" | "to" | "stop";
     address: string;
     coordinates?: {
       latitude: number;
@@ -15,27 +15,30 @@ export interface OrderData {
     };
   }>;
   createdAt: number;
-  status: 'draft' | 'confirmed' | 'completed' | 'cancelled';
+  status: "draft" | "confirmed" | "completed" | "cancelled";
 }
 
 class FixDriveOrderService {
-  private storageKey = 'fixdrive_order_data';
-  private sessionKey = 'fixdrive_session_data';
+  private storageKey = "fixdrive_order_data";
+  private sessionKey = "fixdrive_session_data";
 
   // Сохранение данных заказа
-  async saveOrderData(orderData: Omit<OrderData, 'id' | 'createdAt' | 'status'>): Promise<OrderData> {
+  async saveOrderData(
+    orderData: Omit<OrderData, "id" | "createdAt" | "status">,
+  ): Promise<OrderData> {
     try {
       const order: OrderData = {
         ...orderData,
         id: `order_${Date.now()}`,
         createdAt: Date.now(),
-        status: 'draft',
+        status: "draft",
       };
 
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(order));
       return order;
     } catch (error) {
-      console.error('Не удалось сохранить данные заказа'); return;
+      console.error("Не удалось сохранить данные заказа");
+      return;
     }
   }
 
@@ -50,11 +53,14 @@ class FixDriveOrderService {
   }
 
   // Обновление данных заказа
-  async updateOrderData(updates: Partial<OrderData>): Promise<OrderData | null> {
+  async updateOrderData(
+    updates: Partial<OrderData>,
+  ): Promise<OrderData | null> {
     try {
       const currentData = await this.loadOrderData();
       if (!currentData) {
-        console.error('Нет сохраненных данных заказа'); return;
+        console.error("Нет сохраненных данных заказа");
+        return;
       }
 
       const updatedData: OrderData = {
@@ -65,7 +71,8 @@ class FixDriveOrderService {
       await AsyncStorage.setItem(this.storageKey, JSON.stringify(updatedData));
       return updatedData;
     } catch (error) {
-      console.error('Не удалось обновить данные заказа'); return;
+      console.error("Не удалось обновить данные заказа");
+      return;
     }
   }
 
@@ -80,33 +87,43 @@ class FixDriveOrderService {
         ...sessionData,
         lastUpdate: Date.now(),
       };
-      await AsyncStorage.setItem(this.sessionKey, JSON.stringify(sessionDataWithTimestamp));
+      await AsyncStorage.setItem(
+        this.sessionKey,
+        JSON.stringify(sessionDataWithTimestamp),
+      );
     } catch (error) {
-      console.error('Не удалось сохранить данные сессии'); return;
+      console.error("Не удалось сохранить данные сессии");
+      return;
     }
   }
 
   // Сохранение данных контейнеров по отдельности
-  async saveContainerTimes(containerData: Array<{
-    containerId: string;
-    containerType: string;
-    containerIndex: number;
-    address: string;
-    fromCoordinate?: { latitude: number; longitude: number };
-    toCoordinate?: { latitude: number; longitude: number };
-    time: string;
-    isActive: boolean;
-    isCalculated: boolean;
-  }>): Promise<void> {
+  async saveContainerTimes(
+    containerData: Array<{
+      containerId: string;
+      containerType: string;
+      containerIndex: number;
+      address: string;
+      fromCoordinate?: { latitude: number; longitude: number };
+      toCoordinate?: { latitude: number; longitude: number };
+      time: string;
+      isActive: boolean;
+      isCalculated: boolean;
+    }>,
+  ): Promise<void> {
     try {
-      const containerTimesKey = 'fixdrive_container_times';
+      const containerTimesKey = "fixdrive_container_times";
       const containerTimesWithTimestamp = {
         containers: containerData,
         lastUpdate: Date.now(),
       };
-      await AsyncStorage.setItem(containerTimesKey, JSON.stringify(containerTimesWithTimestamp));
+      await AsyncStorage.setItem(
+        containerTimesKey,
+        JSON.stringify(containerTimesWithTimestamp),
+      );
     } catch (error) {
-      console.error('Не удалось сохранить данные контейнеров'); return;
+      console.error("Не удалось сохранить данные контейнеров");
+      return;
     }
   }
 
@@ -130,7 +147,8 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.removeItem(this.storageKey);
     } catch (error) {
-      console.error('Не удалось очистить данные заказа'); return;
+      console.error("Не удалось очистить данные заказа");
+      return;
     }
   }
 
@@ -139,7 +157,8 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.removeItem(this.sessionKey);
     } catch (error) {
-      console.error('Не удалось очистить данные сессии'); return;
+      console.error("Не удалось очистить данные сессии");
+      return;
     }
   }
 
@@ -148,7 +167,8 @@ class FixDriveOrderService {
     try {
       await AsyncStorage.multiRemove([this.storageKey, this.sessionKey]);
     } catch (error) {
-      console.error('Не удалось очистить все данные'); return;
+      console.error("Не удалось очистить все данные");
+      return;
     }
   }
 
@@ -169,13 +189,12 @@ class FixDriveOrderService {
       if (lastUpdate) {
         const now = Date.now();
         const fiveMinutes = 5 * 60 * 1000; // 5 минут в миллисекундах
-        
+
         if (now - lastUpdate > fiveMinutes) {
           await this.clearSessionData();
         }
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Проверка валидности данных заказа
@@ -193,36 +212,36 @@ class FixDriveOrderService {
 
     // Проверка участника семьи
     if (!data.familyMemberId) {
-      errors.push('Не выбран участник семьи');
+      errors.push("Не выбран участник семьи");
     }
 
     // Проверка пакета
     if (!data.packageType) {
-      errors.push('Не выбран пакет');
+      errors.push("Не выбран пакет");
     }
 
     // Проверка адресов
     if (!data.addresses || data.addresses.length === 0) {
-      errors.push('Не указаны адреса');
+      errors.push("Не указаны адреса");
     } else {
-      const fromAddress = data.addresses.find(addr => addr.type === 'from');
-      const toAddress = data.addresses.find(addr => addr.type === 'to');
+      const fromAddress = data.addresses.find((addr) => addr.type === "from");
+      const toAddress = data.addresses.find((addr) => addr.type === "to");
 
       if (!fromAddress || !fromAddress.address) {
-        errors.push('Не указан адрес отправления');
+        errors.push("Не указан адрес отправления");
       }
 
       if (!toAddress || !toAddress.address) {
-        errors.push('Не указан адрес назначения');
+        errors.push("Не указан адрес назначения");
       }
 
       // Проверка координат для основных адресов (проверяем оба формата)
       if (fromAddress && !fromAddress.coordinates && !fromAddress.coordinate) {
-        errors.push('Не удалось определить координаты адреса отправления');
+        errors.push("Не удалось определить координаты адреса отправления");
       }
 
       if (toAddress && !toAddress.coordinates && !toAddress.coordinate) {
-        errors.push('Не удалось определить координаты адреса назначения');
+        errors.push("Не удалось определить координаты адреса назначения");
       }
     }
 

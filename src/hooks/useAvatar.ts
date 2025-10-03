@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Alert } from 'react-native';
-import { AvatarService } from '../services/AvatarService';
-import { useI18n } from './useI18n';
+import { useState, useEffect, useCallback } from "react";
+import { Alert } from "react-native";
+import { AvatarService } from "../services/AvatarService";
+import { useI18n } from "./useI18n";
 
 export const useAvatar = (userId: string) => {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
@@ -29,28 +29,19 @@ export const useAvatar = (userId: string) => {
     try {
       setLoading(true);
       const uri = await AvatarService.takePhoto();
-      
+
       if (uri) {
         const result = await AvatarService.uploadAvatar(userId, uri);
         const success = result.success;
         if (success) {
           setAvatarUri(uri);
-          Alert.alert(
-            t('profile.photoSuccess'),
-            t('profile.photoTakeSuccess')
-          );
+          Alert.alert(t("profile.photoSuccess"), t("profile.photoTakeSuccess"));
         } else {
-          Alert.alert(
-            t('profile.photoError'),
-            t('profile.photoSaveError')
-          );
+          Alert.alert(t("profile.photoError"), t("profile.photoSaveError"));
         }
       }
     } catch (error) {
-      Alert.alert(
-        t('profile.photoError'),
-        t('profile.photoTakeError')
-      );
+      Alert.alert(t("profile.photoError"), t("profile.photoTakeError"));
     } finally {
       setLoading(false);
     }
@@ -60,28 +51,19 @@ export const useAvatar = (userId: string) => {
     try {
       setLoading(true);
       const uri = await AvatarService.pickImageFromGallery();
-      
+
       if (uri) {
         const result = await AvatarService.uploadAvatar(userId, uri);
         const success = result.success;
         if (success) {
           setAvatarUri(uri);
-          Alert.alert(
-            t('profile.photoSuccess'),
-            t('profile.photoPickSuccess')
-          );
+          Alert.alert(t("profile.photoSuccess"), t("profile.photoPickSuccess"));
         } else {
-          Alert.alert(
-            t('profile.photoError'),
-            t('profile.photoSaveError')
-          );
+          Alert.alert(t("profile.photoError"), t("profile.photoSaveError"));
         }
       }
     } catch (error) {
-      Alert.alert(
-        t('profile.photoError'),
-        t('profile.photoPickError')
-      );
+      Alert.alert(t("profile.photoError"), t("profile.photoPickError"));
     } finally {
       setLoading(false);
     }
@@ -95,65 +77,51 @@ export const useAvatar = (userId: string) => {
         if (success) {
           setAvatarUri(null);
           Alert.alert(
-            t('profile.photoSuccess'),
-            t('profile.photoDeleteSuccess')
+            t("profile.photoSuccess"),
+            t("profile.photoDeleteSuccess"),
           );
         } else {
-          Alert.alert(
-            t('profile.photoError'),
-            t('profile.photoDeleteError')
-          );
+          Alert.alert(t("profile.photoError"), t("profile.photoDeleteError"));
         }
       } catch (error) {
-        Alert.alert(
-          t('profile.photoError'),
-          t('profile.photoDeleteError')
-        );
+        Alert.alert(t("profile.photoError"), t("profile.photoDeleteError"));
       } finally {
         setLoading(false);
       }
     };
 
     Alert.alert(
-      t('profile.deletePhotoConfirm'),
-      t('profile.deletePhotoMessage'),
+      t("profile.deletePhotoConfirm"),
+      t("profile.deletePhotoMessage"),
       [
-        { text: t('common.cancel'), style: 'cancel' },
+        { text: t("common.cancel"), style: "cancel" },
         {
-          text: t('common.delete'),
-          style: 'destructive',
-          onPress: confirmDelete
-        }
-      ]
+          text: t("common.delete"),
+          style: "destructive",
+          onPress: confirmDelete,
+        },
+      ],
     );
   }, [t]);
 
   const showAvatarOptions = useCallback(() => {
     if (avatarUri) {
-      Alert.alert(
-        t('profile.changePhoto'),
-        t('profile.changePhotoMessage'),
-        [
-          { text: t('common.cancel'), style: 'cancel' },
-          { text: t('profile.takePhoto'), onPress: takePhoto },
-          { text: t('profile.chooseFromGallery'), onPress: pickFromGallery },
-          { 
-            text: t('profile.deletePhoto'), 
-            style: 'destructive',
-            onPress: deleteAvatar
-          }
-        ]
-      );
+      Alert.alert(t("profile.changePhoto"), t("profile.changePhotoMessage"), [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("profile.takePhoto"), onPress: takePhoto },
+        { text: t("profile.chooseFromGallery"), onPress: pickFromGallery },
+        {
+          text: t("profile.deletePhoto"),
+          style: "destructive",
+          onPress: deleteAvatar,
+        },
+      ]);
     } else {
-      Alert.alert(
-        t('profile.addPhoto'),
-        t('profile.addPhotoMessage'),
-        [
-          { text: t('common.cancel'), style: 'cancel' },
-          { text: t('profile.takePhoto'), onPress: takePhoto },
-          { text: t('profile.chooseFromGallery'), onPress: pickFromGallery }
-        ]
-      );
+      Alert.alert(t("profile.addPhoto"), t("profile.addPhotoMessage"), [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("profile.takePhoto"), onPress: takePhoto },
+        { text: t("profile.chooseFromGallery"), onPress: pickFromGallery },
+      ]);
     }
   }, [avatarUri, takePhoto, pickFromGallery, deleteAvatar, t]);
 
@@ -164,6 +132,6 @@ export const useAvatar = (userId: string) => {
     pickFromGallery,
     deleteAvatar,
     showAvatarOptions,
-    loadAvatar
+    loadAvatar,
   };
 };

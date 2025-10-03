@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native';
-import { lightColors, darkColors } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { lightColors, darkColors } from "../../../constants/colors";
 
 export const NotificationsModalStyles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
   },
   modalContent: {
     backgroundColor: lightColors.surface,
@@ -13,12 +13,12 @@ export const NotificationsModalStyles = StyleSheet.create({
     borderTopRightRadius: 20,
     paddingTop: 20,
     paddingBottom: 40,
-    maxHeight: '80%',
+    maxHeight: "80%",
   },
   modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
@@ -26,7 +26,7 @@ export const NotificationsModalStyles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     color: lightColors.text,
   },
   closeButton: {
@@ -42,53 +42,53 @@ export const NotificationsModalStyles = StyleSheet.create({
   },
   emptyState: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 40,
   },
   emptyStateText: {
     fontSize: 16,
     color: lightColors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 16,
   },
   notificationItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: lightColors.border,
   },
   unreadNotification: {
-    backgroundColor: lightColors.primary + '10',
+    backgroundColor: lightColors.primary + "10",
   },
   notificationIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: lightColors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   notificationIconText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   notificationTextContainer: {
     flex: 1,
     marginRight: 12,
   },
   notificationHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 4,
   },
   notificationTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: lightColors.text,
     flex: 1,
   },
@@ -102,7 +102,7 @@ export const NotificationsModalStyles = StyleSheet.create({
     lineHeight: 20,
   },
   notificationActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
     marginTop: 8,
   },
@@ -114,8 +114,8 @@ export const NotificationsModalStyles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 12,
-    color: '#FFFFFF',
-    fontWeight: '500',
+    color: "#FFFFFF",
+    fontWeight: "500",
   },
   deleteButton: {
     backgroundColor: lightColors.error,
@@ -154,4 +154,4 @@ export const NotificationsModalDarkStyles = StyleSheet.create({
   notificationMessage: {
     color: darkColors.textSecondary,
   },
-}); 
+});

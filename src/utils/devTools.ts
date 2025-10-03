@@ -1,12 +1,5 @@
-/**
- * ⚠️ DEV ONLY - DEVELOPMENT TOOLS ⚠️
- * 
- * Утилиты для работы с DEV-режимом
- * TODO: УДАЛИТЬ ПЕРЕД ПРОДАКШЕНОМ!
- */
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import DevRegistrationService from '../services/DevRegistrationService';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DevRegistrationService from "../services/DevRegistrationService";
 
 /**
  * Показать все данные в AsyncStorage (только DEV ключи)
@@ -14,12 +7,10 @@ import DevRegistrationService from '../services/DevRegistrationService';
 export const showDevStorage = async (): Promise<void> => {
   if (!__DEV__) return;
 
-
   try {
     // Получаем все ключи
     const allKeys = await AsyncStorage.getAllKeys();
-    const devKeys = allKeys.filter(key => key.startsWith('@dev_'));
-
+    const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
 
     for (const key of devKeys) {
       const value = await AsyncStorage.getItem(key);
@@ -27,16 +18,13 @@ export const showDevStorage = async (): Promise<void> => {
         try {
           const parsed = JSON.parse(value);
           const count = Array.isArray(parsed) ? parsed.length : 1;
-        } catch {
-        }
+        } catch {}
       }
     }
 
-
     // Показываем пользователей
     await DevRegistrationService.logDevRegistrationStats();
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 
 /**
@@ -46,10 +34,9 @@ export const clearDevStorage = async (): Promise<void> => {
   if (!__DEV__) return;
 
   try {
-
     // Получаем все ключи
     const allKeys = await AsyncStorage.getAllKeys();
-    const devKeys = allKeys.filter(key => key.startsWith('@dev_'));
+    const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
 
     if (devKeys.length === 0) {
       return;
@@ -57,7 +44,6 @@ export const clearDevStorage = async (): Promise<void> => {
 
     // Удаляем только DEV ключи
     await AsyncStorage.multiRemove(devKeys);
-
   } catch (error) {
     throw error;
   }
@@ -67,11 +53,11 @@ export const clearDevStorage = async (): Promise<void> => {
  * Экспорт всех DEV данных в JSON
  */
 export const exportDevData = async (): Promise<string> => {
-  if (!__DEV__) return '{}';
+  if (!__DEV__) return "{}";
 
   try {
     const allKeys = await AsyncStorage.getAllKeys();
-    const devKeys = allKeys.filter(key => key.startsWith('@dev_'));
+    const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
 
     const data: Record<string, any> = {};
 
@@ -90,7 +76,7 @@ export const exportDevData = async (): Promise<string> => {
 
     return json;
   } catch (error) {
-    return '{}';
+    return "{}";
   }
 };
 
@@ -104,12 +90,12 @@ export const importDevData = async (jsonString: string): Promise<void> => {
     const data = JSON.parse(jsonString);
 
     for (const [key, value] of Object.entries(data)) {
-      if (key.startsWith('@dev_')) {
-        const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+      if (key.startsWith("@dev_")) {
+        const stringValue =
+          typeof value === "string" ? value : JSON.stringify(value);
         await AsyncStorage.setItem(key, stringValue);
       }
     }
-
   } catch (error) {
     throw error;
   }
@@ -121,10 +107,9 @@ export const importDevData = async (jsonString: string): Promise<void> => {
 export const checkStorageHealth = async (): Promise<void> => {
   if (!__DEV__) return;
 
-
   try {
     // Тестовая запись
-    const testKey = '@dev_health_check';
+    const testKey = "@dev_health_check";
     const testValue = { timestamp: Date.now(), test: true };
 
     await AsyncStorage.setItem(testKey, JSON.stringify(testValue));
@@ -137,9 +122,7 @@ export const checkStorageHealth = async (): Promise<void> => {
         return;
       }
     }
-
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 
 /**
@@ -148,11 +131,9 @@ export const checkStorageHealth = async (): Promise<void> => {
 export const checkProfiles = async (): Promise<void> => {
   if (!__DEV__) return;
 
-
   try {
     const allKeys = await AsyncStorage.getAllKeys();
-    const profileKeys = allKeys.filter(key => key.startsWith('@profile_'));
-
+    const profileKeys = allKeys.filter((key) => key.startsWith("@profile_"));
 
     for (const key of profileKeys) {
       const profile = await AsyncStorage.getItem(key);
@@ -162,16 +143,15 @@ export const checkProfiles = async (): Promise<void> => {
     }
 
     // Проверяем user в 'user' ключе
-    const currentUser = await AsyncStorage.getItem('user');
+    const currentUser = await AsyncStorage.getItem("user");
     if (currentUser) {
       const user = JSON.parse(currentUser);
-      
+
       // Проверяем существует ли профиль
       const profileExists = await AsyncStorage.getItem(`@profile_${user.id}`);
     } else {
     }
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 
 /**
@@ -188,7 +168,7 @@ export const DevCommands = {
 };
 
 // Экспортируем в глобальный объект для удобства (только в DEV)
-if (__DEV__ && typeof global !== 'undefined') {
+if (__DEV__ && typeof global !== "undefined") {
   (global as any).DevCommands = DevCommands;
 }
 
@@ -201,4 +181,3 @@ export default {
   checkProfiles,
   DevCommands,
 };
-

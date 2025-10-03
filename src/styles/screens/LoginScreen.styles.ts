@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { SIZES, SHADOWS, getCurrentColors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { SIZES, SHADOWS, getCurrentColors } from "../../constants/colors";
 
 // Создаем функцию для получения стилей с учетом темы
 export const createLoginScreenStyles = (isDark: boolean) => {
   const currentColors = getCurrentColors(isDark);
-  
+
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -18,7 +18,7 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     },
     scrollContent: {
       flexGrow: 1,
-      justifyContent: 'center',
+      justifyContent: "center",
       paddingHorizontal: 20,
       paddingTop: 20,
       paddingBottom: 20,
@@ -26,10 +26,10 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     content: {
       flex: 1,
       padding: SIZES.xl,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     header: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.xxxl,
     },
     headerSpacer: {
@@ -44,16 +44,16 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     },
     title: {
       fontSize: SIZES.fontSize.title,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       marginBottom: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.title,
     },
     subtitle: {
       fontSize: SIZES.fontSize.lg,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.lg,
     },
     form: {
@@ -64,7 +64,7 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     },
     label: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       color: currentColors.text,
       marginBottom: SIZES.sm,
       lineHeight: SIZES.lineHeight.lg,
@@ -102,14 +102,14 @@ export const createLoginScreenStyles = (isDark: boolean) => {
       backgroundColor: currentColors.primary,
       borderRadius: SIZES.radius.md,
       paddingVertical: SIZES.lg,
-      alignItems: 'center',
+      alignItems: "center",
       minHeight: SIZES.buttonHeight.md,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
     loginButtonText: {
       color: currentColors.surface,
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       lineHeight: SIZES.lineHeight.lg,
     },
     loginButtonDisabled: {
@@ -121,8 +121,8 @@ export const createLoginScreenStyles = (isDark: boolean) => {
       transform: [{ scale: 0.98 }],
     },
     divider: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginVertical: SIZES.xxl,
     },
     dividerLine: {
@@ -140,9 +140,9 @@ export const createLoginScreenStyles = (isDark: boolean) => {
       marginBottom: SIZES.xxxl,
     },
     registerSection: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
       marginTop: 0,
       marginBottom: 0,
     },
@@ -150,45 +150,45 @@ export const createLoginScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
       fontSize: SIZES.fontSize.md,
       lineHeight: SIZES.lineHeight.md,
-      textAlign: 'center',
+      textAlign: "center",
     },
     registerLink: {
       color: currentColors.primary,
-      fontWeight: '600',
+      fontWeight: "600",
       marginLeft: SIZES.xs,
     },
     registerLinkUnderlineDark: {
-      color: isDark ? '#60A5FA' : '#23408E',
-      textDecorationLine: 'underline',
-      fontWeight: '600',
+      color: isDark ? "#60A5FA" : "#23408E",
+      textDecorationLine: "underline",
+      fontWeight: "600",
       fontSize: SIZES.fontSize.md,
-      textAlign: 'center',
+      textAlign: "center",
       marginLeft: 0,
     },
     forgotPassword: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.xxl,
     },
     forgotPasswordText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      textDecorationLine: 'underline',
+      textDecorationLine: "underline",
       lineHeight: SIZES.lineHeight.md,
     },
     footer: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: SIZES.xl,
     },
     footerText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.md,
     },
     loadingContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
     },
     loadingText: {
       marginLeft: SIZES.sm,
@@ -224,13 +224,13 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     },
     quickLoginButtonText: {
       fontSize: 18,
-      fontWeight: '600',
-      color: '#fff',
+      fontWeight: "600",
+      color: "#fff",
     },
     quickLoginCardsRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
       marginTop: 8,
       marginBottom: 16,
       gap: 12,
@@ -240,15 +240,15 @@ export const createLoginScreenStyles = (isDark: boolean) => {
       backgroundColor: currentColors.surface,
       borderRadius: 20,
       paddingVertical: 24,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       shadowColor: currentColors.cardShadow,
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: isDark ? 0.3 : 0.08,
       shadowRadius: 12,
       elevation: 4,
       borderWidth: 1,
-      borderColor: isDark ? currentColors.border : 'rgba(0,0,0,0.04)',
+      borderColor: isDark ? currentColors.border : "rgba(0,0,0,0.04)",
     },
     quickLoginCardClient: {
       marginRight: 6,
@@ -262,12 +262,12 @@ export const createLoginScreenStyles = (isDark: boolean) => {
     },
     quickLoginCardText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
       color: currentColors.text,
       marginTop: SIZES.sm,
     },
     backButton: {
-      position: 'absolute',
+      position: "absolute",
       top: 50,
       left: 20,
       zIndex: 1000,
@@ -280,4 +280,4 @@ export const createLoginScreenStyles = (isDark: boolean) => {
 };
 
 // Для обратной совместимости
-export const LoginScreenStyles = createLoginScreenStyles(false); 
+export const LoginScreenStyles = createLoginScreenStyles(false);

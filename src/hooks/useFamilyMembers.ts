@@ -1,10 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getDefaultDate, calculateAge } from '../utils/profileHelpers';
-import { useI18n } from '../hooks/useI18n';
-import { useAuth } from '../context/AuthContext';
-import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import { useState, useCallback, useEffect } from "react";
+import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getDefaultDate, calculateAge } from "../utils/profileHelpers";
+import { useI18n } from "../hooks/useI18n";
+import { useAuth } from "../context/AuthContext";
+import { useUserStorageKey, STORAGE_KEYS } from "../utils/storageKeys";
 
 interface FamilyMember {
   id: string;
@@ -30,9 +30,9 @@ export const useFamilyMembers = () => {
   const { user } = useAuth();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Получаем ключ с изоляцией по пользователю
-  const familyMembersKey = useUserStorageKey('@family_members');
+  const familyMembersKey = useUserStorageKey("@family_members");
 
   // Загружаем семейных членов из AsyncStorage
   const loadFamilyMembers = useCallback(async () => {
@@ -51,39 +51,51 @@ export const useFamilyMembers = () => {
   }, [familyMembersKey]);
 
   // Сохраняем семейных членов в AsyncStorage
-  const saveFamilyMembers = useCallback(async (members: FamilyMember[]) => {
-    try {
-      await AsyncStorage.setItem(familyMembersKey, JSON.stringify(members));
-    } catch (error) {
-    }
-  }, [familyMembersKey]);
+  const saveFamilyMembers = useCallback(
+    async (members: FamilyMember[]) => {
+      try {
+        await AsyncStorage.setItem(familyMembersKey, JSON.stringify(members));
+      } catch (error) {}
+    },
+    [familyMembersKey],
+  );
 
   // Загружаем данные при монтировании
   useEffect(() => {
     loadFamilyMembers();
   }, [loadFamilyMembers]);
 
-  const [expandedFamilyMember, setExpandedFamilyMember] = useState<string | null>(null);
-  const [editingFamilyMember, setEditingFamilyMember] = useState<string | null>(null);
+  const [expandedFamilyMember, setExpandedFamilyMember] = useState<
+    string | null
+  >(null);
+  const [editingFamilyMember, setEditingFamilyMember] = useState<string | null>(
+    null,
+  );
   const [showAddFamilyModal, setShowAddFamilyModal] = useState(false);
-  const [familyPhoneVerification, setFamilyPhoneVerification] = useState<{[key: string]: boolean}>({});
-  const [familyPhoneVerifying, setFamilyPhoneVerifying] = useState<{[key: string]: boolean}>({});
-  
+  const [familyPhoneVerification, setFamilyPhoneVerification] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [familyPhoneVerifying, setFamilyPhoneVerifying] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   const [newFamilyMember, setNewFamilyMember] = useState<NewFamilyMember>({
-    name: '',
-    surname: '',
-    type: '',
+    name: "",
+    surname: "",
+    type: "",
     age: getDefaultDate(),
-    phone: '',
+    phone: "",
   });
 
   // Обработчик изменения телефона с сбросом верификации
   const handlePhoneChange = (phone: string) => {
-    setNewFamilyMember(prev => ({ ...prev, phone }));
+    setNewFamilyMember((prev) => ({ ...prev, phone }));
   };
 
   const toggleFamilyMember = (memberId: string) => {
-    setExpandedFamilyMember(expandedFamilyMember === memberId ? null : memberId);
+    setExpandedFamilyMember(
+      expandedFamilyMember === memberId ? null : memberId,
+    );
   };
 
   const openAddFamilyModal = () => {
@@ -93,18 +105,18 @@ export const useFamilyMembers = () => {
   const closeAddFamilyModal = () => {
     setShowAddFamilyModal(false);
     setNewFamilyMember({
-      name: '',
-      surname: '',
-      type: '',
+      name: "",
+      surname: "",
+      type: "",
       age: getDefaultDate(),
-      phone: '',
+      phone: "",
     });
   };
 
   const addFamilyMember = () => {
     // Проверяем, что обязательные поля заполнены
     if (!newFamilyMember.name.trim() || !newFamilyMember.surname.trim()) {
-      Alert.alert(t('common.error'), t('profile.family.fillNameSurname'));
+      Alert.alert(t("common.error"), t("profile.family.fillNameSurname"));
       return;
     }
 
@@ -124,15 +136,13 @@ export const useFamilyMembers = () => {
     const updatedMembers = [...familyMembers, newMember];
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
-    
+
     // Закрываем модальное окно
     closeAddFamilyModal();
-    
-    Alert.alert(
-      t('common.success'),
-      t('profile.family.addMemberSuccess'),
-      [{ text: t('common.ok') }]
-    );
+
+    Alert.alert(t("common.success"), t("profile.family.addMemberSuccess"), [
+      { text: t("common.ok") },
+    ]);
   };
 
   const startEditingFamilyMember = (memberId: string) => {
@@ -143,14 +153,20 @@ export const useFamilyMembers = () => {
     setEditingFamilyMember(null);
   };
 
-  const saveFamilyMember = (memberId: string, updatedData: Partial<FamilyMember>) => {
-    const updatedMembers = familyMembers.map(member => 
-      member.id === memberId ? { 
-        ...member, 
-        ...updatedData,
-        // Сбрасываем верификацию телефона, если номер изменился
-        phoneVerified: updatedData.phone !== member.phone ? false : member.phoneVerified
-      } : member
+  const saveFamilyMember = (
+    memberId: string,
+    updatedData: Partial<FamilyMember>,
+  ) => {
+    const updatedMembers = familyMembers.map((member) =>
+      member.id === memberId
+        ? {
+            ...member,
+            ...updatedData,
+            // Сбрасываем верификацию телефона, если номер изменился
+            phoneVerified:
+              updatedData.phone !== member.phone ? false : member.phoneVerified,
+          }
+        : member,
     );
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
@@ -158,7 +174,9 @@ export const useFamilyMembers = () => {
   };
 
   const deleteFamilyMember = (memberId: string) => {
-    const updatedMembers = familyMembers.filter(member => member.id !== memberId);
+    const updatedMembers = familyMembers.filter(
+      (member) => member.id !== memberId,
+    );
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
     setExpandedFamilyMember(null);
@@ -166,61 +184,69 @@ export const useFamilyMembers = () => {
   };
 
   const resetFamilyPhoneVerification = (memberId: string) => {
-    setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: false }));
+    setFamilyPhoneVerification((prev) => ({ ...prev, [memberId]: false }));
     // Также сбрасываем статус в данных члена семьи
-    const updatedMembers = familyMembers.map(member => 
-      member.id === memberId 
-        ? { ...member, phoneVerified: false }
-        : member
+    const updatedMembers = familyMembers.map((member) =>
+      member.id === memberId ? { ...member, phoneVerified: false } : member,
     );
     setFamilyMembers(updatedMembers);
     saveFamilyMembers(updatedMembers);
   };
 
-  const verifyFamilyPhone = useCallback((memberId: string) => {
-    const member = familyMembers.find(m => m.id === memberId);
-    if (!member || !member.phone) {
-      Alert.alert(t('common.error'), t('profile.verificationModal.phoneNotSpecified'));
-      return;
-    }
+  const verifyFamilyPhone = useCallback(
+    (memberId: string) => {
+      const member = familyMembers.find((m) => m.id === memberId);
+      if (!member || !member.phone) {
+        Alert.alert(
+          t("common.error"),
+          t("profile.verificationModal.phoneNotSpecified"),
+        );
+        return;
+      }
 
-    const codeSentTitle = t('profile.verifyPhone.success.title');
-    const codeSentMessage = t('profile.verifyPhone.success.message');
-    const cancelText = t('common.cancel');
-    const verifyText = t('common.verify');
-    const successTitle = t('common.success');
-    const successMessage = t('profile.verifyPhone.phoneVerifiedSuccess');
-    const errorTitle = t('profile.verifyPhone.error.title');
-    const errorMessage = t('profile.verifyPhone.error.message');
+      const codeSentTitle = t("profile.verifyPhone.success.title");
+      const codeSentMessage = t("profile.verifyPhone.success.message");
+      const cancelText = t("common.cancel");
+      const verifyText = t("common.verify");
+      const successTitle = t("common.success");
+      const successMessage = t("profile.verifyPhone.phoneVerifiedSuccess");
+      const errorTitle = t("profile.verifyPhone.error.title");
+      const errorMessage = t("profile.verifyPhone.error.message");
 
-    // Сначала показываем "Код отправлен"
-    Alert.alert(
-      codeSentTitle,
-      codeSentMessage,
-      [
-        { text: cancelText, style: 'cancel' },
+      // Сначала показываем "Код отправлен"
+      Alert.alert(codeSentTitle, codeSentMessage, [
+        { text: cancelText, style: "cancel" },
         {
           text: verifyText,
           onPress: () => {
             // Затем показываем поле ввода кода
             Alert.prompt(
-              t('profile.verificationModal.enterCode'),
-              t('profile.verificationModal.enterSmsCode'),
+              t("profile.verificationModal.enterCode"),
+              t("profile.verificationModal.enterSmsCode"),
               [
-                { text: cancelText, style: 'cancel' },
+                { text: cancelText, style: "cancel" },
                 {
                   text: verifyText,
                   onPress: async (code) => {
-                    if (code === '1234') {
-                      setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: true }));
+                    if (code === "1234") {
+                      setFamilyPhoneVerifying((prev) => ({
+                        ...prev,
+                        [memberId]: true,
+                      }));
                       setTimeout(() => {
-                        setFamilyPhoneVerification(prev => ({ ...prev, [memberId]: true }));
-                        setFamilyPhoneVerifying(prev => ({ ...prev, [memberId]: false }));
+                        setFamilyPhoneVerification((prev) => ({
+                          ...prev,
+                          [memberId]: true,
+                        }));
+                        setFamilyPhoneVerifying((prev) => ({
+                          ...prev,
+                          [memberId]: false,
+                        }));
                         // Обновляем статус в данных члена семьи
-                        const updatedMembers = familyMembers.map(member => 
-                          member.id === memberId 
+                        const updatedMembers = familyMembers.map((member) =>
+                          member.id === memberId
                             ? { ...member, phoneVerified: true }
-                            : member
+                            : member,
                         );
                         setFamilyMembers(updatedMembers);
                         saveFamilyMembers(updatedMembers);
@@ -229,16 +255,17 @@ export const useFamilyMembers = () => {
                     } else {
                       Alert.alert(errorTitle, errorMessage);
                     }
-                  }
-                }
+                  },
+                },
               ],
-              'plain-text'
+              "plain-text",
             );
-          }
-        }
-      ]
-    );
-  }, [familyMembers, t]);
+          },
+        },
+      ]);
+    },
+    [familyMembers, t],
+  );
 
   return {
     familyMembers,
@@ -263,4 +290,4 @@ export const useFamilyMembers = () => {
     verifyFamilyPhone,
     resetFamilyPhoneVerification,
   };
-}; 
+};

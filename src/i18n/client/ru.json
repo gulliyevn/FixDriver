@@ -291,8 +291,7 @@
       "tripToWork": "Поездка на работу",
       "routeToWork": "Маршрут: дом - офис"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Поиск водителей...",
     "loadingMore": "Загружаем еще водителей...",

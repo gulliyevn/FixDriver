@@ -1,13 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-import { DriverModalState, DriverModalActions } from '../types/driver-modal.types';
-import { DriverDetails } from '../../../hooks/driver/useDriverDetails';
+import {
+  DriverModalState,
+  DriverModalActions,
+} from "../types/driver-modal.types";
+import { DriverDetails } from "../../../hooks/driver/useDriverDetails";
 
 export const useDriverModalHandlers = (
   state: DriverModalState,
   actions: DriverModalActions,
   onChat: ((driverId: string) => void) | undefined,
-  driverInfo: DriverDetails['driver'],
+  driverInfo: DriverDetails["driver"],
 ) => {
   const handleButtonClick = useCallback(() => {
     if (state.buttonColorState === 3) {
@@ -50,13 +53,13 @@ export const useDriverModalHandlers = (
 
   const handleStopPress = useCallback(() => {
     actions.setShowLongPressDialog(false);
-    actions.setEmergencyActionType('stop');
+    actions.setEmergencyActionType("stop");
     actions.setEmergencyActionsUsed(true);
   }, [actions]);
 
   const handleEndPress = useCallback(() => {
     actions.setShowLongPressDialog(false);
-    actions.setEmergencyActionType('end');
+    actions.setEmergencyActionType("end");
     actions.setEmergencyActionsUsed(true);
   }, [actions]);
 
@@ -78,11 +81,11 @@ export const useDriverModalHandlers = (
   }, [actions]);
 
   const formatTime = useCallback((timestamp: number | null) => {
-    if (!timestamp) return '00:00';
+    if (!timestamp) return "00:00";
     const diff = Date.now() - timestamp;
     const minutes = Math.floor(diff / 60000);
     const seconds = Math.floor((diff % 60000) / 1000);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }, []);
 
   const handleRatingCancel = useCallback(() => {

@@ -1,16 +1,16 @@
-import React, { useState, useRef, useCallback, useEffect, memo } from 'react';
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { useLanguage } from '../context/LanguageContext';
-import { getCurrentColors } from '../constants/colors';
-import MapViewComponent from './MapView';
-import AddressAutocomplete from './AddressAutocomplete';
-import { MapLocation, RoutePoint } from './MapView/types/map.types';
+import React, { useState, useRef, useCallback, useEffect, memo } from "react";
+import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { useLanguage } from "../context/LanguageContext";
+import { getCurrentColors } from "../constants/colors";
+import MapViewComponent from "./MapView";
+import AddressAutocomplete from "./AddressAutocomplete";
+import { MapLocation, RoutePoint } from "./MapView/types/map.types";
 
 interface AddressPoint {
   id: string;
-  type: 'from' | 'to' | 'stop';
+  type: "from" | "to" | "stop";
   address: string;
   coordinate?: MapLocation;
   coordinates?: MapLocation; // Для совместимости с данными сессии
@@ -34,30 +34,33 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   const [addresses, setAddresses] = useState<AddressPoint[]>(() => {
     // Если есть восстановленные адреса, используем их
     if (initialAddresses && initialAddresses.length > 0) {
-      return initialAddresses.map(addr => ({
+      return initialAddresses.map((addr) => ({
         ...addr,
         // Маппинг координат из сессии в компонент
         coordinate: addr.coordinates || addr.coordinate,
-        placeholder: addr.type === 'from' ? t('common.fixDrive.address.fromPlaceholder') :
-                   addr.type === 'to' ? t('common.fixDrive.address.toPlaceholder') :
-                   t('common.fixDrive.address.stopPlaceholder')
+        placeholder:
+          addr.type === "from"
+            ? t("common.fixDrive.address.fromPlaceholder")
+            : addr.type === "to"
+              ? t("common.fixDrive.address.toPlaceholder")
+              : t("common.fixDrive.address.stopPlaceholder"),
       }));
     }
-    
+
     // Иначе используем пустые адреса
     return [
       {
-        id: 'from',
-        type: 'from',
-        address: '',
-        placeholder: t('common.fixDrive.address.fromPlaceholder')
+        id: "from",
+        type: "from",
+        address: "",
+        placeholder: t("common.fixDrive.address.fromPlaceholder"),
       },
       {
-        id: 'to',
-        type: 'to',
-        address: '',
-        placeholder: t('common.fixDrive.address.toPlaceholder')
-      }
+        id: "to",
+        type: "to",
+        address: "",
+        placeholder: t("common.fixDrive.address.toPlaceholder"),
+      },
     ];
   });
 
@@ -65,113 +68,127 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   const [isMapMode, setIsMapMode] = useState(true);
   const [showAddressList, setShowAddressList] = useState(false);
   const [activeAddressId, setActiveAddressId] = useState<string | null>(null);
-  const [addressValidation, setAddressValidation] = useState<{ [key: string]: boolean }>({});
+  const [addressValidation, setAddressValidation] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [isExpandButtonPressed, setIsExpandButtonPressed] = useState(false);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   // Обновляем адреса при изменении initialAddresses
   useEffect(() => {
     if (initialAddresses && initialAddresses.length > 0) {
-      const updatedAddresses = initialAddresses.map(addr => ({
+      const updatedAddresses = initialAddresses.map((addr) => ({
         ...addr,
         // Маппинг координат из сессии в компонент
         coordinate: addr.coordinates || addr.coordinate,
-        placeholder: addr.type === 'from' ? t('common.fixDrive.address.fromPlaceholder') :
-                   addr.type === 'to' ? t('common.fixDrive.address.toPlaceholder') :
-                   t('common.fixDrive.address.stopPlaceholder')
+        placeholder:
+          addr.type === "from"
+            ? t("common.fixDrive.address.fromPlaceholder")
+            : addr.type === "to"
+              ? t("common.fixDrive.address.toPlaceholder")
+              : t("common.fixDrive.address.stopPlaceholder"),
       }));
       setAddresses(updatedAddresses);
-      console.log('Coordinates mapping:', updatedAddresses.map(addr => ({
-        id: addr.id,
-        type: addr.type,
-        coordinate: addr.coordinate,
-        coordinates: addr.coordinates
-      })));
+      console.log(
+        "Coordinates mapping:",
+        updatedAddresses.map((addr) => ({
+          id: addr.id,
+          type: addr.type,
+          coordinate: addr.coordinate,
+          coordinates: addr.coordinates,
+        })),
+      );
     }
   }, [initialAddresses, t]);
 
   // Преобразуем адреса в точки маршрута для карты с жесткой привязкой цветов
   const mapRoutePoints = addresses
-    .filter(addr => addr.coordinate)
+    .filter((addr) => addr.coordinate)
     .map((addr, index) => {
       // Жесткая привязка цветов к типам адресов
       let color: string;
       switch (addr.type) {
-        case 'from':
-          color = 'green'; // Зеленая булавка ВСЕГДА для "откуда"
+        case "from":
+          color = "green"; // Зеленая булавка ВСЕГДА для "откуда"
           break;
-        case 'to':
-          color = 'blue';  // Синяя булавка ВСЕГДА для "куда"
+        case "to":
+          color = "blue"; // Синяя булавка ВСЕГДА для "куда"
           break;
-        case 'stop':
-          color = 'gray';  // Серая булавка ВСЕГДА для остановок
+        case "stop":
+          color = "gray"; // Серая булавка ВСЕГДА для остановок
           break;
         default:
-          color = 'gray';
+          color = "gray";
       }
 
       return {
         id: addr.id,
         coordinate: addr.coordinate!,
-        type: addr.type === 'from' ? 'start' as const : 
-              addr.type === 'to' ? 'end' as const : 'waypoint' as const,
+        type:
+          addr.type === "from"
+            ? ("start" as const)
+            : addr.type === "to"
+              ? ("end" as const)
+              : ("waypoint" as const),
         color: color,
       };
     });
 
   // Логируем обновления mapRoutePoints
-  useEffect(() => {
-  }, [mapRoutePoints]);
+  useEffect(() => {}, [mapRoutePoints]);
 
-  const handleMapPress = useCallback((location: MapLocation) => {
-    // Находим первую пустую точку для заполнения
-    const emptyPoint = addresses.find(addr => !addr.coordinate);
-    if (!emptyPoint) {
-      Alert.alert('Ошибка', 'Все точки маршрута уже выбраны');
-      return;
-    }
+  const handleMapPress = useCallback(
+    (location: MapLocation) => {
+      // Находим первую пустую точку для заполнения
+      const emptyPoint = addresses.find((addr) => !addr.coordinate);
+      if (!emptyPoint) {
+        Alert.alert("Ошибка", "Все точки маршрута уже выбраны");
+        return;
+      }
 
-    // Обновляем адрес с координатами
-    const updatedAddresses = addresses.map(addr => 
-      addr.id === emptyPoint.id 
-        ? { 
-          ...addr, 
-          coordinate: location, 
-          coordinates: location, // Сохраняем в обоих форматах
-          address: `Выбрано на карте (${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)})` 
-        }
-        : addr
-    );
-    
-    setAddresses(updatedAddresses);
-    onAddressesChange(updatedAddresses);
-  }, [addresses, onAddressesChange]);
+      // Обновляем адрес с координатами
+      const updatedAddresses = addresses.map((addr) =>
+        addr.id === emptyPoint.id
+          ? {
+              ...addr,
+              coordinate: location,
+              coordinates: location, // Сохраняем в обоих форматах
+              address: `Выбрано на карте (${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)})`,
+            }
+          : addr,
+      );
+
+      setAddresses(updatedAddresses);
+      onAddressesChange(updatedAddresses);
+    },
+    [addresses, onAddressesChange],
+  );
 
   const addStop = () => {
-    const currentStops = addresses.filter(addr => addr.type === 'stop');
+    const currentStops = addresses.filter((addr) => addr.type === "stop");
     if (currentStops.length >= 2) {
-      Alert.alert('Ограничение', 'Максимум 2 остановки');
+      Alert.alert("Ограничение", "Максимум 2 остановки");
       return;
     }
-    
+
     const stopId = `stop-${Date.now()}`;
     const newStop: AddressPoint = {
       id: stopId,
-      type: 'stop',
-      address: '',
-      placeholder: t('common.fixDrive.address.stopPlaceholder')
+      type: "stop",
+      address: "",
+      placeholder: t("common.fixDrive.address.stopPlaceholder"),
     };
-    
+
     // Вставляем остановку между "Откуда" и "Куда"
-    const fromAddress = addresses.find(addr => addr.type === 'from');
-    const toAddress = addresses.find(addr => addr.type === 'to');
-    
+    const fromAddress = addresses.find((addr) => addr.type === "from");
+    const toAddress = addresses.find((addr) => addr.type === "to");
+
     if (fromAddress && toAddress) {
       const updatedAddresses = [
         fromAddress,
         newStop,
-        ...addresses.filter(addr => addr.type === 'stop'),
-        toAddress
+        ...addresses.filter((addr) => addr.type === "stop"),
+        toAddress,
       ];
       setAddresses(updatedAddresses);
       onAddressesChange(updatedAddresses);
@@ -180,43 +197,46 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
 
   const removeStop = (id: string) => {
     // Находим адрес для удаления
-    const addressToRemove = addresses.find(addr => addr.id === id);
-    
+    const addressToRemove = addresses.find((addr) => addr.id === id);
+
     // Удаляем адрес из массива
-    const updatedAddresses = addresses.filter(addr => addr.id !== id);
+    const updatedAddresses = addresses.filter((addr) => addr.id !== id);
     setAddresses(updatedAddresses);
     onAddressesChange(updatedAddresses);
-    
+
     // Очищаем валидацию для удаленного адреса
-    setAddressValidation(prev => {
+    setAddressValidation((prev) => {
       const newValidation = { ...prev };
       delete newValidation[id];
       return newValidation;
     });
-    
-    
+
     // Логируем привязку булавок
-    const remainingRoutePoints = updatedAddresses.filter(addr => addr.coordinate);
-    console.log('Remaining route points:', remainingRoutePoints.map(point => ({
-      id: point.id,
-      type: point.type,
-      coordinate: point.coordinate
-    })));
+    const remainingRoutePoints = updatedAddresses.filter(
+      (addr) => addr.coordinate,
+    );
+    console.log(
+      "Remaining route points:",
+      remainingRoutePoints.map((point) => ({
+        id: point.id,
+        type: point.type,
+        coordinate: point.coordinate,
+      })),
+    );
   };
 
   const clearAllPoints = () => {
-    const clearedAddresses = addresses.map(addr => ({
+    const clearedAddresses = addresses.map((addr) => ({
       ...addr,
-      address: '',
+      address: "",
       coordinate: undefined,
-      coordinates: undefined
+      coordinates: undefined,
     }));
     setAddresses(clearedAddresses);
     onAddressesChange(clearedAddresses);
-    
+
     // Очищаем всю валидацию
     setAddressValidation({});
-    
   };
 
   const toggleMapMode = () => {
@@ -229,65 +249,83 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   };
 
   const handleAddressChange = (id: string, text: string) => {
-    const updatedAddresses = addresses.map(addr => 
-      addr.id === id ? { ...addr, address: text } : addr
+    const updatedAddresses = addresses.map((addr) =>
+      addr.id === id ? { ...addr, address: text } : addr,
     );
     setAddresses(updatedAddresses);
     onAddressesChange(updatedAddresses);
   };
 
-  const handleAddressSelect = (id: string, address: string, coordinates: MapLocation) => {
-    const updatedAddresses = addresses.map(addr => 
-      addr.id === id ? { 
-        ...addr, 
-        address, 
-        coordinate: coordinates,
-        coordinates: coordinates // Сохраняем в обоих форматах для совместимости
-      } : addr
+  const handleAddressSelect = (
+    id: string,
+    address: string,
+    coordinates: MapLocation,
+  ) => {
+    const updatedAddresses = addresses.map((addr) =>
+      addr.id === id
+        ? {
+            ...addr,
+            address,
+            coordinate: coordinates,
+            coordinates: coordinates, // Сохраняем в обоих форматах для совместимости
+          }
+        : addr,
     );
     setAddresses(updatedAddresses);
     onAddressesChange(updatedAddresses);
   };
 
   const handleValidationChange = (id: string, isValid: boolean) => {
-    setAddressValidation(prev => ({
+    setAddressValidation((prev) => ({
       ...prev,
-      [id]: isValid
+      [id]: isValid,
     }));
   };
 
   const getPointStatus = (address: AddressPoint) => {
     if (address.coordinate) {
-      return 'selected';
+      return "selected";
     }
-    if (address.type === 'from') {
-      return 'next';
+    if (address.type === "from") {
+      return "next";
     }
-    const fromPoint = addresses.find(addr => addr.type === 'from');
-    if (fromPoint?.coordinate && address.type === 'to') {
-      return 'next';
+    const fromPoint = addresses.find((addr) => addr.type === "from");
+    if (fromPoint?.coordinate && address.type === "to") {
+      return "next";
     }
-    if (fromPoint?.coordinate && address.type === 'stop') {
-      return 'next';
+    if (fromPoint?.coordinate && address.type === "stop") {
+      return "next";
     }
-    return 'waiting';
+    return "waiting";
   };
 
   const getPointColor = (type: string) => {
     switch (type) {
-      case 'from': return colors.success; // зеленый для "откуда"
-      case 'to': return colors.primary; // синий для "куда"
-      case 'stop': return colors.textSecondary; // серый для остановок
-      default: return colors.textSecondary;
+      case "from":
+        return colors.success; // зеленый для "откуда"
+      case "to":
+        return colors.primary; // синий для "куда"
+      case "stop":
+        return colors.textSecondary; // серый для остановок
+      default:
+        return colors.textSecondary;
     }
   };
 
   const getStatusIcon = (status: string, type: string) => {
     switch (status) {
-      case 'selected': return 'checkmark-circle';
-      case 'next': return type === 'from' ? 'location' : type === 'to' ? 'flag' : 'ellipse';
-      case 'waiting': return 'ellipse-outline';
-      default: return 'ellipse-outline';
+      case "selected":
+        return "checkmark-circle";
+      case "next":
+        return type === "from"
+          ? "location"
+          : type === "to"
+            ? "flag"
+            : "ellipse";
+      case "waiting":
+        return "ellipse-outline";
+      default:
+        return "ellipse-outline";
     }
   };
 
@@ -297,55 +335,67 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
       const isValid = addressValidation[addressId];
       if (isValid) {
         switch (type) {
-          case 'from': return colors.success; // зеленый для "откуда"
-          case 'to': return colors.primary; // синий для "куда"
-          case 'stop': return colors.textSecondary; // серый для остановок
-          default: return colors.border;
+          case "from":
+            return colors.success; // зеленый для "откуда"
+          case "to":
+            return colors.primary; // синий для "куда"
+          case "stop":
+            return colors.textSecondary; // серый для остановок
+          default:
+            return colors.border;
         }
       }
       return colors.border;
     }
-    
+
     // Для режима карты используем старую логику
-    if (status !== 'selected') {
+    if (status !== "selected") {
       return colors.border;
     }
-    
+
     switch (type) {
-      case 'from': return colors.success; // зеленый для "откуда"
-      case 'to': return colors.primary; // синий для "куда"
-      case 'stop': return colors.textSecondary; // серый для остановок
-      default: return colors.border;
+      case "from":
+        return colors.success; // зеленый для "откуда"
+      case "to":
+        return colors.primary; // синий для "куда"
+      case "stop":
+        return colors.textSecondary; // серый для остановок
+      default:
+        return colors.border;
     }
   };
 
   return (
     <View style={{ marginTop: 10 }}>
-      <View style={{ 
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: 12 
-      }}>
-        <Text style={{ 
-          fontSize: 16, 
-          fontWeight: '500', 
-          color: colors.text
-        }}>
-          {t('common.fixDrive.address.selectFromMap')}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 12,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "500",
+            color: colors.text,
+          }}
+        >
+          {t("common.fixDrive.address.selectFromMap")}
         </Text>
-        
+
         {!isMapMode && (
-          <TouchableOpacity 
-            style={{ 
+          <TouchableOpacity
+            style={{
               backgroundColor: colors.primary,
               borderRadius: 20,
               padding: 8,
-              shadowColor: '#000',
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
-              elevation: 3
+              elevation: 3,
             }}
             onPress={toggleMapMode}
           >
@@ -356,67 +406,69 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
 
       {/* Карта */}
       {isMapMode && (
-        <View style={{ 
-          height: isMapExpanded ? 600 : 200, 
-          borderRadius: 8, 
-          overflow: 'hidden',
-          borderWidth: 1,
-          borderColor: colors.border,
-          marginBottom: 12,
-          position: 'relative'
-        }}>
+        <View
+          style={{
+            height: isMapExpanded ? 600 : 200,
+            borderRadius: 8,
+            overflow: "hidden",
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginBottom: 12,
+            position: "relative",
+          }}
+        >
           {isMapMode && (
             <MapViewComponent
               ref={mapRef}
-              initialLocation={{ latitude: 40.3777, longitude: 49.8920 }}
+              initialLocation={{ latitude: 40.3777, longitude: 49.892 }}
               onLocationSelect={handleMapPress}
               routePoints={mapRoutePoints}
               showTrafficMock={false}
             />
           )}
-          
+
           {/* Кнопка переключения режима в правом верхнем углу */}
-          <TouchableOpacity 
-            style={{ 
-              position: 'absolute',
+          <TouchableOpacity
+            style={{
+              position: "absolute",
               top: 8,
               right: 8,
               backgroundColor: colors.primary,
               borderRadius: 20,
               padding: 8,
-              shadowColor: '#000',
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
-              elevation: 3
+              elevation: 3,
             }}
             onPress={toggleMapMode}
           >
             <Ionicons name="text" size={16} color="#FFFFFF" />
           </TouchableOpacity>
-          
+
           {/* Кнопка раскрытия в правом нижнем углу */}
-          <TouchableOpacity 
-            style={{ 
-              position: 'absolute',
+          <TouchableOpacity
+            style={{
+              position: "absolute",
               bottom: 8,
               right: 8,
               backgroundColor: colors.primary,
               borderRadius: 20,
               padding: 8,
-              shadowColor: '#000',
+              shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.1,
               shadowRadius: 4,
-              elevation: 3
+              elevation: 3,
             }}
             onPress={handleExpandButtonPress}
             activeOpacity={0.7}
           >
-            <Ionicons 
-              name={isExpandButtonPressed ? "contract" : "expand"} 
-              size={16} 
-              color="#FFFFFF" 
+            <Ionicons
+              name={isExpandButtonPressed ? "contract" : "expand"}
+              size={16}
+              color="#FFFFFF"
             />
           </TouchableOpacity>
         </View>
@@ -431,97 +483,124 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
           const borderColor = getBorderColor(status, address.type, address.id);
 
           return (
-            <View key={address.id} style={{ 
-              flexDirection: 'row', 
-              alignItems: 'center',
-              paddingVertical: 8,
-              paddingHorizontal: 12,
-              backgroundColor: colors.surface,
-              borderRadius: 8,
-              marginBottom: 8,
-              borderWidth: 1,
-              borderColor: borderColor
-            }}>
+            <View
+              key={address.id}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+                backgroundColor: colors.surface,
+                borderRadius: 8,
+                marginBottom: 8,
+                borderWidth: 1,
+                borderColor: borderColor,
+              }}
+            >
               {/* Отключаем выпадающий список */}
               <View style={{ marginRight: 12 }}>
-                <Ionicons 
-                  name="chevron-down" 
-                  size={20} 
-                  color={colors.textSecondary} 
+                <Ionicons
+                  name="chevron-down"
+                  size={20}
+                  color={colors.textSecondary}
                 />
               </View>
-              
+
               <View style={{ flex: 1 }}>
-                <Text style={{ 
-                  fontSize: 14, 
-                  fontWeight: '500', 
-                  color: colors.text 
-                }}>
-                  {address.type === 'from' ? t('common.fixDrive.address.from') :
-                   address.type === 'to' ? t('common.fixDrive.address.to') :
-                   t('common.fixDrive.address.stopPlaceholder')}
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "500",
+                    color: colors.text,
+                  }}
+                >
+                  {address.type === "from"
+                    ? t("common.fixDrive.address.from")
+                    : address.type === "to"
+                      ? t("common.fixDrive.address.to")
+                      : t("common.fixDrive.address.stopPlaceholder")}
                 </Text>
-                
+
                 {isMapMode ? (
-                  <Text style={{ 
-                    fontSize: 12, 
-                    color: address.address ? colors.text : colors.textSecondary 
-                  }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: address.address
+                        ? colors.text
+                        : colors.textSecondary,
+                    }}
+                  >
                     {address.address || address.placeholder}
                   </Text>
                 ) : (
                   <AddressAutocomplete
                     value={address.address}
-                    onChangeText={(text) => handleAddressChange(address.id, text)}
-                    onAddressSelect={(addressText, coordinates) => 
+                    onChangeText={(text) =>
+                      handleAddressChange(address.id, text)
+                    }
+                    onAddressSelect={(addressText, coordinates) =>
                       handleAddressSelect(address.id, addressText, coordinates)
                     }
-                    onValidationChange={(isValid) => 
+                    onValidationChange={(isValid) =>
                       handleValidationChange(address.id, isValid)
                     }
                     type={address.type}
                     placeholder={
                       (address.placeholder && t(address.placeholder)) ||
-                      t(`components:common.autocomplete.placeholder.${address.type}`)
+                      t(
+                        `components:common.autocomplete.placeholder.${address.type}`,
+                      )
                     }
                   />
                 )}
               </View>
 
               {/* Кнопки действий */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
                 {/* Кнопка очистки адреса - показывается только когда есть данные */}
                 {address.address && (
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={{ padding: 8, marginRight: 4 }}
                     onPress={() => {
-                      const updatedAddresses = addresses.map(addr => 
-                        addr.id === address.id 
-                          ? { ...addr, address: '', coordinate: undefined, coordinates: undefined }
-                          : addr
+                      const updatedAddresses = addresses.map((addr) =>
+                        addr.id === address.id
+                          ? {
+                              ...addr,
+                              address: "",
+                              coordinate: undefined,
+                              coordinates: undefined,
+                            }
+                          : addr,
                       );
                       setAddresses(updatedAddresses);
                       onAddressesChange(updatedAddresses.slice(0, 1));
-                      
+
                       // Очищаем валидацию для очищенного адреса
-                      setAddressValidation(prev => {
+                      setAddressValidation((prev) => {
                         const newValidation = { ...prev };
                         delete newValidation[address.id];
                         return newValidation;
                       });
-                      
                     }}
                   >
-                    <Ionicons name="close-circle" size={16} color={colors.error} />
+                    <Ionicons
+                      name="close-circle"
+                      size={16}
+                      color={colors.error}
+                    />
                   </TouchableOpacity>
                 )}
 
-
-
                 {/* Кнопка добавления остановок/второго адреса скрыта */}
-                
-                {address.type === 'stop' && (
-                  <TouchableOpacity 
+
+                {address.type === "stop" && (
+                  <TouchableOpacity
                     style={{ padding: 8 }}
                     onPress={() => removeStop(address.id)}
                   >
@@ -535,12 +614,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
           );
         })}
       </View>
-
-
-
-
-
-
     </View>
   );
 };

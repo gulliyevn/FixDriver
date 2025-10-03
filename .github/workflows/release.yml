@@ -1,0 +1,238 @@
+name: 🏷️ Release Management
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # 🏷️ Создание релиза
+  create-release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: 🏷️ Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=${GITHUB_REF#refs/tags/v}
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "🏷️ Version: $VERSION"
+          
+      - name: 📝 Generate changelog
+        id: changelog
+        run: |
+          echo "📝 Generating changelog..."
+          
+          # Получаем последний тег
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          if [ -z "$LAST_TAG" ]; then
+            CHANGELOG="🎉 Initial release v${{ steps.version.outputs.version }}"
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" $LAST_TAG..HEAD)
+          fi
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: 📊 Update package.json version
+        run: |
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          
+      - name: 🏷️ Create Git tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+
+  # 📱 Сборка для мобильных платформ
+  build-mobile:
+    name: 📱 Build Mobile Apps
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    strategy:
+      matrix:
+        platform: [android, ios]
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: 🏗️ Setup Expo
+        run: |
+          npm install -g @expo/cli@latest
+          npx expo install --fix
+          
+      - name: 📱 Build for ${{ matrix.platform }}
+        run: |
+          echo "📱 Building for ${{ matrix.platform }}..."
+          # npx eas build --platform ${{ matrix.platform }} --profile production
+          
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mobile-build-${{ matrix.platform }}-v${{ needs.create-release.outputs.version }}
+          path: |
+            build/
+          retention-days: 30
+
+  # 🌐 Сборка веб-версии
+  build-web:
+    name: 🌐 Build Web App
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: 🌐 Build web app
+        run: |
+          echo "🌐 Building web app..."
+          # npm run build:web
+          
+      - name: 📦 Upload web build
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-build-v${{ needs.create-release.outputs.version }}
+          path: |
+            dist/
+            build/
+          retention-days: 30
+
+  # 🚀 Деплой релиза
+  deploy-release:
+    name: 🚀 Deploy Release
+    runs-on: ubuntu-latest
+    needs: [create-release, build-mobile, build-web]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📥 Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./artifacts
+          
+      - name: 🚀 Deploy to production
+        run: |
+          echo "🚀 Deploying release v${{ needs.create-release.outputs.version }}..."
+          # Здесь будет логика деплоя релиза
+          
+      - name: 📊 Post-deployment verification
+        run: |
+          echo "📊 Verifying deployment..."
+          # Здесь можно добавить проверки работоспособности
+
+  # 📢 Уведомления о релизе
+  release-notifications:
+    name: 📢 Release Notifications
+    runs-on: ubuntu-latest
+    needs: [create-release, deploy-release]
+    if: always()
+    
+    steps:
+      - name: 📢 Slack release notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#fixdrive-releases'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          custom_payload: |
+            {
+              "text": "🏷️ New FixDrive Release: v${{ needs.create-release.outputs.version }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🏷️ FixDrive v${{ needs.create-release.outputs.version }} Released!* 🚀"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Changelog:*\n```${{ needs.create-release.outputs.changelog }}```"
+                  }
+                }
+              ]
+            }
+        if: always()
+        
+      - name: 📱 Telegram release notification
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            MESSAGE="🏷️ <b>FixDrive v${{ needs.create-release.outputs.version }}</b> released! 🚀
+
+<b>Changelog:</b>
+<pre>${{ needs.create-release.outputs.changelog }}</pre>
+
+🎉 Download the latest version now!"
+          else
+            MESSAGE="❌ FixDrive release v${{ needs.create-release.outputs.version }} failed! 🔧"
+          fi
+          
+          curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${{ secrets.TELEGRAM_CHAT_ID }}\",
+              \"text\": \"$MESSAGE\",
+              \"parse_mode\": \"HTML\"
+            }"
+        if: always()

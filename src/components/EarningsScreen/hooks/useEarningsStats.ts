@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
-import { EarningsStats, StatsCard } from '../types/earningsStats.types';
+import { useMemo } from "react";
+import { EarningsStats, StatsCard } from "../types/earningsStats.types";
 
-export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') => {
+export const useEarningsStats = (
+  period: "today" | "week" | "month" | "year",
+) => {
   // Моковые данные - в реальном приложении будут приходить с API
   const mockStats: EarningsStats = useMemo(() => {
     const baseStats = {
@@ -15,7 +17,7 @@ export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') =>
     };
 
     switch (period) {
-      case 'today':
+      case "today":
         return {
           ...baseStats,
           totalRides: 8,
@@ -26,7 +28,7 @@ export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') =>
           totalHours: 6.5,
           scheduleCompletion: 100,
         };
-      case 'week':
+      case "week":
         return {
           ...baseStats,
           totalRides: 42,
@@ -37,7 +39,7 @@ export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') =>
           totalHours: 38,
           scheduleCompletion: 95,
         };
-      case 'month':
+      case "month":
         return {
           ...baseStats,
           totalRides: 156,
@@ -48,7 +50,7 @@ export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') =>
           totalHours: 142,
           scheduleCompletion: 88,
         };
-      case 'year':
+      case "year":
         return {
           ...baseStats,
           totalRides: 1847,
@@ -64,37 +66,40 @@ export const useEarningsStats = (period: 'today' | 'week' | 'month' | 'year') =>
     }
   }, [period]);
 
-  const statsCards: StatsCard[] = useMemo(() => [
-    {
-      title: 'totalRides',
-      value: mockStats.totalRides,
-      icon: 'car-outline',
-      color: '#3B82F6',
-      trend: { value: 12, isPositive: true },
-    },
-    {
-      title: 'avgRating',
-      value: mockStats.avgRating.toFixed(1),
-      subtitle: '/5.0',
-      icon: 'star-outline',
-      color: '#F59E0B',
-      trend: { value: 0.2, isPositive: true },
-    },
-    {
-      title: 'workHours',
-      value: mockStats.workHours.toFixed(1),
-      icon: 'time-outline',
-      color: '#10B981',
-      trend: { value: 1.5, isPositive: true },
-    },
-    {
-      title: 'avgPerRide',
-      value: `${mockStats.avgPerRide.toFixed(1)} AFc`,
-      icon: 'wallet-outline',
-      color: '#EF4444',
-      trend: { value: 0.8, isPositive: true },
-    },
-  ], [mockStats]);
+  const statsCards: StatsCard[] = useMemo(
+    () => [
+      {
+        title: "totalRides",
+        value: mockStats.totalRides,
+        icon: "car-outline",
+        color: "#3B82F6",
+        trend: { value: 12, isPositive: true },
+      },
+      {
+        title: "avgRating",
+        value: mockStats.avgRating.toFixed(1),
+        subtitle: "/5.0",
+        icon: "star-outline",
+        color: "#F59E0B",
+        trend: { value: 0.2, isPositive: true },
+      },
+      {
+        title: "workHours",
+        value: mockStats.workHours.toFixed(1),
+        icon: "time-outline",
+        color: "#10B981",
+        trend: { value: 1.5, isPositive: true },
+      },
+      {
+        title: "avgPerRide",
+        value: `${mockStats.avgPerRide.toFixed(1)} AFc`,
+        icon: "wallet-outline",
+        color: "#EF4444",
+        trend: { value: 0.8, isPositive: true },
+      },
+    ],
+    [mockStats],
+  );
 
   return {
     stats: mockStats,

@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { SIZES, SHADOWS, getCurrentColors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { SIZES, SHADOWS, getCurrentColors } from "../../constants/colors";
 
 // Создаем функцию для получения стилей с учетом темы
 export const createRoleSelectScreenStyles = (isDark: boolean) => {
   const currentColors = getCurrentColors(isDark);
-  
+
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -20,7 +20,7 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
       height: 40,
     },
     headerLogo: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: 20,
     },
     logoIconWrap: {
@@ -28,14 +28,14 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
       height: 80,
       borderRadius: 40,
       backgroundColor: currentColors.surface,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       marginBottom: 12,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
     logoText: {
       fontSize: 28,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       letterSpacing: 1,
     },
@@ -44,9 +44,9 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
     },
     title: {
       fontSize: SIZES.fontSize.title,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.xxxl,
       lineHeight: SIZES.lineHeight.title,
     },
@@ -60,37 +60,37 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
       borderColor: currentColors.border,
     },
     cardHeader: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.lg,
     },
     cardIconWrap: {
       width: 60,
       height: 60,
       borderRadius: 30,
-      backgroundColor: isDark ? '#1F2937' : '#F3F4F6',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: isDark ? "#1F2937" : "#F3F4F6",
+      alignItems: "center",
+      justifyContent: "center",
       marginBottom: SIZES.md,
     },
     cardTitle: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.xs,
     },
     cardSubtitle: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.md,
     },
     cardContent: {
       marginBottom: SIZES.xl,
     },
     featureItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginBottom: SIZES.md,
     },
     featureText: {
@@ -103,7 +103,7 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
     chooseBtn: {
       borderRadius: SIZES.radius.md,
       paddingVertical: SIZES.lg,
-      alignItems: 'center',
+      alignItems: "center",
       minHeight: SIZES.buttonHeight.md,
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
     },
@@ -114,15 +114,15 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
       backgroundColor: currentColors.warning,
     },
     chooseBtnText: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       lineHeight: SIZES.lineHeight.lg,
     },
     loginRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
       marginTop: 24,
       marginBottom: 8,
     },
@@ -134,7 +134,7 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
     loginLink: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      fontWeight: '600',
+      fontWeight: "600",
       marginLeft: SIZES.xs,
       lineHeight: SIZES.lineHeight.md,
     },
@@ -142,7 +142,7 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
       height: 16,
     },
     langWrap: {
-      alignItems: 'center',
+      alignItems: "center",
     },
     spacerBottom: {
       height: 20,
@@ -151,4 +151,4 @@ export const createRoleSelectScreenStyles = (isDark: boolean) => {
 };
 
 // Для обратной совместимости
-export const RoleSelectScreenStyles = createRoleSelectScreenStyles(false); 
+export const RoleSelectScreenStyles = createRoleSelectScreenStyles(false);

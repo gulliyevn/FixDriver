@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, SIZES, SHADOWS } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors, SIZES, SHADOWS } from "../../constants/colors";
 
 export const ButtonStyles = StyleSheet.create({
   // ===== ОСНОВНЫЕ СТИЛИ КНОПКИ =====
@@ -7,13 +7,13 @@ export const ButtonStyles = StyleSheet.create({
     borderRadius: SIZES.radius.md,
     paddingVertical: SIZES.md,
     paddingHorizontal: SIZES.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     minHeight: SIZES.buttonHeight.md,
     ...SHADOWS.light.small,
   },
-  
+
   // ===== ВАРИАНТЫ КНОПОК =====
   primary: {
     backgroundColor: colors.light.primary,
@@ -22,17 +22,17 @@ export const ButtonStyles = StyleSheet.create({
     backgroundColor: colors.light.secondary,
   },
   outline: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderWidth: 2,
     borderColor: colors.light.primary,
   },
   ghost: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   danger: {
     backgroundColor: colors.light.error,
   },
-  
+
   // ===== РАЗМЕРЫ КНОПОК =====
   small: {
     paddingVertical: SIZES.sm,
@@ -49,7 +49,7 @@ export const ButtonStyles = StyleSheet.create({
     paddingHorizontal: SIZES.xxxl,
     minHeight: SIZES.buttonHeight.lg,
   },
-  
+
   // ===== СОСТОЯНИЯ КНОПКИ =====
   disabled: {
     opacity: 0.5,
@@ -58,14 +58,14 @@ export const ButtonStyles = StyleSheet.create({
     opacity: 0.7,
   },
   fullWidth: {
-    width: '100%',
+    width: "100%",
   },
-  
+
   // ===== СТИЛИ ТЕКСТА =====
   text: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   primaryText: {
     color: colors.light.surface,
@@ -94,7 +94,7 @@ export const ButtonStyles = StyleSheet.create({
   disabledText: {
     color: colors.light.textTertiary,
   },
-  
+
   // ===== СТИЛИ ИКОНОК =====
   icon: {
     marginRight: SIZES.sm,
@@ -103,12 +103,12 @@ export const ButtonStyles = StyleSheet.create({
     marginRight: 0,
     marginLeft: SIZES.sm,
   },
-  
+
   // ===== СТИЛИ ЗАГРУЗКИ =====
   loader: {
     marginRight: SIZES.sm,
   },
-  
+
   // ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ =====
   buttonRounded: {
     borderRadius: SIZES.radius.round,
@@ -116,4 +116,4 @@ export const ButtonStyles = StyleSheet.create({
   buttonWithShadow: {
     ...SHADOWS.light.medium,
   },
-}); 
+});

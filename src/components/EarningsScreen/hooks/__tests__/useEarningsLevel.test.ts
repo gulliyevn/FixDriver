@@ -1,39 +1,39 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEarningsLevel } from '../useEarningsLevel';
+import { renderHook, act } from "@testing-library/react-hooks";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEarningsLevel } from "../useEarningsLevel";
 
 // Mock dependencies
-jest.mock('../../../../context/BalanceContext', () => ({
+jest.mock("../../../../context/BalanceContext", () => ({
   useBalanceContext: () => ({
     addEarnings: jest.fn(),
   }),
 }));
 
-jest.mock('../../../../context/LanguageContext', () => ({
+jest.mock("../../../../context/LanguageContext", () => ({
   useLanguage: () => ({
-    language: 'ru',
+    language: "ru",
     setLanguage: jest.fn(),
   }),
 }));
 
-jest.mock('../../../../i18n', () => ({
+jest.mock("../../../../i18n", () => ({
   useI18n: () => ({
     t: (key: string) => key,
   }),
 }));
 
-describe('useEarningsLevel', () => {
+describe("useEarningsLevel", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     AsyncStorage.clear();
   });
 
-  describe('base levels and VIP activation', () => {
-    it('starts at level 1.0 with 0 rides', async () => {
+  describe("base levels and VIP activation", () => {
+    it("starts at level 1.0 with 0 rides", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       expect(result.current.driverLevel.currentLevel).toBe(1);
@@ -42,11 +42,11 @@ describe('useEarningsLevel', () => {
       expect(result.current.driverLevel.isVIP).toBe(false);
     });
 
-    it('advances to sublevel 1.1 after 30 rides', async () => {
+    it("advances to sublevel 1.1 after 30 rides", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // Add 30 rides
@@ -61,11 +61,11 @@ describe('useEarningsLevel', () => {
       expect(result.current.driverLevel.currentProgress).toBe(0);
     });
 
-    it('awards bonus and advances sublevel on completing sublevel 1.1 (30 rides)', async () => {
+    it("awards bonus and advances sublevel on completing sublevel 1.1 (30 rides)", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // Add 29 rides first
@@ -87,11 +87,11 @@ describe('useEarningsLevel', () => {
       expect(result.current.driverLevel.currentProgress).toBe(0);
     });
 
-    it('activates VIP at 4320+ rides', async () => {
+    it("activates VIP at 4320+ rides", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // Add 4319 rides first
@@ -110,7 +110,7 @@ describe('useEarningsLevel', () => {
 
       // Wait for VIP activation to complete
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       });
 
       // VIP should be activated
@@ -118,11 +118,11 @@ describe('useEarningsLevel', () => {
       expect(result.current.driverLevel.vipLevel).toBe(1);
     });
 
-    it('calculates VIP level based on qualified days in periods', async () => {
+    it("calculates VIP level based on qualified days in periods", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // First activate VIP
@@ -141,12 +141,12 @@ describe('useEarningsLevel', () => {
     });
   });
 
-  describe('level progression', () => {
-    it('advances through all sublevels correctly', async () => {
+  describe("level progression", () => {
+    it("advances through all sublevels correctly", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // Level 1: 30+40+50 = 120 rides total
@@ -161,11 +161,11 @@ describe('useEarningsLevel', () => {
       expect(result.current.driverLevel.currentProgress).toBe(0);
     });
 
-    it('resets progress correctly', async () => {
+    it("resets progress correctly", async () => {
       const { result } = renderHook(() => useEarningsLevel());
-      
+
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for initialization
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for initialization
       });
 
       // Add some progress

@@ -315,8 +315,7 @@
       "tripToWork": "Viaje al trabajo",
       "routeToWork": "Ruta: casa - oficina"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Buscar conductores...",
     "loadingMore": "Cargando más conductores...",

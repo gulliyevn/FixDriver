@@ -1,20 +1,20 @@
-const ru = require('./ru.json');
-const en = require('./en.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
-const levels = require('./levels.json');
+const commonRu = require("./ru.json");
+const commonEn = require("./en.json");
+const commonTr = require("./tr.json");
+const commonAz = require("./az.json");
+const commonFr = require("./fr.json");
+const commonAr = require("./ar.json");
+const commonEs = require("./es.json");
+const commonDe = require("./de.json");
+const levels = require("./levels.json");
 
 module.exports = {
-  ru: { ...ru, levels: levels.ru },
-  en: { ...en, levels: levels.en },
-  tr: { ...tr, levels: levels.tr },
-  az: { ...az, levels: levels.az },
-  fr: { ...fr, levels: levels.fr },
-  ar: { ...ar, levels: levels.ar },
-  es: { ...es, levels: levels.es },
-  de: { ...de, levels: levels.de },
-}; 
+  ru: { ...commonRu, levels: levels.ru },
+  en: { ...commonEn, levels: levels.en },
+  tr: { ...commonTr, levels: levels.tr },
+  az: { ...commonAz, levels: levels.az },
+  fr: { ...commonFr, levels: levels.fr },
+  ar: { ...commonAr, levels: levels.ar },
+  es: { ...commonEs, levels: levels.es },
+  de: { ...commonDe, levels: levels.de },
+};

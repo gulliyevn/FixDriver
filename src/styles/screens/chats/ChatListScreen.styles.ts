@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../constants/colors";
 
 export const createChatListScreenStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
@@ -9,9 +9,9 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
     },
     header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
       paddingHorizontal: SIZES.xl,
       paddingVertical: SIZES.lg,
       backgroundColor: colors.background,
@@ -19,39 +19,39 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       borderBottomColor: colors.border,
     },
     headerActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       gap: SIZES.md,
     },
     headerTitle: {
       fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
-      textAlign: 'left',
+      textAlign: "left",
       marginLeft: SIZES.sm, // Сдвигаем правее
     },
     notificationBadge: {
-      position: 'absolute',
+      position: "absolute",
       top: -8,
       right: -8,
-      backgroundColor: '#EF4444',
+      backgroundColor: "#EF4444",
       borderRadius: 10,
       minWidth: 20,
       height: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       paddingHorizontal: SIZES.xs,
       borderWidth: 2,
       borderColor: colors.background,
     },
     notificationCount: {
-      color: '#fff',
+      color: "#fff",
       fontSize: SIZES.fontSize.xs,
-      fontWeight: '700',
+      fontWeight: "700",
     },
     searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginHorizontal: SIZES.xl,
       marginVertical: SIZES.md,
       paddingHorizontal: SIZES.md,
@@ -72,8 +72,8 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       paddingVertical: SIZES.sm,
     },
     chatItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginBottom: SIZES.sm,
       marginHorizontal: SIZES.xl,
       padding: SIZES.md,
@@ -88,46 +88,46 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       height: 24,
       borderRadius: 4,
       borderWidth: 2,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderColor: colors.primary,
       marginRight: SIZES.md,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
     },
     selectionCheckboxActive: {
       backgroundColor: colors.primary,
     },
     avatarContainer: {
-      position: 'relative',
+      position: "relative",
       marginRight: SIZES.md,
     },
     avatar: {
       width: 48,
       height: 48,
       borderRadius: 24,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       backgroundColor: colors.primary, // Фирменный синий цвет FixDrive
     },
     onlineIndicator: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 2,
       right: 2,
       width: 12,
       height: 12,
       borderRadius: 6,
-      backgroundColor: '#10B981', // Зеленый для онлайн
+      backgroundColor: "#10B981", // Зеленый для онлайн
       borderWidth: 2,
       borderColor: colors.background,
     },
     offlineIndicator: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 2,
       right: 2,
       width: 12,
       height: 12,
       borderRadius: 6,
-      backgroundColor: '#9CA3AF', // Серый для офлайн
+      backgroundColor: "#9CA3AF", // Серый для офлайн
       borderWidth: 2,
       borderColor: colors.background,
     },
@@ -135,18 +135,18 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       flex: 1,
     },
     chatHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-start',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
       marginBottom: SIZES.xs,
     },
     chatNameRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
     },
     chatName: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
       flexShrink: 1,
       marginRight: 0,
@@ -158,12 +158,12 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     chatTime: {
       fontSize: SIZES.fontSize.xs,
       color: colors.textSecondary,
-      fontWeight: '500',
+      fontWeight: "500",
     },
     chatPreview: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
     chatInfo: {
       flex: 1,
@@ -176,13 +176,13 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     },
     statusText: {
       fontSize: SIZES.fontSize.sm,
-      color: '#10B981', // Зеленый для онлайн
-      fontWeight: '500',
+      color: "#10B981", // Зеленый для онлайн
+      fontWeight: "500",
     },
     statusTextOffline: {
       fontSize: SIZES.fontSize.sm,
-      color: '#9CA3AF', // Серый для офлайн
-      fontWeight: '500',
+      color: "#9CA3AF", // Серый для офлайн
+      fontWeight: "500",
     },
     lastMessage: {
       fontSize: SIZES.fontSize.md,
@@ -190,8 +190,8 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       marginTop: SIZES.xs,
     },
     rightSection: {
-      alignItems: 'flex-end',
-      justifyContent: 'space-between',
+      alignItems: "flex-end",
+      justifyContent: "space-between",
       height: 60,
     },
     unreadBadge: {
@@ -199,36 +199,36 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       minWidth: 20,
       height: 20,
       borderRadius: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       paddingHorizontal: SIZES.xs,
     },
     unreadCount: {
       color: colors.background,
       fontSize: SIZES.fontSize.xs,
-      fontWeight: '700',
+      fontWeight: "700",
     },
     bookmarkIcon: {
       marginTop: SIZES.xs,
     },
     emptyState: {
       flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       paddingVertical: SIZES.xxl * 2,
     },
     emptyStateTitle: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
       marginTop: SIZES.lg,
-      textAlign: 'center',
+      textAlign: "center",
     },
     emptyStateSubtitle: {
       fontSize: SIZES.fontSize.md,
       color: colors.textSecondary,
       marginTop: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
     },
     actionButtonsContainer: {
       paddingHorizontal: SIZES.xl,
@@ -236,8 +236,8 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
     },
     actionButtonsRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       gap: SIZES.md,
     },
     actionButton: {
@@ -245,8 +245,8 @@ export const createChatListScreenStyles = (isDark: boolean) => {
       paddingVertical: SIZES.md,
       paddingHorizontal: SIZES.lg,
       borderRadius: SIZES.radius.lg,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderWidth: 1,
     },
     selectAllButton: {
@@ -256,21 +256,21 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     selectAllButtonText: {
       color: colors.primary,
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     deleteButton: {
-      backgroundColor: '#EF4444', // Красный цвет
-      borderColor: '#EF4444',
+      backgroundColor: "#EF4444", // Красный цвет
+      borderColor: "#EF4444",
     },
     deleteButtonText: {
       color: colors.background,
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     selectionBar: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
       paddingHorizontal: SIZES.xl,
       paddingVertical: SIZES.md,
       borderTopWidth: 1,
@@ -280,11 +280,11 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     selectionInfo: {
       fontSize: SIZES.fontSize.md,
       color: colors.text,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     actionsRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       gap: SIZES.sm,
     },
     actionBtn: {
@@ -302,26 +302,26 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     actionBtnText: {
       fontSize: SIZES.fontSize.md,
       color: colors.text,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     actionBtnTextPrimary: {
       color: colors.background,
     },
     swipeActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
     },
     swipeActionsLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-start",
       paddingLeft: SIZES.xl,
     },
     swipeActionsRight: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-end",
       paddingRight: SIZES.xl,
     },
     swipeActionInnerLeft: {
@@ -333,23 +333,23 @@ export const createChatListScreenStyles = (isDark: boolean) => {
     swipeAction: {
       width: 100,
       height: 70,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       marginBottom: 8, // смещаем саму кнопку чуть вверх
       borderRadius: SIZES.radius.lg,
     },
     swipeActionText: {
-      color: '#fff',
+      color: "#fff",
       fontSize: SIZES.fontSize.sm,
-      fontWeight: '600',
+      fontWeight: "600",
       marginTop: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
     },
     favoriteAction: {
-      backgroundColor: '#F59E0B', // Оранжевый цвет для избранного
+      backgroundColor: "#F59E0B", // Оранжевый цвет для избранного
     },
     deleteAction: {
-      backgroundColor: '#EF4444', // Красный цвет для удаления
+      backgroundColor: "#EF4444", // Красный цвет для удаления
     },
   });
 };

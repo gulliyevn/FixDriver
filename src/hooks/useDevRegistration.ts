@@ -1,13 +1,7 @@
-/**
- * ⚠️ DEV ONLY - TEMPORARY HOOK ⚠️
- * 
- * Хук для работы с временной регистрацией через AsyncStorage
- * 
- * TODO: УДАЛИТЬ ПЕРЕД ПРОДАКШЕНОМ!
- */
-
-import { useState, useCallback } from 'react';
-import DevRegistrationService, { DevRegisteredUser } from '../services/DevRegistrationService';
+import { useState, useCallback } from "react";
+import DevRegistrationService, {
+  DevRegisteredUser,
+} from "../services/DevRegistrationService";
 
 export const useDevRegistration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,80 +10,89 @@ export const useDevRegistration = () => {
   /**
    * Регистрация клиента (dev-режим)
    */
-  const registerClient = useCallback(async (data: {
-    email: string;
-    phone: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }): Promise<DevRegisteredUser | null> => {
-    if (!__DEV__) {
-      return null;
-    }
+  const registerClient = useCallback(
+    async (data: {
+      email: string;
+      phone: string;
+      password: string;
+      firstName: string;
+      lastName: string;
+    }): Promise<DevRegisteredUser | null> => {
+      if (!__DEV__) {
+        return null;
+      }
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const user = await DevRegistrationService.saveClientRegistration(data);
-      
-      // Логируем статистику
-      await DevRegistrationService.logDevRegistrationStats();
-      
-      return user;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Ошибка регистрации';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const user = await DevRegistrationService.saveClientRegistration(data);
+
+        // Логируем статистику
+        await DevRegistrationService.logDevRegistrationStats();
+
+        return user;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Ошибка регистрации";
+        setError(errorMessage);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   /**
    * Регистрация водителя (dev-режим)
    */
-  const registerDriver = useCallback(async (data: {
-    email: string;
-    phone: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    country: string;
-    licenseNumber: string;
-    licenseExpiry: string;
-    vehicleNumber: string;
-    experience: string;
-    carBrand: string;
-    carModel: string;
-    carYear: string;
-    carMileage: string;
-    tariff: string;
-    licensePhoto?: string;
-    passportPhoto?: string;
-  }): Promise<DevRegisteredUser | null> => {
-    if (!__DEV__) {
-      return null;
-    }
+  const registerDriver = useCallback(
+    async (data: {
+      email: string;
+      phone: string;
+      password: string;
+      firstName: string;
+      lastName: string;
+      country: string;
+      licenseNumber: string;
+      licenseExpiry: string;
+      vehicleNumber: string;
+      experience: string;
+      carBrand: string;
+      carModel: string;
+      carYear: string;
+      carMileage: string;
+      tariff: string;
+      licensePhoto?: string;
+      passportPhoto?: string;
+    }): Promise<DevRegisteredUser | null> => {
+      if (!__DEV__) {
+        return null;
+      }
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const driver = await DevRegistrationService.saveDriverRegistration(data);
-      
-      // Логируем статистику
-      await DevRegistrationService.logDevRegistrationStats();
-      
-      return driver;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Ошибка регистрации';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const driver =
+          await DevRegistrationService.saveDriverRegistration(data);
+
+        // Логируем статистику
+        await DevRegistrationService.logDevRegistrationStats();
+
+        return driver;
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Ошибка регистрации";
+        setError(errorMessage);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   /**
    * Получить всех пользователей
@@ -139,4 +142,3 @@ export const useDevRegistration = () => {
 };
 
 export default useDevRegistration;
-

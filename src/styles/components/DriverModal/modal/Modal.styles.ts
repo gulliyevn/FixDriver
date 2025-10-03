@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../../constants/colors";
 
 export const createModalStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);
@@ -7,17 +7,17 @@ export const createModalStyles = (isDark: boolean) => {
   return StyleSheet.create({
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'transparent',
-      justifyContent: 'flex-end',
-      alignItems: 'flex-end',
+      backgroundColor: "transparent",
+      justifyContent: "flex-end",
+      alignItems: "flex-end",
     },
     modalContainer: {
-      width: '100%',
+      width: "100%",
       backgroundColor: palette.background,
       borderTopLeftRadius: SIZES.radius.lg,
       borderTopRightRadius: SIZES.radius.lg,
       paddingBottom: 0,
-      position: 'absolute',
+      position: "absolute",
       bottom: 0,
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },

@@ -14,6 +14,7 @@
 		905D4B032058664D2C5B1451 /* libPods-FixDrive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9B3A076D112AAFBE73E512B /* libPods-FixDrive.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		29D48841B61248E58ABFB6D7 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06F186449B746FFAAA7A883 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = FixDrive/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* FixDrive-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FixDrive-Bridging-Header.h"; path = "FixDrive/FixDrive-Bridging-Header.h"; sourceTree = "<group>"; };
+		C06F186449B746FFAAA7A883 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "FixDrive/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				8774E9CD71F2A85A593B773D /* PrivacyInfo.xcprivacy */,
+				C06F186449B746FFAAA7A883 /* noop-file.swift */,
 			);
 			name = FixDrive;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				602EC2675680AF63A5518B7D /* ExpoModulesProvider.swift in Sources */,
+				29D48841B61248E58ABFB6D7 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,12 +371,14 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.FixDrive;
-				PRODUCT_NAME = FixDrive;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fixdrive.app";
+				PRODUCT_NAME = "FixDrive";
 				SWIFT_OBJC_BRIDGING_HEADER = "FixDrive/FixDrive-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = FixDrive/FixDrive.entitlements;
 			};
 			name = Debug;
 		};
@@ -396,11 +402,13 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.FixDrive;
-				PRODUCT_NAME = FixDrive;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fixdrive.app";
+				PRODUCT_NAME = "FixDrive";
 				SWIFT_OBJC_BRIDGING_HEADER = "FixDrive/FixDrive-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = FixDrive/FixDrive.entitlements;
 			};
 			name = Release;
 		};

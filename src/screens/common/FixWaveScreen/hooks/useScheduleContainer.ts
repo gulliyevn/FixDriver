@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { RoutePoint } from '../../../../components/MapView/types/map.types';
-import { DistanceCalculationService } from '../../../../services/DistanceCalculationService';
+import { useState, useEffect } from "react";
+import { RoutePoint } from "../../../../components/MapView/types/map.types";
+import { DistanceCalculationService } from "../../../../services/DistanceCalculationService";
 
 export const useScheduleContainer = (
   allowTimeSelection: boolean,
   fromCoordinate?: { latitude: number; longitude: number },
   toCoordinate?: { latitude: number; longitude: number },
   departureTime?: Date,
-  shouldCalculateTime?: boolean
+  shouldCalculateTime?: boolean,
 ) => {
   // Состояние для плавающего режима
   const [pickerState, setPickerState] = useState<{
@@ -16,7 +16,9 @@ export const useScheduleContainer = (
     isVisible: boolean;
   }>({ dayKey: null, date: new Date(), isVisible: false });
   const [dayTempDate, setDayTempDate] = useState<Date>(new Date());
-  const [localDayTimes, setLocalDayTimes] = useState<Record<string, string>>({});
+  const [localDayTimes, setLocalDayTimes] = useState<Record<string, string>>(
+    {},
+  );
 
   // Состояние для фиксированного режима
   const [fixedPickerVisible, setFixedPickerVisible] = useState(false);
@@ -29,69 +31,88 @@ export const useScheduleContainer = (
   const [weekendTempDate, setWeekendTempDate] = useState<Date>(new Date());
 
   // Состояние для расчетного времени
-  const [calculatedTime, setCalculatedTime] = useState<string>('--:--');
+  const [calculatedTime, setCalculatedTime] = useState<string>("--:--");
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Расчет времени для полей "Откуда" и "Остановки"
   useEffect(() => {
     const calculateEstimatedTime = async () => {
-      console.log('🔍 useScheduleContainer - Проверка условий:', {
+      console.log("🔍 useScheduleContainer - Проверка условий:", {
         allowTimeSelection,
         hasFromCoordinate: !!fromCoordinate,
         hasToCoordinate: !!toCoordinate,
         hasDepartureTime: !!departureTime,
         shouldCalculateTime,
-        shouldCalculate: shouldCalculateTime && fromCoordinate && toCoordinate && departureTime,
+        shouldCalculate:
+          shouldCalculateTime &&
+          fromCoordinate &&
+          toCoordinate &&
+          departureTime,
       });
-      
-      if (shouldCalculateTime && fromCoordinate && toCoordinate && departureTime) {
+
+      if (
+        shouldCalculateTime &&
+        fromCoordinate &&
+        toCoordinate &&
+        departureTime
+      ) {
         setIsCalculating(true);
         try {
           const fromPoint: RoutePoint = {
-            id: 'from',
+            id: "from",
             coordinate: fromCoordinate,
-            type: 'start'
+            type: "start",
           };
           const toPoint: RoutePoint = {
-            id: 'to',
+            id: "to",
             coordinate: toCoordinate,
-            type: 'end'
+            type: "end",
           };
-          
+
           const result = await DistanceCalculationService.calculateRouteSegment(
             fromPoint,
             toPoint,
-            departureTime
+            departureTime,
           );
-          
-          
+
           // Для GREEN контейнера (ОТКУДА) время отбытия = время прибытия минус время маршрута
           let finalTime = result.estimatedTime;
           if (result.durationMinutes && result.durationMinutes > 0) {
             // Время прибытия (из BLUE контейнера)
             const arrivalTime = new Date(departureTime);
-            
+
             // Время отбытия = время прибытия минус время маршрута
-            const departureTimeCalculated = new Date(arrivalTime.getTime() - result.durationMinutes * 60 * 1000);
-            const departureHours = departureTimeCalculated.getHours().toString().padStart(2, '0');
-            const departureMinutes = departureTimeCalculated.getMinutes().toString().padStart(2, '0');
-            
+            const departureTimeCalculated = new Date(
+              arrivalTime.getTime() - result.durationMinutes * 60 * 1000,
+            );
+            const departureHours = departureTimeCalculated
+              .getHours()
+              .toString()
+              .padStart(2, "0");
+            const departureMinutes = departureTimeCalculated
+              .getMinutes()
+              .toString()
+              .padStart(2, "0");
+
             finalTime = `${departureHours}:${departureMinutes}`;
-            console.log('⏰ useScheduleContainer - Рассчитанное время отбытия:', {
-              arrivalTime: arrivalTime.toISOString(),
-              routeDurationMinutes: result.durationMinutes,
-              departureTime: finalTime,
-            });
+            console.log(
+              "⏰ useScheduleContainer - Рассчитанное время отбытия:",
+              {
+                arrivalTime: arrivalTime.toISOString(),
+                routeDurationMinutes: result.durationMinutes,
+                departureTime: finalTime,
+              },
+            );
           }
-          
+
           setCalculatedTime(finalTime);
         } catch (error) {
-          setCalculatedTime('--:--');
+          setCalculatedTime("--:--");
         } finally {
           setIsCalculating(false);
         }
       } else {
-        setCalculatedTime('--:--');
+        setCalculatedTime("--:--");
       }
     };
 
@@ -106,13 +127,13 @@ export const useScheduleContainer = (
     setDayTempDate,
     localDayTimes,
     setLocalDayTimes,
-    
+
     // Фиксированный режим
     fixedPickerVisible,
     setFixedPickerVisible,
     fixedTempDate,
     setFixedTempDate,
-    
+
     // Будни/выходные
     weekdayPickerVisible,
     setWeekdayPickerVisible,
@@ -122,7 +143,7 @@ export const useScheduleContainer = (
     setWeekendPickerVisible,
     weekendTempDate,
     setWeekendTempDate,
-    
+
     // Расчетное время
     calculatedTime,
     isCalculating,

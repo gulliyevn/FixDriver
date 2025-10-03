@@ -1,29 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { useTheme } from '../../../../context/ThemeContext';
-import { useLanguage } from '../../../../context/LanguageContext';
-import { getCurrentColors } from '../../../../constants/colors';
-import FixDriveDropdown from '../../../../components/FixDriveDropdown';
-import FixDriveMapInput from '../../../../components/FixDriveMapInput';
-import { useFixDriveFamilyMembers } from '../../../../hooks/useFixDriveFamilyMembers';
-import { fixdriveOrderService } from '../../../../services/fixdriveOrderService';
-import { AddressData } from '../types/fix-drive.types';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { useTheme } from "../../../../context/ThemeContext";
+import { useLanguage } from "../../../../context/LanguageContext";
+import { getCurrentColors } from "../../../../constants/colors";
+import FixDriveDropdown from "../../../../components/FixDriveDropdown";
+import FixDriveMapInput from "../../../../components/FixDriveMapInput";
+import { useFixDriveFamilyMembers } from "../../../../hooks/useFixDriveFamilyMembers";
+import { fixdriveOrderService } from "../../../../services/fixdriveOrderService";
+import { AddressData } from "../types/fix-drive.types";
 
 interface FixDriveAddressPageProps {
   onNext: (data: AddressData) => void;
   initialData?: AddressData;
 }
 
-const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initialData }) => {
+const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({
+  onNext,
+  initialData,
+}) => {
   const { isDark } = useTheme();
   const colors = getCurrentColors(isDark);
   const { t } = useLanguage();
-  
-  const { getFamilyMemberOptions, getFamilyMemberById, loading } = useFixDriveFamilyMembers();
-  
-  const [selectedFamilyMember, setSelectedFamilyMember] = useState<string>(initialData?.familyMemberId || '');
-  const [selectedPackage, setSelectedPackage] = useState<string>(initialData?.packageType || '');
-  const [addresses, setAddresses] = useState<any[]>(initialData?.addresses || []);
+
+  const { getFamilyMemberOptions, getFamilyMemberById, loading } =
+    useFixDriveFamilyMembers();
+
+  const [selectedFamilyMember, setSelectedFamilyMember] = useState<string>(
+    initialData?.familyMemberId || "",
+  );
+  const [selectedPackage, setSelectedPackage] = useState<string>(
+    initialData?.packageType || "",
+  );
+  const [addresses, setAddresses] = useState<any[]>(
+    initialData?.addresses || [],
+  );
   const [isSaving, setIsSaving] = useState(false);
 
   // Загружаем данные из сессии при инициализации и при изменении initialData
@@ -31,25 +41,28 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
     const loadSessionData = async () => {
       try {
         const sessionData = await fixdriveOrderService.loadSessionData();
-        console.log('Session data loaded:', sessionData); // Добавляем лог для отладки
+        console.log("Session data loaded:", sessionData); // Добавляем лог для отладки
         if (sessionData?.addressData) {
           const { addressData } = sessionData;
-          setSelectedFamilyMember(addressData.familyMemberId || '');
-          setSelectedPackage(addressData.packageType || '');
+          setSelectedFamilyMember(addressData.familyMemberId || "");
+          setSelectedPackage(addressData.packageType || "");
           setAddresses(addressData.addresses || []);
-          console.log('Addresses restored:', addressData.addresses); // Добавляем лог для отладки
+          console.log("Addresses restored:", addressData.addresses); // Добавляем лог для отладки
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     loadSessionData();
   }, [initialData]); // Добавляем зависимость от initialData
 
   const familyMemberOptions = getFamilyMemberOptions();
   const packageOptions = [
-    { key: 'standard', label: t('premium.packages.standard'), value: 'standard' },
-    { key: 'plus', label: t('premium.packages.plus'), value: 'plus' },
-    { key: 'premium', label: t('premium.packages.premium'), value: 'premium' },
+    {
+      key: "standard",
+      label: t("premium.packages.standard"),
+      value: "standard",
+    },
+    { key: "plus", label: t("premium.packages.plus"), value: "plus" },
+    { key: "premium", label: t("premium.packages.premium"), value: "premium" },
   ];
 
   const handleFamilyMemberSelect = (value: string) => {
@@ -65,7 +78,7 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
   };
 
   const handleAddressesChange = (newAddresses: any[]) => {
-    console.log('Addresses changed:', newAddresses); // Добавляем лог для отладки
+    console.log("Addresses changed:", newAddresses); // Добавляем лог для отладки
     setAddresses(newAddresses);
     // Сохраняем адреса в сессию при каждом изменении
     saveToSession(newAddresses);
@@ -74,19 +87,21 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
   const saveToSession = async (newAddresses: any[]) => {
     try {
       const selectedMember = getFamilyMemberById(selectedFamilyMember);
-      const familyMemberName = selectedMember ? `${selectedMember.name} ${selectedMember.surname}` : '';
+      const familyMemberName = selectedMember
+        ? `${selectedMember.name} ${selectedMember.surname}`
+        : "";
 
       // Сначала загружаем существующие данные сессии
       const existingSession = await fixdriveOrderService.loadSessionData();
-      
+
       const sessionData = {
         ...existingSession, // Сохраняем существующие данные
-        currentPage: 'addresses',
+        currentPage: "addresses",
         addressData: {
           familyMemberId: selectedFamilyMember,
           familyMemberName,
           packageType: selectedPackage,
-          addresses: newAddresses.map(addr => ({
+          addresses: newAddresses.map((addr) => ({
             id: addr.id,
             type: addr.type,
             address: addr.address,
@@ -95,9 +110,8 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
         },
       };
       await fixdriveOrderService.saveSessionData(sessionData);
-      console.log('Session saved:', sessionData); // Добавляем лог для отладки
-    } catch (error) {
-    }
+      console.log("Session saved:", sessionData); // Добавляем лог для отладки
+    } catch (error) {}
   };
 
   const handleSaveAndNext = async () => {
@@ -105,13 +119,15 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
       setIsSaving(true);
 
       const selectedMember = getFamilyMemberById(selectedFamilyMember);
-      const familyMemberName = selectedMember ? `${selectedMember.name} ${selectedMember.surname}` : '';
+      const familyMemberName = selectedMember
+        ? `${selectedMember.name} ${selectedMember.surname}`
+        : "";
 
       const addressData: AddressData = {
         familyMemberId: selectedFamilyMember,
         familyMemberName,
         packageType: selectedPackage,
-        addresses: addresses.map(addr => ({
+        addresses: addresses.map((addr) => ({
           id: addr.id,
           type: addr.type,
           address: addr.address,
@@ -122,11 +138,9 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
       // Валидируем данные
       const validation = fixdriveOrderService.validateOrderData(addressData);
       if (!validation.isValid) {
-        Alert.alert(
-          'Ошибка валидации',
-          validation.errors.join('\n'),
-          [{ text: 'OK' }]
-        );
+        Alert.alert("Ошибка валидации", validation.errors.join("\n"), [
+          { text: "OK" },
+        ]);
         return;
       }
 
@@ -135,12 +149,11 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
 
       // Переходим к следующей странице
       onNext(addressData);
-
     } catch (error) {
       Alert.alert(
-        'Ошибка',
-        'Не удалось сохранить данные заказа. Попробуйте еще раз.',
-        [{ text: 'OK' }]
+        "Ошибка",
+        "Не удалось сохранить данные заказа. Попробуйте еще раз.",
+        [{ text: "OK" }],
       );
     } finally {
       setIsSaving(false);
@@ -151,13 +164,19 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
     <View style={{ marginTop: 10 }}>
       {/* Выбор участника семьи */}
       {loading ? (
-        <Text style={{ color: colors.primary, textAlign: 'center', marginBottom: 16 }}>
+        <Text
+          style={{
+            color: colors.primary,
+            textAlign: "center",
+            marginBottom: 16,
+          }}
+        >
           Загрузка участников семьи...
         </Text>
       ) : (
         <FixDriveDropdown
-          label={t('common.fixDrive.selectFamilyMember')}
-          placeholder={t('common.fixDrive.familyMemberPlaceholder')}
+          label={t("common.fixDrive.selectFamilyMember")}
+          placeholder={t("common.fixDrive.familyMemberPlaceholder")}
           options={familyMemberOptions}
           selectedValue={selectedFamilyMember}
           onSelect={handleFamilyMemberSelect}
@@ -166,22 +185,22 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
 
       {/* Выбор пакета */}
       <FixDriveDropdown
-        label={t('common.fixDrive.selectPackage')}
-        placeholder={t('common.fixDrive.packagePlaceholder')}
+        label={t("common.fixDrive.selectPackage")}
+        placeholder={t("common.fixDrive.packagePlaceholder")}
         options={packageOptions}
         selectedValue={selectedPackage}
         onSelect={handlePackageSelect}
       />
 
       {/* Ввод адреса через карту */}
-      <FixDriveMapInput 
+      <FixDriveMapInput
         onAddressesChange={handleAddressesChange}
         initialAddresses={addresses}
       />
-      
+
       {/* Кнопка Сохранить и Продолжить */}
-      <TouchableOpacity 
-        style={{ 
+      <TouchableOpacity
+        style={{
           backgroundColor: isSaving ? colors.textSecondary : colors.primary,
           paddingVertical: 12,
           marginHorizontal: 20,
@@ -193,13 +212,15 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({ onNext, initi
         onPress={handleSaveAndNext}
         disabled={isSaving}
       >
-        <Text style={{ 
-          color: '#FFFFFF', 
-          fontSize: 16, 
-          fontWeight: '600',
-          textAlign: 'center'
-        }}>
-          {isSaving ? 'Сохранение...' : t('common.save')}
+        <Text
+          style={{
+            color: "#FFFFFF",
+            fontSize: 16,
+            fontWeight: "600",
+            textAlign: "center",
+          }}
+        >
+          {isSaving ? "Сохранение..." : t("common.save")}
         </Text>
       </TouchableOpacity>
     </View>

@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import { Animated } from "react-native";
 
 export interface CVVAnimationRefs {
   cvvOpacity: Animated.Value;
@@ -10,9 +10,15 @@ export interface CVVAnimationRefs {
 
 export const createCVVStickAnimation = (
   refs: CVVAnimationRefs,
-  onComplete: (showCVV: boolean) => void
+  onComplete: (showCVV: boolean) => void,
 ) => {
-  const { cvvOpacity, stickerOpacity, stickerTranslateX, stickerTranslateY, stickerRotate } = refs;
+  const {
+    cvvOpacity,
+    stickerOpacity,
+    stickerTranslateX,
+    stickerTranslateY,
+    stickerRotate,
+  } = refs;
 
   return (showCVV: boolean) => {
     if (showCVV) {
@@ -42,7 +48,7 @@ export const createCVVStickAnimation = (
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
-        })
+        }),
       ]).start(() => {
         onComplete(false);
       });
@@ -65,7 +71,7 @@ export const createCVVStickAnimation = (
             toValue: 0.2,
             duration: 100,
             useNativeDriver: true,
-          })
+          }),
         ]),
         // Падение и полет вправо
         Animated.parallel([
@@ -93,11 +99,11 @@ export const createCVVStickAnimation = (
             toValue: 1,
             duration: 300,
             useNativeDriver: true,
-          })
-        ])
+          }),
+        ]),
       ]).start(() => {
         onComplete(true);
       });
     }
   };
-}; 
+};

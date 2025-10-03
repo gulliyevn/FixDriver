@@ -1,7 +1,7 @@
 export interface TravelPackage {
   id: string;
   name: string;
-  type: 'single' | 'weekly' | 'monthly' | 'yearly';
+  type: "single" | "weekly" | "monthly" | "yearly";
   price: number;
   tripsIncluded?: number; // количество поездок для пакетных планов
   kmLimit?: number; // лимит километров
@@ -54,7 +54,7 @@ export interface ActivePackage extends TravelPackage {
   timeUsed: number;
 }
 
-export type PackageType = 'single' | 'weekly' | 'monthly' | 'yearly';
+export type PackageType = "single" | "weekly" | "monthly" | "yearly";
 
 export interface Package {
   id: string;
@@ -69,4 +69,4 @@ export interface Package {
   isActive?: boolean;
   tripsRemaining?: number;
   expiresAt?: string;
-} 
+}

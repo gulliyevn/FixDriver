@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,16 @@ import {
   RefreshControl,
   Alert,
   Animated,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
-import NotificationService, { Notification as ApiNotification } from '../../services/NotificationService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../context/AuthContext';
-import { NotificationsScreenStyles } from '../../styles/screens/NotificationsScreen.styles';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../hooks/useI18n";
+import NotificationService, {
+  NotificationData as ApiNotification,
+} from "../../services/NotificationService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../../context/AuthContext";
+import { NotificationsScreenStyles } from "../../styles/screens/NotificationsScreen.styles";
 
 type Notification = ApiNotification;
 
@@ -26,9 +28,13 @@ const NotificationsScreen: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
-  const [selectedNotifications, setSelectedNotifications] = useState<Set<string>>(new Set());
+  const [selectedNotifications, setSelectedNotifications] = useState<
+    Set<string>
+  >(new Set());
   const [fadeAnim] = useState(new Animated.Value(0));
-  const storageKey = user?.id ? `@notifications_${user.id}` : '@notifications_anonymous';
+  const storageKey = user?.id
+    ? `@notifications_${user.id}`
+    : "@notifications_anonymous";
 
   useEffect(() => {
     // Анимация появления
@@ -49,7 +55,7 @@ const NotificationsScreen: React.FC = () => {
         if (!user?.id) {
           setNotifications([]);
         } else {
-          const list = await NotificationService.getInstance().getNotifications(user.id, 1, 50);
+          const list = await NotificationService.getNotifications(50, 0);
           setNotifications(list);
         }
       }
@@ -76,18 +82,28 @@ const NotificationsScreen: React.FC = () => {
       setSelectedNotifications(newSelected);
     } else {
       // Обычный режим - отмечаем как прочитанное
-      if (!notification.isRead) {
-        setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n));
+      if (!notification.read) {
+        setNotifications((prev) =>
+          prev.map((n) =>
+            n.id === notification.id ? { ...n, read: true } : n,
+          ),
+        );
         if (__DEV__) {
-          AsyncStorage.setItem(storageKey, JSON.stringify(
-            notifications.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
-          ));
+          AsyncStorage.setItem(
+            storageKey,
+            JSON.stringify(
+              notifications.map((n) =>
+                n.id === notification.id ? { ...n, read: true } : n,
+              ),
+            ),
+          );
         } else {
-          NotificationService.getInstance().markAsRead(notification.id).catch(() => {});
+          NotificationService
+            .markAsRead(notification.id)
+            .catch(() => {});
         }
       }
       // Здесь можно добавить навигацию в зависимости от типа уведомления
-  
     }
   };
 
@@ -107,122 +123,140 @@ const NotificationsScreen: React.FC = () => {
     if (selectedNotifications.size === notifications.length) {
       setSelectedNotifications(new Set());
     } else {
-      setSelectedNotifications(new Set(notifications.map(n => n.id)));
+      setSelectedNotifications(new Set(notifications.map((n) => n.id)));
     }
   };
 
   const handleMarkSelectedAsRead = () => {
-    setNotifications(prev => prev.map(n => 
-      selectedNotifications.has(n.id) ? { ...n, isRead: true } : n
-    ));
+    setNotifications((prev) =>
+      prev.map((n) =>
+        selectedNotifications.has(n.id) ? { ...n, read: true } : n,
+      ),
+    );
     setIsSelectionMode(false);
     setSelectedNotifications(new Set());
   };
 
   const handleDeleteSelected = () => {
     Alert.alert(
-      t('notifications.alerts.deleteTitle'),
-      t('notifications.alerts.deleteMessage'),
+      t("notifications.alerts.deleteTitle"),
+      t("notifications.alerts.deleteMessage"),
       [
-        { text: t('notifications.buttons.cancel'), style: 'cancel' },
+        { text: t("notifications.buttons.cancel"), style: "cancel" },
         {
-          text: t('notifications.delete'),
-          style: 'destructive',
+          text: t("notifications.delete"),
+          style: "destructive",
           onPress: () => {
-            setNotifications(prev => prev.filter(n => !selectedNotifications.has(n.id)));
+            setNotifications((prev) =>
+              prev.filter((n) => !selectedNotifications.has(n.id)),
+            );
             if (__DEV__) {
-              const updated = notifications.filter(n => !selectedNotifications.has(n.id));
+              const updated = notifications.filter(
+                (n) => !selectedNotifications.has(n.id),
+              );
               AsyncStorage.setItem(storageKey, JSON.stringify(updated));
             } else {
               // удаляем по одному, без ожидания
-              [...selectedNotifications].forEach(id => {
-                NotificationService.getInstance().deleteNotification(id).catch(() => {});
+              [...selectedNotifications].forEach((id) => {
+                NotificationService
+                  .deleteNotification(id)
+                  .catch(() => {});
               });
             }
             setIsSelectionMode(false);
             setSelectedNotifications(new Set());
           },
         },
-      ]
+      ],
     );
   };
 
   const handleDeleteNotification = (notificationId: string) => {
     Alert.alert(
-      t('notifications.alerts.deleteTitle'),
-      t('notifications.alerts.deleteMessage'),
+      t("notifications.alerts.deleteTitle"),
+      t("notifications.alerts.deleteMessage"),
       [
-        { text: t('notifications.buttons.cancel'), style: 'cancel' },
+        { text: t("notifications.buttons.cancel"), style: "cancel" },
         {
-          text: t('notifications.delete'),
-          style: 'destructive',
+          text: t("notifications.delete"),
+          style: "destructive",
           onPress: () => {
-            setNotifications(prev => prev.filter(n => n.id !== notificationId));
+            setNotifications((prev) =>
+              prev.filter((n) => n.id !== notificationId),
+            );
             if (__DEV__) {
-              const updated = notifications.filter(n => n.id !== notificationId);
+              const updated = notifications.filter(
+                (n) => n.id !== notificationId,
+              );
               AsyncStorage.setItem(storageKey, JSON.stringify(updated));
             } else {
-              NotificationService.getInstance().deleteNotification(notificationId).catch(() => {});
+              NotificationService
+                .deleteNotification(notificationId)
+                .catch(() => {});
             }
           },
         },
-      ]
+      ],
     );
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     if (__DEV__) {
-      AsyncStorage.setItem(storageKey, JSON.stringify(
-        notifications.map(n => ({ ...n, isRead: true }))
-      ));
+      AsyncStorage.setItem(
+        storageKey,
+        JSON.stringify(notifications.map((n) => ({ ...n, read: true }))),
+      );
     } else if (user?.id) {
-      NotificationService.getInstance().markAllAsRead(user.id).catch(() => {});
+      NotificationService
+        .markAllAsRead()
+        .catch(() => {});
     }
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'trip':
-        return 'car';
-      case 'payment':
-        return 'card';
-      case 'driver':
-        return 'person';
-      case 'system':
-        return 'settings';
+      case "trip":
+        return "car";
+      case "payment":
+        return "card";
+      case "driver":
+        return "person";
+      case "system":
+        return "settings";
       default:
-        return 'notifications';
+        return "notifications";
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'trip':
-        return '#10B981';
-      case 'payment':
-        return '#F59E0B';
-      case 'driver':
-        return '#3B82F6';
-      case 'system':
-        return '#6B7280';
+      case "trip":
+        return "#10B981";
+      case "payment":
+        return "#F59E0B";
+      case "driver":
+        return "#3B82F6";
+      case "system":
+        return "#6B7280";
       default:
-        return '#6B7280';
+        return "#6B7280";
     }
   };
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const renderNotificationItem = (notification: Notification) => {
     const isSelected = selectedNotifications.has(notification.id);
-    
+
     return (
       <Animated.View key={notification.id} style={{ opacity: fadeAnim }}>
         <TouchableOpacity
           style={[
             NotificationsScreenStyles.notificationItem,
             isDark && NotificationsScreenStyles.notificationItemDark,
-            !notification.isRead && NotificationsScreenStyles.unreadNotification,
+            !notification.read &&
+              NotificationsScreenStyles.unreadNotification,
             isSelected && NotificationsScreenStyles.selectedNotification,
           ]}
           onPress={() => handleNotificationPress(notification)}
@@ -234,7 +268,7 @@ const NotificationsScreen: React.FC = () => {
             <TouchableOpacity
               style={[
                 NotificationsScreenStyles.checkbox,
-                isSelected && NotificationsScreenStyles.checkboxSelected
+                isSelected && NotificationsScreenStyles.checkboxSelected,
               ]}
               onPress={() => handleNotificationPress(notification)}
             >
@@ -249,7 +283,10 @@ const NotificationsScreen: React.FC = () => {
             <View
               style={[
                 NotificationsScreenStyles.notificationIcon,
-                { backgroundColor: getNotificationColor(notification.type) + '20' },
+                {
+                  backgroundColor:
+                    getNotificationColor(notification.type) + "20",
+                },
               ]}
             >
               <Ionicons
@@ -266,16 +303,21 @@ const NotificationsScreen: React.FC = () => {
                   style={[
                     NotificationsScreenStyles.notificationTitle,
                     isDark && NotificationsScreenStyles.notificationTitleDark,
-                    !notification.isRead && NotificationsScreenStyles.unreadTitle,
+                    !notification.read &&
+                      NotificationsScreenStyles.unreadTitle,
                   ]}
                 >
                   {notification.title}
                 </Text>
               </View>
-              <Text style={NotificationsScreenStyles.notificationMessage}>{notification.message}</Text>
-              <Text style={NotificationsScreenStyles.notificationTime}>{notification.createdAt}</Text>
+              <Text style={NotificationsScreenStyles.notificationMessage}>
+                {notification.message}
+              </Text>
+              <Text style={NotificationsScreenStyles.notificationTime}>
+                {new Date(notification.timestamp).toLocaleDateString()}
+              </Text>
             </View>
-            
+
             {!isSelectionMode && (
               <TouchableOpacity
                 style={NotificationsScreenStyles.deleteButton}
@@ -291,21 +333,38 @@ const NotificationsScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={[NotificationsScreenStyles.container, isDark && NotificationsScreenStyles.containerDark]}>
+    <SafeAreaView
+      style={[
+        NotificationsScreenStyles.container,
+        isDark && NotificationsScreenStyles.containerDark,
+      ]}
+    >
       {/* Header */}
-      <View style={[NotificationsScreenStyles.header, isDark && NotificationsScreenStyles.headerDark]}>
+      <View
+        style={[
+          NotificationsScreenStyles.header,
+          isDark && NotificationsScreenStyles.headerDark,
+        ]}
+      >
         {isSelectionMode ? (
           // Режим выбора
-          <View style={NotificationsScreenStyles.selectionHeader} testID="selection-header">
+          <View
+            style={NotificationsScreenStyles.selectionHeader}
+            testID="selection-header"
+          >
             <TouchableOpacity onPress={handleCancelSelection}>
-              <Text style={NotificationsScreenStyles.cancelButton}>{t('notifications.cancel')}</Text>
+              <Text style={NotificationsScreenStyles.cancelButton}>
+                {t("notifications.cancel")}
+              </Text>
             </TouchableOpacity>
             <Text style={NotificationsScreenStyles.selectionTitle}>
-              {t('notifications.selectedCount')}: {selectedNotifications.size}
+              {t("notifications.selectedCount")}: {selectedNotifications.size}
             </Text>
             <TouchableOpacity onPress={handleSelectAll}>
               <Text style={NotificationsScreenStyles.selectAllButton}>
-                {selectedNotifications.size === notifications.length ? t('notifications.unselectAll') : t('notifications.selectAll')}
+                {selectedNotifications.size === notifications.length
+                  ? t("notifications.unselectAll")
+                  : t("notifications.selectAll")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -313,9 +372,18 @@ const NotificationsScreen: React.FC = () => {
           // Обычный режим
           <View style={NotificationsScreenStyles.headerContent}>
             <View style={NotificationsScreenStyles.headerLeft}>
-              <Ionicons name="notifications" size={24} color={isDark ? '#F9FAFB' : '#1F2937'} />
-              <Text style={[NotificationsScreenStyles.headerTitle, isDark && NotificationsScreenStyles.headerTitleDark]}>
-                {t('notifications.title')}
+              <Ionicons
+                name="notifications"
+                size={24}
+                color={isDark ? "#F9FAFB" : "#1F2937"}
+              />
+              <Text
+                style={[
+                  NotificationsScreenStyles.headerTitle,
+                  isDark && NotificationsScreenStyles.headerTitleDark,
+                ]}
+              >
+                {t("notifications.title")}
               </Text>
             </View>
             <View style={NotificationsScreenStyles.headerRight}>
@@ -325,16 +393,20 @@ const NotificationsScreen: React.FC = () => {
                   onPress={handleMarkAllAsRead}
                 >
                   <Text style={NotificationsScreenStyles.markAllButtonText}>
-                    {t('notifications.readAll')} ({unreadCount})
+                    {t("notifications.readAll")} ({unreadCount})
                   </Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={NotificationsScreenStyles.selectButton}
                 onPress={() => setIsSelectionMode(true)}
                 testID="select-button"
               >
-                <Ionicons name="checkmark-circle-outline" size={24} color="#007AFF" />
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={24}
+                  color="#007AFF"
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -344,23 +416,33 @@ const NotificationsScreen: React.FC = () => {
       {/* Actions для выбранных элементов */}
       {isSelectionMode && selectedNotifications.size > 0 && (
         <View style={NotificationsScreenStyles.selectionActions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={NotificationsScreenStyles.actionButton}
             onPress={handleMarkSelectedAsRead}
           >
             <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-            <Text style={NotificationsScreenStyles.actionButtonText}>{t('notifications.markRead')}</Text>
+            <Text style={NotificationsScreenStyles.actionButtonText}>
+              {t("notifications.markRead")}
+            </Text>
           </TouchableOpacity>
-          
-                      <TouchableOpacity 
-              style={[NotificationsScreenStyles.actionButton, NotificationsScreenStyles.deleteActionButton]}
-              onPress={handleDeleteSelected}
+
+          <TouchableOpacity
+            style={[
+              NotificationsScreenStyles.actionButton,
+              NotificationsScreenStyles.deleteActionButton,
+            ]}
+            onPress={handleDeleteSelected}
+          >
+            <Ionicons name="trash" size={20} color="#EF4444" />
+            <Text
+              style={[
+                NotificationsScreenStyles.actionButtonText,
+                NotificationsScreenStyles.deleteButtonText,
+              ]}
             >
-              <Ionicons name="trash" size={20} color="#EF4444" />
-              <Text style={[NotificationsScreenStyles.actionButtonText, NotificationsScreenStyles.deleteButtonText]}>
-                {t('notifications.delete')}
-              </Text>
-            </TouchableOpacity>
+              {t("notifications.delete")}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -374,16 +456,26 @@ const NotificationsScreen: React.FC = () => {
       >
         {notifications.length === 0 ? (
           <View style={NotificationsScreenStyles.emptyState}>
-            <Ionicons 
-              name="notifications-off" 
-              size={64} 
-              color={isDark ? '#6B7280' : '#9CA3AF'} 
+            <Ionicons
+              name="notifications-off"
+              size={64}
+              color={isDark ? "#6B7280" : "#9CA3AF"}
             />
-            <Text style={[NotificationsScreenStyles.emptyStateText, isDark && NotificationsScreenStyles.emptyStateTextDark]}>
-              {t('notifications.noNotifications')}
+            <Text
+              style={[
+                NotificationsScreenStyles.emptyStateText,
+                isDark && NotificationsScreenStyles.emptyStateTextDark,
+              ]}
+            >
+              {t("notifications.noNotifications")}
             </Text>
-            <Text style={[NotificationsScreenStyles.emptyStateSubtext, isDark && NotificationsScreenStyles.emptyStateSubtextDark]}>
-              {t('notifications.allNotificationsHere')}
+            <Text
+              style={[
+                NotificationsScreenStyles.emptyStateSubtext,
+                isDark && NotificationsScreenStyles.emptyStateSubtextDark,
+              ]}
+            >
+              {t("notifications.allNotificationsHere")}
             </Text>
           </View>
         ) : (
@@ -391,10 +483,12 @@ const NotificationsScreen: React.FC = () => {
         )}
       </ScrollView>
       {/* Первичная загрузка */}
-      {notifications.length === 0 && !refreshing && (
-        <></>
-      )}
-      {useEffect(() => { loadNotifications(); }, [user?.id]) as any}
+      {notifications.length === 0 && !refreshing && <></>}
+      {
+        useEffect(() => {
+          loadNotifications();
+        }, [user?.id]) as any
+      }
     </SafeAreaView>
   );
 };

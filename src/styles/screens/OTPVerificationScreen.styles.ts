@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { SIZES, SHADOWS, getCurrentColors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { SIZES, SHADOWS, getCurrentColors } from "../../constants/colors";
 
 // Создаем функцию для получения стилей с учетом темы
 export const createOTPVerificationScreenStyles = (isDark: boolean) => {
   const currentColors = getCurrentColors(isDark);
-  
+
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -13,39 +13,39 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
     content: {
       flex: 1,
       padding: SIZES.xl,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     header: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.xxxl,
     },
     title: {
       fontSize: SIZES.fontSize.title,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       marginBottom: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.title,
     },
     subtitle: {
       fontSize: SIZES.fontSize.lg,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.lg,
     },
     emailText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      fontWeight: '600',
-      textAlign: 'center',
+      fontWeight: "600",
+      textAlign: "center",
       marginTop: SIZES.sm,
     },
     otpContainer: {
       marginBottom: SIZES.xxl,
     },
     otpInputContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       marginBottom: SIZES.xl,
     },
     otpInput: {
@@ -54,9 +54,9 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
       borderWidth: 2,
       borderColor: currentColors.border,
       borderRadius: SIZES.radius.md,
-      textAlign: 'center',
+      textAlign: "center",
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       backgroundColor: currentColors.surface,
       ...(isDark ? SHADOWS.dark.small : SHADOWS.light.small),
@@ -71,7 +71,7 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
     errorText: {
       color: currentColors.error,
       fontSize: SIZES.fontSize.md,
-      textAlign: 'center',
+      textAlign: "center",
       marginTop: SIZES.sm,
       lineHeight: SIZES.lineHeight.md,
     },
@@ -80,14 +80,14 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
       backgroundColor: currentColors.primary,
       borderRadius: SIZES.radius.md,
       paddingVertical: SIZES.lg,
-      alignItems: 'center',
+      alignItems: "center",
       minHeight: SIZES.buttonHeight.md,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
     verifyButtonText: {
       color: currentColors.surface,
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       lineHeight: SIZES.lineHeight.lg,
     },
     verifyButtonDisabled: {
@@ -95,13 +95,13 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
       opacity: 0.6,
     },
     resendContainer: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: SIZES.xl,
     },
     resendText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.md,
     },
     resendButton: {
@@ -110,33 +110,34 @@ export const createOTPVerificationScreenStyles = (isDark: boolean) => {
     resendButtonText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      fontWeight: '600',
-      textDecorationLine: 'underline',
+      fontWeight: "600",
+      textDecorationLine: "underline",
       lineHeight: SIZES.lineHeight.md,
     },
     resendButtonDisabled: {
       color: currentColors.border,
-      textDecorationLine: 'none',
+      textDecorationLine: "none",
     },
     timerText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       marginTop: SIZES.sm,
       lineHeight: SIZES.lineHeight.md,
     },
     backButton: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: SIZES.xl,
     },
     backButtonText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      textDecorationLine: 'underline',
+      textDecorationLine: "underline",
       lineHeight: SIZES.lineHeight.md,
     },
   });
 };
 
 // Для обратной совместимости
-export const OTPVerificationScreenStyles = createOTPVerificationScreenStyles(false); 
+export const OTPVerificationScreenStyles =
+  createOTPVerificationScreenStyles(false);

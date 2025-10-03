@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../constants/colors";
 
 export const PhotoUploadStyles = StyleSheet.create({
   inputContainer: {
@@ -7,24 +7,24 @@ export const PhotoUploadStyles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 8,
-    color: '#374151',
+    color: "#374151",
   },
   requiredStar: {
-    color: '#DC2626',
+    color: "#DC2626",
   },
   uploadButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderWidth: 2,
-    borderColor: '#23408E',
-    borderStyle: 'dashed',
+    borderColor: "#23408E",
+    borderStyle: "dashed",
     borderRadius: 8,
-    backgroundColor: 'rgba(35, 64, 142, 0.05)',
+    backgroundColor: "rgba(35, 64, 142, 0.05)",
   },
   uploadButtonDisabled: {
     opacity: 0.6,
@@ -32,12 +32,12 @@ export const PhotoUploadStyles = StyleSheet.create({
   uploadButtonText: {
     marginLeft: 8,
     fontSize: 16,
-    color: '#23408E',
-    fontWeight: '500',
+    color: "#23408E",
+    fontWeight: "500",
   },
   photoPreview: {
     marginTop: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   photoPreviewImage: {
     width: 120,
@@ -46,12 +46,12 @@ export const PhotoUploadStyles = StyleSheet.create({
     marginBottom: 8,
   },
   removePhotoButton: {
-    position: 'absolute',
+    position: "absolute",
     top: -8,
     right: -8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -59,22 +59,22 @@ export const PhotoUploadStyles = StyleSheet.create({
   },
   photoPreviewText: {
     fontSize: 14,
-    color: '#059669',
-    fontWeight: '500',
+    color: "#059669",
+    fontWeight: "500",
   },
 });
 
 export const getPhotoUploadColors = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   return {
     label: { color: currentColors.text },
-    uploadButton: { 
+    uploadButton: {
       borderColor: currentColors.primary,
-      backgroundColor: currentColors.surface 
+      backgroundColor: currentColors.surface,
     },
     uploadButtonText: { color: currentColors.primary },
     removePhotoButton: { backgroundColor: currentColors.surface },
     photoPreviewText: { color: currentColors.success },
   };
-}; 
+};

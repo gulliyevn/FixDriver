@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Driver } from '../../types/driver';
-import DriverService from '../../services/DriverService';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Driver } from "../../types/driver";
+import DriverService from "../../services/DriverService";
 
 export type UseDriversListResult = {
   drivers: Driver[];
@@ -24,15 +24,18 @@ const ITEMS_PER_PAGE = 10;
 export const useDriversList = (): UseDriversListResult => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    const id = setTimeout(() => setDebouncedQuery(searchQuery.trim().toLowerCase()), 200);
+    const id = setTimeout(
+      () => setDebouncedQuery(searchQuery.trim().toLowerCase()),
+      200,
+    );
     return () => clearTimeout(id);
   }, [searchQuery]);
 
@@ -57,10 +60,10 @@ export const useDriversList = (): UseDriversListResult => {
         if (pageNumber === 1 || isRefresh) {
           setDrivers(pageData);
         } else {
-          setDrivers(prev => [...prev, ...pageData]);
+          setDrivers((prev) => [...prev, ...pageData]);
         }
         const total = response.data.total ?? 0;
-        const accumulated = (pageNumber) * ITEMS_PER_PAGE;
+        const accumulated = pageNumber * ITEMS_PER_PAGE;
         setHasMore(accumulated < total);
         setPage(pageNumber);
       } else {
@@ -92,10 +95,10 @@ export const useDriversList = (): UseDriversListResult => {
     const list = !query
       ? drivers
       : drivers.filter((driver) => {
-          const firstName = driver.first_name?.toLowerCase() ?? '';
-          const lastName = driver.last_name?.toLowerCase() ?? '';
-          const brand = driver.vehicle_brand?.toLowerCase() ?? '';
-          const model = driver.vehicle_model?.toLowerCase() ?? '';
+          const firstName = driver.first_name?.toLowerCase() ?? "";
+          const lastName = driver.last_name?.toLowerCase() ?? "";
+          const brand = driver.vehicle_brand?.toLowerCase() ?? "";
+          const model = driver.vehicle_model?.toLowerCase() ?? "";
           return (
             firstName.includes(query) ||
             lastName.includes(query) ||
@@ -117,9 +120,10 @@ export const useDriversList = (): UseDriversListResult => {
   }, [drivers, debouncedQuery, favorites]);
 
   const toggleFavorite = useCallback((driverId: string) => {
-    setFavorites(prev => {
+    setFavorites((prev) => {
       const next = new Set(prev);
-      if (next.has(driverId)) next.delete(driverId); else next.add(driverId);
+      if (next.has(driverId)) next.delete(driverId);
+      else next.add(driverId);
       return next;
     });
   }, []);
@@ -129,12 +133,12 @@ export const useDriversList = (): UseDriversListResult => {
   }, []);
 
   const removeDriver = useCallback((driverId: string) => {
-    setDrivers(prev => prev.filter(d => d.id !== driverId));
+    setDrivers((prev) => prev.filter((d) => d.id !== driverId));
   }, []);
 
   const removeDrivers = useCallback((ids: Set<string>) => {
     if (!ids || ids.size === 0) return;
-    setDrivers(prev => prev.filter(d => !ids.has(d.id)));
+    setDrivers((prev) => prev.filter((d) => !ids.has(d.id)));
   }, []);
 
   return {
@@ -156,5 +160,3 @@ export const useDriversList = (): UseDriversListResult => {
 };
 
 export default useDriversList;
-
-

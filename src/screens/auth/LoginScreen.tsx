@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
   SafeAreaView,
   ScrollView,
   StatusBar,
   Alert,
   KeyboardAvoidingView,
   Platform,
-  TextInput
-} from 'react-native';
+  TextInput,
+} from "react-native";
 
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../types/navigation';
-import { useAuth } from '../../context/AuthContext';
-import { createLoginScreenStyles } from '../../styles/screens/LoginScreen.styles';
-import Button from '../../components/Button';
-import SocialAuthButtons from '../../components/SocialAuthButtons';
-import { useLanguage } from '../../context/LanguageContext';
-import { useTheme } from '../../context/ThemeContext';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthStackParamList } from "../../types/navigation";
+import { useAuth } from "../../context/AuthContext";
+import { createLoginScreenStyles } from "../../styles/screens/LoginScreen.styles";
+import Button from "../../components/Button";
+import SocialAuthButtons from "../../components/SocialAuthButtons";
+import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-type NavigationProp = StackNavigationProp<AuthStackParamList, 'Login'>;
+type NavigationProp = StackNavigationProp<AuthStackParamList, "Login">;
 
 interface FormData {
   email: string;
@@ -35,13 +35,13 @@ const LoginScreen: React.FC = () => {
   const { login } = useAuth();
   const { t } = useLanguage();
   const { isDark } = useTheme();
-  
+
   // Создаем стили с учетом текущей темы
   const styles = createLoginScreenStyles(isDark);
-  
+
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -52,13 +52,13 @@ const LoginScreen: React.FC = () => {
     const newErrors: Partial<FormData> = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = t('login.emailRequired');
+      newErrors.email = t("login.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = t('login.emailInvalid');
+      newErrors.email = t("login.emailInvalid");
     }
 
     if (!formData.password) {
-      newErrors.password = t('login.passwordRequired');
+      newErrors.password = t("login.passwordRequired");
     }
 
     setErrors(newErrors);
@@ -71,21 +71,21 @@ const LoginScreen: React.FC = () => {
     setLoading(true);
     try {
       const success = await login(formData.email, formData.password);
-      
+
       if (success) {
         // Успешный вход - навигация происходит автоматически через AuthContext
       } else {
-        Alert.alert(t('login.loginError'), t('login.invalidCredentials'));
+        Alert.alert(t("login.loginError"), t("login.invalidCredentials"));
       }
     } catch (error) {
-      Alert.alert(t('login.loginError'), t('login.loginErrorGeneric'));
+      Alert.alert(t("login.loginError"), t("login.loginErrorGeneric"));
     } finally {
       setLoading(false);
     }
   };
 
   const updateFormData = (field: keyof FormData, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -94,12 +94,12 @@ const LoginScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
-      
-      <KeyboardAvoidingView 
+
+      <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView 
+        <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -107,56 +107,52 @@ const LoginScreen: React.FC = () => {
           {/* Header */}
           <View style={styles.headerSpacer} />
           <View style={styles.header}>
-            <Text style={styles.title}>
-              {t('login.title')}
-            </Text>
-            <Text style={styles.subtitle}>
-              {t('login.subtitle')}
-            </Text>
+            <Text style={styles.title}>{t("login.title")}</Text>
+            <Text style={styles.subtitle}>{t("login.subtitle")}</Text>
           </View>
 
           {/* Form */}
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('login.email')}</Text>
+              <Text style={styles.label}>{t("login.email")}</Text>
               <TextInput
                 style={styles.input}
-              value={formData.email}
-              onChangeText={(text) => updateFormData('email', text)}
-              placeholder={t('login.emailPlaceholder')}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+                value={formData.email}
+                onChangeText={(text) => updateFormData("email", text)}
+                placeholder={t("login.emailPlaceholder")}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
               {errors.email && (
                 <Text style={styles.errorText}>{errors.email}</Text>
               )}
             </View>
-            
+
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('login.password')}</Text>
+              <Text style={styles.label}>{t("login.password")}</Text>
               <TextInput
                 style={styles.input}
-              value={formData.password}
-              onChangeText={(text) => updateFormData('password', text)}
-              secureTextEntry={!showPassword}
-            />
+                value={formData.password}
+                onChangeText={(text) => updateFormData("password", text)}
+                secureTextEntry={!showPassword}
+              />
               {errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
             </View>
 
             {/* Кнопка Забыли пароль? */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.forgotPassword}
-              onPress={() => navigation.navigate('ForgotPassword')}
+              onPress={() => navigation.navigate("ForgotPassword")}
             >
               <Text style={styles.registerLinkUnderlineDark}>
-                {t('login.forgotPassword.title')}
+                {t("login.forgotPassword.title")}
               </Text>
             </TouchableOpacity>
 
             <Button
-              title={t('login.loginButton')}
+              title={t("login.loginButton")}
               onPress={handleLogin}
               loading={loading}
               disabled={loading}
@@ -167,7 +163,7 @@ const LoginScreen: React.FC = () => {
           {/* Divider */}
           <View style={styles.divider}>
             <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>{t('login.or')}</Text>
+            <Text style={styles.dividerText}>{t("login.or")}</Text>
             <View style={styles.dividerLine} />
           </View>
 
@@ -178,13 +174,17 @@ const LoginScreen: React.FC = () => {
 
           {/* Register Link */}
           <View style={styles.registerSection}>
-            <Text style={styles.registerText}>{t('login.noAccount')} </Text>
-            <TouchableOpacity onPress={() => navigation.reset({ index: 0, routes: [{ name: 'RoleSelect' }] })}>
-              <Text style={styles.registerLinkUnderlineDark}>{t('login.registerLink')}</Text>
+            <Text style={styles.registerText}>{t("login.noAccount")} </Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.reset({ index: 0, routes: [{ name: "RoleSelect" }] })
+              }
+            >
+              <Text style={styles.registerLinkUnderlineDark}>
+                {t("login.registerLink")}
+              </Text>
             </TouchableOpacity>
           </View>
-
-
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -21,5 +21,5 @@ export interface FamilyMemberItemProps {
   onDelete: () => void;
   onResetPhoneVerification: () => void;
   onVerifyPhone?: () => void;
-  saveRef?: import('react').RefObject<(() => void) | null>;
-} 
+  saveRef?: import("react").RefObject<(() => void) | null>;
+}

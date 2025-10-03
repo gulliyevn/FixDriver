@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SIZES, SHADOWS } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SIZES, SHADOWS } from "../../../constants/colors";
 
 export const createFixWaveScreenStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
@@ -11,9 +11,9 @@ export const createFixWaveScreenStyles = (isDark: boolean) => {
     },
     // Хедер скопированный из ChatListScreen
     header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
       paddingHorizontal: SIZES.xl,
       paddingVertical: SIZES.lg,
       backgroundColor: colors.background,
@@ -27,8 +27,8 @@ export const createFixWaveScreenStyles = (isDark: boolean) => {
       flex: 1,
     },
     headerActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       gap: SIZES.md,
     },
     headerContainer: {
@@ -38,33 +38,33 @@ export const createFixWaveScreenStyles = (isDark: boolean) => {
       borderRadius: 15,
       borderWidth: 1,
       borderColor: colors.border,
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
     },
     headerButton: {
       width: 100,
       height: 24,
       backgroundColor: colors.primary,
       borderRadius: 12,
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'absolute',
+      alignItems: "center",
+      justifyContent: "center",
+      position: "absolute",
     },
     buttonInner: {
-      width: '100%',
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
+      width: "100%",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
     },
     buttonText: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontSize: 12,
-      fontWeight: '600',
-      textAlign: 'center',
+      fontWeight: "600",
+      textAlign: "center",
     },
     containerTouchable: {
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       left: 0,
       right: 0,
@@ -79,9 +79,9 @@ export const createFixWaveScreenStyles = (isDark: boolean) => {
     },
     headerTitle: {
       fontSize: SIZES.fontSize.xxl + 4, // Увеличиваем размер на 4
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
-      textAlign: 'left',
+      textAlign: "left",
       marginLeft: SIZES.sm, // Сдвигаем правее
     },
     content: {
@@ -90,5 +90,3 @@ export const createFixWaveScreenStyles = (isDark: boolean) => {
     },
   });
 };
-
-

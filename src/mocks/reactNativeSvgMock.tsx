@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
 export const Svg = ({ children, ...props }: any) => (
   <View testID="svg" {...props}>
@@ -17,4 +17,4 @@ export const Circle = ({ ...props }: any) => (
 
 export const Rect = ({ ...props }: any) => (
   <View testID="svg-rect" {...props} />
-); 
+);

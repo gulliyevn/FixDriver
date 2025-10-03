@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Platform, Modal } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { getCurrentColors } from '../constants/colors';
-import { StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Platform, Modal } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { getCurrentColors } from "../constants/colors";
+import { StyleSheet } from "react-native";
 
 interface TimePickerProps {
   value?: string; // формат "HH:mm"
@@ -20,17 +20,17 @@ const TimePicker: React.FC<TimePickerProps> = ({
   value,
   onChange,
   onClear,
-  placeholder = 'Выберите время',
+  placeholder = "Выберите время",
   indicatorColor,
   title,
-  dayLabel
+  dayLabel,
 }) => {
   const { isDark } = useTheme();
   const colors = getCurrentColors(isDark);
   const [showPicker, setShowPicker] = useState(false);
   const [currentTime, setCurrentTime] = useState(() => {
     if (value) {
-      const [hours, minutes] = value.split(':');
+      const [hours, minutes] = value.split(":");
       const date = new Date();
       date.setHours(parseInt(hours, 10));
       date.setMinutes(parseInt(minutes, 10));
@@ -41,15 +41,15 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   const handleTimeChange = (event: any, selectedTime?: Date) => {
     // На Android закрываем только при нажатии "ОК"
-    if (Platform.OS === 'android') {
-      if (event.type === 'set' && selectedTime) {
+    if (Platform.OS === "android") {
+      if (event.type === "set" && selectedTime) {
         setShowPicker(false);
         setCurrentTime(selectedTime);
-        const hours = selectedTime.getHours().toString().padStart(2, '0');
-        const minutes = selectedTime.getMinutes().toString().padStart(2, '0');
+        const hours = selectedTime.getHours().toString().padStart(2, "0");
+        const minutes = selectedTime.getMinutes().toString().padStart(2, "0");
         onChange(`${hours}:${minutes}`);
       }
-    } 
+    }
     // На iOS обновляем время без закрытия модалки
     else if (selectedTime) {
       setCurrentTime(selectedTime);
@@ -70,14 +70,16 @@ const TimePicker: React.FC<TimePickerProps> = ({
           {
             backgroundColor: isDark ? colors.surface : colors.background,
             borderColor: colors.border,
-            borderWidth: 1
-          }
+            borderWidth: 1,
+          },
         ]}
       >
         <View style={styles.buttonContent}>
           {indicatorColor && (
             <>
-              <View style={[styles.indicator, { backgroundColor: indicatorColor }]} />
+              <View
+                style={[styles.indicator, { backgroundColor: indicatorColor }]}
+              />
               <Text style={[styles.dash, { color: colors.text }]}>—</Text>
             </>
           )}
@@ -86,14 +88,16 @@ const TimePicker: React.FC<TimePickerProps> = ({
               {dayLabel}
             </Text>
           )}
-          <Text style={[
-            styles.timeText,
-            { color: value ? colors.text : colors.textSecondary }
-          ]}>
+          <Text
+            style={[
+              styles.timeText,
+              { color: value ? colors.text : colors.textSecondary },
+            ]}
+          >
             {value || placeholder}
           </Text>
         </View>
-        
+
         {/* Крестик для удаления - показываем только когда есть значение */}
         {value && onClear && (
           <TouchableOpacity
@@ -104,49 +108,72 @@ const TimePicker: React.FC<TimePickerProps> = ({
             }}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Ionicons 
-              name="close-circle" 
-              size={18} 
-              color={colors.textSecondary} 
+            <Ionicons
+              name="close-circle"
+              size={18}
+              color={colors.textSecondary}
             />
           </TouchableOpacity>
         )}
-        <Ionicons 
-          name="time-outline" 
-          size={20} 
-          color={colors.text} 
-        />
+        <Ionicons name="time-outline" size={20} color={colors.text} />
       </TouchableOpacity>
 
-      {showPicker && (
-        Platform.OS === 'ios' ? (
+      {showPicker &&
+        (Platform.OS === "ios" ? (
           <Modal
             transparent={true}
             animationType="fade"
             visible={showPicker}
             onRequestClose={() => {}}
           >
-            <View style={styles.modalOverlay} onTouchEnd={(e) => e.stopPropagation()}>
-              <View style={[
-                styles.modalContent,
-                { backgroundColor: isDark ? colors.surface : colors.background }
-              ]}>
+            <View
+              style={styles.modalOverlay}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
+              <View
+                style={[
+                  styles.modalContent,
+                  {
+                    backgroundColor: isDark
+                      ? colors.surface
+                      : colors.background,
+                  },
+                ]}
+              >
                 <View style={styles.modalHeader}>
                   <TouchableOpacity onPress={() => setShowPicker(false)}>
-                    <Text style={[styles.modalButtonText, { color: colors.primary }]}>
+                    <Text
+                      style={[
+                        styles.modalButtonText,
+                        { color: colors.primary },
+                      ]}
+                    >
                       Отмена
                     </Text>
                   </TouchableOpacity>
                   <Text style={[styles.modalTitle, { color: colors.text }]}>
                     Выберите время
                   </Text>
-                  <TouchableOpacity onPress={() => {
-                    setShowPicker(false);
-                    const hours = currentTime.getHours().toString().padStart(2, '0');
-                    const minutes = currentTime.getMinutes().toString().padStart(2, '0');
-                    onChange(`${hours}:${minutes}`);
-                  }}>
-                    <Text style={[styles.modalButtonText, { color: colors.primary }]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPicker(false);
+                      const hours = currentTime
+                        .getHours()
+                        .toString()
+                        .padStart(2, "0");
+                      const minutes = currentTime
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, "0");
+                      onChange(`${hours}:${minutes}`);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.modalButtonText,
+                        { color: colors.primary },
+                      ]}
+                    >
                       Готово
                     </Text>
                   </TouchableOpacity>
@@ -157,7 +184,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                   display="spinner"
                   onChange={handleTimeChange}
                   textColor={colors.text}
-                  style={{ width: '100%', alignSelf: 'center' }}
+                  style={{ width: "100%", alignSelf: "center" }}
                 />
               </View>
             </View>
@@ -169,27 +196,26 @@ const TimePicker: React.FC<TimePickerProps> = ({
             display="default"
             onChange={handleTimeChange}
           />
-        )
-      )}
+        ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
   },
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 12,
     borderRadius: 8,
   },
   buttonContent: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   indicator: {
     width: 12,
@@ -211,33 +237,33 @@ const styles = StyleSheet.create({
   clearButton: {
     marginRight: 8,
     padding: 2,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    pointerEvents: 'auto',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    pointerEvents: "auto",
   },
   modalContent: {
     borderRadius: 16,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-    width: '90%',
-    backgroundColor: '#fff',
-    alignSelf: 'center',
+    paddingBottom: Platform.OS === "ios" ? 20 : 0,
+    width: "90%",
+    backgroundColor: "#fff",
+    alignSelf: "center",
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomColor: "rgba(0, 0, 0, 0.1)",
   },
   modalTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   modalButtonText: {
     fontSize: 16,

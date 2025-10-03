@@ -1,11 +1,14 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import Select from '../Select';
-import AddressValidationIndicator from './AddressValidationIndicator';
-import { AddressModalStyles, getAddressModalStyles } from '../../styles/components/AddressModal.styles';
-import { getCurrentColors } from '../../constants/colors';
+import Select from "../Select";
+import AddressValidationIndicator from "./AddressValidationIndicator";
+import {
+  AddressModalStyles,
+  getAddressModalStyles,
+} from "../../styles/components/AddressModal.styles";
+import { getCurrentColors } from "../../constants/colors";
 
 export interface AddressCategoryOption {
   value: string;
@@ -25,7 +28,7 @@ interface AddressFormProps {
   onCategorySelect: (value: string) => void;
   onToggleDefault: () => void;
   onMapPress: () => void;
-  validationStatus: 'idle' | 'checking' | 'valid' | 'invalid';
+  validationStatus: "idle" | "checking" | "valid" | "invalid";
   onRetryValidation: () => void;
   labels: {
     nameLabel: string;
@@ -68,12 +71,15 @@ const AddressForm: React.FC<AddressFormProps> = ({
   dynamicStyles,
   isDark,
 }) => {
-  const placeholderColor = dynamicStyles.placeholderColor ?? getCurrentColors(isDark).textSecondary;
+  const placeholderColor =
+    dynamicStyles.placeholderColor ?? getCurrentColors(isDark).textSecondary;
 
   return (
     <View style={[styles.formContainer, dynamicStyles.formContainer]}>
       <View style={styles.inputGroup}>
-        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>{labels.nameLabel}</Text>
+        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
+          {labels.nameLabel}
+        </Text>
         <TextInput
           style={[styles.textInput, dynamicStyles.textInput]}
           placeholder={labels.namePlaceholder}
@@ -85,7 +91,9 @@ const AddressForm: React.FC<AddressFormProps> = ({
       </View>
 
       <View style={styles.inputGroup}>
-        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>{labels.categoryLabel}</Text>
+        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
+          {labels.categoryLabel}
+        </Text>
         <Select
           options={categories}
           value={category}
@@ -97,8 +105,15 @@ const AddressForm: React.FC<AddressFormProps> = ({
       </View>
 
       <View style={styles.inputGroup}>
-        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>{labels.addressLabel}</Text>
-        <View style={[styles.addressInputContainer, dynamicStyles.addressInputContainer]}>
+        <Text style={[styles.inputLabel, dynamicStyles.inputLabel]}>
+          {labels.addressLabel}
+        </Text>
+        <View
+          style={[
+            styles.addressInputContainer,
+            dynamicStyles.addressInputContainer,
+          ]}
+        >
           <TextInput
             style={[styles.addressInput, dynamicStyles.addressInput]}
             placeholder={labels.addressPlaceholder}
@@ -109,7 +124,10 @@ const AddressForm: React.FC<AddressFormProps> = ({
             multiline
             maxLength={200}
           />
-          <TouchableOpacity style={[styles.mapButton, dynamicStyles.mapButton]} onPress={onMapPress}>
+          <TouchableOpacity
+            style={[styles.mapButton, dynamicStyles.mapButton]}
+            onPress={onMapPress}
+          >
             <Ionicons name="map-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -130,9 +148,18 @@ const AddressForm: React.FC<AddressFormProps> = ({
         />
       </View>
 
-      <TouchableOpacity style={styles.checkboxContainer} onPress={onToggleDefault}>
-        <Ionicons name={isDefault ? 'checkmark-circle' : 'ellipse-outline'} size={24} color={isDefault ? '#4caf50' : '#ccc'} />
-        <Text style={[styles.checkboxText, dynamicStyles.checkboxText]}>{labels.defaultLabel}</Text>
+      <TouchableOpacity
+        style={styles.checkboxContainer}
+        onPress={onToggleDefault}
+      >
+        <Ionicons
+          name={isDefault ? "checkmark-circle" : "ellipse-outline"}
+          size={24}
+          color={isDefault ? "#4caf50" : "#ccc"}
+        />
+        <Text style={[styles.checkboxText, dynamicStyles.checkboxText]}>
+          {labels.defaultLabel}
+        </Text>
       </TouchableOpacity>
     </View>
   );

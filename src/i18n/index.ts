@@ -1,42 +1,42 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { I18n } from 'i18n-js';
-import * as Localization from 'expo-localization';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { I18n } from "i18n-js";
+import * as Localization from "expo-localization";
 
 // Import all translation files using require for better JSON compatibility
-const login = require('./login');
-const register = require('./register');
-const profile = require('./profile');
-const common = require('./common');
-const errors = require('./errors');
-const notifications = require('./notifications');
-const support = require('./support');
-const help = require('./help');
-const navigation = require('./navigation');
-const components = require('./components');
-const driver = require('./driver');
-const client = require('./client');
-const cards = require('./components/cards');
-const about = require('./client/about');
-const theme = require('./profile/theme');
-const premium = require('./premium');
-const newNs = require('./new@new.json');
+const login = require("./login");
+const register = require("./register");
+const profile = require("./profile");
+const common = require("./common");
+const errors = require("./errors");
+const notifications = require("./notifications");
+const support = require("./support");
+const help = require("./help");
+const navigation = require("./navigation");
+const components = require("./components");
+const driver = require("./driver");
+const client = require("./client");
+const cards = require("./components/cards");
+const about = require("./client/about");
+const theme = require("./profile/theme");
+const premium = require("./premium");
+const newNs = require("./new@new.json");
 
 // Supported languages with flags and native names
 export const SUPPORTED_LANGUAGES = {
-  ru: { name: 'Русский', native: 'Русский', flag: '🇷🇺' },
-  en: { name: 'English', native: 'English', flag: '🇺🇸' },
-  tr: { name: 'Türkçe', native: 'Türkçe', flag: '🇹🇷' },
-  az: { name: 'Azərbaycan', native: 'Azərbaycan', flag: '🇦🇿' },
-  fr: { name: 'Français', native: 'Français', flag: '🇫🇷' },
-  ar: { name: 'العربية', native: 'العربية', flag: '🇸🇦' },
-  es: { name: 'Español', native: 'Español', flag: '🇪🇸' },
-  de: { name: 'Deutsch', native: 'Deutsch', flag: '🇩🇪' },
+  ru: { name: "Русский", native: "Русский", flag: "🇷🇺" },
+  en: { name: "English", native: "English", flag: "🇺🇸" },
+  tr: { name: "Türkçe", native: "Türkçe", flag: "🇹🇷" },
+  az: { name: "Azərbaycan", native: "Azərbaycan", flag: "🇦🇿" },
+  fr: { name: "Français", native: "Français", flag: "🇫🇷" },
+  ar: { name: "العربية", native: "العربية", flag: "🇸🇦" },
+  es: { name: "Español", native: "Español", flag: "🇪🇸" },
+  de: { name: "Deutsch", native: "Deutsch", flag: "🇩🇪" },
 } as const;
 
 export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
 
 // Default language
-const DEFAULT_LANGUAGE: SupportedLanguage = 'ru';
+const DEFAULT_LANGUAGE: SupportedLanguage = "ru";
 
 // Create translations for each language (сохраняем namespace)
 const createTranslations = (lang: string) => {
@@ -67,23 +67,23 @@ const createTranslations = (lang: string) => {
 
 // Create i18n instance with translations
 const i18n = new I18n({
-  ru: createTranslations('ru'),
-  en: createTranslations('en'),
-  tr: createTranslations('tr'),
-  az: createTranslations('az'),
-  fr: createTranslations('fr'),
-  ar: createTranslations('ar'),
-  es: createTranslations('es'),
-  de: createTranslations('de'),
+  ru: createTranslations("ru"),
+  en: createTranslations("en"),
+  tr: createTranslations("tr"),
+  az: createTranslations("az"),
+  fr: createTranslations("fr"),
+  ar: createTranslations("ar"),
+  es: createTranslations("es"),
+  de: createTranslations("de"),
 });
 
 i18n.defaultLocale = DEFAULT_LANGUAGE;
 i18n.locale = DEFAULT_LANGUAGE;
 i18n.enableFallback = true;
-i18n.defaultSeparator = '.';
+i18n.defaultSeparator = ".";
 
 // Storage keys
-const LANGUAGE_STORAGE_KEY = '@FixDrive:language';
+const LANGUAGE_STORAGE_KEY = "@FixDrive:language";
 
 // Event listeners for language changes
 type LanguageChangeListener = (language: SupportedLanguage) => void;
@@ -93,7 +93,9 @@ export const addLanguageChangeListener = (listener: LanguageChangeListener) => {
   languageChangeListeners.push(listener);
 };
 
-export const removeLanguageChangeListener = (listener: LanguageChangeListener) => {
+export const removeLanguageChangeListener = (
+  listener: LanguageChangeListener,
+) => {
   const index = languageChangeListeners.indexOf(listener);
   if (index > -1) {
     languageChangeListeners.splice(index, 1);
@@ -101,16 +103,19 @@ export const removeLanguageChangeListener = (listener: LanguageChangeListener) =
 };
 
 const notifyLanguageChange = (language: SupportedLanguage) => {
-  languageChangeListeners.forEach(listener => listener(language));
+  languageChangeListeners.forEach((listener) => listener(language));
 };
 
 // Language management
-export const setLanguage = async (language: SupportedLanguage): Promise<void> => {
+export const setLanguage = async (
+  language: SupportedLanguage,
+): Promise<void> => {
   try {
     if (!SUPPORTED_LANGUAGES[language]) {
-      console.error(`Unsupported language: ${language}`); return;
+      console.error(`Unsupported language: ${language}`);
+      return;
     }
-    
+
     i18n.locale = language;
     await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     notifyLanguageChange(language);
@@ -122,8 +127,10 @@ export const setLanguage = async (language: SupportedLanguage): Promise<void> =>
 // Get system language and map to supported language
 export const getSystemLanguage = (): SupportedLanguage => {
   try {
-    const systemLocale = Localization.getLocales()[0]?.languageCode || 'en';
-    return SUPPORTED_LANGUAGES[systemLocale] ? systemLocale as SupportedLanguage : DEFAULT_LANGUAGE;
+    const systemLocale = Localization.getLocales()[0]?.languageCode || "en";
+    return SUPPORTED_LANGUAGES[systemLocale]
+      ? (systemLocale as SupportedLanguage)
+      : DEFAULT_LANGUAGE;
   } catch (error) {
     return DEFAULT_LANGUAGE;
   }
@@ -148,24 +155,28 @@ export const initializeLanguage = async (): Promise<void> => {
     i18n.locale = language;
     notifyLanguageChange(language);
   } catch (error) {
-
-
     i18n.locale = DEFAULT_LANGUAGE;
   }
 };
 
 // Main translation function using i18n-js
-export const t = (key: string, params?: Record<string, string | number>): string => {
+export const t = (
+  key: string,
+  params?: Record<string, string | number>,
+): string => {
   try {
     let result = i18n.t(key, params);
-    
+
     // Если интерполяция не сработала, делаем замену вручную
-    if (params && result.includes('{clientName}')) {
+    if (params && result.includes("{clientName}")) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
-        result = result.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+        result = result.replace(
+          new RegExp(`{${paramKey}}`, "g"),
+          String(paramValue),
+        );
       });
     }
-    
+
     return result;
   } catch (error) {
     return key;
@@ -177,11 +188,9 @@ export const getCurrentLanguage = (): SupportedLanguage => {
   return i18n.locale as SupportedLanguage;
 };
 
-
-
 // Check if RTL language
 export const isRTL = (): boolean => {
-  return i18n.locale === 'ar';
+  return i18n.locale === "ar";
 };
 
 // Get language info
@@ -197,4 +206,4 @@ export const getLanguageOptions = () => {
   }));
 };
 
-export default i18n; 
+export default i18n;

@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, TouchableOpacity, Animated } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { createMapViewStyles } from '../../../styles/components/MapView.styles';
+import React from "react";
+import { View, TouchableOpacity, Animated } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../../context/ThemeContext";
+import { createMapViewStyles } from "../../../styles/components/MapView.styles";
 
 interface MapControlsProps {
   buttonAnimations: Animated.Value[];
@@ -22,11 +22,11 @@ const MapControls: React.FC<MapControlsProps> = ({
 
   const buttonIcons = [
     "refresh-outline",
-    "location-sharp", 
+    "location-sharp",
     "locate-outline",
     "layers-outline",
     "add-outline",
-    "remove-outline"
+    "remove-outline",
   ] as const;
 
   const buttonActions = [
@@ -45,22 +45,24 @@ const MapControls: React.FC<MapControlsProps> = ({
           key={index}
           style={{
             opacity: anim,
-            transform: [{
-              translateY: anim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 0]
-              })
-            }]
+            transform: [
+              {
+                translateY: anim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 0],
+                }),
+              },
+            ],
           }}
         >
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.additionalButton}
             onPress={buttonActions[index]}
           >
-            <Ionicons 
+            <Ionicons
               name={buttonIcons[index]}
-              size={20} 
-              color={isDark ? '#F9FAFB' : '#111827'} 
+              size={20}
+              color={isDark ? "#F9FAFB" : "#111827"}
             />
           </TouchableOpacity>
         </Animated.View>

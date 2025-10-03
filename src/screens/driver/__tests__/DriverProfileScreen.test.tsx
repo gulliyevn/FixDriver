@@ -1,7 +1,12 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import DriverProfileScreen from '../DriverProfileScreen';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from "../../../test-utils/testWrapper";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import DriverProfileScreen from "../DriverProfileScreen";
 
 // Мокаем навигацию
 const mockNavigation = {
@@ -11,25 +16,25 @@ const mockNavigation = {
 };
 
 // Мокаем useFocusEffect
-jest.mock('@react-navigation/native', () => ({
-  ...jest.requireActual('@react-navigation/native'),
+jest.mock("@react-navigation/native", () => ({
+  ...jest.requireActual("@react-navigation/native"),
   useFocusEffect: jest.fn((callback) => callback()),
 }));
 
 // Мокаем хуки
-jest.mock('../../../hooks/driver/DriverUseProfile', () => ({
+jest.mock("../../../hooks/driver/DriverUseProfile", () => ({
   useDriverProfile: () => ({
     profile: {
-      id: '1',
-      name: 'John',
-      surname: 'Driver',
-      phone: '+1234567890',
-      email: 'john.driver@example.com',
-      birthDate: '1990-01-01',
+      id: "1",
+      name: "John",
+      surname: "Driver",
+      phone: "+1234567890",
+      email: "john.driver@example.com",
+      birthDate: "1990-01-01",
       rating: 4.8,
-      address: 'Driver Address',
-      createdAt: '2024-01-01T00:00:00.000Z',
-      role: 'driver',
+      address: "Driver Address",
+      createdAt: "2024-01-01T00:00:00.000Z",
+      role: "driver",
       avatar: null,
     },
     loading: false,
@@ -40,7 +45,7 @@ jest.mock('../../../hooks/driver/DriverUseProfile', () => ({
   }),
 }));
 
-jest.mock('../../../hooks/useBalance', () => ({
+jest.mock("../../../hooks/useBalance", () => ({
   useBalance: () => ({
     balance: 2500,
     earnings: 1500,
@@ -52,28 +57,28 @@ jest.mock('../../../hooks/useBalance', () => ({
   }),
 }));
 
-jest.mock('../../../hooks/useI18n', () => ({
+jest.mock("../../../hooks/useI18n", () => ({
   useI18n: () => ({
     t: (key: string) => key,
-    language: 'ru',
+    language: "ru",
     setLanguage: jest.fn(),
   }),
 }));
 
-jest.mock('../../../context/ThemeContext', () => ({
+jest.mock("../../../context/ThemeContext", () => ({
   useTheme: () => ({
     isDark: false,
     toggleTheme: jest.fn(),
   }),
 }));
 
-jest.mock('../../../context/AuthContext', () => ({
+jest.mock("../../../context/AuthContext", () => ({
   useAuth: () => ({
     user: {
-      id: '1',
-      name: 'John',
-      email: 'john.driver@example.com',
-      role: 'driver',
+      id: "1",
+      name: "John",
+      email: "john.driver@example.com",
+      role: "driver",
     },
     isAuthenticated: true,
     isLoading: false,
@@ -87,24 +92,24 @@ jest.mock('../../../context/AuthContext', () => ({
 }));
 
 // Мокаем AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
+jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
 }));
 
 // Мокаем expo-linear-gradient
-jest.mock('expo-linear-gradient', () => ({
-  LinearGradient: 'LinearGradient',
+jest.mock("expo-linear-gradient", () => ({
+  LinearGradient: "LinearGradient",
 }));
 
 // Мокаем Ionicons
-jest.mock('@expo/vector-icons', () => ({
-  Ionicons: 'Ionicons',
+jest.mock("@expo/vector-icons", () => ({
+  Ionicons: "Ionicons",
 }));
 
 // Мокаем стили
-jest.mock('../../../styles/screens/driver/DriverProfileScreen.styles', () => ({
+jest.mock("../../../styles/screens/driver/DriverProfileScreen.styles", () => ({
   DriverProfileScreenStyles: {
     container: {},
     fixedSection: {},
@@ -166,203 +171,273 @@ jest.mock('../../../styles/screens/driver/DriverProfileScreen.styles', () => ({
 }));
 
 // Мокаем моки
-jest.mock('../../../mocks/data/users', () => ({
-  mockUsers: [{
-    id: '1',
-    name: 'John',
-    surname: 'Driver',
-    phone: '+1234567890',
-    email: 'john.driver@example.com',
-    rating: 4.8,
-    address: 'Driver Address',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    role: 'driver',
-    avatar: null,
-  }],
+jest.mock("../../../mocks/data/users", () => ({
+  mockUsers: [
+    {
+      id: "1",
+      name: "John",
+      surname: "Driver",
+      phone: "+1234567890",
+      email: "john.driver@example.com",
+      rating: 4.8,
+      address: "Driver Address",
+      createdAt: "2024-01-01T00:00:00.000Z",
+      role: "driver",
+      avatar: null,
+    },
+  ],
 }));
 
 // Мокаем утилиты
-jest.mock('../../../utils/formatters', () => ({
+jest.mock("../../../utils/formatters", () => ({
   formatBalance: (balance: number) => `${balance.toLocaleString()}`,
 }));
 
 // Мокаем константы
-jest.mock('../../../constants/colors', () => ({
+jest.mock("../../../constants/colors", () => ({
   colors: {
     light: {
-      primary: '#0066CC',
-      secondary: '#666666',
-      text: '#333333',
-      textSecondary: '#666666',
-      surface: '#FFFFFF',
+      primary: "#0066CC",
+      secondary: "#666666",
+      text: "#333333",
+      textSecondary: "#666666",
+      surface: "#FFFFFF",
     },
     dark: {
-      primary: '#0066CC',
-      secondary: '#666666',
-      text: '#FFFFFF',
-      textSecondary: '#CCCCCC',
-      surface: '#1A1A1A',
+      primary: "#0066CC",
+      secondary: "#666666",
+      text: "#FFFFFF",
+      textSecondary: "#CCCCCC",
+      surface: "#1A1A1A",
     },
   },
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
-  return render(
-    <NavigationContainer>
-      {component}
-    </NavigationContainer>
-  );
+  return render(<NavigationContainer>{component}</NavigationContainer>);
 };
 
-describe('DriverProfileScreen', () => {
+describe("DriverProfileScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders driver profile information correctly', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("renders driver profile information correctly", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      expect(screen.getByText('John Driver')).toBeTruthy();
-      expect(screen.getByText('+1234567890')).toBeTruthy();
+      expect(screen.getByText("John Driver")).toBeTruthy();
+      expect(screen.getByText("+1234567890")).toBeTruthy();
     });
   });
 
-  it('displays driver statistics', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("displays driver statistics", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      expect(screen.getByText('127')).toBeTruthy(); // trips
-      expect(screen.getByText('12 450 AFc')).toBeTruthy(); // earnings
-      expect(screen.getByText('4.8')).toBeTruthy(); // rating
-      expect(screen.getByText('2,500 AFc')).toBeTruthy(); // balance
+      expect(screen.getByText("127")).toBeTruthy(); // trips
+      expect(screen.getByText("12 450 AFc")).toBeTruthy(); // earnings
+      expect(screen.getByText("4.8")).toBeTruthy(); // rating
+      expect(screen.getByText("2,500 AFc")).toBeTruthy(); // balance
     });
   });
 
-  it('navigates to edit driver profile when avatar is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to edit driver profile when avatar is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
       // Находим аватар по иконке
-      const avatarIcon = screen.getByText('John Driver').parent;
+      const avatarIcon = screen.getByText("John Driver").parent;
       fireEvent.press(avatarIcon!);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('EditDriverProfile');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("EditDriverProfile");
     });
   });
 
-  it('navigates to balance screen when balance is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to balance screen when balance is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const balanceButton = screen.getByText('2,500 AFc');
+      const balanceButton = screen.getByText("2,500 AFc");
       fireEvent.press(balanceButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Balance');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Balance");
     });
   });
 
-  it('navigates to cards screen when cards option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to cards screen when cards option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const cardsButton = screen.getByText('client.profile.cards');
+      const cardsButton = screen.getByText("client.profile.cards");
       fireEvent.press(cardsButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Cards');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Cards");
     });
   });
 
-  it('navigates to trips screen when trips option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to trips screen when trips option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
       // Используем getAllByText для избежания дублирования
-      const tripsButtons = screen.getAllByText('client.profile.trips');
+      const tripsButtons = screen.getAllByText("client.profile.trips");
       fireEvent.press(tripsButtons[1]); // Берем второй элемент (в меню)
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Trips');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Trips");
     });
   });
 
-  it('navigates to payment history screen when payment history option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to payment history screen when payment history option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const paymentHistoryButton = screen.getByText('client.profile.paymentHistory');
+      const paymentHistoryButton = screen.getByText(
+        "client.profile.paymentHistory",
+      );
       fireEvent.press(paymentHistoryButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('PaymentHistory');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("PaymentHistory");
     });
   });
 
-  it('navigates to settings screen when settings option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to settings screen when settings option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const settingsButton = screen.getByText('client.settings');
+      const settingsButton = screen.getByText("client.settings");
       fireEvent.press(settingsButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Settings');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Settings");
     });
   });
 
-  it('navigates to residence screen when residence option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to residence screen when residence option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const residenceButton = screen.getByText('client.profile.residence');
+      const residenceButton = screen.getByText("client.profile.residence");
       fireEvent.press(residenceButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Residence');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Residence");
     });
   });
 
-  it('navigates to help screen when help option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to help screen when help option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const helpButton = screen.getByText('client.profile.help');
+      const helpButton = screen.getByText("client.profile.help");
       fireEvent.press(helpButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Help');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("Help");
     });
   });
 
-  it('navigates to about screen when about option is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("navigates to about screen when about option is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const aboutButton = screen.getByText('client.profile.about');
+      const aboutButton = screen.getByText("client.profile.about");
       fireEvent.press(aboutButton);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('About');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("About");
     });
   });
 
-  it('shows logout confirmation when logout is pressed', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("shows logout confirmation when logout is pressed", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
-      const logoutButton = screen.getByText('client.profile.logout');
+      const logoutButton = screen.getByText("client.profile.logout");
       fireEvent.press(logoutButton);
       // Проверяем что Alert.alert был вызван
       expect(logoutButton).toBeTruthy();
     });
   });
 
-  it('shows driver-specific statistics', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("shows driver-specific statistics", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
       // Проверяем что отображаются водительские данные
-      expect(screen.getByText('John Driver')).toBeTruthy();
-      expect(screen.getByText('4.8')).toBeTruthy(); // рейтинг водителя
-      expect(screen.getByText('2,500 AFc')).toBeTruthy(); // баланс водителя
+      expect(screen.getByText("John Driver")).toBeTruthy();
+      expect(screen.getByText("4.8")).toBeTruthy(); // рейтинг водителя
+      expect(screen.getByText("2,500 AFc")).toBeTruthy(); // баланс водителя
     });
   });
 
-  it('handles driver role correctly', async () => {
-    renderWithProviders(<DriverProfileScreen navigation={mockNavigation as any} route={{} as any} />);
+  it("handles driver role correctly", async () => {
+    renderWithProviders(
+      <DriverProfileScreen
+        navigation={mockNavigation as any}
+        route={{} as any}
+      />,
+    );
 
     await waitFor(() => {
       // Проверяем что профиль загружается как водительский
-      const profile = screen.getByText('John Driver');
+      const profile = screen.getByText("John Driver");
       expect(profile).toBeTruthy();
-      
+
       // Проверяем что используется правильный хук
       expect(mockNavigation.navigate).toBeDefined();
     });
   });
-}); 
+});

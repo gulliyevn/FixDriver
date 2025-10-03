@@ -1,16 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const PasswordStrengthIndicatorStyles = StyleSheet.create({
   container: {
     marginTop: 8,
   },
   strengthRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   progressContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
     marginRight: 12,
   },
@@ -21,20 +21,20 @@ export const PasswordStrengthIndicatorStyles = StyleSheet.create({
     marginRight: 4,
   },
   strengthInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   strengthText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 4,
   },
   feedbackContainer: {
     marginTop: 8,
   },
   feedbackItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: 4,
   },
   feedbackText: {
@@ -43,4 +43,4 @@ export const PasswordStrengthIndicatorStyles = StyleSheet.create({
     flex: 1,
     lineHeight: 16,
   },
-}); 
+});

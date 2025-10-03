@@ -1,8 +1,8 @@
-export type HelpModalType = 'booking' | 'payment' | 'rules' | 'safety';
+export type HelpModalType = "booking" | "payment" | "rules" | "safety";
 
 export type HelpSectionAction =
-  | { type: 'navigation'; value: string }
-  | { type: 'link'; value: string };
+  | { type: "navigation"; value: string }
+  | { type: "link"; value: string };
 
 export interface HelpSection {
   id: string;
@@ -43,4 +43,3 @@ export interface HelpContentDto {
     fallback_url?: string;
   };
 }
-

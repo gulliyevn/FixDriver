@@ -1,19 +1,19 @@
-const ru = require('./ru.json');
-const en = require('./en.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const profileRu = require("./ru.json");
+const profileEn = require("./en.json");
+const profileTr = require("./tr.json");
+const profileAz = require("./az.json");
+const profileFr = require("./fr.json");
+const profileAr = require("./ar.json");
+const profileEs = require("./es.json");
+const profileDe = require("./de.json");
 
 module.exports = {
-  ru,
-  en,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  ru: profileRu,
+  en: profileEn,
+  tr: profileTr,
+  az: profileAz,
+  fr: profileFr,
+  ar: profileAr,
+  es: profileEs,
+  de: profileDe,
+};

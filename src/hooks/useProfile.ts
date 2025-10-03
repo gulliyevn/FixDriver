@@ -1,6 +1,6 @@
-import { useContext } from 'react';
-import { ProfileContext } from '../context/ProfileContext';
-import { User } from '../types/user';
+import { useContext } from "react";
+import { ProfileContext } from "../context/ProfileContext";
+import { User } from "../types/user";
 
 export interface UserProfile {
   id: string;
@@ -24,10 +24,16 @@ export const useProfile = () => {
   const context = useContext(ProfileContext);
 
   if (!context) {
-    console.error('useProfile must be used within ProfileProvider'); return;
+    console.error("useProfile must be used within ProfileProvider");
+    return;
   }
 
-  const { profile, loading, updateProfile: contextUpdateProfile, loadProfile } = context;
+  const {
+    profile,
+    loading,
+    updateProfile: contextUpdateProfile,
+    loadProfile,
+  } = context;
 
   // Адаптируем updateProfile для обратной совместимости
   const updateProfile = async (updatedData: Partial<UserProfile>) => {
@@ -47,9 +53,9 @@ export const useProfile = () => {
   return {
     profile,
     loading,
-    error: !profile && !loading ? 'Не удалось загрузить профиль' : null,
+    error: !profile && !loading ? "Не удалось загрузить профиль" : null,
     loadProfile,
     updateProfile,
-    clearProfile
+    clearProfile,
   };
 };

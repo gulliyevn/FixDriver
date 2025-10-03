@@ -315,8 +315,7 @@
       "tripToWork": "İşə səyahət",
       "routeToWork": "Marşrut: ev - ofis"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Sürücüləri axtarın...",
     "loadingMore": "Daha çox sürücü yüklənir...",

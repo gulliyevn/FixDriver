@@ -1,31 +1,35 @@
-import React, { useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  Modal, 
-  ScrollView, 
-  Animated, 
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Animated,
   Dimensions,
-  StatusBar 
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useLanguage } from '../context/LanguageContext';
-import { useTheme } from '../context/ThemeContext';
-import { colors } from '../constants/colors';
-import { SupportedLanguage } from '../i18n';
-import { LanguageSelectorStyles } from '../styles/components/LanguageSelector.styles';
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
+import { colors } from "../constants/colors";
+import { SupportedLanguage } from "../i18n";
+import { LanguageSelectorStyles } from "../styles/components/LanguageSelector.styles";
 
 interface LanguageSelectorProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose }) => {
-  const { t, setLanguage, language, languageOptions, isLoading } = useLanguage();
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({
+  visible,
+  onClose,
+}) => {
+  const { t, setLanguage, language, languageOptions, isLoading } =
+    useLanguage();
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -78,8 +82,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
     try {
       await setLanguage(selectedLanguage as SupportedLanguage);
       onClose();
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const handleClose = () => {
@@ -96,7 +99,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
     },
     header: {
       ...LanguageSelectorStyles.header,
-      borderBottomColor: currentColors.border + '40',
+      borderBottomColor: currentColors.border + "40",
     },
     title: {
       ...LanguageSelectorStyles.title,
@@ -115,7 +118,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
     },
     languageItemSelected: {
       ...LanguageSelectorStyles.languageItemSelected,
-      backgroundColor: currentColors.primary + '15',
+      backgroundColor: currentColors.primary + "15",
       borderColor: currentColors.primary,
       shadowColor: currentColors.primary,
     },
@@ -162,50 +165,50 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
       onRequestClose={handleClose}
       statusBarTranslucent
     >
-      <StatusBar backgroundColor="rgba(0, 0, 0, 0.6)" barStyle={isDark ? 'light-content' : 'dark-content'} />
-      
-      <Animated.View 
+      <StatusBar
+        backgroundColor="rgba(0, 0, 0, 0.6)"
+        barStyle={isDark ? "light-content" : "dark-content"}
+      />
+
+      <Animated.View
         style={[
           styles.modalOverlay,
           LanguageSelectorStyles.animatedOverlay,
-          { opacity: fadeAnim }
+          { opacity: fadeAnim },
         ]}
       >
-        <Animated.View 
+        <Animated.View
           style={[
             styles.modalContent,
             LanguageSelectorStyles.animatedContent,
             {
-              transform: [
-                { scale: scaleAnim },
-                { translateY: slideAnim }
-              ]
-            }
+              transform: [{ scale: scaleAnim }, { translateY: slideAnim }],
+            },
           ]}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>{t('common.selectLanguage')}</Text>
-            <TouchableOpacity 
-              style={styles.closeButton} 
+            <Text style={styles.title}>{t("common.selectLanguage")}</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
               onPress={handleClose}
               activeOpacity={0.7}
             >
-              <Ionicons 
-                name="close" 
-                size={20} 
-                color={currentColors.text} 
-              />
+              <Ionicons name="close" size={20} color={currentColors.text} />
             </TouchableOpacity>
           </View>
-          
+
           {isLoading ? (
             <View style={styles.loadingContainer}>
-              <Ionicons name="refresh" size={32} color={currentColors.primary} />
-              <Text style={styles.loadingText}>{t('common.loading')}</Text>
+              <Ionicons
+                name="refresh"
+                size={32}
+                color={currentColors.primary}
+              />
+              <Text style={styles.loadingText}>{t("common.loading")}</Text>
             </View>
           ) : (
-            <ScrollView 
-              style={styles.languageList} 
+            <ScrollView
+              style={styles.languageList}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={LanguageSelectorStyles.scrollViewContent}
             >
@@ -214,7 +217,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
                   key={lang.code}
                   style={[
                     styles.languageItem,
-                    language === lang.code && styles.languageItemSelected
+                    language === lang.code && styles.languageItemSelected,
                   ]}
                   onPress={() => handleLanguageSelect(lang.code)}
                   activeOpacity={0.7}
@@ -222,26 +225,22 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
                   <View style={styles.flagContainer}>
                     <Text style={styles.flag}>{lang.flag}</Text>
                   </View>
-                  
+
                   <View style={styles.languageInfo}>
-                    <Text style={[
-                      styles.languageName,
-                      language === lang.code && styles.languageNameSelected
-                    ]}>
+                    <Text
+                      style={[
+                        styles.languageName,
+                        language === lang.code && styles.languageNameSelected,
+                      ]}
+                    >
                       {lang.name}
                     </Text>
-                    <Text style={styles.languageNative}>
-                      {lang.native}
-                    </Text>
+                    <Text style={styles.languageNative}>{lang.native}</Text>
                   </View>
-                  
+
                   {language === lang.code && (
                     <View style={styles.checkIcon}>
-                      <Ionicons 
-                        name="checkmark" 
-                        size={16} 
-                        color="#FFFFFF"
-                      />
+                      <Ionicons name="checkmark" size={16} color="#FFFFFF" />
                     </View>
                   )}
                 </TouchableOpacity>
@@ -254,4 +253,4 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ visible, onClose })
   );
 };
 
-export default LanguageSelector; 
+export default LanguageSelector;

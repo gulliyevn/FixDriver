@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   Modal,
   View,
   Text,
   TouchableOpacity,
   SafeAreaView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { getCurrentColors } from '../constants/colors';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { getCurrentColors } from "../constants/colors";
 
 interface NotificationsModalProps {
   visible: boolean;
@@ -30,36 +30,57 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
       onRequestClose={onClose}
     >
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-        <View style={{ 
-          flexDirection: 'row', 
-          alignItems: 'center', 
-          justifyContent: 'space-between', 
-          padding: 20, 
-          borderBottomWidth: 1, 
-          borderBottomColor: colors.border 
-        }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 20,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.border,
+          }}
+        >
           <TouchableOpacity onPress={onClose}>
             <Ionicons name="close" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: colors.text }}>
+          <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text }}>
             Уведомления
           </Text>
           <TouchableOpacity>
-            <Ionicons name="checkmark-circle-outline" size={24} color={colors.text} />
+            <Ionicons
+              name="checkmark-circle-outline"
+              size={24}
+              color={colors.text}
+            />
           </TouchableOpacity>
         </View>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Ionicons 
-            name="notifications-outline" 
-            size={64} 
-            color={colors.textSecondary} 
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Ionicons
+            name="notifications-outline"
+            size={64}
+            color={colors.textSecondary}
             style={{ marginBottom: 16 }}
           />
-          <Text style={{ fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: 8 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "600",
+              color: colors.text,
+              marginBottom: 8,
+            }}
+          >
             Нет новых уведомлений
           </Text>
-          <Text style={{ fontSize: 16, color: colors.textSecondary, textAlign: 'center' }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: colors.textSecondary,
+              textAlign: "center",
+            }}
+          >
             Здесь будут отображаться ваши уведомления
           </Text>
         </View>

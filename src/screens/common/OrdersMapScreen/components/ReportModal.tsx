@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../../../context/ThemeContext';
-import { useI18n } from '../../../../hooks/useI18n';
-import { createOrdersMapScreenStyles } from '../../../../styles/screens/OrdersMapScreen.styles';
+import React from "react";
+import { View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../../../context/ThemeContext";
+import { useI18n } from "../../../../hooks/useI18n";
+import { createOrdersMapScreenStyles } from "../../../../styles/screens/OrdersMapScreen.styles";
 
 interface ReportModalProps {
   isVisible: boolean;
@@ -37,33 +37,37 @@ const ReportModal: React.FC<ReportModalProps> = ({
             <View style={styles.reportIconContainer}>
               <Ionicons name="warning" size={32} color="#DC2626" />
             </View>
-            <Text style={styles.reportModalTitle}>{t('common.report.title')}</Text>
+            <Text style={styles.reportModalTitle}>
+              {t("common.report.title")}
+            </Text>
           </View>
-          
+
           <Text style={styles.reportModalSubtitle}>
-            {t('common.report.subtitle')}
+            {t("common.report.subtitle")}
           </Text>
-          
+
           <TextInput
             style={styles.reportCommentInput}
-            placeholder={t('common.report.commentPlaceholder')}
-            placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
+            placeholder={t("common.report.commentPlaceholder")}
+            placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
             value={reportComment}
             onChangeText={onCommentChange}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
           />
-          
+
           <View style={styles.reportModalButtons}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.reportCancelButton}
               onPress={onCancel}
             >
-              <Text style={styles.reportCancelButtonText}>{t('common.cancel')}</Text>
+              <Text style={styles.reportCancelButtonText}>
+                {t("common.cancel")}
+              </Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               style={[
                 styles.reportSubmitButton,
                 !reportComment?.trim() && styles.reportSubmitButtonDisabled,
@@ -71,12 +75,14 @@ const ReportModal: React.FC<ReportModalProps> = ({
               onPress={onSubmit}
               disabled={!reportComment?.trim()}
             >
-              <Text style={[
-                styles.reportSubmitButtonText,
-                !reportComment?.trim() && styles.reportSubmitButtonTextDisabled,
-              ]}
+              <Text
+                style={[
+                  styles.reportSubmitButtonText,
+                  !reportComment?.trim() &&
+                    styles.reportSubmitButtonTextDisabled,
+                ]}
               >
-                {t('common.report.submit')}
+                {t("common.report.submit")}
               </Text>
             </TouchableOpacity>
           </View>

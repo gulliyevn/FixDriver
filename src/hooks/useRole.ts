@@ -1,5 +1,5 @@
-import { useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/user';
+import { useAuth } from "../context/AuthContext";
+import { UserRole } from "../types/user";
 
 /**
  * Хук для получения текущей роли пользователя
@@ -15,15 +15,17 @@ export const useRole = (): UserRole => {
  */
 export const useRoleKeys = () => {
   const role = useRole();
-  
+
   const getStorageKey = (baseKey: string): string => {
     return role === UserRole.DRIVER ? `driver_${baseKey}` : `client_${baseKey}`;
   };
-  
+
   const getApiEndpoint = (baseEndpoint: string): string => {
-    return role === UserRole.DRIVER ? `/driver${baseEndpoint}` : `/client${baseEndpoint}`;
+    return role === UserRole.DRIVER
+      ? `/driver${baseEndpoint}`
+      : `/client${baseEndpoint}`;
   };
-  
+
   return {
     role,
     getStorageKey,

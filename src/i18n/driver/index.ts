@@ -1,19 +1,19 @@
-const ru = require('./ru.json');
-const en = require('./en.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const driverRu = require("./ru.json");
+const driverEn = require("./en.json");
+const driverTr = require("./tr.json");
+const driverAz = require("./az.json");
+const driverFr = require("./fr.json");
+const driverAr = require("./ar.json");
+const driverEs = require("./es.json");
+const driverDe = require("./de.json");
 
 module.exports = {
-  ru,
-  en,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  ru: driverRu,
+  en: driverEn,
+  tr: driverTr,
+  az: driverAz,
+  fr: driverFr,
+  ar: driverAr,
+  es: driverEs,
+  de: driverDe,
+};

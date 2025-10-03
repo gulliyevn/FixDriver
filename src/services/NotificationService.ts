@@ -1,39 +1,53 @@
-import APIClient from './APIClient';
+// Сервис для real-time уведомлений
+import WebSocketService, { WebSocketMessage } from "./WebSocketService";
+import APIClient from "./APIClient";
+import { Platform } from "react-native";
+import * as Notifications from "expo-notifications";
 
-export interface Notification {
+export interface NotificationData {
   id: string;
-  userId: string;
   title: string;
   message: string;
-  type: 'trip' | 'payment' | 'driver' | 'system' | 'order';
-  isRead: boolean;
-  createdAt: string;
-  data?: Record<string, unknown>;
-}
-
-export interface PushNotificationPayload {
-  title: string;
-  message: string;
-  data?: Record<string, unknown>;
+  type: "info" | "warning" | "error" | "success";
+  category: "order" | "payment" | "driver" | "system";
+  data?: any;
+  timestamp: number;
+  read: boolean;
+  priority: "low" | "normal" | "high";
 }
 
 export interface NotificationSettings {
-  userId: string;
   pushEnabled: boolean;
-  emailEnabled: boolean;
-  smsEnabled: boolean;
-  tripNotifications: boolean;
-  paymentNotifications: boolean;
-  driverNotifications: boolean;
-  systemNotifications: boolean;
-  orderNotifications: boolean;
+  soundEnabled: boolean;
+  vibrationEnabled: boolean;
+  categories: {
+    orders: boolean;
+    payments: boolean;
+    drivers: boolean;
+    system: boolean;
+  };
 }
 
 class NotificationService {
   private static instance: NotificationService;
-  private listeners: ((notifications: Notification[]) => void)[] = [];
+  private ws: typeof WebSocketService;
+  private isInitialized = false;
+  private notificationQueue: NotificationData[] = [];
+  private settings: NotificationSettings = {
+    pushEnabled: true,
+    soundEnabled: true,
+    vibrationEnabled: true,
+    categories: {
+      orders: true,
+      payments: true,
+      drivers: true,
+      system: true,
+    },
+  };
 
-  private constructor() {}
+  private constructor() {
+    this.ws = WebSocketService;
+  }
 
   static getInstance(): NotificationService {
     if (!NotificationService.instance) {
@@ -42,132 +56,324 @@ class NotificationService {
     return NotificationService.instance;
   }
 
-  async getNotifications(userId: string, page: number = 1, limit: number = 20): Promise<Notification[]> {
+  /**
+   * Инициализация сервиса уведомлений
+   */
+  async initialize(): Promise<void> {
+    if (this.isInitialized) return;
+
     try {
-      const response = await APIClient.get<Notification[]>(`/notifications/user/${userId}`, { page, limit });
-      return response.success && response.data ? response.data : [];
+      // Настройка Expo Notifications
+      await this.setupExpoNotifications();
+
+      // Подключение к WebSocket для real-time уведомлений
+      await this.setupWebSocketListeners();
+
+      // Загрузка настроек уведомлений
+      await this.loadSettings();
+
+      this.isInitialized = true;
     } catch (error) {
+      console.error("Ошибка инициализации NotificationService:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Настройка Expo Notifications
+   */
+  private async setupExpoNotifications(): Promise<void> {
+    // Настройка обработчика уведомлений
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: this.settings.soundEnabled,
+        shouldSetBadge: true,
+        shouldShowBanner: true,
+        shouldShowList: true,
+      }),
+    });
+
+    // Запрос разрешений
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      this.settings.pushEnabled = false;
+      return;
+    }
+
+    // Получение Expo Push Token
+    try {
+      const token = await Notifications.getExpoPushTokenAsync();
+      await this.registerPushToken(token.data);
+    } catch (error) {
+      console.error("Ошибка получения Expo Push Token:", error);
+    }
+  }
+
+  /**
+   * Настройка WebSocket слушателей для real-time уведомлений
+   */
+  private async setupWebSocketListeners(): Promise<void> {
+    await this.ws.connect({
+      onMessage: (message: WebSocketMessage) => {
+        if (message.type === "notification") {
+          this.handleRealtimeNotification(message.data);
+        }
+      },
+      onError: (error) => {
+        console.error("WebSocket ошибка в NotificationService:", error);
+      },
+      onClose: () => {},
+    });
+  }
+
+  /**
+   * Обработка real-time уведомления
+   */
+  private handleRealtimeNotification(data: NotificationData): void {
+    // Проверяем настройки категории
+    if (
+      !this.settings.categories[
+        data.category as keyof typeof this.settings.categories
+      ]
+    ) {
+      return;
+    }
+
+    // Добавляем в очередь
+    this.notificationQueue.push(data);
+
+    // Показываем локальное уведомление
+    this.showLocalNotification(data);
+
+    // Сохраняем уведомление
+    this.saveNotification(data);
+  }
+
+  /**
+   * Показ локального уведомления
+   */
+  private async showLocalNotification(
+    notification: NotificationData,
+  ): Promise<void> {
+    if (!this.settings.pushEnabled) return;
+
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: notification.title,
+          body: notification.message,
+          data: notification.data,
+          sound: this.settings.soundEnabled,
+        },
+        trigger: null, // Показать немедленно
+      });
+    } catch (error) {
+      console.error("Ошибка показа локального уведомления:", error);
+    }
+  }
+
+  /**
+   * Регистрация Push Token на сервере
+   */
+  private async registerPushToken(token: string): Promise<void> {
+    try {
+      const response = await APIClient.post("/notifications/register-token", {
+        token,
+        platform: Platform.OS,
+        appVersion: "1.0.0", // Можно получить из app.json
+      });
+
+      if (!response.success) {
+        console.error("Ошибка регистрации Push Token:", response.error);
+      }
+    } catch (error) {
+      console.error("Ошибка регистрации Push Token:", error);
+    }
+  }
+
+  /**
+   * Сохранение уведомления локально
+   */
+  private async saveNotification(
+    notification: NotificationData,
+  ): Promise<void> {
+    try {
+      // Можно использовать AsyncStorage или базу данных
+      // Для простоты пока просто логируем
+      console.log("Уведомление сохранено:", notification);
+    } catch (error) {
+      console.error("Ошибка сохранения уведомления:", error);
+    }
+  }
+
+  /**
+   * Получение всех уведомлений
+   */
+  async getNotifications(limit = 50, offset = 0): Promise<NotificationData[]> {
+    try {
+      const response = await APIClient.get("/notifications", {
+        limit,
+        offset,
+      });
+
+      if (response.success && response.data) {
+        return (response.data as any)?.notifications || [];
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Ошибка получения уведомлений:", error);
       return [];
     }
   }
 
-  async getUnreadCount(userId: string): Promise<number> {
+  /**
+   * Отметка уведомления как прочитанного
+   */
+  async markAsRead(notificationId: string): Promise<void> {
     try {
-      const response = await APIClient.get<{ count: number }>(`/notifications/user/${userId}/unread-count`);
-      return response.success && response.data?.count || 0;
-    } catch (error) {
-      return 0;
-    }
-  }
+      await APIClient.patch(`/notifications/${notificationId}/read`);
 
-  async markAsRead(notificationId: string): Promise<boolean> {
-    try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/${notificationId}/read`, {});
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async markAllAsRead(userId: string): Promise<boolean> {
-    try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/user/${userId}/mark-all-read`, {});
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async deleteNotification(notificationId: string): Promise<boolean> {
-    try {
-      const response = await APIClient.delete<{ success: boolean }>(`/notifications/${notificationId}`);
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async clearAll(userId: string): Promise<boolean> {
-    try {
-      const response = await APIClient.delete<{ success: boolean }>(`/notifications/user/${userId}/clear-all`);
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async getNotificationSettings(userId: string): Promise<NotificationSettings | null> {
-    try {
-      const response = await APIClient.get<NotificationSettings>(`/notifications/settings/${userId}`);
-      return response.success && response.data ? response.data : null;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async updateNotificationSettings(userId: string, settings: Partial<NotificationSettings>): Promise<boolean> {
-    try {
-      const response = await APIClient.put<{ success: boolean }>(`/notifications/settings/${userId}`, settings);
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async sendPushNotification(userId: string, payload: PushNotificationPayload): Promise<boolean> {
-    try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/push/${userId}`, payload as any);
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async registerPushToken(userId: string, token: string, platform: 'ios' | 'android'): Promise<boolean> {
-    try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/register-token`, {
-        userId,
-        token,
-        platform
-      });
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async unregisterPushToken(userId: string, token: string): Promise<boolean> {
-    try {
-      const response = await APIClient.post<{ success: boolean }>(`/notifications/unregister-token`, {
-        userId,
-        token
-      });
-      return response.success && response.data?.success || false;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  // Подписка на обновления уведомлений
-  subscribe(listener: (notifications: Notification[]) => void): () => void {
-    this.listeners.push(listener);
-    return () => {
-      const index = this.listeners.indexOf(listener);
-      if (index > -1) {
-        this.listeners.splice(index, 1);
+      // Обновляем локальную очередь
+      const index = this.notificationQueue.findIndex(
+        (n) => n.id === notificationId,
+      );
+      if (index !== -1) {
+        this.notificationQueue[index].read = true;
       }
+    } catch (error) {
+      console.error("Ошибка отметки уведомления как прочитанного:", error);
+    }
+  }
+
+  /**
+   * Отметка всех уведомлений как прочитанных
+   */
+  async markAllAsRead(): Promise<void> {
+    try {
+      await APIClient.patch("/notifications/mark-all-read");
+
+      // Обновляем локальную очередь
+      this.notificationQueue.forEach((notification) => {
+        notification.read = true;
+      });
+    } catch (error) {
+      console.error("Ошибка отметки всех уведомлений как прочитанных:", error);
+    }
+  }
+
+  /**
+   * Удаление уведомления
+   */
+  async deleteNotification(notificationId: string): Promise<void> {
+    try {
+      await APIClient.delete(`/notifications/${notificationId}`);
+
+      // Удаляем из локальной очереди
+      this.notificationQueue = this.notificationQueue.filter(
+        (n) => n.id !== notificationId,
+      );
+    } catch (error) {
+      console.error("Ошибка удаления уведомления:", error);
+    }
+  }
+
+  /**
+   * Отправка тестового уведомления
+   */
+  async sendTestNotification(): Promise<void> {
+    const testNotification: NotificationData = {
+      id: `test-${Date.now()}`,
+      title: "Тестовое уведомление",
+      message: "Это тестовое уведомление для проверки работы системы",
+      type: "info",
+      category: "system",
+      timestamp: Date.now(),
+      read: false,
+      priority: "normal",
     };
+
+    this.handleRealtimeNotification(testNotification);
   }
 
-  // Уведомление подписчиков об изменениях
-  private notifyListeners(notifications: Notification[]): void {
-    this.listeners.forEach(listener => listener(notifications));
+  /**
+   * Обновление настроек уведомлений
+   */
+  async updateSettings(
+    newSettings: Partial<NotificationSettings>,
+  ): Promise<void> {
+    try {
+      this.settings = { ...this.settings, ...newSettings };
+
+      await APIClient.put("/notifications/settings", this.settings);
+
+      // Если отключили push уведомления, отменяем все запланированные
+      if (!newSettings.pushEnabled) {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+      }
+    } catch (error) {
+      console.error("Ошибка обновления настроек уведомлений:", error);
+    }
   }
 
-  // Метод для обновления уведомлений (вызывается извне при получении новых уведомлений)
-  updateNotifications(notifications: Notification[]): void {
-    this.notifyListeners(notifications);
+  /**
+   * Загрузка настроек уведомлений
+   */
+  private async loadSettings(): Promise<void> {
+    try {
+      const response = await APIClient.get("/notifications/settings");
+
+      if (response.success && response.data) {
+        this.settings = { ...this.settings, ...(response.data as any) };
+      }
+    } catch (error) {
+      console.error("Ошибка загрузки настроек уведомлений:", error);
+    }
+  }
+
+  /**
+   * Получение текущих настроек
+   */
+  getSettings(): NotificationSettings {
+    return { ...this.settings };
+  }
+
+  /**
+   * Получение количества непрочитанных уведомлений
+   */
+  getUnreadCount(): number {
+    return this.notificationQueue.filter((n) => !n.read).length;
+  }
+
+  /**
+   * Очистка всех уведомлений
+   */
+  async clearAllNotifications(): Promise<void> {
+    try {
+      await APIClient.delete("/notifications/clear-all");
+      this.notificationQueue = [];
+    } catch (error) {
+      console.error("Ошибка очистки всех уведомлений:", error);
+    }
+  }
+
+  /**
+   * Деинициализация сервиса
+   */
+  destroy(): void {
+    this.ws.disconnect();
+    this.isInitialized = false;
+    this.notificationQueue = [];
   }
 }
 
-export default NotificationService;
+export default NotificationService.getInstance();

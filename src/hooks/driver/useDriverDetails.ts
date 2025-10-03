@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import DriverService from '../../services/DriverService';
+import DriverService from "../../services/DriverService";
 
 export interface DriverDetails {
   driver: {
@@ -18,13 +18,21 @@ export interface DriverDetails {
     childAge: number;
     childType: string;
   };
-  trips: Array<{ text: string; time: string; dotStyle?: 'blue' | 'location' | 'default' }>;
+  trips: Array<{
+    text: string;
+    time: string;
+    dotStyle?: "blue" | "location" | "default";
+  }>;
 }
 
 export const useDriverDetails = (driverId: string) => {
-  const [driverInfo, setDriverInfo] = useState<DriverDetails['driver'] | null>(null);
-  const [clientInfo, setClientInfo] = useState<DriverDetails['client'] | null>(null);
-  const [trips, setTrips] = useState<DriverDetails['trips']>([]);
+  const [driverInfo, setDriverInfo] = useState<DriverDetails["driver"] | null>(
+    null,
+  );
+  const [clientInfo, setClientInfo] = useState<DriverDetails["client"] | null>(
+    null,
+  );
+  const [trips, setTrips] = useState<DriverDetails["trips"]>([]);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -37,17 +45,17 @@ export const useDriverDetails = (driverId: string) => {
         setDriverInfo({
           id: profile.id,
           phone: profile.phone_number,
-          schedule: profile.schedule ?? '',
-          price: profile.price ?? '',
-          distance: profile.distance ?? '',
-          time: profile.time ?? '',
+          schedule: profile.schedule ?? "",
+          price: profile.price ?? "",
+          distance: profile.distance ?? "",
+          time: profile.time ?? "",
           rating: profile.rating ?? 0,
         });
         setClientInfo({
-          name: profile.client?.name ?? '',
-          childName: profile.client?.childName ?? '',
+          name: profile.client?.name ?? "",
+          childName: profile.client?.childName ?? "",
           childAge: profile.client?.childAge ?? 0,
-          childType: profile.client?.childType ?? '',
+          childType: profile.client?.childType ?? "",
         });
       }
 
@@ -60,20 +68,19 @@ export const useDriverDetails = (driverId: string) => {
   return {
     driverInfo: driverInfo ?? {
       id: driverId,
-      phone: '',
-      schedule: '',
-      price: '',
-      distance: '',
-      time: '',
+      phone: "",
+      schedule: "",
+      price: "",
+      distance: "",
+      time: "",
       rating: 0,
     },
     clientInfo: clientInfo ?? {
-      name: '',
-      childName: '',
+      name: "",
+      childName: "",
       childAge: 0,
-      childType: '',
+      childType: "",
     },
     trips,
   };
 };
-

@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../../constants/colors";
 
 export const createRatingStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);
@@ -16,9 +16,9 @@ export const createRatingStyles = (isDark: boolean) => {
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
     ratingContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
       marginBottom: SIZES.md,
       gap: SIZES.sm,
     },
@@ -30,7 +30,7 @@ export const createRatingStyles = (isDark: boolean) => {
     },
     commentLabel: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
       color: palette.text,
       marginBottom: SIZES.sm,
     },
@@ -43,7 +43,7 @@ export const createRatingStyles = (isDark: boolean) => {
       color: palette.text,
       backgroundColor: palette.surface,
       minHeight: 80,
-      textAlignVertical: 'top',
+      textAlignVertical: "top",
     },
   });
 };

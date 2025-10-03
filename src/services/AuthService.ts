@@ -1,7 +1,7 @@
-import JWTService, { TokenResponse } from './JWTService';
-import { User, UserRole } from '../types/user';
-import { ENV_CONFIG, ConfigUtils } from '../config/environment';
-import APIClient from './APIClient';
+import JWTService, { TokenResponse } from "./JWTService";
+import { User, UserRole } from "../types/user";
+import { ENV_CONFIG, ConfigUtils } from "../config/environment";
+import APIClient from "./APIClient";
 
 export interface AuthResponse {
   success: boolean;
@@ -61,16 +61,18 @@ const transformGoUserToFrontend = (goUser: GoUserInfo): User => {
     avatar: null,
     rating: 0,
     createdAt: new Date().toISOString(),
-    address: '',
+    address: "",
   };
 };
 
-const transformGoTokensToFrontend = (goTokens: GoTokenResponse): TokenResponse => {
+const transformGoTokensToFrontend = (
+  goTokens: GoTokenResponse,
+): TokenResponse => {
   return {
     accessToken: goTokens.access_token,
     refreshToken: goTokens.refresh_token,
     expiresIn: goTokens.expires_in,
-    tokenType: 'Bearer' as const,
+    tokenType: "Bearer" as const,
   };
 };
 
@@ -78,19 +80,27 @@ export class AuthService {
   /**
    * Вход в систему
    */
-  static async login(email: string, password: string, authMethod?: string): Promise<AuthResponse> {
+  static async login(
+    email: string,
+    password: string,
+    authMethod?: string,
+  ): Promise<AuthResponse> {
     try {
       const requestBody: GoLoginRequest = {
         email,
         password,
       };
 
-      const response = await APIClient.post<GoTokenResponse>('/auth/client/login', requestBody);
-      
+      const response = await APIClient.post<GoTokenResponse>(
+        "/auth/client/login",
+        requestBody,
+      );
+
       if (!response.success || !response.data) {
-        console.error(response.error || 'Login failed'); return;
+        console.error(response.error || "Login failed");
+        return;
       }
-      
+
       // Преобразуем данные в формат фронтенда
       const user = transformGoUserToFrontend(response.data.user_info);
       const tokens = transformGoTokensToFrontend(response.data);
@@ -103,7 +113,7 @@ export class AuthService {
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Login failed',
+        message: error instanceof Error ? error.message : "Login failed",
       };
     }
   }
@@ -111,15 +121,18 @@ export class AuthService {
   /**
    * Регистрация пользователя
    */
-  static async register(userData: {
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    country: string;
-    role: UserRole;
-    children?: Array<{ name: string; age: number; relationship: string }>;
-  }, password: string): Promise<AuthResponse> {
+  static async register(
+    userData: {
+      name: string;
+      surname: string;
+      email: string;
+      phone: string;
+      country: string;
+      role: UserRole;
+      children?: Array<{ name: string; age: number; relationship: string }>;
+    },
+    password: string,
+  ): Promise<AuthResponse> {
     try {
       const requestBody: GoRegisterRequest = {
         email: userData.email,
@@ -129,12 +142,16 @@ export class AuthService {
         last_name: userData.surname,
       };
 
-      const response = await APIClient.post<GoTokenResponse>('/auth/client/register', requestBody);
-      
+      const response = await APIClient.post<GoTokenResponse>(
+        "/auth/client/register",
+        requestBody,
+      );
+
       if (!response.success || !response.data) {
-        console.error(response.error || 'Registration failed'); return;
+        console.error(response.error || "Registration failed");
+        return;
       }
-      
+
       // Преобразуем данные в формат фронтенда
       const user = transformGoUserToFrontend(response.data.user_info);
       const tokens = transformGoTokensToFrontend(response.data);
@@ -147,7 +164,7 @@ export class AuthService {
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Registration failed',
+        message: error instanceof Error ? error.message : "Registration failed",
       };
     }
   }
@@ -159,25 +176,26 @@ export class AuthService {
     try {
       // Получаем refresh token
       const refreshToken = await JWTService.getRefreshToken();
-      
+
       if (refreshToken) {
         try {
-          await APIClient.post('/auth/client/logout', { refresh_token: refreshToken });
-        } catch (error) {
-        }
+          await APIClient.post("/auth/client/logout", {
+            refresh_token: refreshToken,
+          });
+        } catch (error) {}
       }
 
       // Очищаем токены локально
       await JWTService.clearTokens();
-      
+
       return {
         success: true,
-        message: 'Logged out successfully',
+        message: "Logged out successfully",
       };
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Logout failed',
+        message: error instanceof Error ? error.message : "Logout failed",
       };
     }
   }
@@ -188,36 +206,40 @@ export class AuthService {
   static async refreshToken(): Promise<AuthResponse> {
     try {
       const refreshToken = await JWTService.getRefreshToken();
-      
+
       if (!refreshToken) {
         return {
           success: false,
-          message: 'No refresh token available',
+          message: "No refresh token available",
         };
       }
 
-      const response = await APIClient.post<GoTokenResponse>('/auth/client/refresh', { refresh_token: refreshToken });
-      
+      const response = await APIClient.post<GoTokenResponse>(
+        "/auth/client/refresh",
+        { refresh_token: refreshToken },
+      );
+
       if (!response.success || !response.data) {
-        console.error(response.error || 'Token refresh failed'); return;
+        console.error(response.error || "Token refresh failed");
+        return;
       }
-      
+
       // Преобразуем данные в формат фронтенда
       const user = transformGoUserToFrontend(response.data.user_info);
       const tokens = transformGoTokensToFrontend(response.data);
 
       return {
         success: true,
-        message: 'Token refreshed successfully',
+        message: "Token refreshed successfully",
         user,
         tokens,
       };
     } catch (error) {
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Token refresh failed',
+        message:
+          error instanceof Error ? error.message : "Token refresh failed",
       };
     }
   }
-
 }

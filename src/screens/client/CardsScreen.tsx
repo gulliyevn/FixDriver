@@ -1,19 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, Modal, TextInput, Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
-import { ClientScreenProps } from '../../types/navigation';
-import { DriverStackParamList } from '../../types/driver/DriverNavigation';
-import { CardsScreenStyles as styles, getCardsScreenStyles } from '../../styles/screens/profile/CardsScreen.styles';
-import { colors } from '../../constants/colors';
-import { Card } from '../../services/cardService';
-import VisaIcon from '../../components/VisaIcon';
-import MastercardIcon from '../../components/MastercardIcon';
-import { useI18n } from '../../hooks/useI18n';
-import { useCards } from '../../hooks/useCards';
-import { CardService } from '../../services/cardService';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  Modal,
+  TextInput,
+  Platform,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
+import { ClientScreenProps } from "../../types/navigation";
+import { DriverStackParamList } from "../../types/driver/DriverNavigation";
+import {
+  CardsScreenStyles as styles,
+  getCardsScreenStyles,
+} from "../../styles/screens/profile/CardsScreen.styles";
+import { colors } from "../../constants/colors";
+import { Card } from "../../services/cardService";
+import VisaIcon from "../../components/VisaIcon";
+import MastercardIcon from "../../components/MastercardIcon";
+import { useI18n } from "../../hooks/useI18n";
+import { useCards } from "../../hooks/useCards";
+import { CardService } from "../../services/cardService";
 
 // import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
@@ -31,11 +43,11 @@ import { CardService } from '../../services/cardService';
 const handleScanCard = async () => {
   // Временно для Expo Go - просто показываем алерт
   Alert.alert(
-    'Сканер карт',
-    'Функция сканирования карт будет доступна в продакшн версии приложения.',
-    [{ text: 'OK' }]
+    "Сканер карт",
+    "Функция сканирования карт будет доступна в продакшн версии приложения.",
+    [{ text: "OK" }],
   );
-  
+
   // Код для продакшн билда (раскомментировать после сборки):
   // const granted = await requestCameraPermission();
   // if (!granted) {
@@ -54,7 +66,7 @@ const handleScanCard = async () => {
 };
 
 // Универсальный тип для навигации
-type CardsScreenProps = ClientScreenProps<'Cards'> | { navigation: any };
+type CardsScreenProps = ClientScreenProps<"Cards"> | { navigation: any };
 
 const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();
@@ -63,43 +75,53 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   const dynamicStyles = getCardsScreenStyles(isDark);
   const currentColors = isDark ? colors.dark : colors.light;
   // const [cards, setCards] = useState<Card[]>([]); // Заменено на useCards
-  const { cards, loading: cardsLoading, addCard: addCardToHook, deleteCard: deleteCardFromHook } = useCards();
+  const {
+    cards,
+    loading: cardsLoading,
+    addCard: addCardToHook,
+    deleteCard: deleteCardFromHook,
+  } = useCards();
   const [defaultCardId, setDefaultCardId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCard, setNewCard] = useState({
-    holderName: '',
-    number: '',
-    expiry: '',
-    type: 'visa',
-    cvv: '',
+    holderName: "",
+    number: "",
+    expiry: "",
+    type: "visa",
+    cvv: "",
   });
 
   // Валидация
-  const [errors, setErrors] = useState({ holderName: '', number: '', expiry: '', cvv: '' });
+  const [errors, setErrors] = useState({
+    holderName: "",
+    number: "",
+    expiry: "",
+    cvv: "",
+  });
 
   // Определяем роль пользователя
-  const isDriver = user?.role === 'driver';
-  
+  const isDriver = user?.role === "driver";
+
   // Условная логика для разных ролей
   const getScreenTitle = () => {
-    return isDriver ? 'Карты для выплат' : t('components.cards.title');
+    return isDriver ? "Карты для выплат" : t("components.cards.title");
   };
-  
+
   const getEmptyStateText = () => {
-    return isDriver 
-      ? 'Добавьте карту для получения выплат' 
-      : t('components.cards.emptyDescription');
+    return isDriver
+      ? "Добавьте карту для получения выплат"
+      : t("components.cards.emptyDescription");
   };
-  
+
   const getAddCardButtonText = () => {
-    return isDriver ? 'Добавить карту для выплат' : t('components.cards.add');
+    return isDriver ? "Добавить карту для выплат" : t("components.cards.add");
   };
 
   useEffect(() => {
     (async () => {
       // Теперь карты загружает useCards автоматически
       // Осталось только загрузить карту по умолчанию
-      const def = cards.find(c => c.isDefault);
+      const def = cards.find((c) => c.isDefault);
       setDefaultCardId(def ? def.id : null);
     })();
   }, [cards]); // Зависимость от cards из useCards
@@ -112,38 +134,38 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   }, [showAddModal]);
 
   // Определение типа карты по номеру
-  const getCardType = (number: string): 'visa' | 'mastercard' => {
-    const digits = number.replace(/\D/g, '');
-    if (digits.startsWith('4')) return 'visa';
-    if (digits.startsWith('5')) return 'mastercard';
-    if (digits.startsWith('34') || digits.startsWith('37')) return 'visa'; // American Express (но показываем как Visa)
-    if (digits.startsWith('6')) return 'mastercard'; // Discover (но показываем как Mastercard)
-    return 'visa'; // по умолчанию
+  const getCardType = (number: string): "visa" | "mastercard" => {
+    const digits = number.replace(/\D/g, "");
+    if (digits.startsWith("4")) return "visa";
+    if (digits.startsWith("5")) return "mastercard";
+    if (digits.startsWith("34") || digits.startsWith("37")) return "visa"; // American Express (но показываем как Visa)
+    if (digits.startsWith("6")) return "mastercard"; // Discover (но показываем как Mastercard)
+    return "visa"; // по умолчанию
   };
 
   const getCardErrors = () => {
-    const newErrors = { holderName: '', number: '', expiry: '', cvv: '' };
+    const newErrors = { holderName: "", number: "", expiry: "", cvv: "" };
     if (!newCard.holderName || newCard.holderName.trim().length < 2) {
-      newErrors.holderName = t('components.cards.holderError');
+      newErrors.holderName = t("components.cards.holderError");
     }
     if (!/^([0-9]{4} ){3}[0-9]{4}$/.test(newCard.number)) {
-      newErrors.number = t('components.cards.numberError');
+      newErrors.number = t("components.cards.numberError");
     }
     if (!/^\d{2}\/\d{2}$/.test(newCard.expiry)) {
-      newErrors.expiry = t('components.cards.expiryError');
+      newErrors.expiry = t("components.cards.expiryError");
     } else {
-      const [mm, yy] = newCard.expiry.split('/').map(Number);
+      const [mm, yy] = newCard.expiry.split("/").map(Number);
       const now = new Date();
       const curYear = now.getFullYear() % 100;
       const curMonth = now.getMonth() + 1;
       if (mm < 1 || mm > 12) {
-        newErrors.expiry = t('components.cards.expiryMonthError');
+        newErrors.expiry = t("components.cards.expiryMonthError");
       } else if (yy < curYear || (yy === curYear && mm < curMonth)) {
-        newErrors.expiry = t('components.cards.expiryPastError');
+        newErrors.expiry = t("components.cards.expiryPastError");
       }
     }
     if (!/^\d{3,4}$/.test(newCard.cvv)) {
-      newErrors.cvv = t('components.cards.cvvError');
+      newErrors.cvv = t("components.cards.cvvError");
     }
     return newErrors;
   };
@@ -170,73 +192,95 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
       id,
       holderName: newCard.holderName,
       last4: lastFour,
-      type: 'card' as const,
-      expiryMonth: parseInt(newCard.expiry.split('/')[0]),
-      expiryYear: parseInt(newCard.expiry.split('/')[1]),
-      brand: cardType === 'visa' ? 'Visa' : cardType === 'mastercard' ? 'Mastercard' : 'Visa',
+      type: "card" as const,
+      expiryMonth: parseInt(newCard.expiry.split("/")[0]),
+      expiryYear: parseInt(newCard.expiry.split("/")[1]),
+      brand:
+        cardType === "visa"
+          ? "Visa"
+          : cardType === "mastercard"
+            ? "Mastercard"
+            : "Visa",
       isDefault: cards.length === 0, // Если это первая карта, делаем её по умолчанию
     };
     // Используем универсальный хук
     const success = await addCardToHook(newCardData);
     if (!success) {
-      Alert.alert(t('common.error'), t('cards.addError'));
+      Alert.alert(t("common.error"), t("cards.addError"));
       return;
     }
-    
+
     // Если это первая карта, устанавливаем её как карту по умолчанию
-    if (cards.length === 1) { // Теперь карта уже добавлена
-      await CardService.setDefault(id, 'current_user_id');
+    if (cards.length === 1) {
+      // Теперь карта уже добавлена
+      await CardService.setDefault(id, "current_user_id");
     }
     setDefaultCardId(newCardData.isDefault ? id : defaultCardId);
     setShowAddModal(false);
-    setNewCard({ holderName: '', number: '', expiry: '', type: 'visa', cvv: '' });
-    setErrors({ holderName: '', number: '', expiry: '', cvv: '' });
+    setNewCard({
+      holderName: "",
+      number: "",
+      expiry: "",
+      type: "visa",
+      cvv: "",
+    });
+    setErrors({ holderName: "", number: "", expiry: "", cvv: "" });
   };
 
   const handleCancelAdd = () => {
     setShowAddModal(false);
-    setNewCard({ holderName: '', number: '', expiry: '', type: 'visa', cvv: '' });
+    setNewCard({
+      holderName: "",
+      number: "",
+      expiry: "",
+      type: "visa",
+      cvv: "",
+    });
   };
 
   const handleDeleteCard = async (cardId: string) => {
     Alert.alert(
-      t('components.cards.delete'),
-      t('components.cards.deleteConfirm'),
+      t("components.cards.delete"),
+      t("components.cards.deleteConfirm"),
       [
-        { text: t('components.cards.cancel'), style: 'cancel' },
-        { text: t('components.cards.delete'), style: 'destructive', onPress: async () => {
-          const success = await deleteCardFromHook(cardId);
-          if (!success) {
-            Alert.alert(t('common.error'), t('cards.deleteError'));
-            return;
-          }
-          if (defaultCardId === cardId) {
-            if (cards.length > 1) {
-              const newDefaultId = cards.find(c => c.id !== cardId)?.id;
-              if (newDefaultId) {
-                await CardService.setDefault(newDefaultId, 'current_user_id');
-                setDefaultCardId(newDefaultId);
-              }
-            } else {
-              setDefaultCardId(null);
+        { text: t("components.cards.cancel"), style: "cancel" },
+        {
+          text: t("components.cards.delete"),
+          style: "destructive",
+          onPress: async () => {
+            const success = await deleteCardFromHook(cardId);
+            if (!success) {
+              Alert.alert(t("common.error"), t("cards.deleteError"));
+              return;
             }
-          }
-        } }
-      ]
+            if (defaultCardId === cardId) {
+              if (cards.length > 1) {
+                const newDefaultId = cards.find((c) => c.id !== cardId)?.id;
+                if (newDefaultId) {
+                  await CardService.setDefault(newDefaultId, "current_user_id");
+                  setDefaultCardId(newDefaultId);
+                }
+              } else {
+                setDefaultCardId(null);
+              }
+            }
+          },
+        },
+      ],
     );
   };
 
   const handleSetDefault = async (cardId: string) => {
-    await CardService.setDefault(cardId, 'current_user_id');
+    await CardService.setDefault(cardId, "current_user_id");
     setDefaultCardId(cardId);
   };
 
   const getCardColor = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'visa':
-        return isDark ? '#60A5FA' : '#1a1f71'; // фирменный синий Visa
-      case 'mastercard':
-        return isDark ? '#FBBF24' : '#eb001b'; // фирменный цвет Mastercard
+      case "visa":
+        return isDark ? "#60A5FA" : "#1a1f71"; // фирменный синий Visa
+      case "mastercard":
+        return isDark ? "#FBBF24" : "#eb001b"; // фирменный цвет Mastercard
       default:
         return currentColors.primary;
     }
@@ -244,37 +288,37 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
 
   const handleCardNumberChange = (text: string) => {
     // Удаляем все нецифровые символы
-    const digits = text.replace(/\D/g, '');
+    const digits = text.replace(/\D/g, "");
     // Ограничиваем до 16 цифр
     const limited = digits.slice(0, 16);
     // Форматируем в группы по 4 цифры
-    let formatted = '';
+    let formatted = "";
     for (let i = 0; i < limited.length; i++) {
       if (i > 0 && i % 4 === 0) {
-        formatted += ' ';
+        formatted += " ";
       }
       formatted += limited[i];
     }
     // Определяем тип карты на основе номера
     const cardType = getCardType(formatted);
-    setNewCard(prev => ({ ...prev, number: formatted, type: cardType }));
+    setNewCard((prev) => ({ ...prev, number: formatted, type: cardType }));
   };
 
   const handleExpiryChange = (v: string) => {
-    let digits = v.replace(/\D/g, '');
+    let digits = v.replace(/\D/g, "");
     digits = digits.slice(0, 4);
-    let formatted = '';
+    let formatted = "";
     if (digits.length > 0) {
       let mm = digits.slice(0, 2);
-      if (mm.length === 1 && parseInt(mm) > 1) mm = '0' + mm;
+      if (mm.length === 1 && parseInt(mm) > 1) mm = "0" + mm;
       if (mm.length === 2) {
         let m = parseInt(mm, 10);
-        if (m < 1) mm = '01';
-        if (m > 12) mm = '12';
+        if (m < 1) mm = "01";
+        if (m > 12) mm = "12";
       }
       formatted = mm;
       if (digits.length > 2) {
-        formatted += '/';
+        formatted += "/";
         let yy = digits.slice(2, 4);
         const now = new Date();
         const curYear = now.getFullYear() % 100;
@@ -283,16 +327,21 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
         formatted += yy;
       }
     }
-    setNewCard(c => ({ ...c, expiry: formatted }));
+    setNewCard((c) => ({ ...c, expiry: formatted }));
   };
 
   return (
     <View style={[styles.container, dynamicStyles.container]}>
       <View style={[styles.header, dynamicStyles.header]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <Ionicons name="arrow-back" size={24} color={currentColors.primary} />
         </TouchableOpacity>
-        <Text style={[styles.title, dynamicStyles.title]}>{getScreenTitle()}</Text>
+        <Text style={[styles.title, dynamicStyles.title]}>
+          {getScreenTitle()}
+        </Text>
         <TouchableOpacity onPress={handleAddCard} style={styles.addButton}>
           <Ionicons name="add" size={24} color={currentColors.primary} />
         </TouchableOpacity>
@@ -307,22 +356,32 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContainer, dynamicStyles.modalContainer]}>
-            <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>{t('components.cards.addTitle')}</Text>
+            <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
+              {t("components.cards.addTitle")}
+            </Text>
             <TextInput
-                              placeholder={t('components.cards.holderPlaceholder')}
+              placeholder={t("components.cards.holderPlaceholder")}
               placeholderTextColor={currentColors.textSecondary}
               value={newCard.holderName}
-              onChangeText={v => setNewCard(c => ({ ...c, holderName: v }))}
+              onChangeText={(v) => setNewCard((c) => ({ ...c, holderName: v }))}
               style={[styles.input, dynamicStyles.input]}
             />
-                            {!!errors.holderName && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.holderError')}</Text>}
+            {!!errors.holderName && (
+              <Text style={[styles.errorText, dynamicStyles.errorText]}>
+                {t("components.cards.holderError")}
+              </Text>
+            )}
             <View style={styles.inputContainer}>
               <TextInput
-                placeholder={t('components.cards.numberPlaceholder')}
+                placeholder={t("components.cards.numberPlaceholder")}
                 placeholderTextColor={currentColors.textSecondary}
                 value={newCard.number}
                 onChangeText={handleCardNumberChange}
-                style={[styles.input, styles.inputWithIcon, dynamicStyles.input]}
+                style={[
+                  styles.input,
+                  styles.inputWithIcon,
+                  dynamicStyles.input,
+                ]}
                 keyboardType="numeric"
                 maxLength={19}
               />
@@ -331,52 +390,92 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
                 style={styles.scanButton}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Ionicons name="scan-outline" size={22} color={currentColors.primary} />
+                <Ionicons
+                  name="scan-outline"
+                  size={22}
+                  color={currentColors.primary}
+                />
               </TouchableOpacity>
               {/* Индикатор типа карты */}
               {newCard.number.length > 0 && (
                 <View style={styles.cardTypeIndicator}>
-                  {newCard.type === 'visa' ? (
+                  {newCard.type === "visa" ? (
                     <VisaIcon width={24} height={24} />
-                  ) : newCard.type === 'mastercard' ? (
+                  ) : newCard.type === "mastercard" ? (
                     <MastercardIcon width={24} height={24} />
                   ) : null}
                 </View>
               )}
             </View>
-                            {!!errors.number && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.numberError')}</Text>}
+            {!!errors.number && (
+              <Text style={[styles.errorText, dynamicStyles.errorText]}>
+                {t("components.cards.numberError")}
+              </Text>
+            )}
             <View style={styles.inputRow}>
               <TextInput
-                                  placeholder={t('components.cards.expiryPlaceholder')}
+                placeholder={t("components.cards.expiryPlaceholder")}
                 placeholderTextColor={currentColors.textSecondary}
                 value={newCard.expiry}
                 onChangeText={handleExpiryChange}
-                style={[styles.input, styles.inputFlex, dynamicStyles.inputFlex]}
+                style={[
+                  styles.input,
+                  styles.inputFlex,
+                  dynamicStyles.inputFlex,
+                ]}
                 keyboardType="numeric"
                 maxLength={5}
               />
               <TextInput
-                                  placeholder={t('components.cards.cvvPlaceholder')}
+                placeholder={t("components.cards.cvvPlaceholder")}
                 placeholderTextColor={currentColors.textSecondary}
-                value={newCard.cvv || ''}
-                onChangeText={v => setNewCard(c => ({ ...c, cvv: v.replace(/[^0-9]/g, '') }))}
+                value={newCard.cvv || ""}
+                onChangeText={(v) =>
+                  setNewCard((c) => ({ ...c, cvv: v.replace(/[^0-9]/g, "") }))
+                }
                 maxLength={4}
                 keyboardType="number-pad"
                 secureTextEntry
-                style={[styles.input, styles.inputFlex, dynamicStyles.inputFlex]}
+                style={[
+                  styles.input,
+                  styles.inputFlex,
+                  dynamicStyles.inputFlex,
+                ]}
               />
             </View>
             <View style={styles.errorRow}>
               <View style={styles.errorContainer}>
-                {!!errors.expiry && <Text style={[styles.errorText, dynamicStyles.errorText]}>{errors.expiry}</Text>}
+                {!!errors.expiry && (
+                  <Text style={[styles.errorText, dynamicStyles.errorText]}>
+                    {errors.expiry}
+                  </Text>
+                )}
               </View>
               <View style={styles.errorContainer}>
-                {!!errors.cvv && <Text style={[styles.errorText, dynamicStyles.errorText]}>{t('components.cards.cvvError')}</Text>}
+                {!!errors.cvv && (
+                  <Text style={[styles.errorText, dynamicStyles.errorText]}>
+                    {t("components.cards.cvvError")}
+                  </Text>
+                )}
               </View>
             </View>
             <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={handleCancelAdd} style={[styles.modalButton, styles.modalButtonCancel, dynamicStyles.modalButtonCancel]}>
-                <Text style={[styles.modalButtonText, dynamicStyles.modalButtonText]}>{t('components.cards.cancel')}</Text>
+              <TouchableOpacity
+                onPress={handleCancelAdd}
+                style={[
+                  styles.modalButton,
+                  styles.modalButtonCancel,
+                  dynamicStyles.modalButtonCancel,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.modalButtonText,
+                    dynamicStyles.modalButtonText,
+                  ]}
+                >
+                  {t("components.cards.cancel")}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleSaveCard}
@@ -384,80 +483,129 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
                   styles.modalButton,
                   styles.modalButtonSave,
                   !isCardValid() && styles.modalButtonDisabled,
-                  isCardValid() ? dynamicStyles.modalButtonSave : dynamicStyles.modalButtonSaveDisabled,
+                  isCardValid()
+                    ? dynamicStyles.modalButtonSave
+                    : dynamicStyles.modalButtonSaveDisabled,
                 ]}
                 disabled={!isCardValid()}
               >
-                                  <Text style={[styles.modalButtonText, isCardValid() ? dynamicStyles.modalButtonTextSave : dynamicStyles.modalButtonTextSaveDisabled]}>{t('components.cards.save')}</Text>
+                <Text
+                  style={[
+                    styles.modalButtonText,
+                    isCardValid()
+                      ? dynamicStyles.modalButtonTextSave
+                      : dynamicStyles.modalButtonTextSaveDisabled,
+                  ]}
+                >
+                  {t("components.cards.save")}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {cards.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="card-outline" size={64} color="#ccc" />
-            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>{t('components.cards.empty')}</Text>
-            <Text style={[styles.emptyDescription, dynamicStyles.emptyDescription]}>
+            <Text style={[styles.emptyTitle, dynamicStyles.emptyTitle]}>
+              {t("components.cards.empty")}
+            </Text>
+            <Text
+              style={[styles.emptyDescription, dynamicStyles.emptyDescription]}
+            >
               {getEmptyStateText()}
             </Text>
-            <TouchableOpacity style={styles.addCardButton} onPress={handleAddCard}>
-              <Text style={styles.addCardButtonText}>{getAddCardButtonText()}</Text>
+            <TouchableOpacity
+              style={styles.addCardButton}
+              onPress={handleAddCard}
+            >
+              <Text style={styles.addCardButtonText}>
+                {getAddCardButtonText()}
+              </Text>
             </TouchableOpacity>
           </View>
         ) : (
           <>
             {cards.map((card) => (
-              <View key={card.id} style={[styles.cardItem, dynamicStyles.cardItem]}>
+              <View
+                key={card.id}
+                style={[styles.cardItem, dynamicStyles.cardItem]}
+              >
                 <View style={styles.cardHeader}>
                   <View style={styles.cardInfo}>
-                    {card.type.toLowerCase() === 'visa' ? (
+                    {card.type.toLowerCase() === "visa" ? (
                       <VisaIcon width={32} height={32} />
-                    ) : card.type.toLowerCase() === 'mastercard' ? (
+                    ) : card.type.toLowerCase() === "mastercard" ? (
                       <MastercardIcon width={32} height={32} />
                     ) : (
-                      <Ionicons 
-                        name={'card'}
+                      <Ionicons
+                        name={"card"}
                         size={32}
                         color={getCardColor(card.type)}
                       />
                     )}
                     <View style={styles.cardDetails}>
-                      <Text style={[styles.cardName, dynamicStyles.cardName]}>{card.holderName}</Text>
+                      <Text style={[styles.cardName, dynamicStyles.cardName]}>
+                        {card.holderName}
+                      </Text>
                       <View style={styles.cardNumberRow}>
-                        <Text style={[styles.cardNumber, dynamicStyles.cardNumber]}>•••• {card.last4 || '****'}</Text>
-                        <Text style={[styles.cardExpiry, dynamicStyles.cardExpiry, styles.cardExpiryWithMargin]}> {card.expiryMonth ? `${card.expiryMonth.toString().padStart(2, '0')}/${card.expiryYear}` : '**/**'}</Text>
+                        <Text
+                          style={[styles.cardNumber, dynamicStyles.cardNumber]}
+                        >
+                          •••• {card.last4 || "****"}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.cardExpiry,
+                            dynamicStyles.cardExpiry,
+                            styles.cardExpiryWithMargin,
+                          ]}
+                        >
+                          {" "}
+                          {card.expiryMonth
+                            ? `${card.expiryMonth.toString().padStart(2, "0")}/${card.expiryYear}`
+                            : "**/**"}
+                        </Text>
                       </View>
                       <TouchableOpacity
                         style={[
                           styles.defaultButton,
-                          card.id === defaultCardId ? dynamicStyles.defaultButton : dynamicStyles.defaultButtonInactive
+                          card.id === defaultCardId
+                            ? dynamicStyles.defaultButton
+                            : dynamicStyles.defaultButtonInactive,
                         ]}
                         onPress={() => handleSetDefault(card.id)}
                         disabled={card.id === defaultCardId}
                       >
-                        <Text style={[
-                          styles.defaultButtonText,
-                          card.id === defaultCardId ? dynamicStyles.defaultButtonText : dynamicStyles.defaultButtonTextInactive
-                        ]}>
-                          {t('components.cards.default')}
+                        <Text
+                          style={[
+                            styles.defaultButtonText,
+                            card.id === defaultCardId
+                              ? dynamicStyles.defaultButtonText
+                              : dynamicStyles.defaultButtonTextInactive,
+                          ]}
+                        >
+                          {t("components.cards.default")}
                         </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => {
                       handleDeleteCard(card.id);
                     }}
                     style={styles.deleteButton}
                   >
-                    <Ionicons name="trash-outline" size={20} color={currentColors.error} />
+                    <Ionicons
+                      name="trash-outline"
+                      size={20}
+                      color={currentColors.error}
+                    />
                   </TouchableOpacity>
                 </View>
-                <View style={styles.cardFooter}>
-                </View>
+                <View style={styles.cardFooter}></View>
               </View>
             ))}
           </>
@@ -467,4 +615,4 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   );
 };
 
-export default CardsScreen; 
+export default CardsScreen;

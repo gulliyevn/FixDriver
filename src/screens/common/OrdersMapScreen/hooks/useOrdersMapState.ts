@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { MapService, MapLocation } from '../../../../services/MapService';
-import { OrdersMapState, OrdersMapActions } from '../types/orders-map.types';
+import { useState, useEffect } from "react";
+import { MapService, MapLocation } from "../../../../services/MapService";
+import { OrdersMapState, OrdersMapActions } from "../types/orders-map.types";
 
 export const useOrdersMapState = (): [OrdersMapState, OrdersMapActions] => {
-  const [currentLocation, setCurrentLocation] = useState<MapLocation | undefined>(undefined);
+  const [currentLocation, setCurrentLocation] = useState<
+    MapLocation | undefined
+  >(undefined);
   const [isExpanded, setIsExpanded] = useState(false);
   const [driverVisibilityTrigger, setDriverVisibilityTrigger] = useState(0);
   const [mapRefreshKey, setMapRefreshKey] = useState(0);
@@ -11,9 +13,11 @@ export const useOrdersMapState = (): [OrdersMapState, OrdersMapActions] => {
   const [isClientLocationActive, setIsClientLocationActive] = useState(false);
   const [isDriverModalVisible, setIsDriverModalVisible] = useState(false);
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
-  const [reportComment, setReportComment] = useState('');
+  const [reportComment, setReportComment] = useState("");
   const [isSimpleDialogVisible, setIsSimpleDialogVisible] = useState(false);
-  const [mapType, setMapType] = useState<'standard' | 'satellite' | 'hybrid'>('standard');
+  const [mapType, setMapType] = useState<"standard" | "satellite" | "hybrid">(
+    "standard",
+  );
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
 
   // Инициализация текущей локации

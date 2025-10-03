@@ -1,4 +1,4 @@
-import { AddressCategoryConfig } from '../constants/addressCategories';
+import { AddressCategoryConfig } from "../constants/addressCategories";
 
 export interface AddressInput {
   title: string;

@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import DriverStatusService from '../../../services/DriverStatusService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Animated } from 'react-native';
+import { useState, useRef, useEffect } from "react";
+import DriverStatusService from "../../../services/DriverStatusService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Animated } from "react-native";
 
 export const useEarningsState = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'year'>('today');
+  const [selectedPeriod, setSelectedPeriod] = useState<
+    "today" | "week" | "month" | "year"
+  >("today");
   const [filterExpanded, setFilterExpanded] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
@@ -17,12 +19,11 @@ export const useEarningsState = () => {
   useEffect(() => {
     (async () => {
       try {
-        const saved = await AsyncStorage.getItem('@driver_online_status');
-        if (saved === 'true' || saved === 'false') {
-          setIsOnline(saved === 'true');
+        const saved = await AsyncStorage.getItem("@driver_online_status");
+        if (saved === "true" || saved === "false") {
+          setIsOnline(saved === "true");
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     })();
   }, []);
 
@@ -31,11 +32,11 @@ export const useEarningsState = () => {
     const unsub = DriverStatusService.subscribe((online) => {
       setIsOnline(online);
       // Принудительно обновляем UI при изменении статуса
-      setUiUpdateTrigger(prev => prev + 1);
+      setUiUpdateTrigger((prev) => prev + 1);
     });
-    
+
     return () => {
-      if (typeof unsub === 'function') {
+      if (typeof unsub === "function") {
         unsub();
       }
     };

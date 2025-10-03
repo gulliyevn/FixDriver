@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ButtonState {
   buttonColorState: number;
   isPaused: boolean;
   emergencyActionsUsed: boolean;
-  emergencyActionType: 'stop' | 'end' | null;
+  emergencyActionType: "stop" | "end" | null;
   pauseStartTime: number | null;
   // Новые состояния для таймера в статусе 2 (циан)
   isTripTimerActive: boolean;
   tripStartTime: number | null;
 }
 
-const BUTTON_STATE_KEY = '@driver_modal_button_state';
+const BUTTON_STATE_KEY = "@driver_modal_button_state";
 
 export const usePersistentButtonState = (driverId: string) => {
   const [buttonState, setButtonState] = useState<ButtonState>({
@@ -42,7 +42,7 @@ export const usePersistentButtonState = (driverId: string) => {
     try {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       const savedState = await AsyncStorage.getItem(key);
-      
+
       if (savedState) {
         const parsedState = JSON.parse(savedState);
         setButtonState(parsedState);
@@ -57,12 +57,11 @@ export const usePersistentButtonState = (driverId: string) => {
     try {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.setItem(key, JSON.stringify(buttonState));
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const updateButtonState = useCallback((updates: Partial<ButtonState>) => {
-    setButtonState(prev => ({ ...prev, ...updates }));
+    setButtonState((prev) => ({ ...prev, ...updates }));
   }, []);
 
   const resetButtonState = async () => {
@@ -75,14 +74,13 @@ export const usePersistentButtonState = (driverId: string) => {
       isTripTimerActive: false,
       tripStartTime: null,
     };
-    
+
     setButtonState(newState);
-    
+
     try {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.removeItem(key);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return {

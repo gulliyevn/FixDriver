@@ -1,12 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DriverModalState, DriverModalActions } from '../types/driver-modal.types';
-import { usePersistentButtonState } from '../../../hooks/usePersistentButtonState';
+import { useState, useEffect, useCallback, useRef } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  DriverModalState,
+  DriverModalActions,
+} from "../types/driver-modal.types";
+import { usePersistentButtonState } from "../../../hooks/usePersistentButtonState";
 
-export const useDriverModalState = (driverId: string): [DriverModalState, DriverModalActions] => {
-  const { buttonState, updateButtonState, resetButtonState, isLoaded } = usePersistentButtonState(driverId);
+export const useDriverModalState = (
+  driverId: string,
+): [DriverModalState, DriverModalActions] => {
+  const { buttonState, updateButtonState, resetButtonState, isLoaded } =
+    usePersistentButtonState(driverId);
   const isInitialized = useRef(false);
-  
+
   const [isDriverExpanded, setIsDriverExpanded] = useState(false);
   const [buttonColorState, setButtonColorState] = useState(0);
   const [isOnline, setIsOnline] = useState(false);
@@ -23,7 +29,9 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
   const [showGoOnlineConfirm, setShowGoOnlineConfirm] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [emergencyActionsUsed, setEmergencyActionsUsed] = useState(false);
-  const [emergencyActionType, setEmergencyActionType] = useState<'stop' | 'end' | null>(null);
+  const [emergencyActionType, setEmergencyActionType] = useState<
+    "stop" | "end" | null
+  >(null);
   const [isEmergencyButtonActive, setIsEmergencyButtonActive] = useState(false);
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
   const [slideProgress, setSlideProgress] = useState(0);
@@ -63,7 +71,16 @@ export const useDriverModalState = (driverId: string): [DriverModalState, Driver
         tripStartTime,
       });
     }
-  }, [buttonColorState, isPaused, emergencyActionsUsed, emergencyActionType, pauseStartTime, isTripTimerActive, tripStartTime, isLoaded]);
+  }, [
+    buttonColorState,
+    isPaused,
+    emergencyActionsUsed,
+    emergencyActionType,
+    pauseStartTime,
+    isTripTimerActive,
+    tripStartTime,
+    isLoaded,
+  ]);
 
   // Асинхронная активация кнопки экстренных действий
   useEffect(() => {

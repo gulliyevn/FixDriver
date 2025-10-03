@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -6,20 +6,20 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { ButtonStyles } from '../styles/components/Button.styles';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { ButtonStyles } from "../styles/components/Button.styles";
 
 export interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  size?: "small" | "medium" | "large";
   disabled?: boolean;
   loading?: boolean;
   icon?: keyof typeof Ionicons.glyphMap;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   fullWidth?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -29,12 +29,12 @@ export interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   disabled = false,
   loading = false,
   icon,
-  iconPosition = 'left',
+  iconPosition = "left",
   fullWidth = false,
   style,
   textStyle,
@@ -47,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
 
   const handlePressIn = () => {
     if (disabled || loading) return;
-    
+
     Animated.parallel([
       Animated.timing(scaleAnim, {
         toValue: 0.95,
@@ -64,7 +64,7 @@ const Button: React.FC<ButtonProps> = ({
 
   const handlePressOut = () => {
     if (disabled || loading) return;
-    
+
     Animated.parallel([
       Animated.timing(scaleAnim, {
         toValue: 1,
@@ -111,21 +111,21 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const getIconColor = (): string => {
-    if (disabled) return isDark ? '#6B7280' : '#9CA3AF';
-    
+    if (disabled) return isDark ? "#6B7280" : "#9CA3AF";
+
     switch (variant) {
-      case 'primary':
-        return '#FFFFFF';
-      case 'secondary':
-        return isDark ? '#F9FAFB' : '#1F2937';
-      case 'outline':
-        return isDark ? '#F9FAFB' : '#1F2937';
-      case 'ghost':
-        return isDark ? '#F9FAFB' : '#1F2937';
-      case 'danger':
-        return '#FFFFFF';
+      case "primary":
+        return "#FFFFFF";
+      case "secondary":
+        return isDark ? "#F9FAFB" : "#1F2937";
+      case "outline":
+        return isDark ? "#F9FAFB" : "#1F2937";
+      case "ghost":
+        return isDark ? "#F9FAFB" : "#1F2937";
+      case "danger":
+        return "#FFFFFF";
       default:
-        return '#FFFFFF';
+        return "#FFFFFF";
     }
   };
 
@@ -135,11 +135,11 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <Ionicons
         name={icon}
-        size={size === 'small' ? 16 : size === 'large' ? 24 : 20}
+        size={size === "small" ? 16 : size === "large" ? 24 : 20}
         color={getIconColor()}
         style={[
           ButtonStyles.icon,
-          iconPosition === 'right' && ButtonStyles.iconRight,
+          iconPosition === "right" && ButtonStyles.iconRight,
         ]}
       />
     );
@@ -152,17 +152,17 @@ const Button: React.FC<ButtonProps> = ({
 
     return (
       <>
-        {icon && iconPosition === 'left' && renderIcon()}
+        {icon && iconPosition === "left" && renderIcon()}
         {loading ? (
           <ActivityIndicator
-            size={size === 'small' ? 'small' : 'small'}
+            size={size === "small" ? "small" : "small"}
             color={getIconColor()}
             style={ButtonStyles.loader}
           />
         ) : (
           <Text style={getTextStyle()}>{title}</Text>
         )}
-        {icon && iconPosition === 'right' && renderIcon()}
+        {icon && iconPosition === "right" && renderIcon()}
       </>
     );
   };

@@ -1,4 +1,4 @@
-import APIClient from '../APIClient';
+import APIClient from "../APIClient";
 
 export interface Address {
   id: string;
@@ -48,7 +48,9 @@ export class DriverAddressService {
    */
   async getAddresses(driverId: string): Promise<Address[]> {
     try {
-      const response = await APIClient.get<Address[]>(`/drivers/${driverId}/addresses`);
+      const response = await APIClient.get<Address[]>(
+        `/drivers/${driverId}/addresses`,
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -60,7 +62,9 @@ export class DriverAddressService {
    */
   async getAddress(addressId: string): Promise<Address | null> {
     try {
-      const response = await APIClient.get<Address>(`/drivers/addresses/${addressId}`);
+      const response = await APIClient.get<Address>(
+        `/drivers/addresses/${addressId}`,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -70,11 +74,14 @@ export class DriverAddressService {
   /**
    * Создает новый адрес водителя
    */
-  async createAddress(driverId: string, addressData: CreateAddressRequest): Promise<Address | null> {
+  async createAddress(
+    driverId: string,
+    addressData: CreateAddressRequest,
+  ): Promise<Address | null> {
     try {
-      const response = await APIClient.post<Address>('/drivers/addresses', {
+      const response = await APIClient.post<Address>("/drivers/addresses", {
         ...addressData,
-        driverId
+        driverId,
       });
       return response.success && response.data ? response.data : null;
     } catch (error) {
@@ -85,9 +92,15 @@ export class DriverAddressService {
   /**
    * Обновляет адрес водителя
    */
-  async updateAddress(addressId: string, updates: UpdateAddressRequest): Promise<Address | null> {
+  async updateAddress(
+    addressId: string,
+    updates: UpdateAddressRequest,
+  ): Promise<Address | null> {
     try {
-      const response = await APIClient.put<Address>(`/drivers/addresses/${addressId}`, updates);
+      const response = await APIClient.put<Address>(
+        `/drivers/addresses/${addressId}`,
+        updates,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -99,8 +112,10 @@ export class DriverAddressService {
    */
   async deleteAddress(addressId: string): Promise<boolean> {
     try {
-      const response = await APIClient.delete<{ success: boolean }>(`/drivers/addresses/${addressId}`);
-      return response.success && response.data?.success || false;
+      const response = await APIClient.delete<{ success: boolean }>(
+        `/drivers/addresses/${addressId}`,
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -109,10 +124,16 @@ export class DriverAddressService {
   /**
    * Устанавливает адрес по умолчанию для водителя
    */
-  async setDefaultAddress(driverId: string, addressId: string): Promise<boolean> {
+  async setDefaultAddress(
+    driverId: string,
+    addressId: string,
+  ): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/drivers/${driverId}/addresses/default`, { addressId });
-      return response.success && response.data?.success || false;
+      const response = await APIClient.post<{ success: boolean }>(
+        `/drivers/${driverId}/addresses/default`,
+        { addressId },
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -123,7 +144,9 @@ export class DriverAddressService {
    */
   async getDefaultAddress(driverId: string): Promise<Address | null> {
     try {
-      const response = await APIClient.get<Address>(`/drivers/${driverId}/addresses/default`);
+      const response = await APIClient.get<Address>(
+        `/drivers/${driverId}/addresses/default`,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -135,23 +158,26 @@ export class DriverAddressService {
    */
   async geocodeAddress(address: string): Promise<GeocodeResponse> {
     try {
-      const response = await APIClient.post<GeocodeResponse['data']>('/drivers/addresses/geocode', { address });
-      
+      const response = await APIClient.post<GeocodeResponse["data"]>(
+        "/drivers/addresses/geocode",
+        { address },
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          data: response.data
+          data: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при геокодировании адреса'
+        error: response.error || "Ошибка при геокодировании адреса",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при геокодировании адреса'
+        error: "Ошибка при геокодировании адреса",
       };
     }
   }
@@ -159,25 +185,31 @@ export class DriverAddressService {
   /**
    * Обратное геокодирование (получение адреса по координатам)
    */
-  async reverseGeocode(latitude: number, longitude: number): Promise<GeocodeResponse> {
+  async reverseGeocode(
+    latitude: number,
+    longitude: number,
+  ): Promise<GeocodeResponse> {
     try {
-      const response = await APIClient.post<GeocodeResponse['data']>('/drivers/addresses/reverse-geocode', { latitude, longitude });
-      
+      const response = await APIClient.post<GeocodeResponse["data"]>(
+        "/drivers/addresses/reverse-geocode",
+        { latitude, longitude },
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          data: response.data
+          data: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при обратном геокодировании'
+        error: response.error || "Ошибка при обратном геокодировании",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при обратном геокодировании'
+        error: "Ошибка при обратном геокодировании",
       };
     }
   }
@@ -187,7 +219,10 @@ export class DriverAddressService {
    */
   async searchAddresses(driverId: string, query: string): Promise<Address[]> {
     try {
-      const response = await APIClient.get<Address[]>(`/drivers/${driverId}/addresses/search`, { q: query });
+      const response = await APIClient.get<Address[]>(
+        `/drivers/${driverId}/addresses/search`,
+        { q: query },
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -197,9 +232,13 @@ export class DriverAddressService {
   /**
    * Получает категории адресов для водителей
    */
-  async getAddressCategories(): Promise<Array<{ id: string; name: string; icon: string; color: string }>> {
+  async getAddressCategories(): Promise<
+    Array<{ id: string; name: string; icon: string; color: string }>
+  > {
     try {
-      const response = await APIClient.get<Array<{ id: string; name: string; icon: string; color: string }>>('/drivers/addresses/categories');
+      const response = await APIClient.get<
+        Array<{ id: string; name: string; icon: string; color: string }>
+      >("/drivers/addresses/categories");
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];

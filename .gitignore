@@ -260,6 +260,27 @@ lint-report-*.txt
 uploads/temp/
 uploads/cache/
 
+# ===== APP STORE CREDENTIALS =====
+
+# Apple Developer Credentials
+credentials/apple-distribution.p12
+credentials/apple-distribution.p12.password
+credentials/apple-distribution.mobileprovision
+credentials/AppleWWDRCA.cer
+
+# Google Play Credentials
+credentials/google-service-account.json
+credentials/play-store-credentials.json
+credentials/upload-keystore.jks
+credentials/keystore.properties
+
+# EAS Build Credentials
+credentials/eas-build-credentials.json
+credentials/app-signing-key.json
+
+# App Store Connect API
+credentials/app-store-connect-api-key.json
+
 # ===== ДОПОЛНИТЕЛЬНЫЕ ИСКЛЮЧЕНИЯ =====
 
 # Storybook

@@ -1,31 +1,26 @@
-import React, { useRef } from 'react';
-import { 
-  TouchableOpacity, 
-  Text, 
-  Animated, 
-  ViewStyle 
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useLanguage } from '../context/LanguageContext';
-import { useTheme } from '../context/ThemeContext';
-import { colors } from '../constants/colors';
-import { LanguageButtonStyles } from '../styles/components/LanguageButton.styles';
+import React, { useRef } from "react";
+import { TouchableOpacity, Text, Animated, ViewStyle } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
+import { colors } from "../constants/colors";
+import { LanguageButtonStyles } from "../styles/components/LanguageButton.styles";
 
 interface LanguageButtonProps {
   onPress: () => void;
   style?: ViewStyle;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
 }
 
-const LanguageButton: React.FC<LanguageButtonProps> = ({ 
-  onPress, 
-  style, 
-  size = 'medium' 
+const LanguageButton: React.FC<LanguageButtonProps> = ({
+  onPress,
+  style,
+  size = "medium",
 }) => {
   const { language, getLanguageInfo } = useLanguage();
   const { isDark } = useTheme();
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   const languageInfo = getLanguageInfo(language);
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -43,20 +38,20 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
         useNativeDriver: true,
       }),
     ]).start();
-    
+
     onPress();
   };
 
   const getSizeStyles = () => {
     switch (size) {
-      case 'small':
+      case "small":
         return {
           buttonStyle: LanguageButtonStyles.small,
           textStyle: LanguageButtonStyles.textSmall,
           flagStyle: LanguageButtonStyles.flagSmall,
           fontSize: 14,
         };
-      case 'large':
+      case "large":
         return {
           buttonStyle: LanguageButtonStyles.large,
           textStyle: LanguageButtonStyles.textLarge,
@@ -98,7 +93,12 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
   };
 
   return (
-    <Animated.View style={[LanguageButtonStyles.animatedContainer, { transform: [{ scale: scaleAnim }] }]}>
+    <Animated.View
+      style={[
+        LanguageButtonStyles.animatedContainer,
+        { transform: [{ scale: scaleAnim }] },
+      ]}
+    >
       <TouchableOpacity
         style={[styles.button, style]}
         onPress={handlePress}
@@ -106,9 +106,9 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
       >
         <Text style={styles.flag}>{languageInfo.flag}</Text>
         <Text style={styles.text}>{languageInfo.name}</Text>
-        <Ionicons 
-          name="chevron-down" 
-          size={sizeStyles.fontSize - 2} 
+        <Ionicons
+          name="chevron-down"
+          size={sizeStyles.fontSize - 2}
           color={currentColors.textSecondary}
           style={styles.icon}
         />
@@ -117,4 +117,4 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
   );
 };
 
-export default LanguageButton; 
+export default LanguageButton;

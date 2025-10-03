@@ -1,5 +1,5 @@
-import APIClient from './APIClient';
-import { Order, OrderStatus } from '../types/order';
+import APIClient from "./APIClient";
+import { Order, OrderStatus } from "../types/order";
 
 export interface OrderData {
   id: string;
@@ -8,7 +8,7 @@ export interface OrderData {
   packageType: string;
   addresses: Array<{
     id: string;
-    type: 'from' | 'to' | 'stop';
+    type: "from" | "to" | "stop";
     address: string;
     coordinates?: {
       latitude: number;
@@ -16,7 +16,7 @@ export interface OrderData {
     };
   }>;
   createdAt: number;
-  status: 'draft' | 'confirmed' | 'completed' | 'cancelled';
+  status: "draft" | "confirmed" | "completed" | "cancelled";
 }
 
 export class OrderService {
@@ -49,21 +49,30 @@ export class OrderService {
     }
   }
 
-  async createOrder(orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>): Promise<Order> {
+  async createOrder(
+    orderData: Omit<Order, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Order> {
     try {
-      const response = await APIClient.post<Order>('/orders', orderData);
+      const response = await APIClient.post<Order>("/orders", orderData);
       if (response.success && response.data) {
         return response.data;
       }
-      console.error(response.error || 'Failed to create order'); return;
+      console.error(response.error || "Failed to create order");
+      return;
     } catch (error) {
       throw error;
     }
   }
 
-  async updateOrder(orderId: string, updates: Partial<Order>): Promise<Order | null> {
+  async updateOrder(
+    orderId: string,
+    updates: Partial<Order>,
+  ): Promise<Order | null> {
     try {
-      const response = await APIClient.put<Order>(`/orders/${orderId}`, updates);
+      const response = await APIClient.put<Order>(
+        `/orders/${orderId}`,
+        updates,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -72,7 +81,10 @@ export class OrderService {
 
   async cancelOrder(orderId: string): Promise<Order | null> {
     try {
-      const response = await APIClient.post<Order>(`/orders/${orderId}/cancel`, {});
+      const response = await APIClient.post<Order>(
+        `/orders/${orderId}/cancel`,
+        {},
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -81,7 +93,10 @@ export class OrderService {
 
   async completeOrder(orderId: string): Promise<Order | null> {
     try {
-      const response = await APIClient.post<Order>(`/orders/${orderId}/complete`, {});
+      const response = await APIClient.post<Order>(
+        `/orders/${orderId}/complete`,
+        {},
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -91,7 +106,9 @@ export class OrderService {
   // Методы для водителей
   async getDriverOrders(driverId: string): Promise<Order[]> {
     try {
-      const response = await APIClient.get<Order[]>(`/orders/driver/${driverId}`);
+      const response = await APIClient.get<Order[]>(
+        `/orders/driver/${driverId}`,
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -100,16 +117,25 @@ export class OrderService {
 
   async acceptOrder(orderId: string, driverId: string): Promise<Order | null> {
     try {
-      const response = await APIClient.post<Order>(`/orders/${orderId}/accept`, { driverId });
+      const response = await APIClient.post<Order>(
+        `/orders/${orderId}/accept`,
+        { driverId },
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
     }
   }
 
-  async updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order | null> {
+  async updateOrderStatus(
+    orderId: string,
+    status: OrderStatus,
+  ): Promise<Order | null> {
     try {
-      const response = await APIClient.post<Order>(`/orders/${orderId}/status`, { status });
+      const response = await APIClient.post<Order>(
+        `/orders/${orderId}/status`,
+        { status },
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -117,19 +143,31 @@ export class OrderService {
   }
 
   // Методы для отслеживания
-  async trackOrder(orderId: string): Promise<{ location: { latitude: number; longitude: number }; status: string } | null> {
+  async trackOrder(orderId: string): Promise<{
+    location: { latitude: number; longitude: number };
+    status: string;
+  } | null> {
     try {
-      const response = await APIClient.get<{ location: { latitude: number; longitude: number }; status: string }>(`/orders/${orderId}/track`);
+      const response = await APIClient.get<{
+        location: { latitude: number; longitude: number };
+        status: string;
+      }>(`/orders/${orderId}/track`);
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
     }
   }
 
-  async updateOrderLocation(orderId: string, location: { latitude: number; longitude: number }): Promise<boolean> {
+  async updateOrderLocation(
+    orderId: string,
+    location: { latitude: number; longitude: number },
+  ): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/orders/${orderId}/location`, { location });
-      return response.success && response.data?.success || false;
+      const response = await APIClient.post<{ success: boolean }>(
+        `/orders/${orderId}/location`,
+        { location },
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -138,16 +176,25 @@ export class OrderService {
   // Поиск и фильтрация
   async searchOrders(query: string, userId: string): Promise<Order[]> {
     try {
-      const response = await APIClient.get<Order[]>(`/orders/search`, { q: query, userId });
+      const response = await APIClient.get<Order[]>(`/orders/search`, {
+        q: query,
+        userId,
+      });
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
     }
   }
 
-  async getOrdersByStatus(status: OrderStatus, userId: string): Promise<Order[]> {
+  async getOrdersByStatus(
+    status: OrderStatus,
+    userId: string,
+  ): Promise<Order[]> {
     try {
-      const response = await APIClient.get<Order[]>(`/orders/status/${status}`, { userId });
+      const response = await APIClient.get<Order[]>(
+        `/orders/status/${status}`,
+        { userId },
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];

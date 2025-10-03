@@ -2,7 +2,7 @@ export interface DriverModalProps {
   isVisible: boolean;
   onClose: () => void;
   onOverlayClose: () => void;
-  role?: 'client' | 'driver';
+  role?: "client" | "driver";
   onChat?: (driverId: string) => void;
   driverId: string;
 }
@@ -25,7 +25,7 @@ export interface DriverModalState {
   showGoOnlineConfirm: boolean;
   isPaused: boolean;
   emergencyActionsUsed: boolean;
-  emergencyActionType: 'stop' | 'end' | null;
+  emergencyActionType: "stop" | "end" | null;
   isEmergencyButtonActive: boolean;
   pauseStartTime: number | null;
   slideProgress: number;
@@ -56,7 +56,7 @@ export interface DriverModalActions {
   setShowRatingDialog: (show: boolean) => void;
   setIsPaused: (paused: boolean) => void;
   setEmergencyActionsUsed: (used: boolean) => void;
-  setEmergencyActionType: (type: 'stop' | 'end' | null) => void;
+  setEmergencyActionType: (type: "stop" | "end" | null) => void;
   setIsEmergencyButtonActive: (active: boolean) => void;
   setPauseStartTime: (time: number | null) => void;
   setSlideProgress: (progress: number) => void;

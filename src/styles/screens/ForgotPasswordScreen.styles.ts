@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { SIZES, SHADOWS, getCurrentColors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { SIZES, SHADOWS, getCurrentColors } from "../../constants/colors";
 
 // Создаем функцию для получения стилей с учетом темы
 export const createForgotPasswordScreenStyles = (isDark: boolean) => {
   const currentColors = getCurrentColors(isDark);
-  
+
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -13,24 +13,24 @@ export const createForgotPasswordScreenStyles = (isDark: boolean) => {
     content: {
       flex: 1,
       padding: SIZES.xl,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     header: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.xxxl,
     },
     title: {
       fontSize: SIZES.fontSize.title,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       marginBottom: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.title,
     },
     subtitle: {
       fontSize: SIZES.fontSize.lg,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.lg,
     },
     form: {
@@ -41,7 +41,7 @@ export const createForgotPasswordScreenStyles = (isDark: boolean) => {
     },
     label: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       color: currentColors.text,
       marginBottom: SIZES.sm,
       lineHeight: SIZES.lineHeight.lg,
@@ -79,14 +79,14 @@ export const createForgotPasswordScreenStyles = (isDark: boolean) => {
       backgroundColor: currentColors.primary,
       borderRadius: SIZES.radius.md,
       paddingVertical: SIZES.lg,
-      alignItems: 'center',
+      alignItems: "center",
       minHeight: SIZES.buttonHeight.md,
       ...(isDark ? SHADOWS.dark.medium : SHADOWS.light.medium),
     },
     submitButtonText: {
       color: currentColors.surface,
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '600',
+      fontWeight: "600",
       lineHeight: SIZES.lineHeight.lg,
     },
     submitButtonDisabled: {
@@ -94,17 +94,17 @@ export const createForgotPasswordScreenStyles = (isDark: boolean) => {
       opacity: 0.6,
     },
     backButton: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: SIZES.xl,
     },
     backButtonText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.primary,
-      textDecorationLine: 'underline',
+      textDecorationLine: "underline",
       lineHeight: SIZES.lineHeight.md,
     },
     successContainer: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.xxl,
     },
     successIcon: {
@@ -112,25 +112,26 @@ export const createForgotPasswordScreenStyles = (isDark: boolean) => {
       height: 80,
       borderRadius: 40,
       backgroundColor: currentColors.success,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       marginBottom: SIZES.lg,
     },
     successTitle: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: currentColors.text,
       marginBottom: SIZES.sm,
-      textAlign: 'center',
+      textAlign: "center",
     },
     successText: {
       fontSize: SIZES.fontSize.md,
       color: currentColors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: SIZES.lineHeight.md,
     },
   });
 };
 
 // Для обратной совместимости
-export const ForgotPasswordScreenStyles = createForgotPasswordScreenStyles(false); 
+export const ForgotPasswordScreenStyles =
+  createForgotPasswordScreenStyles(false);

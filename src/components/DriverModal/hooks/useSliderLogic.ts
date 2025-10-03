@@ -1,12 +1,16 @@
-import { useRef, useCallback, useEffect } from 'react';
-import { Animated } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import * as Haptics from 'expo-haptics';
-import { DriverModalState, DriverModalActions, SliderConfig } from '../types/driver-modal.types';
+import { useRef, useCallback, useEffect } from "react";
+import { Animated } from "react-native";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
+import * as Haptics from "expo-haptics";
+import {
+  DriverModalState,
+  DriverModalActions,
+  SliderConfig,
+} from "../types/driver-modal.types";
 
 export const useSliderLogic = (
   state: DriverModalState,
-  actions: DriverModalActions
+  actions: DriverModalActions,
 ) => {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const handleSwipeAnim = useRef(new Animated.Value(0)).current;
@@ -14,7 +18,10 @@ export const useSliderLogic = (
 
   const SLIDER_BUTTON_SIZE = 60;
   const SLIDER_PADDING = 4;
-  const maxSlideDistance = Math.max(0, state.sliderWidth - SLIDER_BUTTON_SIZE - SLIDER_PADDING * 2);
+  const maxSlideDistance = Math.max(
+    0,
+    state.sliderWidth - SLIDER_BUTTON_SIZE - SLIDER_PADDING * 2,
+  );
   const completeThreshold = maxSlideDistance * 0.95;
 
   const sliderConfig: SliderConfig = {
@@ -43,7 +50,7 @@ export const useSliderLogic = (
 
   const completeSwipe = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    
+
     Animated.sequence([
       Animated.timing(slideAnim, {
         toValue: -maxSlideDistance,
@@ -56,7 +63,7 @@ export const useSliderLogic = (
         useNativeDriver: false,
         tension: 100,
         friction: 8,
-      })
+      }),
     ]).start();
 
     if (state.buttonColorState === 0) {
@@ -85,55 +92,72 @@ export const useSliderLogic = (
         actions.setShowLongPressDialog(true);
       }
     }
-  }, [slideAnim, maxSlideDistance, state.buttonColorState, state.isPaused, state.isButtonsSwapped, actions]);
+  }, [
+    slideAnim,
+    maxSlideDistance,
+    state.buttonColorState,
+    state.isPaused,
+    state.isButtonsSwapped,
+    actions,
+  ]);
 
-  const onHandlerStateChange = useCallback((event: any) => {
-    const { state: gestureState, translationX } = event.nativeEvent;
-    
-    if (gestureState === State.END || gestureState === State.CANCELLED || gestureState === State.FAILED) {
-      const slideDistance = Math.abs(translationX);
-      
-      if (slideDistance >= completeThreshold && translationX < 0) {
-        completeSwipe();
-      } else {
-        resetSlider();
-      }
-    }
-  }, [completeThreshold, completeSwipe, resetSlider]);
+  const onHandlerStateChange = useCallback(
+    (event: any) => {
+      const { state: gestureState, translationX } = event.nativeEvent;
 
-  const onHandleStateChange = useCallback((event: any) => {
-    if (event.nativeEvent.state === State.END) {
-      const { translationY } = event.nativeEvent;
-      
-      // Если свайп меньше 5px - считаем это кликом
-      if (Math.abs(translationY) < 5) {
-        // Клик - переключаем состояние
-        actions.setIsDriverExpanded(!state.isDriverExpanded);
-      } else if (translationY < -20 && !state.isDriverExpanded) {
-        // Свайп вверх - раскрываем
-        actions.setIsDriverExpanded(true);
-      } else if (translationY > 20 && state.isDriverExpanded) {
-        // Свайп вниз - сворачиваем
-        actions.setIsDriverExpanded(false);
+      if (
+        gestureState === State.END ||
+        gestureState === State.CANCELLED ||
+        gestureState === State.FAILED
+      ) {
+        const slideDistance = Math.abs(translationX);
+
+        if (slideDistance >= completeThreshold && translationX < 0) {
+          completeSwipe();
+        } else {
+          resetSlider();
+        }
       }
-      
-      Animated.spring(handleSwipeAnim, {
-        toValue: 0,
-        useNativeDriver: false,
-        tension: 100,
-        friction: 8,
-      }).start();
-    }
-  }, [state.isDriverExpanded, actions, handleSwipeAnim]);
+    },
+    [completeThreshold, completeSwipe, resetSlider],
+  );
+
+  const onHandleStateChange = useCallback(
+    (event: any) => {
+      if (event.nativeEvent.state === State.END) {
+        const { translationY } = event.nativeEvent;
+
+        // Если свайп меньше 5px - считаем это кликом
+        if (Math.abs(translationY) < 5) {
+          // Клик - переключаем состояние
+          actions.setIsDriverExpanded(!state.isDriverExpanded);
+        } else if (translationY < -20 && !state.isDriverExpanded) {
+          // Свайп вверх - раскрываем
+          actions.setIsDriverExpanded(true);
+        } else if (translationY > 20 && state.isDriverExpanded) {
+          // Свайп вниз - сворачиваем
+          actions.setIsDriverExpanded(false);
+        }
+
+        Animated.spring(handleSwipeAnim, {
+          toValue: 0,
+          useNativeDriver: false,
+          tension: 100,
+          friction: 8,
+        }).start();
+      }
+    },
+    [state.isDriverExpanded, actions, handleSwipeAnim],
+  );
 
   const onGestureEvent = Animated.event(
     [{ nativeEvent: { translationX: slideAnim } }],
-    { useNativeDriver: false }
+    { useNativeDriver: false },
   );
 
   const onHandleGestureEvent = Animated.event(
     [{ nativeEvent: { translationY: handleSwipeAnim } }],
-    { useNativeDriver: false }
+    { useNativeDriver: false },
   );
 
   return {

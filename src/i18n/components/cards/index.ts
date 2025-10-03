@@ -1,19 +1,19 @@
-const en = require('./en.json');
-const ru = require('./ru.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const cardsEn = require("./en.json");
+const cardsRu = require("./ru.json");
+const cardsTr = require("./tr.json");
+const cardsAz = require("./az.json");
+const cardsFr = require("./fr.json");
+const cardsAr = require("./ar.json");
+const cardsEs = require("./es.json");
+const cardsDe = require("./de.json");
 
 module.exports = {
-  en,
-  ru,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  en: cardsEn,
+  ru: cardsRu,
+  tr: cardsTr,
+  az: cardsAz,
+  fr: cardsFr,
+  ar: cardsAr,
+  es: cardsEs,
+  de: cardsDe,
+};

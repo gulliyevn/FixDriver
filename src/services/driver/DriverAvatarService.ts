@@ -1,5 +1,5 @@
-import APIClient from '../APIClient';
-import * as ImagePicker from 'expo-image-picker';
+import APIClient from "../APIClient";
+import * as ImagePicker from "expo-image-picker";
 
 export interface AvatarData {
   id: string;
@@ -24,7 +24,9 @@ export class DriverAvatarService {
    */
   static async getAvatar(driverId: string): Promise<AvatarData | null> {
     try {
-      const response = await APIClient.get<AvatarData>(`/drivers/${driverId}/avatar`);
+      const response = await APIClient.get<AvatarData>(
+        `/drivers/${driverId}/avatar`,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -34,33 +36,39 @@ export class DriverAvatarService {
   /**
    * Загружает новый аватар водителя
    */
-  static async uploadAvatar(driverId: string, imageUri: string): Promise<UploadAvatarResponse> {
+  static async uploadAvatar(
+    driverId: string,
+    imageUri: string,
+  ): Promise<UploadAvatarResponse> {
     try {
       const formData = new FormData();
-      formData.append('avatar', {
+      formData.append("avatar", {
         uri: imageUri,
-        type: 'image/jpeg',
-        name: 'avatar.jpg',
+        type: "image/jpeg",
+        name: "avatar.jpg",
       } as any);
-      formData.append('driverId', driverId);
+      formData.append("driverId", driverId);
 
-      const response = await APIClient.post<AvatarData>('/drivers/avatar/upload', formData as any);
-      
+      const response = await APIClient.post<AvatarData>(
+        "/drivers/avatar/upload",
+        formData as any,
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          avatar: response.data
+          avatar: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при загрузке аватара'
+        error: response.error || "Ошибка при загрузке аватара",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при загрузке аватара'
+        error: "Ошибка при загрузке аватара",
       };
     }
   }
@@ -70,8 +78,10 @@ export class DriverAvatarService {
    */
   static async deleteAvatar(driverId: string): Promise<boolean> {
     try {
-      const response = await APIClient.delete<{ success: boolean }>(`/drivers/${driverId}/avatar`);
-      return response.success && response.data?.success || false;
+      const response = await APIClient.delete<{ success: boolean }>(
+        `/drivers/${driverId}/avatar`,
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -121,19 +131,24 @@ export class DriverAvatarService {
   /**
    * Запрашивает разрешения на доступ к камере и галерее
    */
-  static async requestPermissions(): Promise<{ camera: boolean; gallery: boolean }> {
+  static async requestPermissions(): Promise<{
+    camera: boolean;
+    gallery: boolean;
+  }> {
     try {
-      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
-      const mediaLibraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const cameraPermission =
+        await ImagePicker.requestCameraPermissionsAsync();
+      const mediaLibraryPermission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       return {
-        camera: cameraPermission.status === 'granted',
-        gallery: mediaLibraryPermission.status === 'granted'
+        camera: cameraPermission.status === "granted",
+        gallery: mediaLibraryPermission.status === "granted",
       };
     } catch (error) {
       return {
         camera: false,
-        gallery: false
+        gallery: false,
       };
     }
   }

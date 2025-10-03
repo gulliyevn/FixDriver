@@ -1,31 +1,31 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../constants/colors";
 
 export const AuthStatusIndicatorStyles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 12,
     borderRadius: 8,
     marginVertical: 8,
   },
   containerAuthenticated: {
-    backgroundColor: colors.light.success + '20',
+    backgroundColor: colors.light.success + "20",
     borderWidth: 1,
     borderColor: colors.light.success,
   },
   containerUnauthenticated: {
-    backgroundColor: colors.light.warning + '20',
+    backgroundColor: colors.light.warning + "20",
     borderWidth: 1,
     borderColor: colors.light.warning,
   },
   containerLoading: {
-    backgroundColor: colors.light.info + '20',
+    backgroundColor: colors.light.info + "20",
     borderWidth: 1,
     borderColor: colors.light.info,
   },
   containerError: {
-    backgroundColor: colors.light.error + '20',
+    backgroundColor: colors.light.error + "20",
     borderWidth: 1,
     borderColor: colors.light.error,
   },
@@ -46,7 +46,7 @@ export const AuthStatusIndicatorStyles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   textAuthenticated: {
     color: colors.light.success,
@@ -61,9 +61,9 @@ export const AuthStatusIndicatorStyles = StyleSheet.create({
     color: colors.light.error,
   },
   refreshButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 'auto',
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: "auto",
     padding: 4,
   },
   refreshText: {
@@ -82,4 +82,4 @@ export const AuthStatusIndicatorStyles = StyleSheet.create({
     color: colors.light.textSecondary,
     marginBottom: 2,
   },
-}); 
+});

@@ -1,6 +1,6 @@
-import * as Location from 'expo-location';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserDriver, UserRole } from '../types/user';
+import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserDriver, UserRole } from "../types/user";
 
 export interface MapLocation {
   latitude: number;
@@ -22,24 +22,31 @@ interface CachedLocation {
 }
 
 export class MapService {
-  private static readonly LOCATION_CACHE_KEY = 'cached_location';
+  private static readonly LOCATION_CACHE_KEY = "cached_location";
   private static readonly LOCATION_CACHE_DURATION = 5 * 60 * 1000; // 5 минут
   private static readonly DEFAULT_REGIONS = {
-    'AZ': { lat: 40.3777, lng: 49.8920, name: 'Баку, Азербайджан' },
-    'RU': { lat: 55.7558, lng: 37.6176, name: 'Москва, Россия' },
-    'TR': { lat: 39.9334, lng: 32.8597, name: 'Анкара, Турция' },
-    'US': { lat: 40.7128, lng: -74.0060, name: 'Нью-Йорк, США' },
-    'DE': { lat: 52.5200, lng: 13.4050, name: 'Берлин, Германия' },
-    'FR': { lat: 48.8566, lng: 2.3522, name: 'Париж, Франция' },
-    'ES': { lat: 40.4168, lng: -3.7038, name: 'Мадрид, Испания' },
-    'AR': { lat: 36.7525, lng: 3.0420, name: 'Алжир, Алжир' },
+    AZ: { lat: 40.3777, lng: 49.892, name: "Баку, Азербайджан" },
+    RU: { lat: 55.7558, lng: 37.6176, name: "Москва, Россия" },
+    TR: { lat: 39.9334, lng: 32.8597, name: "Анкара, Турция" },
+    US: { lat: 40.7128, lng: -74.006, name: "Нью-Йорк, США" },
+    DE: { lat: 52.52, lng: 13.405, name: "Берлин, Германия" },
+    FR: { lat: 48.8566, lng: 2.3522, name: "Париж, Франция" },
+    ES: { lat: 40.4168, lng: -3.7038, name: "Мадрид, Испания" },
+    AR: { lat: 36.7525, lng: 3.042, name: "Алжир, Алжир" },
   };
 
   // Получить регион по умолчанию на основе локали устройства
-  private static getDefaultRegion(): { lat: number; lng: number; name: string } {
+  private static getDefaultRegion(): {
+    lat: number;
+    lng: number;
+    name: string;
+  } {
     const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-    const countryCode = locale.split('-')[1]?.toUpperCase() || 'AZ';
-    return this.DEFAULT_REGIONS[countryCode as keyof typeof this.DEFAULT_REGIONS] || this.DEFAULT_REGIONS['AZ'];
+    const countryCode = locale.split("-")[1]?.toUpperCase() || "AZ";
+    return (
+      this.DEFAULT_REGIONS[countryCode as keyof typeof this.DEFAULT_REGIONS] ||
+      this.DEFAULT_REGIONS["AZ"]
+    );
   }
 
   // Кэширование локации
@@ -50,9 +57,11 @@ export class MapService {
         timestamp: Date.now(),
         expiresAt: Date.now() + this.LOCATION_CACHE_DURATION,
       };
-      await AsyncStorage.setItem(this.LOCATION_CACHE_KEY, JSON.stringify(cachedLocation));
-    } catch (error) {
-    }
+      await AsyncStorage.setItem(
+        this.LOCATION_CACHE_KEY,
+        JSON.stringify(cachedLocation),
+      );
+    } catch (error) {}
   }
 
   // Получить кэшированную локацию
@@ -83,8 +92,8 @@ export class MapService {
 
       // Запрашиваем разрешение на геолокацию
       const { status } = await Location.requestForegroundPermissionsAsync();
-      
-      if (status !== 'granted') {
+
+      if (status !== "granted") {
         // Возвращаем кэшированную локацию или регион по умолчанию
         if (cachedLocation) {
           return cachedLocation;
@@ -106,12 +115,12 @@ export class MapService {
       });
 
       // Получаем адрес по координатам с retry
-      let address = 'Определение адреса...';
+      let address = "Определение адреса...";
       try {
-      const addressResponse = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
+        const addressResponse = await Location.reverseGeocodeAsync({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
 
         if (addressResponse[0]) {
           const addr = addressResponse[0];
@@ -120,10 +129,10 @@ export class MapService {
             addr.streetNumber,
             addr.city,
             addr.region,
-            addr.country
+            addr.country,
           ].filter(Boolean);
-          
-          address = addressParts.join(', ') || 'Неизвестный адрес';
+
+          address = addressParts.join(", ") || "Неизвестный адрес";
         }
       } catch (geocodeError) {
         address = `${location.coords.latitude.toFixed(6)}, ${location.coords.longitude.toFixed(6)}`;
@@ -141,7 +150,6 @@ export class MapService {
 
       return result;
     } catch (error) {
-      
       // Возвращаем кэшированную локацию или регион по умолчанию
       const cachedLocation = await this.getCachedLocation();
       if (cachedLocation) {
@@ -157,32 +165,33 @@ export class MapService {
     }
   }
 
-  static async getNearbyDrivers(location: MapLocation): Promise<DriverLocation[]> {
-    // TODO: заменить на реальный API запрос
+  static async getNearbyDrivers(
+    location: MapLocation,
+  ): Promise<DriverLocation[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
           {
             latitude: location.latitude + 0.001,
             longitude: location.longitude + 0.001,
-            address: 'Москва, ул. Тверская',
+            address: "Москва, ул. Тверская",
             driver: {
-              id: '1',
-              name: 'Алексей',
-              surname: 'Петров',
-              email: 'alex@example.com',
-              address: 'Москва',
+              id: "1",
+              name: "Алексей",
+              surname: "Петров",
+              email: "alex@example.com",
+              address: "Москва",
               role: UserRole.DRIVER,
-              phone: '+7 (999) 123-45-67',
+              phone: "+7 (999) 123-45-67",
               avatar: null,
               rating: 4.8,
               createdAt: new Date().toISOString(),
               vehicle: {
-                make: 'Toyota',
-                model: 'Camry',
+                make: "Toyota",
+                model: "Camry",
                 year: 2020,
-                color: 'белый',
-                licensePlate: 'A123BC',
+                color: "белый",
+                licensePlate: "A123BC",
               },
               isAvailable: true,
             },
@@ -192,24 +201,24 @@ export class MapService {
           {
             latitude: location.latitude - 0.001,
             longitude: location.longitude - 0.001,
-            address: 'Москва, ул. Арбат',
+            address: "Москва, ул. Арбат",
             driver: {
-              id: '2',
-              name: 'Мария',
-              surname: 'Иванова',
-              email: 'maria@example.com',
-              address: 'Москва',
+              id: "2",
+              name: "Мария",
+              surname: "Иванова",
+              email: "maria@example.com",
+              address: "Москва",
               role: UserRole.DRIVER,
-              phone: '+7 (999) 234-56-78',
+              phone: "+7 (999) 234-56-78",
               avatar: null,
               rating: 4.9,
               createdAt: new Date().toISOString(),
               vehicle: {
-                make: 'Honda',
-                model: 'Civic',
+                make: "Honda",
+                model: "Civic",
                 year: 2019,
-                color: 'серебристый',
-                licensePlate: 'B456DE',
+                color: "серебристый",
+                licensePlate: "B456DE",
               },
               isAvailable: true,
             },
@@ -219,24 +228,24 @@ export class MapService {
           {
             latitude: location.latitude + 0.002,
             longitude: location.longitude - 0.002,
-            address: 'Москва, ул. Покровка',
+            address: "Москва, ул. Покровка",
             driver: {
-              id: '3',
-              name: 'Дмитрий',
-              surname: 'Сидоров',
-              email: 'dmitry@example.com',
-              address: 'Москва',
+              id: "3",
+              name: "Дмитрий",
+              surname: "Сидоров",
+              email: "dmitry@example.com",
+              address: "Москва",
               role: UserRole.DRIVER,
-              phone: '+7 (999) 345-67-89',
+              phone: "+7 (999) 345-67-89",
               avatar: null,
               rating: 4.7,
               createdAt: new Date().toISOString(),
               vehicle: {
-                make: 'BMW',
-                model: 'X5',
+                make: "BMW",
+                model: "X5",
                 year: 2021,
-                color: 'черный',
-                licensePlate: 'C789FG',
+                color: "черный",
+                licensePlate: "C789FG",
               },
               isAvailable: false,
             },
@@ -248,8 +257,10 @@ export class MapService {
     });
   }
 
-  static async getRoute(from: MapLocation, to: MapLocation): Promise<MapLocation[]> {
-    // TODO: заменить на реальный API маршрутов
+  static async getRoute(
+    from: MapLocation,
+    to: MapLocation,
+  ): Promise<MapLocation[]> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
@@ -267,7 +278,7 @@ export class MapService {
   static async geocodeAddress(address: string): Promise<MapLocation> {
     try {
       const geocodeResult = await Location.geocodeAsync(address);
-      
+
       if (geocodeResult.length > 0) {
         const { latitude, longitude } = geocodeResult[0];
         return {
@@ -276,7 +287,8 @@ export class MapService {
           address,
         };
       } else {
-        console.error('Адрес не найден'); return;
+        console.error("Адрес не найден");
+        return;
       }
     } catch (error) {
       // Возвращаем дефолтную локацию в случае ошибки
@@ -288,12 +300,15 @@ export class MapService {
     }
   }
 
-  static async watchLocation(callback: (location: MapLocation) => void): Promise<() => void> {
+  static async watchLocation(
+    callback: (location: MapLocation) => void,
+  ): Promise<() => void> {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      
-      if (status !== 'granted') {
-        console.error('Разрешение на геолокацию не предоставлено'); return;
+
+      if (status !== "granted") {
+        console.error("Разрешение на геолокацию не предоставлено");
+        return;
       }
 
       // Сначала вызываем callback с текущей локацией
@@ -309,12 +324,12 @@ export class MapService {
         async (location) => {
           try {
             // Получаем адрес для новой позиции
-            let address = 'Обновление адреса...';
+            let address = "Обновление адреса...";
             try {
               const addressResponse = await Location.reverseGeocodeAsync({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              });
 
               if (addressResponse[0]) {
                 const addr = addressResponse[0];
@@ -323,10 +338,10 @@ export class MapService {
                   addr.streetNumber,
                   addr.city,
                   addr.region,
-                  addr.country
+                  addr.country,
                 ].filter(Boolean);
-                
-                address = addressParts.join(', ') || 'Неизвестный адрес';
+
+                address = addressParts.join(", ") || "Неизвестный адрес";
               }
             } catch (geocodeError) {
               address = `${location.coords.latitude.toFixed(6)}, ${location.coords.longitude.toFixed(6)}`;
@@ -344,9 +359,8 @@ export class MapService {
 
             // Вызываем callback
             callback(newLocation);
-          } catch (error) {
-          }
-        }
+          } catch (error) {}
+        },
       );
 
       return () => subscription.remove();
@@ -356,19 +370,20 @@ export class MapService {
   }
 
   // Новый метод для получения локации с retry
-  static async getCurrentLocationWithRetry(maxRetries: number = 3): Promise<MapLocation> {
+  static async getCurrentLocationWithRetry(
+    maxRetries: number = 3,
+  ): Promise<MapLocation> {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         return await this.getCurrentLocation();
       } catch (error) {
-        
         if (attempt === maxRetries) {
           // Последняя попытка - возвращаем кэш или дефолт
           const cachedLocation = await this.getCachedLocation();
           if (cachedLocation) {
             return cachedLocation;
           }
-          
+
           const defaultRegion = this.getDefaultRegion();
           return {
             latitude: defaultRegion.lat,
@@ -376,12 +391,12 @@ export class MapService {
             address: defaultRegion.name,
           };
         }
-        
+
         // Ждем перед следующей попыткой
-        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
       }
     }
-    
+
     // Fallback
     const defaultRegion = this.getDefaultRegion();
     return {
@@ -395,8 +410,7 @@ export class MapService {
   static async clearLocationCache(): Promise<void> {
     try {
       await AsyncStorage.removeItem(this.LOCATION_CACHE_KEY);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 }
 

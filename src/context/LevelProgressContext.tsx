@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useEarningsLevel } from '../components/EarningsScreen/hooks/useEarningsLevel';
+import React, { createContext, useContext, ReactNode } from "react";
+import { useEarningsLevel } from "../components/EarningsScreen/hooks/useEarningsLevel";
 
 interface LevelUpResult {
   hasLevelUp: boolean;
@@ -14,16 +14,25 @@ interface LevelProgressContextType {
   activateVIPLevel: () => Promise<void>;
   addRides: (count: number) => Promise<void>;
   resetProgress: () => Promise<void>;
-  getTotalRidesForLevel: (level: number, subLevel: number, progress: number) => number;
+  getTotalRidesForLevel: (
+    level: number,
+    subLevel: number,
+    progress: number,
+  ) => number;
   updateVIPLevel: (qualifiedDaysInPeriods: number[]) => Promise<void>;
 }
 
-const LevelProgressContext = createContext<LevelProgressContextType | undefined>(undefined);
+const LevelProgressContext = createContext<
+  LevelProgressContextType | undefined
+>(undefined);
 
 export const useLevelProgress = (): LevelProgressContextType => {
   const context = useContext(LevelProgressContext);
   if (!context) {
-    console.error('useLevelProgress must be used within a LevelProgressProvider'); return;
+    console.error(
+      "useLevelProgress must be used within a LevelProgressProvider",
+    );
+    return;
   }
   return context;
 };
@@ -32,8 +41,18 @@ interface LevelProgressProviderProps {
   children: ReactNode;
 }
 
-export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({ children }) => {
-  const { driverLevel, incrementProgress, activateVIPLevel, addRides, resetProgress, getTotalRidesForLevel, updateVIPLevel } = useEarningsLevel();
+export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({
+  children,
+}) => {
+  const {
+    driverLevel,
+    incrementProgress,
+    activateVIPLevel,
+    addRides,
+    resetProgress,
+    getTotalRidesForLevel,
+    updateVIPLevel,
+  } = useEarningsLevel();
 
   const value: LevelProgressContextType = {
     driverLevel,

@@ -1,17 +1,17 @@
-import { StyleSheet } from 'react-native';
-import { colors, SIZES, SHADOWS } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors, SIZES, SHADOWS } from "../../constants/colors";
 
 export const AppAvatarStyles = StyleSheet.create({
   // ===== ОСНОВНОЙ КОНТЕЙНЕР =====
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.light.surface,
     borderWidth: 2,
     borderColor: colors.light.border,
     ...SHADOWS.light.small,
   },
-  
+
   // ===== РАЗМЕРЫ АВАТАРОВ =====
   sizeSmall: {
     width: SIZES.icon.lg,
@@ -33,7 +33,7 @@ export const AppAvatarStyles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
   },
-  
+
   // ===== ВАРИАНТЫ АВАТАРОВ =====
   avatarPrimary: {
     backgroundColor: colors.light.primary,
@@ -56,14 +56,14 @@ export const AppAvatarStyles = StyleSheet.create({
     borderColor: colors.light.error,
   },
   avatarOutline: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderColor: colors.light.primary,
   },
-  
+
   // ===== СТИЛИ ИЗОБРАЖЕНИЯ =====
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 50,
   },
   imageSmall: {
@@ -78,12 +78,12 @@ export const AppAvatarStyles = StyleSheet.create({
   imageXLarge: {
     borderRadius: 40,
   },
-  
+
   // ===== СТИЛИ ТЕКСТА =====
   text: {
     color: colors.light.text,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   textSmall: {
     fontSize: SIZES.fontSize.sm,
@@ -104,10 +104,10 @@ export const AppAvatarStyles = StyleSheet.create({
   textPrimary: {
     color: colors.light.surface,
   },
-  
+
   // ===== СТИЛИ СТАТУСА =====
   statusContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
     borderWidth: 2,
@@ -142,7 +142,7 @@ export const AppAvatarStyles = StyleSheet.create({
     width: 16,
     height: 16,
   },
-  
+
   // ===== СОСТОЯНИЯ АВАТАРА =====
   avatarPressed: {
     opacity: 0.8,
@@ -154,7 +154,7 @@ export const AppAvatarStyles = StyleSheet.create({
   avatarLoading: {
     opacity: 0.7,
   },
-  
+
   // ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ =====
   avatarRounded: {
     borderRadius: SIZES.radius.round,
@@ -171,11 +171,11 @@ export const AppAvatarStyles = StyleSheet.create({
   avatarInteractivePressed: {
     ...SHADOWS.light.medium,
   },
-  
+
   // ===== СТИЛИ ГРУППЫ АВАТАРОВ =====
   groupContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   groupAvatar: {
     marginLeft: -SIZES.sm,
@@ -188,4 +188,4 @@ export const AppAvatarStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.light.border,
   },
-}); 
+});

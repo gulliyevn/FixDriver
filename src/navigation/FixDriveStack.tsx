@@ -1,7 +1,7 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import FixDriveScreen from '../screens/common/FixDriveScreen';
-import { ClientStackParamList } from '../types/navigation';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import FixDriveScreen from "../screens/common/FixDriveScreen";
+import { ClientStackParamList } from "../types/navigation";
 
 const Stack = createStackNavigator<ClientStackParamList>();
 

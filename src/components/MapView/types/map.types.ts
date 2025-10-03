@@ -8,7 +8,7 @@ export interface MapMarker {
   coordinate: MapLocation;
   title: string;
   description?: string;
-  type?: 'driver' | 'client' | 'destination' | 'start' | 'waypoint' | 'end';
+  type?: "driver" | "client" | "destination" | "start" | "waypoint" | "end";
   label?: string;
   colorHex?: string;
   onPress?: (marker: MapMarker) => void;
@@ -17,7 +17,7 @@ export interface MapMarker {
 export interface RoutePoint {
   id: string;
   coordinate: MapLocation;
-  type: 'start' | 'waypoint' | 'end';
+  type: "start" | "waypoint" | "end";
   plannedArrivalAtMs?: number;
 }
 
@@ -26,11 +26,11 @@ export interface MapViewComponentProps {
   onLocationSelect?: (location: MapLocation) => void;
   showNearbyDrivers?: boolean;
   onDriverVisibilityToggle?: (timestamp: number) => void;
-  role?: 'client' | 'driver';
+  role?: "client" | "driver";
   clientLocationActive?: boolean;
   isDriverModalVisible?: boolean;
   onDriverModalClose?: () => void;
-  mapType?: 'standard' | 'satellite' | 'hybrid';
+  mapType?: "standard" | "satellite" | "hybrid";
   markers?: MapMarker[];
   routePoints?: RoutePoint[];
   showTrafficMock?: boolean;

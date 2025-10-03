@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors, SIZES, SHADOWS } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors, SIZES, SHADOWS } from "../../constants/colors";
 
 export const AppCardStyles = StyleSheet.create({
   // ===== ОСНОВНОЙ КОНТЕЙНЕР =====
@@ -10,7 +10,7 @@ export const AppCardStyles = StyleSheet.create({
     marginBottom: SIZES.md,
     ...SHADOWS.light.medium,
   },
-  
+
   // ===== ВАРИАНТЫ КАРТОЧЕК =====
   cardPrimary: {
     backgroundColor: colors.light.primary,
@@ -28,11 +28,11 @@ export const AppCardStyles = StyleSheet.create({
     backgroundColor: colors.light.error,
   },
   cardOutline: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderWidth: 1,
     borderColor: colors.light.border,
   },
-  
+
   // ===== РАЗМЕРЫ КАРТОЧЕК =====
   cardSmall: {
     padding: SIZES.md,
@@ -42,7 +42,7 @@ export const AppCardStyles = StyleSheet.create({
     padding: SIZES.xl,
     marginBottom: SIZES.lg,
   },
-  
+
   // ===== СОСТОЯНИЯ КАРТОЧЕК =====
   cardPressed: {
     opacity: 0.8,
@@ -54,20 +54,20 @@ export const AppCardStyles = StyleSheet.create({
   cardLoading: {
     opacity: 0.7,
   },
-  
+
   // ===== СТИЛИ СОДЕРЖИМОГО =====
   content: {
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: SIZES.md,
   },
   title: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.light.text,
     lineHeight: SIZES.lineHeight.lg,
   },
@@ -84,7 +84,7 @@ export const AppCardStyles = StyleSheet.create({
     color: colors.light.surface,
     opacity: 0.8,
   },
-  
+
   // ===== СТИЛИ ИКОНОК =====
   icon: {
     width: SIZES.icon.lg,
@@ -103,12 +103,12 @@ export const AppCardStyles = StyleSheet.create({
     width: SIZES.icon.xl,
     height: SIZES.icon.xl,
   },
-  
+
   // ===== СТИЛИ ДЕЙСТВИЙ =====
   actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
     marginTop: SIZES.md,
     gap: SIZES.sm,
   },
@@ -120,7 +120,7 @@ export const AppCardStyles = StyleSheet.create({
   actionButtonPrimary: {
     backgroundColor: colors.light.surface,
   },
-  
+
   // ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ =====
   cardRounded: {
     borderRadius: SIZES.radius.round,
@@ -153,4 +153,4 @@ export const AppCardStyles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-}); 
+});

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { fixwaveOrderService } from '../services/fixwaveOrderService';
+import { useEffect, useRef } from "react";
+import { fixwaveOrderService } from "../services/fixwaveOrderService";
 
 export const useSessionCleanup = () => {
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -9,8 +9,7 @@ export const useSessionCleanup = () => {
     const checkAndClearSession = async () => {
       try {
         await fixwaveOrderService.checkAndClearExpiredSession();
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     // Проверяем сразу при запуске
@@ -31,8 +30,7 @@ export const useSessionCleanup = () => {
   const forceClearSession = async () => {
     try {
       await fixwaveOrderService.clearSessionData();
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return { forceClearSession };

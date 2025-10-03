@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { styles } from './ScheduleContainer.styles';
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { styles } from "./ScheduleContainer.styles";
 
 interface ScheduleContainerContentProps {
   fixedMode: boolean;
@@ -28,7 +28,9 @@ interface ScheduleContainerContentProps {
   onDayPress: (dayKey: string) => void;
 }
 
-export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> = ({
+export const ScheduleContainerContent: React.FC<
+  ScheduleContainerContentProps
+> = ({
   fixedMode,
   weekdaysMode,
   activeDays,
@@ -53,7 +55,7 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
   const shouldShowCalculatedTime = !allowTimeSelection && isCalculating;
 
   const getDisplayTime = () => {
-    console.log('🎯 getDisplayTime:', {
+    console.log("🎯 getDisplayTime:", {
       shouldShowCalculatedTime,
       allowTimeSelection,
       calculatedTime,
@@ -71,11 +73,11 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
 
     // Иначе показываем время, введенное пользователем
     if (fixedMode) {
-      return fixedTime || '--:--';
+      return fixedTime || "--:--";
     } else if (weekdaysMode) {
-      return weekdayTime || '--:--';
+      return weekdayTime || "--:--";
     } else {
-      return weekendTime || '--:--';
+      return weekendTime || "--:--";
     }
   };
 
@@ -86,7 +88,7 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
         return (
           <View style={styles.weekDaysContainer}>
             <Text style={[styles.selectDaysText, { color: colors.text }]}>
-              {t('common.selectTripDays')}
+              {t("common.selectTripDays")}
             </Text>
           </View>
         );
@@ -94,40 +96,70 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
 
       return (
         <View style={{ marginTop: 8, marginBottom: 8 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <Text style={[styles.dayText, { color: colors.text }]}> 
-              {t('common.weekdaysOnly')}
-              {':'}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 6,
+            }}
+          >
+            <Text style={[styles.dayText, { color: colors.text }]}>
+              {t("common.weekdaysOnly")}
+              {":"}
             </Text>
             <TouchableOpacity
               style={[
                 styles.dayButton,
-                { backgroundColor: colors.background, borderColor: colors.border, opacity: allowTimeSelection ? 1 : 0.5 }
+                {
+                  backgroundColor: colors.background,
+                  borderColor: colors.border,
+                  opacity: allowTimeSelection ? 1 : 0.5,
+                },
               ]}
               activeOpacity={0.8}
               onPress={onWeekdayPress}
             >
-              <Text style={[styles.dayText, { color: colors.text }]}> 
-                {allowTimeSelection ? (weekdayTime || '--:--') : (isCalculating ? '...' : (calculatedWeekdayTime || calculatedTime))}
+              <Text style={[styles.dayText, { color: colors.text }]}>
+                {allowTimeSelection
+                  ? weekdayTime || "--:--"
+                  : isCalculating
+                    ? "..."
+                    : calculatedWeekdayTime || calculatedTime}
               </Text>
             </TouchableOpacity>
           </View>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <Text style={[styles.dayText, { color: colors.text }]}> 
-              {t('common.weekend') || 'Выходные'}
-              {':'}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 6,
+            }}
+          >
+            <Text style={[styles.dayText, { color: colors.text }]}>
+              {t("common.weekend") || "Выходные"}
+              {":"}
             </Text>
             <TouchableOpacity
               style={[
                 styles.dayButton,
-                { backgroundColor: colors.background, borderColor: colors.border, opacity: allowTimeSelection ? 1 : 0.5 }
+                {
+                  backgroundColor: colors.background,
+                  borderColor: colors.border,
+                  opacity: allowTimeSelection ? 1 : 0.5,
+                },
               ]}
               activeOpacity={0.8}
               onPress={onWeekendPress}
             >
-              <Text style={[styles.dayText, { color: colors.text }]}> 
-                {allowTimeSelection ? (weekendTime || '--:--') : (isCalculating ? '...' : (calculatedWeekendTime || calculatedTime))}
+              <Text style={[styles.dayText, { color: colors.text }]}>
+                {allowTimeSelection
+                  ? weekendTime || "--:--"
+                  : isCalculating
+                    ? "..."
+                    : calculatedWeekendTime || calculatedTime}
               </Text>
             </TouchableOpacity>
           </View>
@@ -139,7 +171,7 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
         return (
           <View style={styles.weekDaysContainer}>
             <Text style={[styles.selectDaysText, { color: colors.text }]}>
-              {t('common.selectTripDays')}
+              {t("common.selectTripDays")}
             </Text>
           </View>
         );
@@ -147,10 +179,17 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
 
       return (
         <View style={styles.weekDaysContainer}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={[styles.dayText, { color: colors.text }]}> 
-              {t('common.departureTime')}
-              {':'}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={[styles.dayText, { color: colors.text }]}>
+              {t("common.departureTime")}
+              {":"}
             </Text>
             <TouchableOpacity
               style={[
@@ -158,14 +197,20 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
                 {
                   backgroundColor: colors.background,
                   borderColor: colors.border,
-                  opacity: allowTimeSelection ? 1 : 0.5
-                }
+                  opacity: allowTimeSelection ? 1 : 0.5,
+                },
               ]}
               onPress={onFixedTimePress}
               activeOpacity={0.8}
             >
-              <Text style={[styles.dayText, { color: colors.text }]}> 
-                {allowTimeSelection ? (fixedTime ? fixedTime : '--:--') : (isCalculating ? '...' : calculatedTime)}
+              <Text style={[styles.dayText, { color: colors.text }]}>
+                {allowTimeSelection
+                  ? fixedTime
+                    ? fixedTime
+                    : "--:--"
+                  : isCalculating
+                    ? "..."
+                    : calculatedTime}
               </Text>
             </TouchableOpacity>
           </View>
@@ -177,27 +222,49 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
     if (!activeDays || activeDays.length === 0) {
       return (
         <View style={styles.weekDaysContainer}>
-          <Text style={[styles.selectDaysText, { color: colors.text }]}>{t('common.selectTripDays')}</Text>
+          <Text style={[styles.selectDaysText, { color: colors.text }]}>
+            {t("common.selectTripDays")}
+          </Text>
         </View>
       );
     }
 
     return (
       <View style={styles.weekDaysContainer}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           {/* Левая подпись до тех пор, пока хватает места */}
           {activeDays ? (
             activeDays.length <= 4 ? (
-              <Text style={[styles.dayText, { color: colors.text, marginRight: 8 }]}> {t('common.departureTime')}{':'} </Text>
+              <Text
+                style={[styles.dayText, { color: colors.text, marginRight: 8 }]}
+              >
+                {" "}
+                {t("common.departureTime")}
+                {":"}{" "}
+              </Text>
             ) : activeDays.length === 5 ? (
-              <Text style={[styles.dayText, { color: colors.text, marginRight: 8 }]}> {t('common.time')}{':'} </Text>
+              <Text
+                style={[styles.dayText, { color: colors.text, marginRight: 8 }]}
+              >
+                {" "}
+                {t("common.time")}
+                {":"}{" "}
+              </Text>
             ) : null
           ) : null}
-          
+
           {/* Кнопки дней слева направо */}
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', marginLeft: -4 }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginLeft: -4,
+            }}
+          >
             {visibleDays.map((day) => {
-              const selectedTime = (dayTimes && dayTimes[day.key]) || localDayTimes[day.key];
+              const selectedTime =
+                (dayTimes && dayTimes[day.key]) || localDayTimes[day.key];
               return (
                 <TouchableOpacity
                   key={day.key}
@@ -207,13 +274,19 @@ export const ScheduleContainerContent: React.FC<ScheduleContainerContentProps> =
                       backgroundColor: colors.background,
                       borderColor: colors.border,
                       marginLeft: 1,
-                    }
+                    },
                   ]}
                   onPress={() => onDayPress(day.key)}
                   activeOpacity={0.8}
                 >
                   <Text style={[styles.dayText, { color: colors.text }]}>
-                    {allowTimeSelection ? (selectedTime ? selectedTime : day.label) : (isCalculating ? '...' : calculatedTime)}
+                    {allowTimeSelection
+                      ? selectedTime
+                        ? selectedTime
+                        : day.label
+                      : isCalculating
+                        ? "..."
+                        : calculatedTime}
                   </Text>
                 </TouchableOpacity>
               );

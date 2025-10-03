@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
-import { useI18n } from '../../hooks/useI18n';
-import { createFamilyMemberItemStyles } from '../../styles/components/profile/FamilyMemberItem.styles';
-import { FamilyMemberItemProps, FamilyMember } from '../../types/family';
-import { calculateAge } from '../../utils/profileHelpers';
-import FamilyMemberEditMode from './FamilyMemberEditMode';
-import FamilyMemberViewMode from './FamilyMemberViewMode';
-
-
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../context/ThemeContext";
+import { useI18n } from "../../hooks/useI18n";
+import { createFamilyMemberItemStyles } from "../../styles/components/profile/FamilyMemberItem.styles";
+import { FamilyMemberItemProps, FamilyMember } from "../../types/family";
+import { calculateAge } from "../../utils/profileHelpers";
+import FamilyMemberEditMode from "./FamilyMemberEditMode";
+import FamilyMemberViewMode from "./FamilyMemberViewMode";
 
 const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   member,
@@ -28,13 +26,13 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   const { isDark } = useTheme();
   const { t } = useI18n();
   const styles = createFamilyMemberItemStyles(isDark);
-  
+
   const [editingData, setEditingData] = useState<Partial<FamilyMember>>({
     name: member.name,
     surname: member.surname,
     type: member.type,
     birthDate: member.birthDate,
-    phone: member.phone ?? '',
+    phone: member.phone ?? "",
   });
 
   React.useEffect(() => {
@@ -44,12 +42,12 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         surname: member.surname,
         type: member.type,
         birthDate: member.birthDate,
-        phone: member.phone ?? '',
+        phone: member.phone ?? "",
       });
     } else {
       // Очищаем функцию сохранения
       if (saveRef?.current) {
-        saveRef.current = null;
+        (saveRef as any).current = null;
       }
     }
   }, [isEditing, member.id]); // Изменили зависимость с member на member.id
@@ -57,7 +55,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   // Отдельный useEffect для установки функции сохранения с актуальными данными
   React.useEffect(() => {
     if (isEditing && saveRef?.current) {
-      saveRef.current = () => {
+      (saveRef as any).current = () => {
         const updatedData = {
           ...editingData,
           age: calculateAge(editingData.birthDate || member.birthDate),
@@ -69,7 +67,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   }, [isEditing, editingData, member.birthDate, onSave]); // Добавили editingData в зависимости
 
   const hasChanges = () => {
-    const phoneChanged = (editingData.phone ?? '') !== (member.phone ?? '');
+    const phoneChanged = (editingData.phone ?? "") !== (member.phone ?? "");
     return (
       editingData.name !== member.name ||
       editingData.surname !== member.surname ||
@@ -82,33 +80,29 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   const handleToggle = () => {
     if (isEditing && hasChanges()) {
       // Показываем диалог подтверждения сохранения изменений
-      Alert.alert(
-        t('common.confirmation'),
-        t('profile.family.confirmSave'),
-        [
-          { 
-            text: t('common.cancel'), 
-            style: 'cancel',
-            onPress: () => {
-              // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-              // НЕ закрываем блок, НЕ сбрасываем изменения
-            }
+      Alert.alert(t("common.confirmation"), t("profile.family.confirmSave"), [
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+          onPress: () => {
+            // При отмене НЕ делаем ничего - остаемся в режиме редактирования
+            // НЕ закрываем блок, НЕ сбрасываем изменения
           },
-          { 
-            text: t('common.save'), 
-            onPress: () => {
-              // Сохраняем изменения и закрываем
-              const updatedData = {
-                ...editingData,
-                age: calculateAge(editingData.birthDate || member.birthDate),
-                phone: editingData.phone?.trim() || undefined,
-              };
-              onSave(updatedData);
-              onToggle();
-            }
-          }
-        ]
-      );
+        },
+        {
+          text: t("common.save"),
+          onPress: () => {
+            // Сохраняем изменения и закрываем
+            const updatedData = {
+              ...editingData,
+              age: calculateAge(editingData.birthDate || member.birthDate),
+              phone: editingData.phone?.trim() || undefined,
+            };
+            onSave(updatedData);
+            onToggle();
+          },
+        },
+      ]);
     } else if (isEditing && !hasChanges()) {
       // Если в режиме редактирования, но нет изменений - сразу закрываем блок
       onCancelEditing();
@@ -122,7 +116,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   return (
     <View style={styles.container}>
       {/* Заголовок члена семьи */}
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.headerContainer}
         onPress={handleToggle}
         activeOpacity={0.7}
@@ -132,17 +126,21 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
             {member.name} {member.surname}
           </Text>
           <Text style={styles.headerSubtitle}>
-            {t(`profile.familyTypes.${member.type}`)} • {member.age} {t('profile.years')}
+            {t(`profile.familyTypes.${member.type}`)} • {member.age}{" "}
+            {t("profile.years")}
           </Text>
         </View>
-        <Ionicons 
-          name="chevron-forward" 
-          size={20} 
-          color={isDark ? '#9CA3AF' : '#666666'}
-          style={[styles.headerIcon, { transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }]}
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color={isDark ? "#9CA3AF" : "#666666"}
+          style={[
+            styles.headerIcon,
+            { transform: [{ rotate: isExpanded ? "90deg" : "0deg" }] },
+          ]}
         />
       </TouchableOpacity>
-      
+
       {/* Расширенная информация */}
       {isExpanded && (
         <View style={styles.expandedContainer}>
@@ -171,4 +169,4 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
   );
 };
 
-export default FamilyMemberItem; 
+export default FamilyMemberItem;

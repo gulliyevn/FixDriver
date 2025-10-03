@@ -1,73 +1,73 @@
 export const lightColors = {
   // Основные цвета FixDrive
-  primary: '#083198', // Основные кнопки
-  secondary: '#0360bc', // Маршрутные линии
-  accent: '#006ac9', // Кнопка звонков
-  
+  primary: "#083198", // Основные кнопки
+  secondary: "#0360bc", // Маршрутные линии
+  accent: "#006ac9", // Кнопка звонков
+
   // Фоновые цвета
-  background: '#fffeff', // Светлый фон приложения
-  surface: '#f1f1f0', // Фон карты
-  card: '#ffffff', // Дороги на карте
-  tabBar: '#ffffff',
-  
+  background: "#fffeff", // Светлый фон приложения
+  surface: "#f1f1f0", // Фон карты
+  card: "#ffffff", // Дороги на карте
+  tabBar: "#ffffff",
+
   // Текстовые цвета
-  text: '#030304', // Тексты
-  textSecondary: '#6d6565', // Точка прибытия
-  textTertiary: '#1b1d1e', // Точка выезда
-  
+  text: "#030304", // Тексты
+  textSecondary: "#6d6565", // Точка прибытия
+  textTertiary: "#1b1d1e", // Точка выезда
+
   // Границы и разделители
-  border: '#E5E7EB',
-  borderLight: '#F3F4F6',
-  
+  border: "#E5E7EB",
+  borderLight: "#F3F4F6",
+
   // Статусные цвета
-  success: '#10B981',
-  warning: '#F59E0B',
-  error: '#EF4444',
-  info: '#0163c2', // Активная иконка таббара
-  
+  success: "#10B981",
+  warning: "#F59E0B",
+  error: "#EF4444",
+  info: "#0163c2", // Активная иконка таббара
+
   // Дополнительные цвета
-  cardShadow: '#000000',
-  gradient: ['#083198', '#0360bc'],
-  
+  cardShadow: "#000000",
+  gradient: ["#083198", "#0360bc"],
+
   // Специальные цвета
-  overlay: 'rgba(0, 0, 0, 0.5)',
-  backdrop: 'rgba(0, 0, 0, 0.3)',
+  overlay: "rgba(0, 0, 0, 0.5)",
+  backdrop: "rgba(0, 0, 0, 0.3)",
 };
 
 export const darkColors = {
   // Основные цвета
-  primary: '#3B82F6',
-  secondary: '#60A5FA',
-  accent: '#22D3EE',
-  
+  primary: "#3B82F6",
+  secondary: "#60A5FA",
+  accent: "#22D3EE",
+
   // Фоновые цвета
-  background: '#111827',
-  surface: '#1F2937',
-  card: '#1F2937',
-  tabBar: '#111827',
-  
+  background: "#111827",
+  surface: "#1F2937",
+  card: "#1F2937",
+  tabBar: "#111827",
+
   // Текстовые цвета
-  text: '#F9FAFB',
-  textSecondary: '#9CA3AF',
-  textTertiary: '#6B7280',
-  
+  text: "#F9FAFB",
+  textSecondary: "#9CA3AF",
+  textTertiary: "#6B7280",
+
   // Границы и разделители
-  border: '#374151',
-  borderLight: '#4B5563',
-  
+  border: "#374151",
+  borderLight: "#4B5563",
+
   // Статусные цвета
-  success: '#34D399',
-  warning: '#FBBF24',
-  error: '#F87171',
-  info: '#60A5FA',
-  
+  success: "#34D399",
+  warning: "#FBBF24",
+  error: "#F87171",
+  info: "#60A5FA",
+
   // Дополнительные цвета
-  cardShadow: '#000000',
-  gradient: ['#3B82F6', '#60A5FA'],
-  
+  cardShadow: "#000000",
+  gradient: ["#3B82F6", "#60A5FA"],
+
   // Специальные цвета
-  overlay: 'rgba(0, 0, 0, 0.7)',
-  backdrop: 'rgba(0, 0, 0, 0.5)',
+  overlay: "rgba(0, 0, 0, 0.7)",
+  backdrop: "rgba(0, 0, 0, 0.5)",
 };
 
 export const colors = {
@@ -92,7 +92,7 @@ export const SIZES = {
   xl: 20,
   xxl: 24,
   xxxl: 32,
-  
+
   // Радиусы
   radius: {
     xs: 4,
@@ -102,7 +102,7 @@ export const SIZES = {
     xl: 20,
     round: 50,
   },
-  
+
   // Размеры шрифтов
   fontSize: {
     xs: 10,
@@ -114,7 +114,7 @@ export const SIZES = {
     xxxl: 24,
     title: 28,
   },
-  
+
   // Высота строк
   lineHeight: {
     xs: 14,
@@ -126,7 +126,7 @@ export const SIZES = {
     xxxl: 28,
     title: 32,
   },
-  
+
   // Размеры иконок
   icon: {
     xs: 12,
@@ -136,14 +136,14 @@ export const SIZES = {
     xl: 28,
     xxl: 32,
   },
-  
+
   // Высота кнопок
   buttonHeight: {
     sm: 36,
     md: 44,
     lg: 52,
   },
-  
+
   // Высота инпутов
   inputHeight: {
     sm: 36,
@@ -156,21 +156,21 @@ export const SIZES = {
 export const SHADOWS = {
   light: {
     small: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.05,
       shadowRadius: 2,
       elevation: 1,
     },
     medium: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
       elevation: 2,
     },
     large: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.15,
       shadowRadius: 8,
@@ -179,21 +179,21 @@ export const SHADOWS = {
   },
   dark: {
     small: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.3,
       shadowRadius: 2,
       elevation: 1,
     },
     medium: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.4,
       shadowRadius: 4,
       elevation: 2,
     },
     large: {
-      shadowColor: '#000000',
+      shadowColor: "#000000",
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.5,
       shadowRadius: 8,
@@ -210,10 +210,10 @@ export const ANIMATIONS = {
     slow: 500,
   },
   easing: {
-    ease: 'ease',
-    easeIn: 'ease-in',
-    easeOut: 'ease-out',
-    easeInOut: 'ease-in-out',
+    ease: "ease",
+    easeIn: "ease-in",
+    easeOut: "ease-out",
+    easeInOut: "ease-in-out",
   },
 };
 

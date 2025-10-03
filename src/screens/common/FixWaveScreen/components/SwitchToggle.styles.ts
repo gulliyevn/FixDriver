@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   switchContainer: {
@@ -6,14 +6,14 @@ export const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
   },
   switchThumb: {
     width: 50,
     height: 24,
     borderRadius: 12,
-    position: 'absolute',
+    position: "absolute",
   },
 });

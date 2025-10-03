@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Alert, ViewStyle } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../context/ThemeContext';
-import { AppError, ErrorHandler } from '../utils/errorHandler';
-import { ErrorDisplayStyles } from '../styles/components/ErrorDisplay.styles';
+import React from "react";
+import { View, Text, TouchableOpacity, Alert, ViewStyle } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../context/ThemeContext";
+import { AppError, ErrorHandler } from "../utils/errorHandler";
+import { ErrorDisplayStyles } from "../styles/components/ErrorDisplay.styles";
 
 interface ErrorDisplayProps {
   error: AppError | null;
@@ -18,24 +18,24 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   onRetry,
   onAction,
   showDetails = false,
-  containerStyle
+  containerStyle,
 }) => {
   const { isDark } = useTheme();
 
   if (!error) return null;
 
   const getErrorIcon = (code: string) => {
-    if (code.startsWith('AUTH_')) return 'lock-closed';
-    if (code.startsWith('NET_')) return 'wifi';
-    if (code.startsWith('VAL_')) return 'alert-circle';
-    return 'warning';
+    if (code.startsWith("AUTH_")) return "lock-closed";
+    if (code.startsWith("NET_")) return "wifi";
+    if (code.startsWith("VAL_")) return "alert-circle";
+    return "warning";
   };
 
   const getErrorColor = (code: string) => {
-    if (code.startsWith('AUTH_')) return '#DC2626';
-    if (code.startsWith('NET_')) return '#F59E0B';
-    if (code.startsWith('VAL_')) return '#EF4444';
-    return '#6B7280';
+    if (code.startsWith("AUTH_")) return "#DC2626";
+    if (code.startsWith("NET_")) return "#F59E0B";
+    if (code.startsWith("VAL_")) return "#EF4444";
+    return "#6B7280";
   };
 
   const handleRetry = () => {
@@ -53,23 +53,24 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
 
   const showErrorDetails = () => {
     if (showDetails && error.details) {
-      Alert.alert(
-        'Детали ошибки',
-        error.details,
-        [{ text: 'Понятно', style: 'default' }]
-      );
+      Alert.alert("Детали ошибки", error.details, [
+        { text: "Понятно", style: "default" },
+      ]);
     }
   };
 
   return (
-    <View testID="error-display" style={[
-      ErrorDisplayStyles.container,
-      {
-        backgroundColor: isDark ? '#1F2937' : '#FEF2F2',
-        borderColor: getErrorColor(error.code),
-      },
-      containerStyle
-    ]}>
+    <View
+      testID="error-display"
+      style={[
+        ErrorDisplayStyles.container,
+        {
+          backgroundColor: isDark ? "#1F2937" : "#FEF2F2",
+          borderColor: getErrorColor(error.code),
+        },
+        containerStyle,
+      ]}
+    >
       <View style={ErrorDisplayStyles.header}>
         <View style={ErrorDisplayStyles.iconContainer}>
           <Ionicons
@@ -80,18 +81,22 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
           />
         </View>
         <View style={ErrorDisplayStyles.content}>
-          <Text style={[
-            ErrorDisplayStyles.title,
-            { color: isDark ? '#F9FAFB' : '#991B1B' }
-          ]}>
+          <Text
+            style={[
+              ErrorDisplayStyles.title,
+              { color: isDark ? "#F9FAFB" : "#991B1B" },
+            ]}
+          >
             {ErrorHandler.getUserFriendlyMessage(error)}
           </Text>
           {error.details && showDetails && (
             <TouchableOpacity onPress={showErrorDetails}>
-              <Text style={[
-                ErrorDisplayStyles.detailsLink,
-                { color: getErrorColor(error.code) }
-              ]}>
+              <Text
+                style={[
+                  ErrorDisplayStyles.detailsLink,
+                  { color: getErrorColor(error.code) },
+                ]}
+              >
                 Подробнее
               </Text>
             </TouchableOpacity>
@@ -107,7 +112,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
               {
                 backgroundColor: getErrorColor(error.code),
                 marginRight: 8,
-              }
+              },
             ]}
             onPress={handleRetry}
           >
@@ -121,17 +126,19 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
             style={[
               ErrorDisplayStyles.actionButton,
               {
-                backgroundColor: 'transparent',
+                backgroundColor: "transparent",
                 borderWidth: 1,
                 borderColor: getErrorColor(error.code),
-              }
+              },
             ]}
             onPress={handleAction}
           >
-            <Text style={[
-              ErrorDisplayStyles.actionButtonText,
-              { color: getErrorColor(error.code) }
-            ]}>
+            <Text
+              style={[
+                ErrorDisplayStyles.actionButtonText,
+                { color: getErrorColor(error.code) },
+              ]}
+            >
               {ErrorHandler.getRecommendedAction(error)}
             </Text>
           </TouchableOpacity>
@@ -141,4 +148,4 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   );
 };
 
-export default ErrorDisplay; 
+export default ErrorDisplay;

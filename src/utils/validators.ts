@@ -1,4 +1,4 @@
-import { SECURITY_CONFIG, SecurityUtils } from '../config/security';
+import { SECURITY_CONFIG, SecurityUtils } from "../config/security";
 
 export interface ValidationResult {
   isValid: boolean;
@@ -8,7 +8,7 @@ export interface ValidationResult {
 
 export interface PasswordStrength {
   score: number;
-  level: 'weak' | 'medium' | 'strong' | 'very-strong';
+  level: "weak" | "medium" | "strong" | "very-strong";
   feedback: string[];
 }
 
@@ -21,29 +21,35 @@ export class Validators {
     const warnings: string[] = [];
 
     if (!email) {
-      errors.push('Email обязателен');
+      errors.push("Email обязателен");
       return { isValid: false, errors, warnings };
     }
 
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.EMAIL.test(email)) {
-      errors.push('Некорректный формат email');
+      errors.push("Некорректный формат email");
     }
 
     if (email.length > SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.EMAIL) {
-      errors.push(`Email не должен превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.EMAIL} символов`);
+      errors.push(
+        `Email не должен превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.EMAIL} символов`,
+      );
     }
 
     // Проверка на временные email сервисы
-    const tempEmailDomains = ['10minutemail.com', 'tempmail.org', 'guerrillamail.com'];
-    const domain = email.split('@')[1]?.toLowerCase();
-    if (domain && tempEmailDomains.some(temp => domain.includes(temp))) {
-      warnings.push('Рекомендуется использовать постоянный email адрес');
+    const tempEmailDomains = [
+      "10minutemail.com",
+      "tempmail.org",
+      "guerrillamail.com",
+    ];
+    const domain = email.split("@")[1]?.toLowerCase();
+    if (domain && tempEmailDomains.some((temp) => domain.includes(temp))) {
+      warnings.push("Рекомендуется использовать постоянный email адрес");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -57,7 +63,8 @@ export class Validators {
     return {
       isValid: result.isValid,
       errors: result.errors,
-      warnings: strength.level === 'weak' ? ['Пароль слишком слабый'] : undefined
+      warnings:
+        strength.level === "weak" ? ["Пароль слишком слабый"] : undefined,
     };
   }
 
@@ -87,28 +94,28 @@ export class Validators {
     // Проверка на повторяющиеся символы
     if (/(.)\1{2,}/.test(password)) {
       score -= 1;
-      feedback.push('repeat');
+      feedback.push("repeat");
     }
 
     // Проверка на последовательности
     if (/123|abc|qwe/i.test(password)) {
       score -= 1;
-      feedback.push('sequence');
+      feedback.push("sequence");
     }
 
     // Определение уровня
-    let level: 'weak' | 'medium' | 'strong' | 'very-strong';
-    if (score <= 3) level = 'weak';
-    else if (score <= 5) level = 'medium';
-    else if (score <= 7) level = 'strong';
-    else level = 'very-strong';
+    let level: "weak" | "medium" | "strong" | "very-strong";
+    if (score <= 3) level = "weak";
+    else if (score <= 5) level = "medium";
+    else if (score <= 7) level = "strong";
+    else level = "very-strong";
 
     // Добавляем рекомендации (ключи)
-    if (password.length < 8) feedback.push('minLength');
-    if (!/[A-Z]/.test(password)) feedback.push('uppercase');
-    if (!/[a-z]/.test(password)) feedback.push('lowercase');
-    if (!/\d/.test(password)) feedback.push('numbers');
-    if (!/[@$!%*?&]/.test(password)) feedback.push('specialChars');
+    if (password.length < 8) feedback.push("minLength");
+    if (!/[A-Z]/.test(password)) feedback.push("uppercase");
+    if (!/[a-z]/.test(password)) feedback.push("lowercase");
+    if (!/\d/.test(password)) feedback.push("numbers");
+    if (!/[@$!%*?&]/.test(password)) feedback.push("specialChars");
 
     return { score, level, feedback };
   }
@@ -121,41 +128,44 @@ export class Validators {
     const warnings: string[] = [];
 
     if (!phone) {
-      errors.push('Номер телефона обязателен');
+      errors.push("Номер телефона обязателен");
       return { isValid: false, errors, warnings };
     }
 
     // Очищаем от форматирования
-    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanPhone = phone.replace(/\D/g, "");
 
     if (cleanPhone.length < 7) {
-      errors.push('Номер телефона слишком короткий');
+      errors.push("Номер телефона слишком короткий");
     }
 
     if (cleanPhone.length > 15) {
-      errors.push('Номер телефона слишком длинный');
+      errors.push("Номер телефона слишком длинный");
     }
 
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.PHONE.test(phone)) {
-      errors.push('Некорректный формат номера телефона');
+      errors.push("Некорректный формат номера телефона");
     }
 
     // Проверка на российские номера (если нужно)
-    if (phone.startsWith('+7') && cleanPhone.length !== 11) {
-      warnings.push('Проверьте правильность российского номера');
+    if (phone.startsWith("+7") && cleanPhone.length !== 11) {
+      warnings.push("Проверьте правильность российского номера");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
   /**
    * Валидация имени
    */
-  static validateName(name: string, fieldName: string = 'Имя'): ValidationResult {
+  static validateName(
+    name: string,
+    fieldName: string = "Имя",
+  ): ValidationResult {
     const errors: string[] = [];
 
     if (!name) {
@@ -168,7 +178,9 @@ export class Validators {
     }
 
     if (name.length > SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME) {
-      errors.push(`${fieldName} не должно превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME} символов`);
+      errors.push(
+        `${fieldName} не должно превышать ${SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME} символов`,
+      );
     }
 
     if (!SECURITY_CONFIG.VALIDATION.PATTERNS.NAME.test(name)) {
@@ -182,7 +194,7 @@ export class Validators {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -193,19 +205,19 @@ export class Validators {
     const errors: string[] = [];
 
     if (!licenseNumber) {
-      errors.push('Номер водительских прав обязателен');
+      errors.push("Номер водительских прав обязателен");
       return { isValid: false, errors };
     }
 
     // Азербайджанский формат: AZ12345678
     const azPattern = /^[A-Z]{2}\d{8}$/;
     if (!azPattern.test(licenseNumber)) {
-      errors.push('Некорректный формат номера прав (AZ12345678)');
+      errors.push("Некорректный формат номера прав (AZ12345678)");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -216,19 +228,19 @@ export class Validators {
     const errors: string[] = [];
 
     if (!vehicleNumber) {
-      errors.push('Номер автомобиля обязателен');
+      errors.push("Номер автомобиля обязателен");
       return { isValid: false, errors };
     }
 
     // Азербайджанский формат: 12-AB-123
     const azPattern = /^\d{2}-[A-Z]{2}-\d{3}$/;
     if (!azPattern.test(vehicleNumber)) {
-      errors.push('Некорректный формат номера автомобиля (12-AB-123)');
+      errors.push("Некорректный формат номера автомобиля (12-AB-123)");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -240,7 +252,7 @@ export class Validators {
     const warnings: string[] = [];
 
     if (!expiryDate) {
-      errors.push('Дата истечения прав обязательна');
+      errors.push("Дата истечения прав обязательна");
       return { isValid: false, errors, warnings };
     }
 
@@ -248,26 +260,26 @@ export class Validators {
     const today = new Date();
 
     if (isNaN(expiry.getTime())) {
-      errors.push('Некорректная дата');
+      errors.push("Некорректная дата");
       return { isValid: false, errors, warnings };
     }
 
     if (expiry <= today) {
-      errors.push('Срок действия прав истек');
+      errors.push("Срок действия прав истек");
     }
 
     // Предупреждение если права истекают в течение 3 месяцев
     const threeMonthsFromNow = new Date();
     threeMonthsFromNow.setMonth(threeMonthsFromNow.getMonth() + 3);
-    
+
     if (expiry <= threeMonthsFromNow && expiry > today) {
-      warnings.push('Права истекают в течение 3 месяцев');
+      warnings.push("Права истекают в течение 3 месяцев");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -278,17 +290,17 @@ export class Validators {
     const errors: string[] = [];
 
     if (!otp) {
-      errors.push('OTP код обязателен');
+      errors.push("OTP код обязателен");
       return { isValid: false, errors };
     }
 
     if (!/^\d{6}$/.test(otp)) {
-      errors.push('OTP код должен содержать 6 цифр');
+      errors.push("OTP код должен содержать 6 цифр");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -307,11 +319,11 @@ export class Validators {
     const warnings: string[] = [];
 
     // Валидация имени
-    const nameValidation = this.validateName(data.name, 'Имя');
+    const nameValidation = this.validateName(data.name, "Имя");
     errors.push(...nameValidation.errors);
 
     // Валидация фамилии
-    const surnameValidation = this.validateName(data.surname, 'Фамилия');
+    const surnameValidation = this.validateName(data.surname, "Фамилия");
     errors.push(...surnameValidation.errors);
 
     // Валидация email
@@ -331,27 +343,29 @@ export class Validators {
 
     // Проверка совпадения паролей
     if (data.password !== data.confirmPassword) {
-      errors.push('Пароли не совпадают');
+      errors.push("Пароли не совпадают");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
   /**
    * Валидация формы регистрации водителя
    */
-  static validateDriverRegistration(data: Record<string, unknown>): ValidationResult {
+  static validateDriverRegistration(
+    data: Record<string, unknown>,
+  ): ValidationResult {
     const formData = {
-      name: String(data.first_name || ''),
-      surname: String(data.last_name || ''),
-      email: String(data.email || ''),
-      phone: String(data.phone_number || ''),
-      password: String(data.password || ''),
-      confirmPassword: String(data.confirmPassword || '')
+      name: String(data.first_name || ""),
+      surname: String(data.last_name || ""),
+      email: String(data.email || ""),
+      phone: String(data.phone_number || ""),
+      password: String(data.password || ""),
+      confirmPassword: String(data.confirmPassword || ""),
     };
 
     // Валидация основных полей
@@ -361,19 +375,25 @@ export class Validators {
     }
 
     // Валидация водительских прав
-    const licenseValidation = this.validateLicenseNumber(String(data.license_number || ''));
+    const licenseValidation = this.validateLicenseNumber(
+      String(data.license_number || ""),
+    );
     if (!licenseValidation.isValid) {
       return licenseValidation;
     }
 
     // Валидация номера автомобиля
-    const vehicleValidation = this.validateVehicleNumber(String(data.vehicle_number || ''));
+    const vehicleValidation = this.validateVehicleNumber(
+      String(data.vehicle_number || ""),
+    );
     if (!vehicleValidation.isValid) {
       return vehicleValidation;
     }
 
     // Валидация срока действия прав
-    const expiryValidation = this.validateLicenseExpiry(String(data.license_expiry_date || ''));
+    const expiryValidation = this.validateLicenseExpiry(
+      String(data.license_expiry_date || ""),
+    );
     if (!expiryValidation.isValid) {
       return expiryValidation;
     }
@@ -384,20 +404,23 @@ export class Validators {
   /**
    * Валидация формы входа
    */
-  static validateLogin(data: { email: string; password: string }): ValidationResult {
+  static validateLogin(data: {
+    email: string;
+    password: string;
+  }): ValidationResult {
     const errors: string[] = [];
 
     if (!data.email) {
-      errors.push('Email обязателен');
+      errors.push("Email обязателен");
     }
 
     if (!data.password) {
-      errors.push('Пароль обязателен');
+      errors.push("Пароль обязателен");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }

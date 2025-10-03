@@ -4,7 +4,7 @@
     "description": "Прогрессируйте и получайте бонусы за каждый уровень!",
     "levelNames": {
       "starter": "Стартер",
-      "determined": "Целеустремленный", 
+      "determined": "Целеустремленный",
       "reliable": "Надежный",
       "champion": "Чемпион",
       "superstar": "Суперзвезда",
@@ -29,7 +29,7 @@
     "levelNames": {
       "starter": "Starter",
       "determined": "Determined",
-      "reliable": "Reliable", 
+      "reliable": "Reliable",
       "champion": "Champion",
       "superstar": "Superstar",
       "emperor": "Emperor",
@@ -54,7 +54,7 @@
       "starter": "Başlanğıc",
       "determined": "Məqsədli",
       "reliable": "Etibarlı",
-      "champion": "Çempion", 
+      "champion": "Çempion",
       "superstar": "Superstar",
       "emperor": "İmperator",
       "vip": "VIP"

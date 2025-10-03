@@ -1,9 +1,12 @@
-import React from 'react';
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import MapViewComponent from '../MapView';
-import { AddressModalStyles, getAddressModalStyles } from '../../styles/components/AddressModal.styles';
+import MapViewComponent from "../MapView";
+import {
+  AddressModalStyles,
+  getAddressModalStyles,
+} from "../../styles/components/AddressModal.styles";
 
 interface Coordinates {
   latitude: number;
@@ -35,13 +38,20 @@ const AddressMapModal: React.FC<AddressMapModalProps> = ({
   instructionsText,
   selectedCoordinates,
 }) => (
-  <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
+  <Modal
+    visible={visible}
+    animationType="slide"
+    presentationStyle="pageSheet"
+    onRequestClose={onClose}
+  >
     <View style={[styles.mapModalContainer, dynamicStyles.mapModalContainer]}>
       <View style={[styles.mapModalHeader, dynamicStyles.mapModalHeader]}>
         <TouchableOpacity onPress={onClose} style={styles.mapCloseButton}>
-          <Ionicons name="close" size={24} color={isDark ? '#fff' : '#000'} />
+          <Ionicons name="close" size={24} color={isDark ? "#fff" : "#000"} />
         </TouchableOpacity>
-        <Text style={[styles.mapModalTitle, dynamicStyles.mapModalTitle]}>{title}</Text>
+        <Text style={[styles.mapModalTitle, dynamicStyles.mapModalTitle]}>
+          {title}
+        </Text>
         <TouchableOpacity onPress={onClose} style={styles.mapConfirmButton}>
           <Text style={styles.mapConfirmButtonText}>{confirmText}</Text>
         </TouchableOpacity>
@@ -51,17 +61,23 @@ const AddressMapModal: React.FC<AddressMapModalProps> = ({
         <MapViewComponent
           onLocationSelect={onSelect}
           showNearbyDrivers={false}
-          markers={selectedCoordinates ? [
-            {
-              id: 'selected',
-              coordinate: selectedCoordinates,
-              title,
-              description: instructionsText,
-              type: 'destination',
-            },
-          ] : []}
+          markers={
+            selectedCoordinates
+              ? [
+                  {
+                    id: "selected",
+                    coordinate: selectedCoordinates,
+                    title,
+                    description: instructionsText,
+                    type: "destination",
+                  },
+                ]
+              : []
+          }
         />
-        <Text style={[styles.mapInstructions, dynamicStyles.mapInstructions]}>{instructionsText}</Text>
+        <Text style={[styles.mapInstructions, dynamicStyles.mapInstructions]}>
+          {instructionsText}
+        </Text>
       </View>
     </View>
   </Modal>

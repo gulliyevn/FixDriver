@@ -1,24 +1,28 @@
-import { renderHook, act } from '@testing-library/react-native';
-import { useBalance } from '../useBalance';
-import { useAuth } from '../../context/AuthContext';
-import { useClientBalance } from '../client/useClientBalance';
-import { useDriverBalance } from '../driver/useDriverBalance';
+import { renderHook, act } from "../../test-utils/testWrapper";
+import { useBalance } from "../useBalance";
+import { useAuth } from "../../context/AuthContext";
+import { useClientBalance } from "../client/useClientBalance";
+import { useDriverBalance } from "../driver/useDriverBalance";
 
 // Мокаем контексты
-jest.mock('../../context/AuthContext');
-jest.mock('../client/useClientBalance');
-jest.mock('../driver/useDriverBalance');
+jest.mock("../../context/AuthContext");
+jest.mock("../client/useClientBalance");
+jest.mock("../driver/useDriverBalance");
 
 const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
-const mockUseClientBalance = useClientBalance as jest.MockedFunction<typeof useClientBalance>;
-const mockUseDriverBalance = useDriverBalance as jest.MockedFunction<typeof useDriverBalance>;
+const mockUseClientBalance = useClientBalance as jest.MockedFunction<
+  typeof useClientBalance
+>;
+const mockUseDriverBalance = useDriverBalance as jest.MockedFunction<
+  typeof useDriverBalance
+>;
 
-describe('useBalance - Smart Role Hook', () => {
+describe("useBalance - Smart Role Hook", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Client Role', () => {
+  describe("Client Role", () => {
     const mockClientBalance = {
       balance: 1000,
       transactions: [],
@@ -31,7 +35,12 @@ describe('useBalance - Smart Role Hook', () => {
 
     beforeEach(() => {
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'client' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "client",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -54,7 +63,7 @@ describe('useBalance - Smart Role Hook', () => {
       });
     });
 
-    it('should use client balance hook when user role is client', () => {
+    it("should use client balance hook when user role is client", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(mockUseClientBalance).toHaveBeenCalled();
@@ -62,24 +71,24 @@ describe('useBalance - Smart Role Hook', () => {
       expect(result.current).toEqual(mockClientBalance);
     });
 
-    it('should have client-specific properties', () => {
+    it("should have client-specific properties", () => {
       const { result } = renderHook(() => useBalance());
 
-      expect(result.current).toHaveProperty('cashback');
-      expect(result.current).toHaveProperty('topUpBalance');
-      expect(result.current).toHaveProperty('deductBalance');
-      expect(result.current).toHaveProperty('getCashback');
+      expect(result.current).toHaveProperty("cashback");
+      expect(result.current).toHaveProperty("topUpBalance");
+      expect(result.current).toHaveProperty("deductBalance");
+      expect(result.current).toHaveProperty("getCashback");
     });
 
-    it('should not have driver-specific properties', () => {
+    it("should not have driver-specific properties", () => {
       const { result } = renderHook(() => useBalance());
 
-      expect(result.current).not.toHaveProperty('earnings');
-      expect(result.current).not.toHaveProperty('withdrawBalance');
-      expect(result.current).not.toHaveProperty('getEarnings');
+      expect(result.current).not.toHaveProperty("earnings");
+      expect(result.current).not.toHaveProperty("withdrawBalance");
+      expect(result.current).not.toHaveProperty("getEarnings");
     });
 
-    it('should handle topUpBalance correctly for client', async () => {
+    it("should handle topUpBalance correctly for client", async () => {
       const { result } = renderHook(() => useBalance());
 
       await act(async () => {
@@ -89,30 +98,33 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockClientBalance.topUpBalance).toHaveBeenCalledWith(500);
     });
 
-    it('should handle deductBalance correctly for client', async () => {
+    it("should handle deductBalance correctly for client", async () => {
       const { result } = renderHook(() => useBalance());
 
       await act(async () => {
-        await result.current.deductBalance(100, 'Test payment');
+        await result.current.deductBalance(100, "Test payment");
       });
 
-      expect(mockClientBalance.deductBalance).toHaveBeenCalledWith(100, 'Test payment');
+      expect(mockClientBalance.deductBalance).toHaveBeenCalledWith(
+        100,
+        "Test payment",
+      );
     });
 
-    it('should return correct balance for client', () => {
+    it("should return correct balance for client", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(result.current.balance).toBe(1000);
     });
 
-    it('should return correct cashback for client', () => {
+    it("should return correct cashback for client", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(result.current.cashback).toBe(50);
     });
   });
 
-  describe('Driver Role', () => {
+  describe("Driver Role", () => {
     const mockDriverBalance = {
       balance: 2500,
       transactions: [],
@@ -125,7 +137,12 @@ describe('useBalance - Smart Role Hook', () => {
 
     beforeEach(() => {
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'driver' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "driver",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -148,7 +165,7 @@ describe('useBalance - Smart Role Hook', () => {
       });
     });
 
-    it('should use driver balance hook when user role is driver', () => {
+    it("should use driver balance hook when user role is driver", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(mockUseDriverBalance).toHaveBeenCalled();
@@ -156,24 +173,24 @@ describe('useBalance - Smart Role Hook', () => {
       expect(result.current).toEqual(mockDriverBalance);
     });
 
-    it('should have driver-specific properties', () => {
+    it("should have driver-specific properties", () => {
       const { result } = renderHook(() => useBalance());
 
-      expect(result.current).toHaveProperty('earnings');
-      expect(result.current).toHaveProperty('topUpBalance');
-      expect(result.current).toHaveProperty('withdrawBalance');
-      expect(result.current).toHaveProperty('getEarnings');
+      expect(result.current).toHaveProperty("earnings");
+      expect(result.current).toHaveProperty("topUpBalance");
+      expect(result.current).toHaveProperty("withdrawBalance");
+      expect(result.current).toHaveProperty("getEarnings");
     });
 
-    it('should not have client-specific properties', () => {
+    it("should not have client-specific properties", () => {
       const { result } = renderHook(() => useBalance());
 
-      expect(result.current).not.toHaveProperty('cashback');
-      expect(result.current).not.toHaveProperty('deductBalance');
-      expect(result.current).not.toHaveProperty('getCashback');
+      expect(result.current).not.toHaveProperty("cashback");
+      expect(result.current).not.toHaveProperty("deductBalance");
+      expect(result.current).not.toHaveProperty("getCashback");
     });
 
-    it('should handle topUpBalance correctly for driver', async () => {
+    it("should handle topUpBalance correctly for driver", async () => {
       const { result } = renderHook(() => useBalance());
 
       await act(async () => {
@@ -183,7 +200,7 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockDriverBalance.topUpBalance).toHaveBeenCalledWith(500);
     });
 
-    it('should handle withdrawBalance correctly for driver', async () => {
+    it("should handle withdrawBalance correctly for driver", async () => {
       const { result } = renderHook(() => useBalance());
 
       await act(async () => {
@@ -193,24 +210,29 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockDriverBalance.withdrawBalance).toHaveBeenCalledWith(100);
     });
 
-    it('should return correct balance for driver', () => {
+    it("should return correct balance for driver", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(result.current.balance).toBe(2500);
     });
 
-    it('should return correct earnings for driver', () => {
+    it("should return correct earnings for driver", () => {
       const { result } = renderHook(() => useBalance());
 
       expect(result.current.earnings).toBe(1500);
     });
   });
 
-  describe('Role Switching', () => {
-    it('should switch from client to driver balance when role changes', () => {
+  describe("Role Switching", () => {
+    it("should switch from client to driver balance when role changes", () => {
       // Начинаем с роли клиента
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'client' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "client",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -228,7 +250,12 @@ describe('useBalance - Smart Role Hook', () => {
 
       // Переключаемся на роль водителя
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'driver' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "driver",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -244,7 +271,7 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockUseDriverBalance).toHaveBeenCalled();
     });
 
-    it('should maintain separate balance states for different roles', () => {
+    it("should maintain separate balance states for different roles", () => {
       const mockClientBalance = {
         balance: 1000,
         transactions: [],
@@ -270,7 +297,12 @@ describe('useBalance - Smart Role Hook', () => {
 
       // Клиент
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'client' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "client",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -288,7 +320,12 @@ describe('useBalance - Smart Role Hook', () => {
 
       // Водитель
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'driver' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "driver",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -308,8 +345,8 @@ describe('useBalance - Smart Role Hook', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle undefined user role gracefully', () => {
+  describe("Error Handling", () => {
+    it("should handle undefined user role gracefully", () => {
       mockUseAuth.mockReturnValue({
         user: undefined,
         isAuthenticated: false,
@@ -329,9 +366,14 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockUseDriverBalance).not.toHaveBeenCalled();
     });
 
-    it('should handle unknown role gracefully', () => {
+    it("should handle unknown role gracefully", () => {
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'unknown' as any },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "unknown" as any,
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -350,8 +392,8 @@ describe('useBalance - Smart Role Hook', () => {
     });
   });
 
-  describe('Integration with Package Context', () => {
-    it('should work correctly with package purchases for client', async () => {
+  describe("Integration with Package Context", () => {
+    it("should work correctly with package purchases for client", async () => {
       const mockClientBalance = {
         balance: 1000,
         transactions: [],
@@ -363,7 +405,12 @@ describe('useBalance - Smart Role Hook', () => {
       };
 
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'client' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "client",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -380,14 +427,22 @@ describe('useBalance - Smart Role Hook', () => {
 
       // Симулируем покупку пакета
       await act(async () => {
-        const success = await result.current.deductBalance(100, 'Premium package purchase', 'premium');
+        const success = await result.current.deductBalance(
+          100,
+          "Premium package purchase",
+          "premium",
+        );
         expect(success).toBe(true);
       });
 
-      expect(mockClientBalance.deductBalance).toHaveBeenCalledWith(100, 'Premium package purchase', 'premium');
+      expect(mockClientBalance.deductBalance).toHaveBeenCalledWith(
+        100,
+        "Premium package purchase",
+        "premium",
+      );
     });
 
-    it('should work correctly with earnings for driver', async () => {
+    it("should work correctly with earnings for driver", async () => {
       const mockDriverBalance = {
         balance: 2500,
         transactions: [],
@@ -399,7 +454,12 @@ describe('useBalance - Smart Role Hook', () => {
       };
 
       mockUseAuth.mockReturnValue({
-        user: { id: '1', name: 'John', email: 'john@example.com', role: 'driver' },
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          role: "driver",
+        },
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -423,4 +483,4 @@ describe('useBalance - Smart Role Hook', () => {
       expect(mockDriverBalance.withdrawBalance).toHaveBeenCalledWith(500);
     });
   });
-}); 
+});

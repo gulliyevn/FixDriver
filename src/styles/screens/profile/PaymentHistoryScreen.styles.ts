@@ -1,28 +1,28 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../../constants/colors";
 
 export const PaymentHistoryScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 45,
     paddingBottom: 6,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   backButton: {
     padding: 8,
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
   },
   filterButton: {
     padding: 8,
@@ -40,31 +40,31 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginTop: 16,
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   emptyDescription: {
     fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
+    color: "#888",
+    textAlign: "center",
   },
   paymentItem: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
   paymentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   paymentInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
     marginRight: 12,
   },
@@ -74,20 +74,20 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
   },
   paymentTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginBottom: 4,
   },
   paymentDate: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   paymentAmount: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   amountText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
   },
   statusBadge: {
@@ -97,56 +97,56 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
   paymentDescription: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e5e5e5',
+    borderTopColor: "#e5e5e5",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 40,
   },
   loadingText: {
     fontSize: 16,
     marginTop: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   loadingMoreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 16,
     gap: 8,
   },
   loadingMoreText: {
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
   errorBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffebee',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ffebee",
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginHorizontal: 16,
     marginTop: 8,
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#e53935',
+    borderLeftColor: "#e53935",
     gap: 8,
   },
   errorText: {
     flex: 1,
     fontSize: 14,
-    color: '#e53935',
+    color: "#e53935",
   },
   errorCloseButton: {
     padding: 4,
@@ -156,7 +156,7 @@ export const PaymentHistoryScreenStyles = StyleSheet.create({
 // Функция для получения динамических стилей в зависимости от темы
 export const getPaymentHistoryScreenStyles = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   return {
     container: {
       backgroundColor: currentColors.background,
@@ -193,10 +193,10 @@ export const getPaymentHistoryScreenStyles = (isDark: boolean) => {
       color: currentColors.textSecondary,
     },
     errorBox: {
-      backgroundColor: isDark ? '#2d1b1b' : '#ffebee',
+      backgroundColor: isDark ? "#2d1b1b" : "#ffebee",
     },
     errorText: {
-      color: '#e53935',
+      color: "#e53935",
     },
   };
-}; 
+};

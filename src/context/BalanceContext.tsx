@@ -1,12 +1,14 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
-import { BalanceService, TransactionRecord } from '../services/BalanceService';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
+import { BalanceService, TransactionRecord } from "../services/BalanceService";
 
 interface BalanceContextType {
   balance: number;
   earnings: number;
   transactions: TransactionRecord[];
-  addEarnings: (amount: number) => Promise<{ newBalance: number; newEarnings: number }>;
+  addEarnings: (
+    amount: number,
+  ) => Promise<{ newBalance: number; newEarnings: number }>;
   topUpBalance: (amount: number) => Promise<boolean>;
   withdrawBalance: (amount: number) => Promise<boolean>;
   deductBalance: (amount: number, description?: string) => Promise<boolean>;
@@ -21,7 +23,8 @@ const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
 export const useBalanceContext = () => {
   const context = useContext(BalanceContext);
   if (!context) {
-    console.error('useBalanceContext must be used within a BalanceProvider'); return;
+    console.error("useBalanceContext must be used within a BalanceProvider");
+    return;
   }
   return context;
 };
@@ -30,7 +33,9 @@ interface BalanceProviderProps {
   children: React.ReactNode;
 }
 
-export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) => {
+export const BalanceProvider: React.FC<BalanceProviderProps> = ({
+  children,
+}) => {
   const { user } = useAuth();
   const [balance, setBalance] = useState(0);
   const [earnings, setEarnings] = useState(0);
@@ -64,7 +69,11 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       const list = await BalanceService.getTransactions(user.id);
       setTransactions(list);
       const total = list
-        .filter(t => t.type === 'credit' && /earning|заработ/gi.test(t.description || ''))
+        .filter(
+          (t) =>
+            t.type === "credit" &&
+            /earning|заработ/gi.test(t.description || ""),
+        )
         .reduce((acc, t) => acc + t.amount, 0);
       setEarnings(total);
     } catch (error) {
@@ -86,7 +95,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     if (!user) return { newBalance: balance, newEarnings: earnings };
     await BalanceService.addTransaction(user.id, {
       amount,
-      type: 'credit',
+      type: "credit",
       description: `earning ${amount}`,
     });
     const b = await BalanceService.getBalance(user.id);
@@ -94,7 +103,10 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     setBalance(b.balance);
     setTransactions(list);
     const total = list
-      .filter(t => t.type === 'credit' && /earning|заработ/gi.test(t.description || ''))
+      .filter(
+        (t) =>
+          t.type === "credit" && /earning|заработ/gi.test(t.description || ""),
+      )
       .reduce((acc, t) => acc + t.amount, 0);
     setEarnings(total);
     return { newBalance: b.balance, newEarnings: total };
@@ -107,7 +119,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       if (__DEV__) {
         await BalanceService.addTransaction(user.id, {
           amount,
-          type: 'credit',
+          type: "credit",
           description: `topup ${amount}`,
         });
       } else {
@@ -130,7 +142,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       // Represent withdrawal as debit transaction
       await BalanceService.addTransaction(user.id, {
         amount,
-        type: 'debit',
+        type: "debit",
         description: `withdrawal ${amount}`,
       });
       const b = await BalanceService.getBalance(user.id);
@@ -149,8 +161,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       setEarnings(0);
       setTransactions([]);
       // В DEV можно очистить через перезапись ключей, но оставим минимально без IO
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const resetEarnings = async (): Promise<number> => {
@@ -163,13 +174,20 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
     }
   };
 
-  const deductBalance = async (amount: number, description?: string): Promise<boolean> => {
+  const deductBalance = async (
+    amount: number,
+    description?: string,
+  ): Promise<boolean> => {
     try {
       if (balance < amount) {
         return false;
       }
-      await BalanceService.withdrawBalance(user?.id || '', amount, description || 'Balance deduction');
-      setBalance(prev => prev - amount);
+      await BalanceService.withdrawBalance(
+        user?.id || "",
+        amount,
+        description || "Balance deduction",
+      );
+      setBalance((prev) => prev - amount);
       return true;
     } catch (error) {
       return false;
@@ -191,8 +209,6 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
   };
 
   return (
-    <BalanceContext.Provider value={value}>
-      {children}
-    </BalanceContext.Provider>
+    <BalanceContext.Provider value={value}>{children}</BalanceContext.Provider>
   );
 };

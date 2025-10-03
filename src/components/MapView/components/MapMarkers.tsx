@@ -1,7 +1,7 @@
-import React from 'react';
-import { Marker } from 'react-native-maps';
-import { View, StyleSheet } from 'react-native';
-import { MapMarker } from '../types/map.types';
+import React from "react";
+import { Marker } from "react-native-maps";
+import { View, StyleSheet } from "react-native";
+import { MapMarker } from "../types/map.types";
 
 interface MapMarkersProps {
   markers: MapMarker[];
@@ -16,20 +16,20 @@ const MapMarkers: React.FC<MapMarkersProps> = ({
 }) => {
   const getMarkerColor = (type?: string) => {
     switch (type) {
-      case 'driver':
-        return '#2563EB';
-      case 'client':
-        return '#059669';
-      case 'destination':
-        return '#EF4444';
-      case 'start':
-        return '#059669'; // slightly darker green
-      case 'waypoint':
-        return '#9CA3AF'; // slightly lighter gray
-      case 'end':
-        return '#3B82F6'; // brighter blue
+      case "driver":
+        return "#2563EB";
+      case "client":
+        return "#059669";
+      case "destination":
+        return "#EF4444";
+      case "start":
+        return "#059669"; // slightly darker green
+      case "waypoint":
+        return "#9CA3AF"; // slightly lighter gray
+      case "end":
+        return "#3B82F6"; // brighter blue
       default:
-        return '#EF4444';
+        return "#EF4444";
     }
   };
 
@@ -55,7 +55,7 @@ const MapMarkers: React.FC<MapMarkersProps> = ({
           <Pin color={marker.colorHex || getMarkerColor(marker.type)} />
         </Marker>
       ))}
-      
+
       {/* Клиентский маркер для водителей */}
       {clientMarker && (
         <Marker
@@ -65,7 +65,7 @@ const MapMarkers: React.FC<MapMarkersProps> = ({
           description={clientMarker.description}
           onPress={() => onMarkerPress(clientMarker)}
         >
-          <Pin color={getMarkerColor('client')} />
+          <Pin color={getMarkerColor("client")} />
         </Marker>
       )}
     </>
@@ -76,20 +76,20 @@ export default MapMarkers;
 
 const styles = StyleSheet.create({
   pinContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   pinHead: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   pinHeadInner: {
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
   pinBody: {
     width: 3,

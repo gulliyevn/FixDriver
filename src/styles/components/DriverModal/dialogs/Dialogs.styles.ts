@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../../constants/colors";
 
 export const createDialogsStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);
@@ -7,9 +7,9 @@ export const createDialogsStyles = (isDark: boolean) => {
   return StyleSheet.create({
     dialogOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "center",
+      alignItems: "center",
     },
     dialogContainer: {
       backgroundColor: palette.background,
@@ -23,16 +23,16 @@ export const createDialogsStyles = (isDark: boolean) => {
     },
     dialogTitle: {
       fontSize: SIZES.fontSize.lg + 2,
-      fontWeight: '600',
+      fontWeight: "600",
       color: palette.text,
       marginBottom: SIZES.md,
-      textAlign: 'center',
+      textAlign: "center",
     },
     dialogText: {
       fontSize: SIZES.fontSize.md + 2,
       color: palette.textSecondary,
       marginBottom: SIZES.lg + 10,
-      textAlign: 'center',
+      textAlign: "center",
       lineHeight: 24,
     },
     dialogButton: {
@@ -40,33 +40,33 @@ export const createDialogsStyles = (isDark: boolean) => {
       paddingVertical: SIZES.md,
       paddingHorizontal: SIZES.lg,
       borderRadius: SIZES.radius.md,
-      alignItems: 'center',
+      alignItems: "center",
     },
     dialogButtonText: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     dialogButtonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       gap: SIZES.md,
       marginBottom: 0,
     },
     dialogCancelButton: {
       flex: 1,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       paddingVertical: SIZES.md + 5,
       paddingHorizontal: SIZES.lg + 10,
       borderRadius: SIZES.radius.md,
       borderWidth: 1,
       borderColor: palette.border,
-      alignItems: 'center',
+      alignItems: "center",
     },
     dialogCancelButtonText: {
       color: palette.text,
       fontSize: SIZES.fontSize.md + 2,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     dialogOkButton: {
       flex: 1,
@@ -74,36 +74,36 @@ export const createDialogsStyles = (isDark: boolean) => {
       paddingVertical: SIZES.md + 5,
       paddingHorizontal: SIZES.lg + 10,
       borderRadius: SIZES.radius.md,
-      alignItems: 'center',
+      alignItems: "center",
     },
     dialogOkButtonText: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontSize: SIZES.fontSize.md + 2,
-      fontWeight: '600',
+      fontWeight: "600",
     },
     emergencyStopButton: {
       flex: 1,
-      backgroundColor: '#EAB308',
+      backgroundColor: "#EAB308",
       paddingVertical: SIZES.md + 5,
       paddingHorizontal: SIZES.lg + 10,
       borderRadius: SIZES.radius.md,
-      alignItems: 'center',
+      alignItems: "center",
       marginRight: SIZES.xs,
     },
     emergencyEndButton: {
       flex: 1,
-      backgroundColor: '#DC2626',
+      backgroundColor: "#DC2626",
       paddingVertical: SIZES.md + 5,
       paddingHorizontal: SIZES.lg + 10,
       borderRadius: SIZES.radius.md,
-      alignItems: 'center',
+      alignItems: "center",
       marginLeft: SIZES.xs,
     },
     emergencyButtonText: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontSize: SIZES.fontSize.sm + 1,
-      fontWeight: '600',
-      textAlign: 'center',
+      fontWeight: "600",
+      textAlign: "center",
     },
     // Специальные стили для диалога онлайн статуса
     onlineDialogContainer: {
@@ -119,8 +119,8 @@ export const createDialogsStyles = (isDark: boolean) => {
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
     onlineDialogButtonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       gap: SIZES.md,
       marginBottom: -SIZES.sm,
     },

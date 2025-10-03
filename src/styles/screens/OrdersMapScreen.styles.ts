@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SIZES } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SIZES } from "../../constants/colors";
 
 export const createOrdersMapScreenStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
@@ -11,10 +11,10 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
     },
     mapContainer: {
       flex: 1,
-      position: 'relative',
+      position: "relative",
     },
     topLeftButton: {
-      position: 'absolute',
+      position: "absolute",
       top: SIZES.xl + 32,
       left: SIZES.lg,
       width: 48,
@@ -23,9 +23,9 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.border,
-      alignItems: 'center',
-      justifyContent: 'center',
-      shadowColor: '#000',
+      alignItems: "center",
+      justifyContent: "center",
+      shadowColor: "#000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -33,7 +33,7 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       zIndex: 10,
     },
     topRightButton: {
-      position: 'absolute',
+      position: "absolute",
       top: SIZES.xl + 32,
       right: SIZES.lg,
       width: 48,
@@ -42,9 +42,9 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.border,
-      alignItems: 'center',
-      justifyContent: 'center',
-      shadowColor: '#000',
+      alignItems: "center",
+      justifyContent: "center",
+      shadowColor: "#000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -53,16 +53,16 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
     },
     sosText: {
       fontSize: 12,
-      fontWeight: '700',
-      color: '#DC2626',
+      fontWeight: "700",
+      color: "#DC2626",
       letterSpacing: 1,
     },
     bottomButtonsContainer: {
-      position: 'absolute',
+      position: "absolute",
       bottom: SIZES.xl,
       right: SIZES.lg - 4,
-      flexDirection: 'column',
-      alignItems: 'flex-end',
+      flexDirection: "column",
+      alignItems: "flex-end",
       gap: SIZES.md,
     },
     bottomButton: {
@@ -70,11 +70,11 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       height: 48,
       borderRadius: 24,
       backgroundColor: colors.background,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 2,
@@ -84,15 +84,15 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       elevation: 4,
     },
     settingsPanel: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 60,
       right: 0,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       borderRadius: SIZES.radius.lg,
       borderWidth: 0,
-      borderColor: 'transparent',
+      borderColor: "transparent",
       padding: 0,
-      shadowColor: 'transparent',
+      shadowColor: "transparent",
       shadowOffset: {
         width: 0,
         height: 0,
@@ -100,16 +100,16 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       shadowOpacity: 0,
       shadowRadius: 0,
       elevation: 0,
-      flexDirection: 'column',
-      alignItems: 'flex-end',
+      flexDirection: "column",
+      alignItems: "flex-end",
       gap: SIZES.xs,
       width: 48, // Ограничиваем ширину панели
       height: 300, // Ограничиваем высоту панели
-      pointerEvents: 'box-none', // Позволяет кликам проходить сквозь панель, но кнопки остаются кликабельными
+      pointerEvents: "box-none", // Позволяет кликам проходить сквозь панель, но кнопки остаются кликабельными
     },
     settingsButton: {
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       paddingVertical: SIZES.xs,
       paddingHorizontal: SIZES.xs,
       borderRadius: 24, // Делаем круглую форму как у основных кнопок
@@ -118,7 +118,7 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 2,
@@ -126,21 +126,21 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       shadowOpacity: 0.1,
       shadowRadius: 4,
       elevation: 4,
-      pointerEvents: 'auto', // Кнопки остаются кликабельными
+      pointerEvents: "auto", // Кнопки остаются кликабельными
     },
     settingsButtonText: {
       fontSize: SIZES.fontSize.md,
       color: colors.text,
-      fontWeight: '500',
+      fontWeight: "500",
       marginLeft: SIZES.sm,
     },
-    
+
     // Стили для модалки репорта
     reportModalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "center",
+      alignItems: "center",
     },
     reportModalContainer: {
       backgroundColor: colors.background,
@@ -149,7 +149,7 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       marginHorizontal: SIZES.lg,
       minWidth: 320,
       maxWidth: 400,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 4,
@@ -159,28 +159,28 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       elevation: 8,
     },
     reportModalHeader: {
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: SIZES.lg,
     },
     reportIconContainer: {
       width: 64,
       height: 64,
       borderRadius: 32,
-      backgroundColor: '#FEF2F2',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: "#FEF2F2",
+      alignItems: "center",
+      justifyContent: "center",
       marginBottom: SIZES.md,
     },
     reportModalTitle: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
-      textAlign: 'center',
+      textAlign: "center",
     },
     reportModalSubtitle: {
       fontSize: SIZES.fontSize.md,
       color: colors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.lg,
     },
     reportCommentInput: {
@@ -193,10 +193,10 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       backgroundColor: colors.surface,
       minHeight: 100,
       marginBottom: SIZES.xl,
-      textAlignVertical: 'top',
+      textAlignVertical: "top",
     },
     reportModalButtons: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: SIZES.md,
     },
     reportCancelButton: {
@@ -206,12 +206,12 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       borderRadius: SIZES.radius.md,
       borderWidth: 1,
       borderColor: colors.border,
-      backgroundColor: 'transparent',
-      alignItems: 'center',
+      backgroundColor: "transparent",
+      alignItems: "center",
     },
     reportCancelButtonText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
     },
     reportSubmitButton: {
@@ -219,8 +219,8 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       paddingVertical: SIZES.md,
       paddingHorizontal: SIZES.lg,
       borderRadius: SIZES.radius.md,
-      backgroundColor: '#DC2626',
-      alignItems: 'center',
+      backgroundColor: "#DC2626",
+      alignItems: "center",
     },
     reportSubmitButtonDisabled: {
       backgroundColor: colors.border,
@@ -229,25 +229,25 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
     },
     reportSubmitButtonText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
-      color: '#FFFFFF',
+      fontWeight: "600",
+      color: "#FFFFFF",
     },
     reportSubmitButtonTextDisabled: {
       color: colors.textSecondary,
     },
     leftButton: {
-      position: 'absolute',
+      position: "absolute",
       bottom: SIZES.xl,
       left: SIZES.lg - 4,
       width: 48,
       height: 48,
       borderRadius: 24,
       backgroundColor: colors.background,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderWidth: 1,
       borderColor: colors.border,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 2,
@@ -256,13 +256,13 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       shadowRadius: 4,
       elevation: 4,
     },
-    
+
     // Стили для простого диалога
     simpleDialogOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "center",
+      alignItems: "center",
     },
     simpleDialogContainer: {
       backgroundColor: colors.background,
@@ -270,7 +270,7 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       padding: SIZES.xl,
       margin: SIZES.xl,
       minWidth: 280,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 4,
@@ -281,19 +281,19 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
     },
     simpleDialogTitle: {
       fontSize: SIZES.fontSize.xl,
-      fontWeight: '700',
+      fontWeight: "700",
       color: colors.text,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.md,
     },
     simpleDialogMessage: {
       fontSize: SIZES.fontSize.md,
       color: colors.textSecondary,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.xl,
     },
     simpleDialogButtons: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: SIZES.md,
     },
     simpleDialogNoButton: {
@@ -303,12 +303,12 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       borderRadius: SIZES.radius.md,
       borderWidth: 1,
       borderColor: colors.border,
-      backgroundColor: 'transparent',
-      alignItems: 'center',
+      backgroundColor: "transparent",
+      alignItems: "center",
     },
     simpleDialogNoButtonText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
       color: colors.text,
     },
     simpleDialogYesButton: {
@@ -317,14 +317,12 @@ export const createOrdersMapScreenStyles = (isDark: boolean) => {
       paddingHorizontal: SIZES.lg,
       borderRadius: SIZES.radius.md,
       backgroundColor: colors.primary,
-      alignItems: 'center',
+      alignItems: "center",
     },
     simpleDialogYesButtonText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
-      color: '#FFFFFF',
+      fontWeight: "600",
+      color: "#FFFFFF",
     },
   });
 };
-
-

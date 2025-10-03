@@ -1,49 +1,53 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-import Button from '../../components/Button';
-import { createRoleSelectScreenStyles } from '../../styles/screens/RoleSelectScreen.styles';
-import { createThemeToggleStyles } from '../../styles/components/ThemeToggle.styles';
-import LanguageSelector from '../../components/LanguageSelector';
-import LanguageButton from '../../components/LanguageButton';
-import { useLanguage } from '../../context/LanguageContext';
-import { useTheme } from '../../context/ThemeContext';
-import { getCurrentColors } from '../../constants/colors';
-import i18n from '../../i18n';
-import { useI18n } from '../../hooks/useI18n';
+import React from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import Button from "../../components/Button";
+import { createRoleSelectScreenStyles } from "../../styles/screens/RoleSelectScreen.styles";
+import { createThemeToggleStyles } from "../../styles/components/ThemeToggle.styles";
+import LanguageSelector from "../../components/LanguageSelector";
+import LanguageButton from "../../components/LanguageButton";
+import { useLanguage } from "../../context/LanguageContext";
+import { useTheme } from "../../context/ThemeContext";
+import { getCurrentColors } from "../../constants/colors";
+import i18n from "../../i18n";
+import { useI18n } from "../../hooks/useI18n";
 
 const RoleSelectScreen: React.FC = () => {
   const navigation = useNavigation();
   const [langModal, setLangModal] = React.useState(false);
   const { t, language } = useI18n();
   const { isDark, toggleTheme } = useTheme();
-  
+
   // Создаем стили с учетом текущей темы
   const styles = createRoleSelectScreenStyles(isDark);
   const themeToggleStyles = createThemeToggleStyles(isDark);
-  
+
   // Получаем текущие цвета
   const currentColors = getCurrentColors(isDark);
 
-
-
-
-  const handleRoleSelect = (role: 'client' | 'driver') => {
-    if (role === 'client') {
-      navigation.navigate('ClientRegister' as never);
+  const handleRoleSelect = (role: "client" | "driver") => {
+    if (role === "client") {
+      navigation.navigate("ClientRegister" as never);
     } else {
-      navigation.navigate('DriverRegister' as never);
+      navigation.navigate("DriverRegister" as never);
     }
   };
 
   const handleLogin = () => {
-    navigation.navigate('Login' as never);
+    navigation.navigate("Login" as never);
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView 
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentContainer}
       >
@@ -53,8 +57,8 @@ const RoleSelectScreen: React.FC = () => {
         {/* Логотип по центру */}
         <View style={styles.headerLogo}>
           <View style={styles.logoIconWrap}>
-            <Image 
-              source={require('../../../assets/icon.png')}
+            <Image
+              source={require("../../../assets/icon.png")}
               style={{ width: 56, height: 56, borderRadius: 12 }}
               resizeMode="contain"
             />
@@ -65,10 +69,7 @@ const RoleSelectScreen: React.FC = () => {
         {/* Отступ под иконкой/логотипом */}
         <View style={styles.spacerLogoBottom} />
 
-
-
         {/* Main Content (карточки) */}
-        
 
         {/* Client Card */}
         <View style={styles.card}>
@@ -77,38 +78,41 @@ const RoleSelectScreen: React.FC = () => {
               <Ionicons name="person" size={32} color="#10B981" />
             </View>
             <Text style={styles.cardTitle}>
-              {t('common.roleSelect.clientTitle')}
+              {t("common.roleSelect.clientTitle")}
             </Text>
             <Text style={styles.cardSubtitle}>
-              {t('common.roleSelect.clientSubtitle')}
+              {t("common.roleSelect.clientSubtitle")}
             </Text>
           </View>
-          
+
           <View style={styles.cardContent}>
             <View style={styles.featureItem}>
               <Ionicons name="shield-checkmark" size={20} color="#10B981" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.clientSafe')}
+                {t("common.roleSelect.clientSafe")}
               </Text>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="location" size={20} color="#10B981" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.clientTracking')}
+                {t("common.roleSelect.clientTracking")}
               </Text>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="card" size={20} color="#10B981" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.clientPayment')}
+                {t("common.roleSelect.clientPayment")}
               </Text>
             </View>
           </View>
 
           <Button
-            title={t('common.roleSelect.choose') || 'Выбрать'}
-            onPress={() => handleRoleSelect('client')}
-            style={StyleSheet.flatten([styles.chooseBtn, styles.chooseBtnClient])}
+            title={t("common.roleSelect.choose") || "Выбрать"}
+            onPress={() => handleRoleSelect("client")}
+            style={StyleSheet.flatten([
+              styles.chooseBtn,
+              styles.chooseBtnClient,
+            ])}
             textStyle={styles.chooseBtnText}
             icon="arrow-forward"
             iconPosition="right"
@@ -122,38 +126,41 @@ const RoleSelectScreen: React.FC = () => {
               <Ionicons name="car" size={32} color="#3B82F6" />
             </View>
             <Text style={styles.cardTitle}>
-              {t('common.roleSelect.driverTitle')}
+              {t("common.roleSelect.driverTitle")}
             </Text>
             <Text style={styles.cardSubtitle}>
-              {t('common.roleSelect.driverSubtitle')}
+              {t("common.roleSelect.driverSubtitle")}
             </Text>
           </View>
-          
+
           <View style={styles.cardContent}>
             <View style={styles.featureItem}>
               <Ionicons name="time" size={20} color="#3B82F6" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.driverFlexible')}
+                {t("common.roleSelect.driverFlexible")}
               </Text>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="cash" size={20} color="#3B82F6" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.driverIncome')}
+                {t("common.roleSelect.driverIncome")}
               </Text>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="call" size={20} color="#3B82F6" />
               <Text style={styles.featureText}>
-                {t('common.roleSelect.driverSupport')}
+                {t("common.roleSelect.driverSupport")}
               </Text>
             </View>
           </View>
 
           <Button
-            title={t('common.roleSelect.choose') || 'Выбрать'}
-            onPress={() => handleRoleSelect('driver')}
-            style={StyleSheet.flatten([styles.chooseBtn, styles.chooseBtnDriver])}
+            title={t("common.roleSelect.choose") || "Выбрать"}
+            onPress={() => handleRoleSelect("driver")}
+            style={StyleSheet.flatten([
+              styles.chooseBtn,
+              styles.chooseBtnDriver,
+            ])}
             textStyle={styles.chooseBtnText}
             icon="arrow-forward"
             iconPosition="right"
@@ -161,14 +168,12 @@ const RoleSelectScreen: React.FC = () => {
         </View>
 
         {/* Login Link (inline, одна строка) */}
-        <View style={styles.loginRow}> 
+        <View style={styles.loginRow}>
           <Text style={styles.loginText}>
-            {t('common.roleSelect.alreadyAccount')}
+            {t("common.roleSelect.alreadyAccount")}
           </Text>
           <TouchableOpacity onPress={handleLogin}>
-            <Text style={styles.loginLink}>
-              {t('common.roleSelect.login')}
-            </Text>
+            <Text style={styles.loginLink}>{t("common.roleSelect.login")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -177,10 +182,7 @@ const RoleSelectScreen: React.FC = () => {
 
         {/* Language and Theme Buttons Row */}
         <View style={themeToggleStyles.container}>
-          <LanguageButton 
-            onPress={() => setLangModal(true)}
-            size="small"
-          />
+          <LanguageButton onPress={() => setLangModal(true)} size="small" />
         </View>
 
         {/* Пустое пространство снизу */}
@@ -188,9 +190,9 @@ const RoleSelectScreen: React.FC = () => {
       </ScrollView>
 
       {/* Language Selector Modal */}
-      <LanguageSelector 
-        visible={langModal} 
-        onClose={() => setLangModal(false)} 
+      <LanguageSelector
+        visible={langModal}
+        onClose={() => setLangModal(false)}
       />
     </View>
   );

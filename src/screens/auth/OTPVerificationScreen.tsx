@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,28 +7,37 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
-} from 'react-native';
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../types/navigation';
-import Button from '../../components/Button';
-import { OTPService } from '../../services/OTPService';
-import { OTPVerificationScreenStyles as styles } from '../../styles/screens/OTPVerificationScreen.styles';
-import { useI18n } from '../../hooks/useI18n';
+} from "react-native";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthStackParamList } from "../../types/navigation";
+import Button from "../../components/Button";
+import { OTPService } from "../../services/OTPService";
+import { OTPVerificationScreenStyles as styles } from "../../styles/screens/OTPVerificationScreen.styles";
+import { useI18n } from "../../hooks/useI18n";
 
-type OTPVerificationScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'OTPVerification'>;
-type OTPVerificationScreenRouteProp = RouteProp<AuthStackParamList, 'OTPVerification'>;
+type OTPVerificationScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  "OTPVerification"
+>;
+type OTPVerificationScreenRouteProp = RouteProp<
+  AuthStackParamList,
+  "OTPVerification"
+>;
 
 interface OTPVerificationScreenProps {
   navigation: OTPVerificationScreenNavigationProp;
   route: OTPVerificationScreenRouteProp;
 }
 
-const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigation, route }) => {
+const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const { phone, type } = route.params;
   const { t } = useI18n();
 
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
@@ -40,8 +49,9 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       setTimeLeft(60);
       setCanResend(false);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to send OTP';
-      Alert.alert(t('common.error'), errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to send OTP";
+      Alert.alert(t("common.error"), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -68,10 +78,11 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       await OTPService.resendOTP(phone);
       setTimeLeft(60);
       setCanResend(false);
-              Alert.alert(t('common.success'), 'OTP has been resent to your phone');
+      Alert.alert(t("common.success"), "OTP has been resent to your phone");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to resend OTP';
-      Alert.alert(t('common.error'), errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to resend OTP";
+      Alert.alert(t("common.error"), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +90,7 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
 
   const handleVerifyOTP = async () => {
     if (!otp.trim()) {
-      Alert.alert(t('common.error'), 'Please enter the OTP');
+      Alert.alert(t("common.error"), "Please enter the OTP");
       return;
     }
 
@@ -88,21 +99,22 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
       const isValid = await OTPService.verifyOTP(phone, otp);
 
       if (isValid) {
-        if (type === 'register') {
+        if (type === "register") {
           // Handle registration flow
-          Alert.alert(t('common.success'), 'Phone verified successfully');
+          Alert.alert(t("common.success"), "Phone verified successfully");
           // Navigate to complete registration
         } else {
           // Handle forgot password flow
-          Alert.alert(t('common.success'), 'OTP verified successfully');
+          Alert.alert(t("common.success"), "OTP verified successfully");
           // Navigate to reset password
         }
       } else {
-        Alert.alert(t('common.error'), 'Invalid OTP. Please try again.');
+        Alert.alert(t("common.error"), "Invalid OTP. Please try again.");
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to verify OTP';
-      Alert.alert(t('common.error'), errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to verify OTP";
+      Alert.alert(t("common.error"), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -111,13 +123,13 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.content}>
         <View style={styles.header}>
@@ -146,7 +158,9 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
           />
 
           <View style={styles.resendContainer}>
-            <Text style={styles.resendText}>Didn&apos;t receive the code? </Text>
+            <Text style={styles.resendText}>
+              Didn&apos;t receive the code?{" "}
+            </Text>
             {canResend ? (
               <TouchableOpacity onPress={handleResendOTP} disabled={isLoading}>
                 <Text style={styles.resendButtonText}>Resend</Text>
@@ -170,4 +184,4 @@ const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({ navigatio
   );
 };
 
-export default OTPVerificationScreen; 
+export default OTPVerificationScreen;

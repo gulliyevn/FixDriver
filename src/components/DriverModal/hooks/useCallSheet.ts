@@ -1,10 +1,13 @@
-import { useRef, useCallback } from 'react';
-import { Animated, Linking } from 'react-native';
+import { useRef, useCallback } from "react";
+import { Animated, Linking } from "react-native";
 
-import { DriverModalActions } from '../types/driver-modal.types';
-import { DriverDetails } from '../../../hooks/driver/useDriverDetails';
+import { DriverModalActions } from "../types/driver-modal.types";
+import { DriverDetails } from "../../../hooks/driver/useDriverDetails";
 
-export const useCallSheet = (actions: DriverModalActions, driver: DriverDetails['driver']) => {
+export const useCallSheet = (
+  actions: DriverModalActions,
+  driver: DriverDetails["driver"],
+) => {
   const callAnim = useRef(new Animated.Value(0)).current;
 
   const openCallSheet = useCallback(() => {

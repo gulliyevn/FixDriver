@@ -14,4 +14,3 @@ export type CountryItem = {
   code: string;
   name: string;
 };
-

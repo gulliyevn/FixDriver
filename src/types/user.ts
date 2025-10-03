@@ -1,6 +1,6 @@
 export enum UserRole {
-  CLIENT = 'client',
-  DRIVER = 'driver',
+  CLIENT = "client",
+  DRIVER = "driver",
 }
 
 export interface User {
@@ -52,7 +52,7 @@ export interface Child {
 
 export interface PaymentMethod {
   id: string;
-  type: 'card' | 'paypal';
+  type: "card" | "paypal";
   last4?: string;
   brand?: string;
   isDefault: boolean;

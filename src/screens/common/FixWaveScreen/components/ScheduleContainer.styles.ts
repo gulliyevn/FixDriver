@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 10,
   },
   divider: {
@@ -18,9 +18,9 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   weekDaysContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 10,
   },
   dayButton: {
@@ -28,15 +28,15 @@ export const styles = StyleSheet.create({
     height: 30,
     borderRadius: 8,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   dayText: {
     fontSize: 12,
   },
   selectDaysText: {
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
     flex: 1,
   },
   bottomDivider: {

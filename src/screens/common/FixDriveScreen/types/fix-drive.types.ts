@@ -22,7 +22,7 @@ export interface FixDriveHookReturn {
   actions: FixDriveActions;
 }
 
-export type FixDrivePage = 'addresses' | 'timeSchedule' | 'confirmation';
+export type FixDrivePage = "addresses" | "timeSchedule" | "confirmation";
 
 export interface ProgressStep {
   id: FixDrivePage;
@@ -38,7 +38,7 @@ export interface AddressData {
   packageType: string;
   addresses: Array<{
     id: string;
-    type: 'from' | 'to' | 'stop';
+    type: "from" | "to" | "stop";
     address: string;
     coordinates?: {
       latitude: number;
@@ -72,5 +72,5 @@ export interface FixDriveOrderData {
   addressData: AddressData;
   timeScheduleData: TimeScheduleData;
   createdAt: number;
-  status: 'draft' | 'confirmed' | 'completed' | 'cancelled';
+  status: "draft" | "confirmed" | "completed" | "cancelled";
 }

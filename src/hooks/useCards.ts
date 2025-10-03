@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card } from '../services/cardService';
-import { CardService } from '../services/cardService';
-import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
-import { useAuth } from '../context/AuthContext';
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Card } from "../services/cardService";
+import { CardService } from "../services/cardService";
+import { useUserStorageKey, STORAGE_KEYS } from "../utils/storageKeys";
+import { useAuth } from "../context/AuthContext";
 
 export const useCards = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  
+
   // Получаем ключ с изоляцией по пользователю
   const cardsKey = useUserStorageKey(STORAGE_KEYS.USER_CARDS);
 
@@ -21,7 +21,7 @@ export const useCards = () => {
   const loadCards = async () => {
     try {
       setLoading(true);
-      
+
       if (__DEV__) {
         // DEV: загружаем из AsyncStorage
         const savedCards = await AsyncStorage.getItem(cardsKey);
@@ -46,7 +46,7 @@ export const useCards = () => {
     }
   };
 
-  const addCard = async (cardData: Omit<Card, 'id'>) => {
+  const addCard = async (cardData: Omit<Card, "id">) => {
     try {
       if (__DEV__) {
         // DEV: сохраняем в AsyncStorage
@@ -54,7 +54,7 @@ export const useCards = () => {
           ...cardData,
           id: Date.now().toString(),
         };
-        
+
         const updatedCards = [...cards, newCard];
         setCards(updatedCards);
         await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
@@ -64,7 +64,7 @@ export const useCards = () => {
         if (!user?.id) return false;
         const newCard = await CardService.addCard(cardData, user.id);
         if (newCard) {
-          setCards(prev => [...prev, newCard]);
+          setCards((prev) => [...prev, newCard]);
           return true;
         }
         return false;
@@ -78,7 +78,7 @@ export const useCards = () => {
     try {
       if (__DEV__) {
         // DEV: удаляем из AsyncStorage
-        const updatedCards = cards.filter(card => card.id !== cardId);
+        const updatedCards = cards.filter((card) => card.id !== cardId);
         setCards(updatedCards);
         await AsyncStorage.setItem(cardsKey, JSON.stringify(updatedCards));
         return true;
@@ -86,7 +86,7 @@ export const useCards = () => {
         // PROD: удаляем через API
         const success = await CardService.deleteCard(cardId);
         if (success) {
-          setCards(prev => prev.filter(card => card.id !== cardId));
+          setCards((prev) => prev.filter((card) => card.id !== cardId));
           return true;
         }
         return false;

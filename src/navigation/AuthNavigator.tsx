@@ -1,12 +1,12 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import RoleSelectScreen from '../screens/auth/RoleSelectScreen';
-import LoginScreen from '../screens/auth/LoginScreen';
-import DriverRegisterScreen from '../screens/auth/DriverRegisterScreen';
-import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
-import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
-import ClientRegisterScreen from '../screens/auth/ClientRegisterScreen';
-import { AuthStackParamList } from '../types/navigation';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import RoleSelectScreen from "../screens/auth/RoleSelectScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import DriverRegisterScreen from "../screens/auth/DriverRegisterScreen";
+import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen";
+import OTPVerificationScreen from "../screens/auth/OTPVerificationScreen";
+import ClientRegisterScreen from "../screens/auth/ClientRegisterScreen";
+import { AuthStackParamList } from "../types/navigation";
 
 const Stack = createStackNavigator<AuthStackParamList>();
 

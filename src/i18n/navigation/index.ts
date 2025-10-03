@@ -1,19 +1,19 @@
-const ru = require('./ru.json');
-const en = require('./en.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const navigationRu = require("./ru.json");
+const navigationEn = require("./en.json");
+const navigationTr = require("./tr.json");
+const navigationAz = require("./az.json");
+const navigationFr = require("./fr.json");
+const navigationAr = require("./ar.json");
+const navigationEs = require("./es.json");
+const navigationDe = require("./de.json");
 
 module.exports = {
-  ru,
-  en,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  ru: navigationRu,
+  en: navigationEn,
+  tr: navigationTr,
+  az: navigationAz,
+  fr: navigationFr,
+  ar: navigationAr,
+  es: navigationEs,
+  de: navigationDe,
+};

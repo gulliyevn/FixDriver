@@ -1,7 +1,7 @@
-import APIClient from './APIClient';
-import JWTService from './JWTService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User, Client } from '../types/user';
+import APIClient from "./APIClient";
+import JWTService from "./JWTService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { User, Client } from "../types/user";
 
 export interface ChangePasswordRequest {
   currentPassword: string;
@@ -31,7 +31,7 @@ export interface UpdateProfileRequest {
 }
 
 export class ProfileService {
-  private static STORAGE_KEY = '@profile_';
+  private static STORAGE_KEY = "@profile_";
 
   /**
    * Получить профиль пользователя
@@ -42,24 +42,25 @@ export class ProfileService {
     try {
       // ⚠️ DEV ONLY: Загружаем из локального хранилища
       if (__DEV__) {
-        
-        const profileJson = await AsyncStorage.getItem(`${this.STORAGE_KEY}${userId}`);
+        const profileJson = await AsyncStorage.getItem(
+          `${this.STORAGE_KEY}${userId}`,
+        );
         if (profileJson) {
           const profile = JSON.parse(profileJson);
           return profile;
         }
-        
+
         return null;
       }
 
       // PROD: Загружаем с API
       const response = await APIClient.get<User>(`/profile/${userId}`);
-      
+
       if (response.success && response.data) {
         // Кэшируем в AsyncStorage
         await AsyncStorage.setItem(
           `${this.STORAGE_KEY}${userId}`,
-          JSON.stringify(response.data)
+          JSON.stringify(response.data),
         );
         return response.data;
       }
@@ -75,15 +76,17 @@ export class ProfileService {
    * DEV: сохраняет в AsyncStorage
    * PROD: отправляет на API
    */
-  static async updateProfile(userId: string, updates: UpdateProfileRequest): Promise<{ success: boolean; profile?: User; error?: string }> {
+  static async updateProfile(
+    userId: string,
+    updates: UpdateProfileRequest,
+  ): Promise<{ success: boolean; profile?: User; error?: string }> {
     try {
       // ⚠️ DEV ONLY: Обновляем в локальном хранилище
       if (__DEV__) {
-        
         // Получаем текущий профиль
         const currentProfile = await this.getProfile(userId);
         if (!currentProfile) {
-          return { success: false, error: 'Profile not found' };
+          return { success: false, error: "Profile not found" };
         }
 
         // Обновляем
@@ -95,30 +98,33 @@ export class ProfileService {
         // Сохраняем
         await AsyncStorage.setItem(
           `${this.STORAGE_KEY}${userId}`,
-          JSON.stringify(updatedProfile)
+          JSON.stringify(updatedProfile),
         );
 
         return { success: true, profile: updatedProfile };
       }
 
       // PROD: Отправляем на API
-      const response = await APIClient.patch<User>(`/profile/${userId}`, updates);
+      const response = await APIClient.patch<User>(
+        `/profile/${userId}`,
+        updates,
+      );
 
       if (response.success && response.data) {
         // Обновляем кэш
         await AsyncStorage.setItem(
           `${this.STORAGE_KEY}${userId}`,
-          JSON.stringify(response.data)
+          JSON.stringify(response.data),
         );
 
         return { success: true, profile: response.data };
       }
 
-      return { success: false, error: response.error || 'Update failed' };
+      return { success: false, error: response.error || "Update failed" };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Update failed',
+        error: error instanceof Error ? error.message : "Update failed",
       };
     }
   }
@@ -128,14 +134,16 @@ export class ProfileService {
    * DEV: сохраняет base64 в AsyncStorage
    * PROD: загружает файл на сервер
    */
-  static async uploadAvatar(userId: string, imageUri: string): Promise<{ success: boolean; avatarUrl?: string; error?: string }> {
+  static async uploadAvatar(
+    userId: string,
+    imageUri: string,
+  ): Promise<{ success: boolean; avatarUrl?: string; error?: string }> {
     try {
       // ⚠️ DEV ONLY: Сохраняем URI локально
       if (__DEV__) {
-        
         const profile = await this.getProfile(userId);
         if (!profile) {
-          return { success: false, error: 'Profile not found' };
+          return { success: false, error: "Profile not found" };
         }
 
         const updatedProfile = {
@@ -145,7 +153,7 @@ export class ProfileService {
 
         await AsyncStorage.setItem(
           `${this.STORAGE_KEY}${userId}`,
-          JSON.stringify(updatedProfile)
+          JSON.stringify(updatedProfile),
         );
 
         return { success: true, avatarUrl: imageUri };
@@ -153,15 +161,15 @@ export class ProfileService {
 
       // PROD: Загружаем на сервер
       const formData = new FormData();
-      formData.append('avatar', {
+      formData.append("avatar", {
         uri: imageUri,
-        type: 'image/jpeg',
-        name: 'avatar.jpg',
+        type: "image/jpeg",
+        name: "avatar.jpg",
       } as any);
 
       const response = await APIClient.post<{ avatarUrl: string }>(
         `/profile/${userId}/avatar`,
-        formData as any
+        formData as any,
       );
 
       if (response.success && response.data) {
@@ -171,47 +179,52 @@ export class ProfileService {
           profile.avatar = response.data.avatarUrl;
           await AsyncStorage.setItem(
             `${this.STORAGE_KEY}${userId}`,
-            JSON.stringify(profile)
+            JSON.stringify(profile),
           );
         }
 
         return { success: true, avatarUrl: response.data.avatarUrl };
       }
 
-      return { success: false, error: response.error || 'Upload failed' };
+      return { success: false, error: response.error || "Upload failed" };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Upload failed',
+        error: error instanceof Error ? error.message : "Upload failed",
       };
     }
   }
   /**
    * Изменение пароля пользователя
    */
-  static async changePassword(data: ChangePasswordRequest): Promise<ChangePasswordResponse> {
+  static async changePassword(
+    data: ChangePasswordRequest,
+  ): Promise<ChangePasswordResponse> {
     try {
-
-      const response = await APIClient.post<{ message: string }>('/profile/change-password', {
-        current_password: data.currentPassword,
-        new_password: data.newPassword,
-      });
+      const response = await APIClient.post<{ message: string }>(
+        "/profile/change-password",
+        {
+          current_password: data.currentPassword,
+          new_password: data.newPassword,
+        },
+      );
 
       if (response.success) {
         return {
           success: true,
-          message: response.data?.message || 'Password changed successfully',
+          message: response.data?.message || "Password changed successfully",
         };
       } else {
         return {
           success: false,
-          error: response.error || 'Failed to change password',
+          error: response.error || "Failed to change password",
         };
       }
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Change password failed',
+        error:
+          error instanceof Error ? error.message : "Change password failed",
       };
     }
   }
@@ -220,27 +233,32 @@ export class ProfileService {
    * Удаление аккаунта пользователя
    * Полностью удаляет все данные пользователя из БД
    */
-  static async deleteAccount(): Promise<{ success: boolean; message?: string }> {
+  static async deleteAccount(): Promise<{
+    success: boolean;
+    message?: string;
+  }> {
     try {
       const authHeader = await JWTService.getAuthHeader();
       if (!authHeader) {
-        console.error('No authentication token'); return;
+        console.error("No authentication token");
+        return;
       }
 
-      const response = await APIClient.delete<{ message: string }>('/profile/account');
+      const response = await APIClient.delete<{ message: string }>(
+        "/profile/account",
+      );
 
       if (response.success) {
         return { success: true };
       } else {
-        console.error(response.error || 'Failed to delete account'); return;
+        console.error(response.error || "Failed to delete account");
+        return;
       }
     } catch (error) {
-      
-      return { 
-        success: false, 
-        message: error instanceof Error ? error.message : 'Unknown error' 
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
-
 }

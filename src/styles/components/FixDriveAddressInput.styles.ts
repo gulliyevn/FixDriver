@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors } from "../../constants/colors";
 
 export const createFixDriveAddressInputStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
@@ -10,7 +10,7 @@ export const createFixDriveAddressInputStyles = (isDark: boolean) => {
     },
     title: {
       fontSize: 16,
-      fontWeight: '500',
+      fontWeight: "500",
       color: colors.text,
       marginBottom: 12,
     },
@@ -22,8 +22,8 @@ export const createFixDriveAddressInputStyles = (isDark: boolean) => {
       borderColor: colors.border,
       borderRadius: 8,
       backgroundColor: colors.surface,
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       paddingHorizontal: 12,
       paddingVertical: 8,
       marginRight: 40,
@@ -38,8 +38,8 @@ export const createFixDriveAddressInputStyles = (isDark: boolean) => {
       paddingVertical: 8,
     },
     threeLinesContainer: {
-      flexDirection: 'column',
-      alignItems: 'center',
+      flexDirection: "column",
+      alignItems: "center",
       marginLeft: 8,
     },
     line: {
@@ -52,16 +52,16 @@ export const createFixDriveAddressInputStyles = (isDark: boolean) => {
       marginBottom: 0,
     },
     actionsContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginLeft: 8,
     },
     mapButton: {
-      position: 'absolute',
+      position: "absolute",
       right: 10,
       top: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       width: 30,
       height: 30,
       zIndex: 1000,

@@ -1,19 +1,19 @@
-const en = require('./en.json');
-const ru = require('./ru.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const notificationsEn = require("./en.json");
+const notificationsRu = require("./ru.json");
+const notificationsTr = require("./tr.json");
+const notificationsAz = require("./az.json");
+const notificationsFr = require("./fr.json");
+const notificationsAr = require("./ar.json");
+const notificationsEs = require("./es.json");
+const notificationsDe = require("./de.json");
 
 module.exports = {
-  en,
-  ru,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  en: notificationsEn,
+  ru: notificationsRu,
+  tr: notificationsTr,
+  az: notificationsAz,
+  fr: notificationsFr,
+  ar: notificationsAr,
+  es: notificationsEs,
+  de: notificationsDe,
+};

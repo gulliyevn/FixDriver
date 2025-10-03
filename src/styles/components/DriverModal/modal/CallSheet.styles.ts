@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors, SHADOWS, SIZES } from '../../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors, SHADOWS, SIZES } from "../../../../constants/colors";
 
 export const createCallSheetStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);
@@ -7,8 +7,8 @@ export const createCallSheetStyles = (isDark: boolean) => {
   return StyleSheet.create({
     callSheetOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'flex-end',
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "flex-end",
     },
     callSheetBackdrop: {
       flex: 1,
@@ -23,7 +23,7 @@ export const createCallSheetStyles = (isDark: boolean) => {
       ...(isDark ? SHADOWS.dark.large : SHADOWS.light.large),
     },
     callSheetClose: {
-      position: 'absolute',
+      position: "absolute",
       top: SIZES.lg,
       right: SIZES.lg,
       zIndex: 1,
@@ -33,19 +33,19 @@ export const createCallSheetStyles = (isDark: boolean) => {
       height: 4,
       backgroundColor: palette.border,
       borderRadius: 2,
-      alignSelf: 'center',
+      alignSelf: "center",
       marginBottom: SIZES.lg,
     },
     callSheetTitle: {
       fontSize: SIZES.fontSize.lg,
-      fontWeight: '700',
+      fontWeight: "700",
       color: palette.text,
-      textAlign: 'center',
+      textAlign: "center",
       marginBottom: SIZES.xl,
     },
     callSheetOption: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       paddingVertical: SIZES.lg,
       paddingHorizontal: SIZES.md,
       borderRadius: SIZES.radius.md,
@@ -56,7 +56,7 @@ export const createCallSheetStyles = (isDark: boolean) => {
     },
     callSheetOptionText: {
       fontSize: SIZES.fontSize.md,
-      fontWeight: '600',
+      fontWeight: "600",
       color: palette.text,
       marginLeft: SIZES.md,
       flex: 1,

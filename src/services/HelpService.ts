@@ -1,8 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from './APIClient';
-import { HelpContent, HelpContentDto, HelpSection } from '../shared/types/help';
-import { DEFAULT_HELP_CONTENT } from '../shared/constants/help';
-import { STORAGE_KEYS } from '../utils/storageKeys';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import apiClient from "./APIClient";
+import { HelpContent, HelpContentDto, HelpSection } from "../shared/types/help";
+import { DEFAULT_HELP_CONTENT } from "../shared/constants/help";
+import { STORAGE_KEYS } from "../utils/storageKeys";
 
 const HELP_CACHE_KEY = STORAGE_KEYS.HELP_CONTENT_CACHE;
 
@@ -15,7 +15,7 @@ class HelpService {
       }
     }
 
-    const response = await apiClient.get<HelpContentDto>('/help/content');
+    const response = await apiClient.get<HelpContentDto>("/help/content");
     if (response.success && response.data) {
       const mapped = this.mapDto(response.data);
       if (__DEV__) {
@@ -28,14 +28,16 @@ class HelpService {
       return DEFAULT_HELP_CONTENT;
     }
 
-    console.error(response.error || 'Failed to load help content'); return;
+    console.error(response.error || "Failed to load help content");
+    return;
   }
 
   static async refreshHelpContent(): Promise<HelpContent> {
     try {
-      const response = await apiClient.get<HelpContentDto>('/help/content');
+      const response = await apiClient.get<HelpContentDto>("/help/content");
       if (!response.success || !response.data) {
-        console.error(response.error || 'Failed to load help content'); return;
+        console.error(response.error || "Failed to load help content");
+        return;
       }
       const mapped = this.mapDto(response.data);
       if (__DEV__) {
@@ -77,14 +79,17 @@ class HelpService {
     return {
       sections,
       contact: {
-        whatsappNumber: dto.contact?.whatsapp_number || DEFAULT_HELP_CONTENT.contact.whatsappNumber,
+        whatsappNumber:
+          dto.contact?.whatsapp_number ||
+          DEFAULT_HELP_CONTENT.contact.whatsappNumber,
         phoneNumber: dto.contact?.phone_number,
-        messageKey: dto.contact?.message_key || DEFAULT_HELP_CONTENT.contact.messageKey,
-        fallbackUrl: dto.contact?.fallback_url || DEFAULT_HELP_CONTENT.contact.fallbackUrl,
+        messageKey:
+          dto.contact?.message_key || DEFAULT_HELP_CONTENT.contact.messageKey,
+        fallbackUrl:
+          dto.contact?.fallback_url || DEFAULT_HELP_CONTENT.contact.fallbackUrl,
       },
     };
   }
 }
 
 export default HelpService;
-

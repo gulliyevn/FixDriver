@@ -315,8 +315,7 @@
       "tripToWork": "Trajet vers le travail",
       "routeToWork": "Itinéraire: maison - bureau"
     }
-  }
-  ,
+  },
   "driversScreen": {
     "searchPlaceholder": "Rechercher des chauffeurs...",
     "loadingMore": "Chargement de plus de chauffeurs...",

@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import APIClient from './APIClient';
-import { ADDRESS_CATEGORY_CONFIG } from '../shared/constants/addressCategories';
+import APIClient from "./APIClient";
+import { ADDRESS_CATEGORY_CONFIG } from "../shared/constants/addressCategories";
 
 export interface Address {
   id: string;
@@ -58,13 +58,15 @@ export interface AddressCategory {
   color?: string;
 }
 
-const DEV_ADDRESS_CATEGORIES: AddressCategory[] = ADDRESS_CATEGORY_CONFIG.map(({ id, translationKey, icon }) => ({
-  id,
-  name: translationKey,
-  icon,
-}));
+const DEV_ADDRESS_CATEGORIES: AddressCategory[] = ADDRESS_CATEGORY_CONFIG.map(
+  ({ id, translationKey, icon }) => ({
+    id,
+    name: translationKey,
+    icon,
+  }),
+);
 
-const DEV_ADDRESS_HISTORY_KEY = 'address_history';
+const DEV_ADDRESS_HISTORY_KEY = "address_history";
 
 class AddressService {
   /**
@@ -72,7 +74,9 @@ class AddressService {
    */
   async getAddresses(userId: string): Promise<Address[]> {
     try {
-      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}`);
+      const response = await APIClient.get<Address[]>(
+        `/addresses/user/${userId}`,
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -94,11 +98,14 @@ class AddressService {
   /**
    * Создает новый адрес
    */
-  async createAddress(userId: string, addressData: CreateAddressRequest): Promise<Address | null> {
+  async createAddress(
+    userId: string,
+    addressData: CreateAddressRequest,
+  ): Promise<Address | null> {
     try {
-      const response = await APIClient.post<Address>('/addresses', {
+      const response = await APIClient.post<Address>("/addresses", {
         ...addressData,
-        userId
+        userId,
       });
       return response.success && response.data ? response.data : null;
     } catch (error) {
@@ -109,9 +116,15 @@ class AddressService {
   /**
    * Обновляет адрес
    */
-  async updateAddress(addressId: string, updates: UpdateAddressRequest): Promise<Address | null> {
+  async updateAddress(
+    addressId: string,
+    updates: UpdateAddressRequest,
+  ): Promise<Address | null> {
     try {
-      const response = await APIClient.put<Address>(`/addresses/${addressId}`, updates);
+      const response = await APIClient.put<Address>(
+        `/addresses/${addressId}`,
+        updates,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -123,8 +136,10 @@ class AddressService {
    */
   async deleteAddress(addressId: string): Promise<boolean> {
     try {
-      const response = await APIClient.delete<{ success: boolean }>(`/addresses/${addressId}`);
-      return response.success && response.data?.success || false;
+      const response = await APIClient.delete<{ success: boolean }>(
+        `/addresses/${addressId}`,
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -135,8 +150,11 @@ class AddressService {
    */
   async setDefaultAddress(userId: string, addressId: string): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/addresses/user/${userId}/default`, { addressId });
-      return response.success && response.data?.success || false;
+      const response = await APIClient.post<{ success: boolean }>(
+        `/addresses/user/${userId}/default`,
+        { addressId },
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -147,7 +165,9 @@ class AddressService {
    */
   async getDefaultAddress(userId: string): Promise<Address | null> {
     try {
-      const response = await APIClient.get<Address>(`/addresses/user/${userId}/default`);
+      const response = await APIClient.get<Address>(
+        `/addresses/user/${userId}/default`,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -159,23 +179,26 @@ class AddressService {
    */
   async geocodeAddress(address: string): Promise<GeocodeResponse> {
     try {
-      const response = await APIClient.post<GeocodeResponse['data']>('/addresses/geocode', { address });
-      
+      const response = await APIClient.post<GeocodeResponse["data"]>(
+        "/addresses/geocode",
+        { address },
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          data: response.data
+          data: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при геокодировании адреса'
+        error: response.error || "Ошибка при геокодировании адреса",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при геокодировании адреса'
+        error: "Ошибка при геокодировании адреса",
       };
     }
   }
@@ -183,25 +206,31 @@ class AddressService {
   /**
    * Обратное геокодирование (получение адреса по координатам)
    */
-  async reverseGeocode(latitude: number, longitude: number): Promise<GeocodeResponse> {
+  async reverseGeocode(
+    latitude: number,
+    longitude: number,
+  ): Promise<GeocodeResponse> {
     try {
-      const response = await APIClient.post<GeocodeResponse['data']>('/addresses/reverse-geocode', { latitude, longitude });
-      
+      const response = await APIClient.post<GeocodeResponse["data"]>(
+        "/addresses/reverse-geocode",
+        { latitude, longitude },
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          data: response.data
+          data: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при обратном геокодировании'
+        error: response.error || "Ошибка при обратном геокодировании",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при обратном геокодировании'
+        error: "Ошибка при обратном геокодировании",
       };
     }
   }
@@ -211,7 +240,10 @@ class AddressService {
    */
   async searchAddresses(userId: string, query: string): Promise<Address[]> {
     try {
-      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/search`, { q: query });
+      const response = await APIClient.get<Address[]>(
+        `/addresses/user/${userId}/search`,
+        { q: query },
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -227,7 +259,9 @@ class AddressService {
     }
 
     try {
-      const response = await APIClient.get<AddressCategory[]>('/addresses/categories');
+      const response = await APIClient.get<AddressCategory[]>(
+        "/addresses/categories",
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -244,7 +278,10 @@ class AddressService {
     }
 
     try {
-      const response = await APIClient.post<{ success: boolean }>('/addresses/verify', { address });
+      const response = await APIClient.post<{ success: boolean }>(
+        "/addresses/verify",
+        { address },
+      );
       return response.success && response.data?.success === true;
     } catch (error) {
       return false;
@@ -256,7 +293,9 @@ class AddressService {
    */
   async getPopularAddresses(userId: string): Promise<Address[]> {
     try {
-      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/popular`);
+      const response = await APIClient.get<Address[]>(
+        `/addresses/user/${userId}/popular`,
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -269,7 +308,9 @@ class AddressService {
   async getAddressHistory(userId: string): Promise<Address[]> {
     if (__DEV__) {
       try {
-        const history = await AsyncStorage.getItem(`${DEV_ADDRESS_HISTORY_KEY}_${userId}`);
+        const history = await AsyncStorage.getItem(
+          `${DEV_ADDRESS_HISTORY_KEY}_${userId}`,
+        );
         return history ? JSON.parse(history) : [];
       } catch (error) {
         return [];
@@ -277,7 +318,9 @@ class AddressService {
     }
 
     try {
-      const response = await APIClient.get<Address[]>(`/addresses/user/${userId}/history`);
+      const response = await APIClient.get<Address[]>(
+        `/addresses/user/${userId}/history`,
+      );
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -293,10 +336,12 @@ class AddressService {
       const storageKey = `${DEV_ADDRESS_HISTORY_KEY}_${userId}`;
       const history = await AsyncStorage.getItem(storageKey);
       const parsed: Address[] = history ? JSON.parse(history) : [];
-      const updated = [address, ...parsed.filter(item => item.id !== address.id)].slice(0, 10);
+      const updated = [
+        address,
+        ...parsed.filter((item) => item.id !== address.id),
+      ].slice(0, 10);
       await AsyncStorage.setItem(storageKey, JSON.stringify(updated));
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 }
 

@@ -1,25 +1,25 @@
-import { StyleSheet } from 'react-native';
-import { getCurrentColors } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { getCurrentColors } from "../../../constants/colors";
 
 export const ChangePasswordScreenStyles = StyleSheet.create({
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 45,
     paddingBottom: 6,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   backButton: {
     padding: 8,
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
   },
   placeholder: {
     width: 40,
@@ -32,10 +32,10 @@ export const ChangePasswordScreenStyles = StyleSheet.create({
     paddingBottom: 32,
   },
   infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     padding: 16,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: "#f8f9fa",
     borderRadius: 12,
     marginBottom: 24,
   },
@@ -50,12 +50,12 @@ export const ChangePasswordScreenStyles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
   },
   passwordInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 16,
@@ -69,7 +69,7 @@ export const ChangePasswordScreenStyles = StyleSheet.create({
     padding: 4,
   },
   errorText: {
-    color: '#ef4444',
+    color: "#ef4444",
     fontSize: 14,
     marginTop: 4,
   },
@@ -79,12 +79,12 @@ export const ChangePasswordScreenStyles = StyleSheet.create({
   },
   requirementsTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 12,
   },
   requirementItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   requirementText: {
@@ -98,15 +98,15 @@ export const ChangePasswordScreenStyles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "600",
+    color: "#fff",
+    textAlign: "center",
   },
 });
 
 export const getChangePasswordScreenColors = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);
-  
+
   return {
     container: {
       backgroundColor: colors.background,
@@ -119,7 +119,7 @@ export const getChangePasswordScreenColors = (isDark: boolean) => {
       color: colors.text,
     },
     infoContainer: {
-      backgroundColor: isDark ? '#2a2a2a' : '#f8f9fa',
+      backgroundColor: isDark ? "#2a2a2a" : "#f8f9fa",
     },
     infoText: {
       color: colors.textSecondary,
@@ -128,7 +128,7 @@ export const getChangePasswordScreenColors = (isDark: boolean) => {
       color: colors.text,
     },
     passwordInput: {
-      backgroundColor: isDark ? '#2a2a2a' : '#f8f9fa',
+      backgroundColor: isDark ? "#2a2a2a" : "#f8f9fa",
       borderColor: colors.border,
     },
     textInput: {
@@ -144,4 +144,4 @@ export const getChangePasswordScreenColors = (isDark: boolean) => {
       color: colors.error,
     },
   };
-}; 
+};

@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from "react";
+import { View, Text } from "react-native";
 
 export type DriverTrip = {
   text: string;
   time: string;
-  dotStyle?: 'default' | 'blue' | 'location';
+  dotStyle?: "default" | "blue" | "location";
 };
 
 export type DriverTripsProps = {
@@ -13,17 +13,21 @@ export type DriverTripsProps = {
   trips: DriverTrip[];
 };
 
-const DriverTrips: React.FC<DriverTripsProps> = ({ styles, driverId, trips }) => {
+const DriverTrips: React.FC<DriverTripsProps> = ({
+  styles,
+  driverId,
+  trips,
+}) => {
   return (
     <View style={styles.tripsContainer}>
       {trips.map((trip, index) => (
-        <React.Fragment key={`trip-${driverId ?? 'driver'}-${index}`}>
+        <React.Fragment key={`trip-${driverId ?? "driver"}-${index}`}>
           <View style={styles.tripItem}>
             <View
               style={[
                 styles.tripDot,
-                trip.dotStyle === 'blue' && styles.tripDotBlue,
-                trip.dotStyle === 'location' && styles.tripDotLocation,
+                trip.dotStyle === "blue" && styles.tripDotBlue,
+                trip.dotStyle === "location" && styles.tripDotLocation,
               ]}
             />
             <Text style={styles.tripText}>{trip.text}</Text>
@@ -36,5 +40,3 @@ const DriverTrips: React.FC<DriverTripsProps> = ({ styles, driverId, trips }) =>
 };
 
 export default React.memo(DriverTrips);
-
-

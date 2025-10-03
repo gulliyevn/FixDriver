@@ -1,20 +1,20 @@
-import React, { useMemo } from 'react';
-import { View } from 'react-native';
-import { useTheme } from '../../../context/ThemeContext';
-import { useAuth } from '../../../context/AuthContext';
-import { useLanguage } from '../../../context/LanguageContext';
-import { createOrdersMapScreenStyles } from '../../../styles/screens/OrdersMapScreen.styles';
-import MapViewComponent from '../../../components/MapView';
+import React, { useMemo } from "react";
+import { View } from "react-native";
+import { useTheme } from "../../../context/ThemeContext";
+import { useAuth } from "../../../context/AuthContext";
+import { useLanguage } from "../../../context/LanguageContext";
+import { createOrdersMapScreenStyles } from "../../../styles/screens/OrdersMapScreen.styles";
+import MapViewComponent from "../../../components/MapView";
 
 // Импорты из новой структуры
-import { useOrdersMapState } from './hooks/useOrdersMapState';
-import { useMapControls } from './hooks/useMapControls';
-import { useMapSettings } from './hooks/useMapSettings';
-import MapControlsComponent from './components/MapControls';
-import ReportModal from './components/ReportModal';
-import SimpleDialog from './components/SimpleDialog';
-import ShareRouteService from '../../../services/ShareRouteService';
-import ClientTripShareService from '../../../services/ClientTripShareService';
+import { useOrdersMapState } from "./hooks/useOrdersMapState";
+import { useMapControls } from "./hooks/useMapControls";
+import { useMapSettings } from "./hooks/useMapSettings";
+import MapControlsComponent from "./components/MapControls";
+import ReportModal from "./components/ReportModal";
+import SimpleDialog from "./components/SimpleDialog";
+import ShareRouteService from "../../../services/ShareRouteService";
+import ClientTripShareService from "../../../services/ClientTripShareService";
 
 const OrdersMapScreen: React.FC = () => {
   const { isDark } = useTheme();
@@ -30,21 +30,46 @@ const OrdersMapScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
-        <MapViewComponent 
+        <MapViewComponent
           ref={mapRef}
           key={state.mapRefreshKey}
           initialLocation={state.currentLocation}
           onDriverVisibilityToggle={handlers.handleDriverVisibilityToggle}
-          role={user?.role === 'driver' ? 'driver' : 'client'}
+          role={user?.role === "driver" ? "driver" : "client"}
           clientLocationActive={state.isClientLocationActive}
           isDriverModalVisible={state.isDriverModalVisible}
           onDriverModalClose={handlers.handleDriverModalClose}
           mapType={state.mapType}
-          routePoints={state.currentLocation ? [
-            { id: 'start', type: 'start', coordinate: { latitude: state.currentLocation.latitude, longitude: state.currentLocation.longitude } },
-            { id: 'wp1', type: 'waypoint', coordinate: { latitude: state.currentLocation.latitude + 0.01, longitude: state.currentLocation.longitude + 0.008 } },
-            { id: 'end', type: 'end', coordinate: { latitude: state.currentLocation.latitude + 0.02, longitude: state.currentLocation.longitude + 0.015 } },
-          ] : []}
+          routePoints={
+            state.currentLocation
+              ? [
+                  {
+                    id: "start",
+                    type: "start",
+                    coordinate: {
+                      latitude: state.currentLocation.latitude,
+                      longitude: state.currentLocation.longitude,
+                    },
+                  },
+                  {
+                    id: "wp1",
+                    type: "waypoint",
+                    coordinate: {
+                      latitude: state.currentLocation.latitude + 0.01,
+                      longitude: state.currentLocation.longitude + 0.008,
+                    },
+                  },
+                  {
+                    id: "end",
+                    type: "end",
+                    coordinate: {
+                      latitude: state.currentLocation.latitude + 0.02,
+                      longitude: state.currentLocation.longitude + 0.015,
+                    },
+                  },
+                ]
+              : []
+          }
           showTrafficMock={true}
         />
 
@@ -67,13 +92,36 @@ const OrdersMapScreen: React.FC = () => {
           onSimpleDialogOpen={() => actions.setIsSimpleDialogVisible(true)}
           onChevronPress={handlers.handleChevronPress}
           onSharePress={() => {
-            const points = state.currentLocation ? [
-              { id: 'start', type: 'start' as const, coordinate: { latitude: state.currentLocation.latitude, longitude: state.currentLocation.longitude } },
-              { id: 'wp1', type: 'waypoint' as const, coordinate: { latitude: state.currentLocation.latitude + 0.01, longitude: state.currentLocation.longitude + 0.008 } },
-              { id: 'end', type: 'end' as const, coordinate: { latitude: state.currentLocation.latitude + 0.02, longitude: state.currentLocation.longitude + 0.015 } },
-            ] : [];
-            if (user?.role === 'driver') {
-              ShareRouteService.open(points, 'driver');
+            const points = state.currentLocation
+              ? [
+                  {
+                    id: "start",
+                    type: "start" as const,
+                    coordinate: {
+                      latitude: state.currentLocation.latitude,
+                      longitude: state.currentLocation.longitude,
+                    },
+                  },
+                  {
+                    id: "wp1",
+                    type: "waypoint" as const,
+                    coordinate: {
+                      latitude: state.currentLocation.latitude + 0.01,
+                      longitude: state.currentLocation.longitude + 0.008,
+                    },
+                  },
+                  {
+                    id: "end",
+                    type: "end" as const,
+                    coordinate: {
+                      latitude: state.currentLocation.latitude + 0.02,
+                      longitude: state.currentLocation.longitude + 0.015,
+                    },
+                  },
+                ]
+              : [];
+            if (user?.role === "driver") {
+              ShareRouteService.open(points, "driver");
             } else {
               ClientTripShareService.share(points);
             }
@@ -94,8 +142,8 @@ const OrdersMapScreen: React.FC = () => {
       {/* Простой диалог Да/Нет */}
       <SimpleDialog
         isVisible={state.isSimpleDialogVisible}
-        title={t('common.emergency.title')}
-        message={t('common.emergency.message')}
+        title={t("common.emergency.title")}
+        message={t("common.emergency.message")}
         onYes={handlers.handleSimpleDialogYes}
         onNo={handlers.handleSimpleDialogNo}
       />

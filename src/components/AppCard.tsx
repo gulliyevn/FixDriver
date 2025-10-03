@@ -1,14 +1,14 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ViewStyle } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { AppCardStyles } from '../styles/components/AppCard.styles';
+import React from "react";
+import { View, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { AppCardStyles } from "../styles/components/AppCard.styles";
 
 interface AppCardProps {
   title?: string;
   subtitle?: string;
   icon?: keyof typeof Ionicons.glyphMap;
   onPress?: () => void;
-  variant?: 'default' | 'primary' | 'secondary';
+  variant?: "default" | "primary" | "secondary";
   disabled?: boolean;
   style?: ViewStyle;
   margin?: number;
@@ -20,14 +20,14 @@ export default function AppCard({
   subtitle,
   icon,
   onPress,
-  variant = 'default',
+  variant = "default",
   disabled = false,
   style,
   margin = 0,
   children,
 }: AppCardProps) {
-  const isPrimary = variant === 'primary';
-  const isSecondary = variant === 'secondary';
+  const isPrimary = variant === "primary";
+  const isSecondary = variant === "secondary";
 
   const cardStyle = [
     AppCardStyles.container,
@@ -57,9 +57,7 @@ export default function AppCard({
     <>
       {(title || subtitle || icon) && (
         <View style={AppCardStyles.content}>
-          {icon && (
-            <Ionicons name={icon} size={24} style={iconStyle} />
-          )}
+          {icon && <Ionicons name={icon} size={24} style={iconStyle} />}
           {(title || subtitle) && (
             <View style={AppCardStyles.textContainer}>
               {title && <Text style={titleStyle}>{title}</Text>}

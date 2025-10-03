@@ -1,15 +1,15 @@
-import { renderHook, act } from '@testing-library/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useCustomizedDays } from '../useCustomizedDays';
+import { renderHook, act } from "../../../../../../test-utils/testWrapper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useCustomizedDays } from "../useCustomizedDays";
 
 // Мокаем AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
+jest.mock("@react-native-async-storage/async-storage", () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
   removeItem: jest.fn(),
 }));
 
-describe('useCustomizedDays', () => {
+describe("useCustomizedDays", () => {
   const mockAsyncStorage = AsyncStorage as jest.Mocked<typeof AsyncStorage>;
 
   beforeEach(() => {
@@ -18,8 +18,8 @@ describe('useCustomizedDays', () => {
     console.error = jest.fn();
   });
 
-  describe('Инициализация', () => {
-    it('должен инициализироваться с пустыми значениями по умолчанию', () => {
+  describe("Инициализация", () => {
+    it("должен инициализироваться с пустыми значениями по умолчанию", () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       expect(result.current.showCustomizationModal).toBe(false);
@@ -29,10 +29,10 @@ describe('useCustomizedDays', () => {
       expect(result.current.validationError).toBeNull();
     });
 
-    it('должен инициализироваться с переданными начальными данными', () => {
+    it("должен инициализироваться с переданными начальными данными", () => {
       const initialData = {
-        mon: { there: '09:00', back: '18:00' },
-        tue: { there: '10:00', back: '19:00' },
+        mon: { there: "09:00", back: "18:00" },
+        tue: { there: "10:00", back: "19:00" },
       };
 
       const { result } = renderHook(() => useCustomizedDays(initialData));
@@ -41,10 +41,10 @@ describe('useCustomizedDays', () => {
     });
   });
 
-  describe('Управление модальным окном', () => {
-    it('должен открывать модальное окно и копировать данные в временные', () => {
+  describe("Управление модальным окном", () => {
+    it("должен открывать модальное окно и копировать данные в временные", () => {
       const initialData = {
-        mon: { there: '09:00', back: '18:00' }
+        mon: { there: "09:00", back: "18:00" },
       };
 
       const { result } = renderHook(() => useCustomizedDays(initialData));
@@ -58,7 +58,7 @@ describe('useCustomizedDays', () => {
       expect(result.current.validationError).toBeNull();
     });
 
-    it('должен закрывать модальное окно и сбрасывать ошибки', () => {
+    it("должен закрывать модальное окно и сбрасывать ошибки", () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       // Сначала открываем и добавляем ошибку
@@ -75,16 +75,16 @@ describe('useCustomizedDays', () => {
     });
   });
 
-  describe('Валидация', () => {
-    it('должен проходить валидацию с корректными данными без обратной поездки', async () => {
+  describe("Валидация", () => {
+    it("должен проходить валидацию с корректными данными без обратной поездки", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       // Настраиваем данные
       act(() => {
-        result.current.setSelectedCustomDays(['mon', 'tue']);
+        result.current.setSelectedCustomDays(["mon", "tue"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '' },
-          tue: { there: '10:00', back: '' },
+          mon: { there: "09:00", back: "" },
+          tue: { there: "10:00", back: "" },
         });
       });
 
@@ -101,13 +101,13 @@ describe('useCustomizedDays', () => {
       expect(result.current.showCustomizationModal).toBe(false);
     });
 
-    it('должен проходить валидацию с корректными данными с обратной поездкой', async () => {
+    it("должен проходить валидацию с корректными данными с обратной поездкой", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '18:00' },
+          mon: { there: "09:00", back: "18:00" },
         });
       });
 
@@ -126,9 +126,9 @@ describe('useCustomizedDays', () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '', back: '18:00' },
+          mon: { there: "", back: "18:00" },
         });
       });
 
@@ -140,7 +140,7 @@ describe('useCustomizedDays', () => {
       expect(saveResult).toBe(false);
       expect(result.current.validationError).toEqual({
         message: 'Выберите время "туда"',
-        field: 'mon-there'
+        field: "mon-there",
       });
     });
 
@@ -148,9 +148,9 @@ describe('useCustomizedDays', () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '' },
+          mon: { there: "09:00", back: "" },
         });
       });
 
@@ -162,15 +162,15 @@ describe('useCustomizedDays', () => {
       expect(saveResult).toBe(false);
       expect(result.current.validationError).toEqual({
         message: 'Выберите время "обратно"',
-        field: 'mon-back'
+        field: "mon-back",
       });
     });
 
-    it('должен не проходить валидацию если данные дня отсутствуют', async () => {
+    it("должен не проходить валидацию если данные дня отсутствуют", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({}); // Пустые данные
       });
 
@@ -182,21 +182,21 @@ describe('useCustomizedDays', () => {
       expect(saveResult).toBe(false);
       expect(result.current.validationError).toEqual({
         message: 'Выберите время "туда"',
-        field: 'mon-there'
+        field: "mon-there",
       });
     });
   });
 
-  describe('Сохранение в AsyncStorage', () => {
-    it('должен сохранять данные в AsyncStorage при успешной валидации', async () => {
+  describe("Сохранение в AsyncStorage", () => {
+    it("должен сохранять данные в AsyncStorage при успешной валидации", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       const testData = {
-        mon: { there: '09:00', back: '18:00' },
+        mon: { there: "09:00", back: "18:00" },
       };
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays(testData);
       });
 
@@ -207,22 +207,22 @@ describe('useCustomizedDays', () => {
       });
 
       expect(mockAsyncStorage.setItem).toHaveBeenCalledWith(
-        'customizedSchedule',
-        JSON.stringify(testData)
+        "customizedSchedule",
+        JSON.stringify(testData),
       );
     });
 
-    it('должен логировать ошибку при неудачном сохранении в AsyncStorage', async () => {
+    it("должен логировать ошибку при неудачном сохранении в AsyncStorage", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '' },
+          mon: { there: "09:00", back: "" },
         });
       });
 
-      const saveError = new Error('AsyncStorage error');
+      const saveError = new Error("AsyncStorage error");
       mockAsyncStorage.setItem.mockRejectedValue(saveError);
 
       await act(async () => {
@@ -230,23 +230,23 @@ describe('useCustomizedDays', () => {
       });
 
       expect(console.error).toHaveBeenCalledWith(
-        '❌ useCustomizedDays: Ошибка сохранения в localStorage:',
-        saveError
+        "❌ useCustomizedDays: Ошибка сохранения в localStorage:",
+        saveError,
       );
     });
   });
 
-  describe('Обновление состояния', () => {
-    it('должен обновлять customizedDays после успешного сохранения', async () => {
+  describe("Обновление состояния", () => {
+    it("должен обновлять customizedDays после успешного сохранения", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       const testData = {
-        mon: { there: '09:00', back: '18:00' },
-        tue: { there: '10:00', back: '19:00' },
+        mon: { there: "09:00", back: "18:00" },
+        tue: { there: "10:00", back: "19:00" },
       };
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon', 'tue']);
+        result.current.setSelectedCustomDays(["mon", "tue"]);
         result.current.setTempCustomizedDays(testData);
       });
 
@@ -260,17 +260,17 @@ describe('useCustomizedDays', () => {
       expect(result.current.selectedCustomDays).toEqual([]);
     });
 
-    it('должен сохранять состояние при неудачной валидации', async () => {
+    it("должен сохранять состояние при неудачной валидации", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
-      const originalData = { tue: { there: '10:00', back: '19:00' } };
-      
+      const originalData = { tue: { there: "10:00", back: "19:00" } };
+
       // Устанавливаем начальные данные
       act(() => {
         result.current.setCustomizedDays(originalData);
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '', back: '' }, // Невалидные данные
+          mon: { there: "", back: "" }, // Невалидные данные
         });
       });
 
@@ -280,18 +280,18 @@ describe('useCustomizedDays', () => {
 
       // Исходные данные должны остаться неизменными
       expect(result.current.customizedDays).toEqual(originalData);
-      expect(result.current.selectedCustomDays).toEqual(['mon']);
+      expect(result.current.selectedCustomDays).toEqual(["mon"]);
     });
   });
 
-  describe('Логирование', () => {
-    it('должен логировать начало валидации', async () => {
+  describe("Логирование", () => {
+    it("должен логировать начало валидации", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '18:00' },
+          mon: { there: "09:00", back: "18:00" },
         });
       });
 
@@ -301,18 +301,23 @@ describe('useCustomizedDays', () => {
         await result.current.saveModal(true);
       });
 
-      expect(console.log).toHaveBeenCalledWith('🔄 useCustomizedDays: Начинаем валидацию модального окна...');
-      expect(console.log).toHaveBeenCalledWith('📋 Выбранные дни для кастомизации:', ['mon']);
-      expect(console.log).toHaveBeenCalledWith('🔄 Обратная поездка:', true);
+      expect(console.log).toHaveBeenCalledWith(
+        "🔄 useCustomizedDays: Начинаем валидацию модального окна...",
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        "📋 Выбранные дни для кастомизации:",
+        ["mon"],
+      );
+      expect(console.log).toHaveBeenCalledWith("🔄 Обратная поездка:", true);
     });
 
-    it('должен логировать успешную валидацию', async () => {
+    it("должен логировать успешную валидацию", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '09:00', back: '18:00' },
+          mon: { there: "09:00", back: "18:00" },
         });
       });
 
@@ -322,17 +327,21 @@ describe('useCustomizedDays', () => {
         await result.current.saveModal(true);
       });
 
-      expect(console.log).toHaveBeenCalledWith('✅ useCustomizedDays: Валидация пройдена успешно');
-      expect(console.log).toHaveBeenCalledWith('💾 useCustomizedDays: Применяем кастомизацию к основному состоянию');
+      expect(console.log).toHaveBeenCalledWith(
+        "✅ useCustomizedDays: Валидация пройдена успешно",
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        "💾 useCustomizedDays: Применяем кастомизацию к основному состоянию",
+      );
     });
 
-    it('должен логировать ошибки валидации', async () => {
+    it("должен логировать ошибки валидации", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({
-          mon: { there: '', back: '' },
+          mon: { there: "", back: "" },
         });
       });
 
@@ -341,23 +350,23 @@ describe('useCustomizedDays', () => {
       });
 
       expect(console.log).toHaveBeenCalledWith(
-        '❌ useCustomizedDays: Ошибка валидации:',
+        "❌ useCustomizedDays: Ошибка валидации:",
         expect.objectContaining({
           message: 'Выберите время "туда"',
-          field: 'mon-there'
-        })
+          field: "mon-there",
+        }),
       );
     });
 
-    it('должен логировать данные сохранения', async () => {
+    it("должен логировать данные сохранения", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       const testData = {
-        mon: { there: '09:00', back: '18:00' },
+        mon: { there: "09:00", back: "18:00" },
       };
 
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays(testData);
       });
 
@@ -367,19 +376,26 @@ describe('useCustomizedDays', () => {
         await result.current.saveModal(true);
       });
 
-      expect(console.log).toHaveBeenCalledWith('🔄 useCustomizedDays: Сохранение кастомизированных дней...');
-      expect(console.log).toHaveBeenCalledWith('📊 Кастомизированные дни:', JSON.stringify(testData, null, 2));
-      expect(console.log).toHaveBeenCalledWith('✅ useCustomizedDays: Кастомизированные дни сохранены в localStorage');
+      expect(console.log).toHaveBeenCalledWith(
+        "🔄 useCustomizedDays: Сохранение кастомизированных дней...",
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        "📊 Кастомизированные дни:",
+        JSON.stringify(testData, null, 2),
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        "✅ useCustomizedDays: Кастомизированные дни сохранены в localStorage",
+      );
     });
   });
 
-  describe('Обработка ошибок', () => {
-    it('должен сбрасывать ошибку при открытии модального окна', async () => {
+  describe("Обработка ошибок", () => {
+    it("должен сбрасывать ошибку при открытии модального окна", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       // Устанавливаем ошибку валидации
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({});
       });
 
@@ -389,7 +405,7 @@ describe('useCustomizedDays', () => {
 
       expect(result.current.validationError).toEqual({
         message: 'Выберите время "туда"',
-        field: 'mon-there'
+        field: "mon-there",
       });
 
       // Открываем модальное окно - ошибка должна сброситься
@@ -400,12 +416,12 @@ describe('useCustomizedDays', () => {
       expect(result.current.validationError).toBeNull();
     });
 
-    it('должен сбрасывать ошибку при закрытии модального окна', async () => {
+    it("должен сбрасывать ошибку при закрытии модального окна", async () => {
       const { result } = renderHook(() => useCustomizedDays());
 
       // Создаем ошибку
       act(() => {
-        result.current.setSelectedCustomDays(['mon']);
+        result.current.setSelectedCustomDays(["mon"]);
         result.current.setTempCustomizedDays({});
       });
 
@@ -415,7 +431,7 @@ describe('useCustomizedDays', () => {
 
       expect(result.current.validationError).toEqual({
         message: 'Выберите время "туда"',
-        field: 'mon-there'
+        field: "mon-there",
       });
 
       // Закрываем модальное окно

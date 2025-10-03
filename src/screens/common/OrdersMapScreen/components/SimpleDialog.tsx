@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { useTheme } from '../../../../context/ThemeContext';
-import { useLanguage } from '../../../../context/LanguageContext';
-import { createOrdersMapScreenStyles } from '../../../../styles/screens/OrdersMapScreen.styles';
+import React from "react";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { useTheme } from "../../../../context/ThemeContext";
+import { useLanguage } from "../../../../context/LanguageContext";
+import { createOrdersMapScreenStyles } from "../../../../styles/screens/OrdersMapScreen.styles";
 
 interface SimpleDialogProps {
   isVisible: boolean;
@@ -39,13 +39,20 @@ const SimpleDialog: React.FC<SimpleDialogProps> = ({
               style={styles.simpleDialogNoButton}
               onPress={onNo}
             >
-              <Text style={styles.simpleDialogNoButtonText}>{t('common.emergency.cancel')}</Text>
+              <Text style={styles.simpleDialogNoButtonText}>
+                {t("common.emergency.cancel")}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.simpleDialogYesButton, { backgroundColor: '#DC2626' }]}
+              style={[
+                styles.simpleDialogYesButton,
+                { backgroundColor: "#DC2626" },
+              ]}
               onPress={onYes}
             >
-              <Text style={styles.simpleDialogYesButtonText}>{t('common.emergency.call')}</Text>
+              <Text style={styles.simpleDialogYesButtonText}>
+                {t("common.emergency.call")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -1,2 +1,2 @@
-export { default } from './EarningsScreen';
-export * from './types/earnings.types';
+export { default } from "./EarningsScreen";
+export * from "./types/earnings.types";

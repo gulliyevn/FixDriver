@@ -1,19 +1,19 @@
-const ru = require('./ru.json');
-const en = require('./en.json');
-const tr = require('./tr.json');
-const az = require('./az.json');
-const fr = require('./fr.json');
-const ar = require('./ar.json');
-const es = require('./es.json');
-const de = require('./de.json');
+const componentsRu = require("./ru.json");
+const componentsEn = require("./en.json");
+const componentsTr = require("./tr.json");
+const componentsAz = require("./az.json");
+const componentsFr = require("./fr.json");
+const componentsAr = require("./ar.json");
+const componentsEs = require("./es.json");
+const componentsDe = require("./de.json");
 
 module.exports = {
-  ru,
-  en,
-  tr,
-  az,
-  fr,
-  ar,
-  es,
-  de,
-}; 
+  ru: componentsRu,
+  en: componentsEn,
+  tr: componentsTr,
+  az: componentsAz,
+  fr: componentsFr,
+  ar: componentsAr,
+  es: componentsEs,
+  de: componentsDe,
+};

@@ -1,11 +1,11 @@
 export interface Transaction {
   id: string;
-  type: 'payment' | 'topup' | 'refund' | 'withdrawal';
+  type: "payment" | "topup" | "refund" | "withdrawal";
   amount: string;
   description: string;
   date: string;
   time: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: "completed" | "pending" | "failed";
 }
 
 export interface BalanceData {
@@ -29,4 +29,4 @@ export interface WithdrawalMethod {
   description: string;
   minAmount: number;
   maxAmount: number;
-} 
+}

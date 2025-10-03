@@ -1,8 +1,8 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import ChatListScreen from '../screens/common/chats/ChatListScreen';
-import ChatScreen from '../screens/common/chats/ChatScreen';
-import { ChatStackParamList } from '../types/navigation';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import ChatListScreen from "../screens/common/chats/ChatListScreen";
+import ChatScreen from "../screens/common/chats/ChatScreen";
+import { ChatStackParamList } from "../types/navigation";
 
 const Stack = createStackNavigator<ChatStackParamList>();
 
@@ -17,14 +17,8 @@ const ChatStack: React.FC = () => {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen 
-        name="ChatList" 
-        component={ChatListScreen}
-      />
-      <Stack.Screen 
-        name="ChatConversation" 
-        component={ChatScreen}
-      />
+      <Stack.Screen name="ChatList" component={ChatListScreen} />
+      <Stack.Screen name="ChatConversation" component={ChatScreen} />
     </Stack.Navigator>
   );
 };

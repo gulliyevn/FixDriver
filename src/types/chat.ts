@@ -2,9 +2,9 @@ export interface Message {
   id: string;
   chatId: string;
   senderId: string;
-  senderType: 'client' | 'driver';
+  senderType: "client" | "driver";
   content: string;
-  type: 'text' | 'image' | 'file' | 'location';
+  type: "text" | "image" | "file" | "location";
   timestamp: string;
   isRead: boolean;
   metadata?: {
@@ -50,8 +50,8 @@ export interface ChatPreview {
 export interface SendMessageRequest {
   chatId: string;
   content: string;
-  type: 'text' | 'image' | 'file' | 'location';
-  metadata?: Message['metadata'];
+  type: "text" | "image" | "file" | "location";
+  metadata?: Message["metadata"];
 }
 
 export interface CreateChatRequest {

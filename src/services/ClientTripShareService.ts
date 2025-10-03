@@ -1,26 +1,27 @@
-import { Share } from 'react-native';
-import type { ShareRoutePoint } from './ShareRouteService';
+import { Share } from "react-native";
+import type { ShareRoutePoint } from "./ShareRouteService";
 
-const formatCoord = (p: ShareRoutePoint | { latitude: number; longitude: number }) => {
-  const lat = 'coordinate' in p ? p.coordinate.latitude : p.latitude;
-  const lon = 'coordinate' in p ? p.coordinate.longitude : p.longitude;
+const formatCoord = (
+  p: ShareRoutePoint | { latitude: number; longitude: number },
+) => {
+  const lat = "coordinate" in p ? p.coordinate.latitude : p.latitude;
+  const lon = "coordinate" in p ? p.coordinate.longitude : p.longitude;
   return `${lat},${lon}`;
 };
 
-// TODO: В продакшене заменить на реальный домен
 // const FIXDRIVE_DOMAIN = 'https://fixdrive.app';
-const FIXDRIVE_DOMAIN = 'https://example.com'; // Временный домен для разработки
+const FIXDRIVE_DOMAIN = "https://example.com"; // Временный домен для разработки
 
 const buildFixDriveUrl = (points: ShareRoutePoint[]) => {
   const origin = formatCoord(points[0]);
   const destination = formatCoord(points[points.length - 1]);
-  const waypoints = points.slice(1, -1).map(formatCoord).join('|');
+  const waypoints = points.slice(1, -1).map(formatCoord).join("|");
 
   const params = new URLSearchParams({
     o: origin,
     d: destination,
     ...(waypoints && { w: waypoints }),
-    t: 'driving', // travel mode
+    t: "driving", // travel mode
   });
 
   return `${FIXDRIVE_DOMAIN}/route?${params.toString()}`;
@@ -30,14 +31,20 @@ const buildFixDriveUrl = (points: ShareRoutePoint[]) => {
 const buildGoogleWebUrl = (points: ShareRoutePoint[]) => {
   const origin = formatCoord(points[0]);
   const destination = formatCoord(points[points.length - 1]);
-  const waypoints = points.slice(1, -1).map(formatCoord).join('|');
+  const waypoints = points.slice(1, -1).map(formatCoord).join("|");
 
-  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ''}&travelmode=driving`;
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ""}&travelmode=driving`;
 };
 
-const hasSufficientRoute = (points: ShareRoutePoint[] | undefined | null): points is ShareRoutePoint[] => {
+const hasSufficientRoute = (
+  points: ShareRoutePoint[] | undefined | null,
+): points is ShareRoutePoint[] => {
   if (!points || points.length < 2) return false;
-  return points.every(p => typeof p?.coordinate?.latitude === 'number' && typeof p?.coordinate?.longitude === 'number');
+  return points.every(
+    (p) =>
+      typeof p?.coordinate?.latitude === "number" &&
+      typeof p?.coordinate?.longitude === "number",
+  );
 };
 
 const ClientTripShareService = {
@@ -49,7 +56,6 @@ const ClientTripShareService = {
     const fixDriveUrl = buildFixDriveUrl(points);
     const fallbackUrl = buildGoogleWebUrl(points);
 
-    // TODO: В продакшене добавить проверку установки приложения
     // const isAppInstalled = await checkAppInstalled();
     // const shareUrl = isAppInstalled ? fixDriveUrl : fallbackUrl;
     const shareUrl = fixDriveUrl; // Пока используем FixDrive URL
@@ -58,7 +64,7 @@ const ClientTripShareService = {
       await Share.share({
         url: shareUrl,
         message: `Маршрут: ${shareUrl}`,
-        title: 'Поделиться маршрутом',
+        title: "Поделиться маршрутом",
       });
     } catch {
       // noop
@@ -67,5 +73,3 @@ const ClientTripShareService = {
 };
 
 export default ClientTripShareService;
-
-

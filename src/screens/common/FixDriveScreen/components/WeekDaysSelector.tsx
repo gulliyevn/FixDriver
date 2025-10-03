@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
-import { styles } from './WeekDaysSelector.styles';
-import { ANIMATION_CONFIG } from './constants';
-import { WeekdaysSection } from './sections/WeekdaysSection';
-import { FlexibleScheduleSection } from './sections/FlexibleScheduleSection';
-import TimePicker from '../../../../components/TimePicker';
-import { TIME_PICKER_COLORS } from './constants';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Animated, Easing } from "react-native";
+import { styles } from "./WeekDaysSelector.styles";
+import { ANIMATION_CONFIG } from "./constants";
+import { WeekdaysSection } from "./sections/WeekdaysSection";
+import { FlexibleScheduleSection } from "./sections/FlexibleScheduleSection";
+import TimePicker from "../../../../components/TimePicker";
+import { TIME_PICKER_COLORS } from "./constants";
 
 interface WeekDaysSelectorProps {
   colors: Record<string, any>;
@@ -44,37 +44,52 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
   isReturnTrip = false,
   onReturnTripChange,
 
-  scheduleType
+  scheduleType,
 }) => {
-  const [animations] = useState(() => Array(7).fill(0).map(() => new Animated.Value(1)));
+  const [animations] = useState(() =>
+    Array(7)
+      .fill(0)
+      .map(() => new Animated.Value(1)),
+  );
 
   const animatePress = (index: number) => {
     Animated.sequence([
-      Animated.timing(animations[index], { toValue: ANIMATION_CONFIG.SCALE, duration: ANIMATION_CONFIG.DURATION, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
-      Animated.timing(animations[index], { toValue: 1, duration: ANIMATION_CONFIG.DURATION, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      Animated.timing(animations[index], {
+        toValue: ANIMATION_CONFIG.SCALE,
+        duration: ANIMATION_CONFIG.DURATION,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(animations[index], {
+        toValue: 1,
+        duration: ANIMATION_CONFIG.DURATION,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
     ]).start();
   };
 
   const weekDays = [
-    { key: 'mon', label: t('common.mon') },
-    { key: 'tue', label: t('common.tue') },
-    { key: 'wed', label: t('common.wed') },
-    { key: 'thu', label: t('common.thu') },
-    { key: 'fri', label: t('common.fri') },
-    { key: 'sat', label: t('common.sat') },
-    { key: 'sun', label: t('common.sun') },
+    { key: "mon", label: t("common.mon") },
+    { key: "tue", label: t("common.tue") },
+    { key: "wed", label: t("common.wed") },
+    { key: "thu", label: t("common.thu") },
+    { key: "fri", label: t("common.fri") },
+    { key: "sat", label: t("common.sat") },
+    { key: "sun", label: t("common.sun") },
   ];
 
   const toggleDay = (key: string, index: number) => {
     animatePress(index);
-    const next = selectedDays.includes(key) ? selectedDays.filter(d => d !== key) : [...selectedDays, key];
+    const next = selectedDays.includes(key)
+      ? selectedDays.filter((d) => d !== key)
+      : [...selectedDays, key];
     onSelectionChange && onSelectionChange(next);
   };
 
   const renderSection = () => {
-    
     switch (scheduleType) {
-      case 'weekdays':
+      case "weekdays":
         return (
           <WeekdaysSection
             t={t}
@@ -91,8 +106,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
             onReturnWeekdaysTimeChange={onReturnWeekdaysTimeChange}
           />
         );
-      case 'flexible':
-        
+      case "flexible":
         return selectedDays.length >= 2 ? (
           <FlexibleScheduleSection
             t={t}
@@ -107,13 +121,14 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
             onReturnTripChange={onReturnTripChange}
           />
         ) : (
-          console.log('❌ WeekDaysSelector: FlexibleScheduleSection НЕ отображается - недостаточно дней'),
-          null
+          (console.log(
+            "❌ WeekDaysSelector: FlexibleScheduleSection НЕ отображается - недостаточно дней",
+          ),
+          null)
         );
-      
+
       // Добавляем кнопку сохранения для режима flexible
-      case 'flexible-with-button':
-        
+      case "flexible-with-button":
         return selectedDays.length >= 2 ? (
           <View>
             <FlexibleScheduleSection
@@ -127,46 +142,42 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
               onReturnTimeChange={onReturnTimeChange}
               isReturnTrip={!!isReturnTrip}
               onReturnTripChange={onReturnTripChange}
-
             />
-                            </View>
+          </View>
         ) : null;
-      case 'oneWay':
-        
+      case "oneWay":
         return (
           <View>
             <TimePicker
               value={selectedTime}
-              onChange={time => onTimeChange?.(time)}
-              onClear={() => onTimeChange?.('')}
-              placeholder={t('common.selectTime')}
+              onChange={(time) => onTimeChange?.(time)}
+              onClear={() => onTimeChange?.("")}
+              placeholder={t("common.selectTime")}
               indicatorColor={TIME_PICKER_COLORS.THERE}
-              title={t('common.there')}
+              title={t("common.there")}
             />
-            
-
           </View>
         );
-      case 'thereAndBack':
+      case "thereAndBack":
         return (
           <>
             <TimePicker
               value={selectedTime}
-              onChange={time => onTimeChange?.(time)}
-              onClear={() => onTimeChange?.('')}
-              placeholder={t('common.selectTime')}
+              onChange={(time) => onTimeChange?.(time)}
+              onClear={() => onTimeChange?.("")}
+              placeholder={t("common.selectTime")}
               indicatorColor={TIME_PICKER_COLORS.THERE}
-              title={t('common.there')}
+              title={t("common.there")}
             />
             {selectedTime && (
               <View style={{ marginTop: 16 }}>
                 <TimePicker
                   value={returnTime}
-                  onChange={time => onReturnTimeChange?.(time)}
-                  onClear={() => onReturnTimeChange?.('')}
-                  placeholder={t('common.selectTime')}
+                  onChange={(time) => onReturnTimeChange?.(time)}
+                  onClear={() => onReturnTimeChange?.("")}
+                  placeholder={t("common.selectTime")}
                   indicatorColor={TIME_PICKER_COLORS.BACK}
-                  title={t('common.return')}
+                  title={t("common.return")}
                 />
               </View>
             )}
@@ -183,16 +194,38 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
         {weekDays.map((day, index) => {
           const isActive = selectedDays.includes(day.key);
           return (
-            <Animated.View key={day.key} style={{ transform: [{ scale: animations[index] }] }}>
+            <Animated.View
+              key={day.key}
+              style={{ transform: [{ scale: animations[index] }] }}
+            >
               <TouchableOpacity
                 testID={`day-button-${day.key}`}
-                style={[styles.dayButton, { 
-                  backgroundColor: isActive ? colors.primary : isDark ? colors.surface : colors.background
-                }]}
+                style={[
+                  styles.dayButton,
+                  {
+                    backgroundColor: isActive
+                      ? colors.primary
+                      : isDark
+                        ? colors.surface
+                        : colors.background,
+                  },
+                ]}
                 activeOpacity={0.8}
                 onPress={() => toggleDay(day.key, index)}
               >
-                <Text style={[styles.dayText, { color: isActive ? '#FFFFFF' : isDark ? colors.text : colors.primary, opacity: isActive ? 1 : isDark ? 0.8 : 1 }]}>
+                <Text
+                  style={[
+                    styles.dayText,
+                    {
+                      color: isActive
+                        ? "#FFFFFF"
+                        : isDark
+                          ? colors.text
+                          : colors.primary,
+                      opacity: isActive ? 1 : isDark ? 0.8 : 1,
+                    },
+                  ]}
+                >
                   {day.label}
                 </Text>
               </TouchableOpacity>
@@ -202,9 +235,7 @@ export const WeekDaysSelector: React.FC<WeekDaysSelectorProps> = ({
       </View>
 
       {selectedDays.length > 0 && (
-        <View style={{ marginTop: 8 }}>
-          {renderSection()}
-        </View>
+        <View style={{ marginTop: 8 }}>{renderSection()}</View>
       )}
     </View>
   );

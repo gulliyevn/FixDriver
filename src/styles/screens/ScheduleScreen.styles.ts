@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../constants/colors";
 
 export const ScheduleScreenStyles = StyleSheet.create({
   container: {
@@ -14,7 +14,7 @@ export const ScheduleScreenStyles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     color: colors.light.text,
     marginBottom: 8,
   },
@@ -31,7 +31,7 @@ export const ScheduleScreenStyles = StyleSheet.create({
     backgroundColor: colors.light.surface,
     borderRadius: 12,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -42,7 +42,7 @@ export const ScheduleScreenStyles = StyleSheet.create({
     backgroundColor: colors.light.surface,
     borderRadius: 12,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -50,7 +50,7 @@ export const ScheduleScreenStyles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.light.text,
     marginBottom: 16,
   },
@@ -58,15 +58,15 @@ export const ScheduleScreenStyles = StyleSheet.create({
     gap: 12,
   },
   formRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   formField: {
     flex: 1,
   },
   scheduleItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: colors.light.surface,
@@ -77,15 +77,15 @@ export const ScheduleScreenStyles = StyleSheet.create({
   },
   scheduleItemActive: {
     borderColor: colors.light.primary,
-    backgroundColor: colors.light.primary + '10',
+    backgroundColor: colors.light.primary + "10",
   },
   scheduleItemCompleted: {
     borderColor: colors.light.success,
-    backgroundColor: colors.light.success + '10',
+    backgroundColor: colors.light.success + "10",
   },
   scheduleItemCancelled: {
     borderColor: colors.light.error,
-    backgroundColor: colors.light.error + '10',
+    backgroundColor: colors.light.error + "10",
   },
   scheduleIcon: {
     marginRight: 12,
@@ -94,33 +94,33 @@ export const ScheduleScreenStyles = StyleSheet.create({
     flex: 1,
   },
   scheduleHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 4,
   },
   scheduleTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.light.text,
   },
   scheduleStatus: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
   },
   scheduleStatusUpcoming: {
-    backgroundColor: colors.light.primary + '20',
+    backgroundColor: colors.light.primary + "20",
     color: colors.light.primary,
   },
   scheduleStatusCompleted: {
-    backgroundColor: colors.light.success + '20',
+    backgroundColor: colors.light.success + "20",
     color: colors.light.success,
   },
   scheduleStatusCancelled: {
-    backgroundColor: colors.light.error + '20',
+    backgroundColor: colors.light.error + "20",
     color: colors.light.error,
   },
   scheduleDetails: {
@@ -133,7 +133,7 @@ export const ScheduleScreenStyles = StyleSheet.create({
     color: colors.light.textSecondary,
   },
   scheduleActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
   },
   actionButton: {
@@ -141,27 +141,27 @@ export const ScheduleScreenStyles = StyleSheet.create({
     borderRadius: 6,
   },
   cancelButton: {
-    backgroundColor: colors.light.error + '20',
+    backgroundColor: colors.light.error + "20",
   },
   cancelButtonText: {
     color: colors.light.error,
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 32,
   },
   emptyText: {
     fontSize: 16,
     color: colors.light.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 16,
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 60,
     left: 20,
     zIndex: 1,
@@ -174,41 +174,41 @@ export const ScheduleScreenStyles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   emptyDescription: {
     fontSize: 14,
     color: colors.light.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 20,
   },
   scheduleButton: {
     backgroundColor: colors.light.primary,
     borderRadius: 12,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
   },
   scheduleButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   loadingOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1000,
   },
   loadingText: {
     fontSize: 16,
     color: colors.light.textSecondary,
   },
-}); 
+});

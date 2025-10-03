@@ -1,28 +1,28 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../constants/colors";
 
 export const RulesModalStyles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   modalCloseButton: {
     padding: 8,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
   },
   placeholder: {
     width: 40,
@@ -37,22 +37,22 @@ export const RulesModalStyles = StyleSheet.create({
   },
   rulesTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginBottom: 8,
   },
   rulesText: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     lineHeight: 24,
   },
   // Стили для слайдов
   slideItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 12,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     borderRadius: 12,
     marginBottom: 8,
   },
@@ -60,9 +60,9 @@ export const RulesModalStyles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   slideInfo: {
@@ -70,40 +70,40 @@ export const RulesModalStyles = StyleSheet.create({
   },
   slideTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
     marginBottom: 4,
   },
   slideContent: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
   },
   slideOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     zIndex: 1000,
   },
   slideHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   backButton: {
     padding: 8,
   },
   slideHeaderTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#003366',
+    fontWeight: "600",
+    color: "#003366",
   },
   slideScroll: {
     flex: 1,
@@ -112,7 +112,7 @@ export const RulesModalStyles = StyleSheet.create({
   },
   slideText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     lineHeight: 24,
   },
 });
@@ -120,7 +120,7 @@ export const RulesModalStyles = StyleSheet.create({
 // Функции для динамических стилей с поддержкой темной темы
 export const getRulesModalStyles = (isDark: boolean) => {
   const currentColors = isDark ? colors.dark : colors.light;
-  
+
   return {
     modalContainer: {
       backgroundColor: currentColors.background,
@@ -156,4 +156,4 @@ export const getRulesModalStyles = (isDark: boolean) => {
       color: currentColors.text,
     },
   };
-}; 
+};

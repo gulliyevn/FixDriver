@@ -1,6 +1,6 @@
-import { useRef, useCallback, useState } from 'react';
-import { Animated } from 'react-native';
-import { OrdersMapActions } from '../types/orders-map.types';
+import { useRef, useCallback, useState } from "react";
+import { Animated } from "react-native";
+import { OrdersMapActions } from "../types/orders-map.types";
 
 export const useMapSettings = (actions: OrdersMapActions) => {
   const settingsRotateAnim = useRef(new Animated.Value(0)).current;
@@ -11,7 +11,7 @@ export const useMapSettings = (actions: OrdersMapActions) => {
     const toValue = isExpanded ? 0 : 1;
     setIsExpanded(!isExpanded);
     actions.setIsSettingsExpanded(!isExpanded);
-    
+
     Animated.parallel([
       Animated.timing(settingsRotateAnim, {
         toValue,
@@ -22,13 +22,13 @@ export const useMapSettings = (actions: OrdersMapActions) => {
         toValue,
         duration: 300,
         useNativeDriver: false,
-      })
+      }),
     ]).start();
   }, [isExpanded, actions]);
 
   const settingsRotate = settingsRotateAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
+    outputRange: ["0deg", "180deg"],
   });
 
   const settingsPanelWidth = settingsPanelAnim.interpolate({

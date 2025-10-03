@@ -1,12 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const RatingStarsStyles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   starsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   star: {
     marginRight: 2,
@@ -17,6 +17,6 @@ export const RatingStarsStyles = StyleSheet.create({
   ratingText: {
     marginLeft: 5,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
-}); 
+});

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const DatePickerStyles = StyleSheet.create({
   container: {
@@ -6,7 +6,7 @@ export const DatePickerStyles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
     marginLeft: 10,
   },
@@ -14,9 +14,9 @@ export const DatePickerStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   pickerText: {
     fontSize: 16,
@@ -29,33 +29,33 @@ export const DatePickerStyles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 0,
     padding: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: 'transparent',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "transparent",
     gap: 8,
-    shadowColor: 'transparent',
+    shadowColor: "transparent",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
     elevation: 0,
     margin: 0,
-    width: 'auto',
+    width: "auto",
   },
   inlinePickerText: {
     fontSize: 16,
-    textAlign: 'left',
+    textAlign: "left",
     flex: 0,
   },
   readOnlyText: {
     fontSize: 16,
-    textAlign: 'left',
+    textAlign: "left",
     minWidth: 80,
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     borderTopLeftRadius: 20,
@@ -66,9 +66,9 @@ export const DatePickerStyles = StyleSheet.create({
     marginHorizontal: 20,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   modalButton: {
@@ -77,16 +77,16 @@ export const DatePickerStyles = StyleSheet.create({
   },
   modalButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   datePickerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
     height: 200,
     flex: 1,
     marginLeft: 0,
@@ -95,27 +95,29 @@ export const DatePickerStyles = StyleSheet.create({
 });
 
 export const getDatePickerColors = (isDark: boolean) => {
-  const colors = isDark ? {
-    background: '#1F2937',
-    surface: '#374151',
-    text: '#F9FAFB',
-    textSecondary: '#9CA3AF',
-    primary: '#3B82F6',
-    border: '#4B5563',
-  } : {
-    background: '#ffffff',
-    surface: '#f9f9f9',
-    text: '#003366',
-    textSecondary: '#666666',
-    primary: '#083198',
-    border: '#f0f0f0',
-  };
+  const colors = isDark
+    ? {
+        background: "#1F2937",
+        surface: "#374151",
+        text: "#F9FAFB",
+        textSecondary: "#9CA3AF",
+        primary: "#3B82F6",
+        border: "#4B5563",
+      }
+    : {
+        background: "#ffffff",
+        surface: "#f9f9f9",
+        text: "#003366",
+        textSecondary: "#666666",
+        primary: "#083198",
+        border: "#f0f0f0",
+      };
 
   return {
     label: { color: colors.text },
-    pickerButton: { 
+    pickerButton: {
       backgroundColor: colors.surface,
-      borderColor: colors.border 
+      borderColor: colors.border,
     },
     pickerText: { color: colors.text },
     pickerTextPlaceholder: { color: colors.textSecondary },
@@ -123,11 +125,11 @@ export const getDatePickerColors = (isDark: boolean) => {
     modalContent: { backgroundColor: colors.background },
     modalButtonText: { color: colors.primary },
     modalTitle: { color: colors.text },
-    datePickerContainer: { 
+    datePickerContainer: {
       backgroundColor: colors.surface,
-      width: '100%',
+      width: "100%",
       marginLeft: 0,
       paddingLeft: 0,
     },
   };
-}; 
+};

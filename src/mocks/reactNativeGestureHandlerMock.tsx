@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
 export const GestureHandlerRootView = ({ children, ...props }: any) => (
   <View {...props}>{children}</View>
@@ -20,4 +20,4 @@ export const State = {
   CANCELLED: 3,
   ACTIVE: 4,
   END: 5,
-}; 
+};

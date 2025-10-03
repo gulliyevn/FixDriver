@@ -4,58 +4,60 @@ export const SECURITY_CONFIG = {
   // JWT настройки
   JWT: {
     // Секретный ключ для подписи JWT (в продакшене должен быть в переменных окружения)
-    SECRET: process.env.EXPO_PUBLIC_JWT_SECRET || 'fixdrive-jwt-secret-key-2024',
-    
+    SECRET:
+      process.env.EXPO_PUBLIC_JWT_SECRET || "fixdrive-jwt-secret-key-2024",
+
     // Время жизни access token (24 часа)
     ACCESS_TOKEN_EXPIRY: 24 * 60 * 60,
-    
+
     // Время жизни refresh token (7 дней)
     REFRESH_TOKEN_EXPIRY: 7 * 24 * 60 * 60,
-    
+
     // Алгоритм подписи
-    ALGORITHM: 'HS256' as const,
-    
+    ALGORITHM: "HS256" as const,
+
     // Идентификатор приложения в токене
-    ISSUER: 'fixdrive-app',
-    
+    ISSUER: "fixdrive-app",
+
     // Аудитория токена
-    AUDIENCE: 'fixdrive-users',
+    AUDIENCE: "fixdrive-users",
   },
 
   // Настройки паролей
   PASSWORD: {
     // Минимальная длина пароля
     MIN_LENGTH: 8,
-    
+
     // Максимальная длина пароля
     MAX_LENGTH: 128,
-    
+
     // Требования к паролю
     REQUIREMENTS: {
-      UPPERCASE: true,    // Заглавные буквы
-      LOWERCASE: true,    // Строчные буквы
-      NUMBERS: true,      // Цифры
+      UPPERCASE: true, // Заглавные буквы
+      LOWERCASE: true, // Строчные буквы
+      NUMBERS: true, // Цифры
       SPECIAL_CHARS: true, // Специальные символы
     },
-    
+
     // Регулярное выражение для валидации пароля
-    PATTERN: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    PATTERN:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   },
 
   // Настройки OTP
   OTP: {
     // Длина OTP кода
     LENGTH: 6,
-    
+
     // Время жизни OTP кода (10 минут)
     EXPIRY_MINUTES: 10,
-    
+
     // Максимальное количество попыток
     MAX_ATTEMPTS: 3,
-    
+
     // Время блокировки после превышения попыток (30 минут)
     BLOCK_DURATION_MINUTES: 30,
-    
+
     // Интервал между повторными отправками (60 секунд)
     RESEND_INTERVAL_SECONDS: 60,
   },
@@ -63,34 +65,34 @@ export const SECURITY_CONFIG = {
   // Настройки API
   API: {
     // Таймаут запросов (30 секунд)
-    TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '30000'),
-    
+    TIMEOUT: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || "30000"),
+
     // Максимальное количество повторных попыток
     MAX_RETRIES: 3,
-    
+
     // Задержка между повторными попытками (1 секунда)
     RETRY_DELAY: 1000,
-    
+
     // Заголовки безопасности
     SECURITY_HEADERS: {
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY',
-      'X-XSS-Protection': '1; mode=block',
-      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "X-XSS-Protection": "1; mode=block",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     },
   },
 
   // Настройки шифрования
   ENCRYPTION: {
     // Алгоритм шифрования для чувствительных данных
-    ALGORITHM: 'AES-256-GCM',
-    
+    ALGORITHM: "AES-256-GCM",
+
     // Размер ключа (32 байта для AES-256)
     KEY_SIZE: 32,
-    
+
     // Размер IV (12 байт для GCM)
     IV_SIZE: 12,
-    
+
     // Размер тега аутентификации (16 байт для GCM)
     TAG_SIZE: 16,
   },
@@ -99,10 +101,10 @@ export const SECURITY_CONFIG = {
   SESSION: {
     // Максимальное количество активных сессий на пользователя
     MAX_SESSIONS_PER_USER: 5,
-    
+
     // Время неактивности для автоматического выхода (30 минут)
     INACTIVITY_TIMEOUT: 30 * 60 * 1000,
-    
+
     // Проверка активности каждые 5 минут
     ACTIVITY_CHECK_INTERVAL: 5 * 60 * 1000,
   },
@@ -111,14 +113,15 @@ export const SECURITY_CONFIG = {
   LOGGING: {
     // Логировать ли чувствительные данные
     LOG_SENSITIVE_DATA: false,
-    
+
     // Маскировать ли персональные данные в логах
     MASK_PERSONAL_DATA: true,
-    
+
     // Паттерны для маскировки данных
     MASK_PATTERNS: {
       EMAIL: /([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-      PHONE: /(\+?\d{1,3})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{2})[-.\s]?(\d{2})/g,
+      PHONE:
+        /(\+?\d{1,3})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{2})[-.\s]?(\d{2})/g,
       CREDIT_CARD: /\b(\d{4})[-.\s]?(\d{4})[-.\s]?(\d{4})[-.\s]?(\d{4})\b/g,
     },
   },
@@ -134,7 +137,7 @@ export const SECURITY_CONFIG = {
       ADDRESS: 500,
       DESCRIPTION: 1000,
     },
-    
+
     // Регулярные выражения для валидации
     PATTERNS: {
       EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -149,10 +152,10 @@ export const SECURITY_CONFIG = {
   RATE_LIMITING: {
     // Максимальное количество запросов в минуту
     REQUESTS_PER_MINUTE: 60,
-    
+
     // Максимальное количество попыток входа в час
     LOGIN_ATTEMPTS_PER_HOUR: 5,
-    
+
     // Время блокировки после превышения лимита (30 минут)
     BLOCK_DURATION_MINUTES: 30,
   },
@@ -174,19 +177,22 @@ export const SecurityUtils = {
     masked = masked.replace(
       SECURITY_CONFIG.LOGGING.MASK_PATTERNS.EMAIL,
       (match, username, domain) => {
-        const maskedUsername = username.length > 2 
-          ? username.charAt(0) + '*'.repeat(username.length - 2) + username.charAt(username.length - 1)
-          : username;
+        const maskedUsername =
+          username.length > 2
+            ? username.charAt(0) +
+              "*".repeat(username.length - 2) +
+              username.charAt(username.length - 1)
+            : username;
         return `${maskedUsername}@${domain}`;
-      }
+      },
     );
 
     // Маскируем телефон
     masked = masked.replace(
       SECURITY_CONFIG.LOGGING.MASK_PATTERNS.PHONE,
       (match, country, area, prefix, middle, last) => {
-        return `${country || ''}***-***-${last}`;
-      }
+        return `${country || ""}***-***-${last}`;
+      },
     );
 
     // Маскируем номер карты
@@ -194,7 +200,7 @@ export const SecurityUtils = {
       SECURITY_CONFIG.LOGGING.MASK_PATTERNS.CREDIT_CARD,
       (match, first, second, third, fourth) => {
         return `${first}-****-****-${fourth}`;
-      }
+      },
     );
 
     return masked;
@@ -207,27 +213,40 @@ export const SecurityUtils = {
     const errors: string[] = [];
 
     if (password.length < SECURITY_CONFIG.PASSWORD.MIN_LENGTH) {
-      errors.push(`Пароль должен содержать минимум ${SECURITY_CONFIG.PASSWORD.MIN_LENGTH} символов`);
+      errors.push(
+        `Пароль должен содержать минимум ${SECURITY_CONFIG.PASSWORD.MIN_LENGTH} символов`,
+      );
     }
 
     if (password.length > SECURITY_CONFIG.PASSWORD.MAX_LENGTH) {
-      errors.push(`Пароль не должен превышать ${SECURITY_CONFIG.PASSWORD.MAX_LENGTH} символов`);
+      errors.push(
+        `Пароль не должен превышать ${SECURITY_CONFIG.PASSWORD.MAX_LENGTH} символов`,
+      );
     }
 
-    if (SECURITY_CONFIG.PASSWORD.REQUIREMENTS.UPPERCASE && !/[A-Z]/.test(password)) {
-      errors.push('Пароль должен содержать заглавные буквы');
+    if (
+      SECURITY_CONFIG.PASSWORD.REQUIREMENTS.UPPERCASE &&
+      !/[A-Z]/.test(password)
+    ) {
+      errors.push("Пароль должен содержать заглавные буквы");
     }
 
-    if (SECURITY_CONFIG.PASSWORD.REQUIREMENTS.LOWERCASE && !/[a-z]/.test(password)) {
-      errors.push('Пароль должен содержать строчные буквы');
+    if (
+      SECURITY_CONFIG.PASSWORD.REQUIREMENTS.LOWERCASE &&
+      !/[a-z]/.test(password)
+    ) {
+      errors.push("Пароль должен содержать строчные буквы");
     }
 
     if (SECURITY_CONFIG.PASSWORD.REQUIREMENTS.NUMBERS && !/\d/.test(password)) {
-      errors.push('Пароль должен содержать цифры');
+      errors.push("Пароль должен содержать цифры");
     }
 
-    if (SECURITY_CONFIG.PASSWORD.REQUIREMENTS.SPECIAL_CHARS && !/[@$!%*?&]/.test(password)) {
-      errors.push('Пароль должен содержать специальные символы (@$!%*?&)');
+    if (
+      SECURITY_CONFIG.PASSWORD.REQUIREMENTS.SPECIAL_CHARS &&
+      !/[@$!%*?&]/.test(password)
+    ) {
+      errors.push("Пароль должен содержать специальные символы (@$!%*?&)");
     }
 
     return {
@@ -254,29 +273,32 @@ export const SecurityUtils = {
    * Валидирует имя
    */
   validateName(name: string): boolean {
-    return SECURITY_CONFIG.VALIDATION.PATTERNS.NAME.test(name) && 
-           name.length <= SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME;
+    return (
+      SECURITY_CONFIG.VALIDATION.PATTERNS.NAME.test(name) &&
+      name.length <= SECURITY_CONFIG.VALIDATION.MAX_LENGTHS.NAME
+    );
   },
 
   /**
    * Генерирует безопасный случайный токен
    */
   generateSecureToken(length: number = 32): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+
     // Используем Math.random как fallback для React Native
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    
+
     return result;
   },
 
   /**
    * Проверяет силу пароля
    */
-  getPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
+  getPasswordStrength(password: string): "weak" | "medium" | "strong" {
     let score = 0;
 
     // Длина
@@ -294,10 +316,10 @@ export const SecurityUtils = {
     if (uniqueChars >= 8) score += 1;
     if (uniqueChars >= 12) score += 1;
 
-    if (score <= 3) return 'weak';
-    if (score <= 5) return 'medium';
-    return 'strong';
+    if (score <= 3) return "weak";
+    if (score <= 5) return "medium";
+    return "strong";
   },
 };
 
-export default SECURITY_CONFIG; 
+export default SECURITY_CONFIG;

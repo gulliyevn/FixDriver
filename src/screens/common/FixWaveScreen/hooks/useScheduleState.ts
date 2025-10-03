@@ -1,43 +1,43 @@
-import { useState, useRef } from 'react';
-import { TimeScheduleData } from '../types/fix-wave.types';
+import { useState, useRef } from "react";
+import { TimeScheduleData } from "../types/fix-wave.types";
 
 export const useScheduleState = (initialData?: TimeScheduleData) => {
   // Флаг для отслеживания инициализации
   const isInitializedRef = useRef(false);
-  
+
   const [timeScheduleData, setTimeScheduleData] = useState<TimeScheduleData>(
     initialData || {
       date: new Date(),
-      time: '',
+      time: "",
       isRecurring: false,
-      notes: '',
-    }
+      notes: "",
+    },
   );
-  
+
   const [addresses, setAddresses] = useState({
-    from: '',
-    to: '',
+    from: "",
+    to: "",
     stops: [] as string[],
   });
-  
+
   const [coordinates, setCoordinates] = useState({
     from: undefined as { latitude: number; longitude: number } | undefined,
     to: undefined as { latitude: number; longitude: number } | undefined,
     stops: [] as Array<{ latitude: number; longitude: number }>,
   });
-  
+
   const [switchStates, setSwitchStates] = useState({
     switch1: false, // направление: false = туда, true = туда-обратно
     switch2: false, // режим: false = фиксированный, true = плавающий
     switch3: false, // дни: false = ежедневно, true = будни/выходные
   });
-  
+
   const [times, setTimes] = useState({
     fixed: {} as Record<number, string>,
     weekday: {} as Record<number, string>,
     weekend: {} as Record<number, string>,
   });
-  
+
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   // Функция для сброса всех данных при переключении режимов
@@ -75,7 +75,7 @@ export const useScheduleState = (initialData?: TimeScheduleData) => {
       setSelectedDays(newSelectedDays);
     }
   };
-  
+
   return {
     timeScheduleData,
     setTimeScheduleData: safeSetTimeScheduleData,

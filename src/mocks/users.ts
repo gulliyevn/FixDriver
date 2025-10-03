@@ -5,5 +5,5 @@
 // - src/mocks/data/users.ts - данные пользователей
 // - src/mocks/factories.ts - фабрики для создания моков
 
-export * from './data/users';
-// factories.ts was removed - no longer needed 
+export * from "./data/users";
+// factories.ts was removed - no longer needed

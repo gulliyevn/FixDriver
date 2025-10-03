@@ -1,5 +1,5 @@
-import APIClient from './APIClient';
-import * as ImagePicker from 'expo-image-picker';
+import APIClient from "./APIClient";
+import * as ImagePicker from "expo-image-picker";
 
 export interface AvatarData {
   id: string;
@@ -24,7 +24,9 @@ export class AvatarService {
    */
   static async getAvatar(userId: string): Promise<AvatarData | null> {
     try {
-      const response = await APIClient.get<AvatarData>(`/avatars/user/${userId}`);
+      const response = await APIClient.get<AvatarData>(
+        `/avatars/user/${userId}`,
+      );
       return response.success && response.data ? response.data : null;
     } catch (error) {
       return null;
@@ -34,33 +36,39 @@ export class AvatarService {
   /**
    * Загружает новый аватар
    */
-  static async uploadAvatar(userId: string, imageUri: string): Promise<UploadAvatarResponse> {
+  static async uploadAvatar(
+    userId: string,
+    imageUri: string,
+  ): Promise<UploadAvatarResponse> {
     try {
       const formData = new FormData();
-      formData.append('avatar', {
+      formData.append("avatar", {
         uri: imageUri,
-        type: 'image/jpeg',
-        name: 'avatar.jpg',
+        type: "image/jpeg",
+        name: "avatar.jpg",
       } as any);
-      formData.append('userId', userId);
+      formData.append("userId", userId);
 
-      const response = await APIClient.post<AvatarData>('/avatars/upload', formData as any);
-      
+      const response = await APIClient.post<AvatarData>(
+        "/avatars/upload",
+        formData as any,
+      );
+
       if (response.success && response.data) {
         return {
           success: true,
-          avatar: response.data
+          avatar: response.data,
         };
       }
-      
+
       return {
         success: false,
-        error: response.error || 'Ошибка при загрузке аватара'
+        error: response.error || "Ошибка при загрузке аватара",
       };
     } catch (error) {
       return {
         success: false,
-        error: 'Ошибка при загрузке аватара'
+        error: "Ошибка при загрузке аватара",
       };
     }
   }
@@ -70,8 +78,10 @@ export class AvatarService {
    */
   static async deleteAvatar(userId: string): Promise<boolean> {
     try {
-      const response = await APIClient.delete<{ success: boolean }>(`/avatars/user/${userId}`);
-      return response.success && response.data?.success || false;
+      const response = await APIClient.delete<{ success: boolean }>(
+        `/avatars/user/${userId}`,
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -82,8 +92,11 @@ export class AvatarService {
    */
   static async setDefaultAvatar(userId: string): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/default`, {});
-      return response.success && response.data?.success || false;
+      const response = await APIClient.post<{ success: boolean }>(
+        `/avatars/user/${userId}/default`,
+        {},
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -92,9 +105,14 @@ export class AvatarService {
   /**
    * Получает список доступных аватаров по умолчанию
    */
-  static async getDefaultAvatars(): Promise<Array<{ id: string; url: string; thumbnailUrl: string; name: string }>> {
+  static async getDefaultAvatars(): Promise<
+    Array<{ id: string; url: string; thumbnailUrl: string; name: string }>
+  > {
     try {
-      const response = await APIClient.get<Array<{ id: string; url: string; thumbnailUrl: string; name: string }>>('/avatars/defaults');
+      const response =
+        await APIClient.get<
+          Array<{ id: string; url: string; thumbnailUrl: string; name: string }>
+        >("/avatars/defaults");
       return response.success && response.data ? response.data : [];
     } catch (error) {
       return [];
@@ -104,10 +122,16 @@ export class AvatarService {
   /**
    * Устанавливает аватар по умолчанию по ID
    */
-  static async setDefaultAvatarById(userId: string, avatarId: string): Promise<boolean> {
+  static async setDefaultAvatarById(
+    userId: string,
+    avatarId: string,
+  ): Promise<boolean> {
     try {
-      const response = await APIClient.post<{ success: boolean }>(`/avatars/user/${userId}/set-default`, { avatarId });
-      return response.success && response.data?.success || false;
+      const response = await APIClient.post<{ success: boolean }>(
+        `/avatars/user/${userId}/set-default`,
+        { avatarId },
+      );
+      return (response.success && response.data?.success) || false;
     } catch (error) {
       return false;
     }
@@ -157,19 +181,24 @@ export class AvatarService {
   /**
    * Запрашивает разрешения на доступ к камере и галерее
    */
-  static async requestPermissions(): Promise<{ camera: boolean; gallery: boolean }> {
+  static async requestPermissions(): Promise<{
+    camera: boolean;
+    gallery: boolean;
+  }> {
     try {
-      const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
-      const mediaLibraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const cameraPermission =
+        await ImagePicker.requestCameraPermissionsAsync();
+      const mediaLibraryPermission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       return {
-        camera: cameraPermission.status === 'granted',
-        gallery: mediaLibraryPermission.status === 'granted'
+        camera: cameraPermission.status === "granted",
+        gallery: mediaLibraryPermission.status === "granted",
       };
     } catch (error) {
       return {
         camera: false,
-        gallery: false
+        gallery: false,
       };
     }
   }
@@ -188,7 +217,10 @@ export class AvatarService {
   /**
    * Сжимает изображение (заглушка)
    */
-  static async compressImage(uri: string, quality: number = 0.8): Promise<string> {
+  static async compressImage(
+    uri: string,
+    quality: number = 0.8,
+  ): Promise<string> {
     // В реальном приложении здесь была бы сжатие изображения
     // Пока возвращаем оригинальную URI
     return uri;

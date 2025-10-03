@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import HelpService from '../../services/HelpService';
-import { HelpContent, HelpSection } from '../types/help';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import HelpService from "../../services/HelpService";
+import { HelpContent, HelpSection } from "../types/help";
 
 interface UseHelpContentResult {
   sections: HelpSection[];
-  contact: HelpContent['contact'];
+  contact: HelpContent["contact"];
   loading: boolean;
   refreshing: boolean;
   errorKey: string | null;
@@ -14,15 +14,14 @@ interface UseHelpContentResult {
 const DEFAULT_RESULT: UseHelpContentResult = {
   sections: [],
   contact: {
-    whatsappNumber: '',
-    messageKey: '',
+    whatsappNumber: "",
+    messageKey: "",
   },
   loading: false,
   refreshing: false,
   errorKey: null,
   refresh: async () => undefined,
 };
-
 
 const useHelpContent = (): UseHelpContentResult => {
   const [content, setContent] = useState<HelpContent | null>(null);
@@ -45,7 +44,7 @@ const useHelpContent = (): UseHelpContentResult => {
       setContent(result);
       setErrorKey(null);
     } catch (error) {
-      setErrorKey('errors.helpContentLoadFailed');
+      setErrorKey("errors.helpContentLoadFailed");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -73,4 +72,3 @@ const useHelpContent = (): UseHelpContentResult => {
 };
 
 export default useHelpContent;
-

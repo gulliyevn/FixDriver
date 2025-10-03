@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { AppAvatarStyles } from '../styles/components/AppAvatar.styles';
+import React from "react";
+import { View, Text, Image } from "react-native";
+import { AppAvatarStyles } from "../styles/components/AppAvatar.styles";
 
 interface AppAvatarProps {
-  size?: 'small' | 'medium' | 'large' | number;
+  size?: "small" | "medium" | "large" | number;
   source?: { uri: string };
   defaultSource?: { uri: string };
   name?: string;
@@ -11,20 +11,23 @@ interface AppAvatarProps {
 }
 
 export default function AppAvatar({
-  size = 'medium',
+  size = "medium",
   source,
   defaultSource,
   name,
 }: AppAvatarProps) {
   const getContainerStyle = () => {
-    if (typeof size === 'number') {
-      return [AppAvatarStyles.container, { width: size, height: size, borderRadius: size / 2 }];
+    if (typeof size === "number") {
+      return [
+        AppAvatarStyles.container,
+        { width: size, height: size, borderRadius: size / 2 },
+      ];
     }
-    
+
     switch (size) {
-      case 'small':
+      case "small":
         return [AppAvatarStyles.container, AppAvatarStyles.sizeSmall];
-      case 'large':
+      case "large":
         return [AppAvatarStyles.container, AppAvatarStyles.sizeLarge];
       default:
         return [AppAvatarStyles.container, AppAvatarStyles.sizeMedium];
@@ -32,15 +35,15 @@ export default function AppAvatar({
   };
 
   const getTextStyle = () => {
-    if (typeof size === 'number') {
+    if (typeof size === "number") {
       const fontSize = Math.max(12, size * 0.4);
       return [AppAvatarStyles.text, { fontSize }];
     }
-    
+
     switch (size) {
-      case 'small':
+      case "small":
         return [AppAvatarStyles.text, AppAvatarStyles.textSmall];
-      case 'large':
+      case "large":
         return [AppAvatarStyles.text, AppAvatarStyles.textLarge];
       default:
         return [AppAvatarStyles.text, AppAvatarStyles.textMedium];
@@ -49,9 +52,9 @@ export default function AppAvatar({
 
   const getInitials = (fullName: string) => {
     return fullName
-      .split(' ')
-      .map(name => name.charAt(0))
-      .join('')
+      .split(" ")
+      .map((name) => name.charAt(0))
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
@@ -72,9 +75,7 @@ export default function AppAvatar({
 
   return (
     <View testID="avatar-container" style={getContainerStyle()}>
-      <Text style={getTextStyle()}>
-        {name ? getInitials(name) : '?'}
-      </Text>
+      <Text style={getTextStyle()}>{name ? getInitials(name) : "?"}</Text>
     </View>
   );
 }

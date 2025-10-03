@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface AddressValidationIndicatorProps {
-  status: 'idle' | 'checking' | 'valid' | 'invalid';
+  status: "idle" | "checking" | "valid" | "invalid";
   onRetry?: () => void;
   messages: {
     checking: string;
@@ -28,29 +28,31 @@ const AddressValidationIndicator: React.FC<AddressValidationIndicatorProps> = ({
   messages,
   styles,
 }) => {
-  if (status === 'idle') {
+  if (status === "idle") {
     return null;
   }
 
   return (
     <View style={styles.container}>
-      {status === 'checking' && (
+      {status === "checking" && (
         <View style={styles.item}>
           <ActivityIndicator size="small" color="#2196f3" />
           <Text style={styles.text}>{messages.checking}</Text>
         </View>
       )}
-      {status === 'valid' && (
+      {status === "valid" && (
         <View style={styles.item}>
           <Ionicons name="checkmark-circle" size={16} color="#4caf50" />
           <Text style={[styles.text, styles.textValid]}>{messages.valid}</Text>
         </View>
       )}
-      {status === 'invalid' && (
+      {status === "invalid" && (
         <>
           <View style={styles.item}>
             <Ionicons name="close-circle" size={16} color="#f44336" />
-            <Text style={[styles.text, styles.textInvalid]}>{messages.invalid}</Text>
+            <Text style={[styles.text, styles.textInvalid]}>
+              {messages.invalid}
+            </Text>
           </View>
           {onRetry && (
             <TouchableOpacity style={styles.retryButton} onPress={onRetry}>

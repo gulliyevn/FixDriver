@@ -1,7 +1,7 @@
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
-import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
+import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 export interface NotificationSettings {
   pushEnabled: boolean;
@@ -35,6 +35,7 @@ class PushNotificationService {
     Notifications.setNotificationHandler({
       handleNotification: async () => {
         return {
+          shouldShowAlert: true,
           shouldPlaySound: false,
           shouldSetBadge: true,
           shouldShowBanner: true,
@@ -51,27 +52,28 @@ class PushNotificationService {
       return {
         granted: false,
         canAskAgain: false,
-        status: Notifications.PermissionStatus.DENIED,
+        status: 'denied' as any,
       };
     }
 
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
 
-    if (existingStatus !== 'granted') {
+    if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
 
-    if (finalStatus !== 'granted') {
+    if (finalStatus !== "granted") {
       return {
         granted: false,
-        canAskAgain: finalStatus === 'denied',
+        canAskAgain: finalStatus === "denied",
         status: finalStatus,
       };
     }
 
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       await this.createNotificationChannel();
     }
 
@@ -105,24 +107,23 @@ class PushNotificationService {
     }
   }
 
-
-
   // Настройка слушателей уведомлений
   setupNotificationListeners(
     onNotificationReceived?: (notification: Notifications.Notification) => void,
-    onNotificationResponse?: (response: Notifications.NotificationResponse) => void
+    onNotificationResponse?: (
+      response: Notifications.NotificationResponse,
+    ) => void,
   ) {
     this.notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
         onNotificationReceived?.(notification);
-      }
+      },
     );
 
-    this.responseListener = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
+    this.responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
         onNotificationResponse?.(response);
-      }
-    );
+      });
   }
 
   // Удаление слушателей
@@ -141,7 +142,7 @@ class PushNotificationService {
   async getCurrentPermissions(): Promise<NotificationPermissions> {
     const { status, canAskAgain } = await Notifications.getPermissionsAsync();
     return {
-      granted: status === 'granted',
+      granted: status === "granted",
       canAskAgain,
       status,
     };
@@ -150,33 +151,31 @@ class PushNotificationService {
   // Открытие настроек уведомлений
   async openNotificationSettings(): Promise<void> {
     try {
-      const { Linking } = await import('react-native');
-      if (Platform.OS === 'ios') {
-        await Linking.openURL('app-settings:');
+      const { Linking } = await import("react-native");
+      if (Platform.OS === "ios") {
+        await Linking.openURL("app-settings:");
       } else {
         await Linking.openSettings();
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Создание канала уведомлений для Android
   private async createNotificationChannel() {
-    if (Platform.OS !== 'android') return;
+    if (Platform.OS !== "android") return;
 
     try {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'FixDrive Notifications',
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "FixDrive Notifications",
         importance: Notifications.AndroidImportance.DEFAULT,
         vibrationPattern: [0],
-        lightColor: '#FF231F7C',
+        lightColor: "#FF231F7C",
         enableVibrate: false,
         enableLights: true,
         sound: undefined,
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 }
 
-export default PushNotificationService; 
+export default PushNotificationService;

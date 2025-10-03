@@ -11,14 +11,38 @@
       { "label": "Nissan", "value": "Nissan" }
     ],
     "models": {
-      "Volkswagen": [ { "label": "Polo", "value": "Polo" }, { "label": "Golf", "value": "Golf" } ],
-      "Hyundai": [ { "label": "Solaris", "value": "Solaris" }, { "label": "Accent", "value": "Accent" } ],
-      "Kia": [ { "label": "Rio", "value": "Rio" }, { "label": "Picanto", "value": "Picanto" } ],
-      "Renault": [ { "label": "Logan", "value": "Logan" }, { "label": "Sandero", "value": "Sandero" } ],
-      "Skoda": [ { "label": "Rapid", "value": "Rapid" }, { "label": "Fabia", "value": "Fabia" } ],
-      "Lada": [ { "label": "Vesta", "value": "Vesta" }, { "label": "Granta", "value": "Granta" } ],
-      "Ford": [ { "label": "Focus", "value": "Focus" }, { "label": "Fiesta", "value": "Fiesta" } ],
-      "Nissan": [ { "label": "Almera", "value": "Almera" }, { "label": "Micra", "value": "Micra" } ]
+      "Volkswagen": [
+        { "label": "Polo", "value": "Polo" },
+        { "label": "Golf", "value": "Golf" }
+      ],
+      "Hyundai": [
+        { "label": "Solaris", "value": "Solaris" },
+        { "label": "Accent", "value": "Accent" }
+      ],
+      "Kia": [
+        { "label": "Rio", "value": "Rio" },
+        { "label": "Picanto", "value": "Picanto" }
+      ],
+      "Renault": [
+        { "label": "Logan", "value": "Logan" },
+        { "label": "Sandero", "value": "Sandero" }
+      ],
+      "Skoda": [
+        { "label": "Rapid", "value": "Rapid" },
+        { "label": "Fabia", "value": "Fabia" }
+      ],
+      "Lada": [
+        { "label": "Vesta", "value": "Vesta" },
+        { "label": "Granta", "value": "Granta" }
+      ],
+      "Ford": [
+        { "label": "Focus", "value": "Focus" },
+        { "label": "Fiesta", "value": "Fiesta" }
+      ],
+      "Nissan": [
+        { "label": "Almera", "value": "Almera" },
+        { "label": "Micra", "value": "Micra" }
+      ]
     }
   },
   "Plus": {
@@ -32,13 +56,34 @@
       { "label": "Ford", "value": "Ford" }
     ],
     "models": {
-      "Volkswagen": [ { "label": "Tiguan", "value": "Tiguan" }, { "label": "Passat", "value": "Passat" } ],
-      "Toyota": [ { "label": "Camry", "value": "Camry" }, { "label": "Corolla", "value": "Corolla" } ],
-      "Kia": [ { "label": "Sportage", "value": "Sportage" }, { "label": "Ceed", "value": "Ceed" } ],
-      "Hyundai": [ { "label": "Tucson", "value": "Tucson" }, { "label": "Elantra", "value": "Elantra" } ],
-      "Mazda": [ { "label": "Mazda6", "value": "Mazda6" }, { "label": "CX-5", "value": "CX-5" } ],
-      "Skoda": [ { "label": "Octavia", "value": "Octavia" }, { "label": "Superb", "value": "Superb" } ],
-      "Ford": [ { "label": "Mondeo", "value": "Mondeo" }, { "label": "Kuga", "value": "Kuga" } ]
+      "Volkswagen": [
+        { "label": "Tiguan", "value": "Tiguan" },
+        { "label": "Passat", "value": "Passat" }
+      ],
+      "Toyota": [
+        { "label": "Camry", "value": "Camry" },
+        { "label": "Corolla", "value": "Corolla" }
+      ],
+      "Kia": [
+        { "label": "Sportage", "value": "Sportage" },
+        { "label": "Ceed", "value": "Ceed" }
+      ],
+      "Hyundai": [
+        { "label": "Tucson", "value": "Tucson" },
+        { "label": "Elantra", "value": "Elantra" }
+      ],
+      "Mazda": [
+        { "label": "Mazda6", "value": "Mazda6" },
+        { "label": "CX-5", "value": "CX-5" }
+      ],
+      "Skoda": [
+        { "label": "Octavia", "value": "Octavia" },
+        { "label": "Superb", "value": "Superb" }
+      ],
+      "Ford": [
+        { "label": "Mondeo", "value": "Mondeo" },
+        { "label": "Kuga", "value": "Kuga" }
+      ]
     }
   },
   "Premium": {
@@ -51,12 +96,30 @@
       { "label": "Land Rover", "value": "Land Rover" }
     ],
     "models": {
-      "Mercedes": [ { "label": "S-class", "value": "S-class" }, { "label": "E-class", "value": "E-class" } ],
-      "BMW": [ { "label": "7 Series", "value": "7 Series" }, { "label": "5 Series", "value": "5 Series" } ],
-      "Audi": [ { "label": "A8", "value": "A8" }, { "label": "A6", "value": "A6" } ],
-      "Lexus": [ { "label": "LS", "value": "LS" }, { "label": "RX", "value": "RX" } ],
-      "Porsche": [ { "label": "Panamera", "value": "Panamera" }, { "label": "Cayenne", "value": "Cayenne" } ],
-      "Land Rover": [ { "label": "Range Rover", "value": "Range Rover" }, { "label": "Discovery", "value": "Discovery" } ]
+      "Mercedes": [
+        { "label": "S-class", "value": "S-class" },
+        { "label": "E-class", "value": "E-class" }
+      ],
+      "BMW": [
+        { "label": "7 Series", "value": "7 Series" },
+        { "label": "5 Series", "value": "5 Series" }
+      ],
+      "Audi": [
+        { "label": "A8", "value": "A8" },
+        { "label": "A6", "value": "A6" }
+      ],
+      "Lexus": [
+        { "label": "LS", "value": "LS" },
+        { "label": "RX", "value": "RX" }
+      ],
+      "Porsche": [
+        { "label": "Panamera", "value": "Panamera" },
+        { "label": "Cayenne", "value": "Cayenne" }
+      ],
+      "Land Rover": [
+        { "label": "Range Rover", "value": "Range Rover" },
+        { "label": "Discovery", "value": "Discovery" }
+      ]
     }
   }
-} 
+}

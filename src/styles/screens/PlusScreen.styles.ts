@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native';
-import { SIZES, SHADOWS } from '../../constants/colors';
+import { StyleSheet } from "react-native";
+import { SIZES, SHADOWS } from "../../constants/colors";
 
 export const PlusScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: SIZES.lg,
     paddingVertical: SIZES.md,
     ...SHADOWS.light.medium,
@@ -19,8 +19,8 @@ export const PlusScreenStyles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   subtitle: {
     fontSize: SIZES.fontSize.md,
@@ -30,8 +30,8 @@ export const PlusScreenStyles = StyleSheet.create({
     width: 40,
   },
   stepIndicator: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     paddingVertical: SIZES.md,
     gap: SIZES.sm,
   },
@@ -39,7 +39,7 @@ export const PlusScreenStyles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: "#E5E7EB",
   },
   content: {
     flex: 1,
@@ -47,7 +47,7 @@ export const PlusScreenStyles = StyleSheet.create({
   },
   stepTitle: {
     fontSize: SIZES.fontSize.xl,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: SIZES.sm,
     marginTop: SIZES.lg,
   },
@@ -60,13 +60,13 @@ export const PlusScreenStyles = StyleSheet.create({
     borderRadius: SIZES.radius.lg,
     marginBottom: SIZES.lg,
     borderWidth: 2,
-    borderColor: '#F59E0B',
-    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+    borderColor: "#F59E0B",
+    backgroundColor: "rgba(245, 158, 11, 0.05)",
     ...SHADOWS.light.medium,
   },
   premiumTitle: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: SIZES.sm,
   },
   premiumSubtitle: {
@@ -77,41 +77,41 @@ export const PlusScreenStyles = StyleSheet.create({
     paddingVertical: SIZES.sm,
     paddingHorizontal: SIZES.md,
     borderRadius: SIZES.radius.sm,
-    backgroundColor: '#F59E0B',
-    alignItems: 'center',
+    backgroundColor: "#F59E0B",
+    alignItems: "center",
   },
   premiumButtonText: {
     fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: "600",
+    color: "#FFFFFF",
   },
   section: {
     marginBottom: SIZES.xl,
   },
   sectionTitle: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: SIZES.md,
   },
   quickActions: {
     gap: SIZES.md,
   },
   quickAction: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: SIZES.md,
     borderRadius: SIZES.radius.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: "#E5E7EB",
     ...SHADOWS.light.small,
   },
   quickActionIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#F3F4F6",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: SIZES.md,
   },
   quickActionContent: {
@@ -119,7 +119,7 @@ export const PlusScreenStyles = StyleSheet.create({
   },
   quickActionTitle: {
     fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: SIZES.xs,
   },
   quickActionSubtitle: {
@@ -129,49 +129,49 @@ export const PlusScreenStyles = StyleSheet.create({
     marginLeft: SIZES.sm,
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: SIZES.md,
   },
   gridItem: {
-    width: '48%',
+    width: "48%",
     padding: SIZES.md,
     borderRadius: SIZES.radius.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    alignItems: 'center',
+    borderColor: "#E5E7EB",
+    alignItems: "center",
     ...SHADOWS.light.small,
   },
   gridItemIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F3F4F6',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#F3F4F6",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: SIZES.sm,
   },
   gridItemTitle: {
     fontSize: SIZES.fontSize.sm,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
     marginBottom: SIZES.xs,
   },
   gridItemSubtitle: {
     fontSize: SIZES.fontSize.xs,
-    textAlign: 'center',
+    textAlign: "center",
   },
   packageCard: {
     padding: SIZES.lg,
     borderRadius: SIZES.radius.lg,
     marginBottom: SIZES.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    position: 'relative',
+    borderColor: "#E5E7EB",
+    position: "relative",
     ...SHADOWS.light.medium,
   },
   popularBadge: {
-    position: 'absolute',
+    position: "absolute",
     top: SIZES.md,
     right: SIZES.md,
     paddingHorizontal: SIZES.sm,
@@ -180,29 +180,29 @@ export const PlusScreenStyles = StyleSheet.create({
   },
   popularText: {
     fontSize: SIZES.fontSize.xs,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   packageHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: SIZES.sm,
   },
   packageName: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   packagePrice: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   packageDescription: {
     fontSize: SIZES.fontSize.md,
     marginBottom: SIZES.md,
   },
   packageDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   packageDetail: {
     fontSize: SIZES.fontSize.sm,
@@ -215,7 +215,7 @@ export const PlusScreenStyles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: SIZES.fontSize.md,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: SIZES.sm,
   },
   input: {
@@ -231,7 +231,7 @@ export const PlusScreenStyles = StyleSheet.create({
     paddingHorizontal: SIZES.md,
     paddingVertical: SIZES.sm,
     fontSize: SIZES.fontSize.md,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     minHeight: 80,
   },
   routeCard: {
@@ -241,8 +241,8 @@ export const PlusScreenStyles = StyleSheet.create({
     ...SHADOWS.light.medium,
   },
   routePoint: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: SIZES.md,
   },
   routeDot: {
@@ -268,7 +268,7 @@ export const PlusScreenStyles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: SIZES.fontSize.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: SIZES.md,
   },
   summaryText: {
@@ -282,23 +282,23 @@ export const PlusScreenStyles = StyleSheet.create({
   nextButton: {
     paddingVertical: SIZES.md,
     borderRadius: SIZES.radius.md,
-    alignItems: 'center',
+    alignItems: "center",
   },
   nextButtonText: {
     fontSize: SIZES.fontSize.md,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   loadingOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   loadingText: {
     fontSize: SIZES.fontSize.md,
   },
-}); 
+});

@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
-import { createDriverInfoBarStyles } from '../../styles/components/driver/DriverInfoBar.styles';
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../context/ThemeContext";
+import { createDriverInfoBarStyles } from "../../styles/components/driver/DriverInfoBar.styles";
 
 export type DriverInfoBarProps = {
-  role?: 'client' | 'driver';
+  role?: "client" | "driver";
   schedule: string;
   price: string;
   distance: string;
@@ -13,11 +13,22 @@ export type DriverInfoBarProps = {
   onPress?: () => void;
 };
 
-const DriverInfoBar: React.FC<DriverInfoBarProps> = ({ role = 'client', schedule, price, distance, timeOrChildType, onPress }) => {
+const DriverInfoBar: React.FC<DriverInfoBarProps> = ({
+  role = "client",
+  schedule,
+  price,
+  distance,
+  timeOrChildType,
+  onPress,
+}) => {
   const { isDark } = useTheme();
   const styles = createDriverInfoBarStyles(isDark);
   return (
-    <TouchableOpacity style={styles.driverInfoBar} onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
+    <TouchableOpacity
+      style={styles.driverInfoBar}
+      onPress={onPress}
+      activeOpacity={onPress ? 0.7 : 1}
+    >
       <View style={styles.scheduleInfo}>
         <Ionicons name="calendar-outline" size={16} color="#9CA3AF" />
         <Text style={styles.scheduleText}>{schedule}</Text>

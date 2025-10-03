@@ -1,14 +1,22 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import APIClient from './APIClient';
-import { useUserStorageKey, STORAGE_KEYS } from '../utils/storageKeys';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import APIClient from "./APIClient";
+import { useUserStorageKey, STORAGE_KEYS } from "../utils/storageKeys";
 
 export interface PaymentTransaction {
   id: string;
-  type: 'trip' | 'topup' | 'refund' | 'fee' | 'package_purchase' | 'subscription_renewal' | 'withdrawal' | 'earnings';
+  type:
+    | "trip"
+    | "topup"
+    | "refund"
+    | "fee"
+    | "package_purchase"
+    | "subscription_renewal"
+    | "withdrawal"
+    | "earnings";
   amount: number;
   description: string;
   date: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: "completed" | "pending" | "failed";
   translationKey?: string;
   translationParams?: Record<string, string>;
   packageType?: string;
@@ -17,9 +25,18 @@ export interface PaymentTransaction {
 }
 
 export interface PaymentFilter {
-  type: 'all' | 'trip' | 'topup' | 'refund' | 'fee' | 'package_purchase' | 'subscription_renewal' | 'withdrawal' | 'earnings';
-  status: 'all' | 'completed' | 'pending' | 'failed';
-  dateRange: 'all' | 'today' | 'week' | 'month' | 'year';
+  type:
+    | "all"
+    | "trip"
+    | "topup"
+    | "refund"
+    | "fee"
+    | "package_purchase"
+    | "subscription_renewal"
+    | "withdrawal"
+    | "earnings";
+  status: "all" | "completed" | "pending" | "failed";
+  dateRange: "all" | "today" | "week" | "month" | "year";
 }
 
 export interface PaymentStats {
@@ -45,11 +62,11 @@ export const PaymentHistoryService = {
    */
   async getPaymentHistory(
     userId: string,
-    userRole: 'client' | 'driver',
-    filter: PaymentFilter = { type: 'all', status: 'all', dateRange: 'all' },
+    userRole: "client" | "driver",
+    filter: PaymentFilter = { type: "all", status: "all", dateRange: "all" },
     page: number = 1,
     limit: number = 20,
-    cursor?: string
+    cursor?: string,
   ): Promise<PaymentHistoryResponse> {
     if (__DEV__) {
       return this.getPaymentHistoryDev(userId, userRole, filter, page, limit);
@@ -58,15 +75,15 @@ export const PaymentHistoryService = {
     const params = new URLSearchParams({
       page: page.toString(),
       limit: limit.toString(),
-      ...(filter.type !== 'all' && { type: filter.type }),
-      ...(filter.status !== 'all' && { status: filter.status }),
-      ...(filter.dateRange !== 'all' && { dateRange: filter.dateRange }),
+      ...(filter.type !== "all" && { type: filter.type }),
+      ...(filter.status !== "all" && { status: filter.status }),
+      ...(filter.dateRange !== "all" && { dateRange: filter.dateRange }),
       ...(cursor && { cursor }),
       role: userRole,
     });
 
     const response = await APIClient.get<PaymentHistoryResponse>(
-      `/payment-history/${userId}?${params.toString()}`
+      `/payment-history/${userId}?${params.toString()}`,
     );
 
     return response.data;
@@ -77,15 +94,16 @@ export const PaymentHistoryService = {
    */
   async getPaymentHistoryDev(
     userId: string,
-    userRole: 'client' | 'driver',
+    userRole: "client" | "driver",
     filter: PaymentFilter,
     page: number,
-    limit: number
+    limit: number,
   ): Promise<PaymentHistoryResponse> {
     try {
-      const storageKey = userRole === 'client' 
-        ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
-        : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
+      const storageKey =
+        userRole === "client"
+          ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
+          : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
 
       const storedData = await AsyncStorage.getItem(storageKey);
       let allTransactions: PaymentTransaction[] = [];
@@ -99,12 +117,17 @@ export const PaymentHistoryService = {
       let filteredTransactions = this.applyFilters(allTransactions, filter);
 
       // Сортируем по дате (новые сначала)
-      filteredTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      filteredTransactions.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
 
       // Пагинация
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
-      const paginatedTransactions = filteredTransactions.slice(startIndex, endIndex);
+      const paginatedTransactions = filteredTransactions.slice(
+        startIndex,
+        endIndex,
+      );
 
       // Статистика
       const stats = this.calculateStats(allTransactions);
@@ -113,7 +136,10 @@ export const PaymentHistoryService = {
         transactions: paginatedTransactions,
         stats,
         hasMore: endIndex < filteredTransactions.length,
-        nextCursor: endIndex < filteredTransactions.length ? endIndex.toString() : undefined,
+        nextCursor:
+          endIndex < filteredTransactions.length
+            ? endIndex.toString()
+            : undefined,
       };
     } catch (error) {
       return {
@@ -127,13 +153,16 @@ export const PaymentHistoryService = {
   /**
    * Получить статистику по платежам
    */
-  async getPaymentStats(userId: string, userRole: 'client' | 'driver'): Promise<PaymentStats> {
+  async getPaymentStats(
+    userId: string,
+    userRole: "client" | "driver",
+  ): Promise<PaymentStats> {
     if (__DEV__) {
       return this.getPaymentStatsDev(userId, userRole);
     }
 
     const response = await APIClient.get<PaymentStats>(
-      `/payment-history/${userId}/stats?role=${userRole}`
+      `/payment-history/${userId}/stats?role=${userRole}`,
     );
 
     return response.data;
@@ -142,14 +171,20 @@ export const PaymentHistoryService = {
   /**
    * DEV: Получить статистику из AsyncStorage
    */
-  async getPaymentStatsDev(userId: string, userRole: 'client' | 'driver'): Promise<PaymentStats> {
+  async getPaymentStatsDev(
+    userId: string,
+    userRole: "client" | "driver",
+  ): Promise<PaymentStats> {
     try {
-      const storageKey = userRole === 'client' 
-        ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
-        : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
+      const storageKey =
+        userRole === "client"
+          ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
+          : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
 
       const storedData = await AsyncStorage.getItem(storageKey);
-      const transactions: PaymentTransaction[] = storedData ? JSON.parse(storedData) : [];
+      const transactions: PaymentTransaction[] = storedData
+        ? JSON.parse(storedData)
+        : [];
 
       return this.calculateStats(transactions);
     } catch (error) {
@@ -162,43 +197,46 @@ export const PaymentHistoryService = {
    */
   async updatePaymentHistoryCache(
     userId: string,
-    userRole: 'client' | 'driver',
-    transactions: PaymentTransaction[]
+    userRole: "client" | "driver",
+    transactions: PaymentTransaction[],
   ): Promise<void> {
     if (!__DEV__) return;
 
     try {
-      const storageKey = userRole === 'client' 
-        ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
-        : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
+      const storageKey =
+        userRole === "client"
+          ? `${STORAGE_KEYS.CLIENT_TRANSACTIONS}_${userId}`
+          : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
 
       await AsyncStorage.setItem(storageKey, JSON.stringify(transactions));
-    } catch (error) {
-    }
+    } catch (error) {}
   },
 
   /**
    * Применить фильтры к транзакциям
    */
-  applyFilters(transactions: PaymentTransaction[], filter: PaymentFilter): PaymentTransaction[] {
+  applyFilters(
+    transactions: PaymentTransaction[],
+    filter: PaymentFilter,
+  ): PaymentTransaction[] {
     let filtered = [...transactions];
 
     // Фильтр по типу
-    if (filter.type !== 'all') {
-      filtered = filtered.filter(tx => tx.type === filter.type);
+    if (filter.type !== "all") {
+      filtered = filtered.filter((tx) => tx.type === filter.type);
     }
 
     // Фильтр по статусу
-    if (filter.status !== 'all') {
-      filtered = filtered.filter(tx => tx.status === filter.status);
+    if (filter.status !== "all") {
+      filtered = filtered.filter((tx) => tx.status === filter.status);
     }
 
     // Фильтр по дате
-    if (filter.dateRange !== 'all') {
+    if (filter.dateRange !== "all") {
       const now = new Date();
       const startDate = this.getDateRangeStart(filter.dateRange, now);
-      
-      filtered = filtered.filter(tx => {
+
+      filtered = filtered.filter((tx) => {
         const txDate = new Date(tx.date);
         return txDate >= startDate && txDate <= now;
       });
@@ -213,7 +251,7 @@ export const PaymentHistoryService = {
   calculateStats(transactions: PaymentTransaction[]): PaymentStats {
     const stats = this.getEmptyStats();
 
-    transactions.forEach(tx => {
+    transactions.forEach((tx) => {
       stats.totalTransactions++;
       stats.totalAmount += Math.abs(tx.amount);
 
@@ -224,13 +262,13 @@ export const PaymentHistoryService = {
       }
 
       switch (tx.status) {
-        case 'completed':
+        case "completed":
           stats.completedCount++;
           break;
-        case 'pending':
+        case "pending":
           stats.pendingCount++;
           break;
-        case 'failed':
+        case "failed":
           stats.failedCount++;
           break;
       }
@@ -244,18 +282,18 @@ export const PaymentHistoryService = {
    */
   getDateRangeStart(dateRange: string, now: Date): Date {
     const start = new Date(now);
-    
+
     switch (dateRange) {
-      case 'today':
+      case "today":
         start.setHours(0, 0, 0, 0);
         break;
-      case 'week':
+      case "week":
         start.setDate(now.getDate() - 7);
         break;
-      case 'month':
+      case "month":
         start.setMonth(now.getMonth() - 1);
         break;
-      case 'year':
+      case "year":
         start.setFullYear(now.getFullYear() - 1);
         break;
       default:

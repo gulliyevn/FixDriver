@@ -1,18 +1,20 @@
-import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import PushNotificationService, { 
-  NotificationSettings, 
-  NotificationPermissions 
-} from '../services/PushNotificationService';
+import { useState, useEffect, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PushNotificationService, {
+  NotificationSettings,
+  NotificationPermissions,
+} from "../services/PushNotificationService";
 
-const NOTIFICATION_SETTINGS_KEY = '@notification_settings';
+const NOTIFICATION_SETTINGS_KEY = "@notification_settings";
 const DEFAULT_SETTINGS: NotificationSettings = {
   pushEnabled: true,
 };
 
 export const useNotifications = () => {
-  const [settings, setSettings] = useState<NotificationSettings>(DEFAULT_SETTINGS);
-  const [permissions, setPermissions] = useState<NotificationPermissions | null>(null);
+  const [settings, setSettings] =
+    useState<NotificationSettings>(DEFAULT_SETTINGS);
+  const [permissions, setPermissions] =
+    useState<NotificationPermissions | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pushToken, setPushToken] = useState<string | null>(null);
 
@@ -21,23 +23,29 @@ export const useNotifications = () => {
   // Загрузка настроек из AsyncStorage
   const loadSettings = useCallback(async () => {
     try {
-      const storedSettings = await AsyncStorage.getItem(NOTIFICATION_SETTINGS_KEY);
+      const storedSettings = await AsyncStorage.getItem(
+        NOTIFICATION_SETTINGS_KEY,
+      );
       if (storedSettings) {
         const parsedSettings = JSON.parse(storedSettings);
         setSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }, []);
 
   // Сохранение настроек в AsyncStorage
-  const saveSettings = useCallback(async (newSettings: NotificationSettings) => {
-    try {
-      await AsyncStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
-      setSettings(newSettings);
-    } catch (error) {
-    }
-  }, []);
+  const saveSettings = useCallback(
+    async (newSettings: NotificationSettings) => {
+      try {
+        await AsyncStorage.setItem(
+          NOTIFICATION_SETTINGS_KEY,
+          JSON.stringify(newSettings),
+        );
+        setSettings(newSettings);
+      } catch (error) {}
+    },
+    [],
+  );
 
   // Инициализация уведомлений
   const initializeNotifications = useCallback(async () => {
@@ -49,8 +57,9 @@ export const useNotifications = () => {
       // Настройки обновляются локально
 
       // Проверяем разрешения
-      const currentPermissions = await notificationService.getCurrentPermissions();
-  
+      const currentPermissions =
+        await notificationService.getCurrentPermissions();
+
       setPermissions(currentPermissions);
 
       // Если разрешения есть, получаем токен
@@ -66,7 +75,7 @@ export const useNotifications = () => {
         },
         () => {
           // Здесь можно добавить навигацию при нажатии на уведомление
-        }
+        },
       );
     } catch (error) {
     } finally {
@@ -83,7 +92,7 @@ export const useNotifications = () => {
       if (result.granted) {
         const token = await notificationService.getExpoPushToken();
         setPushToken(token);
-        
+
         // Обновляем настройки
         const newSettings = { ...settings, pushEnabled: true };
         await saveSettings(newSettings);
@@ -96,10 +105,13 @@ export const useNotifications = () => {
   }, [settings, saveSettings, notificationService]);
 
   // Обновление настроек
-  const updateSettings = useCallback(async (newSettings: Partial<NotificationSettings>) => {
-    const updatedSettings = { ...settings, ...newSettings };
-    await saveSettings(updatedSettings);
-  }, [settings, saveSettings]);
+  const updateSettings = useCallback(
+    async (newSettings: Partial<NotificationSettings>) => {
+      const updatedSettings = { ...settings, ...newSettings };
+      await saveSettings(updatedSettings);
+    },
+    [settings, saveSettings],
+  );
 
   // Включение/выключение push-уведомлений
   const togglePushNotifications = useCallback(async () => {
@@ -114,8 +126,6 @@ export const useNotifications = () => {
       await updateSettings({ pushEnabled: false });
     }
   }, [settings.pushEnabled, requestPermissions, updateSettings]);
-
-
 
   // Открытие настроек уведомлений
   const openNotificationSettings = useCallback(async () => {
@@ -137,11 +147,11 @@ export const useNotifications = () => {
     permissions,
     isLoading,
     pushToken,
-    
+
     // Методы
     requestPermissions,
     updateSettings,
     togglePushNotifications,
     openNotificationSettings,
   };
-}; 
+};

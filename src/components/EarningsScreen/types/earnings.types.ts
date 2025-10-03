@@ -1,4 +1,4 @@
-export type PeriodType = 'today' | 'week' | 'month' | 'year';
+export type PeriodType = "today" | "week" | "month" | "year";
 
 export interface EarningsData {
   total: string;

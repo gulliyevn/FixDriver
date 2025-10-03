@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { lightColors, darkColors } from '../../../constants/colors';
+import { StyleSheet } from "react-native";
+import { lightColors, darkColors } from "../../../constants/colors";
 
 export const DriverCardStyles = StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ export const DriverCardStyles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 8,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -18,12 +18,12 @@ export const DriverCardStyles = StyleSheet.create({
     elevation: 3,
   },
   driverContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   driverCompactHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   avatar: {
@@ -31,14 +31,14 @@ export const DriverCardStyles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     backgroundColor: lightColors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   avatarText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   nameRatingRow: {
     flex: 1,
@@ -46,13 +46,13 @@ export const DriverCardStyles = StyleSheet.create({
   },
   driverName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: lightColors.text,
     marginBottom: 4,
   },
   rating: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   ratingText: {
     fontSize: 14,
@@ -60,8 +60,8 @@ export const DriverCardStyles = StyleSheet.create({
     marginLeft: 4,
   },
   carInfoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 4,
   },
   carInfoText: {
@@ -69,8 +69,8 @@ export const DriverCardStyles = StyleSheet.create({
     color: lightColors.textSecondary,
   },
   statusInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 4,
   },
   statusDot: {
@@ -84,14 +84,14 @@ export const DriverCardStyles = StyleSheet.create({
     color: lightColors.textSecondary,
   },
   memberTagRowSpaced: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: 8,
   },
   memberTagCompact: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -119,18 +119,18 @@ export const DriverCardStyles = StyleSheet.create({
   },
   routeTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: lightColors.text,
     marginBottom: 12,
   },
   routePointWithTime: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   routeLeftSide: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   routePinContainer: {
@@ -138,15 +138,15 @@ export const DriverCardStyles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     backgroundColor: lightColors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   routePin: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
   routeText: {
     fontSize: 14,
@@ -159,12 +159,12 @@ export const DriverCardStyles = StyleSheet.create({
     marginLeft: 8,
   },
   tripDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 16,
   },
   tripDetailItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   tripDetailText: {
     fontSize: 12,
@@ -172,7 +172,7 @@ export const DriverCardStyles = StyleSheet.create({
     marginTop: 4,
   },
   expandedActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   callButtonExpanded: {
@@ -181,12 +181,12 @@ export const DriverCardStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   callButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   chatButtonExpanded: {
     flex: 1,
@@ -194,15 +194,15 @@ export const DriverCardStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   chatButtonDisabled: {
     backgroundColor: lightColors.border,
   },
   chatButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   chatButtonTextDisabled: {
     color: lightColors.textSecondary,
@@ -247,4 +247,4 @@ export const DriverCardDarkStyles = StyleSheet.create({
   tripDetailText: {
     color: darkColors.textSecondary,
   },
-}); 
+});

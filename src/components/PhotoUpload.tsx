@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,18 +7,21 @@ import {
   ActivityIndicator,
   Alert,
   Linking,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useLanguage } from '../context/LanguageContext';
-import { useTheme } from '../context/ThemeContext';
-import { PhotoUploadStyles, getPhotoUploadColors } from '../styles/components/PhotoUpload.styles';
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
+import {
+  PhotoUploadStyles,
+  getPhotoUploadColors,
+} from "../styles/components/PhotoUpload.styles";
 
 interface PhotoUploadProps {
   photo: string | null;
   onPhotoChange: (photo: string | null) => void;
   onError: (error: string | undefined) => void;
-  type: 'license' | 'passport' | 'vehicle';
+  type: "license" | "passport" | "vehicle";
   uploading: boolean;
   onUploadingChange: (uploading: boolean) => void;
 }
@@ -37,30 +40,35 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
   const getIconName = () => {
     if (uploading) return null;
-    if (type === 'vehicle') return 'car-outline';
-    return type === 'license' ? 'camera-outline' : 'document-outline';
+    if (type === "vehicle") return "car-outline";
+    return type === "license" ? "camera-outline" : "document-outline";
   };
 
   const getButtonText = () => {
-    if (uploading) return t('register.uploading');
-    return photo ? t('register.changePhoto') : t('register.uploadPhoto');
+    if (uploading) return t("register.uploading");
+    return photo ? t("register.changePhoto") : t("register.uploadPhoto");
   };
 
   const getLabelText = () => {
-    if (type === 'vehicle') return t('register.passportPhoto');
-    return type === 'license' ? t('register.licensePhoto') : t('register.passportPhoto');
+    if (type === "vehicle") return t("register.passportPhoto");
+    return type === "license"
+      ? t("register.licensePhoto")
+      : t("register.passportPhoto");
   };
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
+    if (status !== "granted") {
       Alert.alert(
-        t('register.galleryAccess'),
-        t('register.galleryAccessRequired'),
+        t("register.galleryAccess"),
+        t("register.galleryAccessRequired"),
         [
-          { text: t('register.cancel'), style: 'cancel' },
-          { text: t('register.settings'), onPress: () => Linking.openSettings() }
-        ]
+          { text: t("register.cancel"), style: "cancel" },
+          {
+            text: t("register.settings"),
+            onPress: () => Linking.openSettings(),
+          },
+        ],
       );
       return false;
     }
@@ -85,31 +93,31 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         onError(undefined);
       }
     } catch (error) {
-      onError(t('register.photoPickError'));
+      onError(t("register.photoPickError"));
     } finally {
       onUploadingChange(false);
     }
   };
 
   const removePhoto = () => {
-    Alert.alert(
-      t('register.deletePhoto'),
-      t('register.deletePhotoConfirm'),
-      [
-        { text: t('register.cancel'), style: 'cancel' },
-        { text: t('register.delete'), onPress: () => onPhotoChange(null) }
-      ]
-    );
+    Alert.alert(t("register.deletePhoto"), t("register.deletePhotoConfirm"), [
+      { text: t("register.cancel"), style: "cancel" },
+      { text: t("register.delete"), onPress: () => onPhotoChange(null) },
+    ]);
   };
 
   return (
     <View style={PhotoUploadStyles.inputContainer}>
       <Text style={[PhotoUploadStyles.label, dynamicStyles.label]}>
-        {getLabelText()} 
+        {getLabelText()}
         <Text style={PhotoUploadStyles.requiredStar}>*</Text>
       </Text>
-      <TouchableOpacity 
-        style={[PhotoUploadStyles.uploadButton, dynamicStyles.uploadButton, uploading && PhotoUploadStyles.uploadButtonDisabled]} 
+      <TouchableOpacity
+        style={[
+          PhotoUploadStyles.uploadButton,
+          dynamicStyles.uploadButton,
+          uploading && PhotoUploadStyles.uploadButtonDisabled,
+        ]}
         onPress={pickImage}
         disabled={uploading}
       >
@@ -118,22 +126,42 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         ) : (
           <Ionicons name={getIconName()!} size={24} color="#23408E" />
         )}
-        <Text style={[PhotoUploadStyles.uploadButtonText, dynamicStyles.uploadButtonText]}>{getButtonText()}</Text>
+        <Text
+          style={[
+            PhotoUploadStyles.uploadButtonText,
+            dynamicStyles.uploadButtonText,
+          ]}
+        >
+          {getButtonText()}
+        </Text>
       </TouchableOpacity>
       {photo && (
         <View style={PhotoUploadStyles.photoPreview}>
-          <Image source={{ uri: photo }} style={PhotoUploadStyles.photoPreviewImage} />
-          <TouchableOpacity 
-            style={[PhotoUploadStyles.removePhotoButton, dynamicStyles.removePhotoButton]} 
+          <Image
+            source={{ uri: photo }}
+            style={PhotoUploadStyles.photoPreviewImage}
+          />
+          <TouchableOpacity
+            style={[
+              PhotoUploadStyles.removePhotoButton,
+              dynamicStyles.removePhotoButton,
+            ]}
             onPress={removePhoto}
           >
             <Ionicons name="close-circle" size={24} color="#FF0000" />
           </TouchableOpacity>
-          <Text style={[PhotoUploadStyles.photoPreviewText, dynamicStyles.photoPreviewText]}>{t('register.photoUploaded')}</Text>
+          <Text
+            style={[
+              PhotoUploadStyles.photoPreviewText,
+              dynamicStyles.photoPreviewText,
+            ]}
+          >
+            {t("register.photoUploaded")}
+          </Text>
         </View>
       )}
     </View>
   );
 };
 
-export default PhotoUpload; 
+export default PhotoUpload;
