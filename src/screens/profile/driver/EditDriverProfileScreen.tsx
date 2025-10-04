@@ -297,7 +297,9 @@ const EditDriverProfileScreen: React.FC<
     if (openSwipeRef.current) {
       try {
         openSwipeRef.current.close();
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to close swipe ref:', error);
+      }
       openSwipeRef.current = null;
     }
   };
@@ -484,7 +486,9 @@ const EditDriverProfileScreen: React.FC<
                 ) {
                   try {
                     openSwipeRef.current.close();
-                  } catch (error) {}
+                  } catch (error) {
+                    console.warn('Failed to close swipe ref:', error);
+                  }
                 }
                 openSwipeRef.current = swipeRefs.current[vehicle.id] ?? null;
               }}

@@ -78,7 +78,9 @@ export class TranslationValidator {
       try {
         const translations = require(`../i18n/${namespace}/${language}.json`);
         this.extractKeys(translations, namespace, [], keys);
-      } catch (error) {}
+      } catch (error) {
+        console.warn(`Failed to load translations for ${namespace}/${language}:`, error);
+      }
     }
 
     return keys;

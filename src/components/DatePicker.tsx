@@ -34,7 +34,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
   const dynamicStyles = getDatePickerColors(isDark);
 
-  const handleDateChange = (event: any, selectedDate?: Date) => {
+  const handleDateChange = (event: { type: string }, selectedDate?: Date) => {
     // Для Android закрываем пикер только при нажатии "OK"
     if (Platform.OS === "android" && event.type === "set") {
       setShowPicker(false);

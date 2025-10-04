@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Modal, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLanguage } from "../context/LanguageContext";
 
 interface AgreementCheckboxProps {
   agree: boolean;
   onAgreeChange: (agree: boolean) => void;
-  styles: any;
+  styles: StyleSheet.NamedStyles<Record<string, unknown>>;
 }
 
 const AgreementCheckbox: React.FC<AgreementCheckboxProps> = ({

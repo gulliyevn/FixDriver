@@ -341,7 +341,9 @@ class AddressService {
         ...parsed.filter((item) => item.id !== address.id),
       ].slice(0, 10);
       await AsyncStorage.setItem(storageKey, JSON.stringify(updated));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save address to history:', error);
+    }
   }
 }
 

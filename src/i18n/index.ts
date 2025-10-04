@@ -110,18 +110,14 @@ const notifyLanguageChange = (language: SupportedLanguage) => {
 export const setLanguage = async (
   language: SupportedLanguage,
 ): Promise<void> => {
-  try {
-    if (!SUPPORTED_LANGUAGES[language]) {
-      console.error(`Unsupported language: ${language}`);
-      return;
-    }
-
-    i18n.locale = language;
-    await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-    notifyLanguageChange(language);
-  } catch (error) {
-    throw error;
+  if (!SUPPORTED_LANGUAGES[language]) {
+    console.error(`Unsupported language: ${language}`);
+    return;
   }
+
+  i18n.locale = language;
+  await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  notifyLanguageChange(language);
 };
 
 // Get system language and map to supported language

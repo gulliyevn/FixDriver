@@ -52,7 +52,7 @@ class PushNotificationService {
       return {
         granted: false,
         canAskAgain: false,
-        status: 'denied' as any,
+        status: "denied" as any,
       };
     }
 
@@ -157,7 +157,9 @@ class PushNotificationService {
       } else {
         await Linking.openSettings();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to open settings:', error);
+    }
   }
 
   // Создание канала уведомлений для Android
@@ -174,7 +176,9 @@ class PushNotificationService {
         enableLights: true,
         sound: undefined,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to create notification channel:', error);
+    }
   }
 }
 

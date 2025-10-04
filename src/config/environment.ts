@@ -83,6 +83,7 @@ export const logError = (error: Error | string, context?: string) => {
     const errorMessage = error instanceof Error ? error.message : error;
 
     if (error instanceof Error && error.stack) {
+      console.warn('Error stack:', error.stack);
     }
   }
 };

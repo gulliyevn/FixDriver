@@ -66,7 +66,9 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     try {
       const historyData = await placesService.getHistory(historyKey);
       setHistory(historyData);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load address history:', error);
+    }
   }, [historyKey]);
 
   useEffect(() => {
@@ -143,6 +145,9 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       setValidationError(null);
       onValidationChange(true);
     } catch (error) {
+      console.warn('Failed to validate address:', error);
+      setValidationError('Address validation failed');
+      onValidationChange(false);
     } finally {
       setIsLoading(false);
     }

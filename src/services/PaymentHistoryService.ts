@@ -209,7 +209,9 @@ export const PaymentHistoryService = {
           : `${STORAGE_KEYS.DRIVER_TRANSACTIONS}_${userId}`;
 
       await AsyncStorage.setItem(storageKey, JSON.stringify(transactions));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save transactions to storage:', error);
+    }
   },
 
   /**

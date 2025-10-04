@@ -79,7 +79,9 @@ export const useSessionData = (
             state.setCoordinates((prev) => ({ ...prev, stops: stopCoords }));
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to process session data:', error);
+      }
     };
 
     loadSessionData();

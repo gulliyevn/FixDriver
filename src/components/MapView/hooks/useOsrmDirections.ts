@@ -71,9 +71,10 @@ export const useOsrmDirections = (points: RoutePoint[] | undefined) => {
         const url = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=polyline${steps ? "&steps=true" : ""}`;
         const resp = await fetch(url);
         const data = await resp.json();
-        if (data.code !== "Ok" || !data.routes?.length)
+        if (data.code !== "Ok" || !data.routes?.length) {
           console.error("OSRM failed");
-        return;
+          return;
+        }
         const best = data.routes[0];
         const decoded = osrmPolylineDecode(best.geometry);
         setRoute({

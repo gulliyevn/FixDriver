@@ -73,6 +73,7 @@ const ChatListScreen: React.FC = () => {
       const list = await ChatService.getChats("current_user_id");
       setChats(list);
     } catch (error) {
+      console.warn('Failed to load chats:', error);
     } finally {
       setLoading(false);
     }
@@ -133,7 +134,9 @@ const ChatListScreen: React.FC = () => {
     if (openSwipeRef.current) {
       try {
         openSwipeRef.current.close();
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to close swipe ref:', error);
+      }
       openSwipeRef.current = null;
     }
   }, []);
@@ -232,7 +235,9 @@ const ChatListScreen: React.FC = () => {
           ) {
             try {
               openSwipeRef.current.close();
-            } catch (error) {}
+            } catch (error) {
+              console.warn('Failed to close swipe ref:', error);
+            }
           }
           openSwipeRef.current = swipeRefs.current[item.id] ?? null;
         }}

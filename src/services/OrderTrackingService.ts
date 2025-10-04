@@ -2,6 +2,17 @@
 import WebSocketService, { WebSocketMessage } from "./WebSocketService";
 import APIClient from "./APIClient";
 
+// Типы для NodeJS
+declare global {
+  namespace NodeJS {
+    interface Timeout {
+      ref(): NodeJS.Timeout;
+      unref(): NodeJS.Timeout;
+      refresh(): NodeJS.Timeout;
+    }
+  }
+}
+
 export interface OrderStatus {
   id: string;
   status: "pending" | "accepted" | "in_progress" | "completed" | "cancelled";
@@ -59,7 +70,7 @@ class OrderTrackingService {
   private trackingOrders: Map<string, OrderTrackingData> = new Map();
   private eventHandlers: Map<string, TrackingEventHandlers> = new Map();
   private isInitialized = false;
-  private trackingInterval: NodeJS.Timeout | null = null;
+  private trackingInterval: ReturnType<typeof setInterval> | null = null;
 
   private constructor() {
     this.ws = WebSocketService;
@@ -104,22 +115,22 @@ class OrderTrackingService {
   private handleWebSocketMessage(message: WebSocketMessage): void {
     switch (message.type) {
       case "order_location_update":
-        this.handleLocationUpdate(message.data);
+        this.handleLocationUpdate(message.data as unknown as OrderLocation);
         break;
       case "order_status_change":
-        this.handleStatusChange(message.data);
+        this.handleStatusChange(message.data as unknown as OrderStatus);
         break;
       case "driver_location_update":
-        this.handleDriverLocationUpdate(message.data);
+        this.handleDriverLocationUpdate(message.data as unknown as OrderLocation);
         break;
       case "route_update":
-        this.handleRouteUpdate(message.data);
+        this.handleRouteUpdate(message.data as unknown as OrderLocation);
         break;
       case "tracking_started":
-        this.handleTrackingStarted(message.data);
+        this.handleTrackingStarted(message.data as { orderId: string; });
         break;
       case "tracking_stopped":
-        this.handleTrackingStopped(message.data);
+        this.handleTrackingStopped(message.data as { orderId: string; });
         break;
     }
   }
@@ -142,7 +153,8 @@ class OrderTrackingService {
         throw new Error("Не удалось получить данные для отслеживания заказа");
       }
 
-      const trackingData: OrderTrackingData = response.data as OrderTrackingData;
+      const trackingData: OrderTrackingData =
+        response.data as OrderTrackingData;
       this.trackingOrders.set(orderId, trackingData);
 
       // Отправляем запрос на начало отслеживания через WebSocket
@@ -288,7 +300,9 @@ class OrderTrackingService {
       if (response.success && response.data) {
         const trackingData = this.trackingOrders.get(orderId);
         if (trackingData) {
-          trackingData.estimatedArrival = (response.data as any).estimatedArrival;
+          trackingData.estimatedArrival = (
+            response.data as any
+          ).estimatedArrival;
           this.trackingOrders.set(orderId, trackingData);
         }
       }

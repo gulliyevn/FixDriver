@@ -109,7 +109,9 @@ export const ShareRouteService = {
           if (!chosen) return;
           try {
             await Linking.openURL(chosen.url);
-          } catch (error) {}
+          } catch (error) {
+            console.warn('Failed to open URL:', error);
+          }
         },
       );
       return;

@@ -2,10 +2,18 @@ import JWTService from "./JWTService";
 import { ENV_CONFIG } from "../config/environment";
 
 // Типы для fetch API
-declare global {
-  interface RequestInit {
-    signal?: AbortSignal;
-  }
+interface RequestInitType {
+  method?: string;
+  headers?: Record<string, string> | string[][];
+  body?: string | FormData | Blob | ArrayBuffer | null;
+  mode?: string;
+  credentials?: string;
+  cache?: string;
+  redirect?: string;
+  referrer?: string;
+  referrerPolicy?: string;
+  integrity?: string;
+  signal?: AbortSignal | null;
 }
 
 // Конфигурация API
@@ -159,23 +167,34 @@ class APIClient {
    */
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {},
+    options: RequestInitType = {},
   ): Promise<APIResponse<T>> {
     try {
       const url = `${API_CONFIG.BASE_URL}${endpoint}`;
       const headers = await this.getHeaders();
 
       const response = await fetch(url, {
-        ...options,
+        method: options.method,
+        body: options.body,
+        mode: options.mode as "cors" | "no-cors" | "same-origin",
+        credentials: options.credentials as "omit" | "same-origin" | "include",
+        cache: options.cache as "default" | "no-store" | "reload" | "no-cache" | "force-cache" | "only-if-cached",
+        redirect: options.redirect as "follow" | "error" | "manual",
+        referrer: options.referrer,
+        referrerPolicy: options.referrerPolicy as "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url",
+        integrity: options.integrity,
+        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
         headers: {
           ...headers,
-          ...options.headers,
+          ...(options.headers as Record<string, string>),
         },
-        signal: AbortSignal.timeout(API_CONFIG.TIMEOUT),
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch((error) => {
+          console.warn('Failed to parse error response:', error);
+          return {};
+        });
         return {
           success: false,
           error: errorData.message || "Request failed",

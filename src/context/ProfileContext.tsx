@@ -113,6 +113,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
         }
       }
     } catch (error) {
+      console.warn('Failed to load profile:', error);
     } finally {
       setLoading(false);
     }

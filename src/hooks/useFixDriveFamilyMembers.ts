@@ -88,6 +88,7 @@ export const useFixDriveFamilyMembers = () => {
             members.length > 0 ? [accountOwner, ...members] : [accountOwner];
           setFamilyMembers(allMembers);
         } catch (error) {
+          console.warn('Failed to load family members:', error);
         } finally {
           setLoading(false);
         }
@@ -139,7 +140,9 @@ export const useFixDriveFamilyMembers = () => {
 
         setFamilyMembers(allMembers);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load family members:', error);
+    }
   };
 
   return {

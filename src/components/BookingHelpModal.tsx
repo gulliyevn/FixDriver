@@ -124,7 +124,7 @@ const BookingHelpModal: React.FC<BookingHelpModalProps> = ({
             >
               <View style={[slideStyles.slideIcon, dynamicStyles.slideIcon]}>
                 <Ionicons
-                  name={slide.icon as any}
+                  name={slide.icon as keyof typeof Ionicons.glyphMap}
                   size={24}
                   color={isDark ? "#fff" : "#003366"}
                 />

@@ -91,7 +91,9 @@ export const useDriverBalance = (): DriverBalanceContextType => {
     try {
       await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const saveTransactions = async (newTransactions: DriverTransaction[]) => {
@@ -101,14 +103,18 @@ export const useDriverBalance = (): DriverBalanceContextType => {
         JSON.stringify(newTransactions),
       );
       setTransactions(newTransactions);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const saveEarnings = async (newEarnings: number) => {
     try {
       await AsyncStorage.setItem(earningsKey, newEarnings.toString());
       setEarnings(newEarnings);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const topUpBalance = async (amount: number) => {
@@ -206,7 +212,9 @@ export const useDriverBalance = (): DriverBalanceContextType => {
       // Обнуляем заработки тоже
       setEarnings(0);
       await AsyncStorage.setItem(earningsKey, "0");
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   return {

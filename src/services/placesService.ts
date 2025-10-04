@@ -169,7 +169,9 @@ class PlacesService {
       }
 
       await AsyncStorage.setItem(storageKey, JSON.stringify(history));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save places history:', error);
+    }
   }
 
   // Получение истории адресов
@@ -194,7 +196,9 @@ class PlacesService {
 
     try {
       await AsyncStorage.removeItem(storageKey);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to clear places history:', error);
+    }
   }
 
   // Валидация адреса (минимальная проверка)

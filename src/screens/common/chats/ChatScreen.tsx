@@ -52,6 +52,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
       const messagesList = await ChatService.getMessages(chatId);
       setMessages(messagesList);
     } catch (error) {
+      console.warn('Failed to load messages:', error);
     } finally {
       setLoading(false);
     }

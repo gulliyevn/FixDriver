@@ -98,9 +98,9 @@ const NotificationsScreen: React.FC = () => {
             ),
           );
         } else {
-          NotificationService
-            .markAsRead(notification.id)
-            .catch(() => {});
+          NotificationService.markAsRead(notification.id).catch((error) => {
+            console.warn('Failed to mark notification as read:', error);
+          });
         }
       }
       // Здесь можно добавить навигацию в зависимости от типа уведомления
@@ -158,9 +158,9 @@ const NotificationsScreen: React.FC = () => {
             } else {
               // удаляем по одному, без ожидания
               [...selectedNotifications].forEach((id) => {
-                NotificationService
-                  .deleteNotification(id)
-                  .catch(() => {});
+                NotificationService.deleteNotification(id).catch((error) => {
+                  console.warn('Failed to delete notification:', error);
+                });
               });
             }
             setIsSelectionMode(false);
@@ -190,9 +190,9 @@ const NotificationsScreen: React.FC = () => {
               );
               AsyncStorage.setItem(storageKey, JSON.stringify(updated));
             } else {
-              NotificationService
-                .deleteNotification(notificationId)
-                .catch(() => {});
+              NotificationService.deleteNotification(notificationId).catch(
+                () => {},
+              );
             }
           },
         },
@@ -208,9 +208,9 @@ const NotificationsScreen: React.FC = () => {
         JSON.stringify(notifications.map((n) => ({ ...n, read: true }))),
       );
     } else if (user?.id) {
-      NotificationService
-        .markAllAsRead()
-        .catch(() => {});
+      NotificationService.markAllAsRead().catch((error) => {
+        console.warn('Failed to mark all notifications as read:', error);
+      });
     }
   };
 
@@ -255,8 +255,7 @@ const NotificationsScreen: React.FC = () => {
           style={[
             NotificationsScreenStyles.notificationItem,
             isDark && NotificationsScreenStyles.notificationItemDark,
-            !notification.read &&
-              NotificationsScreenStyles.unreadNotification,
+            !notification.read && NotificationsScreenStyles.unreadNotification,
             isSelected && NotificationsScreenStyles.selectedNotification,
           ]}
           onPress={() => handleNotificationPress(notification)}
@@ -303,8 +302,7 @@ const NotificationsScreen: React.FC = () => {
                   style={[
                     NotificationsScreenStyles.notificationTitle,
                     isDark && NotificationsScreenStyles.notificationTitleDark,
-                    !notification.read &&
-                      NotificationsScreenStyles.unreadTitle,
+                    !notification.read && NotificationsScreenStyles.unreadTitle,
                   ]}
                 >
                   {notification.title}

@@ -30,7 +30,9 @@ export const useNotifications = () => {
         const parsedSettings = JSON.parse(storedSettings);
         setSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load notification settings:', error);
+    }
   }, []);
 
   // Сохранение настроек в AsyncStorage
@@ -42,7 +44,9 @@ export const useNotifications = () => {
           JSON.stringify(newSettings),
         );
         setSettings(newSettings);
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to save notification settings:', error);
+      }
     },
     [],
   );
@@ -78,6 +82,7 @@ export const useNotifications = () => {
         },
       );
     } catch (error) {
+      console.warn('Failed to initialize notifications:', error);
     } finally {
       setIsLoading(false);
     }

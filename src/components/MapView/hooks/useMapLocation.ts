@@ -40,7 +40,9 @@ export const useMapLocation = (initialLocation?: MapLocation) => {
             longitudeDelta: 0.0421,
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to initialize map location:', error);
+      }
     };
 
     if (!initialLocation) {

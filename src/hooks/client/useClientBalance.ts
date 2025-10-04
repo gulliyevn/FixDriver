@@ -55,7 +55,9 @@ export const useClientBalance = (): ClientBalanceContextType => {
       if (storedBalance) {
         setBalance(parseFloat(storedBalance));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load balance:', error);
+    }
   };
 
   const loadTransactions = async () => {
@@ -85,7 +87,9 @@ export const useClientBalance = (): ClientBalanceContextType => {
 
         setTransactions(migratedTransactions);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const loadCashback = async () => {
@@ -94,14 +98,18 @@ export const useClientBalance = (): ClientBalanceContextType => {
       if (storedCashback) {
         setCashback(parseFloat(storedCashback));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const saveBalance = async (newBalance: number) => {
     try {
       await AsyncStorage.setItem(balanceKey, newBalance.toString());
       setBalance(newBalance);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const saveTransactions = async (newTransactions: ClientTransaction[]) => {
@@ -111,14 +119,18 @@ export const useClientBalance = (): ClientBalanceContextType => {
         JSON.stringify(newTransactions),
       );
       setTransactions(newTransactions);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const saveCashback = async (newCashback: number) => {
     try {
       await AsyncStorage.setItem(cashbackKey, newCashback.toString());
       setCashback(newCashback);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   const topUpBalance = async (amount: number) => {
@@ -188,7 +200,9 @@ export const useClientBalance = (): ClientBalanceContextType => {
       // Обнуляем cashback
       setCashback(0);
       await AsyncStorage.setItem(cashbackKey, "0");
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to perform operation:', error);
+    }
   };
 
   // Dummy функция для совместимости с интерфейсом

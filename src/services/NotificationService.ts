@@ -125,7 +125,7 @@ class NotificationService {
     await this.ws.connect({
       onMessage: (message: WebSocketMessage) => {
         if (message.type === "notification") {
-          this.handleRealtimeNotification(message.data);
+          this.handleRealtimeNotification(message.data as unknown as NotificationData);
         }
       },
       onError: (error) => {

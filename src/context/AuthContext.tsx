@@ -128,6 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       }
     } catch (error) {
+      console.warn('Failed to initialize auth context:', error);
       // Не выходим автоматически при ошибках инициализации
     } finally {
       setIsLoading(false);
@@ -161,7 +162,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Показываем сохраненные пароли для отладки
         const userWithEmail = devUsers.find((u) => u.email === email);
         if (userWithEmail) {
+          console.log('Found user with email:', userWithEmail.email);
         } else {
+          console.log('No user found with email:', email);
         }
 
         const devUser = devUsers.find(
@@ -198,6 +201,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           return true;
         } else {
+          console.log('Authentication failed for user:', email);
         }
       }
 
@@ -291,6 +295,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(null);
     } catch (error) {
+      console.warn('Failed to logout:', error);
     } finally {
       setIsLoading(false);
     }

@@ -52,7 +52,9 @@ export const useCustomizedDays = (initial: CustomizedMap = {}) => {
   const saveToLocalStorage = async (data: CustomizedMap) => {
     try {
       await AsyncStorage.setItem("customizedSchedule", JSON.stringify(data));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save customized schedule:', error);
+    }
   };
 
   const saveModal = async (isReturnTrip: boolean = false) => {

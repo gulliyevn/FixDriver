@@ -194,7 +194,9 @@ class FixDriveOrderService {
           await this.clearSessionData();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to check and clear expired session:', error);
+    }
   }
 
   // Проверка валидности данных заказа

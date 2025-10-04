@@ -18,13 +18,17 @@ export const showDevStorage = async (): Promise<void> => {
         try {
           const parsed = JSON.parse(value);
           const count = Array.isArray(parsed) ? parsed.length : 1;
-        } catch {}
+        } catch (error) {
+          console.warn('Failed to parse dev data:', error);
+        }
       }
     }
 
     // Показываем пользователей
     await DevRegistrationService.logDevRegistrationStats();
-  } catch (error) {}
+  } catch (error) {
+    console.warn('Failed to log dev registration stats:', error);
+  }
 };
 
 /**
@@ -33,20 +37,16 @@ export const showDevStorage = async (): Promise<void> => {
 export const clearDevStorage = async (): Promise<void> => {
   if (!__DEV__) return;
 
-  try {
-    // Получаем все ключи
-    const allKeys = await AsyncStorage.getAllKeys();
-    const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
+  // Получаем все ключи
+  const allKeys = await AsyncStorage.getAllKeys();
+  const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
 
-    if (devKeys.length === 0) {
-      return;
-    }
-
-    // Удаляем только DEV ключи
-    await AsyncStorage.multiRemove(devKeys);
-  } catch (error) {
-    throw error;
+  if (devKeys.length === 0) {
+    return;
   }
+
+  // Удаляем только DEV ключи
+  await AsyncStorage.multiRemove(devKeys);
 };
 
 /**
@@ -86,18 +86,14 @@ export const exportDevData = async (): Promise<string> => {
 export const importDevData = async (jsonString: string): Promise<void> => {
   if (!__DEV__) return;
 
-  try {
-    const data = JSON.parse(jsonString);
+  const data = JSON.parse(jsonString);
 
-    for (const [key, value] of Object.entries(data)) {
-      if (key.startsWith("@dev_")) {
-        const stringValue =
-          typeof value === "string" ? value : JSON.stringify(value);
-        await AsyncStorage.setItem(key, stringValue);
-      }
+  for (const [key, value] of Object.entries(data)) {
+    if (key.startsWith("@dev_")) {
+      const stringValue =
+        typeof value === "string" ? value : JSON.stringify(value);
+      await AsyncStorage.setItem(key, stringValue);
     }
-  } catch (error) {
-    throw error;
   }
 };
 
@@ -122,7 +118,9 @@ export const checkStorageHealth = async (): Promise<void> => {
         return;
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.warn('Failed to clear dev data:', error);
+  }
 };
 
 /**
@@ -150,8 +148,11 @@ export const checkProfiles = async (): Promise<void> => {
       // Проверяем существует ли профиль
       const profileExists = await AsyncStorage.getItem(`@profile_${user.id}`);
     } else {
+      console.log('No current user found');
     }
-  } catch (error) {}
+  } catch (error) {
+    console.warn('Failed to check user profiles:', error);
+  }
 };
 
 /**

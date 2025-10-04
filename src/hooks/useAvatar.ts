@@ -20,6 +20,7 @@ export const useAvatar = (userId: string) => {
       const uri = avatar?.url || null;
       setAvatarUri(uri);
     } catch (error) {
+      console.warn('Failed to load avatar:', error);
     } finally {
       setLoading(false);
     }

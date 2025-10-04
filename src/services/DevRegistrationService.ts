@@ -40,49 +40,45 @@ export const saveClientRegistration = async (data: {
   firstName: string;
   lastName: string;
 }): Promise<DevRegisteredUser> => {
-  try {
-    // Генерируем временный ID
-    const userId = `dev_client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  // Генерируем временный ID
+  const userId = `dev_client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    const user: DevRegisteredUser = {
-      id: userId,
-      ...data,
-      role: "client",
-      registeredAt: new Date().toISOString(),
-    };
+  const user: DevRegisteredUser = {
+    id: userId,
+    ...data,
+    role: "client",
+    registeredAt: new Date().toISOString(),
+  };
 
-    // Получаем существующих пользователей
-    const existingUsersJson = await AsyncStorage.getItem(
-      DEV_STORAGE_KEYS.USERS,
-    );
-    const existingUsers: DevRegisteredUser[] = existingUsersJson
-      ? JSON.parse(existingUsersJson)
-      : [];
+  // Получаем существующих пользователей
+  const existingUsersJson = await AsyncStorage.getItem(
+    DEV_STORAGE_KEYS.USERS,
+  );
+  const existingUsers: DevRegisteredUser[] = existingUsersJson
+    ? JSON.parse(existingUsersJson)
+    : [];
 
-    // Проверяем дубликаты по email
-    const duplicate = existingUsers.find((u) => u.email === data.email);
-    if (duplicate) {
-      console.error("Пользователь с таким email уже зарегистрирован");
-      return;
-    }
-
-    // Добавляем нового пользователя
-    existingUsers.push(user);
-
-    // Сохраняем обратно
-    await AsyncStorage.setItem(
-      DEV_STORAGE_KEYS.USERS,
-      JSON.stringify(existingUsers),
-    );
-
-    // Проверяем что сохранилось
-    const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
-    const verifyUsers = verifyJson ? JSON.parse(verifyJson) : [];
-
-    return user;
-  } catch (error) {
-    throw error;
+  // Проверяем дубликаты по email
+  const duplicate = existingUsers.find((u) => u.email === data.email);
+  if (duplicate) {
+    console.error("Пользователь с таким email уже зарегистрирован");
+    return;
   }
+
+  // Добавляем нового пользователя
+  existingUsers.push(user);
+
+  // Сохраняем обратно
+  await AsyncStorage.setItem(
+    DEV_STORAGE_KEYS.USERS,
+    JSON.stringify(existingUsers),
+  );
+
+  // Проверяем что сохранилось
+  const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
+  const verifyUsers = verifyJson ? JSON.parse(verifyJson) : [];
+
+  return user;
 };
 
 /**
@@ -107,49 +103,45 @@ export const saveDriverRegistration = async (data: {
   licensePhoto?: string;
   passportPhoto?: string;
 }): Promise<DevRegisteredUser> => {
-  try {
-    // Генерируем временный ID
-    const driverId = `dev_driver_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  // Генерируем временный ID
+  const driverId = `dev_driver_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    const driver: DevRegisteredUser = {
-      id: driverId,
-      ...data,
-      role: "driver",
-      registeredAt: new Date().toISOString(),
-    };
+  const driver: DevRegisteredUser = {
+    id: driverId,
+    ...data,
+    role: "driver",
+    registeredAt: new Date().toISOString(),
+  };
 
-    // Получаем существующих водителей
-    const existingDriversJson = await AsyncStorage.getItem(
-      DEV_STORAGE_KEYS.DRIVERS,
-    );
-    const existingDrivers: DevRegisteredUser[] = existingDriversJson
-      ? JSON.parse(existingDriversJson)
-      : [];
+  // Получаем существующих водителей
+  const existingDriversJson = await AsyncStorage.getItem(
+    DEV_STORAGE_KEYS.DRIVERS,
+  );
+  const existingDrivers: DevRegisteredUser[] = existingDriversJson
+    ? JSON.parse(existingDriversJson)
+    : [];
 
-    // Проверяем дубликаты по email
-    const duplicate = existingDrivers.find((d) => d.email === data.email);
-    if (duplicate) {
-      console.error("Водитель с таким email уже зарегистрирован");
-      return;
-    }
-
-    // Добавляем нового водителя
-    existingDrivers.push(driver);
-
-    // Сохраняем обратно
-    await AsyncStorage.setItem(
-      DEV_STORAGE_KEYS.DRIVERS,
-      JSON.stringify(existingDrivers),
-    );
-
-    // Проверяем что сохранилось
-    const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
-    const verifyDrivers = verifyJson ? JSON.parse(verifyJson) : [];
-
-    return driver;
-  } catch (error) {
-    throw error;
+  // Проверяем дубликаты по email
+  const duplicate = existingDrivers.find((d) => d.email === data.email);
+  if (duplicate) {
+    console.error("Водитель с таким email уже зарегистрирован");
+    return;
   }
+
+  // Добавляем нового водителя
+  existingDrivers.push(driver);
+
+  // Сохраняем обратно
+  await AsyncStorage.setItem(
+    DEV_STORAGE_KEYS.DRIVERS,
+    JSON.stringify(existingDrivers),
+  );
+
+  // Проверяем что сохранилось
+  const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
+  const verifyDrivers = verifyJson ? JSON.parse(verifyJson) : [];
+
+  return driver;
 };
 
 /**
@@ -175,14 +167,10 @@ export const getAllDevUsers = async (): Promise<DevRegisteredUser[]> => {
  * Очистить все временные регистрации
  */
 export const clearAllDevRegistrations = async (): Promise<void> => {
-  try {
-    await AsyncStorage.multiRemove([
-      DEV_STORAGE_KEYS.USERS,
-      DEV_STORAGE_KEYS.DRIVERS,
-    ]);
-  } catch (error) {
-    throw error;
-  }
+  await AsyncStorage.multiRemove([
+    DEV_STORAGE_KEYS.USERS,
+    DEV_STORAGE_KEYS.DRIVERS,
+  ]);
 };
 
 /**
@@ -206,7 +194,9 @@ export const logDevRegistrationStats = async (): Promise<void> => {
     if (users.length > 0) {
       users.slice(-5).forEach((user, index) => {});
     }
-  } catch (error) {}
+  } catch (error) {
+    console.warn('Failed to log dev registration stats:', error);
+  }
 };
 
 // Экспорт для удобства

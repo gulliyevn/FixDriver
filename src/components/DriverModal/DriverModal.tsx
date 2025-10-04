@@ -29,17 +29,7 @@ const DriverModal: React.FC<DriverModalProps> = ({
 }) => {
   const { isDark } = useTheme();
   const styles = createDriverModalStyles(isDark, role);
-
-  if (!driverId) {
-    return null;
-  }
-
   const { driverInfo, clientInfo, trips } = useDriverDetails(driverId);
-
-  if (!driverInfo) {
-    return null;
-  }
-
   const [state, actions] = useDriverModalState(driverId);
   const handlers = useDriverModalHandlers(state, actions, onChat, driverInfo);
   const callSheet = useCallSheet(actions, driverInfo);
@@ -51,7 +41,9 @@ const DriverModal: React.FC<DriverModalProps> = ({
       try {
         const saved = await AsyncStorage.getItem("@driver_online_status");
         actions.setIsOnline(saved === "true");
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to load driver online status:', error);
+      }
     })();
   }, [isVisible, actions]);
 
@@ -63,6 +55,14 @@ const DriverModal: React.FC<DriverModalProps> = ({
       friction: 8,
     }).start();
   }, [state.isDriverExpanded, slider.driverExpandAnim]);
+
+  if (!driverId) {
+    return null;
+  }
+
+  if (!driverInfo) {
+    return null;
+  }
 
   const driverExpandHeight = slider.driverExpandAnim.interpolate({
     inputRange: [0, 1],

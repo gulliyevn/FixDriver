@@ -172,7 +172,9 @@ const DriversScreen: React.FC = () => {
       if (savedLastBookmarked) {
         setLastBookmarkedId(JSON.parse(savedLastBookmarked));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load last bookmarked driver:', error);
+    }
   };
 
   // Фильтрация водителей
@@ -333,12 +335,16 @@ const DriversScreen: React.FC = () => {
                 "driver_paused",
                 JSON.stringify([...newPausedDrivers]),
               );
-            } catch (error) {}
+            } catch (error) {
+              console.warn('Failed to save paused drivers:', error);
+            }
 
             // Закрываем свайп после подтверждения
             try {
               swipeRefs.current[driverId]?.close?.();
-            } catch (error) {}
+            } catch (error) {
+              console.warn('Failed to close swipe ref:', error);
+            }
           },
         },
       ]);
@@ -365,7 +371,9 @@ const DriversScreen: React.FC = () => {
           "driver_deleted",
           JSON.stringify([...newDeletedDrivers]),
         );
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to save deleted drivers:', error);
+      }
     },
     [deletedDrivers],
   );
@@ -427,7 +435,9 @@ const DriversScreen: React.FC = () => {
     if (openSwipeRef.current) {
       try {
         openSwipeRef.current.close();
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to close swipe ref:', error);
+      }
       openSwipeRef.current = null;
     }
   }, []);
@@ -493,7 +503,9 @@ const DriversScreen: React.FC = () => {
         ) {
           try {
             openSwipeRef.current.close();
-          } catch (error) {}
+          } catch (error) {
+            console.warn('Failed to close swipe ref:', error);
+          }
         }
         openSwipeRef.current = swipeRefs.current[id] ?? null;
       }}
@@ -506,13 +518,17 @@ const DriversScreen: React.FC = () => {
         toggleFavorite(driverId);
         try {
           swipeRefs.current[driverId]?.close?.();
-        } catch (error) {}
+        } catch (error) {
+          console.warn('Failed to close swipe ref:', error);
+        }
       }}
       onDelete={(driverId) => {
         deleteDriver(driverId);
         try {
           swipeRefs.current[driverId]?.close?.();
-        } catch (error) {}
+        } catch (error) {
+          console.warn('Failed to close swipe ref:', error);
+        }
       }}
       onChat={handleChatWithDriver}
       onTogglePause={togglePause}
@@ -596,7 +612,9 @@ const DriversScreen: React.FC = () => {
                 "driver_deleted",
                 JSON.stringify([...newDeletedDrivers]),
               );
-            } catch (error) {}
+            } catch (error) {
+              console.warn('Failed to save deleted drivers:', error);
+            }
           },
         },
       ],

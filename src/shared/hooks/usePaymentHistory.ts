@@ -223,7 +223,9 @@ export const usePaymentHistory = (): UsePaymentHistoryResult => {
         userRole,
       );
       setStats(newStats);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load payment stats:', error);
+    }
   }, [user?.id, userRole]);
 
   // Загрузка при изменении фильтра

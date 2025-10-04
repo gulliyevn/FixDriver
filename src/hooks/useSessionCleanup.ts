@@ -9,7 +9,9 @@ export const useSessionCleanup = () => {
     const checkAndClearSession = async () => {
       try {
         await fixwaveOrderService.checkAndClearExpiredSession();
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to check and clear expired session:', error);
+      }
     };
 
     // Проверяем сразу при запуске
@@ -30,7 +32,9 @@ export const useSessionCleanup = () => {
   const forceClearSession = async () => {
     try {
       await fixwaveOrderService.clearSessionData();
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to clear session data:', error);
+    }
   };
 
   return { forceClearSession };

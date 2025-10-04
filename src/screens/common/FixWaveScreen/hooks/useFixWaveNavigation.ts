@@ -23,7 +23,9 @@ export const useFixWaveNavigation = () => {
           setCurrentPage("addresses");
           updateProgress("addresses");
         }
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to load session:', error);
+      }
     };
     loadSession();
   }, []);
@@ -45,7 +47,9 @@ export const useFixWaveNavigation = () => {
       };
       await fixwaveOrderService.saveSessionData(sessionData);
       setSessionData(sessionData);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save session data:', error);
+    }
   }, []);
 
   const goToPage = useCallback(
@@ -82,7 +86,9 @@ export const useFixWaveNavigation = () => {
     try {
       await fixwaveOrderService.clearSessionData();
       setSessionData(null);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to clear session data:', error);
+    }
   }, []);
 
   return {

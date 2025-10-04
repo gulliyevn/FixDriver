@@ -81,9 +81,10 @@ export const useDirections = (
         });
         let resp = await fetch(url);
         let data = await resp.json();
-        if (data.status !== "OK" || !data.routes?.length)
+        if (data.status !== "OK" || !data.routes?.length) {
           console.error(data.status || "Directions failed");
-        return;
+          return;
+        }
         let best = data.routes[0];
         const decoded = polyline
           .decode(best.overview_polyline.points)

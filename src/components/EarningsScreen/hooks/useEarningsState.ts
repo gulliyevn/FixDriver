@@ -23,7 +23,9 @@ export const useEarningsState = () => {
         if (saved === "true" || saved === "false") {
           setIsOnline(saved === "true");
         }
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to load driver online status:', error);
+      }
     })();
   }, []);
 

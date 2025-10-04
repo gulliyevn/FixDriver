@@ -161,7 +161,9 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
       setEarnings(0);
       setTransactions([]);
       // В DEV можно очистить через перезапись ключей, но оставим минимально без IO
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to reset balance:', error);
+    }
   };
 
   const resetEarnings = async (): Promise<number> => {

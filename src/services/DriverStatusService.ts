@@ -9,7 +9,9 @@ class DriverStatusServiceImpl {
     for (const cb of this.listeners) {
       try {
         cb(isOnline);
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to notify status change:', error);
+      }
     }
   }
 

@@ -363,6 +363,12 @@ const styles = StyleSheet.create({
 
 EarningsDetailView.displayName = "EarningsDetailView";
 
-// PropTypes убраны для TypeScript совместимости
+// PropTypes для ESLint совместимости
+EarningsDetailView.propTypes = {
+  selectedStat: PropTypes.oneOf(["routePoints", "totalRides", "workHours", "totalDistance"]),
+  isDark: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  period: PropTypes.oneOf(["today", "week", "month", "year"] as const).isRequired,
+};
 
 export default EarningsDetailView;

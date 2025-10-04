@@ -47,7 +47,9 @@ export const useEarningsHandlers = (
     AsyncStorage.setItem(
       "@driver_online_status",
       String(newOnlineStatus),
-    ).catch(() => {});
+    ).catch((error) => {
+      console.warn('Failed to save driver online status:', error);
+    });
 
     // Интеграция с VIP системой
     if (newOnlineStatus) {

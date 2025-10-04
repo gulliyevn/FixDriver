@@ -39,7 +39,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       } else {
         // Use default theme
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load theme:', error);
+    }
   };
 
   const toggleTheme = async () => {
@@ -48,7 +50,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
     try {
       await AsyncStorage.setItem("theme", newTheme);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save theme:', error);
+    }
   };
 
   const value = {

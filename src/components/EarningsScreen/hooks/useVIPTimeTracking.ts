@@ -96,7 +96,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     loadVIPTimeData();
     // Принудительно проверяем день при загрузке
     setTimeout(() => {
-      performDayCheck().catch((error) => {});
+      performDayCheck().catch((error) => {
+        console.warn('Failed to perform day check:', error);
+      });
     }, 1000);
   }, []);
 
@@ -284,7 +286,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   // Таймер: проверяем каждую минуту
   useEffect(() => {
     const interval = setInterval(() => {
-      performDayCheck().catch((error) => {});
+      performDayCheck().catch((error) => {
+        console.warn('Failed to perform day check:', error);
+      });
     }, 60000);
     return () => clearInterval(interval);
   }, [performDayCheck]);
@@ -333,13 +337,17 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         setVipTimeData(initialData);
         await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(initialData));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to initialize VIP time data:', error);
+    }
   };
 
   const saveVIPTimeData = async (data: VIPTimeData) => {
     try {
       await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(data));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save VIP time data:', error);
+    }
   };
 
   // Функции для работы с дневной статистикой
@@ -355,7 +363,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   const saveDailyStats = async (stats: DailyStats) => {
     try {
       await AsyncStorage.setItem(DAILY_STATS_KEY, JSON.stringify(stats));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save daily stats:', error);
+    }
   };
 
   const saveDayStats = async (
@@ -394,7 +404,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     setVipTimeData(newData);
     saveVIPTimeData(newData);
     // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
-    AsyncStorage.setItem("@driver_online_status", "true").catch(() => {});
+    AsyncStorage.setItem("@driver_online_status", "true").catch((error) => {
+      console.warn('Failed to save driver online status:', error);
+    });
     // Уведомляем DriverStatusService о изменении статуса
     DriverStatusService.setOnline(true);
   }, [isVIP, vipTimeData]);
@@ -415,7 +427,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     setVipTimeData(newData);
     saveVIPTimeData(newData);
     // Дублируем статус в AsyncStorage, чтобы не терялся при рестарте
-    AsyncStorage.setItem("@driver_online_status", "false").catch(() => {});
+    AsyncStorage.setItem("@driver_online_status", "false").catch((error) => {
+      console.warn('Failed to save driver online status:', error);
+    });
     // Уведомляем DriverStatusService о изменении статуса
     DriverStatusService.setOnline(false);
   }, [vipTimeData]);
@@ -619,7 +633,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
 
     // Уведомляем DriverStatusService
     DriverStatusService.setOnline(true);
-    AsyncStorage.setItem("@driver_online_status", "true").catch(() => {});
+    AsyncStorage.setItem("@driver_online_status", "true").catch((error) => {
+      console.warn('Failed to save driver online status:', error);
+    });
   }, [vipTimeData, saveVIPTimeData]);
 
   const handleDayEndCancel = useCallback(() => {
@@ -641,7 +657,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
 
     // Уведомляем DriverStatusService
     DriverStatusService.setOnline(false);
-    AsyncStorage.setItem("@driver_online_status", "false").catch(() => {});
+    AsyncStorage.setItem("@driver_online_status", "false").catch((error) => {
+      console.warn('Failed to save driver online status:', error);
+    });
   }, [vipTimeData, saveVIPTimeData]);
 
   return {

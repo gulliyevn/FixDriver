@@ -56,7 +56,7 @@ export const DayEndModal: React.FC<DayEndModalProps> = ({
   );
 };
 
-const createStyles = (isDark: boolean, colors: any) =>
+const createStyles = (isDark: boolean, colors: { primary: string; background: string; text: string; card: string; textSecondary: string; border: string }) =>
   StyleSheet.create({
     overlay: {
       flex: 1,

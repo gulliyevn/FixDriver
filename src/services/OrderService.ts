@@ -52,16 +52,12 @@ export class OrderService {
   async createOrder(
     orderData: Omit<Order, "id" | "createdAt" | "updatedAt">,
   ): Promise<Order> {
-    try {
-      const response = await APIClient.post<Order>("/orders", orderData);
-      if (response.success && response.data) {
-        return response.data;
-      }
-      console.error(response.error || "Failed to create order");
-      return;
-    } catch (error) {
-      throw error;
+    const response = await APIClient.post<Order>("/orders", orderData);
+    if (response.success && response.data) {
+      return response.data;
     }
+    console.error(response.error || "Failed to create order");
+    return;
   }
 
   async updateOrder(

@@ -182,7 +182,9 @@ export class AuthService {
           await APIClient.post("/auth/client/logout", {
             refresh_token: refreshToken,
           });
-        } catch (error) {}
+        } catch (error) {
+          console.warn('Failed to logout on server:', error);
+        }
       }
 
       // Очищаем токены локально

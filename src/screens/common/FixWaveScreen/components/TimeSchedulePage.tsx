@@ -108,7 +108,9 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({
         timeScheduleData: data,
       };
       await fixwaveOrderService.saveSessionData(sessionData);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save session data:', error);
+    }
   };
 
   const handleSaveAndNext = async () => {

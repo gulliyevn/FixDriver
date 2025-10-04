@@ -48,7 +48,9 @@ export const useMapMarkers = (
       if (location && !initialLocation) {
         // Здесь можно обновить регион карты
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to handle driver visibility toggle:', error);
+    }
   }, [onDriverVisibilityToggle, initialLocation]);
 
   const handleMarkerPress = useCallback((marker: MapMarker) => {

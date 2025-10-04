@@ -120,6 +120,7 @@ export const useMapControls = (
         actions.setIsSettingsExpanded(false);
       }
     } catch (error) {
+      console.warn('Failed to refresh map:', error);
     } finally {
       actions.setIsRefreshing(false);
     }

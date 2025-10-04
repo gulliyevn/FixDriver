@@ -5,6 +5,7 @@ const ENABLE_SOCIAL_LOGS = false;
 
 const log = (message: string, data?: unknown) => {
   if (ENABLE_SOCIAL_LOGS) {
+    console.log('Social Auth:', message, data);
   }
 };
 
@@ -216,7 +217,9 @@ export class SocialAuthService {
       //
       // const { LoginManager } = require('react-native-fbsdk-next');
       // await LoginManager.logOut();
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to logout from social auth:', error);
+    }
   }
 
   /**

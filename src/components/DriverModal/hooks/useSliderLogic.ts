@@ -102,7 +102,7 @@ export const useSliderLogic = (
   ]);
 
   const onHandlerStateChange = useCallback(
-    (event: any) => {
+    (event: { nativeEvent: { state: number; translationX: number } }) => {
       const { state: gestureState, translationX } = event.nativeEvent;
 
       if (
@@ -123,7 +123,7 @@ export const useSliderLogic = (
   );
 
   const onHandleStateChange = useCallback(
-    (event: any) => {
+    (event: { nativeEvent: { state: number; translationY: number } }) => {
       if (event.nativeEvent.state === State.END) {
         const { translationY } = event.nativeEvent;
 

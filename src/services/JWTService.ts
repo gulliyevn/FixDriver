@@ -352,19 +352,13 @@ export class JWTService {
     role: "client" | "driver";
     phone: string;
   }): Promise<TokenResponse> {
-    try {
-      // Сначала очищаем старые токены
+    // Сначала очищаем старые токены
+    await this.clearTokens();
 
-      await this.clearTokens();
+    // Генерируем новые токены
+    const tokens = await this.generateTokens(userData);
 
-      // Генерируем новые токены
-
-      const tokens = await this.generateTokens(userData);
-
-      return tokens;
-    } catch (error) {
-      throw error;
-    }
+    return tokens;
   }
 
   /**

@@ -49,7 +49,9 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
           setAddresses(addressData.addresses || []);
           console.log("Addresses restored:", addressData.addresses); // Добавляем лог для отладки
         }
-      } catch (error) {}
+      } catch (error) {
+        console.warn('Failed to load session data:', error);
+      }
     };
     loadSessionData();
   }, [initialData]); // Добавляем зависимость от initialData
@@ -111,7 +113,9 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
       };
       await fixwaveOrderService.saveSessionData(sessionData);
       console.log("Session saved:", sessionData); // Добавляем лог для отладки
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save session data:', error);
+    }
   };
 
   const handleSaveAndNext = async () => {

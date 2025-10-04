@@ -2,9 +2,32 @@
 import { ENV_CONFIG } from "../config/environment";
 import JWTService from "./JWTService";
 
+// Типы для WebSocket
+interface WebSocketType {
+  close(code?: number, reason?: string): void;
+  readyState: number;
+  send(data: string): void;
+  onopen: ((event: Event) => void) | null;
+  onmessage: ((event: MessageEvent) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onclose: ((event: CloseEventType) => void) | null;
+}
+
+interface CloseEventType {
+  code: number;
+  reason: string;
+  wasClean: boolean;
+}
+
+interface NodeJSTimeout {
+  ref(): NodeJSTimeout;
+  unref(): NodeJSTimeout;
+  refresh(): NodeJSTimeout;
+}
+
 export interface WebSocketMessage {
   type: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: number;
   messageId: string;
 }
@@ -12,21 +35,21 @@ export interface WebSocketMessage {
 export interface WebSocketEventHandlers {
   onMessage?: (message: WebSocketMessage) => void;
   onError?: (error: Event) => void;
-  onClose?: (event: CloseEvent) => void;
+  onClose?: (event: CloseEventType) => void;
   onOpen?: (event: Event) => void;
   onReconnect?: () => void;
 }
 
 class WebSocketService {
   private static instance: WebSocketService;
-  private ws: WebSocket | null = null;
+  private ws: WebSocketType | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectInterval = 1000; // 1 секунда
   private isConnecting = false;
   private messageQueue: WebSocketMessage[] = [];
   private eventHandlers: WebSocketEventHandlers = {};
-  private heartbeatInterval: NodeJS.Timeout | null = null;
+  private heartbeatInterval: NodeJSTimeout | null = null;
   private isAuthenticated = false;
 
   private constructor() {}
@@ -42,7 +65,7 @@ class WebSocketService {
    * Подключение к WebSocket серверу
    */
   async connect(handlers: WebSocketEventHandlers = {}): Promise<void> {
-    if (this.ws?.readyState === WebSocket.OPEN) {
+    if (this.ws?.readyState === 1) { // WebSocket.OPEN = 1
       return;
     }
 
@@ -62,7 +85,7 @@ class WebSocketService {
       // Строим URL для WebSocket
       const wsUrl = this.buildWebSocketUrl(token);
 
-      this.ws = new WebSocket(wsUrl);
+      this.ws = new (global as any).WebSocket(wsUrl) as WebSocketType;
       this.setupEventListeners();
     } catch (error) {
       console.error("Ошибка подключения к WebSocket:", error);
@@ -161,7 +184,7 @@ class WebSocketService {
   /**
    * Отправка сообщения через WebSocket
    */
-  sendMessage(type: string, data: any): void {
+  sendMessage(type: string, data: Record<string, unknown>): void {
     const message: WebSocketMessage = {
       type,
       data,
@@ -169,7 +192,7 @@ class WebSocketService {
       messageId: this.generateMessageId(),
     };
 
-    if (this.ws?.readyState === WebSocket.OPEN && this.isAuthenticated) {
+    if (this.ws?.readyState === 1 && this.isAuthenticated) { // WebSocket.OPEN = 1
       try {
         this.ws.send(JSON.stringify(message));
       } catch (error) {
@@ -188,7 +211,7 @@ class WebSocketService {
   private flushMessageQueue(): void {
     while (
       this.messageQueue.length > 0 &&
-      this.ws?.readyState === WebSocket.OPEN
+      this.ws?.readyState === 1 // WebSocket.OPEN = 1
     ) {
       const message = this.messageQueue.shift();
       if (message) {
@@ -224,7 +247,7 @@ class WebSocketService {
    */
   private startHeartbeat(): void {
     this.heartbeatInterval = setInterval(() => {
-      if (this.ws?.readyState === WebSocket.OPEN) {
+      if (this.ws?.readyState === 1) { // WebSocket.OPEN = 1
         this.sendMessage("heartbeat", { timestamp: Date.now() });
       }
     }, 30000); // Каждые 30 секунд
@@ -235,7 +258,7 @@ class WebSocketService {
    */
   private stopHeartbeat(): void {
     if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
+      clearInterval(this.heartbeatInterval as any);
       this.heartbeatInterval = null;
     }
   }
@@ -284,7 +307,7 @@ class WebSocketService {
     reconnectAttempts: number;
   } {
     return {
-      isConnected: this.ws?.readyState === WebSocket.OPEN,
+      isConnected: this.ws?.readyState === 1, // WebSocket.OPEN = 1
       isConnecting: this.isConnecting,
       isAuthenticated: this.isAuthenticated,
       reconnectAttempts: this.reconnectAttempts,
@@ -295,7 +318,7 @@ class WebSocketService {
    * Проверка готовности к отправке сообщений
    */
   isReady(): boolean {
-    return this.ws?.readyState === WebSocket.OPEN && this.isAuthenticated;
+    return this.ws?.readyState === 1 && this.isAuthenticated; // WebSocket.OPEN = 1
   }
 }
 

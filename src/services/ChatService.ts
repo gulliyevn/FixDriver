@@ -246,22 +246,22 @@ class ChatServiceInternal {
   private handleWebSocketMessage(message: WebSocketMessage): void {
     switch (message.type) {
       case "chat_message":
-        this.handleNewMessage(message.data);
+        this.handleNewMessage(message.data as unknown as Message);
         break;
       case "typing_start":
-        this.handleTypingStart(message.data);
+        this.handleTypingStart(message.data as { chatId: string; userId: string; });
         break;
       case "typing_stop":
-        this.handleTypingStop(message.data);
+        this.handleTypingStop(message.data as { chatId: string; userId: string; });
         break;
       case "message_read":
-        this.handleMessageRead(message.data);
+        this.handleMessageRead(message.data as { messageId: string; readBy: string; });
         break;
       case "user_online":
-        this.handleUserOnline(message.data);
+        this.handleUserOnline(message.data as { userId: string; });
         break;
       case "user_offline":
-        this.handleUserOffline(message.data);
+        this.handleUserOffline(message.data as { userId: string; });
         break;
     }
   }
@@ -338,7 +338,12 @@ class ChatServiceInternal {
   ): Promise<boolean> {
     if (!this.isRealtimeEnabled || !this.ws.isReady()) {
       // Fallback на обычную отправку через API
-      const result = await this.sendMessage(chatId, content, messageType, metadata);
+      const result = await this.sendMessage(
+        chatId,
+        content,
+        messageType,
+        metadata,
+      );
       return !!result;
     }
 
@@ -355,7 +360,12 @@ class ChatServiceInternal {
     } catch (error) {
       console.error("Ошибка отправки real-time сообщения:", error);
       // Fallback на обычную отправку
-      const result = await this.sendMessage(chatId, content, messageType, metadata);
+      const result = await this.sendMessage(
+        chatId,
+        content,
+        messageType,
+        metadata,
+      );
       return !!result;
     }
   }

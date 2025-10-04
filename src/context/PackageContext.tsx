@@ -72,6 +72,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
 
   // Проверяем, что deductBalance является функцией
   if (typeof deductBalance !== "function") {
+    console.warn('deductBalance is not a function:', typeof deductBalance);
   }
 
   // Загружаем сохраненный пакет и подписку при инициализации
@@ -125,7 +126,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         setCurrentPackage("free");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load package:', error);
+    }
   };
 
   const loadSubscription = async () => {
@@ -160,7 +163,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         // No subscription found
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to load subscription:', error);
+    }
   };
 
   const updatePackage = async (
@@ -308,7 +313,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
       // Устанавливаем бесплатный пакет
       await AsyncStorage.setItem(PACKAGE_KEY, "free");
       setCurrentPackage("free");
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to reset to free package:', error);
+    }
   };
 
   const toggleAutoRenew = async () => {
@@ -325,7 +332,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
         );
         setSubscription(updatedSubscription);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to update subscription:', error);
+    }
   };
 
   const processAutoRenewal = async (): Promise<boolean> => {
@@ -554,7 +563,9 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
           ],
         );
       }
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to show subscription alert:', error);
+    }
   };
 
   const getPackageIcon = (packageType: PackageType = currentPackage) => {

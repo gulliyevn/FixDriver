@@ -82,7 +82,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     try {
       await setLanguage(selectedLanguage as SupportedLanguage);
       onClose();
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to set language:', error);
+    }
   };
 
   const handleClose = () => {

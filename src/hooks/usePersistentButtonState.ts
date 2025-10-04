@@ -48,6 +48,7 @@ export const usePersistentButtonState = (driverId: string) => {
         setButtonState(parsedState);
       }
     } catch (error) {
+      console.warn('Failed to load button state:', error);
     } finally {
       setIsLoaded(true);
     }
@@ -57,7 +58,9 @@ export const usePersistentButtonState = (driverId: string) => {
     try {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.setItem(key, JSON.stringify(buttonState));
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save button state:', error);
+    }
   };
 
   const updateButtonState = useCallback((updates: Partial<ButtonState>) => {
@@ -80,7 +83,9 @@ export const usePersistentButtonState = (driverId: string) => {
     try {
       const key = `${BUTTON_STATE_KEY}_${driverId}`;
       await AsyncStorage.removeItem(key);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to clear button state:', error);
+    }
   };
 
   return {

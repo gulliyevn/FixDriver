@@ -61,7 +61,9 @@ export class MapService {
         this.LOCATION_CACHE_KEY,
         JSON.stringify(cachedLocation),
       );
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to cache location:', error);
+    }
   }
 
   // Получить кэшированную локацию
@@ -359,7 +361,9 @@ export class MapService {
 
             // Вызываем callback
             callback(newLocation);
-          } catch (error) {}
+          } catch (error) {
+            console.warn('Failed to update location:', error);
+          }
         },
       );
 
@@ -410,7 +414,9 @@ export class MapService {
   static async clearLocationCache(): Promise<void> {
     try {
       await AsyncStorage.removeItem(this.LOCATION_CACHE_KEY);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to clear location cache:', error);
+    }
   }
 }
 

@@ -99,7 +99,9 @@ export const useEarningsLevel = () => {
       await AsyncStorage.setItem(LEVEL_PROGRESS_KEY, JSON.stringify(progress));
       setDriverLevel(progress);
       // Прогресс сохранен
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to save level progress:', error);
+    }
   };
 
   // Функция для расчета VIP уровня: +1 за каждый успешный 30-дневный период (>=20 дней)
@@ -145,7 +147,9 @@ export const useEarningsLevel = () => {
       const initialLevel = createInitialLevel();
       setDriverLevel(initialLevel);
       await saveLevelProgress(initialLevel);
-    } catch (error) {}
+    } catch (error) {
+      console.warn('Failed to initialize level:', error);
+    }
   };
 
   // Функция для расчета общего количества поездок

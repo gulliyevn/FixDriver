@@ -25,20 +25,16 @@ export const getEmergencyNumber = (countryCode: string): string => {
 export const callEmergencyService = async (
   countryCode?: string,
 ): Promise<void> => {
-  try {
-    const code = countryCode || "RU"; // Default to Russia
-    const emergencyNumber = getEmergencyNumber(code);
-    const phoneUrl = `tel:${emergencyNumber}`;
+  const code = countryCode || "RU"; // Default to Russia
+  const emergencyNumber = getEmergencyNumber(code);
+  const phoneUrl = `tel:${emergencyNumber}`;
 
-    const canOpen = await Linking.canOpenURL(phoneUrl);
-    if (canOpen) {
-      await Linking.openURL(phoneUrl);
-    } else {
-      console.error("Cannot make emergency call");
-      return;
-    }
-  } catch (error) {
-    throw error;
+  const canOpen = await Linking.canOpenURL(phoneUrl);
+  if (canOpen) {
+    await Linking.openURL(phoneUrl);
+  } else {
+    console.error("Cannot make emergency call");
+    return;
   }
 };
 

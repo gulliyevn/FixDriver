@@ -76,5 +76,7 @@ export const clearScheduleData = async () => {
   try {
     await AsyncStorage.removeItem("flexibleSchedule");
     await AsyncStorage.removeItem("customizedSchedule");
-  } catch (error) {}
+  } catch (error) {
+    console.warn('Failed to clear schedule storage:', error);
+  }
 };
