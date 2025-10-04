@@ -14,7 +14,6 @@ export type DriverInfoBarProps = {
 };
 
 const DriverInfoBar: React.FC<DriverInfoBarProps> = ({
-  role = "client",
   schedule,
   price,
   distance,

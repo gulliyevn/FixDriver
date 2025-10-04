@@ -14,24 +14,22 @@ import { createRoleSelectScreenStyles } from "../../styles/screens/RoleSelectScr
 import { createThemeToggleStyles } from "../../styles/components/ThemeToggle.styles";
 import LanguageSelector from "../../components/LanguageSelector";
 import LanguageButton from "../../components/LanguageButton";
-import { useLanguage } from "../../context/LanguageContext";
 import { useTheme } from "../../context/ThemeContext";
 import { getCurrentColors } from "../../constants/colors";
-import i18n from "../../i18n";
 import { useI18n } from "../../hooks/useI18n";
 
 const RoleSelectScreen: React.FC = () => {
   const navigation = useNavigation();
   const [langModal, setLangModal] = React.useState(false);
-  const { t, language } = useI18n();
-  const { isDark, toggleTheme } = useTheme();
+  const { t } = useI18n();
+  const { isDark } = useTheme();
 
   // Создаем стили с учетом текущей темы
   const styles = createRoleSelectScreenStyles(isDark);
   const themeToggleStyles = createThemeToggleStyles(isDark);
 
   // Получаем текущие цвета
-  const currentColors = getCurrentColors(isDark);
+  getCurrentColors(isDark);
 
   const handleRoleSelect = (role: "client" | "driver") => {
     if (role === "client") {

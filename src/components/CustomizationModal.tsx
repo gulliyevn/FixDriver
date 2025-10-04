@@ -12,7 +12,6 @@ interface CustomizationModalProps {
 const CustomizationModal: React.FC<CustomizationModalProps> = ({
   visible,
   onClose,
-  onSave,
 }) => {
   const { isDark } = useTheme();
 

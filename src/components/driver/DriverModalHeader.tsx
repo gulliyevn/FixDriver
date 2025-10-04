@@ -2,14 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-type Driver = {
-  first_name?: string;
-  last_name?: string;
-  vehicle_brand?: string;
-  vehicle_model?: string;
-  vehicle_number?: string;
-};
-
 export type DriverModalHeaderProps = {
   styles: any;
   role?: "client" | "driver";

@@ -15,21 +15,16 @@ import {
   EditClientProfileScreenStyles as styles,
   getEditClientProfileScreenColors,
 } from "../../styles/screens/profile/EditClientProfileScreen.styles";
-import { Ionicons } from "@expo/vector-icons";
 import { ClientScreenProps } from "../../types/navigation";
 import { mockUsers } from "../../mocks/users";
-import APIClient from "../../services/APIClient";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useProfile } from "../../hooks/useProfile";
 import { useVerification } from "../../hooks/useVerification";
 import { useFamilyMembers } from "../../hooks/useFamilyMembers";
 import {
-  getDefaultDate,
-  hasChanges,
   handleCirclePress,
 } from "../../utils/profileHelpers";
-import DatePicker from "../../components/DatePicker";
 import PersonalInfoSection from "../../components/profile/PersonalInfoSection";
 import FamilySection from "../../components/profile/FamilySection";
 import AddFamilyModal from "../../components/profile/AddFamilyModal";
@@ -37,15 +32,13 @@ import ProfileAvatarSection from "../../components/profile/ProfileAvatarSection"
 import VipSection from "../../components/profile/VipSection";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import { useI18n } from "../../hooks/useI18n";
-import { FamilyMember } from "../../types/family";
 
 const EditClientProfileScreen: React.FC<
   ClientScreenProps<"EditClientProfile">
 > = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { logout, login, changeRole } = useAuth();
-  const rootNavigation = useNavigation();
+  const { login, changeRole } = useAuth();
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
   const currentColors = isDark
     ? { dark: { primary: "#3B82F6" } }

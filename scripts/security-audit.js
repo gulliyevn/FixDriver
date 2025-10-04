@@ -34,7 +34,7 @@ function checkFileForSecrets(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const issues = [];
     
-    sensitivePatterns.forEach((pattern, index) => {
+    sensitivePatterns.forEach((pattern) => {
       const matches = content.match(pattern);
       if (matches) {
         issues.push({

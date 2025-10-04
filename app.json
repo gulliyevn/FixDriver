@@ -45,7 +45,8 @@
           "color": "#ffffff"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-font"
     ],
     "jsEngine": "hermes",
     "scheme": "fixdrive",

@@ -10,7 +10,7 @@ interface EarningsLevelProps {
 }
 
 const EarningsLevel: React.FC<EarningsLevelProps> = ({ isDark }) => {
-  const { t } = useI18n();
+  useI18n();
   const colors = getCurrentColors(isDark);
   const { driverLevel } = useLevelProgress();
 

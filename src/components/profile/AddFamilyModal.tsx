@@ -7,7 +7,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";
@@ -44,7 +43,6 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   onClose,
   onAdd,
   onVerifyPhone,
-  isVerifyingPhone = false,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
@@ -146,33 +144,6 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
     if (localPhoneVerificationStatus) {
       setLocalPhoneVerificationStatus(false);
     }
-  };
-
-  // Обработчик верификации телефона
-  const handleVerifyPhone = () => {
-    if (onVerifyPhone) {
-      onVerifyPhone();
-      // Устанавливаем локальный статус верификации
-      setLocalPhoneVerificationStatus(true);
-    }
-  };
-
-  // Определяем, какую иконку показывать
-  const getPhoneVerificationIcon = () => {
-    // Если есть локальный статус верификации, показываем галочку
-    if (localPhoneVerificationStatus) {
-      return "checkmark-circle";
-    }
-    // Иначе показываем щит (по умолчанию)
-    return "shield-checkmark-outline";
-  };
-
-  // Определяем цвет иконки
-  const getPhoneVerificationColor = () => {
-    if (localPhoneVerificationStatus) {
-      return "#4CAF50"; // Зеленый для верифицированного
-    }
-    return isDark ? "#3B82F6" : "#083198"; // Синий для неверифицированного
   };
 
   const familyTypes = [

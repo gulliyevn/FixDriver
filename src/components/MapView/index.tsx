@@ -6,16 +6,15 @@ import React, {
   useMemo,
   memo,
 } from "react";
-import { View, Alert, Animated } from "react-native";
+import { View, Animated } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
 import { createMapViewStyles } from "../../styles/components/MapView.styles";
 import DriverModal from "../DriverModal";
 
 // Импорты из новой структуры
-import { MapViewComponentProps, MapRef, RoutePoint } from "./types/map.types";
+import { MapViewComponentProps, MapRef } from "./types/map.types";
 import { useMapZoom } from "./hooks/useMapZoom";
 import { useMapMarkers } from "./hooks/useMapMarkers";
 import { useMapLocation } from "./hooks/useMapLocation";
@@ -37,13 +36,11 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
       onDriverModalClose,
       mapType = "standard",
       routePoints = [],
-      showTrafficMock = true,
     },
     ref,
   ) => {
     const mapRef = useRef<MapView>(null);
     const { isDark } = useTheme();
-    const { user } = useAuth();
     const navigation = useNavigation<any>();
     const styles = createMapViewStyles(isDark);
 
@@ -235,7 +232,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
           showsBuildings={false}
           showsIndoors={false}
           showsIndoorLevelPicker={false}
-          showsPointsOfInterests={false}
+          showsPointsOfInterest={false}
           mapType={mapType}
           customMapStyle={
             isDark && mapType === "standard"

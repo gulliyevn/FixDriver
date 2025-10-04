@@ -38,7 +38,7 @@ function runTest(testPath) {
     log(`🧪 Запуск тестов: ${path.basename(testPath)}`, colors.bright);
     log(`${'='.repeat(80)}`, colors.cyan);
     
-    const child = exec(command, (error, stdout, stderr) => {
+    const child = exec(command, (error, stdout) => {
       if (error) {
         log(`❌ Тесты не прошли: ${testPath}`, colors.red);
         log(error.message, colors.red);
@@ -83,7 +83,7 @@ async function runAllTests() {
   log('📊 СВОДКА РЕЗУЛЬТАТОВ ТЕСТИРОВАНИЯ', colors.bright + colors.magenta);
   log('='.repeat(80), colors.magenta);
 
-  results.forEach((result, index) => {
+  results.forEach((result) => {
     const icon = result.status === 'passed' ? '✅' : '❌';
     const color = result.status === 'passed' ? colors.green : colors.red;
     const fileName = path.basename(result.path);

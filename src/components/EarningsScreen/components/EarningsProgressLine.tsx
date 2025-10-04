@@ -4,7 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useI18n } from "../../../hooks/useI18n";
 import { getCurrentColors, SIZES } from "../../../constants/colors";
 import { useLevelProgress } from "../../../context/LevelProgressContext";
-import { getLevelConfig } from "../types/levels.config";
 
 interface EarningsProgressLineProps {
   isDark: boolean;
@@ -20,7 +19,7 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({
   vipRidesToday,
   vipCurrentHours,
 }) => {
-  const { t } = useI18n();
+  useI18n();
   const colors = getCurrentColors(isDark);
   const { driverLevel } = useLevelProgress();
 
@@ -98,11 +97,6 @@ const EarningsProgressLine: React.FC<EarningsProgressLineProps> = ({
     },
   });
 
-  // Функция для получения названия следующего уровня
-  const getNextLevelTitle = (level: number) => {
-    const config = getLevelConfig(level, 1);
-    return config.levelKey;
-  };
 
   // Функция для получения текста прогресса
   const getProgressText = () => {

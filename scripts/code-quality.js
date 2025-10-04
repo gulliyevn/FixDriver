@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const { execSync } = require('child_process');
 
 console.log('🔍 Проверка качества кода...\n');

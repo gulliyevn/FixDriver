@@ -4,7 +4,6 @@ import { useTheme } from "../context/ThemeContext";
 
 interface OptimizedImageProps extends Omit<ImageProps, "source"> {
   source: string | { uri: string };
-  placeholder?: string;
   fallback?: string;
   showLoading?: boolean;
   containerStyle?: any;
@@ -15,7 +14,6 @@ interface OptimizedImageProps extends Omit<ImageProps, "source"> {
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   source,
-  placeholder,
   fallback,
   showLoading = true,
   containerStyle,

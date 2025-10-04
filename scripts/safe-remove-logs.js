@@ -33,7 +33,6 @@ console.log(`📁 Найдено ${tsFiles.length} файлов для обра�
 tsFiles.forEach(filePath => {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
-    let originalContent = content;
     
     // БЕЗОПАСНОЕ удаление console.log - только отдельные строки
     const lines = content.split('\n');

@@ -1,12 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect, memo } from "react";
-import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
 import { getCurrentColors } from "../constants/colors";
 import MapViewComponent from "./MapView";
 import AddressAutocomplete from "./AddressAutocomplete";
-import { MapLocation, RoutePoint } from "./MapView/types/map.types";
+import { MapLocation } from "./MapView/types/map.types";
 
 interface AddressPoint {
   id: string;
@@ -64,10 +64,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     ];
   });
 
-  const [routePoints, setRoutePoints] = useState<RoutePoint[]>([]);
   const [isMapMode, setIsMapMode] = useState(true);
-  const [showAddressList, setShowAddressList] = useState(false);
-  const [activeAddressId, setActiveAddressId] = useState<string | null>(null);
   const [addressValidation, setAddressValidation] = useState<{
     [key: string]: boolean;
   }>({});
@@ -104,7 +101,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   // Преобразуем адреса в точки маршрута для карты с жесткой привязкой цветов
   const mapRoutePoints = addresses
     .filter((addr) => addr.coordinate)
-    .map((addr, index) => {
+    .map((addr) => {
       // Жесткая привязка цветов к типам адресов
       let color: string;
       switch (addr.type) {
@@ -164,40 +161,8 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     [addresses, onAddressesChange],
   );
 
-  const addStop = () => {
-    const currentStops = addresses.filter((addr) => addr.type === "stop");
-    if (currentStops.length >= 2) {
-      Alert.alert("Ограничение", "Максимум 2 остановки");
-      return;
-    }
-
-    const stopId = `stop-${Date.now()}`;
-    const newStop: AddressPoint = {
-      id: stopId,
-      type: "stop",
-      address: "",
-      placeholder: t("common.fixDrive.address.stopPlaceholder"),
-    };
-
-    // Вставляем остановку между "Откуда" и "Куда"
-    const fromAddress = addresses.find((addr) => addr.type === "from");
-    const toAddress = addresses.find((addr) => addr.type === "to");
-
-    if (fromAddress && toAddress) {
-      const updatedAddresses = [
-        fromAddress,
-        newStop,
-        ...addresses.filter((addr) => addr.type === "stop"),
-        toAddress,
-      ];
-      setAddresses(updatedAddresses);
-      onAddressesChange(updatedAddresses);
-    }
-  };
 
   const removeStop = (id: string) => {
-    // Находим адрес для удаления
-    const addressToRemove = addresses.find((addr) => addr.id === id);
 
     // Удаляем адрес из массива
     const updatedAddresses = addresses.filter((addr) => addr.id !== id);
@@ -225,19 +190,6 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     );
   };
 
-  const clearAllPoints = () => {
-    const clearedAddresses = addresses.map((addr) => ({
-      ...addr,
-      address: "",
-      coordinate: undefined,
-      coordinates: undefined,
-    }));
-    setAddresses(clearedAddresses);
-    onAddressesChange(clearedAddresses);
-
-    // Очищаем всю валидацию
-    setAddressValidation({});
-  };
 
   const toggleMapMode = () => {
     setIsMapMode(!isMapMode);
@@ -299,35 +251,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
     return "waiting";
   };
 
-  const getPointColor = (type: string) => {
-    switch (type) {
-      case "from":
-        return colors.success; // зеленый для "откуда"
-      case "to":
-        return colors.primary; // синий для "куда"
-      case "stop":
-        return colors.textSecondary; // серый для остановок
-      default:
-        return colors.textSecondary;
-    }
-  };
 
-  const getStatusIcon = (status: string, type: string) => {
-    switch (status) {
-      case "selected":
-        return "checkmark-circle";
-      case "next":
-        return type === "from"
-          ? "location"
-          : type === "to"
-            ? "flag"
-            : "ellipse";
-      case "waiting":
-        return "ellipse-outline";
-      default:
-        return "ellipse-outline";
-    }
-  };
 
   const getBorderColor = (status: string, type: string, addressId: string) => {
     // Для текстового режима проверяем валидацию
@@ -476,10 +400,8 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
 
       {/* Список точек (оставляем только верхний) */}
       <View style={{ marginBottom: 12 }}>
-        {addresses.slice(0, 1).map((address, index) => {
+        {addresses.slice(0, 1).map((address) => {
           const status = getPointStatus(address);
-          const pointColor = getPointColor(address.type);
-          const statusIcon = getStatusIcon(status, address.type);
           const borderColor = getBorderColor(status, address.type, address.id);
 
           return (

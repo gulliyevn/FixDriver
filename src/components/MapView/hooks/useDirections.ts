@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import polyline from "@mapbox/polyline";
 import { RoutePoint } from "../types/map.types";
-import { ENV_CONFIG } from "../../../config/environment";
 
 interface DirectionsResult {
   coordinates: Array<{ latitude: number; longitude: number }>;
@@ -86,21 +85,11 @@ export const useDirections = (
           return;
         }
         let best = data.routes[0];
-        const decoded = polyline
-          .decode(best.overview_polyline.points)
-          .map((p: number[]) => ({ latitude: p[0], longitude: p[1] }));
         const durationInTrafficSec = best.legs.reduce(
           (acc: number, leg: any) =>
             acc + (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
           0,
         );
-        const distanceMeters = best.legs.reduce(
-          (acc: number, leg: any) => acc + (leg.distance?.value ?? 0),
-          0,
-        );
-        let reorderedIndices: number[] | undefined = undefined;
-        if (best.waypoint_order)
-          reorderedIndices = best.waypoint_order as number[];
 
         // Проверка на опоздание
         const nowMs = Date.now();

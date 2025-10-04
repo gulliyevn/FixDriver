@@ -8,7 +8,6 @@ import {
   Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../../../context/ThemeContext";
 import { t } from "../../../i18n";
 import { createDriverModalStyles } from "../../../styles/components/DriverModal";
 

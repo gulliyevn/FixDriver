@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, StatusBarStyle } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import { useTheme } from "../context/ThemeContext";
 
 const DynamicStatusBar: React.FC = () => {

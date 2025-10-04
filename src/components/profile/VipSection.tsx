@@ -16,7 +16,7 @@ interface VipSectionProps {
 const VipSection: React.FC<VipSectionProps> = ({ onVipPress }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const dynamicStyles = getVipSectionColors(isDark);
+  getVipSectionColors(isDark);
 
   return (
     <View style={styles.container}>

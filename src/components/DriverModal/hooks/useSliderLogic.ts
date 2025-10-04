@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect } from "react";
 import { Animated } from "react-native";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { State } from "react-native-gesture-handler";
 import * as Haptics from "expo-haptics";
 import {
   DriverModalState,

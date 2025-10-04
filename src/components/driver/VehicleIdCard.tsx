@@ -28,9 +28,6 @@ const VehicleIdCard: React.FC<VehicleIdCardProps> = ({
   const { isDark } = useTheme();
   const { t } = useI18n();
   const dynamicStyles = getVehicleIdCardColors(isDark);
-  const currentColors = isDark
-    ? { primary: "#3B82F6" }
-    : { primary: "#083198" };
 
   // Определяем иконку и цвет в зависимости от статуса верификации
   const getVerificationIcon = () => {

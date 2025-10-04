@@ -93,7 +93,7 @@ export const useDriverModalHandlers = (
   }, [actions]);
 
   const handleRatingSubmit = useCallback(
-    (rating: number, comment: string) => {
+    () => {
       actions.setShowRatingDialog(false);
     },
     [actions],

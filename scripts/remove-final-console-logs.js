@@ -19,7 +19,7 @@ function processFile(filePath) {
     
     // Удаляем console.log строки аккуратно
     const consoleLogRegex = /(\s*)console\.log\([^)]*\);?\s*/g;
-    const newContent = content.replace(consoleLogRegex, (match, indent) => {
+    const newContent = content.replace(consoleLogRegex, () => {
       modified = true;
       return '';
     });

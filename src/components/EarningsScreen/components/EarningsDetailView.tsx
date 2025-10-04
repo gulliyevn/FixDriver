@@ -4,16 +4,15 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import { getCurrentColors, SIZES } from "../../../constants/colors";
 // Mock functions removed - using hardcoded data
-const getRideHistoryByPeriod = (period: string) => [];
-const getHourlyActivityByPeriod = (period: string) => [];
-const getDistanceMetricsByPeriod = (period: string) => [];
-const getRoutePointsByPeriod = (period: string) => [];
+const getRideHistoryByPeriod = () => [];
+const getHourlyActivityByPeriod = () => [];
+const getDistanceMetricsByPeriod = () => [];
+const getRoutePointsByPeriod = () => [];
 
 interface EarningsDetailViewProps {
   selectedStat:
@@ -28,7 +27,7 @@ interface EarningsDetailViewProps {
 }
 
 const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
-  ({ selectedStat, isDark, onClose, period }) => {
+  ({ selectedStat, isDark }) => {
     const colors = getCurrentColors(isDark);
 
     if (!selectedStat) return null;
@@ -39,28 +38,28 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
           return {
             title: "История поездок",
             icon: "car-outline",
-            data: getRideHistoryByPeriod(period),
+            data: getRideHistoryByPeriod(),
           };
 
         case "workHours":
           return {
             title: "Активность по часам",
             icon: "time-outline",
-            data: getHourlyActivityByPeriod(period),
+            data: getHourlyActivityByPeriod(),
           };
 
         case "totalDistance":
           return {
             title: "Статистика пробега",
             icon: "navigate-outline",
-            data: getDistanceMetricsByPeriod(period),
+            data: getDistanceMetricsByPeriod(),
           };
 
         case "routePoints":
           return {
             title: "Маршруты на сегодня",
             icon: "location-outline",
-            data: getRoutePointsByPeriod(period),
+            data: getRoutePointsByPeriod(),
           };
 
         default:

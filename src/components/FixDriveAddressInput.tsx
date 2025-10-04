@@ -83,7 +83,7 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
     onAddressesChange(updatedAddresses);
   };
 
-  const selectFromMap = (id: string) => {
+  const selectFromMap = () => {
     // Здесь будет логика выбора адреса из карты
   };
 
@@ -98,23 +98,13 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
     }
   };
 
-  const getAddressLabel = (type: "from" | "to" | "stop") => {
-    switch (type) {
-      case "from":
-        return t("common.fixDrive.address.from");
-      case "to":
-        return t("common.fixDrive.address.to");
-      case "stop":
-        return "Остановка";
-    }
-  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Адрес</Text>
 
       <View>
-        {addresses.map((address, index) => (
+        {addresses.map((address) => (
           <View key={address.id} style={styles.addressContainer}>
             {/* Контейнер с полем ввода */}
             <View style={styles.addressInputContainer}>
@@ -148,7 +138,7 @@ const FixDriveAddressInput: React.FC<FixDriveAddressInputProps> = ({
                 } else if (address.type === "stop") {
                   removeStop(address.id);
                 } else {
-                  selectFromMap(address.id);
+                  selectFromMap();
                 }
               }}
             >

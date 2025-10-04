@@ -8,7 +8,6 @@ import React, {
 import {
   SafeAreaView,
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   Alert,

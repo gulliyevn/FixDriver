@@ -17,7 +17,7 @@ function quickFixFile(filePath) {
     
     // 2. Заменяем any на unknown в простых случаях
     const anyRegex = /:\s*any\b/g;
-    const newContent2 = content.replace(anyRegex, (match) => {
+    const newContent2 = content.replace(anyRegex, () => {
       modified = true;
       return ': unknown';
     });

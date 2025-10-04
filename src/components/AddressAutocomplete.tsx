@@ -51,7 +51,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     STORAGE_KEYS.ADDRESS_AUTOCOMPLETE_HISTORY,
   );
   const addressService = useMemo(() => new AddressService(), []);
-  const { verifyAddress } = useAddressGeocoding(addressService);
+  useAddressGeocoding(addressService);
 
   const [predictions, setPredictions] = useState<PlacePrediction[]>([]);
   const [history, setHistory] = useState<AddressHistory[]>([]);
@@ -167,6 +167,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   };
 
   const handleQuickOption = (option: string) => {
+    console.log('Quick option selected:', option);
     setShowDropdown(false);
   };
 

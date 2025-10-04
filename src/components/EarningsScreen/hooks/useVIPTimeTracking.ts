@@ -3,10 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { VIP_CONFIG, calculateMonthlyVIPBonus } from "../types/levels.config";
 import { useBalanceContext } from "../../../context/BalanceContext";
 import DriverStatusService from "../../../services/DriverStatusService";
-import DriverStatsService from "../../../services/DriverStatsService";
 
 const VIP_TIME_KEY = "@driver_vip_time_tracking";
-const DAILY_STATS_KEY = "@driver_daily_stats";
 
 interface VIPTimeData {
   currentDay: string; // YYYY-MM-DD
@@ -22,14 +20,6 @@ interface VIPTimeData {
   qualifiedDaysHistory: number[]; // История квалифицированных дней по 30-дневным периодам
 }
 
-interface DailyStats {
-  [date: string]: {
-    hoursOnline: number;
-    ridesCount: number;
-    earnings: number;
-    isQualified: boolean;
-  };
-}
 
 const MIN_HOURS_PER_DAY = 10;
 
@@ -175,14 +165,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         setDayEndModalVisible(true);
 
         // Сохраняем данные для обработки в диалоге
-        const previousDayEarnings = await resetEarnings();
-        const previousDayStats = {
-          date: vipTimeData.currentDay,
-          hoursOnline: vipTimeData.hoursOnline + additionalHours,
-          ridesCount: vipTimeData.ridesToday,
-          earnings: previousDayEarnings,
-          isQualified: isQualifiedDay,
-        };
+        await resetEarnings();
 
         // Сохраняем в БД асинхронно
         // DriverStatsService.saveDayStats(previousDayStats).catch(error => {
@@ -351,43 +334,8 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
   };
 
   // Функции для работы с дневной статистикой
-  const loadDailyStats = async (): Promise<DailyStats> => {
-    try {
-      const saved = await AsyncStorage.getItem(DAILY_STATS_KEY);
-      return saved ? JSON.parse(saved) : {};
-    } catch (error) {
-      return {};
-    }
-  };
 
-  const saveDailyStats = async (stats: DailyStats) => {
-    try {
-      await AsyncStorage.setItem(DAILY_STATS_KEY, JSON.stringify(stats));
-    } catch (error) {
-      console.warn('Failed to save daily stats:', error);
-    }
-  };
 
-  const saveDayStats = async (
-    date: string,
-    hoursOnline: number,
-    ridesCount: number,
-    earnings: number = 0,
-  ) => {
-    const stats = await loadDailyStats();
-    const isQualified =
-      hoursOnline >= MIN_HOURS_PER_DAY &&
-      ridesCount >= VIP_CONFIG.minRidesPerDay;
-
-    stats[date] = {
-      hoursOnline,
-      ridesCount,
-      earnings,
-      isQualified,
-    };
-
-    await saveDailyStats(stats);
-  };
 
   const startOnlineTime = useCallback(() => {
     const now = Date.now();

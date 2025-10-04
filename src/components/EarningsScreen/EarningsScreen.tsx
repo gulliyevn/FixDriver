@@ -9,7 +9,6 @@ import {
   Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useTheme } from "../../context/ThemeContext";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../context/AuthContext";
@@ -62,14 +61,9 @@ const EarningsScreen: React.FC = () => {
   const balanceAnim = useRef(new Animated.Value(1)).current;
 
   // Получаем данные о прогрессе водителя из контекста — единый источник истины
-  const { driverLevel, incrementProgress, updateVIPLevel } = useLevelProgress();
+  const { driverLevel, updateVIPLevel } = useLevelProgress();
   const {
-    balance,
     earnings,
-    addEarnings,
-    loadBalance,
-    loadEarnings,
-    resetBalance,
   } = useBalance();
 
   const { currentData } = useEarningsData(selectedPeriod, forceUpdate);
@@ -83,7 +77,7 @@ const EarningsScreen: React.FC = () => {
   // (перенесено ниже, после инициализации useVIPTimeTracking)
 
   // Получаем роль пользователя на верхнем уровне
-  const { user } = useAuth();
+  useAuth();
 
   // Адаптивный цвет для круга
   const circleColor = isDark ? "#3B82F6" : "#083198";
@@ -104,17 +98,11 @@ const EarningsScreen: React.FC = () => {
     startOnlineTime,
     stopOnlineTime,
     getCurrentHoursOnline,
-    resetVIPTimeData,
-    registerRide,
-    addManualOnlineHours,
-    simulateDayChange,
-    simulateMonthChange,
     getQualifiedDaysHistory,
     // Диалог окончания дня
     dayEndModalVisible,
     handleDayEndConfirm,
     handleDayEndCancel,
-    forceDayCheck,
   } = useVIPTimeTracking(driverLevel.isVIP);
 
   // Единый источник значений для VIP прогресс-бара и тестового контейнера

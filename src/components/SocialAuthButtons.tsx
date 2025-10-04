@@ -1,7 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SocialAuthService } from "../services/SocialAuthService";
 import { SocialAuthButtonsStyles } from "../styles/components/SocialAuthButtons.styles";
 import { useI18n } from "../hooks/useI18n";
@@ -18,7 +17,7 @@ export default function SocialAuthButtons({
   onSuccess,
   onError,
 }: SocialAuthButtonsProps) {
-  const { t } = useI18n();
+  useI18n();
   const handleGoogleSignIn = async () => {
     if (onPress) {
       await onPress("google");

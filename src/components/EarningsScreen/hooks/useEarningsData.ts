@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useBalance } from "../../../hooks/useBalance";
 import { useDriverStats } from "../../../hooks/useDriverStats";
 import { PeriodStats } from "../../../services/DriverStatsService";

@@ -6,7 +6,6 @@ import {
   Modal,
   ScrollView,
   Animated,
-  Dimensions,
   StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";

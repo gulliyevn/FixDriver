@@ -5,24 +5,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Old architecture providers and navigation
-import RootNavigator from '../src/navigation/RootNavigator';
-import { AuthProvider } from '../src/context/AuthContext';
-import { ThemeProvider } from '../src/context/ThemeContext';
-import { LanguageProvider } from '../src/context/LanguageContext';
-import { BalanceProvider } from '../src/context/BalanceContext';
-import { ProfileProvider } from '../src/context/ProfileContext';
-import { PackageProvider } from '../src/context/PackageContext';
-import { LevelProgressProvider } from '../src/context/LevelProgressContext';
-import NotificationService from '../src/services/NotificationService';
-import '../src/utils/devTools'; // DEV tools для консоли
+import RootNavigator from './src/navigation/RootNavigator';
+import { AuthProvider } from './src/context/AuthContext';
+import { ThemeProvider } from './src/context/ThemeContext';
+import { LanguageProvider } from './src/context/LanguageContext';
+import { BalanceProvider } from './src/context/BalanceContext';
+import { ProfileProvider } from './src/context/ProfileContext';
+import { PackageProvider } from './src/context/PackageContext';
+import { LevelProgressProvider } from './src/context/LevelProgressContext';
+import './src/utils/devTools'; // DEV tools для консоли
 import 'formdata-polyfill';
 
-function App() {
+const App: React.FC = () => {
   useEffect(() => {
     // Инициализация уведомлений при запуске приложения
     const initNotifications = async () => {
       try {
-        const notificationService = NotificationService.getInstance();
+        // NotificationService уже инициализирован как singleton
+        console.log('NotificationService ready');
         // NotificationService готов к использованию
         console.log('NotificationService initialized');
       } catch (error) {
@@ -56,6 +56,7 @@ function App() {
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
-}
+};
 
+export default App;
 registerRootComponent(App);

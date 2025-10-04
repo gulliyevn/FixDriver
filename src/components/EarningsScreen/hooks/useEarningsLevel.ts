@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 import {
-  LEVELS_CONFIG,
   VIP_CONFIG,
   getLevelConfig,
   isVIPLevel,
@@ -30,8 +29,8 @@ export interface DriverLevel {
 }
 
 export const useEarningsLevel = () => {
-  const { addEarnings, loadBalance, loadEarnings } = useBalanceContext();
-  const { t } = useI18n();
+  const { addEarnings } = useBalanceContext();
+  useI18n();
 
   const [driverLevel, setDriverLevel] = useState<DriverLevel>(() => {
     const config = getLevelConfig(1, 1);
@@ -207,7 +206,6 @@ export const useEarningsLevel = () => {
 
         if (totalRides < accumulatedRides + ridesInThisSubLevel) {
           // Нашли нужный подуровень
-          const progressInSubLevel = totalRides - accumulatedRides;
 
           return {
             level,

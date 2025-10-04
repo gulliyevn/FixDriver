@@ -46,7 +46,7 @@ try {
   keyChecks.forEach(key => {
     const result = TranslationValidator.checkKey(key);
     const missingLanguages = Object.entries(result)
-      .filter(([lang, exists]) => !exists)
+      .filter(([, exists]) => !exists)
       .map(([lang]) => lang);
     
     if (missingLanguages.length === 0) {

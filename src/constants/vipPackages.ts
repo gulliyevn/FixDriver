@@ -27,7 +27,7 @@ export const ANIMATION_CONFIG = {
 
 // Константы для градиента скидки
 export const DISCOUNT_GRADIENT = {
-  COLORS: ["#00FFFF", "#FF00FF", "#FFFF00"],
+  COLORS: ["#00FFFF", "#FF00FF", "#FFFF00"] as string[],
   START: { x: 0, y: 0 },
   END: { x: 1, y: 1 },
 } as const;

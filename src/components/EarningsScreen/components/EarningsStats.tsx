@@ -22,7 +22,7 @@ interface EarningsStatsProps {
 const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
   const { t } = useI18n();
   const colors = getCurrentColors(isDark);
-  const { quickStats, periodStats } = useEarningsData(period);
+  const { quickStats } = useEarningsData(period);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [animation] = useState(new Animated.Value(0));

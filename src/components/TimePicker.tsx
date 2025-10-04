@@ -22,7 +22,6 @@ const TimePicker: React.FC<TimePickerProps> = ({
   onClear,
   placeholder = "Выберите время",
   indicatorColor,
-  title,
   dayLabel,
 }) => {
   const { isDark } = useTheme();
@@ -54,11 +53,6 @@ const TimePicker: React.FC<TimePickerProps> = ({
     else if (selectedTime) {
       setCurrentTime(selectedTime);
     }
-  };
-
-  const formatDisplayTime = (timeString?: string) => {
-    if (!timeString) return title || placeholder;
-    return timeString;
   };
 
   return (

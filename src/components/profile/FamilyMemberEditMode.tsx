@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -29,7 +29,6 @@ interface FamilyMemberEditModeProps {
 const FamilyMemberEditMode: React.FC<FamilyMemberEditModeProps> = ({
   member,
   editingData,
-  phoneVerified,
   onSave,
   onCancel,
   onDelete,

@@ -63,7 +63,6 @@ interface VipPackagesProps {
 const VipPackages: React.FC<VipPackagesProps> = ({
   onSelectPackage,
   currentPackage,
-  currentPeriod,
   selectedPeriod: externalSelectedPeriod,
   onPeriodChange,
   isSubscriptionActive = true,
@@ -269,7 +268,7 @@ const VipPackages: React.FC<VipPackagesProps> = ({
               </Text>
               {selectedPeriod === "year" && (
                 <LinearGradient
-                  colors={DISCOUNT_GRADIENT.COLORS}
+                  colors={DISCOUNT_GRADIENT.COLORS as [string, string, string]}
                   start={DISCOUNT_GRADIENT.START}
                   end={DISCOUNT_GRADIENT.END}
                   style={VipPackagesStyles.yearDiscountBadge}

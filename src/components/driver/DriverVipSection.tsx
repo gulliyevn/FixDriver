@@ -16,7 +16,7 @@ interface DriverVipSectionProps {
 const DriverVipSection: React.FC<DriverVipSectionProps> = ({ onVipPress }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const dynamicStyles = getDriverVipSectionColors(isDark);
+  getDriverVipSectionColors(isDark);
 
   return (
     <View style={styles.container}>

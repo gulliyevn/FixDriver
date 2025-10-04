@@ -7,14 +7,6 @@ let hasIssues = false;
 
 // 1. Проверка размера bundle
 console.log('📦 Проверка размера файлов...');
-function getFileSize(filePath) {
-  try {
-    const stats = fs.statSync(filePath);
-    return stats.size;
-  } catch (error) {
-    return 0;
-  }
-}
 
 function scanDirectory(dirPath, extensions = ['.ts', '.tsx', '.js', '.jsx']) {
   let totalSize = 0;

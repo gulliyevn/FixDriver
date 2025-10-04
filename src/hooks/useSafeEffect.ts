@@ -19,7 +19,7 @@ export const useSafeEffect = (
   effect: () => void | (() => void),
   deps?: React.DependencyList,
 ) => {
-  const cleanupRef = useRef<(() => void) | void>();
+  const cleanupRef = useRef<(() => void) | void>(undefined);
   const isCleanedUpRef = useRef(false);
 
   useEffect(() => {
