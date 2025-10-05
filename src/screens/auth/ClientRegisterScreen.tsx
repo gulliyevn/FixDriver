@@ -48,8 +48,8 @@ const ClientRegisterScreen: React.FC = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
 
   const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
+    setForm((prev: typeof form) => ({ ...prev, [field]: value }));
+    setErrors((prev: typeof errors) => ({ ...prev, [field]: undefined }));
   };
 
   const validate = () => {

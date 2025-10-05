@@ -228,7 +228,7 @@ export const useFamilyMembers = () => {
                 { text: cancelText, style: "cancel" },
                 {
                   text: verifyText,
-                  onPress: async (code) => {
+                  onPress: async (code: string) => {
                     if (code === "1234") {
                       setFamilyPhoneVerifying((prev) => ({
                         ...prev,

@@ -124,15 +124,15 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
 
   // Выбираем нужный хук в зависимости от роли
   const balanceHook = isDriver ? driverBalanceHook : clientBalanceHook;
-  const userBalance = balanceHook.balance;
+  const userBalance = balanceHook?.balance ?? 0;
 
   // Для водителей показываем общую сумму (баланс + заработок)
   const totalBalance = isDriver
-    ? userBalance + (driverBalanceHook as DriverBalanceContextType).earnings
+    ? userBalance + ((driverBalanceHook as DriverBalanceContextType)?.earnings ?? 0)
     : userBalance;
   const topUpBalance = isDriver
-    ? (driverBalanceHook as DriverBalanceContextType).topUpBalance
-    : clientBalanceHook.topUpBalance;
+    ? (driverBalanceHook as DriverBalanceContextType)?.topUpBalance
+    : clientBalanceHook?.topUpBalance;
   const withdrawBalance = isDriver
     ? (driverBalanceHook as DriverBalanceContextType).withdrawBalance
     : null;
@@ -205,7 +205,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
           { text: t("client.balance.cancel"), style: "cancel" },
           {
             text: t("client.balance.withdraw"),
-            onPress: (inputAmount) => {
+            onPress: (inputAmount: string) => {
               if (inputAmount) {
                 const amountNum = parseFloat(inputAmount);
                 if (!isNaN(amountNum) && amountNum > 0) {

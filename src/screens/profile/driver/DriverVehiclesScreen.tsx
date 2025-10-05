@@ -62,8 +62,8 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
 
   // Логика зависимостей между полями
   useEffect(() => {
-    if (vehicleForm.tariff) {
-      setBrandOptions(vehicleSegments[vehicleForm.tariff]?.brands || carBrands);
+    if (vehicleForm.tariff && vehicleForm.tariff in vehicleSegments) {
+      setBrandOptions((vehicleSegments as any)[vehicleForm.tariff]?.brands || carBrands);
       setModelOptions([]);
       setVehicleForm((prev) => ({ ...prev, carBrand: "", carModel: "" }));
     }
@@ -79,7 +79,8 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
 
   const handleBrandChange = (brand: string) => {
     setVehicleForm((prev) => ({ ...prev, carBrand: brand, carModel: "" }));
-    setModelOptions(vehicleSegments[vehicleForm.tariff]?.models[brand] || []);
+    const segment = vehicleForm.tariff && vehicleForm.tariff in vehicleSegments ? (vehicleSegments as any)[vehicleForm.tariff] : null;
+    setModelOptions(segment?.models?.[brand] || []);
   };
 
   const handleModelChange = (model: string) => {

@@ -22,9 +22,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const dynamicStyles = getProfileHeaderColors(isDark);
-  const currentColors = isDark
-    ? { dark: { primary: "#3B82F6" } }
-    : { light: { primary: "#083198" } };
+  const primaryColor = isDark ? "#3B82F6" : "#083198";
 
   return (
     <View style={[styles.header, dynamicStyles.header]}>
@@ -42,9 +40,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <Ionicons
           name={isEditing ? "checkmark" : "create-outline"}
           size={24}
-          color={
-            isDark ? currentColors.dark.primary : currentColors.light.primary
-          }
+          color={primaryColor}
         />
       </TouchableOpacity>
     </View>

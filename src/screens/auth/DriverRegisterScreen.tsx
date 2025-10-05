@@ -74,8 +74,8 @@ const DriverRegisterScreen: React.FC = () => {
   >(null);
 
   useEffect(() => {
-    if (form.tariff) {
-      setBrandOptions(vehicleSegments[form.tariff]?.brands || carBrands);
+    if (form.tariff && form.tariff in vehicleSegments) {
+      setBrandOptions((vehicleSegments as any)[form.tariff]?.brands || carBrands);
       setModelOptions([]);
       setForm((prev) => ({ ...prev, carBrand: "", carModel: "" }));
     }
@@ -85,13 +85,14 @@ const DriverRegisterScreen: React.FC = () => {
   const yearOptions = getYearOptions();
 
   const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
+    setForm((prev: typeof form) => ({ ...prev, [field]: value }));
+    setErrors((prev: typeof errors) => ({ ...prev, [field]: undefined }));
   };
 
   const handleBrandChange = (brand: string) => {
     setForm((prev) => ({ ...prev, carBrand: brand, carModel: "" }));
-    setModelOptions(vehicleSegments[form.tariff]?.models[brand] || []);
+    const segment = form.tariff && form.tariff in vehicleSegments ? (vehicleSegments as any)[form.tariff] : null;
+    setModelOptions(segment?.models?.[brand] || []);
   };
   const handleModelChange = (model: string) => {
     setForm((prev) => ({ ...prev, carModel: model }));
@@ -110,22 +111,22 @@ const DriverRegisterScreen: React.FC = () => {
     label: string;
     value: string | number;
   }) => {
-    setForm((prev) => ({ ...prev, experience: option.value.toString() }));
-    setErrors((prev) => ({ ...prev, experience: undefined }));
+    setForm((prev: typeof form) => ({ ...prev, experience: option.value.toString() }));
+    setErrors((prev: typeof errors) => ({ ...prev, experience: undefined }));
   };
   const handleCountryChange = (option: {
     label: string;
     value: string | number;
   }) => {
-    setForm((prev) => ({ ...prev, country: option.value.toString() }));
-    setErrors((prev) => ({ ...prev, country: undefined }));
+    setForm((prev: typeof form) => ({ ...prev, country: option.value.toString() }));
+    setErrors((prev: typeof errors) => ({ ...prev, country: undefined }));
   };
   const handleYearChange = (option: {
     label: string;
     value: string | number;
   }) => {
-    setForm((prev) => ({ ...prev, carYear: option.value.toString() }));
-    setErrors((prev) => ({ ...prev, carYear: undefined }));
+    setForm((prev: typeof form) => ({ ...prev, carYear: option.value.toString() }));
+    setErrors((prev: typeof errors) => ({ ...prev, carYear: undefined }));
   };
 
   const validate = () => {
@@ -409,7 +410,7 @@ const DriverRegisterScreen: React.FC = () => {
               photo={licensePhoto}
               onPhotoChange={(uri) => setLicensePhoto(uri)}
               onError={(err) =>
-                setErrors((prev) => ({ ...prev, licensePhoto: err }))
+                setErrors((prev: typeof errors) => ({ ...prev, licensePhoto: err }))
               }
               type="license"
               uploading={uploadingPhoto === "license"}
@@ -535,7 +536,7 @@ const DriverRegisterScreen: React.FC = () => {
               photo={passportPhoto}
               onPhotoChange={(uri) => setPassportPhoto(uri)}
               onError={(err) =>
-                setErrors((prev) => ({ ...prev, passportPhoto: err }))
+                setErrors((prev: typeof errors) => ({ ...prev, passportPhoto: err }))
               }
               type="passport"
               uploading={uploadingPhoto === "passport"}

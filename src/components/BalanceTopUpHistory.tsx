@@ -46,8 +46,8 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({
   const clientBalanceHook = useBalance();
   const driverBalanceHook = useDriverBalance();
   const transactions = isDriver
-    ? driverBalanceHook.transactions
-    : clientBalanceHook.transactions;
+    ? driverBalanceHook?.transactions ?? []
+    : clientBalanceHook?.transactions ?? [];
   const dynamicStyles = getBalanceTopUpHistoryStyles(isDark);
 
   // Фильтруем транзакции в зависимости от роли и выбранного типа

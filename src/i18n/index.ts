@@ -124,7 +124,7 @@ export const setLanguage = async (
 export const getSystemLanguage = (): SupportedLanguage => {
   try {
     const systemLocale = Localization.getLocales()[0]?.languageCode || "en";
-    return SUPPORTED_LANGUAGES[systemLocale]
+    return (systemLocale in SUPPORTED_LANGUAGES)
       ? (systemLocale as SupportedLanguage)
       : DEFAULT_LANGUAGE;
   } catch (error) {

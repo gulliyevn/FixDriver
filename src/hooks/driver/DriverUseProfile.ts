@@ -47,7 +47,7 @@ export const useDriverProfile = (userId: string) => {
 
       // Если сохраненных данных нет, загружаем из моков
       const response = await APIClient.get("/auth/users");
-      const user = response.data?.[0] || mockUsers[0];
+      const user = (Array.isArray(response.data) ? response.data[0] : null) || mockUsers[0];
 
       // Загружаем аватар из нового сервиса
       const avatar = await DriverAvatarService.getAvatar(userId);
@@ -99,7 +99,7 @@ export const useDriverProfile = (userId: string) => {
 
         // Обновляем данные в моках для совместимости
         const response = await APIClient.get("/auth/users");
-      const user = response.data?.[0] || mockUsers[0];
+        const user = (Array.isArray(response.data) ? response.data[0] : null) || mockUsers[0];
         if (updatedData.name !== undefined) user.name = updatedData.name;
         if (updatedData.surname !== undefined)
           user.surname = updatedData.surname;

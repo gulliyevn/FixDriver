@@ -59,7 +59,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
       trips: 127,
       spent: "12 450 AFc",
       rating: profile.rating,
-      balance: formatBalance(balanceHook.balance) + " AFc",
+      balance: formatBalance(balanceHook?.balance ?? 0) + " AFc",
       address: profile.address,
       email: profile.email,
       memberSince: new Date(profile.createdAt).getFullYear(),

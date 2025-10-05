@@ -68,7 +68,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const { t } = useI18n();
   const balanceHook = useBalance();
-  const deductBalance = balanceHook.deductBalance;
+  const deductBalance = balanceHook?.deductBalance;
 
   // Проверяем, что deductBalance является функцией
   if (typeof deductBalance !== "function") {

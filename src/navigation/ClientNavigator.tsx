@@ -27,7 +27,7 @@ const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       id={undefined}
-      tabBar={(props) => <TabBarWithLanguage {...props} />}
+      tabBar={(props: any) => <TabBarWithLanguage {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {

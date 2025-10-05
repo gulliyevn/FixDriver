@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TimeScheduleData } from "../types/fix-wave.types";
+import { TimeScheduleData, AddressData } from "../types/fix-wave.types";
 import { fixwaveOrderService } from "../../../../services/fixwaveOrderService";
 
 export const useSessionData = (
@@ -42,14 +42,15 @@ export const useSessionData = (
         }
 
         if (sessionData?.addressData?.addresses) {
+          type Address = AddressData['addresses'][number];
           const fromAddr = sessionData.addressData.addresses.find(
-            (addr) => addr.type === "from",
+            (addr: Address) => addr.type === "from",
           );
           const toAddr = sessionData.addressData.addresses.find(
-            (addr) => addr.type === "to",
+            (addr: Address) => addr.type === "to",
           );
           const stops = sessionData.addressData.addresses.filter(
-            (addr) => addr.type === "stop",
+            (addr: Address) => addr.type === "stop",
           );
 
           if (fromAddr) {
@@ -67,10 +68,11 @@ export const useSessionData = (
             }));
           }
           if (stops && stops.length) {
-            const stopAddresses = stops.map((s) => s.address).slice(0, 2);
+            type Address = AddressData['addresses'][number];
+            const stopAddresses = stops.map((s: Address) => s.address).slice(0, 2);
             const stopCoords = stops
               .slice(0, 2)
-              .map((s) => s.coordinates)
+              .map((s: Address) => s.coordinates)
               .filter(Boolean) as Array<{
               latitude: number;
               longitude: number;
