@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import APIClient from "./APIClient";
-import { useUserStorageKey, STORAGE_KEYS } from "../utils/storageKeys";
+import { STORAGE_KEYS } from "../utils/storageKeys";
 
 export interface PaymentTransaction {
   id: string;

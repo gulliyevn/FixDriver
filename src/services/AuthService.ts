@@ -1,6 +1,5 @@
 import JWTService, { TokenResponse } from "./JWTService";
 import { User, UserRole } from "../types/user";
-import { ENV_CONFIG, ConfigUtils } from "../config/environment";
 import APIClient from "./APIClient";
 
 export interface AuthResponse {
@@ -83,7 +82,6 @@ export class AuthService {
   static async login(
     email: string,
     password: string,
-    authMethod?: string,
   ): Promise<AuthResponse> {
     try {
       const requestBody: GoLoginRequest = {

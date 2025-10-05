@@ -38,7 +38,7 @@ export interface UsePaymentHistoryResult {
   getTransactionIcon: (type: string) => string;
   getTransactionColor: (type: string) => string;
   getStatusColor: (status: string) => string;
-  formatAmount: (amount: number, type: string) => string;
+  formatAmount: (amount: number) => string;
 }
 
 export const usePaymentHistory = (): UsePaymentHistoryResult => {
@@ -328,7 +328,7 @@ export const usePaymentHistory = (): UsePaymentHistoryResult => {
     }
   }, []);
 
-  const formatAmount = useCallback((amount: number, type: string): string => {
+  const formatAmount = useCallback((amount: number): string => {
     const sign = amount > 0 ? "+" : "";
     const absAmount = Math.abs(amount);
     return `${sign}${absAmount} AFc`;

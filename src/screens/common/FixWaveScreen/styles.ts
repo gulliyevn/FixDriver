@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { getCurrentColors, SIZES, SHADOWS } from "../../../constants/colors";
+import { getCurrentColors, SIZES } from "../../../constants/colors";
 
 export const createFixWaveScreenStyles = (isDark: boolean) => {
   const colors = getCurrentColors(isDark);

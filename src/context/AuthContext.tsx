@@ -155,7 +155,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (
     email: string,
     password: string,
-    authMethod?: "google" | "facebook" | "apple",
   ): Promise<boolean> => {
     try {
       setIsLoading(true);
@@ -216,7 +215,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       // PROD: Используем AuthService для входа
-      const result = await AuthService.login(email, password, authMethod);
+      const result = await AuthService.login(email, password);
 
       if (result.success && result.user && result.tokens) {
         // Сохраняем токены и данные пользователя

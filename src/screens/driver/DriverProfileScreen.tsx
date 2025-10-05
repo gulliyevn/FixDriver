@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Alert,
-  Modal,
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,7 +18,6 @@ import {
 } from "../../styles/screens/driver/DriverProfileScreen.styles";
 import { DriverScreenProps } from "../../types/driver/DriverNavigation";
 import { colors } from "../../constants/colors";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDriverProfile as useProfile } from "../../hooks/driver/DriverUseProfile";
 import { useBalance } from "../../hooks/useBalance";
@@ -38,7 +36,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
   const dynamicStyles = getDriverProfileStyles(isDark);
 
   // Используем хук для работы с профилем
-  const { profile, loading, error, loadProfile } =
+  const { profile, error, loadProfile } =
     useProfile("current_driver_id");
 
   // Используем умный хук для баланса
@@ -56,7 +54,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
   // const { userStats, loading: statsLoading } = useUserStats();
 
   // Данные из мокдата
-  const getUserStats = (userId: string) => {
+  const getUserStats = () => {
     if (!profile) return null;
 
     return {
@@ -73,7 +71,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
     };
   };
 
-  const userStats = getUserStats(profile?.id || "") || {
+  const userStats = getUserStats() || {
     trips: 0,
     spent: "0 AFc",
     rating: 0,

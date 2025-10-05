@@ -75,8 +75,7 @@ export const saveClientRegistration = async (data: {
   );
 
   // Проверяем что сохранилось
-  const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
-  const verifyUsers = verifyJson ? JSON.parse(verifyJson) : [];
+  await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
 
   return user;
 };
@@ -138,8 +137,7 @@ export const saveDriverRegistration = async (data: {
   );
 
   // Проверяем что сохранилось
-  const verifyJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
-  const verifyDrivers = verifyJson ? JSON.parse(verifyJson) : [];
+  await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
 
   return driver;
 };
@@ -188,11 +186,9 @@ export const logDevRegistrationStats = async (): Promise<void> => {
 
   try {
     const users = await getAllDevUsers();
-    const clients = users.filter((u) => u.role === "client");
-    const drivers = users.filter((u) => u.role === "driver");
 
     if (users.length > 0) {
-      users.slice(-5).forEach((user, index) => {});
+      users.slice(-5).forEach(() => {});
     }
   } catch (error) {
     console.warn('Failed to log dev registration stats:', error);

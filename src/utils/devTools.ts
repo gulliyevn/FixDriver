@@ -16,8 +16,7 @@ export const showDevStorage = async (): Promise<void> => {
       const value = await AsyncStorage.getItem(key);
       if (value) {
         try {
-          const parsed = JSON.parse(value);
-          const count = Array.isArray(parsed) ? parsed.length : 1;
+          JSON.parse(value);
         } catch (error) {
           console.warn('Failed to parse dev data:', error);
         }
@@ -136,7 +135,7 @@ export const checkProfiles = async (): Promise<void> => {
     for (const key of profileKeys) {
       const profile = await AsyncStorage.getItem(key);
       if (profile) {
-        const parsed = JSON.parse(profile);
+        JSON.parse(profile);
       }
     }
 
@@ -146,7 +145,7 @@ export const checkProfiles = async (): Promise<void> => {
       const user = JSON.parse(currentUser);
 
       // Проверяем существует ли профиль
-      const profileExists = await AsyncStorage.getItem(`@profile_${user.id}`);
+      await AsyncStorage.getItem(`@profile_${user.id}`);
     } else {
       console.log('No current user found');
     }

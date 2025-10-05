@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { getCurrentColors, SIZES } from "../../../../constants/colors";
+import { getCurrentColors } from "../../../../constants/colors";
 
 export const createAvatarStyles = (
   isDark: boolean,

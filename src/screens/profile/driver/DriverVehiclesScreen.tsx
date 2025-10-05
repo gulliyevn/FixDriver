@@ -40,7 +40,7 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
   // Хук для работы с автомобилями из БД
   const { createVehicle, validateVehicleForm } = useDriverVehicles();
 
-  const [isEditing, setIsEditing] = useState(true); // Показываем форму сразу
+  const [isEditing] = useState(true); // Показываем форму сразу
 
   // Состояние формы автомобиля
   const [vehicleForm, setVehicleForm] = useState<VehicleFormData>({

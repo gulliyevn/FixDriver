@@ -27,7 +27,7 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
   const { isDark } = useTheme();
   const colors = useMemo(() => getCurrentColors(isDark), [isDark]);
   const styles = useMemo(() => createFixWaveScreenStyles(isDark), [isDark]);
-  const { t } = useLanguage();
+  useLanguage();
 
   // Хук для навигации между страницами
   const {

@@ -291,7 +291,7 @@ const PaymentHistoryScreen: React.FC<PaymentHistoryScreenProps> = ({
                           { color: getTransactionColor(transaction.type) },
                         ]}
                       >
-                        {formatAmount(transaction.amount, transaction.type)}
+                        {formatAmount(transaction.amount)}
                       </Text>
                       <View
                         style={[

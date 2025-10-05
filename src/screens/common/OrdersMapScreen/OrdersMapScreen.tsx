@@ -75,7 +75,6 @@ const OrdersMapScreen: React.FC = () => {
 
         <MapControlsComponent
           isDark={isDark}
-          isSettingsExpanded={state.isSettingsExpanded}
           isRefreshing={state.isRefreshing}
           isClientLocationActive={state.isClientLocationActive}
           settingsRotate={settings.settingsRotate}

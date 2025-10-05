@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { getCurrentColors, SHADOWS, SIZES } from "../../../constants/colors";
+import { getCurrentColors, SIZES } from "../../../constants/colors";
 
 export const createDriverInfoBarStyles = (isDark: boolean) => {
   const palette = getCurrentColors(isDark);

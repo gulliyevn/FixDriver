@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Alert,
-  Modal,
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../context/AuthContext";
 import { useI18n } from "../../hooks/useI18n";
 import { useTheme } from "../../context/ThemeContext";
@@ -19,7 +17,6 @@ import {
 } from "../../styles/screens/ClientProfileScreen.styles";
 import { ClientScreenProps } from "../../types/navigation";
 import { colors } from "../../constants/colors";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useProfile } from "../../hooks/useProfile";
 import { useBalance } from "../../hooks/useBalance";
@@ -38,7 +35,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
   const dynamicStyles = getClientProfileStyles(isDark);
 
   // Используем хук для работы с профилем
-  const { profile, loading, error, loadProfile } = useProfile();
+  const { profile, error, loadProfile } = useProfile();
 
   // Используем умный хук для баланса
   const balanceHook = useBalance();
@@ -55,7 +52,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
   // const { userStats, loading: statsLoading } = useUserStats();
 
   // Данные из мокдата
-  const getUserStats = (userId: string) => {
+  const getUserStats = () => {
     if (!profile) return null;
 
     return {
@@ -72,7 +69,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
     };
   };
 
-  const userStats = getUserStats(profile?.id || "") || {
+  const userStats = getUserStats() || {
     trips: 0,
     spent: "0 AFc",
     rating: 0,

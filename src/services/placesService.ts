@@ -42,7 +42,6 @@ class PlacesService {
   // Получение предсказаний адресов через OpenStreetMap Nominatim
   async getPlacePredictions(
     input: string,
-    country?: string,
   ): Promise<PlacePrediction[]> {
     if (!input.trim() || input.length < 2) {
       return [];
@@ -69,7 +68,7 @@ class PlacesService {
       const data = await response.json();
 
       // Преобразуем ответ OpenStreetMap в формат Google Places
-      return data.map((item: any, index: number) => ({
+      return data.map((item: any) => ({
         place_id: item.place_id.toString(),
         description: item.display_name,
         structured_formatting: {

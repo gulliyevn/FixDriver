@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../../constants/colors";
+// colors not used
 
 export const VehicleIdCardStyles = StyleSheet.create({
   card: {

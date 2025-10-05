@@ -206,8 +206,9 @@ export class AvatarService {
   /**
    * Проверяет размер изображения
    */
-  static validateImageSize(uri: string): Promise<boolean> {
+  static validateImageSize(_uri: string): Promise<boolean> {
     return new Promise((resolve) => {
+      void _uri;
       // В реальном приложении здесь была бы проверка размера файла
       // Пока возвращаем true
       resolve(true);
@@ -219,9 +220,11 @@ export class AvatarService {
    */
   static async compressImage(
     uri: string,
-    quality: number = 0.8,
+    _quality: number = 0.8,
   ): Promise<string> {
     // В реальном приложении здесь была бы сжатие изображения
+    // Небольшая операция, чтобы пометить параметр использованным
+    void _quality;
     // Пока возвращаем оригинальную URI
     return uri;
   }

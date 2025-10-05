@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import AddressService, { AddressCategory } from "../../services/addressService";
+import AddressService from "../../services/addressService";
 import { ADDRESS_CATEGORY_CONFIG } from "../constants/addressCategories";
 import { useI18n } from "../../hooks/useI18n";
 

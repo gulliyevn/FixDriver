@@ -20,7 +20,7 @@ import {
   PremiumPackagesScreenStyles,
   getPremiumPackagesScreenColors,
 } from "../../styles/screens/profile/PremiumPackagesScreen.styles";
-import { formatBalance, formatDateWithLanguage } from "../../utils/formatters";
+import { formatBalance } from "../../utils/formatters";
 
 interface PremiumPackagesScreenProps {
   navigation: {
@@ -34,14 +34,13 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({
 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { language } = useLanguage();
+  useLanguage();
   const { user } = useAuth();
   const currentColors = isDark ? colors.dark : colors.light;
   const {
     currentPackage,
     subscription,
     updatePackage,
-    extendSubscription,
     cancelSubscription,
     toggleAutoRenew,
   } = usePackage();
@@ -86,10 +85,9 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({
   const handlePackageSelect = (
     packageId: string,
     price: number,
-    selectedPeriod: "month" | "year",
   ) => {
     // 1. СНАЧАЛА определяем сценарий действия
-    const scenario = determineScenario(packageId, selectedPeriod);
+    const scenario = determineScenario(packageId);
 
     // 2. Проверяем баланс только для новых покупок
     if (
@@ -143,9 +141,7 @@ const PremiumPackagesScreen: React.FC<PremiumPackagesScreenProps> = ({
   // Функция определения сценария
   const determineScenario = (
     packageId: string,
-    selectedPeriod: "month" | "year",
   ) => {
-    const currentPeriod = subscription?.period || "month";
 
     // Бесплатный пакет
     if (packageId === "free") {

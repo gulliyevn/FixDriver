@@ -1,6 +1,5 @@
 import APIClient from "../APIClient";
 import {
-  DriverVehicle,
   CreateVehicleRequest,
   UpdateVehicleRequest,
   VehicleResponse,

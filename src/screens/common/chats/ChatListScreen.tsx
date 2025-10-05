@@ -14,8 +14,6 @@ import {
   Alert,
   TextInput,
   Animated,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import type { Swipeable as RNSwipeable } from "react-native-gesture-handler";
@@ -35,7 +33,7 @@ const ChatListScreen: React.FC = () => {
   const { isDark } = useTheme();
   const styles = useMemo(() => createChatListScreenStyles(isDark), [isDark]);
   const { t } = useI18n();
-  const { user } = useAuth();
+  useAuth();
   const navigation = useNavigation<StackNavigationProp<ClientStackParamList>>();
   const [chats, setChats] = useState<any[]>([]);
   const [filteredChats, setFilteredChats] = useState<any[]>([]);
@@ -327,24 +325,7 @@ const ChatListScreen: React.FC = () => {
     }
   };
 
-  const markAsRead = () => {
-    if (selectedIds.size === 0) return;
-
-    Alert.alert(
-      t("client.chat.markAsRead"),
-      t("client.chat.markAsReadConfirm", { count: selectedIds.size }),
-      [
-        { text: t("common.cancel"), style: "cancel" },
-        {
-          text: t("client.chat.read"),
-          onPress: () => {
-            setSelectionMode(false);
-            setSelectedIds(new Set());
-          },
-        },
-      ],
-    );
-  };
+  // markAsRead was unused and has been removed
 
   const deleteSelected = () => {
     if (selectedIds.size === 0) return;
@@ -411,7 +392,7 @@ const ChatListScreen: React.FC = () => {
     </View>
   );
 
-  const onListScrollBegin = (_e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onListScrollBegin = () => {
     closeOpenSwipe();
   };
 

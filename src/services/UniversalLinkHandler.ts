@@ -1,5 +1,4 @@
-import { Linking } from "react-native";
-import type { ShareRoutePoint } from "./ShareRouteService";
+// Unused imports removed
 
 export interface RouteParams {
   o: string; // origin: "lat,lon"
@@ -8,25 +7,9 @@ export interface RouteParams {
   t?: string; // travel mode: "driving", "walking", etc.
 }
 
-const parseCoordinate = (
-  coordStr: string,
-): { latitude: number; longitude: number } | null => {
-  const [lat, lon] = coordStr.split(",").map(Number);
-  if (isNaN(lat) || isNaN(lon)) return null;
-  return { latitude: lat, longitude: lon };
-};
+// parseCoordinate helper removed as unused
 
-const parseWaypoints = (
-  waypointsStr: string,
-): Array<{ latitude: number; longitude: number }> => {
-  return waypointsStr
-    .split("|")
-    .map(parseCoordinate)
-    .filter(
-      (coord): coord is { latitude: number; longitude: number } =>
-        coord !== null,
-    );
-};
+// Unused function removed
 
 export const UniversalLinkHandler = {
   handleIncomingUrl(url: string): void {

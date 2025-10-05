@@ -1,13 +1,11 @@
 import React from "react";
 import { View, TouchableOpacity, Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../../../../context/ThemeContext";
 import { useAuth } from "../../../../context/AuthContext";
 import { createOrdersMapScreenStyles } from "../../../../styles/screens/OrdersMapScreen.styles";
 
 interface MapControlsProps {
   isDark: boolean;
-  isSettingsExpanded: boolean;
   isRefreshing: boolean;
   isClientLocationActive: boolean;
   settingsRotate: Animated.AnimatedInterpolation<string | number>;
@@ -29,7 +27,6 @@ interface MapControlsProps {
 
 const MapControls: React.FC<MapControlsProps> = ({
   isDark,
-  isSettingsExpanded,
   isRefreshing,
   isClientLocationActive,
   settingsRotate,

@@ -381,7 +381,7 @@ class DriverService {
       return response.data.items;
     } catch (error) {
       if (__DEV__) {
-        return this.mockGetDriverTrips(driverId);
+        return this.mockGetDriverTrips();
       }
       throw error;
     }
@@ -454,7 +454,7 @@ class DriverService {
     ];
   }
 
-  private static mockGetDriverTrips(driverId: string): DriverTrip[] {
+  private static mockGetDriverTrips(): DriverTrip[] {
     return [
       { text: "Школа", time: "08:30", dotStyle: "location" },
       { text: "Музыкальная школа", time: "15:00", dotStyle: "blue" },

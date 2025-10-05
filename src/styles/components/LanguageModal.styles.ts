@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 
-const { height: screenHeight } = Dimensions.get("window");
+// screenHeight not used
 
 export const LanguageModalStyles = StyleSheet.create({
   modalOverlay: {

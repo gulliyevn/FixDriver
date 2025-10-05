@@ -27,14 +27,14 @@ const buildFixDriveUrl = (points: ShareRoutePoint[]) => {
   return `${FIXDRIVE_DOMAIN}/route?${params.toString()}`;
 };
 
-// Fallback на Google Maps если приложение не установлено
-const buildGoogleWebUrl = (points: ShareRoutePoint[]) => {
-  const origin = formatCoord(points[0]);
-  const destination = formatCoord(points[points.length - 1]);
-  const waypoints = points.slice(1, -1).map(formatCoord).join("|");
-
-  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ""}&travelmode=driving`;
-};
+// Fallback на Google Maps если приложение не установлено (не используется)
+// const buildGoogleWebUrl = (points: ShareRoutePoint[]) => {
+//   const origin = formatCoord(points[0]);
+//   const destination = formatCoord(points[points.length - 1]);
+//   const waypoints = points.slice(1, -1).map(formatCoord).join("|");
+//
+//   return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}${waypoints ? `&waypoints=${encodeURIComponent(waypoints)}` : ""}&travelmode=driving`;
+// };
 
 const hasSufficientRoute = (
   points: ShareRoutePoint[] | undefined | null,
@@ -54,7 +54,6 @@ const ClientTripShareService = {
     }
 
     const fixDriveUrl = buildFixDriveUrl(points);
-    const fallbackUrl = buildGoogleWebUrl(points);
 
     // const isAppInstalled = await checkAppInstalled();
     // const shareUrl = isAppInstalled ? fixDriveUrl : fallbackUrl;

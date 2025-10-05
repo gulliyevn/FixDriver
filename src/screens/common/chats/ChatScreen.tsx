@@ -365,7 +365,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const handleExportChat = async () => {
     try {
       const msgs = await ChatService.getMessages(chatId);
-      const text = msgs
+      msgs
         .map(
           (m) => `${new Date(m.timestamp).toLocaleTimeString()}: ${m.content}`,
         )

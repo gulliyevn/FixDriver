@@ -2,12 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { usePackage } from "../../context/PackageContext";
 import {
   View,
-  Text,
-  TouchableOpacity,
   ScrollView,
-  TextInput,
   Alert,
-  Image,
   Animated,
 } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
@@ -18,7 +14,7 @@ import {
 import { ClientScreenProps } from "../../types/navigation";
 import { mockUsers } from "../../mocks/users";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useProfile } from "../../hooks/useProfile";
 import { useVerification } from "../../hooks/useVerification";
 import { useFamilyMembers } from "../../hooks/useFamilyMembers";
@@ -40,9 +36,6 @@ const EditClientProfileScreen: React.FC<
   const { t } = useI18n();
   const { login, changeRole } = useAuth();
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
-  const currentColors = isDark
-    ? { dark: { primary: "#3B82F6" } }
-    : { light: { primary: "#083198" } };
 
   const { profile, updateProfile, loadProfile } = useProfile();
   const { currentPackage } = usePackage();
@@ -87,7 +80,6 @@ const EditClientProfileScreen: React.FC<
     newFamilyMember,
     setNewFamilyMember,
     familyPhoneVerification,
-    familyPhoneVerifying,
     toggleFamilyMember,
     openAddFamilyModal,
     closeAddFamilyModal,
@@ -112,52 +104,7 @@ const EditClientProfileScreen: React.FC<
     );
   };
 
-  const handleFamilyExit = () => {
-    // Если есть активное редактирование семейного члена
-    if (editingFamilyMember !== null) {
-      // Проверяем, есть ли изменения через функцию сохранения
-      if (saveFamilyRef.current) {
-        // Если есть функция сохранения, значит есть изменения - показываем диалог
-        Alert.alert(t("common.confirmation"), t("profile.family.confirmSave"), [
-          {
-            text: t("common.cancel"),
-            style: "cancel",
-            onPress: () => {
-              // При отмене НЕ делаем ничего - остаемся в режиме редактирования
-              // Пользователь остается на экране и может продолжить редактирование
-            },
-          },
-          {
-            text: t("common.save"),
-            onPress: () => {
-              // Сохраняем изменения и отменяем редактирование
-              handleFamilySave();
-            },
-          },
-        ]);
-      } else {
-        // Если нет функции сохранения, значит изменений нет - сразу выходим
-        cancelEditingFamilyMember();
-        navigation.goBack();
-      }
-    } else {
-      // Если нет активного редактирования, просто уходим назад
-      navigation.goBack();
-    }
-  };
-
-  const handleFamilySave = () => {
-    // Вызываем функцию сохранения из ref, если она есть
-    if (saveFamilyRef.current) {
-      saveFamilyRef.current();
-    }
-
-    // Отменяем редактирование
-    cancelEditingFamilyMember();
-
-    // Уходим назад напрямую, без вызова handleFamilyExit
-    navigation.goBack();
-  };
+  // handleFamilySave removed as unused
 
   // Функция валидации полей личной информации
   const validatePersonalInfo = (): { isValid: boolean; errors: string[] } => {

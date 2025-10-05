@@ -18,7 +18,6 @@ import { useAuth } from "../../context/AuthContext";
 import { SupportChatScreenStyles } from "../../styles/screens/SupportChatScreen.styles";
 import {
   supportService,
-  SupportMessage,
   SupportTicket,
 } from "../../services/SupportService";
 

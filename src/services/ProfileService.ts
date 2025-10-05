@@ -1,7 +1,7 @@
 import APIClient from "./APIClient";
 import JWTService from "./JWTService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User, Client } from "../types/user";
+import { User } from "../types/user";
 
 export interface ChangePasswordRequest {
   currentPassword: string;

@@ -5,9 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   Alert,
-  Image,
   Animated,
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
@@ -20,17 +18,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { DriverScreenProps } from "../../../types/driver/DriverNavigation";
 import { mockUsers } from "../../../mocks/users";
-import APIClient from "../../../services/APIClient";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useDriverProfile as useProfile } from "../../../hooks/driver/DriverUseProfile";
 import { useVerification } from "../../../hooks/useVerification";
-import {
-  getDefaultDate,
-  hasChanges,
-  handleDriverCirclePress,
-} from "../../../utils/profileHelpers";
-import DatePicker from "../../../components/DatePicker";
+import { handleDriverCirclePress } from "../../../utils/profileHelpers";
 import PersonalInfoSection from "../../../components/driver/DriverPersonalInfoSection";
 import ProfileAvatarSection from "../../../components/driver/DriverProfileAvatarSection";
 import VipSection from "../../../components/driver/DriverVipSection";
@@ -46,12 +38,9 @@ const EditDriverProfileScreen: React.FC<
 > = ({ navigation }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();
-  const { logout, login, changeRole } = useAuth();
+  const { login, changeRole } = useAuth();
   const rootNavigation = useNavigation();
   const dynamicStyles = getEditDriverProfileScreenColors(isDark);
-  const currentColors = isDark
-    ? { primary: "#3B82F6" }
-    : { primary: "#083198" };
 
   const { profile, updateProfile, loadProfile } =
     useProfile("current_driver_id");
@@ -291,18 +280,6 @@ const EditDriverProfileScreen: React.FC<
       loadVehicles(); // Перезагружаем автомобили при каждом фокусе
     }, [loadVehicles]),
   );
-
-  // Функция для закрытия открытого свайпа
-  const closeOpenSwipe = () => {
-    if (openSwipeRef.current) {
-      try {
-        openSwipeRef.current.close();
-      } catch (error) {
-        console.warn('Failed to close swipe ref:', error);
-      }
-      openSwipeRef.current = null;
-    }
-  };
 
   // Функция удаления автомобиля
   const handleDeleteVehicle = (vehicleId: string) => {

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { getCurrentColors, SHADOWS, SIZES } from "../../../constants/colors";
+// Unused imports removed
 
 // Импорты стилей
 import { createModalStyles } from "./modal/Modal.styles";
