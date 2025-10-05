@@ -19,7 +19,7 @@ import { useI18n } from "../../hooks/useI18n";
 import { colors } from "../../constants/colors";
 import { useAuth } from "../../context/AuthContext";
 
-type AboutScreenProps = ClientScreenProps<"About"> | { navigation: any };
+type AboutScreenProps = ClientScreenProps<"About"> ;
 
 const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();

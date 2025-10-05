@@ -24,7 +24,7 @@ import { useAuth } from "../../context/AuthContext";
 
 type ResidenceScreenProps =
   | ClientScreenProps<"Residence">
-  | { navigation: any; route?: any };
+  ;
 
 const ResidenceScreen: React.FC<ResidenceScreenProps> = ({
   navigation,

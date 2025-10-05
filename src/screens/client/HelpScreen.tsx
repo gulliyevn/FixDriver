@@ -25,7 +25,7 @@ import useHelpContent from "../../shared/hooks/useHelpContent";
 import { getCurrentColors } from "../../constants/colors";
 import type { HelpSection, HelpModalType } from "../../shared/types/help";
 
-type HelpScreenProps = ClientScreenProps<"Help"> | { navigation: any };
+type HelpScreenProps = ClientScreenProps<"Help"> ;
 
 const HelpScreen: React.FC<HelpScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();

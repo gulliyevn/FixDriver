@@ -13,44 +13,44 @@ let ProfileProvider: React.ComponentType<React.PropsWithChildren>;
 try {
   LanguageProvider = require("../context/LanguageContext").LanguageProvider;
 } catch (e) {
-  LanguageProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  LanguageProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   ThemeProvider = require("../context/ThemeContext").ThemeProvider;
 } catch (e) {
-  ThemeProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  ThemeProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   AuthProvider = require("../context/AuthContext").AuthProvider;
 } catch (e) {
-  AuthProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  AuthProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   BalanceProvider = require("../context/BalanceContext").BalanceProvider;
 } catch (e) {
-  BalanceProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  BalanceProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   PackageProvider = require("../context/PackageContext").PackageProvider;
 } catch (e) {
-  PackageProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  PackageProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   LevelProgressProvider =
     require("../context/LevelProgressContext").LevelProgressProvider;
 } catch (e) {
-  LevelProgressProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  LevelProgressProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   ProfileProvider = require("../context/ProfileContext").ProfileProvider;
 } catch (e) {
-  ProfileProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
+  ProfileProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 // Mock данные для тестов

@@ -27,7 +27,7 @@ import { ProfileService } from "../../services/ProfileService";
 import { DriverProfileService } from "../../services/driver/DriverProfileService";
 import { getCurrentColors } from "../../constants/colors";
 
-type SettingsScreenProps = ClientScreenProps<"Settings"> | { navigation: any };
+type SettingsScreenProps = ClientScreenProps<"Settings"> ;
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const { isDark, toggleTheme } = useTheme();

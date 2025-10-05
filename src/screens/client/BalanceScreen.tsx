@@ -82,7 +82,7 @@ import {
  * 6. Подключить уведомления о транзакциях
  */
 
-type BalanceScreenProps = ClientScreenProps<"Balance"> | { navigation: any };
+type BalanceScreenProps = ClientScreenProps<"Balance"> ;
 
 const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();

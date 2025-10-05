@@ -63,7 +63,7 @@ const handleScanCard = async () => {
 };
 
 // Универсальный тип для навигации
-type CardsScreenProps = ClientScreenProps<"Cards"> | { navigation: any };
+type CardsScreenProps = ClientScreenProps<"Cards"> ;
 
 const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();

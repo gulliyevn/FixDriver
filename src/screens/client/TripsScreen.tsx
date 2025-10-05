@@ -15,7 +15,7 @@ import TripsFilter, { TripFilter } from "../../components/TripsFilter";
 import { colors } from "../../constants/colors";
 
 // Универсальный тип для навигации
-type TripsScreenProps = ClientScreenProps<"Trips"> | { navigation: any };
+type TripsScreenProps = ClientScreenProps<"Trips"> ;
 
 const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
   const { isDark } = useTheme();

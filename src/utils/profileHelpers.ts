@@ -49,7 +49,7 @@ export const hasChanges = (
 
 // Функция для обработки нажатия на круг (переключение между клиентом и водителем)
 export const handleCirclePress = (
-  navigation: any,
+  navigation: { navigate: (screen: string) => void },
   login: (email: string, password: string) => Promise<boolean>,
   t: (key: string) => string,
   changeRole?: (role: "client" | "driver") => void,
@@ -95,7 +95,7 @@ export const handleCirclePress = (
 
 // Функция для обработки нажатия на круг в профиле водителя (переключение к клиенту)
 export const handleDriverCirclePress = (
-  navigation: any,
+  navigation: { navigate: (screen: string) => void },
   login: (email: string, password: string) => Promise<boolean>,
   t: (key: string) => string,
   changeRole?: (role: "client" | "driver") => void,

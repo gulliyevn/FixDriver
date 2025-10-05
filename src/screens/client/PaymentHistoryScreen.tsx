@@ -33,7 +33,7 @@ import { usePaymentHistory } from "../../shared/hooks/usePaymentHistory";
 
 type PaymentHistoryScreenProps =
   | ClientScreenProps<"PaymentHistory">
-  | { navigation: any };
+  ;
 
 const PaymentHistoryScreen: React.FC<PaymentHistoryScreenProps> = ({
   navigation,
