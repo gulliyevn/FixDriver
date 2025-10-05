@@ -11,7 +11,7 @@ export interface VipPackage {
 
 export const getPremiumPackages = (
   selectedPeriod: "month" | "year",
-  currentColors: any,
+  currentColors: Record<string, any>,
   t?: (key: string) => string,
 ): VipPackage[] => {
   // Бесплатный пакет всегда показывается

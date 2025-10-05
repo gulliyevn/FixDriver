@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useI18n } from "../hooks/useI18n";
 
 type DriversSelectionBarProps = {
-  styles: any;
+  styles: Record<string, any>;
   selectedCount: number;
   totalCount: number;
   onSelectAll: () => void;

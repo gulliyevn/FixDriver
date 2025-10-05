@@ -86,7 +86,7 @@ const DriverRegisterScreen: React.FC = () => {
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev: any) => ({ ...prev, [field]: undefined }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const handleBrandChange = (brand: string) => {
@@ -111,25 +111,25 @@ const DriverRegisterScreen: React.FC = () => {
     value: string | number;
   }) => {
     setForm((prev) => ({ ...prev, experience: option.value.toString() }));
-    setErrors((prev: any) => ({ ...prev, experience: undefined }));
+    setErrors((prev) => ({ ...prev, experience: undefined }));
   };
   const handleCountryChange = (option: {
     label: string;
     value: string | number;
   }) => {
     setForm((prev) => ({ ...prev, country: option.value.toString() }));
-    setErrors((prev: any) => ({ ...prev, country: undefined }));
+    setErrors((prev) => ({ ...prev, country: undefined }));
   };
   const handleYearChange = (option: {
     label: string;
     value: string | number;
   }) => {
     setForm((prev) => ({ ...prev, carYear: option.value.toString() }));
-    setErrors((prev: any) => ({ ...prev, carYear: undefined }));
+    setErrors((prev) => ({ ...prev, carYear: undefined }));
   };
 
   const validate = () => {
-    const newErrors: any = {};
+    const newErrors: Record<string, string> = {};
     if (!form.firstName.trim())
       newErrors.firstName = t("register.firstNameRequired");
     if (!form.lastName.trim())
@@ -409,7 +409,7 @@ const DriverRegisterScreen: React.FC = () => {
               photo={licensePhoto}
               onPhotoChange={(uri) => setLicensePhoto(uri)}
               onError={(err) =>
-                setErrors((prev: any) => ({ ...prev, licensePhoto: err }))
+                setErrors((prev) => ({ ...prev, licensePhoto: err }))
               }
               type="license"
               uploading={uploadingPhoto === "license"}
@@ -535,7 +535,7 @@ const DriverRegisterScreen: React.FC = () => {
               photo={passportPhoto}
               onPhotoChange={(uri) => setPassportPhoto(uri)}
               onError={(err) =>
-                setErrors((prev: any) => ({ ...prev, passportPhoto: err }))
+                setErrors((prev) => ({ ...prev, passportPhoto: err }))
               }
               type="passport"
               uploading={uploadingPhoto === "passport"}

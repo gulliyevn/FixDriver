@@ -2,55 +2,55 @@ import React from "react";
 import { render, RenderOptions } from "@testing-library/react-native";
 
 // Импортируем только те провайдеры, которые точно существуют
-let LanguageProvider: any;
-let ThemeProvider: any;
-let AuthProvider: any;
-let BalanceProvider: any;
-let PackageProvider: any;
-let LevelProgressProvider: any;
-let ProfileProvider: any;
+let LanguageProvider: React.ComponentType<React.PropsWithChildren>;
+let ThemeProvider: React.ComponentType<React.PropsWithChildren>;
+let AuthProvider: React.ComponentType<any>;
+let BalanceProvider: React.ComponentType<React.PropsWithChildren>;
+let PackageProvider: React.ComponentType<React.PropsWithChildren>;
+let LevelProgressProvider: React.ComponentType<React.PropsWithChildren>;
+let ProfileProvider: React.ComponentType<React.PropsWithChildren>;
 
 try {
   LanguageProvider = require("../context/LanguageContext").LanguageProvider;
 } catch (e) {
-  LanguageProvider = ({ children }: any) => children;
+  LanguageProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   ThemeProvider = require("../context/ThemeContext").ThemeProvider;
 } catch (e) {
-  ThemeProvider = ({ children }: any) => children;
+  ThemeProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   AuthProvider = require("../context/AuthContext").AuthProvider;
 } catch (e) {
-  AuthProvider = ({ children }: any) => children;
+  AuthProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   BalanceProvider = require("../context/BalanceContext").BalanceProvider;
 } catch (e) {
-  BalanceProvider = ({ children }: any) => children;
+  BalanceProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   PackageProvider = require("../context/PackageContext").PackageProvider;
 } catch (e) {
-  PackageProvider = ({ children }: any) => children;
+  PackageProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   LevelProgressProvider =
     require("../context/LevelProgressContext").LevelProgressProvider;
 } catch (e) {
-  LevelProgressProvider = ({ children }: any) => children;
+  LevelProgressProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 try {
   ProfileProvider = require("../context/ProfileContext").ProfileProvider;
 } catch (e) {
-  ProfileProvider = ({ children }: any) => children;
+  ProfileProvider = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => children;
 }
 
 // Mock данные для тестов

@@ -49,11 +49,11 @@ const ClientRegisterScreen: React.FC = () => {
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev: any) => ({ ...prev, [field]: undefined }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const validate = () => {
-    const newErrors: any = {};
+    const newErrors: Record<string, string> = {};
 
     // Основная информация
     if (!form.firstName.trim())

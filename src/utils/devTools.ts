@@ -58,7 +58,7 @@ export const exportDevData = async (): Promise<string> => {
     const allKeys = await AsyncStorage.getAllKeys();
     const devKeys = allKeys.filter((key) => key.startsWith("@dev_"));
 
-    const data: Record<string, any> = {};
+    const data: Record<string, unknown> = {};
 
     for (const key of devKeys) {
       const value = await AsyncStorage.getItem(key);

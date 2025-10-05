@@ -238,7 +238,7 @@ class OrderTrackingService {
   /**
    * Обработка обновления локации водителя
    */
-  private handleDriverLocationUpdate(data: any): void {
+  private handleDriverLocationUpdate(data: unknown): void {
     // Логика обновления информации о водителе
     console.log("Обновление локации водителя:", data);
   }
@@ -246,19 +246,22 @@ class OrderTrackingService {
   /**
    * Обработка обновления маршрута
    */
-  private handleRouteUpdate(data: any): void {
-    const orderId = data.orderId;
+  private handleRouteUpdate(data: unknown): void {
+    if (!data || typeof data !== 'object') return;
+    const dataObj = data as { orderId: string; route: any };
+    
+    const orderId = dataObj.orderId;
     const trackingData = this.trackingOrders.get(orderId);
 
     if (!trackingData) return;
 
     // Обновляем маршрут
-    trackingData.route = data.route;
+    trackingData.route = dataObj.route;
     this.trackingOrders.set(orderId, trackingData);
 
     // Уведомляем обработчики
     const handlers = this.eventHandlers.get(orderId);
-    handlers?.onRouteUpdate?.(data.route);
+    handlers?.onRouteUpdate?.(dataObj.route);
   }
 
   /**

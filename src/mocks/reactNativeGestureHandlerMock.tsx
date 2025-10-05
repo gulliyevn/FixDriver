@@ -1,15 +1,15 @@
 import React from "react";
 import { View } from "react-native";
 
-export const GestureHandlerRootView = ({ children, ...props }: any) => (
+export const GestureHandlerRootView = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
   <View {...props}>{children}</View>
 );
 
-export const PanGestureHandler = ({ children, ...props }: any) => (
+export const PanGestureHandler = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
   <View {...props}>{children}</View>
 );
 
-export const TapGestureHandler = ({ children, ...props }: any) => (
+export const TapGestureHandler = ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
   <View {...props}>{children}</View>
 );
 

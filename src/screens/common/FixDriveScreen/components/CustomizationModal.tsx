@@ -8,7 +8,7 @@ interface CustomizationModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (isReturnTrip: boolean) => Promise<boolean>;
-  colors: any;
+  colors: Record<string, string>;
   t: (key: string) => string;
   weekDays: { key: string; label: string }[];
   selectedDays: string[];

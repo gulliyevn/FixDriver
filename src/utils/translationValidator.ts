@@ -90,12 +90,13 @@ export class TranslationValidator {
    * Рекурсивно извлекает все ключи из объекта переводов
    */
   private static extractKeys(
-    obj: any,
+    obj: unknown,
     namespace: string,
     path: string[],
     keys: TranslationKey[],
   ): void {
-    for (const [key, value] of Object.entries(obj)) {
+    if (!obj || typeof obj !== 'object') return;
+    for (const [key, value] of Object.entries(obj as Record<string, any>)) {
       const currentPath = [...path, key];
 
       if (typeof value === "string") {

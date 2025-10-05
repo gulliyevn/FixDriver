@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { useI18n } from "../hooks/useI18n";
 
 type LoadingFooterProps = {
-  styles: any;
+  styles: Record<string, any>;
 };
 
 const LoadingFooter: React.FC<LoadingFooterProps> = ({ styles }) => {

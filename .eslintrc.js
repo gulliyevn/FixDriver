@@ -19,7 +19,11 @@ module.exports = {
     'react-hooks',
   ],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'warn', // Смягчаем для разработки
+    '@typescript-eslint/no-explicit-any': ['warn', {
+      // Разрешаем any в Record и массивах для динамических структур
+      fixToUnknown: false,
+      ignoreRestArgs: true,
+    }],
     '@typescript-eslint/no-unused-vars': 'warn', // Смягчаем для разработки
     'no-unused-vars': 'off',
     'react-hooks/exhaustive-deps': 'warn',

@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 interface ErrorState {
   hasError: boolean;
   error: Error | null;
-  errorInfo: any;
+  errorInfo: unknown;
 }
 
 export const useErrorBoundary = () => {
@@ -13,7 +13,7 @@ export const useErrorBoundary = () => {
     errorInfo: null,
   });
 
-  const handleError = useCallback((error: Error, errorInfo?: any) => {
+  const handleError = useCallback((error: Error, errorInfo?: unknown) => {
     setErrorState({
       hasError: true,
       error,

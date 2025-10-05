@@ -62,25 +62,28 @@ class PlacesService {
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
-        return;
+        return [];
       }
 
       const data = await response.json();
 
       // Преобразуем ответ OpenStreetMap в формат Google Places
-      return data.map((item: any) => ({
-        place_id: item.place_id.toString(),
-        description: item.display_name,
-        structured_formatting: {
-          main_text:
-            item.address?.road || item.address?.house_number || item.name || "",
-          secondary_text:
-            item.address?.city ||
-            item.address?.town ||
-            item.address?.state ||
-            "",
-        },
-      }));
+      return data.map((item: unknown) => {
+        const itemObj = item as any; // OSM response structure
+        return {
+          place_id: itemObj.place_id?.toString() || '',
+          description: itemObj.display_name || '',
+          structured_formatting: {
+            main_text:
+              itemObj.address?.road || itemObj.address?.house_number || itemObj.name || "",
+            secondary_text:
+              itemObj.address?.city ||
+              itemObj.address?.town ||
+              itemObj.address?.state ||
+              "",
+          },
+        };
+      });
     } catch (error) {
       return [];
     }
@@ -102,7 +105,7 @@ class PlacesService {
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
-        return;
+        return null;
       }
 
       const data = await response.json();

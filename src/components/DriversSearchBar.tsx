@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
 type DriversSearchBarProps = {
-  styles: any;
+  styles: Record<string, any>;
   isDark: boolean;
   value: string;
   onChange: (text: string) => void;
