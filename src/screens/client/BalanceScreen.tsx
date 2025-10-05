@@ -205,7 +205,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
           { text: t("client.balance.cancel"), style: "cancel" },
           {
             text: t("client.balance.withdraw"),
-            onPress: (inputAmount: string) => {
+            onPress: (inputAmount?: string) => {
               if (inputAmount) {
                 const amountNum = parseFloat(inputAmount);
                 if (!isNaN(amountNum) && amountNum > 0) {
@@ -409,7 +409,7 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
             />
           </TouchableOpacity>
           <Ionicons
-            name={getPackageIcon(currentPackage) as any}
+            name={getPackageIcon(currentPackage) as keyof typeof Ionicons.glyphMap}
             size={24}
             color={getPackageColor(currentPackage)}
           />

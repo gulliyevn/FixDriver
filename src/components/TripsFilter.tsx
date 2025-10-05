@@ -181,12 +181,10 @@ const TripsFilter: React.FC<TripsFilterProps> = ({
                         ]
                       : styles.optionContainerUnselected,
                   ]}
-                  onPress={() =>
-                    setFilter({ ...filter, status: status.key as any })
-                  }
+                  onPress={() => setFilter({ ...filter, status: status.key as TripFilter["status"] })}
                 >
                   <Ionicons
-                    name={status.icon as any}
+                    name={status.icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       filter.status === status.key
@@ -234,12 +232,10 @@ const TripsFilter: React.FC<TripsFilterProps> = ({
                         ]
                       : styles.optionContainerUnselected,
                   ]}
-                  onPress={() =>
-                    setFilter({ ...filter, dateRange: range.key as any })
-                  }
+                  onPress={() => setFilter({ ...filter, dateRange: range.key as TripFilter["dateRange"] })}
                 >
                   <Ionicons
-                    name={range.icon as any}
+                    name={range.icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       filter.dateRange === range.key

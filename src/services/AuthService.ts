@@ -96,7 +96,10 @@ export class AuthService {
 
       if (!response.success || !response.data) {
         console.error(response.error || "Login failed");
-        return;
+        return {
+          success: false,
+          message: response.error || "Login failed",
+        };
       }
 
       // Преобразуем данные в формат фронтенда
@@ -120,24 +123,16 @@ export class AuthService {
    * Регистрация пользователя
    */
   static async register(
-    userData: {
-      name: string;
-      surname: string;
-      email: string;
-      phone: string;
-      country: string;
-      role: UserRole;
-      children?: Array<{ name: string; age: number; relationship: string }>;
-    },
+    userData: Partial<User> & { country: string },
     password: string,
   ): Promise<AuthResponse> {
     try {
       const requestBody: GoRegisterRequest = {
-        email: userData.email,
+        email: userData.email || "",
         password,
-        phone_number: userData.phone,
-        first_name: userData.name,
-        last_name: userData.surname,
+        phone_number: userData.phone || "",
+        first_name: userData.name || "",
+        last_name: userData.surname || "",
       };
 
       const response = await APIClient.post<GoTokenResponse>(
@@ -147,7 +142,10 @@ export class AuthService {
 
       if (!response.success || !response.data) {
         console.error(response.error || "Registration failed");
-        return;
+        return {
+          success: false,
+          message: response.error || "Registration failed",
+        };
       }
 
       // Преобразуем данные в формат фронтенда
@@ -221,7 +219,10 @@ export class AuthService {
 
       if (!response.success || !response.data) {
         console.error(response.error || "Token refresh failed");
-        return;
+        return {
+          success: false,
+          message: response.error || "Token refresh failed",
+        };
       }
 
       // Преобразуем данные в формат фронтенда

@@ -109,7 +109,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
         <View style={styles.profileRow}>
           <TouchableOpacity
             style={styles.avatar}
-            onPress={() => navigation.navigate("EditDriverProfile" as any)}
+            onPress={() => navigation.navigate("EditDriverProfile")}
           >
             {profile?.avatar ? (
               <Image
@@ -126,7 +126,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileText}
-            onPress={() => navigation.navigate("EditDriverProfile" as any)}
+            onPress={() => navigation.navigate("EditDriverProfile")}
           >
             <Text style={[styles.profileName, dynamicStyles.profileName]}>
               {profile?.name || ""} {profile?.surname || ""}
@@ -137,7 +137,7 @@ const DriverProfileScreen: React.FC<DriverScreenProps<"DriverProfile">> = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.premiumButtonContainer}
-            onPress={() => navigation.navigate("PremiumPackages" as any)}
+            onPress={() => navigation.navigate("PremiumPackages")}
             activeOpacity={0.8}
           >
             <LinearGradient

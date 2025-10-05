@@ -52,7 +52,19 @@ const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
     dateRange: "all",
   });
 
-  const [allTrips, setAllTrips] = useState<any[]>([]);
+  type TripItem = {
+    id: string;
+    title: string;
+    date: string;
+    time: string;
+    amount: string;
+    status: "completed" | "cancelled" | "scheduled";
+    type: "completed" | "cancelled" | "scheduled";
+    description: string;
+    driver?: string;
+  };
+
+  const [allTrips, setAllTrips] = useState<TripItem[]>([]);
 
   const storageKey = user?.id ? `@trips_${user.id}` : "@trips_anonymous";
 
@@ -74,13 +86,13 @@ const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
           date: new Date(o.createdAt).toLocaleDateString(),
           time: new Date(o.createdAt).toLocaleTimeString(),
           amount: o.price ? `${o.price} ₼` : "",
-          status: o.status,
+          status: o.status as "completed" | "cancelled" | "scheduled",
           type:
             o.status === "completed"
               ? "completed"
               : o.status === "cancelled"
                 ? "cancelled"
-                : "scheduled",
+                : "scheduled" as "completed" | "cancelled" | "scheduled",
           description: o.driverNotes || "",
           driver: o.driverId || undefined,
         }));
@@ -219,11 +231,7 @@ const TripsScreen: React.FC<TripsScreenProps> = ({ navigation }) => {
               >
                 <View style={styles.carHeader}>
                   <View style={styles.carInfo}>
-                    <Ionicons
-                      name={getTripIcon(trip.type) as any}
-                      size={24}
-                      color={getTripColor(trip.type)}
-                    />
+                    <Ionicons name={getTripIcon(trip.type) as keyof typeof Ionicons.glyphMap} size={24} color={getTripColor(trip.type)} />
                     <View style={styles.carDetails}>
                       <Text style={[styles.carModel, dynamicStyles.carModel]}>
                         {trip.title}

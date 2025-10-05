@@ -169,7 +169,7 @@ export class ProfileService {
 
       const response = await APIClient.post<{ avatarUrl: string }>(
         `/profile/${userId}/avatar`,
-        formData as any,
+        formData,
       );
 
       if (response.success && response.data) {
@@ -241,7 +241,10 @@ export class ProfileService {
       const authHeader = await JWTService.getAuthHeader();
       if (!authHeader) {
         console.error("No authentication token");
-        return;
+        return {
+          success: false,
+          message: "No authentication token",
+        };
       }
 
       const response = await APIClient.delete<{ message: string }>(
@@ -252,7 +255,10 @@ export class ProfileService {
         return { success: true };
       } else {
         console.error(response.error || "Failed to delete account");
-        return;
+        return {
+          success: false,
+          message: response.error || "Failed to delete account",
+        };
       }
     } catch (error) {
       return {

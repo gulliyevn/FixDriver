@@ -97,7 +97,7 @@ const DriverProfileAvatarSection: React.FC<DriverProfileAvatarSectionProps> = ({
           </Text>
           <View style={styles.packageIconContainer}>
             <Ionicons
-              name={getPackageIcon(currentPackage) as any}
+              name={getPackageIcon(currentPackage) as keyof typeof Ionicons.glyphMap}
               size={20}
               color={getPackageColor(currentPackage)}
               key={`package-icon-${currentPackage}-${forceUpdate}`}
@@ -152,7 +152,7 @@ const DriverProfileAvatarSection: React.FC<DriverProfileAvatarSectionProps> = ({
               activeOpacity={1}
             >
               <Image
-                source={{ uri: avatarUri }}
+                source={{ uri: avatarUri || undefined }}
                 style={styles.avatarModalImage}
                 resizeMode="contain"
               />

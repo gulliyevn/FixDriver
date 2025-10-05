@@ -25,5 +25,5 @@ export interface EarningsState {
   filterExpanded: boolean;
   isOnline: boolean;
   statusModalVisible: boolean;
-  filterExpandAnim: any; // Animated.Value
+  filterExpandAnim: unknown; // Animated.Value
 }

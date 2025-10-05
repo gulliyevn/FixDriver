@@ -10,7 +10,7 @@ export interface NotificationData {
   message: string;
   type: "info" | "warning" | "error" | "success";
   category: "order" | "payment" | "driver" | "system";
-  data?: any;
+  data?: Record<string, unknown>;
   timestamp: number;
   read: boolean;
   priority: "low" | "normal" | "high";
@@ -226,7 +226,15 @@ class NotificationService {
       });
 
       if (response.success && response.data) {
-        return (response.data as any)?.notifications || [];
+        const payload = response.data as unknown;
+        if (
+          typeof payload === "object" &&
+          payload !== null &&
+          Array.isArray((payload as { notifications?: unknown }).notifications)
+        ) {
+          const list = (payload as { notifications: unknown[] }).notifications;
+          return list.filter((n): n is NotificationData => typeof n === "object" && n !== null && "id" in (n as object))
+        }
       }
 
       return [];
@@ -333,7 +341,8 @@ class NotificationService {
       const response = await APIClient.get("/notifications/settings");
 
       if (response.success && response.data) {
-        this.settings = { ...this.settings, ...(response.data as any) };
+        const incoming = response.data as Partial<NotificationSettings>;
+        this.settings = { ...this.settings, ...incoming };
       }
     } catch (error) {
       console.error("Ошибка загрузки настроек уведомлений:", error);

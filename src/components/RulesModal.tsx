@@ -120,11 +120,7 @@ const RulesModal: React.FC<RulesModalProps> = ({ visible, onClose }) => {
               activeOpacity={0.7}
             >
               <View style={[slideStyles.slideIcon, dynamicStyles.slideIcon]}>
-                <Ionicons
-                  name={slide.icon as any}
-                  size={24}
-                  color={isDark ? "#fff" : "#003366"}
-                />
+                <Ionicons name={slide.icon as keyof typeof Ionicons.glyphMap} size={24} color={isDark ? "#fff" : "#003366"} />
               </View>
               <View style={slideStyles.slideInfo}>
                 <Text

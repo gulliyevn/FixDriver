@@ -120,7 +120,7 @@ const ScheduleTypeSelector: React.FC<ScheduleTypeSelectorProps> = ({
                 ]}
               >
                 <Ionicons
-                  name={type.icon as any}
+                  name={type.icon as keyof typeof Ionicons.glyphMap}
                   size={24}
                   color={
                     isSelected

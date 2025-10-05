@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
 import TabBar from "./TabBar";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 // Импорт экранов
 import OrdersMapScreen from "../screens/common/OrdersMapScreen";
@@ -14,7 +15,7 @@ import DriverProfileStack from "./driver/DriverProfileStack";
 const Tab = createBottomTabNavigator();
 
 // Обёртка для TabBar, чтобы подписаться на смену языка
-function TabBarWithLanguage(props: any) {
+function TabBarWithLanguage(props: BottomTabBarProps) {
   useLanguage();
   return <TabBar {...props} />;
 }

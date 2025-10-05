@@ -297,7 +297,7 @@ const FixDriveScreen: React.FC<FixDriveScreenProps> = ({ isChild = false }) => {
           {currentPage === "addresses" && (
             <FixDriveAddressPage
               onNext={handleAddressPageNext}
-              initialData={addressData}
+              initialData={addressData || undefined}
             />
           )}
 

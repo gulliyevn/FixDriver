@@ -10,7 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
 type EarningsHeaderProps = {
-  styles: Record<string, any>;
+  styles: any;
   isDark: boolean;
   filterExpandAnim: Animated.Value;
   onToggleFilter: () => void;
@@ -118,7 +118,7 @@ const EarningsHeader: React.FC<EarningsHeaderProps> = ({
                 onPress={() => onPeriodSelect(period.key)}
               >
                 <Ionicons
-                  name={period.icon as any}
+                  name={period.icon as keyof typeof Ionicons.glyphMap}
                   size={16}
                   color={
                     selectedPeriod === period.key

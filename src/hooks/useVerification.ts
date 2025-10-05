@@ -90,7 +90,7 @@ export const useVerification = () => {
               { text: cancelText, style: "cancel" },
               {
                 text: verifyText,
-                onPress: async (code: string) => {
+                onPress: async (code?: string) => {
                   if (code === "1234") {
                     setIsVerifying((prev) => ({ ...prev, email: true }));
                     setTimeout(() => {
@@ -139,7 +139,7 @@ export const useVerification = () => {
               { text: cancelText, style: "cancel" },
               {
                 text: verifyText,
-                onPress: async (code: string) => {
+                onPress: async (code?: string) => {
                   if (code === "1234") {
                     setIsVerifying((prev) => ({ ...prev, phone: true }));
                     setTimeout(() => {

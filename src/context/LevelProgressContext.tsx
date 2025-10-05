@@ -20,6 +20,8 @@ interface LevelProgressContextType {
     progress: number,
   ) => number;
   updateVIPLevel: (qualifiedDaysInPeriods: number[]) => Promise<void>;
+  getCurrentLevel: () => { level: number; subLevel: number };
+  getProgressPercentage: () => number;
 }
 
 const LevelProgressContext = createContext<
@@ -32,7 +34,17 @@ export const useLevelProgress = (): LevelProgressContextType => {
     console.error(
       "useLevelProgress must be used within a LevelProgressProvider",
     );
-    return;
+    return {
+      driverLevel: null,
+      incrementProgress: async () => undefined,
+      activateVIPLevel: async () => {},
+      addRides: async () => {},
+      resetProgress: async () => {},
+      getTotalRidesForLevel: () => 0,
+      updateVIPLevel: async () => {},
+      getCurrentLevel: () => ({ level: 0, subLevel: 0 }),
+      getProgressPercentage: () => 0,
+    };
   }
   return context;
 };
@@ -62,6 +74,8 @@ export const LevelProgressProvider: React.FC<LevelProgressProviderProps> = ({
     resetProgress,
     getTotalRidesForLevel,
     updateVIPLevel,
+    getCurrentLevel: () => ({ level: 0, subLevel: 0 }),
+    getProgressPercentage: () => 0,
   };
 
   return (

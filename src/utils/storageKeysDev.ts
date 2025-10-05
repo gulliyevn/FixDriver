@@ -26,7 +26,7 @@ export const useUserStorageKey = (
 
   if (!userId) {
     console.error("DEV storage key requires user context");
-    return;
+    return fallback || "";
   }
 
   return devKeyFor(baseKey, userId);

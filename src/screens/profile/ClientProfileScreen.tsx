@@ -35,7 +35,10 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
   const dynamicStyles = getClientProfileStyles(isDark);
 
   // Используем хук для работы с профилем
-  const { profile, error, loadProfile } = useProfile();
+  const profileContext = useProfile();
+  const profile = profileContext?.profile;
+  const error = profileContext?.error;
+  const loadProfile = profileContext?.loadProfile;
 
   // Используем умный хук для баланса
   const balanceHook = useBalance();
@@ -43,7 +46,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
   useFocusEffect(
     React.useCallback(() => {
       // Перезагружаем профиль при фокусе экрана
-      loadProfile();
+      loadProfile?.();
     }, []), // Убираем loadProfile из зависимостей
   );
 
@@ -107,7 +110,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
         <View style={styles.profileRow}>
           <TouchableOpacity
             style={styles.avatar}
-            onPress={() => navigation.navigate("EditClientProfile" as any)}
+            onPress={() => navigation.navigate("EditClientProfile")}
           >
             {profile?.avatar ? (
               <Image
@@ -124,7 +127,7 @@ const ClientProfileScreen: React.FC<ClientScreenProps<"ClientProfile">> = ({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.profileText}
-            onPress={() => navigation.navigate("EditClientProfile" as any)}
+            onPress={() => navigation.navigate("EditClientProfile")}
           >
             <Text style={[styles.profileName, dynamicStyles.profileName]}>
               {profile?.name || ""} {profile?.surname || ""}

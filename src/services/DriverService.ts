@@ -76,7 +76,10 @@ class DriverService {
       for (const field of requiredFields) {
         if (!data[field as keyof DriverRegistrationData]) {
           console.error(`Поле ${field} обязательно для заполнения`);
-          return;
+          return {
+            success: false,
+            message: `Поле ${field} обязательно для заполнения`,
+          };
         }
       }
 
@@ -84,7 +87,10 @@ class DriverService {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(data.email)) {
         console.error("Некорректный email адрес");
-        return;
+        return {
+          success: false,
+          message: "Некорректный email адрес",
+        };
       }
 
       // Валидация даты истечения прав
@@ -92,7 +98,10 @@ class DriverService {
       const today = new Date();
       if (expiryDate <= today) {
         console.error("Срок действия водительских прав истек");
-        return;
+        return {
+          success: false,
+          message: "Срок действия водительских прав истек",
+        };
       }
 
       // Валидация года выпуска автомобиля
@@ -100,7 +109,10 @@ class DriverService {
         const currentYear = new Date().getFullYear();
         if (data.vehicle_year < 1900 || data.vehicle_year > currentYear + 1) {
           console.error("Некорректный год выпуска автомобиля");
-          return;
+          return {
+            success: false,
+            message: "Некорректный год выпуска автомобиля",
+          };
         }
       }
 
@@ -116,7 +128,10 @@ class DriverService {
 
       if (!response.ok) {
         console.error(result.message || "Ошибка при регистрации");
-        return;
+        return {
+          success: false,
+          message: result.message || "Ошибка при регистрации",
+        };
       }
 
       return result;
@@ -176,7 +191,27 @@ class DriverService {
       );
       if (!response.success || !response.data) {
         console.error(response.error || "Failed to load driver profile");
-        return;
+        return {
+          id: "",
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone_number: "",
+          license_number: "",
+          license_expiry_date: "",
+          vehicle_brand: "",
+          vehicle_model: "",
+          vehicle_number: "",
+          vehicle_year: 0,
+          status: DriverStatus.PENDING,
+          rating: 0,
+          created_at: "",
+          updated_at: "",
+          schedule: "",
+          price: "",
+          distance: "",
+          time: "",
+        };
       }
 
       return response.data;
@@ -205,7 +240,23 @@ class DriverService {
 
       if (!response.ok) {
         console.error("Ошибка при обновлении профиля");
-        return;
+        return {
+          id: "",
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone_number: "",
+          license_number: "",
+          license_expiry_date: "",
+          vehicle_brand: "",
+          vehicle_model: "",
+          vehicle_number: "",
+          vehicle_year: 0,
+          status: DriverStatus.PENDING,
+          rating: 0,
+          created_at: "",
+          updated_at: "",
+        };
       }
 
       return await response.json();
@@ -237,7 +288,10 @@ class DriverService {
 
       if (!response.ok) {
         console.error("Ошибка при обновлении документов");
-        return;
+        return {
+          success: false,
+          message: "Ошибка при обновлении документов",
+        };
       }
 
       return await response.json();
@@ -266,7 +320,17 @@ class DriverService {
 
       if (!response.ok) {
         console.error("Ошибка при получении статистики");
-        return;
+        return {
+          total_trips: 0,
+          completed_trips: 0,
+          cancelled_trips: 0,
+          total_earnings: 0,
+          average_rating: 0,
+          total_ratings: 0,
+          online_hours_today: 0,
+          online_hours_week: 0,
+          online_hours_month: 0,
+        };
       }
 
       return await response.json();
@@ -333,7 +397,7 @@ class DriverService {
 
       if (!response.ok) {
         console.error("Ошибка при получении списка водителей");
-        return;
+        return [];
       }
 
       return await response.json();
@@ -376,7 +440,7 @@ class DriverService {
       );
       if (!response.success || !response.data) {
         console.error(response.error || "Failed to load driver trips");
-        return;
+        return [];
       }
       return response.data.items;
     } catch (error) {

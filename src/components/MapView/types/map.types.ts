@@ -36,10 +36,12 @@ export interface MapViewComponentProps {
   showTrafficMock?: boolean;
 }
 
+import type { Camera, Region } from "react-native-maps";
+
 export interface MapRef {
-  getCamera: () => Promise<any>;
-  animateCamera: (camera: any) => void;
-  animateToRegion: (region: any, duration?: number) => void;
+  getCamera: () => Promise<Camera>;
+  animateCamera: (camera: Partial<Camera>) => void;
+  animateToRegion: (region: Region, duration?: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
 }

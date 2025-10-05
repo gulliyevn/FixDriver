@@ -45,7 +45,7 @@ const NotificationsScreen: React.FC = () => {
     }).start();
   }, [fadeAnim]);
 
-  const loadNotifications = async () => {
+  const loadNotifications = async (): Promise<void> => {
     try {
       setRefreshing(true);
       if (__DEV__) {
@@ -482,11 +482,6 @@ const NotificationsScreen: React.FC = () => {
       </ScrollView>
       {/* Первичная загрузка */}
       {notifications.length === 0 && !refreshing && <></>}
-      {
-        useEffect(() => {
-          loadNotifications();
-        }, [user?.id]) as any
-      }
     </SafeAreaView>
   );
 };

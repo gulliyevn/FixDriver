@@ -75,7 +75,8 @@ const DriverRegisterScreen: React.FC = () => {
 
   useEffect(() => {
     if (form.tariff && form.tariff in vehicleSegments) {
-      setBrandOptions((vehicleSegments as any)[form.tariff]?.brands || carBrands);
+      const segment = vehicleSegments[form.tariff as keyof typeof vehicleSegments];
+      setBrandOptions(segment?.brands || carBrands);
       setModelOptions([]);
       setForm((prev) => ({ ...prev, carBrand: "", carModel: "" }));
     }
@@ -91,8 +92,8 @@ const DriverRegisterScreen: React.FC = () => {
 
   const handleBrandChange = (brand: string) => {
     setForm((prev) => ({ ...prev, carBrand: brand, carModel: "" }));
-    const segment = form.tariff && form.tariff in vehicleSegments ? (vehicleSegments as any)[form.tariff] : null;
-    setModelOptions(segment?.models?.[brand] || []);
+    const segment = form.tariff && form.tariff in vehicleSegments ? vehicleSegments[form.tariff as keyof typeof vehicleSegments] : null;
+    setModelOptions(segment?.models?.[brand as keyof typeof segment.models] || []);
   };
   const handleModelChange = (model: string) => {
     setForm((prev) => ({ ...prev, carModel: model }));
@@ -101,7 +102,7 @@ const DriverRegisterScreen: React.FC = () => {
       (m) => m.value === model,
     );
     if (found?.tariff) {
-      setForm((prev) => ({ ...prev, tariff: found.tariff }));
+      setForm((prev) => ({ ...prev, tariff: found.tariff! }));
     }
   };
   const handleTariffChange = (tariff: string) => {

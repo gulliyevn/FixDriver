@@ -13,11 +13,6 @@ export interface RouteParams {
 
 export const UniversalLinkHandler = {
   handleIncomingUrl(url: string): void {
-    if (!this.isFixDriveRouteUrl(url)) return;
-
-    const points = this.parseRouteUrl(url);
-    if (!points) return;
-
     // navigation.navigate('OrdersMapScreen', { routePoints: points });
   },
 };

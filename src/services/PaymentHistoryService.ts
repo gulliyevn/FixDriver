@@ -86,7 +86,19 @@ export const PaymentHistoryService = {
       `/payment-history/${userId}?${params.toString()}`,
     );
 
-    return response.data;
+    return response.data || {
+      transactions: [],
+      stats: {
+        totalTransactions: 0,
+        totalAmount: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+        completedCount: 0,
+        pendingCount: 0,
+        failedCount: 0,
+      },
+      hasMore: false,
+    };
   },
 
   /**
@@ -165,7 +177,15 @@ export const PaymentHistoryService = {
       `/payment-history/${userId}/stats?role=${userRole}`,
     );
 
-    return response.data;
+    return response.data || {
+      totalTransactions: 0,
+      totalAmount: 0,
+      totalEarned: 0,
+      totalSpent: 0,
+      completedCount: 0,
+      pendingCount: 0,
+      failedCount: 0,
+    };
   },
 
   /**

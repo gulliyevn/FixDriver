@@ -8,7 +8,8 @@ import { useUserStorageKey } from "../utils/storageKeys";
 
 export const useFixDriveFamilyMembers = () => {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const profileContext = useProfile();
+  const profile = profileContext?.profile;
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const familyMembersKey = useUserStorageKey("@family_members");

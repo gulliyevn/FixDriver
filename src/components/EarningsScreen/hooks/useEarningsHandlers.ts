@@ -15,7 +15,7 @@ export const useEarningsHandlers = (
   startOnlineTime?: () => void,
   stopOnlineTime?: () => void,
 ) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
 
   const toggleFilter = useCallback(() => {
     const toValue = filterExpanded ? 0 : 1;
@@ -77,7 +77,7 @@ export const useEarningsHandlers = (
   const handleBalancePress = useCallback(() => {
     try {
       // Переходим на таб профиля
-      navigation.navigate("Profile" as any);
+      (navigation as any).navigate("Profile");
 
       setTimeout(() => {
         // Навигируем к экрану баланса внутри стека профиля
@@ -86,7 +86,7 @@ export const useEarningsHandlers = (
         });
       }, 100);
     } catch (error) {
-      navigation.navigate("Profile" as any);
+      (navigation as any).navigate("Profile");
     }
   }, [navigation]);
 

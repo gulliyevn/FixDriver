@@ -10,7 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
 type DriversHeaderProps = {
-  styles: Record<string, any>;
+  styles: any;
   isDark: boolean;
   filterExpandAnim: Animated.Value;
   onToggleFilter: () => void;

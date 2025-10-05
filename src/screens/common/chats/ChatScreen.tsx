@@ -63,7 +63,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
 
     try {
       const msg = await ChatService.sendMessage(chatId, text.trim());
-      setMessages((prev) => [...prev, msg]);
+      if (msg) {
+        setMessages((prev) => [...prev, msg]);
+      }
       setText("");
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
     } catch (error) {
@@ -100,9 +102,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
             {isMine && (
               <Ionicons
                 name={
-                  (item as any).status === "sent"
+                  (item as Message & { status?: string }).status === "sent"
                     ? "checkmark"
-                    : (item as any).status === "delivered"
+                    : (item as Message & { status?: string }).status === "delivered"
                       ? "checkmark-done"
                       : "time"
                 }
@@ -284,7 +286,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
           },
         },
       );
-      pushMessageAndScroll(msg);
+      if (msg) {
+        pushMessageAndScroll(msg);
+      }
       setShowAttachments(false);
     } catch (e) {
       Alert.alert(t("client.map.locationError"));

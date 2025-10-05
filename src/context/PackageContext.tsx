@@ -344,7 +344,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
         !subscription.autoRenew ||
         subscription.packageType === "free"
       ) {
-        return;
+        return false;
       }
 
       const now = new Date();
@@ -362,7 +362,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
 
         // Списываем средства с баланса
         if (typeof deductBalance !== "function") {
-          return;
+          return false;
         }
         const success = await deductBalance(
           price,
@@ -396,7 +396,7 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
             [{ text: t("common.ok") }],
           );
 
-          return;
+          return false;
         } else {
           // Недостаточно средств - сохраняем информацию о pending автообновлении
           const updatedSubscription = {
@@ -435,13 +435,13 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
             ],
           );
 
-          return;
+          return false;
         }
       }
 
-      return;
+      return true;
     } catch (error) {
-      return;
+      return false;
     }
   };
 
@@ -451,19 +451,19 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
       // Загружаем актуальные данные из AsyncStorage
       const storedSubscription = await AsyncStorage.getItem(SUBSCRIPTION_KEY);
       if (!storedSubscription) {
-        return;
+        return false;
       }
 
       const currentSubscription = JSON.parse(storedSubscription);
       if (!currentSubscription || !currentSubscription.pendingAutoRenewal) {
-        return;
+        return false;
       }
 
       const { price, packageName } = currentSubscription.pendingAutoRenewal;
 
       // Списываем средства с баланса
       if (typeof deductBalance !== "function") {
-        return;
+        return false;
       }
       const success = await deductBalance(
         price,
@@ -497,12 +497,12 @@ export const PackageProvider: React.FC<{ children: ReactNode }> = ({
           [{ text: t("common.ok") }],
         );
 
-        return;
+        return true;
       }
 
-      return;
+      return false;
     } catch (error) {
-      return;
+      return false;
     }
   };
 
@@ -657,7 +657,19 @@ export const usePackage = (): PackageContextType => {
   const context = useContext(PackageContext);
   if (context === undefined) {
     console.error("usePackage must be used within a PackageProvider");
-    return;
+    return {
+      currentPackage: "free",
+      subscription: null,
+      updatePackage: async () => {},
+      extendSubscription: async () => {},
+      cancelSubscription: async () => {},
+      toggleAutoRenew: async () => {},
+      processAutoRenewal: async () => false,
+      checkPendingAutoRenewal: async () => false,
+      getPackageIcon: () => "",
+      getPackageColor: () => "",
+      getPackagePrice: () => 0,
+    };
   }
   return context;
 };

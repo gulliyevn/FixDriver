@@ -263,7 +263,7 @@ const EditDriverProfileScreen: React.FC<
       rotateAnim.setValue(0);
 
       // После завершения анимации вызываем функцию из утилит
-      handleDriverCirclePress(rootNavigation, login, t, changeRole);
+      handleDriverCirclePress(rootNavigation, login, t, changeRole as (role: "client" | "driver") => void);
     });
   };
 

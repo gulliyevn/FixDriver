@@ -5,7 +5,9 @@ import DriverService from "../../services/DriverService";
 export interface DriverDetails {
   driver: {
     id: string;
-    phone: string;
+    first_name: string;
+    last_name: string;
+    phone_number: string;
     schedule: string;
     price: string;
     distance: string;
@@ -44,7 +46,9 @@ export const useDriverDetails = (driverId: string) => {
       if (profile) {
         setDriverInfo({
           id: profile.id,
-          phone: profile.phone_number,
+          first_name: profile.first_name || "",
+          last_name: profile.last_name || "",
+          phone_number: profile.phone_number || "",
           schedule: profile.schedule ?? "",
           price: profile.price ?? "",
           distance: profile.distance ?? "",
@@ -68,7 +72,9 @@ export const useDriverDetails = (driverId: string) => {
   return {
     driverInfo: driverInfo ?? {
       id: driverId,
-      phone: "",
+      first_name: "",
+      last_name: "",
+      phone_number: "",
       schedule: "",
       price: "",
       distance: "",

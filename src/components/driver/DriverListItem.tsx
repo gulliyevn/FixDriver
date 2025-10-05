@@ -460,8 +460,8 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
             <View style={styles.callSheetHandle} />
             <Text style={styles.callSheetTitle}>
               {t("client.driversScreen.call.callTitle", {
-                firstName: driver.first_name,
-                lastName: driver.last_name,
+                firstName: driver.first_name || "",
+                lastName: driver.last_name || "",
               })}
             </Text>
             <TouchableOpacity
@@ -488,7 +488,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
               />
               <Text style={styles.callSheetOptionText}>
                 {t("client.driversScreen.call.networkCallWithNumber", {
-                  phone: driver.phone_number,
+                  phone: driver.phone_number || "",
                 })}
               </Text>
             </TouchableOpacity>

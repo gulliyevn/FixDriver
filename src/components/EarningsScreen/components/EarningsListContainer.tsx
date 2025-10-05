@@ -102,7 +102,16 @@ const EarningsListContainer: React.FC<EarningsListContainerProps> = ({
     },
   ];
 
-  const renderDriverItem = (driver: any, index: number) => (
+  type TopDriver = {
+    id: string;
+    name: string;
+    level: string;
+    rides: string;
+    earnings: string;
+    position: string;
+  };
+
+  const renderDriverItem = (driver: TopDriver, index: number) => (
     <TouchableOpacity
       key={driver.id}
       style={[

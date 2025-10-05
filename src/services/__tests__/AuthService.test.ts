@@ -16,8 +16,8 @@ const mockEnvConfig = ENV_CONFIG as jest.Mocked<typeof ENV_CONFIG>;
 global.fetch = jest.fn();
 
 // Мокаем __DEV__
-const originalDev = (global as any).__DEV__;
-(global as any).__DEV__ = false;
+const originalDev = (global as typeof globalThis & { __DEV__: boolean }).__DEV__;
+(global as typeof globalThis & { __DEV__: boolean }).__DEV__ = false;
 
 describe("AuthService", () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe("AuthService", () => {
   });
 
   afterAll(() => {
-    (global as any).__DEV__ = originalDev;
+    (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = originalDev;
   });
 
   describe("login", () => {
@@ -439,7 +439,7 @@ describe("AuthService", () => {
   describe("mock methods", () => {
     it("mockLogin creates new user when not found", async () => {
       // Временно включаем __DEV__ для тестирования mock методов
-      (global as any).__DEV__ = true;
+      (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = true;
 
       const {
         createAuthMockUser,
@@ -472,11 +472,11 @@ describe("AuthService", () => {
       expect(createAuthMockUser).toHaveBeenCalled();
       expect(mockJWTService.forceRefreshTokens).toHaveBeenCalled();
 
-      (global as any).__DEV__ = false;
+      (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = false;
     });
 
     it("mockRegister creates new user", async () => {
-      (global as any).__DEV__ = true;
+      (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = true;
 
       const { createAuthMockUser } = require("../../mocks/auth");
       const mockUser = {
@@ -521,7 +521,7 @@ describe("AuthService", () => {
         phone: "+1234567890",
       });
 
-      (global as any).__DEV__ = false;
+      (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = false;
     });
   });
 });

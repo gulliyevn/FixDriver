@@ -1,10 +1,13 @@
 import { RoutePoint } from "../components/MapView/types/map.types";
 
 export interface DistanceCalculationResult {
-  distanceMeters: number;
-  durationMinutes: number;
-  trafficLevel: "low" | "medium" | "high";
-  estimatedTime: string; // формат "HH:MM"
+  distanceMeters?: number;
+  durationMinutes?: number;
+  trafficLevel?: "low" | "medium" | "high";
+  estimatedTime?: string; // формат "HH:MM"
+  distance?: number;
+  duration?: number;
+  error?: string;
 }
 
 export class DistanceCalculationService {
@@ -33,14 +36,22 @@ export class DistanceCalculationService {
 
       if (!response.ok) {
         console.error(`OpenRouteService error: ${response.status}`);
-        return;
+        return {
+          distance: 0,
+          duration: 0,
+          error: `OpenRouteService error: ${response.status}`,
+        };
       }
 
       const data = await response.json();
 
       if (!data.routes || !data.routes[0]) {
         console.error("No route found");
-        return;
+        return {
+          distance: 0,
+          duration: 0,
+          error: "No route found",
+        };
       }
 
       const route = data.routes[0];
@@ -93,7 +104,7 @@ export class DistanceCalculationService {
       let segmentDepartureTime = departureTime;
       if (segmentDepartureTime && i > 0) {
         const accumulatedMinutes = results.reduce(
-          (sum, result) => sum + result.durationMinutes,
+          (sum, result) => sum + (result.durationMinutes || 0),
           0,
         );
         segmentDepartureTime = new Date(

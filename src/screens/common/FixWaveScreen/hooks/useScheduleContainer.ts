@@ -105,7 +105,7 @@ export const useScheduleContainer = (
             );
           }
 
-          setCalculatedTime(finalTime);
+          setCalculatedTime(finalTime || "--:--");
         } catch (error) {
           setCalculatedTime("--:--");
         } finally {

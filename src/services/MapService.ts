@@ -290,7 +290,11 @@ export class MapService {
         };
       } else {
         console.error("Адрес не найден");
-        return;
+        return {
+          latitude: 55.7558,
+          longitude: 37.6176,
+          address,
+        };
       }
     } catch (error) {
       // Возвращаем дефолтную локацию в случае ошибки
@@ -310,7 +314,7 @@ export class MapService {
 
       if (status !== "granted") {
         console.error("Разрешение на геолокацию не предоставлено");
-        return;
+        return () => {};
       }
 
       // Сначала вызываем callback с текущей локацией

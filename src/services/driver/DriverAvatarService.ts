@@ -51,7 +51,7 @@ export class DriverAvatarService {
 
       const response = await APIClient.post<AvatarData>(
         "/drivers/avatar/upload",
-        formData as any,
+        formData,
       );
 
       if (response.success && response.data) {

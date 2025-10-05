@@ -29,7 +29,7 @@ class HelpService {
     }
 
     console.error(response.error || "Failed to load help content");
-    return;
+    return DEFAULT_HELP_CONTENT;
   }
 
   static async refreshHelpContent(): Promise<HelpContent> {
@@ -37,7 +37,7 @@ class HelpService {
       const response = await apiClient.get<HelpContentDto>("/help/content");
       if (!response.success || !response.data) {
         console.error(response.error || "Failed to load help content");
-        return;
+        return DEFAULT_HELP_CONTENT;
       }
       const mapped = this.mapDto(response.data);
       if (__DEV__) {

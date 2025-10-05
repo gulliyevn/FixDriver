@@ -201,7 +201,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
             key={index}
             style={styles.statCard}
             onPress={() => {
-              setSelectedStat(card.key as any);
+              setSelectedStat(card.key as typeof selectedStat);
               if (!isExpanded) {
                 setIsExpanded(true);
                 const toValue = 1;
@@ -224,12 +224,7 @@ const EarningsStats: React.FC<EarningsStatsProps> = ({ period, isDark }) => {
             activeOpacity={0.7}
           >
             <View style={styles.valueContainer}>
-              <Ionicons
-                name={card.icon as any}
-                size={16}
-                color={card.color}
-                style={{ marginRight: SIZES.xs }}
-              />
+              <Ionicons name={card.icon as keyof typeof Ionicons.glyphMap} size={16} color={card.color} style={{ marginRight: SIZES.xs }} />
               <View style={{ flexDirection: "column", alignItems: "center" }}>
                 <Text style={styles.statValue}>{card.value}</Text>
               </View>

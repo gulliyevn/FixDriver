@@ -253,12 +253,10 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
                         ]
                       : styles.optionContainerUnselected,
                   ]}
-                  onPress={() =>
-                    setFilter({ ...filter, type: type.key as any })
-                  }
+                  onPress={() => setFilter({ ...filter, type: type.key as PaymentFilter["type"] })}
                 >
                   <Ionicons
-                    name={type.icon as any}
+                    name={type.icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       filter.type === type.key
@@ -306,12 +304,10 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
                         ]
                       : styles.optionContainerUnselected,
                   ]}
-                  onPress={() =>
-                    setFilter({ ...filter, status: status.key as any })
-                  }
+                  onPress={() => setFilter({ ...filter, status: status.key as PaymentFilter["status"] })}
                 >
                   <Ionicons
-                    name={status.icon as any}
+                    name={status.icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       filter.status === status.key
@@ -359,12 +355,10 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
                         ]
                       : styles.optionContainerUnselected,
                   ]}
-                  onPress={() =>
-                    setFilter({ ...filter, dateRange: range.key as any })
-                  }
+                  onPress={() => setFilter({ ...filter, dateRange: range.key as PaymentFilter["dateRange"] })}
                 >
                   <Ionicons
-                    name={range.icon as any}
+                    name={range.icon as keyof typeof Ionicons.glyphMap}
                     size={20}
                     color={
                       filter.dateRange === range.key

@@ -20,7 +20,7 @@ interface AuthContextType {
     password: string,
     authMethod?: string,
   ) => Promise<boolean>;
-  register: (userData: Partial<User>, password: string) => Promise<boolean>;
+  register: (userData: Partial<User> & { country: string }, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
   getAuthHeader: () => Promise<{ Authorization: string } | null>;
@@ -183,16 +183,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (devUser) {
           // Создаем объект User из DevRegisteredUser
           const user: User = {
-            id: devUser.id,
-            email: devUser.email,
+            id: devUser.id || "",
+            email: devUser.email || "",
             name: devUser.firstName || "",
             surname: devUser.lastName || "",
             role: devUser.role as UserRole,
-            phone: devUser.phone,
+            phone: devUser.phone || "",
             avatar: null,
             rating: 5,
             address: "",
-            createdAt: devUser.registeredAt,
+            createdAt: devUser.registeredAt || "",
             birthDate: undefined,
           };
 
@@ -243,15 +243,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    * Регистрация пользователя
    */
   const register = async (
-    userData: {
-      name: string;
-      surname: string;
-      email: string;
-      phone: string;
-      country: string;
-      role: UserRole;
-      children?: Array<{ name: string; age: number; relationship: string }>;
-    },
+    userData: Partial<User> & { country: string },
     password: string,
   ): Promise<boolean> => {
     try {

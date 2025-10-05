@@ -197,11 +197,7 @@ const HelpScreen: React.FC<HelpScreenProps> = ({ navigation }) => {
                 activeOpacity={0.7}
               >
                 <View style={[styles.helpIcon, dynamicStyles.helpIcon]}>
-                  <Ionicons
-                    name={section.icon as any}
-                    size={24}
-                    color={isDark ? "#fff" : "#003366"}
-                  />
+                  <Ionicons name={section.icon as keyof typeof Ionicons.glyphMap} size={24} color={isDark ? "#fff" : "#003366"} />
                 </View>
                 <View style={styles.helpInfo}>
                   <Text style={[styles.helpTitle, dynamicStyles.helpTitle]}>

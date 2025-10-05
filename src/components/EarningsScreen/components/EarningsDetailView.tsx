@@ -26,6 +26,33 @@ interface EarningsDetailViewProps {
   period: "today" | "week" | "month" | "year";
 }
 
+type RideItem = {
+  clientName: string;
+  clientSurname: string;
+  datetime: string;
+  amount: string;
+  status: string;
+};
+
+type HourItem = {
+  hour: string;
+  rides: number | string;
+  earnings: string;
+};
+
+type MetricItem = {
+  icon: keyof typeof Ionicons.glyphMap;
+  metric: string;
+  value: string | number;
+};
+
+type RouteItem = {
+  point: string;
+  time: string;
+  address: string;
+  status: string;
+};
+
 const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
   ({ selectedStat, isDark }) => {
     const colors = getCurrentColors(isDark);
@@ -70,7 +97,7 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
     const content = getDetailContent();
     if (!content) return null;
 
-    const renderRideItem = (item: any, index: number) => (
+    const renderRideItem = (item: RideItem, index: number) => (
       <View key={index} style={styles.rideItem}>
         <View style={styles.rideHeader}>
           <Text style={[styles.clientName, { color: colors.text }]}>
@@ -98,7 +125,7 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
       </View>
     );
 
-    const renderHourItem = (item: any, index: number) => (
+    const renderHourItem = (item: HourItem, index: number) => (
       <View key={index} style={styles.hourItem}>
         <Text style={[styles.hourText, { color: colors.text }]}>
           {item.hour}
@@ -114,10 +141,10 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
       </View>
     );
 
-    const renderMetricItem = (item: any, index: number) => (
+    const renderMetricItem = (item: MetricItem, index: number) => (
       <View key={index} style={styles.metricItem}>
         <View style={styles.metricHeader}>
-          <Ionicons name={item.icon as any} size={16} color={colors.primary} />
+          <Ionicons name={item.icon} size={16} color={colors.primary} />
           <Text style={[styles.metricName, { color: colors.text }]}>
             {item.metric}
           </Text>
@@ -128,7 +155,7 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
       </View>
     );
 
-    const renderRouteItem = (item: any, index: number) => (
+    const renderRouteItem = (item: RouteItem, index: number) => (
       <View key={index} style={styles.routeItem}>
         <View style={styles.routeHeader}>
           <Text style={[styles.routePoint, { color: colors.text }]}>
@@ -191,11 +218,7 @@ const EarningsDetailView: React.FC<EarningsDetailViewProps> = React.memo(
         {/* Заголовок */}
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Ionicons
-              name={content.icon as any}
-              size={20}
-              color={colors.primary}
-            />
+            <Ionicons name={content.icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.primary} />
             <Text style={[styles.title, { color: colors.text }]}>
               {content.title}
             </Text>

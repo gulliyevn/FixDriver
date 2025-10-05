@@ -5,24 +5,9 @@ import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
 import { getCurrentColors } from "../constants/colors";
 import { TabBarStyles as styles } from "../styles/navigation/TabBar.styles";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-interface TabBarProps {
-  state: { routes: Array<{ key: string; name: string }>; index: number };
-  descriptors: Record<
-    string,
-    { options: { tabBarAccessibilityLabel?: string; tabBarTestID?: string } }
-  >;
-  navigation: {
-    emit: (event: {
-      type: string;
-      target: string;
-      canPreventDefault?: boolean;
-    }) => { defaultPrevented?: boolean };
-    navigate: (name: string) => void;
-  };
-}
-
-const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
+const TabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const currentColors = getCurrentColors(isDark);
@@ -208,7 +193,6 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
               style={[

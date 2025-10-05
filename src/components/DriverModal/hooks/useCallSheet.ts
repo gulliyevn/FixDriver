@@ -29,11 +29,11 @@ export const useCallSheet = (
 
   const handleNetworkCall = useCallback(() => {
     try {
-      Linking.openURL(`tel:${driver.phone}`);
+      Linking.openURL(`tel:${driver.phone_number}`);
     } finally {
       closeCallSheet();
     }
-  }, [closeCallSheet, driver.phone]);
+  }, [closeCallSheet, driver.phone_number]);
 
   const handleInternetCall = useCallback(() => {
     closeCallSheet();

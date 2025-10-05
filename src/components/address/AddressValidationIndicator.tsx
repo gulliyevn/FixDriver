@@ -12,13 +12,13 @@ interface AddressValidationIndicatorProps {
     retry: string;
   };
   styles: {
-    container: any;
-    item: any;
-    text: any;
-    textValid: any;
-    textInvalid: any;
-    retryButton: any;
-    retryButtonText: any;
+    container: object;
+    item: object;
+    text: object;
+    textValid: object;
+    textInvalid: object;
+    retryButton: object;
+    retryButtonText: object;
   };
 }
 

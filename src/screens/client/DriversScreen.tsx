@@ -110,7 +110,7 @@ const DriversScreen: React.FC = () => {
         } as typeof prev;
         if (key === "all") return { ...base, all: true };
         // Эксклюзивно: только один активен. Повторное нажатие возвращает к All
-        if ((prev as any)[key]) {
+        if (key in prev && (prev as Record<string, boolean>)[key]) {
           return { ...base, all: true };
         }
         switch (key) {
@@ -285,7 +285,7 @@ const DriversScreen: React.FC = () => {
     (driver: Driver) => {
       try {
         // Для обеих ролей используем одинаковую навигацию к стеку чатов
-        navigation.navigate("Chat" as any);
+        (navigation as any).navigate("Chat");
 
         setTimeout(() => {
           // Навигируем к конкретному чату внутри стека
@@ -302,7 +302,7 @@ const DriversScreen: React.FC = () => {
           });
         }, 100);
       } catch (error) {
-        navigation.navigate("Chat" as any);
+        (navigation as any).navigate("Chat");
       }
     },
     [navigation],

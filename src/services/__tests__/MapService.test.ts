@@ -36,7 +36,7 @@ describe("MapService", () => {
         writable: true,
       });
 
-      const region = (MapService as any).getDefaultRegion();
+      const region = (MapService as typeof MapService & { [key: string]: any }).getDefaultRegion();
       expect(region).toEqual({
         lat: 55.7558,
         lng: 37.6176,
@@ -55,7 +55,7 @@ describe("MapService", () => {
         writable: true,
       });
 
-      const region = (MapService as any).getDefaultRegion();
+      const region = (MapService as typeof MapService & { [key: string]: any }).getDefaultRegion();
       expect(region).toEqual({
         lat: 40.3777,
         lng: 49.892,
@@ -72,7 +72,7 @@ describe("MapService", () => {
         address: "Test Address",
       };
 
-      await (MapService as any).cacheLocation(testLocation);
+      await (MapService as typeof MapService & { [key: string]: any }).cacheLocation(testLocation);
 
       expect(mockAsyncStorage.setItem).toHaveBeenCalledWith(
         "cached_location",
@@ -89,7 +89,7 @@ describe("MapService", () => {
       };
 
       await expect(
-        (MapService as any).cacheLocation(testLocation),
+        (MapService as typeof MapService & { [key: string]: any }).cacheLocation(testLocation),
       ).resolves.not.toThrow();
     });
   });
@@ -111,7 +111,7 @@ describe("MapService", () => {
         JSON.stringify(mockCachedData),
       );
 
-      const result = await (MapService as any).getCachedLocation();
+      const result = await (MapService as typeof MapService & { [key: string]: any }).getCachedLocation();
 
       expect(result).toEqual(mockCachedData.location);
     });
@@ -132,7 +132,7 @@ describe("MapService", () => {
         JSON.stringify(mockCachedData),
       );
 
-      const result = await (MapService as any).getCachedLocation();
+      const result = await (MapService as typeof MapService & { [key: string]: any }).getCachedLocation();
 
       expect(result).toBeNull();
       expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith(
@@ -143,7 +143,7 @@ describe("MapService", () => {
     it("returns null when no cache exists", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
 
-      const result = await (MapService as any).getCachedLocation();
+      const result = await (MapService as typeof MapService & { [key: string]: any }).getCachedLocation();
 
       expect(result).toBeNull();
     });
@@ -151,7 +151,7 @@ describe("MapService", () => {
     it("handles cache parsing error gracefully", async () => {
       mockAsyncStorage.getItem.mockResolvedValue("invalid json");
 
-      const result = await (MapService as any).getCachedLocation();
+      const result = await (MapService as typeof MapService & { [key: string]: any }).getCachedLocation();
 
       expect(result).toBeNull();
     });
@@ -184,7 +184,7 @@ describe("MapService", () => {
     it("requests location permission when no cache", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "granted" as any,
+        status: "granted" as Location.PermissionStatus,
       });
       mockLocation.getCurrentPositionAsync.mockResolvedValue({
         coords: {
@@ -210,7 +210,7 @@ describe("MapService", () => {
     it("returns default region when permission denied", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "denied" as any,
+        status: "denied" as Location.PermissionStatus,
       });
 
       const result = await MapService.getCurrentLocation();
@@ -223,7 +223,7 @@ describe("MapService", () => {
     it("handles location request error gracefully", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "granted" as any,
+        status: "granted" as Location.PermissionStatus,
       });
       mockLocation.getCurrentPositionAsync.mockRejectedValue(
         new Error("Location error"),
@@ -398,7 +398,7 @@ describe("MapService", () => {
       const mockCallback = jest.fn();
 
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "denied" as any,
+        status: "denied" as Location.PermissionStatus,
       });
 
       const unsubscribe = await MapService.watchLocation(mockCallback);
@@ -412,7 +412,7 @@ describe("MapService", () => {
     it("retries location request on failure", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "granted" as any,
+        status: "granted" as Location.PermissionStatus,
       });
 
       // Первые две попытки неудачные, третья успешная
@@ -442,7 +442,7 @@ describe("MapService", () => {
     it("returns default region after all retries fail", async () => {
       mockAsyncStorage.getItem.mockResolvedValue(null);
       mockLocation.requestForegroundPermissionsAsync.mockResolvedValue({
-        status: "granted" as any,
+        status: "granted" as Location.PermissionStatus,
       });
       mockLocation.getCurrentPositionAsync.mockRejectedValue(
         new Error("All attempts failed"),

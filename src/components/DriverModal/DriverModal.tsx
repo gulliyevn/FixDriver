@@ -415,7 +415,11 @@ const DriverModal: React.FC<DriverModalProps> = ({
         isDark={isDark}
         role={role}
         callAnim={callSheet.callAnim}
-        driver={driverInfo}
+        driver={{
+          first_name: driverInfo?.first_name || "",
+          last_name: driverInfo?.last_name || "",
+          phone_number: driverInfo?.phone_number || "",
+        }}
         onClose={callSheet.closeCallSheet}
         onNetworkCall={callSheet.handleNetworkCall}
         onInternetCall={callSheet.handleInternetCall}

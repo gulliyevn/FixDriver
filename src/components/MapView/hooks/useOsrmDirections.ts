@@ -82,8 +82,8 @@ export const useOsrmDirections = (points: RoutePoint[] | undefined) => {
           durationSec: Math.round(best.duration),
           distanceMeters: Math.round(best.distance),
         });
-      } catch (e: any) {
-        setError(e?.message || "OSRM error");
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "OSRM error");
         setRoute(null);
       } finally {
         setLoading(false);

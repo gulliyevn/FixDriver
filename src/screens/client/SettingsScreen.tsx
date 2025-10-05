@@ -130,7 +130,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                 />
               </View>
 
-              {!permissions.granted && (
+              {!permissions?.granted && (
                 <TouchableOpacity
                   style={styles.permissionButton}
                   onPress={requestPermissions}

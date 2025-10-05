@@ -17,7 +17,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
   const { isDark } = useTheme();
   const colors = getCurrentColors(isDark);
-  const steps = getProgressSteps(currentPage as any);
+  const steps = getProgressSteps(currentPage as FixDrivePage);
 
   const handleStepPress = (step: ProgressStep) => {
     // Можно кликать только на завершенные шаги (зеленые)
@@ -61,7 +61,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             disabled={!step.isCompleted}
             activeOpacity={0.7}
           >
-            <Ionicons name={step.icon as any} size={18} color="#FFFFFF" />
+            <Ionicons name={step.icon as keyof typeof Ionicons.glyphMap} size={18} color="#FFFFFF" />
           </TouchableOpacity>
 
           {/* Прогресс бар между кругами */}

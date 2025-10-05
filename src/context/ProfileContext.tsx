@@ -148,7 +148,10 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
 
     try {
       // Используем ProfileService (поддерживает DEV/PROD)
-      const result = await ProfileService.updateProfile(user.id, updates);
+      const result = await ProfileService.updateProfile(user.id, {
+        ...updates,
+        avatar: updates.avatar || undefined,
+      });
 
       if (result.success && result.profile) {
         setProfile(result.profile);

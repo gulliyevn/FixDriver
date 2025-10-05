@@ -38,7 +38,15 @@ class FixDriveOrderService {
       return order;
     } catch (error) {
       console.error("Не удалось сохранить данные заказа");
-      return;
+      return {
+        id: "",
+        familyMemberId: "",
+        familyMemberName: "",
+        packageType: "standard",
+        addresses: [],
+        createdAt: Date.now(),
+        status: "draft",
+      };
     }
   }
 
@@ -60,7 +68,7 @@ class FixDriveOrderService {
       const currentData = await this.loadOrderData();
       if (!currentData) {
         console.error("Нет сохраненных данных заказа");
-        return;
+        return null;
       }
 
       const updatedData: OrderData = {
@@ -72,7 +80,7 @@ class FixDriveOrderService {
       return updatedData;
     } catch (error) {
       console.error("Не удалось обновить данные заказа");
-      return;
+      return null;
     }
   }
 

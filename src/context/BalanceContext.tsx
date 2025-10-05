@@ -24,7 +24,19 @@ export const useBalanceContext = () => {
   const context = useContext(BalanceContext);
   if (!context) {
     console.error("useBalanceContext must be used within a BalanceProvider");
-    return;
+    return {
+      balance: 0,
+      earnings: 0,
+      transactions: [],
+      addEarnings: async () => ({ newBalance: 0, newEarnings: 0 }),
+      topUpBalance: async () => false,
+      withdrawBalance: async () => false,
+      deductBalance: async () => false,
+      resetBalance: async () => {},
+      resetEarnings: async () => 0,
+      loadBalance: async () => {},
+      loadEarnings: async () => {},
+    };
   }
   return context;
 };

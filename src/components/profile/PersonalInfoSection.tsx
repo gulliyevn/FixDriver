@@ -17,7 +17,7 @@ interface PersonalInfoSectionProps {
     email: string;
     birthDate: string;
   };
-  setFormData: (data: any) => void;
+  setFormData: (data: PersonalInfoSectionProps["formData"]) => void;
   isEditing: boolean;
   verificationStatus: {
     email: boolean;

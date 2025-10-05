@@ -27,7 +27,14 @@ import {
   getTariffOptions,
 } from "../../../utils/driverData";
 import { useDriverVehicles } from "../../../hooks/driver/useDriverVehicles";
-import { VehicleFormData } from "../../../types/driver/DriverVehicle";
+import { VehicleFormData, VehicleFormErrors } from "../../../types/driver/DriverVehicle";
+
+type VehicleSegments = Record<string, {
+  brands: { label: string; value: string }[];
+  models: Record<string, { label: string; value: string; tariff?: string }[]>;
+}>;
+
+const vehicleSegmentsData = vehicleSegments as VehicleSegments;
 
 const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
   navigation,
@@ -52,7 +59,7 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
     carMileage: "",
     passportPhoto: "",
   });
-  const [vehicleErrors, setVehicleErrors] = useState<any>({});
+  const [vehicleErrors, setVehicleErrors] = useState<VehicleFormErrors>({});
   const [brandOptions, setBrandOptions] = useState(carBrands);
   const [modelOptions, setModelOptions] = useState<
     { label: string; value: string; tariff?: string }[]
@@ -62,8 +69,8 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
 
   // Логика зависимостей между полями
   useEffect(() => {
-    if (vehicleForm.tariff && vehicleForm.tariff in vehicleSegments) {
-      setBrandOptions((vehicleSegments as any)[vehicleForm.tariff]?.brands || carBrands);
+    if (vehicleForm.tariff && vehicleForm.tariff in vehicleSegmentsData) {
+      setBrandOptions(vehicleSegmentsData[vehicleForm.tariff]?.brands || carBrands);
       setModelOptions([]);
       setVehicleForm((prev) => ({ ...prev, carBrand: "", carModel: "" }));
     }
@@ -72,14 +79,14 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
   const tariffOptions = getTariffOptions(t);
   const yearOptions = getYearOptions();
 
-  const handleVehicleChange = (field: string, value: string) => {
+  const handleVehicleChange = (field: keyof VehicleFormData, value: string) => {
     setVehicleForm((prev) => ({ ...prev, [field]: value }));
-    setVehicleErrors((prev: any) => ({ ...prev, [field]: undefined }));
+    setVehicleErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const handleBrandChange = (brand: string) => {
     setVehicleForm((prev) => ({ ...prev, carBrand: brand, carModel: "" }));
-    const segment = vehicleForm.tariff && vehicleForm.tariff in vehicleSegments ? (vehicleSegments as any)[vehicleForm.tariff] : null;
+    const segment = vehicleForm.tariff && vehicleForm.tariff in vehicleSegmentsData ? vehicleSegmentsData[vehicleForm.tariff] : null;
     setModelOptions(segment?.models?.[brand] || []);
   };
 
@@ -90,7 +97,7 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
       (m) => m.value === model,
     );
     if (found?.tariff) {
-      setVehicleForm((prev) => ({ ...prev, tariff: found.tariff }));
+      setVehicleForm((prev) => ({ ...prev, tariff: found.tariff! }));
     }
   };
 
@@ -103,7 +110,7 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
     value: string | number;
   }) => {
     setVehicleForm((prev) => ({ ...prev, carYear: option.value.toString() }));
-    setVehicleErrors((prev: any) => ({ ...prev, carYear: undefined }));
+    setVehicleErrors((prev) => ({ ...prev, carYear: undefined }));
   };
 
   const validateVehicle = () => {
@@ -282,7 +289,7 @@ const DriverVehiclesScreen: React.FC<DriverScreenProps<"DriverVehicles">> = ({
               photo={vehiclePhoto}
               onPhotoChange={(uri) => setVehiclePhoto(uri)}
               onError={(err) =>
-                setVehicleErrors((prev: any) => ({
+                setVehicleErrors((prev) => ({
                   ...prev,
                   vehiclePhoto: err,
                 }))

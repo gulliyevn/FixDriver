@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { View, StyleSheet, ActivityIndicator, Image, ImageProps } from "react-native";
+import { View, StyleSheet, ActivityIndicator, Image, ImageProps, ViewStyle } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 
 interface OptimizedImageProps extends Omit<ImageProps, "source"> {
   source: string | { uri: string };
   fallback?: string;
   showLoading?: boolean;
-  containerStyle?: any;
+  containerStyle?: ViewStyle | ViewStyle[];
   onLoadStart?: () => void;
   onLoadEnd?: () => void;
   onError?: () => void;

@@ -17,7 +17,7 @@ interface DriverPersonalInfoSectionProps {
     email: string;
     birthDate: string;
   };
-  setFormData: (data: any) => void;
+  setFormData: (data: DriverPersonalInfoSectionProps["formData"]) => void;
   isEditing: boolean;
   verificationStatus: {
     email: boolean;

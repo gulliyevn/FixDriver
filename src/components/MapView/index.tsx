@@ -41,7 +41,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
   ) => {
     const mapRef = useRef<MapView>(null);
     const { isDark } = useTheme();
-    const navigation = useNavigation<any>();
+    const navigation = useNavigation();
     const styles = createMapViewStyles(isDark);
 
     const plannedArrivalAtMs = useMemo(() => {
@@ -79,7 +79,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
         : fallbackRouteCoordinates;
 
     const routeMarkers = useMemo(() => {
-      if (!routePoints || routePoints.length === 0) return [] as any[];
+      if (!routePoints || routePoints.length === 0) return [] as { id: string; coordinate: { latitude: number; longitude: number }; title: string; description: string; type: "start" | "waypoint" | "end"; label: string }[];
       return routePoints.map((p, idx) => {
         const isFirst = idx === 0;
         const isLast = idx === routePoints.length - 1;
@@ -122,9 +122,9 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
 
     // Экспортируем методы карты через ref
     useImperativeHandle(ref, () => ({
-      getCamera: () => mapRef.current?.getCamera(),
-      animateCamera: (camera: any) => mapRef.current?.animateCamera(camera),
-      animateToRegion: (region: any, duration?: number) =>
+      getCamera: () => mapRef.current!.getCamera(),
+      animateCamera: (camera) => mapRef.current?.animateCamera(camera),
+      animateToRegion: (region, duration?: number) =>
         mapRef.current?.animateToRegion(region, duration),
       zoomIn: handleZoomIn,
       zoomOut: handleZoomOut,
@@ -163,35 +163,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
       }
     }, [onDriverModalClose]);
 
-    const handleChatPress = useCallback(
-      (driver: any) => {
-        try {
-          // Закрываем модалку водителя
-          handleDriverModalClose();
-
-          // Для обеих ролей используем одинаковую навигацию к стеку чатов
-          navigation.navigate("Chat");
-
-          setTimeout(() => {
-            // Навигируем к конкретному чату внутри стека
-            navigation.navigate("Chat", {
-              screen: "ChatConversation",
-              params: {
-                driverId: driver.id,
-                driverName: `${driver.first_name} ${driver.last_name}`,
-                driverCar: `${driver.vehicle_brand} ${driver.vehicle_model}`,
-                driverNumber: driver.phone_number,
-                driverRating: driver.rating.toString(),
-                driverStatus: driver.isAvailable ? "online" : "offline",
-              },
-            });
-          }, 100);
-        } catch (error) {
-          navigation.navigate("Chat");
-        }
-      },
-      [navigation, handleDriverModalClose],
-    );
+    
 
     // Плавная анимация центрирования карты при изменении initialLocation
     React.useEffect(() => {
@@ -372,7 +344,23 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
             onClose={handleDriverModalClose}
             onOverlayClose={handleDriverModalClose}
             role={role}
-            onChat={handleChatPress}
+            onChat={(driverId: string) => {
+              const driver = markers.find((m) => m.type === "driver" && m.id === driverId);
+              if (!driver) return;
+              // Навигация к чату по driverId
+              try {
+                handleDriverModalClose();
+                (navigation as any).navigate("Chat");
+                setTimeout(() => {
+                  (navigation as any).navigate("Chat", {
+                    screen: "ChatConversation",
+                    params: { driverId },
+                  });
+                }, 100);
+              } catch {
+                (navigation as any).navigate("Chat");
+              }
+            }}
             driverId={selectedDriverId}
           />
         )}

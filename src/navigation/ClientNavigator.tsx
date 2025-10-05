@@ -9,6 +9,7 @@ import { ClientStackParamList } from "../types/navigation";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
 import TabBar from "./TabBar";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 const Stack = createStackNavigator<ClientStackParamList>();
 
@@ -19,7 +20,7 @@ const TabNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator();
 
   // Обёртка для TabBar, чтобы подписаться на смену языка
-  function TabBarWithLanguage(props: any) {
+  function TabBarWithLanguage(props: BottomTabBarProps) {
     useLanguage();
     return <TabBar {...props} />;
   }

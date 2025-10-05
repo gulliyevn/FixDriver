@@ -71,7 +71,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
         <View style={styles.flex1}>
           <TimePicker
             value={selectedTime}
-            onChange={onTimeChange}
+            onChange={onTimeChange || (() => {})}
             onClear={() => onTimeChange?.("")}
             placeholder={t("common.selectTime")}
             indicatorColor={getDayColor(
@@ -148,7 +148,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
             <View style={styles.flex1}>
               <TimePicker
                 value={returnTime}
-                onChange={onReturnTimeChange}
+                onChange={onReturnTimeChange || (() => {})}
                 onClear={() => onReturnTimeChange?.("")}
                 placeholder={t("common.selectTime")}
                 indicatorColor={getDayColor(

@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from "react";
 import MapView from "react-native-maps";
 
-export const useMapZoom = (mapRef: React.RefObject<MapView>) => {
+export const useMapZoom = (mapRef: React.RefObject<MapView | null>) => {
   const isZoomingRef = useRef(false);
 
   const handleZoomIn = useCallback(() => {

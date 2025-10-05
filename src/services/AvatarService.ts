@@ -51,7 +51,7 @@ export class AvatarService {
 
       const response = await APIClient.post<AvatarData>(
         "/avatars/upload",
-        formData as any,
+        formData,
       );
 
       if (response.success && response.data) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Platform, Modal } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../context/ThemeContext";
 import { getCurrentColors } from "../constants/colors";
@@ -38,7 +38,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
     return new Date();
   });
 
-  const handleTimeChange = (event: any, selectedTime?: Date) => {
+  const handleTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
     // На Android закрываем только при нажатии "ОК"
     if (Platform.OS === "android") {
       if (event.type === "set" && selectedTime) {

@@ -57,7 +57,25 @@ export class OrderService {
       return response.data;
     }
     console.error(response.error || "Failed to create order");
-    return;
+    return {
+      id: "",
+      clientId: "",
+      driverId: "",
+      status: "pending",
+      from: "",
+      to: "",
+      departureTime: new Date().toISOString(),
+      passenger: {
+        name: "",
+        relationship: "",
+      },
+      route: [],
+      price: 0,
+      distance: 0,
+      duration: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   }
 
   async updateOrder(

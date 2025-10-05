@@ -84,14 +84,14 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
         {currentPage === "addresses" && (
           <AddressPage
             onNext={handleAddressPageNext}
-            initialData={addressData}
+            initialData={addressData || undefined}
           />
         )}
 
         {currentPage === "timeSchedule" && (
           <TimeSchedulePage
             onNext={handleTimeScheduleNext}
-            initialData={timeScheduleData}
+            initialData={timeScheduleData || undefined}
           />
         )}
 

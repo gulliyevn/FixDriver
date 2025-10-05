@@ -34,7 +34,7 @@ const ChangePasswordScreen: React.FC<ClientScreenProps<"ChangePassword">> = ({
     newPassword: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<{ currentPassword?: string; newPassword?: string; confirmPassword?: string }>({});
   const [loading, setLoading] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -42,11 +42,11 @@ const ChangePasswordScreen: React.FC<ClientScreenProps<"ChangePassword">> = ({
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev: any) => ({ ...prev, [field]: undefined }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const validate = () => {
-    const newErrors: any = {};
+    const newErrors: { currentPassword?: string; newPassword?: string; confirmPassword?: string } = {};
 
     // Валидация текущего пароля
     if (!form.currentPassword.trim()) {

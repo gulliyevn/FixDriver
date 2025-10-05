@@ -46,7 +46,7 @@ export const BalanceService = {
     }
     const res = await APIClient.post<BalanceRecord>(`/balance/${userId}`, {
       balance: value,
-    } as any);
+    });
     return res.data as BalanceRecord;
   },
 
@@ -87,7 +87,7 @@ export const BalanceService = {
     }
     const res = await APIClient.post<TransactionRecord>(
       `/balance/${userId}/transactions`,
-      tx as any,
+      tx,
     );
     return res.data as TransactionRecord;
   },
@@ -110,7 +110,6 @@ export const BalanceService = {
         amount: -amount,
         type: "debit",
         description,
-        createdAt: new Date().toISOString(),
       });
       return updated;
     }

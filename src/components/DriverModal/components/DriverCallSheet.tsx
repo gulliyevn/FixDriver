@@ -16,7 +16,7 @@ interface DriverCallSheetProps {
   isDark: boolean;
   role: "client" | "driver";
   callAnim: Animated.Value;
-  driver: any;
+  driver: { first_name: string; last_name: string; phone_number: string };
   onClose: () => void;
   onNetworkCall: () => void;
   onInternetCall: () => void;

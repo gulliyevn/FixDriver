@@ -37,7 +37,10 @@ const EditClientProfileScreen: React.FC<
   const { login, changeRole } = useAuth();
   const dynamicStyles = getEditClientProfileScreenColors(isDark);
 
-  const { profile, updateProfile, loadProfile } = useProfile();
+  const profileContext = useProfile();
+  const profile = profileContext?.profile;
+  const updateProfile = profileContext?.updateProfile;
+  const loadProfile = profileContext?.loadProfile;
   const { currentPackage } = usePackage();
   const user = profile || mockUsers[0];
 
@@ -165,7 +168,7 @@ const EditClientProfileScreen: React.FC<
           updateData.email = formData.email.trim();
         }
 
-        const success = await updateProfile(updateData);
+        const success = await updateProfile?.(updateData);
 
         if (success) {
           Alert.alert(
@@ -361,13 +364,13 @@ const EditClientProfileScreen: React.FC<
       rotateAnim.setValue(0);
 
       // После завершения анимации вызываем функцию из утилит
-      handleCirclePress(navigation, login, t, changeRole);
+      handleCirclePress(navigation, login, t, changeRole as (role: "client" | "driver") => void);
     });
   };
 
   // Загружаем данные только один раз при монтировании компонента
   useEffect(() => {
-    loadProfile();
+    loadProfile?.();
     loadVerificationStatus();
   }, []); // Пустой массив зависимостей - выполняется только один раз
 
@@ -403,7 +406,7 @@ const EditClientProfileScreen: React.FC<
       formData.birthDate !== originalDataRef.current.birthDate
     ) {
       // Сохраняем только дату, не трогая остальные данные
-      updateProfile({ birthDate: formData.birthDate });
+      updateProfile?.({ birthDate: formData.birthDate });
     }
   }, [formData.birthDate]);
 

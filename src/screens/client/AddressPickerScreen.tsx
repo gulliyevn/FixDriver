@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, MapPressEvent } from "react-native-maps";
 import * as Location from "expo-location";
 import { ClientScreenProps } from "../../types/navigation";
 import MapService from "../../services/MapService";
@@ -108,7 +108,7 @@ const AddressPickerScreen: React.FC<ClientScreenProps<"AddressPicker">> = ({
     }
   };
 
-  const handleMapPress = async (event: any) => {
+  const handleMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
 
     setSelectedLocation({ latitude, longitude });

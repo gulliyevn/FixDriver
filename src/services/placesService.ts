@@ -68,21 +68,24 @@ class PlacesService {
       const data = await response.json();
 
       // Преобразуем ответ OpenStreetMap в формат Google Places
-      return data.map((item: unknown) => {
-        const itemObj = item as any; // OSM response structure
+      return (data as Array<Record<string, unknown>>).map((item) => {
+        const placeId = String(item.place_id ?? "");
+        const displayName = String(item.display_name ?? "");
+        const address = (item.address ?? {}) as Record<string, unknown>;
+        const road = typeof address.road === "string" ? address.road : undefined;
+        const houseNumber = typeof address.house_number === "string" ? address.house_number : undefined;
+        const name = typeof item.name === "string" ? item.name : undefined;
+        const city = typeof address.city === "string" ? address.city : undefined;
+        const town = typeof address.town === "string" ? address.town : undefined;
+        const state = typeof address.state === "string" ? address.state : undefined;
         return {
-          place_id: itemObj.place_id?.toString() || '',
-          description: itemObj.display_name || '',
+          place_id: placeId,
+          description: displayName,
           structured_formatting: {
-            main_text:
-              itemObj.address?.road || itemObj.address?.house_number || itemObj.name || "",
-            secondary_text:
-              itemObj.address?.city ||
-              itemObj.address?.town ||
-              itemObj.address?.state ||
-              "",
+            main_text: road || houseNumber || name || "",
+            secondary_text: city || town || state || "",
           },
-        };
+        } as PlacePrediction;
       });
     } catch (error) {
       return [];
