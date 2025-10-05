@@ -3,17 +3,12 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
-  Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../../context/ThemeContext";
-import { useLanguage } from "../../../context/LanguageContext";
 import { getCurrentColors } from "../../../constants/colors";
 import { createFixWaveScreenStyles } from "./styles";
 import { useFixWaveNavigation } from "./hooks/useFixWaveNavigation";
-import { useSessionCleanup } from "../../../hooks/useSessionCleanup";
 import ProgressBar from "./components/ProgressBar";
 import AddressPage from "./components/AddressPage";
 import TimeSchedulePage from "./components/TimeSchedulePage";
@@ -31,20 +26,15 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
   const { isDark } = useTheme();
   const colors = useMemo(() => getCurrentColors(isDark), [isDark]);
   const styles = useMemo(() => createFixWaveScreenStyles(isDark), [isDark]);
-  const { t } = useLanguage();
 
   // Хук для навигации между страницами
   const {
     currentPage,
-    progress,
     sessionData,
     nextPage,
-    previousPage,
     goToPage,
   } = useFixWaveNavigation();
 
-  // Хук для автоматической очистки сессии
-  const { forceClearSession } = useSessionCleanup();
 
   // Состояния для данных
   const [addressData, setAddressData] = useState<AddressData | null>(null);
@@ -72,20 +62,12 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
     nextPage({ timeScheduleData: data });
   };
 
-  const handleTimeScheduleBack = () => {
-    previousPage();
-  };
 
   const handleProgressStepPress = (page: FixWavePage) => {
     // Переходим к выбранной странице
     goToPage(page);
   };
 
-  const handleInfoPress = () => {
-    Alert.alert(t("common.info"), t("common.scheduleInfo"), [
-      { text: t("common.ok") },
-    ]);
-  };
 
   const Content = () => (
     <ScrollView
@@ -109,7 +91,6 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
         {currentPage === "timeSchedule" && (
           <TimeSchedulePage
             onNext={handleTimeScheduleNext}
-            onBack={handleTimeScheduleBack}
             initialData={timeScheduleData}
           />
         )}

@@ -1,6 +1,6 @@
-import { StyleSheet, Platform, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get("window");
 
 export const createTimePickerModalStyles = (
   isDark: boolean,

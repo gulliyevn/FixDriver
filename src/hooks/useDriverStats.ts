@@ -131,10 +131,9 @@ export const useDriverStats = () => {
       setError(null);
 
       try {
-        const service = DriverStatsService.getInstance();
         const dateObj = new Date(date);
         const nextDay = new Date(dateObj.getTime() + 24 * 60 * 60 * 1000);
-        const stats = await service.getPeriodStats(
+        const stats = await DriverStatsService.getInstance().getPeriodStats(
           "driver_id",
           "month",
           dateObj.toISOString().split("T")[0],

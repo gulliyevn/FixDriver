@@ -7,14 +7,11 @@ import {
   Alert,
   Modal,
   TextInput,
-  Platform,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { ClientScreenProps } from "../../types/navigation";
-import { DriverStackParamList } from "../../types/driver/DriverNavigation";
 import {
   CardsScreenStyles as styles,
   getCardsScreenStyles,
@@ -77,7 +74,6 @@ const CardsScreen: React.FC<CardsScreenProps> = ({ navigation }) => {
   // const [cards, setCards] = useState<Card[]>([]); // Заменено на useCards
   const {
     cards,
-    loading: cardsLoading,
     addCard: addCardToHook,
     deleteCard: deleteCardFromHook,
   } = useCards();

@@ -1,11 +1,8 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
-  TextInput,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";
@@ -62,13 +59,6 @@ const FamilySection: React.FC<FamilySectionProps> = ({
   const { t } = useI18n();
   const dynamicStyles = getFamilySectionColors(isDark);
 
-  // Состояние для редактируемых данных
-  const [editingData, setEditingData] = useState<{
-    [key: string]: Partial<FamilyMember>;
-  }>({});
-
-  // Ref для хранения функции сохранения
-  const saveRef = useRef<(() => void) | null>(null);
 
   return (
     <View style={styles.familySection}>

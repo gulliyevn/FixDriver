@@ -57,7 +57,6 @@ export const ScheduleContainer: React.FC<ScheduleContainerProps> = ({
   departureTime,
   isDark,
   shouldCalculateTime = false,
-  shouldShowCalculatedTime = false,
   calculatedWeekdayTime,
   calculatedWeekendTime,
 }) => {

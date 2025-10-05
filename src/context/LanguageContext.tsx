@@ -36,7 +36,15 @@ export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
     console.error("useLanguage must be used within a LanguageProvider");
-    return;
+    return {
+      language: "ru" as SupportedLanguage,
+      setLanguage: async () => {},
+      getLanguageInfo: () => ({ name: "Русский", flag: "🇷🇺" }),
+      t: (key: string) => key,
+      languageOptions: [],
+      isLoading: false,
+      error: null,
+    };
   }
   return context;
 };

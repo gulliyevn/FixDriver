@@ -124,7 +124,7 @@ export const useDriverVehicles = () => {
             setError(t("profile.vehicles.createError"));
             return null;
           }
-          const service = DriverVehicleService.getInstance();
+          // const service = DriverVehicleService.getInstance();
           // const response = await service.createVehicle(vehicleData); // Метод будет добавлен при подключении к бэкенду
           const response = {
             success: true,

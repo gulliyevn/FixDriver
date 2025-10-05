@@ -25,7 +25,16 @@ export const useProfile = () => {
   const context = useContext(ProfileContext);
   if (!context) {
     console.error("useProfile must be used within a ProfileProvider");
-    return;
+    return {
+      profile: null,
+      updateProfile: async () => false,
+      addChild: async () => false,
+      removeChild: async () => false,
+      addPaymentMethod: async () => false,
+      removePaymentMethod: async () => false,
+      loading: false,
+      loadProfile: async () => {},
+    };
   }
   return context;
 };

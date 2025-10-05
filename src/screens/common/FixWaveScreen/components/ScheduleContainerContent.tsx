@@ -52,34 +52,7 @@ export const ScheduleContainerContent: React.FC<
   localDayTimes,
   onDayPress,
 }) => {
-  const shouldShowCalculatedTime = !allowTimeSelection && isCalculating;
 
-  const getDisplayTime = () => {
-    console.log("🎯 getDisplayTime:", {
-      shouldShowCalculatedTime,
-      allowTimeSelection,
-      calculatedTime,
-      fixedTime,
-      weekdayTime,
-      weekendTime,
-      weekdaysMode,
-      fixedMode,
-    });
-
-    // Если нужно показать рассчитанное время и время не выбирается пользователем
-    if (shouldShowCalculatedTime && !allowTimeSelection) {
-      return calculatedTime;
-    }
-
-    // Иначе показываем время, введенное пользователем
-    if (fixedMode) {
-      return fixedTime || "--:--";
-    } else if (weekdaysMode) {
-      return weekdayTime || "--:--";
-    } else {
-      return weekendTime || "--:--";
-    }
-  };
 
   if (fixedMode) {
     if (weekdaysMode) {

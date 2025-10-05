@@ -24,7 +24,7 @@ interface TabBarProps {
 
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const { isDark } = useTheme();
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const currentColors = getCurrentColors(isDark);
 
   // Temporary static translations for debugging

@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import {
-  getLanguageOptions,
   getLanguageInfo,
   type SupportedLanguage,
   t as i18nT,

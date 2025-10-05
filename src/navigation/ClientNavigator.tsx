@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
 import OrdersMapScreen from "../screens/common/OrdersMapScreen";
 import DriversScreen from "../screens/client/DriversScreen";
 import ChatStack from "./ChatStack";

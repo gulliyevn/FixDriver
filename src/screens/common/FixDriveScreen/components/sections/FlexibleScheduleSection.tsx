@@ -7,7 +7,6 @@ import { styles } from "./FlexibleScheduleSection.styles";
 import { TIME_PICKER_COLORS } from "../constants";
 import { CustomizationModal } from "../CustomizationModal";
 import { useCustomizedDays } from "../hooks/useCustomizedDays";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
   t: (key: string) => string;
@@ -36,9 +35,7 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
 }) => {
   const customization = useCustomizedDays();
   const customizedKeys = Object.keys(customization.customizedDays);
-  const [mainValidationError, setMainValidationError] = useState<string | null>(
-    null,
-  );
+  const [mainValidationError] = useState<string | null>(null);
 
   // Функция для сортировки дней по порядку недели
   const sortDaysByWeekOrder = (days: string[]) => {
@@ -52,8 +49,6 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
     .filter((day) => !customizedKeys.includes(day));
   const hasMoreDaysToCustomize = remainingDaysToCustomize.length > 0;
 
-  // Логирование для отладки кнопки сохранения
-  const shouldShowSaveButton = selectedTime || customizedKeys.length > 0;
 
   // Функция для получения цвета дня
   const getDayColor = (dayKey: string) => {
@@ -69,32 +64,6 @@ export const FlexibleScheduleSection: React.FC<Props> = ({
     return colorMap[dayKey] || TIME_PICKER_COLORS.THERE;
   };
 
-  // Функция валидации основного расписания
-  const validateMainSchedule = (): string | null => {
-    if (!selectedTime || !selectedTime.trim()) {
-      return 'Выберите время "туда"';
-    }
-
-    if (isReturnTrip && (!returnTime || !returnTime.trim())) {
-      return 'Выберите время "обратно"';
-    }
-
-    // Проверяем кастомизированные дни
-    for (const dayKey of customizedKeys) {
-      const dayData = customization.customizedDays[dayKey];
-      if (!dayData.there || !dayData.there.trim()) {
-        const day = weekDays.find((d) => d.key === dayKey);
-        return `Выберите время "туда" для ${day?.label || dayKey}`;
-      }
-
-      if (isReturnTrip && (!dayData.back || !dayData.back.trim())) {
-        const day = weekDays.find((d) => d.key === dayKey);
-        return `Выберите время "обратно" для ${day?.label || dayKey}`;
-      }
-    }
-
-    return null;
-  };
 
   return (
     <View>

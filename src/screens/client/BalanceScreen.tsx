@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ClientScreenProps } from "../../types/navigation";
-import { DriverStackParamList } from "../../types/driver/DriverNavigation";
 import {
   BalanceScreenStyles as styles,
   getBalanceScreenStyles,
@@ -352,7 +351,6 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
 
   const [showCopied, setShowCopied] = useState(false);
   const [showCVV, setShowCVV] = useState(false);
-  const [isQuickTopUpExpanded, setIsQuickTopUpExpanded] = useState(false);
   const cvvOpacity = useRef(new Animated.Value(0)).current;
   const stickerOpacity = useRef(new Animated.Value(1)).current;
   const stickerTranslateX = useRef(new Animated.Value(0)).current;
@@ -383,16 +381,6 @@ const BalanceScreen: React.FC<BalanceScreenProps> = ({ navigation }) => {
     )(showCVV);
   };
 
-  const handleToggleQuickTopUp = () => {
-    const toValue = isQuickTopUpExpanded ? 0 : 1;
-    Animated.timing(quickTopUpHeight, {
-      toValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start(() => {
-      setIsQuickTopUpExpanded(!isQuickTopUpExpanded);
-    });
-  };
 
   return (
     <View style={[styles.container, balanceColors.container]}>

@@ -56,7 +56,6 @@ const PaymentHistoryScreen: React.FC<PaymentHistoryScreenProps> = ({
     hasMore,
     currentFilter,
     setFilter,
-    resetFilter,
     refresh,
     loadMore,
     clearError,

@@ -3,8 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDefaultDate, calculateAge } from "../utils/profileHelpers";
 import { useI18n } from "../hooks/useI18n";
-import { useAuth } from "../context/AuthContext";
-import { useUserStorageKey, STORAGE_KEYS } from "../utils/storageKeys";
+import { useUserStorageKey } from "../utils/storageKeys";
 
 interface FamilyMember {
   id: string;
@@ -27,7 +26,6 @@ interface NewFamilyMember {
 
 export const useFamilyMembers = () => {
   const { t } = useI18n();
-  const { user } = useAuth();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 interface ErrorState {
   hasError: boolean;
@@ -37,7 +37,7 @@ export const useErrorBoundary = () => {
 
   // Автоматический сброс ошибки при изменении зависимостей
   const resetErrorOnDependencyChange = useCallback(
-    (dependencies: any[]) => {
+    () => {
       // Этот callback не должен содержать useEffect
       // useEffect должен вызываться на верхнем уровне компонента
       if (errorState.hasError) {

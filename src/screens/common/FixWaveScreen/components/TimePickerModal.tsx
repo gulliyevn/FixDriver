@@ -13,7 +13,7 @@ import {
   platformSpecificStyles,
 } from "./TimePickerModal.styles";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get("window");
 
 interface TimePickerModalProps {
   visible: boolean;

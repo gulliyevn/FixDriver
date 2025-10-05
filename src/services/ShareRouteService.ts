@@ -1,4 +1,4 @@
-import { Platform, Linking, ActionSheetIOS, Alert } from "react-native";
+import { Platform, Linking, ActionSheetIOS } from "react-native";
 
 export interface ShareRoutePoint {
   id: string;

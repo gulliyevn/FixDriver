@@ -77,11 +77,8 @@ export const ENV_CONFIG = {
 };
 
 // Функция для логирования ошибок
-export const logError = (error: Error | string, context?: string) => {
+export const logError = (error: Error | string) => {
   if (ENV_CONFIG.LOGGING.ENABLE_ERROR_LOGS) {
-    const timestamp = new Date().toISOString();
-    const errorMessage = error instanceof Error ? error.message : error;
-
     if (error instanceof Error && error.stack) {
       console.warn('Error stack:', error.stack);
     }
@@ -101,7 +98,6 @@ export const ConfigUtils = {
    * Получить заголовки для авторизованных запросов
    */
   async getAuthHeaders(): Promise<Record<string, string>> {
-    const { useAuth } = await import("../context/AuthContext");
     // В реальном использовании нужно получить контекст
     // Здесь возвращаем базовые заголовки
     return {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useUserStorageKey, STORAGE_KEYS } from "../../utils/storageKeys";
+import { useUserStorageKey } from "../../utils/storageKeys";
+import { STORAGE_KEYS } from "../../utils/storageKeys";
 
 export interface DriverTransaction {
   id: string;
@@ -108,14 +109,6 @@ export const useDriverBalance = (): DriverBalanceContextType => {
     }
   };
 
-  const saveEarnings = async (newEarnings: number) => {
-    try {
-      await AsyncStorage.setItem(earningsKey, newEarnings.toString());
-      setEarnings(newEarnings);
-    } catch (error) {
-      console.warn('Failed to perform operation:', error);
-    }
-  };
 
   const topUpBalance = async (amount: number) => {
     const newBalance = balance + amount;

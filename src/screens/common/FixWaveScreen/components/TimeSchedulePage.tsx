@@ -20,13 +20,11 @@ import {
 
 interface TimeSchedulePageProps {
   onNext: (data: TimeScheduleData) => void;
-  onBack: () => void;
   initialData?: TimeScheduleData;
 }
 
 const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({
   onNext,
-  onBack,
   initialData,
 }) => {
   const { isDark } = useTheme();
@@ -34,7 +32,7 @@ const TimeSchedulePage: React.FC<TimeSchedulePageProps> = ({
   const { t } = useLanguage();
 
   // Стили
-  const styles = useMemo(() => createTimeSchedulePageStyles(isDark), [isDark]);
+  const styles = useMemo(() => createTimeSchedulePageStyles(), []);
 
   // Управление состоянием
   const state = useScheduleState(initialData);

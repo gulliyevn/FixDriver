@@ -21,7 +21,6 @@ import Button from "../../components/Button";
 import SocialAuthButtons from "../../components/SocialAuthButtons";
 import { useLanguage } from "../../context/LanguageContext";
 import { useTheme } from "../../context/ThemeContext";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 type NavigationProp = StackNavigationProp<AuthStackParamList, "Login">;
 

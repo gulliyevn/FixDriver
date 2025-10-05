@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";

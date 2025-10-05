@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const createTimeSchedulePageStyles = (isDark: boolean) =>
+export const createTimeSchedulePageStyles = () =>
   StyleSheet.create({
     container: {
       padding: 0,

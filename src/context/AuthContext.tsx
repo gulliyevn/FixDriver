@@ -33,7 +33,17 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     console.error("useAuth must be used within an AuthProvider");
-    return;
+    return {
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      login: async () => false,
+      register: async () => false,
+      logout: () => {},
+      refreshAuth: async () => {},
+      getAuthHeader: () => ({}),
+      changeRole: () => {},
+    };
   }
   return context;
 };
@@ -156,7 +166,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         if (devUsers.length > 0) {
           // Детальный вывод всех пользователей
-          devUsers.forEach((u, index) => {});
+          devUsers.forEach(() => {});
         }
 
         // Показываем сохраненные пароли для отладки

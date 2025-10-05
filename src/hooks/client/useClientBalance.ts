@@ -124,14 +124,6 @@ export const useClientBalance = (): ClientBalanceContextType => {
     }
   };
 
-  const saveCashback = async (newCashback: number) => {
-    try {
-      await AsyncStorage.setItem(cashbackKey, newCashback.toString());
-      setCashback(newCashback);
-    } catch (error) {
-      console.warn('Failed to perform operation:', error);
-    }
-  };
 
   const topUpBalance = async (amount: number) => {
     const newBalance = balance + amount;
@@ -206,7 +198,7 @@ export const useClientBalance = (): ClientBalanceContextType => {
   };
 
   // Dummy функция для совместимости с интерфейсом
-  const addEarnings = async (amount: number) => {};
+  const addEarnings = async () => {};
 
   // Dummy функция для совместимости с интерфейсом
   const loadEarnings = async () => {};

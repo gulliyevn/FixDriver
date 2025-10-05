@@ -5,7 +5,6 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { useI18n } from "../../hooks/useI18n";
 import { ClientScreenProps } from "../../types/navigation";
-import { DriverStackParamList } from "../../types/driver/DriverNavigation";
 import {
   TripsScreenStyles as styles,
   getTripsScreenStyles,

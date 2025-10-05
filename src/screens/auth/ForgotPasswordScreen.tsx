@@ -75,7 +75,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({
           Linking.openURL(webUrl);
         }
       })
-      .catch((err) => {
+      .catch(() => {
         Alert.alert("Ошибка", "Не удалось открыть WhatsApp");
       });
   };

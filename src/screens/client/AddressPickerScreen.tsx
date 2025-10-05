@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Dimensions,
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,14 +13,13 @@ import * as Location from "expo-location";
 import { ClientScreenProps } from "../../types/navigation";
 import MapService from "../../services/MapService";
 
-const { width, height } = Dimensions.get("window");
 
 const AddressPickerScreen: React.FC<ClientScreenProps<"AddressPicker">> = ({
   navigation,
   route,
 }) => {
   const { onAddressSelected } = route.params;
-  const [location, setLocation] = useState<Location.LocationObject | null>(
+  const [, setLocation] = useState<Location.LocationObject | null>(
     null,
   );
   const [selectedLocation, setSelectedLocation] = useState<{

@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../../../context/ThemeContext";
@@ -85,7 +84,6 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
 
   const [expandedDrivers, setExpandedDrivers] = useState<number[]>([]);
   const [selectedDriverId, setSelectedDriverId] = useState<number | null>(null);
-  const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {}, [selectedDriverId]);
 
@@ -142,13 +140,7 @@ const FixDriveConfirm: React.FC<FixDriveConfirmProps> = ({
     );
   };
 
-  const selectDriver = useCallback((driverId: number) => {
-    setSelectedDriverId(driverId);
-  }, []);
 
-  const deselectDriver = useCallback(() => {
-    setSelectedDriverId(null);
-  }, []);
 
   const toggleDriverSelection = useCallback((driverId: number) => {
     setSelectedDriverId((prev) => (prev === driverId ? null : driverId));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ClientScreenProps } from "../../types/navigation";
-import { DriverStackParamList } from "../../types/driver/DriverNavigation";
 import {
   SettingsScreenStyles as styles,
   getSettingsScreenColors,
@@ -31,7 +30,7 @@ import { getCurrentColors } from "../../constants/colors";
 type SettingsScreenProps = ClientScreenProps<"Settings"> | { navigation: any };
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
-  const { isDark, theme, toggleTheme } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const { language, languageOptions, setLanguage, t } = useI18n();
   const { logout, user } = useAuth();
 
@@ -53,7 +52,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     isLoading: notificationsLoading,
     togglePushNotifications,
     requestPermissions,
-    openNotificationSettings,
   } = useNotifications();
 
   const [autoLocation, setAutoLocation] = useState(true);

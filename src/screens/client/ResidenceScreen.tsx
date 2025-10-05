@@ -11,12 +11,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";
 import { getCurrentColors } from "../../constants/colors";
 import { ClientScreenProps } from "../../types/navigation";
-import { DriverStackParamList } from "../../types/driver/DriverNavigation";
 import {
   ResidenceScreenStyles as styles,
   getResidenceScreenStyles,
 } from "../../styles/screens/profile/ResidenceScreen.styles";
-import AddressService, { Address } from "../../services/addressService";
+import { Address } from "../../services/addressService";
 import { useAddressCategories } from "../../shared/hooks/useAddressCategories";
 import AddressModal from "../../components/AddressModal";
 import { useAddresses } from "../../hooks/useAddresses";
@@ -29,7 +28,6 @@ type ResidenceScreenProps =
 
 const ResidenceScreen: React.FC<ResidenceScreenProps> = ({
   navigation,
-  route,
 }) => {
   const { isDark } = useTheme();
   const { t } = useI18n();

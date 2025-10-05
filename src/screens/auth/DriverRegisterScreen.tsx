@@ -19,7 +19,6 @@ import {
   createDriverRegisterScreenStyles,
   getPlaceholderColor,
 } from "../../styles/screens/DriverRegisterScreen.styles";
-import SocialAuthButtons from "../../components/SocialAuthButtons";
 import Select from "../../components/Select";
 import PasswordStrengthIndicator from "../../components/PasswordStrengthIndicator";
 import PhotoUpload from "../../components/PhotoUpload";

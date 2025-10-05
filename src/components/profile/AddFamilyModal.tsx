@@ -42,7 +42,6 @@ const AddFamilyModal: React.FC<AddFamilyModalProps> = ({
   setNewFamilyMember,
   onClose,
   onAdd,
-  onVerifyPhone,
 }) => {
   const { isDark } = useTheme();
   const { t } = useLanguage();
