@@ -32,9 +32,9 @@ export type DriverListItemProps = {
   actionWidth: number;
   SwipeableComponent: React.ComponentType<any>;
   role?: "client" | "driver";
-  swipeRefSetter?: (id: string, ref: any) => void;
-  onSwipeableWillOpen?: (id: string, ref: any) => void;
-  onSwipeableClose?: (id: string, ref: any) => void;
+  swipeRefSetter?: (id: string, ref: unknown) => void;
+  onSwipeableWillOpen?: (id: string, ref: unknown) => void;
+  onSwipeableClose?: (id: string, ref: unknown) => void;
   onToggleFavorite: (driverId: string) => void;
   onDelete: (driverId: string) => void;
   onChat: (driver: Driver) => void;
@@ -117,7 +117,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     [driver.trips],
   );
 
-  const renderLeftActions = (progress: any, dragX: any) => {
+  const renderLeftActions = (progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
     const scale = dragX.interpolate({
       inputRange: [0, actionWidth],
       outputRange: [0, 1],
@@ -172,7 +172,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
     );
   };
 
-  const renderRightActions = (progress: any, dragX: any) => {
+  const renderRightActions = (progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
     const scale = dragX.interpolate({
       inputRange: [-actionWidth, 0],
       outputRange: [1, 0],
@@ -208,7 +208,7 @@ const DriverListItem: React.FC<DriverListItemProps> = ({
   return (
     <>
       <SwipeableComponent
-        ref={(ref: any) => swipeRefSetter?.(driver.id, ref)}
+        ref={(ref: unknown) => swipeRefSetter?.(driver.id, ref)}
         renderLeftActions={renderLeftActions}
         renderRightActions={renderRightActions}
         leftThreshold={80}

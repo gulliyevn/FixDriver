@@ -31,6 +31,25 @@ export interface OrderLocation {
   accuracy?: number;
 }
 
+export interface OrderRoute {
+  distance: number;
+  duration: number;
+  polyline?: string;
+}
+
+export interface DriverInfo {
+  id: string;
+  name: string;
+  phone: string;
+  avatar?: string;
+  vehicleInfo: {
+    make: string;
+    model: string;
+    color: string;
+    plateNumber: string;
+  };
+}
+
 export interface OrderTrackingData {
   orderId: string;
   driverId: string;
@@ -45,11 +64,7 @@ export interface OrderTrackingData {
   };
   currentLocation: OrderLocation;
   estimatedArrival?: string;
-  route?: {
-    distance: number;
-    duration: number;
-    polyline?: string;
-  };
+  route?: OrderRoute;
   statusHistory: OrderStatus[];
   isTracking: boolean;
 }
@@ -57,8 +72,8 @@ export interface OrderTrackingData {
 export interface TrackingEventHandlers {
   onLocationUpdate?: (location: OrderLocation) => void;
   onStatusChange?: (status: OrderStatus) => void;
-  onDriverUpdate?: (driverInfo: any) => void;
-  onRouteUpdate?: (route: any) => void;
+  onDriverUpdate?: (driverInfo: DriverInfo) => void;
+  onRouteUpdate?: (route: OrderRoute) => void;
   onTrackingStart?: (orderId: string) => void;
   onTrackingStop?: (orderId: string) => void;
   onError?: (error: Error) => void;
@@ -248,7 +263,7 @@ class OrderTrackingService {
    */
   private handleRouteUpdate(data: unknown): void {
     if (!data || typeof data !== 'object') return;
-    const dataObj = data as { orderId: string; route: any };
+    const dataObj = data as { orderId: string; route: OrderRoute };
     
     const orderId = dataObj.orderId;
     const trackingData = this.trackingOrders.get(orderId);
@@ -303,9 +318,8 @@ class OrderTrackingService {
       if (response.success && response.data) {
         const trackingData = this.trackingOrders.get(orderId);
         if (trackingData) {
-          trackingData.estimatedArrival = (
-            response.data as any
-          ).estimatedArrival;
+          const dataObj = response.data as { estimatedArrival?: string };
+          trackingData.estimatedArrival = dataObj.estimatedArrival;
           this.trackingOrders.set(orderId, trackingData);
         }
       }
@@ -345,7 +359,8 @@ class OrderTrackingService {
       const response = await APIClient.get(`/orders/${orderId}/status-history`);
 
       if (response.success && response.data) {
-        return (response.data as any)?.history || [];
+        const dataObj = response.data as { history?: OrderStatus[] };
+        return dataObj.history || [];
       }
 
       return [];
@@ -358,12 +373,13 @@ class OrderTrackingService {
   /**
    * Получение маршрута заказа
    */
-  async getOrderRoute(orderId: string): Promise<any> {
+  async getOrderRoute(orderId: string): Promise<OrderRoute | null> {
     try {
       const response = await APIClient.get(`/orders/${orderId}/route`);
 
       if (response.success && response.data) {
-        return (response.data as any)?.route;
+        const dataObj = response.data as { route?: OrderRoute };
+        return dataObj.route || null;
       }
 
       return null;

@@ -73,14 +73,12 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
           id: loadedProfile.id || user?.id || "",
           email: loadedProfile.email || user?.email || "",
           name:
-            (loadedProfile as any).name ||
-            (user as any)?.name ||
-            (user as any)?.firstName ||
+            loadedProfile.name ||
+            user?.name ||
             "",
           surname:
-            (loadedProfile as any).surname ||
-            (user as any)?.surname ||
-            (user as any)?.lastName ||
+            loadedProfile.surname ||
+            user?.surname ||
             "",
           role: loadedProfile.role || user?.role || "client",
           phone: loadedProfile.phone || user?.phone || "",

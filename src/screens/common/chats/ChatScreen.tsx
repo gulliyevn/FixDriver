@@ -19,7 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../../context/ThemeContext";
 import { useLanguage } from "../../../context/LanguageContext";
 import { createChatScreenStyles } from "../../../styles/screens/ChatScreen.styles";
-import { ChatService } from "../../../services/ChatService";
+import { ChatService, Message } from "../../../services/ChatService";
 
 const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const { isDark } = useTheme();
@@ -30,7 +30,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
   const driverCar = route?.params?.driverCar as string | undefined;
   const driverNumber = route?.params?.driverNumber as string | undefined;
   const headerDetails = [driverCar, driverNumber].filter(Boolean).join(" · ");
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const [showAttachments, setShowAttachments] = useState(false);
@@ -71,7 +71,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
     }
   };
 
-  const renderMessage = ({ item }: { item: any }) => {
+  const renderMessage = ({ item }: { item: Message }) => {
     const isMine = item.senderId === "me";
     return (
       <View
@@ -100,9 +100,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
             {isMine && (
               <Ionicons
                 name={
-                  item.status === "sent"
+                  (item as any).status === "sent"
                     ? "checkmark"
-                    : item.status === "delivered"
+                    : (item as any).status === "delivered"
                       ? "checkmark-done"
                       : "time"
                 }
@@ -197,7 +197,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
     </View>
   );
 
-  const pushMessageAndScroll = (msg: any) => {
+  const pushMessageAndScroll = (msg: Message) => {
     setMessages((prev) => [...prev, msg]);
     setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 50);
   };
@@ -221,9 +221,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
           chatId,
           t("client.chat.camera"),
           "image",
-          { imageUrl: asset.uri, fileSize: (asset as any).fileSize },
+          { imageUrl: asset.uri, fileSize: asset.fileSize || 0 },
         );
-        pushMessageAndScroll(msg);
+        if (msg) pushMessageAndScroll(msg);
         setShowAttachments(false);
       }
     } catch (e) {
@@ -251,9 +251,9 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
           chatId,
           t("client.chat.gallery"),
           "image",
-          { imageUrl: asset.uri, fileSize: (asset as any).fileSize },
+          { imageUrl: asset.uri, fileSize: asset.fileSize || 0 },
         );
-        pushMessageAndScroll(msg);
+        if (msg) pushMessageAndScroll(msg);
         setShowAttachments(false);
       }
     } catch (e) {
@@ -497,7 +497,7 @@ const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
               onPress={send}
               disabled={!text.trim()}
             >
-              <Ionicons name="send" size={18} style={styles.sendIcon as any} />
+              <Ionicons name="send" size={18} style={styles.sendIcon} />
             </TouchableOpacity>
           </View>
 

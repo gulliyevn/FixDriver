@@ -21,7 +21,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../../context/ThemeContext";
 import { useI18n } from "../../../hooks/useI18n";
 import { createChatListScreenStyles } from "../../../styles/screens/chats/ChatListScreen.styles";
-import { ChatService } from "../../../services/ChatService";
+import { ChatService, ChatPreview } from "../../../services/ChatService";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -35,8 +35,8 @@ const ChatListScreen: React.FC = () => {
   const { t } = useI18n();
   useAuth();
   const navigation = useNavigation<StackNavigationProp<ClientStackParamList>>();
-  const [chats, setChats] = useState<any[]>([]);
-  const [filteredChats, setFilteredChats] = useState<any[]>([]);
+  const [chats, setChats] = useState<ChatPreview[]>([]);
+  const [filteredChats, setFilteredChats] = useState<ChatPreview[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -83,14 +83,14 @@ const ChatListScreen: React.FC = () => {
       ? base
       : base.filter(
           (chat) =>
-            chat.participant?.name?.toLowerCase().includes(debouncedQuery) ||
-            chat.lastMessage?.content?.toLowerCase().includes(debouncedQuery),
+            chat.participantName?.toLowerCase().includes(debouncedQuery) ||
+            chat.lastMessage?.toLowerCase().includes(debouncedQuery),
         );
-    // Sort: favorites first, then by updatedAt desc
+    // Sort: favorites first, then by lastMessageTime desc
     const sorted = list.sort((a, b) => {
       if (a.isFavorite && !b.isFavorite) return -1;
       if (!a.isFavorite && b.isFavorite) return 1;
-      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      return new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime();
     });
     setFilteredChats(sorted);
   };
@@ -103,24 +103,24 @@ const ChatListScreen: React.FC = () => {
     });
   };
 
-  const openChat = (chat: any) => {
+  const openChat = (chat: ChatPreview) => {
     if (selectionMode) {
       toggleSelect(chat.id);
       return;
     }
 
     navigation.navigate("ChatConversation", {
-      driverId: chat.participant?.id || chat.id,
-      driverName: chat.participant?.name || t("client.chat.unknownUser"),
-      driverCar: chat.participant?.car || "Toyota Camry",
-      driverNumber: chat.participant?.phone || "A123БВ777",
-      driverRating: chat.participant?.rating || "4.8",
-      driverStatus: chat.online ? "online" : "offline",
-      driverPhoto: chat.participant?.avatar,
+      driverId: chat.id,
+      driverName: chat.participantName || t("client.chat.unknownUser"),
+      driverCar: "Toyota Camry",
+      driverNumber: "A123БВ777",
+      driverRating: "4.8",
+      driverStatus: chat.isOnline ? "online" : "offline",
+      driverPhoto: chat.participantAvatar,
     });
   };
 
-  const handleChatPress = (chat: any) => {
+  const handleChatPress = (chat: ChatPreview) => {
     if (selectionMode) {
       toggleSelect(chat.id);
     } else {
@@ -139,8 +139,8 @@ const ChatListScreen: React.FC = () => {
     }
   }, []);
 
-  const renderChatItem = ({ item }: { item: any }) => {
-    const renderLeftActions = (progress: any, dragX: any) => {
+  const renderChatItem = ({ item }: { item: ChatPreview }) => {
+    const renderLeftActions = (progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
       const scale = dragX.interpolate({
         inputRange: [0, ACTION_WIDTH],
         outputRange: [0, 1],
@@ -177,7 +177,7 @@ const ChatListScreen: React.FC = () => {
       );
     };
 
-    const renderRightActions = (progress: any, dragX: any) => {
+    const renderRightActions = (progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
       const scale = dragX.interpolate({
         inputRange: [-ACTION_WIDTH, 0],
         outputRange: [1, 0],
@@ -273,7 +273,7 @@ const ChatListScreen: React.FC = () => {
             </View>
             <View
               style={
-                item.online ? styles.onlineIndicator : styles.offlineIndicator
+                item.isOnline ? styles.onlineIndicator : styles.offlineIndicator
               }
             />
           </View>
@@ -282,7 +282,7 @@ const ChatListScreen: React.FC = () => {
             <View style={styles.chatInfo}>
               <View style={styles.chatNameRow}>
                 <Text style={styles.chatName} numberOfLines={1}>
-                  {item.participant?.name || t("client.chat.unknownUser")}
+                  {item.participantName || t("client.chat.unknownUser")}
                 </Text>
                 {favorites.has(item.id) && (
                   <Ionicons
@@ -295,14 +295,14 @@ const ChatListScreen: React.FC = () => {
               </View>
               <Text style={styles.carInfo}>A123БВ777</Text>
               <Text numberOfLines={1} style={styles.lastMessage}>
-                {item.lastMessage?.content || t("client.chat.noMessages")}
+                {item.lastMessage || t("client.chat.noMessages")}
               </Text>
             </View>
           </View>
 
           <View style={styles.rightSection}>
             <Text style={styles.chatTime}>
-              {new Date(item.updatedAt).toLocaleTimeString()}
+              {new Date(item.lastMessageTime).toLocaleTimeString()}
             </Text>
             {item.unreadCount > 0 && (
               <View style={styles.unreadBadge}>

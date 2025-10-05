@@ -59,10 +59,10 @@ class ChatServiceInternal {
   }
 
   static getInstance(): ChatServiceInternal {
-    if (!(ChatServiceInternal as any).instance) {
-      (ChatServiceInternal as any).instance = new ChatServiceInternal();
+    if (!ChatServiceInternal.instance) {
+      ChatServiceInternal.instance = new ChatServiceInternal();
     }
-    return (ChatServiceInternal as any).instance;
+    return ChatServiceInternal.instance;
   }
 
   async getChats(userId: string): Promise<ChatPreview[]> {
@@ -105,7 +105,7 @@ class ChatServiceInternal {
     chatId: string,
     content: string,
     messageType: "text" | "image" | "file" | "location" = "text",
-    metadata?: any,
+    metadata?: Record<string, unknown>,
   ): Promise<Message | null> {
     try {
       const response = await APIClient.post<Message>("/messages", {
@@ -191,7 +191,7 @@ class ChatServiceInternal {
   }
 
   async uploadFile(
-    file: any,
+    file: Blob | File,
     chatId: string,
   ): Promise<{ url: string; fileName: string } | null> {
     try {
@@ -201,7 +201,7 @@ class ChatServiceInternal {
 
       const response = await APIClient.post<{ url: string; fileName: string }>(
         "/chats/upload",
-        formData as any,
+        formData as unknown as Record<string, unknown>,
       );
       return response.success && response.data ? response.data : null;
     } catch (error) {
@@ -334,7 +334,7 @@ class ChatServiceInternal {
     chatId: string,
     content: string,
     messageType: "text" | "image" | "file" | "location" = "text",
-    metadata?: any,
+    metadata?: Record<string, unknown>,
   ): Promise<boolean> {
     if (!this.isRealtimeEnabled || !this.ws.isReady()) {
       // Fallback на обычную отправку через API

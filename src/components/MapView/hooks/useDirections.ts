@@ -9,6 +9,12 @@ interface DirectionsResult {
   reorderedIndices?: number[]; // mapping from provided waypoints to optimized order
 }
 
+interface RouteLeg {
+  duration?: { value: number };
+  duration_in_traffic?: { value: number };
+  distance?: { value: number };
+}
+
 const buildDirectionsUrl = (
   points: RoutePoint[],
   opts: { optimize: boolean; avoidTolls: boolean; avoidHighways: boolean },
@@ -86,7 +92,7 @@ export const useDirections = (
         }
         let best = data.routes[0];
         const durationInTrafficSec = best.legs.reduce(
-          (acc: number, leg: any) =>
+          (acc: number, leg: RouteLeg) =>
             acc + (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
           0,
         );
@@ -111,7 +117,7 @@ export const useDirections = (
           if (dataOpt.status === "OK" && dataOpt.routes?.length) {
             const cand = dataOpt.routes[0];
             const dur = cand.legs.reduce(
-              (acc: number, leg: any) =>
+              (acc: number, leg: RouteLeg) =>
                 acc +
                 (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
               0,
@@ -124,7 +130,7 @@ export const useDirections = (
 
         // Если всё ещё опаздываем — разрешаем платные/трассы
         const recomputeDurationSec = best.legs.reduce(
-          (acc: number, leg: any) =>
+          (acc: number, leg: RouteLeg) =>
             acc + (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
           0,
         );
@@ -144,7 +150,7 @@ export const useDirections = (
           if (dataTolls.status === "OK" && dataTolls.routes?.length) {
             const bestTolls = dataTolls.routes[0];
             const durTolls = bestTolls.legs.reduce(
-              (acc: number, leg: any) =>
+              (acc: number, leg: RouteLeg) =>
                 acc +
                 (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
               0,
@@ -162,12 +168,12 @@ export const useDirections = (
           .decode(best.overview_polyline.points)
           .map((p: number[]) => ({ latitude: p[0], longitude: p[1] }));
         const finalDurationSec = best.legs.reduce(
-          (acc: number, leg: any) =>
+          (acc: number, leg: RouteLeg) =>
             acc + (leg.duration_in_traffic?.value ?? leg.duration?.value ?? 0),
           0,
         );
         const finalDistanceMeters = best.legs.reduce(
-          (acc: number, leg: any) => acc + (leg.distance?.value ?? 0),
+          (acc: number, leg: RouteLeg) => acc + (leg.distance?.value ?? 0),
           0,
         );
         const finalOrder = best.waypoint_order as number[] | undefined;
@@ -178,8 +184,8 @@ export const useDirections = (
           distanceMeters: finalDistanceMeters,
           reorderedIndices: finalOrder,
         });
-      } catch (e: any) {
-        setError(e?.message || "Directions error");
+      } catch (e: unknown) {
+        setError((e as Error)?.message || "Directions error");
         setRoute(null);
       } finally {
         setLoading(false);
