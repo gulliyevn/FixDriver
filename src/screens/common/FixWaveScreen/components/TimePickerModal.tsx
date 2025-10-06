@@ -12,6 +12,7 @@ import {
   createTimePickerModalStyles,
   platformSpecificStyles,
 } from "./TimePickerModal.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -22,7 +23,7 @@ interface TimePickerModalProps {
   onChange: (date: Date) => void;
   onCancel: () => void;
   onConfirm: () => void;
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   isDark?: boolean;
 }

@@ -5,6 +5,7 @@ import {
   createTimePickerModalStyles,
   platformSpecificStyles,
 } from "./TimePickerModal.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface DateTimePickerModalProps {
   visible: boolean;
@@ -12,7 +13,7 @@ interface DateTimePickerModalProps {
   value: Date | null;
   onCancel: () => void;
   onConfirm: (date: Date) => void;
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   isDark?: boolean;
 }

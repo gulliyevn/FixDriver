@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { FixWavePage } from "../types/fix-wave.types";
+import type { FixWaveOrderData } from "../types/fix-wave.types";
+import type { SessionAddressData, SessionTimeScheduleData } from "../../../../services/fixwaveOrderService";
 import {
   getProgressForPage,
   getNextPage,
@@ -10,7 +12,14 @@ import { fixwaveOrderService } from "../../../../services/fixwaveOrderService";
 export const useFixWaveNavigation = () => {
   const [currentPage, setCurrentPage] = useState<FixWavePage>("addresses");
   const [progress, setProgress] = useState(0);
-  const [sessionData, setSessionData] = useState<any>(null);
+  type SessionData = {
+    currentPage: FixWavePage;
+    addressData?: SessionAddressData;
+    timeScheduleData?: SessionTimeScheduleData;
+    lastUpdate?: number;
+  };
+
+  const [sessionData, setSessionData] = useState<SessionData | null>(null);
 
   // Загружаем данные сессии при инициализации
   useEffect(() => {
@@ -18,7 +27,13 @@ export const useFixWaveNavigation = () => {
       try {
         const data = await fixwaveOrderService.loadSessionData();
         if (data) {
-          setSessionData(data);
+          const currentPage = (data.currentPage as FixWavePage) || "addresses";
+          setSessionData({
+            addressData: data.addressData as SessionAddressData | undefined,
+            timeScheduleData: data.timeScheduleData as SessionTimeScheduleData | undefined,
+            currentPage,
+            lastUpdate: data.lastUpdate,
+          });
           // Всегда начинаем с первой страницы при загрузке
           setCurrentPage("addresses");
           updateProgress("addresses");
@@ -35,15 +50,17 @@ export const useFixWaveNavigation = () => {
     setProgress(newProgress);
   }, []);
 
-  const saveSession = useCallback(async (page: FixWavePage, data?: any) => {
+  const saveSession = useCallback(
+    async (page: FixWavePage, data?: Partial<FixWaveOrderData>) => {
     try {
       // Сначала загружаем существующие данные сессии
       const existingSession = await fixwaveOrderService.loadSessionData();
 
-      const sessionData = {
-        ...existingSession, // Сохраняем существующие данные
+      const sessionData: SessionData = {
         currentPage: page,
-        ...data,
+        addressData: (data?.addressData as SessionAddressData | undefined) ?? existingSession?.addressData,
+        timeScheduleData:
+          (data?.timeScheduleData as SessionTimeScheduleData | undefined) ?? existingSession?.timeScheduleData,
       };
       await fixwaveOrderService.saveSessionData(sessionData);
       setSessionData(sessionData);
@@ -53,7 +70,7 @@ export const useFixWaveNavigation = () => {
   }, []);
 
   const goToPage = useCallback(
-    async (page: FixWavePage, data?: any) => {
+    async (page: FixWavePage, data?: Partial<FixWaveOrderData>) => {
       setCurrentPage(page);
       updateProgress(page);
       await saveSession(page, data);
@@ -62,7 +79,7 @@ export const useFixWaveNavigation = () => {
   );
 
   const nextPage = useCallback(
-    async (data?: any) => {
+    async (data?: Partial<FixWaveOrderData>) => {
       const next = getNextPage(currentPage);
       if (next) {
         await goToPage(next, data);

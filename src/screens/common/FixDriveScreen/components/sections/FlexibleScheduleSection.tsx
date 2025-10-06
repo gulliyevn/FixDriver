@@ -5,12 +5,13 @@ import TimePicker from "../../../../../components/TimePicker";
 import ReturnTripCheckbox from "../../../../../components/ReturnTripCheckbox";
 import { styles } from "./FlexibleScheduleSection.styles";
 import { TIME_PICKER_COLORS } from "../constants";
+import type { ColorPalette } from "../../../../../constants/colors";
 import { CustomizationModal } from "../CustomizationModal";
 import { useCustomizedDays } from "../hooks/useCustomizedDays";
 
 interface Props {
   t: (key: string) => string;
-  colors: Record<string, any>;
+  colors: ColorPalette;
   weekDays: { key: string; label: string }[];
   selectedDays: string[];
   selectedTime?: string;

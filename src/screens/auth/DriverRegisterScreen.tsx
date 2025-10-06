@@ -60,7 +60,7 @@ const DriverRegisterScreen: React.FC = () => {
     carMileage: "",
     tariff: "",
   });
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
   const [brandOptions, setBrandOptions] = useState(carBrands);
@@ -85,9 +85,9 @@ const DriverRegisterScreen: React.FC = () => {
   const tariffOptions = getTariffOptions(t);
   const yearOptions = getYearOptions();
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev: typeof form) => ({ ...prev, [field]: value }));
-    setErrors((prev: typeof errors) => ({ ...prev, [field]: undefined }));
+  const handleChange = (field: keyof typeof form, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const handleBrandChange = (brand: string) => {

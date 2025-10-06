@@ -31,7 +31,16 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({
   const [selectedPackage, setSelectedPackage] = useState<string>(
     initialData?.packageType || "",
   );
-  const [addresses, setAddresses] = useState<any[]>(
+  type AddressPointCompat = {
+    id: string;
+    type: "from" | "to" | "stop";
+    address: string;
+    coordinate?: { latitude: number; longitude: number };
+    coordinates?: { latitude: number; longitude: number };
+    placeholder?: string;
+  };
+
+  const [addresses, setAddresses] = useState<AddressPointCompat[]>(
     initialData?.addresses || [],
   );
   const [isSaving, setIsSaving] = useState(false);
@@ -79,14 +88,14 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({
     saveToSession(addresses);
   };
 
-  const handleAddressesChange = (newAddresses: any[]) => {
+  const handleAddressesChange = (newAddresses: AddressPointCompat[]) => {
     console.log("Addresses changed:", newAddresses); // Добавляем лог для отладки
     setAddresses(newAddresses);
     // Сохраняем адреса в сессию при каждом изменении
     saveToSession(newAddresses);
   };
 
-  const saveToSession = async (newAddresses: any[]) => {
+  const saveToSession = async (newAddresses: AddressPointCompat[]) => {
     try {
       const selectedMember = getFamilyMemberById(selectedFamilyMember);
       const familyMemberName = selectedMember
@@ -199,7 +208,19 @@ const FixDriveAddressPage: React.FC<FixDriveAddressPageProps> = ({
       {/* Ввод адреса через карту */}
       <FixDriveMapInput
         onAddressesChange={handleAddressesChange}
-        initialAddresses={addresses}
+        initialAddresses={addresses.map((addr) => ({
+          id: addr.id,
+          type: addr.type,
+          address: addr.address,
+          coordinate: addr.coordinate ?? addr.coordinates,
+          coordinates: addr.coordinates ?? addr.coordinate,
+          placeholder:
+            addr.type === "from"
+              ? t("common.fixDrive.address.fromPlaceholder")
+              : addr.type === "to"
+                ? t("common.fixDrive.address.toPlaceholder")
+                : t("common.fixDrive.address.stopPlaceholder"),
+        }))}
       />
 
       {/* Кнопка Сохранить и Продолжить */}

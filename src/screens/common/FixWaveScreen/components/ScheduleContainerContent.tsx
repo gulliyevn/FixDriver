@@ -1,13 +1,14 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./ScheduleContainer.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface ScheduleContainerContentProps {
   fixedMode: boolean;
   weekdaysMode: boolean;
   activeDays?: string[];
   allowTimeSelection: boolean;
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   calculatedTime: string;
   isCalculating: boolean;

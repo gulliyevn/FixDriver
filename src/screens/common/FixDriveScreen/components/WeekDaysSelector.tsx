@@ -6,9 +6,10 @@ import { WeekdaysSection } from "./sections/WeekdaysSection";
 import { FlexibleScheduleSection } from "./sections/FlexibleScheduleSection";
 import TimePicker from "../../../../components/TimePicker";
 import { TIME_PICKER_COLORS } from "./constants";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface WeekDaysSelectorProps {
-  colors: Record<string, any>;
+  colors: ColorPalette;
   isDark: boolean;
   t: (key: string) => string;
   selectedDays?: string[];

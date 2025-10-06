@@ -1,4 +1,5 @@
 import APIClient from "../APIClient";
+import type { APIResponse } from "../APIClient";
 import {
   CreateVehicleRequest,
   UpdateVehicleRequest,
@@ -7,11 +8,23 @@ import {
 } from "../../types/driver/DriverVehicle";
 
 type ApiClient = {
-  get<T = unknown>(url: string): Promise<{ data: T }> | Promise<any>;
-  post<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
-  put<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
-  patch<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
-  delete<T = unknown>(url: string): Promise<{ data: T }> | Promise<any>;
+  get<T = unknown>(url: string): Promise<APIResponse<T>>;
+  post<T = unknown>(
+    url: string,
+    body?: unknown,
+    config?: { headers?: Record<string, string> },
+  ): Promise<APIResponse<T>>;
+  put<T = unknown>(
+    url: string,
+    body?: unknown,
+    config?: { headers?: Record<string, string> },
+  ): Promise<APIResponse<T>>;
+  patch<T = unknown>(
+    url: string,
+    body?: unknown,
+    config?: { headers?: Record<string, string> },
+  ): Promise<APIResponse<T>>;
+  delete<T = unknown>(url: string): Promise<APIResponse<T>>;
 };
 
 export class DriverVehicleService {
@@ -34,7 +47,7 @@ export class DriverVehicleService {
    */
   async getDriverVehicles(): Promise<VehiclesListResponse> {
     try {
-      const response = await this.apiClient.get("/driver/vehicles");
+      const response = await this.apiClient.get<import("../../types/driver/DriverVehicle").DriverVehicle[]>("/driver/vehicles");
       return {
         success: true,
         data: response.data,
@@ -55,7 +68,7 @@ export class DriverVehicleService {
    */
   async getDriverVehicle(vehicleId: string): Promise<VehicleResponse> {
     try {
-      const response = await this.apiClient.get(
+      const response = await this.apiClient.get<import("../../types/driver/DriverVehicle").DriverVehicle>(
         `/driver/vehicles/${vehicleId}`,
       );
       return {
@@ -80,7 +93,7 @@ export class DriverVehicleService {
     vehicleData: CreateVehicleRequest,
   ): Promise<VehicleResponse> {
     try {
-      const response = await this.apiClient.post(
+      const response = await this.apiClient.post<import("../../types/driver/DriverVehicle").DriverVehicle>(
         "/driver/vehicles",
         vehicleData,
       );
@@ -106,7 +119,7 @@ export class DriverVehicleService {
     vehicleData: UpdateVehicleRequest,
   ): Promise<VehicleResponse> {
     try {
-      const response = await this.apiClient.put(
+      const response = await this.apiClient.put<import("../../types/driver/DriverVehicle").DriverVehicle>(
         `/driver/vehicles/${vehicleData.id}`,
         vehicleData,
       );
@@ -130,7 +143,7 @@ export class DriverVehicleService {
    */
   async deleteDriverVehicle(vehicleId: string): Promise<VehicleResponse> {
     try {
-      const response = await this.apiClient.delete(
+      const response = await this.apiClient.delete<import("../../types/driver/DriverVehicle").DriverVehicle>(
         `/driver/vehicles/${vehicleId}`,
       );
       return {
@@ -156,7 +169,7 @@ export class DriverVehicleService {
     isActive: boolean,
   ): Promise<VehicleResponse> {
     try {
-      const response = await this.apiClient.patch(
+      const response = await this.apiClient.patch<import("../../types/driver/DriverVehicle").DriverVehicle>(
         `/driver/vehicles/${vehicleId}/toggle`,
         {
           isActive,
@@ -188,7 +201,7 @@ export class DriverVehicleService {
       const formData = new FormData();
       formData.append("passportPhoto", photoFile as unknown as Blob);
 
-      const response = await this.apiClient.post(
+      const response = await this.apiClient.post<import("../../types/driver/DriverVehicle").DriverVehicle>(
         `/driver/vehicles/${vehicleId}/passport-photo`,
         formData,
         {

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { useEarningsLevel } from "../components/EarningsScreen/hooks/useEarningsLevel";
+import type { DriverLevel } from "../components/EarningsScreen/hooks/useEarningsLevel";
 
 interface LevelUpResult {
   hasLevelUp: boolean;
@@ -9,7 +10,7 @@ interface LevelUpResult {
 }
 
 interface LevelProgressContextType {
-  driverLevel: any;
+  driverLevel: DriverLevel;
   incrementProgress: () => Promise<LevelUpResult | undefined>;
   activateVIPLevel: () => Promise<void>;
   addRides: (count: number) => Promise<void>;
@@ -35,7 +36,21 @@ export const useLevelProgress = (): LevelProgressContextType => {
       "useLevelProgress must be used within a LevelProgressProvider",
     );
     return {
-      driverLevel: null,
+      driverLevel: {
+        currentLevel: 1,
+        currentSubLevel: 1,
+        currentProgress: 0,
+        maxProgress: 10,
+        title: "level1",
+        subLevelTitle: "level1 1",
+        icon: "default",
+        nextReward: "0",
+        isRewardAvailable: false,
+        isVIP: false,
+        vipDaysOnline: 0,
+        vipDaysRequired: 20,
+        vipLevel: 1,
+      },
       incrementProgress: async () => undefined,
       activateVIPLevel: async () => {},
       addRides: async () => {},

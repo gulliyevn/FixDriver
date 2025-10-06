@@ -44,10 +44,36 @@ const FixWaveScreen: React.FC<FixWaveScreenProps> = ({ isChild = false }) => {
   // Обновляем данные при изменении sessionData
   useEffect(() => {
     if (sessionData?.addressData) {
-      setAddressData(sessionData.addressData);
+      // Приводим сессионные адреса к рабочему типу
+      const a = sessionData.addressData;
+      setAddressData({
+        familyMemberId: a.familyMemberId || "",
+        familyMemberName: "",
+        packageType: a.packageType || "standard",
+        addresses: (a.addresses || []).map((addr) => ({
+          id: addr.id,
+          type: addr.type,
+          address: addr.address,
+          coordinates: addr.coordinates ?? addr.coordinate,
+        })),
+      });
     }
     if (sessionData?.timeScheduleData) {
-      setTimeScheduleData(sessionData.timeScheduleData);
+      const t = sessionData.timeScheduleData;
+      setTimeScheduleData({
+        date: t.date ? new Date(t.date) : new Date(),
+        time: t.time || "",
+        isRecurring: !!t.isRecurring,
+        recurringDays: t.recurringDays,
+        notes: t.notes,
+        fromAddress: t.fromAddress,
+        toAddress: t.toAddress,
+        fixedTimes: t.fixedTimes,
+        weekdayTimes: t.weekdayTimes,
+        weekendTimes: t.weekendTimes,
+        selectedDays: t.selectedDays,
+        switchStates: t.switchStates,
+      });
     }
   }, [sessionData]);
 

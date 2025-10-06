@@ -8,12 +8,13 @@ import {
 } from "../types/orders-map.types";
 import { callEmergencyService } from "../../../../utils/countryHelpers";
 import { useLanguage } from "../../../../context/LanguageContext";
+import type { MapRef } from "../../../../components/MapView/types/map.types";
 
 export const useMapControls = (
   state: OrdersMapState,
   actions: OrdersMapActions,
-): MapControlHandlers & { mapRef: React.RefObject<any> } => {
-  const mapRef = useRef<any>(null);
+): MapControlHandlers & { mapRef: React.RefObject<MapRef | null> } => {
+  const mapRef = useRef<MapRef | null>(null);
   const isZoomingRef = useRef(false);
   const { t } = useLanguage();
 
@@ -77,7 +78,7 @@ export const useMapControls = (
 
     isZoomingRef.current = true;
 
-    if (mapRef.current && mapRef.current.zoomIn) {
+    if (mapRef.current?.zoomIn) {
       mapRef.current.zoomIn();
     }
 
@@ -93,7 +94,7 @@ export const useMapControls = (
 
     isZoomingRef.current = true;
 
-    if (mapRef.current && mapRef.current.zoomOut) {
+    if (mapRef.current?.zoomOut) {
       mapRef.current.zoomOut();
     }
 

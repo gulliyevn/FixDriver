@@ -96,7 +96,7 @@ export class TranslationValidator {
     keys: TranslationKey[],
   ): void {
     if (!obj || typeof obj !== 'object') return;
-    for (const [key, value] of Object.entries(obj as Record<string, any>)) {
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const currentPath = [...path, key];
 
       if (typeof value === "string") {

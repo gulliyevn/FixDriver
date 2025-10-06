@@ -4,11 +4,12 @@ import { styles } from "./ScheduleContainer.styles";
 import { useScheduleContainer } from "../hooks/useScheduleContainer";
 import { TimePickerModal } from "./TimePickerModal";
 import { ScheduleContainerContent } from "./ScheduleContainerContent";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface ScheduleContainerProps {
   fromAddress: string;
   borderColor: string;
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   isLast: boolean;
   dayTimes?: Record<string, string>;

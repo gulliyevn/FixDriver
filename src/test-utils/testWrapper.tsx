@@ -4,7 +4,7 @@ import { render, RenderOptions } from "@testing-library/react-native";
 // Импортируем только те провайдеры, которые точно существуют
 let LanguageProvider: React.ComponentType<React.PropsWithChildren>;
 let ThemeProvider: React.ComponentType<React.PropsWithChildren>;
-let AuthProvider: React.ComponentType<any>;
+let AuthProvider: React.ComponentType<React.PropsWithChildren<Record<string, unknown>>>;
 let BalanceProvider: React.ComponentType<React.PropsWithChildren>;
 let PackageProvider: React.ComponentType<React.PropsWithChildren>;
 let LevelProgressProvider: React.ComponentType<React.PropsWithChildren>;

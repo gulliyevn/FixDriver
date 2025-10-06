@@ -145,7 +145,12 @@ const EditDriverProfileScreen: React.FC<
         }
 
         // Сохраняем изменения в форме
-        const updateData: any = {};
+        const updateData: Partial<{
+          name: string;
+          surname: string;
+          phone: string;
+          email: string;
+        }> = {};
 
         if (hasFormChanges) {
           updateData.name = formData.firstName.trim();
@@ -219,12 +224,17 @@ const EditDriverProfileScreen: React.FC<
   // Перехватываем swipe-back жест
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = navigation.addListener("beforeRemove", (e: any) => {
+      const unsubscribe = navigation.addListener("beforeRemove", (e) => {
         const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
 
         if (hasPersonalChanges) {
-          // Предотвращаем переход назад
-          e.preventDefault();
+          // Предотвращаем переход назад, если поддерживается
+          const evt: { preventDefault?: () => void } = e as unknown as {
+            preventDefault?: () => void;
+          };
+          if (typeof evt.preventDefault === "function") {
+            evt.preventDefault();
+          }
 
           Alert.alert(
             t("profile.saveChangesConfirm.title"),
@@ -300,7 +310,11 @@ const EditDriverProfileScreen: React.FC<
   };
 
   // Рендер правых действий (кнопка удаления)
-  const renderRightActions = (progress: any, dragX: any, vehicleId: string) => {
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation<string | number>,
+    dragX: Animated.AnimatedInterpolation<string | number>,
+    vehicleId: string,
+  ) => {
     const scale = dragX.interpolate({
       inputRange: [-ACTION_WIDTH, 0],
       outputRange: [1, 0],

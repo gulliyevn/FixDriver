@@ -169,7 +169,7 @@ export const DevCommands = {
 
 // Экспортируем в глобальный объект для удобства (только в DEV)
 if (__DEV__ && typeof global !== "undefined") {
-  (global as any).DevCommands = DevCommands;
+  (global as unknown as { DevCommands?: unknown }).DevCommands = DevCommands;
 }
 
 export default {

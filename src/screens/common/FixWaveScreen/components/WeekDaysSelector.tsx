@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./WeekDaysSelector.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface WeekDaysSelectorProps {
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   selectedDays?: string[];
   onSelectionChange?: (days: string[]) => void;

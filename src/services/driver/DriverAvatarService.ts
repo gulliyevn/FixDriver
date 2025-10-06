@@ -42,11 +42,12 @@ export class DriverAvatarService {
   ): Promise<UploadAvatarResponse> {
     try {
       const formData = new FormData();
-      formData.append("avatar", {
+      const file: { uri: string; type: string; name: string } = {
         uri: imageUri,
         type: "image/jpeg",
         name: "avatar.jpg",
-      } as any);
+      };
+      formData.append("avatar", file as unknown as Blob);
       formData.append("driverId", driverId);
 
       const response = await APIClient.post<AvatarData>(

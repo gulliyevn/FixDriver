@@ -75,6 +75,8 @@ export const colors = {
   dark: darkColors,
 };
 
+export type ColorPalette = typeof lightColors;
+
 // Функция для получения текущих цветов
 export const getCurrentColors = (isDark: boolean) => {
   return isDark ? darkColors : lightColors;

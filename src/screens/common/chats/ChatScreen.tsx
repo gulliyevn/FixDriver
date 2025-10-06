@@ -21,7 +21,16 @@ import { useLanguage } from "../../../context/LanguageContext";
 import { createChatScreenStyles } from "../../../styles/screens/ChatScreen.styles";
 import { ChatService, Message } from "../../../services/ChatService";
 
-const ChatScreen: React.FC<{ route?: any }> = ({ route }) => {
+type ChatRouteParams = {
+  driverId?: string;
+  driverName?: string;
+  driverCar?: string;
+  driverNumber?: string;
+  driverStatus?: "online" | "offline";
+  driverRating?: string;
+};
+
+const ChatScreen: React.FC<{ route?: { params?: ChatRouteParams } }> = ({ route }) => {
   const { isDark } = useTheme();
   const styles = useMemo(() => createChatScreenStyles(isDark), [isDark]);
   const { t } = useLanguage();

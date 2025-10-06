@@ -41,15 +41,15 @@ const ClientRegisterScreen: React.FC = () => {
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev: typeof form) => ({ ...prev, [field]: value }));
-    setErrors((prev: typeof errors) => ({ ...prev, [field]: undefined }));
+  const handleChange = (field: keyof typeof form, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const validate = () => {

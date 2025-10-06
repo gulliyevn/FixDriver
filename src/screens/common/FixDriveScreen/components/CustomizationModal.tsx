@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import TimePicker from "../../../../components/TimePicker";
 import { TIME_PICKER_COLORS } from "./constants";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface CustomizationModalProps {
   visible: boolean;
   onClose: () => void;
   onSave: (isReturnTrip: boolean) => Promise<boolean>;
-  colors: Record<string, string>;
+  colors: ColorPalette;
   t: (key: string) => string;
   weekDays: { key: string; label: string }[];
   selectedDays: string[];

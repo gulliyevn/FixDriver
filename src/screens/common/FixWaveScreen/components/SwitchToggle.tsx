@@ -1,11 +1,12 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { styles } from "./SwitchToggle.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface SwitchToggleProps {
   isActive: boolean;
   onToggle: () => void;
-  colors: any;
+  colors: ColorPalette;
 }
 
 export const SwitchToggle: React.FC<SwitchToggleProps> = ({

@@ -18,6 +18,7 @@ import {
   createTimePickerModalStyles,
   platformSpecificStyles,
 } from "./TimePickerModal.styles";
+import type { ColorPalette } from "../../../../constants/colors";
 
 interface UnifiedDateTimePickerModalProps {
   visible: boolean;
@@ -25,7 +26,7 @@ interface UnifiedDateTimePickerModalProps {
   value: Date | null;
   onCancel: () => void;
   onConfirm: (date: Date) => void;
-  colors: any;
+  colors: ColorPalette;
   t: (key: string) => string;
   isDark?: boolean;
 }
@@ -102,7 +103,9 @@ export const UnifiedDateTimePickerModal: React.FC<
           selectedValue={value}
           onValueChange={(v) => onChange(Number(v))}
           dropdownIconColor={itemColor}
-          itemStyle={pickerItemStyle as any}
+          itemStyle={pickerItemStyle as
+            | { color: string; fontSize: number; fontWeight: "600" }
+            | undefined}
         >
           {data.map((n) => (
             <Picker.Item key={n} label={pad(n)} value={n} color={itemColor} />

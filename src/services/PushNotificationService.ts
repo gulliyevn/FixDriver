@@ -52,7 +52,7 @@ class PushNotificationService {
       return {
         granted: false,
         canAskAgain: false,
-        status: "denied" as any,
+        status: Notifications.PermissionStatus.DENIED,
       };
     }
 

@@ -9,6 +9,7 @@ import UnifiedDateTimePickerModal from "./UnifiedDateTimePickerModal";
 import { useFixDriveFamilyMembers } from "../../../../hooks/useFixDriveFamilyMembers";
 import { fixwaveOrderService } from "../../../../services/fixwaveOrderService";
 import { AddressData } from "../types/fix-wave.types";
+import type { MapLocation } from "../../../../components/MapView/types/map.types";
 
 interface AddressPageProps {
   onNext: (data: AddressData) => void;
@@ -29,7 +30,13 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
   const [selectedPackage, setSelectedPackage] = useState<string>(
     initialData?.packageType || "",
   );
-  const [addresses, setAddresses] = useState<any[]>(
+  const [addresses, setAddresses] = useState<Array<{
+    id: string;
+    type: "from" | "to" | "stop";
+    address: string;
+    coordinate?: MapLocation;
+    coordinates?: MapLocation;
+  }>>(
     initialData?.addresses || [],
   );
   const [isSaving, setIsSaving] = useState(false);
@@ -79,14 +86,30 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
     saveToSession(addresses);
   };
 
-  const handleAddressesChange = (newAddresses: any[]) => {
+  const handleAddressesChange = (
+    newAddresses: Array<{
+      id: string;
+      type: "from" | "to" | "stop";
+      address: string;
+      coordinate?: MapLocation;
+      coordinates?: MapLocation;
+    }>,
+  ) => {
     console.log("Addresses changed:", newAddresses); // Добавляем лог для отладки
     setAddresses(newAddresses);
     // Сохраняем адреса в сессию при каждом изменении
     saveToSession(newAddresses);
   };
 
-  const saveToSession = async (newAddresses: any[]) => {
+  const saveToSession = async (
+    newAddresses: Array<{
+      id: string;
+      type: "from" | "to" | "stop";
+      address: string;
+      coordinate?: MapLocation;
+      coordinates?: MapLocation;
+    }>,
+  ) => {
     try {
       const selectedMember = getFamilyMemberById(selectedFamilyMember);
       const familyMemberName = selectedMember
@@ -238,7 +261,19 @@ const AddressPage: React.FC<AddressPageProps> = ({ onNext, initialData }) => {
       {/* Ввод адреса через карту */}
       <FixDriveMapInput
         onAddressesChange={handleAddressesChange}
-        initialAddresses={addresses}
+        initialAddresses={addresses.map((addr) => ({
+          id: addr.id,
+          type: addr.type,
+          address: addr.address,
+          coordinate: addr.coordinates ?? addr.coordinate,
+          coordinates: addr.coordinates ?? addr.coordinate,
+          placeholder:
+            addr.type === "from"
+              ? t("common.fixDrive.address.fromPlaceholder")
+              : addr.type === "to"
+                ? t("common.fixDrive.address.toPlaceholder")
+                : t("common.fixDrive.address.stopPlaceholder"),
+        }))}
       />
 
       <UnifiedDateTimePickerModal

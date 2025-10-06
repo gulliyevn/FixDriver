@@ -69,15 +69,21 @@ export const getPreviousPage = (
 
 export const canGoToNextPage = (
   currentPage: FixWavePage,
-  data: any,
+  data: {
+    familyMemberId?: string;
+    packageType?: string;
+    addresses?: Array<unknown>;
+    date?: unknown;
+    time?: unknown;
+  },
 ): boolean => {
   switch (currentPage) {
     case "addresses":
-      return (
-        data.familyMemberId && data.packageType && data.addresses?.length >= 2
+      return Boolean(
+        data.familyMemberId && data.packageType && (data.addresses?.length ?? 0) >= 2,
       );
     case "timeSchedule":
-      return data.date && data.time;
+      return Boolean(data.date && data.time);
     case "confirmation":
       return true;
     default:

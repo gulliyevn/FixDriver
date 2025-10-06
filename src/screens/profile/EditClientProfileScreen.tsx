@@ -159,7 +159,12 @@ const EditClientProfileScreen: React.FC<
         }
 
         // Сохраняем изменения в форме
-        const updateData: any = {};
+        const updateData: Partial<{
+          name: string;
+          surname: string;
+          phone: string;
+          email: string;
+        }> = {};
 
         if (hasFormChanges) {
           updateData.name = formData.firstName.trim();
@@ -274,13 +279,18 @@ const EditClientProfileScreen: React.FC<
   // Перехватываем swipe-back жест
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = navigation.addListener("beforeRemove", (e: any) => {
+      const unsubscribe = navigation.addListener("beforeRemove", (e) => {
         const hasPersonalChanges = isEditingPersonalInfo && checkHasChanges();
         const hasFamilyEditing = editingFamilyMember !== null;
 
         if (hasPersonalChanges) {
-          // Предотвращаем переход назад
-          e.preventDefault();
+          // Предотвращаем переход назад, если поддерживается
+          const evt: { preventDefault?: () => void } = e as unknown as {
+            preventDefault?: () => void;
+          };
+          if (typeof evt.preventDefault === "function") {
+            evt.preventDefault();
+          }
 
           Alert.alert(
             t("profile.saveChangesConfirm.title"),
@@ -304,7 +314,12 @@ const EditClientProfileScreen: React.FC<
           );
         } else if (hasFamilyEditing) {
           // Если есть редактирование семейной секции, используем специальную обработку
-          e.preventDefault();
+          const evt2: { preventDefault?: () => void } = e as unknown as {
+            preventDefault?: () => void;
+          };
+          if (typeof evt2.preventDefault === "function") {
+            evt2.preventDefault();
+          }
 
           // Проверяем, есть ли изменения через функцию сохранения
           if (saveFamilyRef.current) {

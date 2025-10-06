@@ -20,7 +20,7 @@ export interface OrderData {
 
 type Coordinate = { latitude: number; longitude: number };
 
-type SessionAddressData = {
+export type SessionAddressData = {
   familyMemberId?: string;
   packageType?: string;
   addresses: Array<{
@@ -33,7 +33,7 @@ type SessionAddressData = {
 };
 
 // Сессия хранит агрегированное расписание, совместимое с TimeScheduleData
-type SessionTimeScheduleData = {
+export type SessionTimeScheduleData = {
   date?: string | number | Date;
   time?: string;
   isRecurring?: boolean;
