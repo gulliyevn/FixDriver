@@ -6,12 +6,20 @@ import {
   VehiclesListResponse,
 } from "../../types/driver/DriverVehicle";
 
+type ApiClient = {
+  get<T = unknown>(url: string): Promise<{ data: T }> | Promise<any>;
+  post<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
+  put<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
+  patch<T = unknown>(url: string, body?: any, config?: any): Promise<{ data: T }> | Promise<any>;
+  delete<T = unknown>(url: string): Promise<{ data: T }> | Promise<any>;
+};
+
 export class DriverVehicleService {
   private static instance: DriverVehicleService;
-  private apiClient: any;
+  private apiClient: ApiClient;
 
   private constructor() {
-    this.apiClient = APIClient;
+    this.apiClient = APIClient as unknown as ApiClient;
   }
 
   public static getInstance(): DriverVehicleService {
@@ -174,11 +182,11 @@ export class DriverVehicleService {
    */
   async uploadPassportPhoto(
     vehicleId: string,
-    photoFile: File,
+    photoFile: { uri: string; type: string; name: string },
   ): Promise<VehicleResponse> {
     try {
       const formData = new FormData();
-      formData.append("passportPhoto", photoFile);
+      formData.append("passportPhoto", photoFile as unknown as Blob);
 
       const response = await this.apiClient.post(
         `/driver/vehicles/${vehicleId}/passport-photo`,

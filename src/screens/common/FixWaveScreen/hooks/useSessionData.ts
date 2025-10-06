@@ -12,7 +12,13 @@ export const useSessionData = (
         const sessionData = await fixwaveOrderService.loadSessionData();
 
         if (sessionData?.timeScheduleData) {
-          state.setTimeScheduleData(sessionData.timeScheduleData);
+          const tsd = sessionData.timeScheduleData;
+          // Приводим date к Date, если сохранена строка/число
+          const normalized = {
+            ...tsd,
+            date: tsd.date ? new Date(tsd.date as unknown as string) : new Date(),
+          } as TimeScheduleData;
+          state.setTimeScheduleData(normalized);
 
           // Восстанавливаем состояние
           if (sessionData.timeScheduleData.fixedTimes) {

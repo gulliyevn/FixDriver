@@ -85,7 +85,12 @@ class WebSocketService {
       // Строим URL для WebSocket
       const wsUrl = this.buildWebSocketUrl(token);
 
-      this.ws = new (global as any).WebSocket(wsUrl) as WebSocketType;
+      type WebSocketCtor = new (url: string) => unknown;
+      const WS = (global as unknown as { WebSocket?: WebSocketCtor }).WebSocket;
+      if (!WS) {
+        throw new Error("WebSocket не доступен в глобальной среде");
+      }
+      this.ws = new WS(wsUrl) as unknown as WebSocketType;
       this.setupEventListeners();
     } catch (error) {
       console.error("Ошибка подключения к WebSocket:", error);
@@ -258,7 +263,7 @@ class WebSocketService {
    */
   private stopHeartbeat(): void {
     if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval as any);
+      clearInterval(this.heartbeatInterval as unknown as number);
       this.heartbeatInterval = null;
     }
   }

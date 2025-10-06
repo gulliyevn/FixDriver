@@ -1,11 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StyleProp, ViewStyle, TextStyle, ImageStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export type DriverModalHeaderProps = {
-  styles: any;
+  styles: {
+    avatarAndInfoRow: StyleProp<ViewStyle>;
+    timerContainer: StyleProp<ViewStyle>;
+    timerText: StyleProp<TextStyle>;
+    avatarContainer: StyleProp<ViewStyle>;
+    avatar: StyleProp<ViewStyle>;
+    onlineIndicator: StyleProp<ViewStyle>;
+    driverMainInfo: StyleProp<ViewStyle>;
+    nameContainer: StyleProp<ViewStyle>;
+    driverName: StyleProp<TextStyle>;
+    premiumIcon: StyleProp<ViewStyle>;
+    vehicleExpandRow: StyleProp<ViewStyle>;
+    vehicleInfoContainer: StyleProp<ViewStyle>;
+    childIcon: StyleProp<ViewStyle>;
+    vehicleInfo: StyleProp<TextStyle>;
+    vehiclePhotoContainer: StyleProp<ViewStyle>;
+    vehiclePhoto: StyleProp<ImageStyle>;
+    fixDriveContainer: StyleProp<ViewStyle>;
+    fixDriveText: StyleProp<TextStyle>;
+  };
   role?: "client" | "driver";
-  driver?: any;
+  driver?: {
+    first_name?: string;
+    last_name?: string;
+    vehicle_brand?: string;
+    vehicle_model?: string;
+    vehicle_number?: string;
+  } | null;
   childName?: string;
   childAge?: string;
   slideProgress?: number;

@@ -19,8 +19,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useI18n } from "../../hooks/useI18n";
 import { createDriversScreenStyles } from "../../styles/screens/drivers/DriversScreen.styles";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation, NavigationProp, ParamListBase } from "@react-navigation/native";
 import {
   ClientStackParamList,
   DriverStackParamList,
@@ -55,10 +54,7 @@ const DriversScreen: React.FC = () => {
     loadMoreDrivers,
     handleRefresh,
   } = useDriversList();
-  const navigation =
-    useNavigation<
-      StackNavigationProp<ClientStackParamList | DriverStackParamList>
-    >();
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [pausedDrivers, setPausedDrivers] = useState<Set<string>>(new Set());
   const [deletedDrivers, setDeletedDrivers] = useState<Set<string>>(new Set());
 
@@ -285,11 +281,11 @@ const DriversScreen: React.FC = () => {
     (driver: Driver) => {
       try {
         // Для обеих ролей используем одинаковую навигацию к стеку чатов
-        (navigation as any).navigate("Chat");
+        navigation.navigate("Chat");
 
         setTimeout(() => {
           // Навигируем к конкретному чату внутри стека
-          (navigation as any).navigate("Chat", {
+          navigation.navigate("Chat", {
             screen: "ChatConversation",
             params: {
               driverId: driver.id,
@@ -302,7 +298,7 @@ const DriversScreen: React.FC = () => {
           });
         }, 100);
       } catch (error) {
-        (navigation as any).navigate("Chat");
+        navigation.navigate("Chat");
       }
     },
     [navigation],

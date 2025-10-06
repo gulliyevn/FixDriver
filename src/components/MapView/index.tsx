@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { View, Animated } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp, ParamListBase } from "@react-navigation/native";
 import { useTheme } from "../../context/ThemeContext";
 import { createMapViewStyles } from "../../styles/components/MapView.styles";
 import DriverModal from "../DriverModal";
@@ -22,6 +22,7 @@ import MapControls from "./components/MapControls";
 import MapMarkersComponent from "./components/MapMarkers";
 import { useDirections } from "./hooks/useDirections";
 import { useOsrmDirections } from "./hooks/useOsrmDirections";
+// We intentionally use ParamListBase here to allow simple string-based navigation without over-constraining to driver stack types
 
 const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
   (
@@ -41,7 +42,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
   ) => {
     const mapRef = useRef<MapView>(null);
     const { isDark } = useTheme();
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const styles = createMapViewStyles(isDark);
 
     const plannedArrivalAtMs = useMemo(() => {
@@ -350,15 +351,9 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
               // Навигация к чату по driverId
               try {
                 handleDriverModalClose();
-                (navigation as any).navigate("Chat");
-                setTimeout(() => {
-                  (navigation as any).navigate("Chat", {
-                    screen: "ChatConversation",
-                    params: { driverId },
-                  });
-                }, 100);
+                navigation.navigate("Chat");
               } catch {
-                (navigation as any).navigate("Chat");
+                navigation.navigate("Chat");
               }
             }}
             driverId={selectedDriverId}

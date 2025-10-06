@@ -6,7 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { getCurrentColors } from "../constants/colors";
 import MapViewComponent from "./MapView";
 import AddressAutocomplete from "./AddressAutocomplete";
-import { MapLocation } from "./MapView/types/map.types";
+import { MapLocation, MapRef } from "./MapView/types/map.types";
 
 interface AddressPoint {
   id: string;
@@ -29,7 +29,7 @@ const FixDriveMapInput: React.FC<FixDriveMapInputProps> = ({
   const { isDark } = useTheme();
   const { t } = useLanguage();
   const colors = getCurrentColors(isDark);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<MapRef | null>(null);
 
   const [addresses, setAddresses] = useState<AddressPoint[]>(() => {
     // Если есть восстановленные адреса, используем их

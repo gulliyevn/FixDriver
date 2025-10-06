@@ -1,9 +1,26 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 import { useI18n } from "../hooks/useI18n";
 
+type DriversSelectionBarStyles = {
+  actionButtonsContainer: StyleProp<ViewStyle>;
+  actionButtonsRow: StyleProp<ViewStyle>;
+  actionButton: StyleProp<ViewStyle>;
+  selectAllButton: StyleProp<ViewStyle>;
+  selectAllButtonText: StyleProp<TextStyle>;
+  bookButton: StyleProp<ViewStyle>;
+  bookButtonText: StyleProp<TextStyle>;
+};
+
 type DriversSelectionBarProps = {
-  styles: any;
+  styles: DriversSelectionBarStyles;
   selectedCount: number;
   totalCount: number;
   onSelectAll: () => void;

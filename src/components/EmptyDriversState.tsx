@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
+type EmptyDriversStateStyles = {
+  emptyState: StyleProp<ViewStyle>;
+  emptyStateTitle: StyleProp<TextStyle>;
+  emptyStateSubtitle: StyleProp<TextStyle>;
+};
+
 type EmptyDriversStateProps = {
-  styles: any;
+  styles: EmptyDriversStateStyles;
   isDark: boolean;
   loading: boolean;
 };

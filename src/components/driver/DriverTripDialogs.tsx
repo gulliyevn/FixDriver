@@ -1,10 +1,29 @@
 import React, { useState } from "react";
-import { Modal, TouchableOpacity, Text, View, TextInput } from "react-native";
+import { Modal, TouchableOpacity, Text, View, TextInput, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { t } from "../../i18n";
 
 export type DriverTripDialogsProps = {
-  styles: any;
+  styles: {
+    dialogOverlay: StyleProp<ViewStyle>;
+    dialogContainer: StyleProp<ViewStyle>;
+    dialogTitle: StyleProp<TextStyle>;
+    dialogText: StyleProp<TextStyle>;
+    dialogButtonsContainer: StyleProp<ViewStyle>;
+    dialogCancelButton: StyleProp<ViewStyle>;
+    dialogCancelButtonText: StyleProp<TextStyle>;
+    dialogOkButton: StyleProp<ViewStyle>;
+    dialogOkButtonText: StyleProp<TextStyle>;
+    emergencyStopButton: StyleProp<ViewStyle>;
+    emergencyEndButton: StyleProp<ViewStyle>;
+    emergencyButtonText: StyleProp<TextStyle>;
+    ratingDialogContainer: StyleProp<ViewStyle>;
+    ratingContainer: StyleProp<ViewStyle>;
+    starButton: StyleProp<ViewStyle>;
+    commentContainer: StyleProp<ViewStyle>;
+    commentLabel: StyleProp<TextStyle>;
+    commentInput: StyleProp<ViewStyle>;
+  };
   clientName: string;
   // Start trip
   showStart: boolean;
@@ -465,7 +484,7 @@ const RatingDialog: React.FC<{
   visible: boolean;
   onCancel: () => void;
   onSubmit: (rating: number, comment: string) => void;
-  styles: any;
+  styles: DriverTripDialogsProps["styles"];
   emergencyActionsUsed?: boolean;
   emergencyActionType?: "stop" | "end" | null;
 }> = ({

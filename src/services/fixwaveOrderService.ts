@@ -18,6 +18,36 @@ export interface OrderData {
   status: "draft" | "confirmed" | "completed" | "cancelled";
 }
 
+type Coordinate = { latitude: number; longitude: number };
+
+type SessionAddressData = {
+  familyMemberId?: string;
+  packageType?: string;
+  addresses: Array<{
+    id: string;
+    type: "from" | "to" | "stop";
+    address: string;
+    coordinate?: Coordinate;
+    coordinates?: Coordinate;
+  }>;
+};
+
+// Сессия хранит агрегированное расписание, совместимое с TimeScheduleData
+type SessionTimeScheduleData = {
+  date?: string | number | Date;
+  time?: string;
+  isRecurring?: boolean;
+  recurringDays?: string[];
+  notes?: string;
+  fromAddress?: string;
+  toAddress?: string;
+  fixedTimes?: Record<number, string>;
+  weekdayTimes?: Record<number, string>;
+  weekendTimes?: Record<number, string>;
+  selectedDays?: string[];
+  switchStates?: { switch1: boolean; switch2: boolean; switch3: boolean };
+};
+
 class FixWaveOrderService {
   private storageKey = "fixwave_order_data";
   private sessionKey = "fixwave_session_data";
@@ -53,7 +83,7 @@ class FixWaveOrderService {
   async loadOrderData(): Promise<OrderData | null> {
     try {
       const data = await AsyncStorage.getItem(this.storageKey);
-      return data ? JSON.parse(data) : null;
+      return data ? (JSON.parse(data) as OrderData) : null;
     } catch (error) {
       return null;
     }
@@ -86,8 +116,8 @@ class FixWaveOrderService {
   // Сохранение данных сессии (для навигации между страницами)
   async saveSessionData(sessionData: {
     currentPage: string;
-    addressData?: any;
-    timeScheduleData?: any;
+    addressData?: SessionAddressData;
+    timeScheduleData?: SessionTimeScheduleData;
   }): Promise<void> {
     try {
       const sessionDataWithTimestamp = {
@@ -137,13 +167,20 @@ class FixWaveOrderService {
   // Загрузка данных сессии
   async loadSessionData(): Promise<{
     currentPage: string;
-    addressData?: any;
-    timeScheduleData?: any;
+    addressData?: SessionAddressData;
+    timeScheduleData?: SessionTimeScheduleData;
     lastUpdate?: number;
   } | null> {
     try {
       const data = await AsyncStorage.getItem(this.sessionKey);
-      return data ? JSON.parse(data) : null;
+      return data
+        ? (JSON.parse(data) as {
+            currentPage: string;
+            addressData?: SessionAddressData;
+            timeScheduleData?: SessionTimeScheduleData;
+            lastUpdate?: number;
+          })
+        : null;
     } catch (error) {
       return null;
     }
@@ -213,8 +250,8 @@ class FixWaveOrderService {
     addresses: Array<{
       type: string;
       address: string;
-      coordinates?: any;
-      coordinate?: any; // Добавляем поддержку обоих форматов
+      coordinates?: Coordinate;
+      coordinate?: Coordinate; // Добавляем поддержку обоих форматов
     }>;
   }): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];

@@ -1,10 +1,22 @@
 import React from "react";
-import { View, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
+type DriversSearchBarStyles = {
+  searchContainer: StyleProp<ViewStyle>;
+  searchInput: StyleProp<TextStyle>;
+};
+
 type DriversSearchBarProps = {
-  styles: any;
+  styles: DriversSearchBarStyles;
   isDark: boolean;
   value: string;
   onChange: (text: string) => void;

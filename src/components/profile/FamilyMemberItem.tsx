@@ -47,15 +47,15 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
     } else {
       // Очищаем функцию сохранения
       if (saveRef?.current) {
-        (saveRef as any).current = null;
+        saveRef.current = null;
       }
     }
   }, [isEditing, member.id]); // Изменили зависимость с member на member.id
 
   // Отдельный useEffect для установки функции сохранения с актуальными данными
   React.useEffect(() => {
-    if (isEditing && saveRef?.current) {
-      (saveRef as any).current = () => {
+    if (isEditing && saveRef?.current !== undefined) {
+      saveRef.current = () => {
         const updatedData = {
           ...editingData,
           age: calculateAge(editingData.birthDate || member.birthDate),

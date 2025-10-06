@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import DriverStatusService from "../../../services/DriverStatusService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Animated } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp, ParamListBase } from "@react-navigation/native";
 
 export const useEarningsHandlers = (
   filterExpanded: boolean,
@@ -15,7 +15,7 @@ export const useEarningsHandlers = (
   startOnlineTime?: () => void,
   stopOnlineTime?: () => void,
 ) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
 
   const toggleFilter = useCallback(() => {
     const toValue = filterExpanded ? 0 : 1;
@@ -77,16 +77,16 @@ export const useEarningsHandlers = (
   const handleBalancePress = useCallback(() => {
     try {
       // Переходим на таб профиля
-      (navigation as any).navigate("Profile");
+      navigation.navigate("Profile");
 
       setTimeout(() => {
         // Навигируем к экрану баланса внутри стека профиля
-        (navigation as any).navigate("Profile", {
+        navigation.navigate("Profile", {
           screen: "Balance",
         });
       }, 100);
     } catch (error) {
-      (navigation as any).navigate("Profile");
+      navigation.navigate("Profile");
     }
   }, [navigation]);
 

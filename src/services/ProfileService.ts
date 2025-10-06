@@ -161,11 +161,12 @@ export class ProfileService {
 
       // PROD: Загружаем на сервер
       const formData = new FormData();
-      formData.append("avatar", {
+      const file: { uri: string; type: string; name: string } = {
         uri: imageUri,
         type: "image/jpeg",
         name: "avatar.jpg",
-      } as any);
+      };
+      formData.append("avatar", file as unknown as Blob);
 
       const response = await APIClient.post<{ avatarUrl: string }>(
         `/profile/${userId}/avatar`,

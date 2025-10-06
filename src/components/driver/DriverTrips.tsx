@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 
 export type DriverTrip = {
   text: string;
@@ -8,7 +8,15 @@ export type DriverTrip = {
 };
 
 export type DriverTripsProps = {
-  styles: any;
+  styles: {
+    tripsContainer: StyleProp<ViewStyle>;
+    tripItem: StyleProp<ViewStyle>;
+    tripDot: StyleProp<ViewStyle>;
+    tripDotBlue: StyleProp<ViewStyle>;
+    tripDotLocation: StyleProp<ViewStyle>;
+    tripText: StyleProp<TextStyle>;
+    tripTime: StyleProp<TextStyle>;
+  };
   driverId: string | undefined;
   trips: DriverTrip[];
 };

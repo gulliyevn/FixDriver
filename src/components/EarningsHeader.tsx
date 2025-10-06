@@ -5,12 +5,32 @@ import {
   TouchableOpacity,
   Animated,
   ScrollView,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../hooks/useI18n";
 
+type EarningsHeaderStyles = {
+  header: StyleProp<ViewStyle>;
+  headerTop: StyleProp<ViewStyle>;
+  headerRow: StyleProp<ViewStyle>;
+  headerTitle: StyleProp<TextStyle>;
+  headerActions: StyleProp<ViewStyle>;
+  filterIconContainer: StyleProp<ViewStyle>;
+  statusButton: StyleProp<ViewStyle>;
+  filtersWrapper: StyleProp<ViewStyle>;
+  filtersContainer: StyleProp<ViewStyle>;
+  filtersContent: StyleProp<ViewStyle>;
+  filterChip: StyleProp<ViewStyle>;
+  filterChipActive: StyleProp<ViewStyle>;
+  filterChipText: StyleProp<TextStyle>;
+  filterChipTextActive: StyleProp<TextStyle>;
+};
+
 type EarningsHeaderProps = {
-  styles: any;
+  styles: EarningsHeaderStyles;
   isDark: boolean;
   filterExpandAnim: Animated.Value;
   onToggleFilter: () => void;

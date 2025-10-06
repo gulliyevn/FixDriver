@@ -92,7 +92,7 @@ export class DriverStatsService {
     endDate?: string,
   ): Promise<PeriodStats | null> {
     try {
-      const params: any = { period };
+      const params: { period: "week" | "month" | "year"; startDate?: string; endDate?: string } = { period };
       if (startDate) params.startDate = startDate;
       if (endDate) params.endDate = endDate;
 

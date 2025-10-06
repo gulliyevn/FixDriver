@@ -8,11 +8,15 @@ import {
   Pressable,
   Linking,
   Modal,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useI18n } from "../../hooks/useI18n";
 import { Driver } from "../../types/driver";
 import { DriverTrip } from "../../services/DriverService";
+import SwipeableDefault from "react-native-gesture-handler/Swipeable";
 
 export type DriverListItemProps = {
   driver: Driver & {
@@ -28,9 +32,72 @@ export type DriverListItemProps = {
     trips?: DriverTrip[];
   };
   isDark: boolean;
-  styles: any;
+  styles: {
+    swipeActionsLeft: StyleProp<ViewStyle>;
+    swipeActionsLeftColumn: StyleProp<ViewStyle>;
+    swipeAction: StyleProp<ViewStyle>;
+    pauseAction: StyleProp<ViewStyle>;
+    favoriteAction: StyleProp<ViewStyle>;
+    swipeActionInnerLeft: StyleProp<ViewStyle>;
+    swipeActionsRight: StyleProp<ViewStyle>;
+    deleteAction: StyleProp<ViewStyle>;
+    swipeActionInnerRight: StyleProp<ViewStyle>;
+    driverItem: StyleProp<ViewStyle>;
+    driverItemPaused: StyleProp<ViewStyle>;
+    pauseOverlay: StyleProp<ViewStyle>;
+    pauseIconLarge: StyleProp<ViewStyle>;
+    driverHeader: StyleProp<ViewStyle>;
+    avatarContainer: StyleProp<ViewStyle>;
+    avatar: StyleProp<ViewStyle>;
+    onlineIndicator: StyleProp<ViewStyle>;
+    driverMainInfo: StyleProp<ViewStyle>;
+    nameRatingRow: StyleProp<ViewStyle>;
+    nameContainer: StyleProp<ViewStyle>;
+    driverName: StyleProp<TextStyle>;
+    premiumIcon: StyleProp<ViewStyle>;
+    favoriteIcon: StyleProp<ViewStyle>;
+    pauseIcon: StyleProp<ViewStyle>;
+    ratingText: StyleProp<TextStyle>;
+    vehicleExpandRow: StyleProp<ViewStyle>;
+    vehicleInfoContainer: StyleProp<ViewStyle>;
+    childIcon: StyleProp<ViewStyle>;
+    vehicleInfo: StyleProp<TextStyle>;
+    driverInfoBar: StyleProp<ViewStyle>;
+    scheduleInfo: StyleProp<ViewStyle>;
+    scheduleText: StyleProp<TextStyle>;
+    priceInfo: StyleProp<ViewStyle>;
+    priceText: StyleProp<TextStyle>;
+    distanceInfo: StyleProp<ViewStyle>;
+    distanceText: StyleProp<TextStyle>;
+    timeInfo: StyleProp<ViewStyle>;
+    timeText: StyleProp<TextStyle>;
+    expandableContent: StyleProp<ViewStyle>;
+    tripsContainer: StyleProp<ViewStyle>;
+    tripItem: StyleProp<ViewStyle>;
+    tripDot: StyleProp<ViewStyle>;
+    tripDotBlue: StyleProp<ViewStyle>;
+    tripDotLocation: StyleProp<ViewStyle>;
+    tripText: StyleProp<TextStyle>;
+    tripTime: StyleProp<TextStyle>;
+    bottomBorder: StyleProp<ViewStyle>;
+    buttonsContainer: StyleProp<ViewStyle>;
+    leftButton: StyleProp<ViewStyle>;
+    buttonContent: StyleProp<ViewStyle>;
+    leftButtonText: StyleProp<TextStyle>;
+    rightButton: StyleProp<ViewStyle>;
+    rightButtonContent: StyleProp<ViewStyle>;
+    rightButtonText: StyleProp<TextStyle>;
+    callSheetOverlay: StyleProp<ViewStyle>;
+    callSheetBackdrop: StyleProp<ViewStyle>;
+    callSheetContainer: StyleProp<ViewStyle>;
+    callSheetClose: StyleProp<ViewStyle>;
+    callSheetHandle: StyleProp<ViewStyle>;
+    callSheetTitle: StyleProp<TextStyle>;
+    callSheetOption: StyleProp<ViewStyle>;
+    callSheetOptionText: StyleProp<TextStyle>;
+  };
   actionWidth: number;
-  SwipeableComponent: React.ComponentType<any>;
+  SwipeableComponent: typeof SwipeableDefault;
   role?: "client" | "driver";
   swipeRefSetter?: (id: string, ref: unknown) => void;
   onSwipeableWillOpen?: (id: string, ref: unknown) => void;

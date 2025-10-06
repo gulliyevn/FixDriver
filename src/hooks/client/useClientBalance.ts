@@ -64,11 +64,13 @@ export const useClientBalance = (): ClientBalanceContextType => {
     try {
       const storedTransactions = await AsyncStorage.getItem(transactionsKey);
       if (storedTransactions) {
-        const parsedTransactions = JSON.parse(storedTransactions);
+        const parsedTransactions = JSON.parse(
+          storedTransactions,
+        ) as ClientTransaction[];
 
         // Миграция: добавляем translationKey для старых транзакций пополнения
         const migratedTransactions = parsedTransactions.map(
-          (transaction: any) => {
+          (transaction: ClientTransaction) => {
             if (
               transaction.type === "balance_topup" &&
               !transaction.translationKey

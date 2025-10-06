@@ -1,9 +1,14 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { useI18n } from "../hooks/useI18n";
 
+type LoadingFooterStyles = {
+  loadingFooter: StyleProp<ViewStyle>;
+  loadingText: StyleProp<TextStyle>;
+};
+
 type LoadingFooterProps = {
-  styles: any;
+  styles: LoadingFooterStyles;
 };
 
 const LoadingFooter: React.FC<LoadingFooterProps> = ({ styles }) => {

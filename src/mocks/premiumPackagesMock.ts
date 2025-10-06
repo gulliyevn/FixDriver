@@ -9,9 +9,16 @@ export interface VipPackage {
   color: string;
 }
 
+type ColorPalette = {
+  primary: string;
+  secondary: string;
+  accent: string;
+  [key: string]: string;
+};
+
 export const getPremiumPackages = (
   selectedPeriod: "month" | "year",
-  currentColors: Record<string, any>,
+  currentColors: ColorPalette,
   t?: (key: string) => string,
 ): VipPackage[] => {
   // Бесплатный пакет всегда показывается
