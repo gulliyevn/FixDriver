@@ -90,7 +90,7 @@ export const useOsrmDirections = (points: RoutePoint[] | undefined) => {
       }
     };
     run();
-  }, [hasEnough, JSON.stringify(points)]);
+  }, [hasEnough, points]);
 
   return { route, loading, error };
 };

@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Запускаем проверки перед коммитом
+echo "🔍 Running pre-commit checks..."
+
+# TypeScript проверка
+echo "📝 TypeScript check..."
+npm run type-check
+
+# ESLint проверка (только ошибки, не предупреждения)
+echo "🔧 ESLint check..."
+npm run lint -- --max-warnings 0
+
+# Форматирование
+echo "💅 Format check..."
+npm run format:check
+
+# Тесты (только для измененных файлов)
+echo "🧪 Running tests..."
+npm run test:ci
+
+echo "✅ All pre-commit checks passed!"

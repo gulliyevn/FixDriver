@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
 import { BalanceService, TransactionRecord } from "../services/BalanceService";
 
@@ -53,16 +53,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
   const [earnings, setEarnings] = useState(0);
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
 
-  // Загружаем данные при инициализации
-  useEffect(() => {
-    if (user) {
-      loadBalance();
-      loadEarnings();
-      loadTransactions();
-    }
-  }, [user]);
-
-  const loadBalance = async () => {
+  const loadBalance = useCallback(async () => {
     if (!user) return;
     try {
       const data = await BalanceService.getBalance(user.id);
@@ -72,9 +63,9 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
     } catch (error) {
       setBalance(0);
     }
-  };
+  }, [user]);
 
-  const loadEarnings = async () => {
+  const loadEarnings = useCallback(async () => {
     // В DEV/минимальной версии earnings считаем агрегатом транзакций типа credit с пометкой 'earning'
     if (!user) return;
     try {
@@ -91,9 +82,9 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
     } catch (error) {
       setEarnings(0);
     }
-  };
+  }, [user]);
 
-  const loadTransactions = async () => {
+  const loadTransactions = useCallback(async () => {
     if (!user) return;
     try {
       const list = await BalanceService.getTransactions(user.id);
@@ -101,7 +92,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
     } catch (error) {
       setTransactions([]);
     }
-  };
+  }, [user]);
 
   const addEarnings = async (amount: number) => {
     if (!user) return { newBalance: balance, newEarnings: earnings };
@@ -207,6 +198,15 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({
       return false;
     }
   };
+
+  // Загружаем данные при инициализации
+  useEffect(() => {
+    if (user) {
+      loadBalance();
+      loadEarnings();
+      loadTransactions();
+    }
+  }, [user, loadBalance, loadEarnings, loadTransactions]);
 
   const value: BalanceContextType = {
     balance,

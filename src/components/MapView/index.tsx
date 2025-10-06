@@ -187,7 +187,7 @@ const MapViewComponent = forwardRef<MapRef, MapViewComponentProps>(
           mapRef.current.animateToRegion(newRegion, 500);
         }
       }
-    }, [initialLocation]); // Убираем updateRegion из зависимостей
+    }, [initialLocation, updateRegion]); // Убираем updateRegion из зависимостей
 
     return (
       <View style={styles.container}>

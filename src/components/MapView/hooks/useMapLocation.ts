@@ -26,7 +26,7 @@ export const useMapLocation = (initialLocation?: MapLocation) => {
 
       setRegion(newRegion);
     }
-  }, [initialLocation?.latitude, initialLocation?.longitude]); // Используем конкретные значения вместо объекта
+  }, [initialLocation?.latitude, initialLocation?.longitude, initialLocation]); // Используем конкретные значения вместо объекта
 
   useEffect(() => {
     const initializeMap = async () => {

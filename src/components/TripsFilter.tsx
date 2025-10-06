@@ -49,7 +49,7 @@ const TripsFilter: React.FC<TripsFilterProps> = ({
     if (visible) {
       fadeAnim.setValue(1);
     }
-  }, []);
+  }, [fadeAnim, visible]);
 
   const statuses = [
     {

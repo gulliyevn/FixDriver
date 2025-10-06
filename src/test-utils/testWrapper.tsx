@@ -1,57 +1,70 @@
-import React from "react";
+import React, { createContext } from "react";
 import { render, RenderOptions } from "@testing-library/react-native";
 
-// Импортируем только те провайдеры, которые точно существуют
-let LanguageProvider: React.ComponentType<React.PropsWithChildren>;
-let ThemeProvider: React.ComponentType<React.PropsWithChildren>;
-let AuthProvider: React.ComponentType<React.PropsWithChildren<Record<string, unknown>>>;
-let BalanceProvider: React.ComponentType<React.PropsWithChildren>;
-let PackageProvider: React.ComponentType<React.PropsWithChildren>;
-let LevelProgressProvider: React.ComponentType<React.PropsWithChildren>;
-let ProfileProvider: React.ComponentType<React.PropsWithChildren>;
+// Создаем мок-контексты для тестов
+const MockLanguageContext = createContext({
+  language: "en",
+  setLanguage: jest.fn(),
+  isLoading: false,
+  error: null,
+  t: (key: string) => key,
+});
 
-try {
-  LanguageProvider = require("../context/LanguageContext").LanguageProvider;
-} catch (e) {
-  LanguageProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockThemeContext = createContext({
+  isDark: false,
+  toggleTheme: jest.fn(),
+  colors: {
+    primary: "#007AFF",
+    background: "#FFFFFF",
+    surface: "#F2F2F7",
+    text: "#000000",
+    textSecondary: "#8E8E93",
+    border: "#E5E5E5",
+  },
+});
 
-try {
-  ThemeProvider = require("../context/ThemeContext").ThemeProvider;
-} catch (e) {
-  ThemeProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockAuthContext = createContext({
+  user: null as unknown,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  register: jest.fn(),
+  refreshAuth: jest.fn(),
+});
 
-try {
-  AuthProvider = require("../context/AuthContext").AuthProvider;
-} catch (e) {
-  AuthProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockBalanceContext = createContext({
+  balance: null as unknown,
+  addBalance: jest.fn(),
+  subtractBalance: jest.fn(),
+  isLoading: false,
+  error: null,
+});
 
-try {
-  BalanceProvider = require("../context/BalanceContext").BalanceProvider;
-} catch (e) {
-  BalanceProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockPackageContext = createContext({
+  currentPackage: null,
+  packages: [],
+  loading: false,
+  error: null,
+  selectPackage: jest.fn(),
+  cancelPackage: jest.fn(),
+});
 
-try {
-  PackageProvider = require("../context/PackageContext").PackageProvider;
-} catch (e) {
-  PackageProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockLevelProgressContext = createContext({
+  driverLevel: null as unknown,
+  incrementProgress: jest.fn(),
+  addEarnings: jest.fn(),
+  isLoading: false,
+  error: null,
+});
 
-try {
-  LevelProgressProvider =
-    require("../context/LevelProgressContext").LevelProgressProvider;
-} catch (e) {
-  LevelProgressProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+const MockProfileContext = createContext({
+  profile: null as unknown,
+  updateProfile: jest.fn(),
+  isLoading: false,
+  error: null,
+});
 
-try {
-  ProfileProvider = require("../context/ProfileContext").ProfileProvider;
-} catch (e) {
-  ProfileProvider = ({ children }: React.PropsWithChildren<Record<string, unknown>>) => children;
-}
+// Моки провайдеров для тестов (без асинхронных операций)
 
 // Mock данные для тестов
 const mockUser = {
@@ -96,33 +109,143 @@ const mockProfile = {
   error: null,
 };
 
-// Обертка для тестов с всеми провайдерами
+// Моки провайдеров для тестов (без асинхронных операций)
+const MockLanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockLanguageContext.Provider
+      value={{
+        language: "en",
+        setLanguage: jest.fn(),
+        isLoading: false,
+        error: null,
+        t: (key: string) => key,
+      }}
+    >
+      {children}
+    </MockLanguageContext.Provider>
+  );
+};
+
+const MockThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockThemeContext.Provider
+      value={{
+        isDark: false,
+        toggleTheme: jest.fn(),
+        colors: {
+          primary: "#007AFF",
+          background: "#FFFFFF",
+          surface: "#F2F2F7",
+          text: "#000000",
+          textSecondary: "#8E8E93",
+          border: "#E5E5E5",
+        },
+      }}
+    >
+      {children}
+    </MockThemeContext.Provider>
+  );
+};
+
+const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockAuthContext.Provider
+      value={{
+        user: mockUser,
+        isLoading: false,
+        login: jest.fn(),
+        logout: jest.fn(),
+        register: jest.fn(),
+        refreshAuth: jest.fn(),
+      }}
+    >
+      {children}
+    </MockAuthContext.Provider>
+  );
+};
+
+const MockBalanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockBalanceContext.Provider
+      value={{
+        balance: mockBalance,
+        addBalance: jest.fn(),
+        subtractBalance: jest.fn(),
+        isLoading: false,
+        error: null,
+      }}
+    >
+      {children}
+    </MockBalanceContext.Provider>
+  );
+};
+
+const MockPackageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockPackageContext.Provider
+      value={{
+        currentPackage: null,
+        packages: [],
+        loading: false,
+        error: null,
+        selectPackage: jest.fn(),
+        cancelPackage: jest.fn(),
+      }}
+    >
+      {children}
+    </MockPackageContext.Provider>
+  );
+};
+
+const MockLevelProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockLevelProgressContext.Provider
+      value={{
+        driverLevel: mockLevelProgress,
+        incrementProgress: jest.fn(),
+        addEarnings: jest.fn(),
+        isLoading: false,
+        error: null,
+      }}
+    >
+      {children}
+    </MockLevelProgressContext.Provider>
+  );
+};
+
+const MockProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <MockProfileContext.Provider
+      value={{
+        profile: mockProfile,
+        updateProfile: jest.fn(),
+        isLoading: false,
+        error: null,
+      }}
+    >
+      {children}
+    </MockProfileContext.Provider>
+  );
+};
+
+// Обертка для тестов с моками провайдеров
 const AllProviders: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <AuthProvider
-          value={{
-            user: mockUser,
-            isLoading: false,
-            login: jest.fn(),
-            logout: jest.fn(),
-            register: jest.fn(),
-            refreshAuth: jest.fn(),
-          }}
-        >
-          <BalanceProvider>
-            <PackageProvider>
-              <LevelProgressProvider>
-                <ProfileProvider>{children}</ProfileProvider>
-              </LevelProgressProvider>
-            </PackageProvider>
-          </BalanceProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </LanguageProvider>
+    <MockLanguageProvider>
+      <MockThemeProvider>
+        <MockAuthProvider>
+          <MockBalanceProvider>
+            <MockPackageProvider>
+              <MockLevelProgressProvider>
+                <MockProfileProvider>{children}</MockProfileProvider>
+              </MockLevelProgressProvider>
+            </MockPackageProvider>
+          </MockBalanceProvider>
+        </MockAuthProvider>
+      </MockThemeProvider>
+    </MockLanguageProvider>
   );
 };
 

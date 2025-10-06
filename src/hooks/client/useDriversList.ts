@@ -74,7 +74,7 @@ export const useDriversList = (): UseDriversListResult => {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, []);
+  }, [debouncedQuery]);
 
   useEffect(() => {
     loadDrivers(1, true);

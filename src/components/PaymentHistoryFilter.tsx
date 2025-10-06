@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -38,7 +39,7 @@ interface PaymentHistoryFilterProps {
   currentFilter: PaymentFilter;
 }
 
-const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
+const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = memo(({
   visible,
   onClose,
   onApply,
@@ -164,7 +165,7 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
     if (visible) {
       fadeAnim.setValue(1);
     }
-  }, []);
+  }, [fadeAnim, visible]);
 
   // Анимация появления/скрытия
   useEffect(() => {
@@ -417,6 +418,15 @@ const PaymentHistoryFilter: React.FC<PaymentHistoryFilterProps> = ({
       </Animated.View>
     </Modal>
   );
+});
+
+PaymentHistoryFilter.displayName = 'PaymentHistoryFilter';
+
+PaymentHistoryFilter.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onApply: PropTypes.func.isRequired,
+  currentFilter: PropTypes.object.isRequired,
 };
 
 export default PaymentHistoryFilter;

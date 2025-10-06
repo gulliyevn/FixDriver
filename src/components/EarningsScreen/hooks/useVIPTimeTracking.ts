@@ -26,7 +26,7 @@ const MIN_HOURS_PER_DAY = 10;
 export const useVIPTimeTracking = (isVIP: boolean) => {
   const { addEarnings, resetEarnings } = useBalanceContext();
   // Добавляем состояние для принудительного обновления
-  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [, setUpdateTrigger] = useState(0);
   // Состояние для диалога окончания дня
   const [dayEndModalVisible, setDayEndModalVisible] = useState(false);
 
@@ -81,26 +81,16 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     };
   }, [vipTimeData, isVIP]);
 
-  // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
-  useEffect(() => {
-    loadVIPTimeData();
-    // Принудительно проверяем день при загрузке
-    setTimeout(() => {
-      performDayCheck().catch((error) => {
-        console.warn('Failed to perform day check:', error);
-      });
-    }, 1000);
-  }, []);
 
   // Инициализируем старт 30-дневного периода только при первом включении онлайн, если VIP и период ещё не установлен
   // useEffect удален - период устанавливается только в startOnlineTime
 
   // Вспомогательная: следующая локальная полуночь как YYYY-MM-DD
-  const getNextLocalMidnightDate = () => {
+  const getNextLocalMidnightDate = useCallback(() => {
     const d = new Date();
     d.setHours(24, 0, 0, 0);
     return getLocalDateString(d);
-  };
+  }, []);
 
   // Проверка смены дня (для всех уровней: сброс суток; VIP: ещё и квалификация/бонусы)
   // ВАЖНО: В 00:00 автоматически отключается онлайн статус
@@ -264,7 +254,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
         // logs removed in production
       }
     }
-  }, [isVIP, vipTimeData]);
+  }, [isVIP, vipTimeData, addEarnings, resetEarnings]);
 
   // Таймер: проверяем каждую минуту
   useEffect(() => {
@@ -286,9 +276,9 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [vipTimeData.isCurrentlyOnline, updateTrigger]); // Добавляем updateTrigger в зависимости
+  }, [vipTimeData.isCurrentlyOnline]); // Добавляем updateTrigger в зависимости
 
-  const loadVIPTimeData = async () => {
+  const loadVIPTimeData = useCallback(async () => {
     try {
       const saved = await AsyncStorage.getItem(VIP_TIME_KEY);
       if (saved) {
@@ -323,15 +313,26 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     } catch (error) {
       console.warn('Failed to initialize VIP time data:', error);
     }
-  };
+  }, []);
 
-  const saveVIPTimeData = async (data: VIPTimeData) => {
+  const saveVIPTimeData = useCallback(async (data: VIPTimeData) => {
     try {
       await AsyncStorage.setItem(VIP_TIME_KEY, JSON.stringify(data));
     } catch (error) {
       console.warn('Failed to save VIP time data:', error);
     }
-  };
+  }, []);
+
+  // Загружаем данные при инициализации (всегда), чтобы таймер не сбрасывался при рестарте
+  useEffect(() => {
+    loadVIPTimeData();
+    // Принудительно проверяем день при загрузке
+    setTimeout(() => {
+      performDayCheck().catch((error) => {
+        console.warn('Failed to perform day check:', error);
+      });
+    }, 1000);
+  }, [loadVIPTimeData, performDayCheck]);
 
   // Функции для работы с дневной статистикой
 
@@ -357,7 +358,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     });
     // Уведомляем DriverStatusService о изменении статуса
     DriverStatusService.setOnline(true);
-  }, [isVIP, vipTimeData]);
+  }, [isVIP, vipTimeData, getNextLocalMidnightDate, saveVIPTimeData]);
 
   const stopOnlineTime = useCallback(() => {
     if (!vipTimeData.isCurrentlyOnline || !vipTimeData.lastOnlineTime) return;
@@ -380,7 +381,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     });
     // Уведомляем DriverStatusService о изменении статуса
     DriverStatusService.setOnline(false);
-  }, [vipTimeData]);
+  }, [vipTimeData, saveVIPTimeData]);
 
   const getCurrentHoursOnline = useCallback(() => {
     const now = Date.now();
@@ -396,8 +397,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     vipTimeData.isCurrentlyOnline,
     vipTimeData.lastOnlineTime,
     vipTimeData.hoursOnline,
-    updateTrigger,
-  ]); // Добавляем updateTrigger
+  ]); // Убираем updateTrigger
 
   const resetVIPTimeData = useCallback(async () => {
     const resetData: VIPTimeData = {
@@ -416,7 +416,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
 
     setVipTimeData(resetData);
     await saveVIPTimeData(resetData);
-  }, []);
+  }, [saveVIPTimeData]);
 
   // Регистрируем завершенную поездку для учёта VIP-дня
   const registerRide = useCallback(async () => {
@@ -427,7 +427,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     };
     setVipTimeData(newData);
     await saveVIPTimeData(newData);
-  }, [isVIP, vipTimeData]);
+  }, [isVIP, vipTimeData, saveVIPTimeData]);
 
   // Ручное добавление часов онлайн (для тестирования)
   const addManualOnlineHours = useCallback(
@@ -468,7 +468,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     setVipTimeData(newData);
     await saveVIPTimeData(newData);
     return { isQualified, newQualifiedDays: newData.qualifiedDaysThisMonth };
-  }, [isVIP, vipTimeData]);
+  }, [isVIP, vipTimeData, saveVIPTimeData]);
 
   // Симуляция смены месяца (для тестирования)
   const simulateMonthChange = useCallback(async () => {
@@ -536,7 +536,7 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
     await saveVIPTimeData(newData);
 
     return { monthlyBonus, quarterlyBonus, consecutiveMonths: newConsecutive };
-  }, [isVIP, vipTimeData, addEarnings]);
+  }, [isVIP, vipTimeData, addEarnings, saveVIPTimeData]);
 
   // Функция для получения истории квалифицированных дней для расчета VIP уровня
   const getQualifiedDaysHistory = useCallback((): number[] => {

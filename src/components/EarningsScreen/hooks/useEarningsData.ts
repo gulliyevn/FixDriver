@@ -223,7 +223,7 @@ export const useEarningsData = (
   forceUpdate?: number,
   localBalance?: number,
 ) => {
-  const { balance, earnings } = useBalance();
+  const { earnings } = useBalance();
   const { getWeekStats, getMonthStats, getTodayStats, loading, error } =
     useDriverStats();
   const [periodStats, setPeriodStats] = useState<PeriodStats | null>(null);
@@ -297,10 +297,6 @@ export const useEarningsData = (
     selectedPeriod,
     effectiveBalance,
     periodStats,
-    forceUpdate,
-    localBalance,
-    earnings,
-    balance,
   ]);
 
   const quickStats = useMemo(() => {

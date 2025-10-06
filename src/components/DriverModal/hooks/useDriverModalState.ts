@@ -79,6 +79,7 @@ export const useDriverModalState = (
     isTripTimerActive,
     tripStartTime,
     isLoaded,
+    updateButtonState,
   ]);
 
   // Асинхронная активация кнопки экстренных действий

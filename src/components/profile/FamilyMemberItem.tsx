@@ -50,7 +50,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         saveRef.current = null;
       }
     }
-  }, [isEditing, member.id]); // Изменили зависимость с member на member.id
+  }, [isEditing, member.id, member.name, member.surname, member.type, member.birthDate, member.phone, saveRef]); // Изменили зависимость с member на member.id
 
   // Отдельный useEffect для установки функции сохранения с актуальными данными
   React.useEffect(() => {
@@ -64,7 +64,7 @@ const FamilyMemberItem: React.FC<FamilyMemberItemProps> = ({
         onSave(updatedData);
       };
     }
-  }, [isEditing, editingData, member.birthDate, onSave]); // Добавили editingData в зависимости
+  }, [isEditing, editingData, member.birthDate, onSave, saveRef]); // Добавили editingData в зависимости
 
   const hasChanges = () => {
     const phoneChanged = (editingData.phone ?? "") !== (member.phone ?? "");

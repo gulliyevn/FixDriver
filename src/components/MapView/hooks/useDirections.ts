@@ -194,7 +194,7 @@ export const useDirections = (
     fetchDirections();
   }, [
     hasEnough,
-    JSON.stringify(points),
+    points,
     plannedArrivalAtMs,
     allowOptimizeWhenLate,
     tollsSpeedupThresholdMin,

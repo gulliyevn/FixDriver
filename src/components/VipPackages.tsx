@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -60,7 +61,7 @@ interface VipPackagesProps {
   isSubscriptionActive?: boolean;
 }
 
-const VipPackages: React.FC<VipPackagesProps> = ({
+const VipPackages: React.FC<VipPackagesProps> = memo(({
   onSelectPackage,
   currentPackage,
   selectedPeriod: externalSelectedPeriod,
@@ -428,6 +429,16 @@ const VipPackages: React.FC<VipPackagesProps> = ({
       </View>
     </View>
   );
+});
+
+VipPackages.displayName = 'VipPackages';
+
+VipPackages.propTypes = {
+  onSelectPackage: PropTypes.func,
+  currentPackage: PropTypes.object,
+  selectedPeriod: PropTypes.oneOf(['month', 'year']),
+  onPeriodChange: PropTypes.func,
+  isSubscriptionActive: PropTypes.bool,
 };
 
 export default VipPackages;

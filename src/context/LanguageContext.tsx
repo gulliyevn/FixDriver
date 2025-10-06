@@ -59,7 +59,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   const [language, setLanguageState] = useState<SupportedLanguage>("ru");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [updateKey, setUpdateKey] = useState(0); // Force re-render
+  const [, setUpdateKey] = useState(0); // Force re-render
 
   // Memoize language options to prevent unnecessary re-renders
   const languageOptions = useMemo(() => getLanguageOptions(), []);
@@ -123,7 +123,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     (key: string, params?: Record<string, string | number>): string => {
       return i18nT(key, params);
     },
-    [language, updateKey],
+    [],
   );
 
   // Memoize context value to prevent unnecessary re-renders
@@ -137,7 +137,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       isLoading,
       error,
     }),
-    [language, setLanguage, t, languageOptions, isLoading, error, updateKey],
+    [language, setLanguage, t, languageOptions, isLoading, error],
   );
 
   return (

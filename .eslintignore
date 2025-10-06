@@ -1,0 +1,13 @@
+# Игнорируем папки
+UNUSED/
+scripts/
+node_modules/
+.expo/
+dist/
+build/
+
+# Игнорируем файлы
+*.log
+*.lock
+package-lock.json
+yarn.lock

@@ -12,7 +12,7 @@ export interface RouteParams {
 // Unused function removed
 
 export const UniversalLinkHandler = {
-  handleIncomingUrl(url: string): void {
+  handleIncomingUrl(): void {
     // navigation.navigate('OrdersMapScreen', { routePoints: points });
   },
 };

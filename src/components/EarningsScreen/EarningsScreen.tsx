@@ -150,7 +150,7 @@ const EarningsScreen: React.FC = () => {
     if (isCurrentlyOnline) {
       setTimerTick((prev) => prev + 1);
     }
-  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime]);
+  }, [vipTimeData.isCurrentlyOnline, vipTimeData.lastOnlineTime, isCurrentlyOnline]);
 
   // Принудительное обновление таймера при изменении онлайн-статуса
   React.useEffect(() => {

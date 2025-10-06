@@ -29,7 +29,7 @@ export interface DriverLevel {
 }
 
 export const useEarningsLevel = () => {
-  const { addEarnings } = useBalanceContext();
+  useBalanceContext();
   useI18n();
 
   const [driverLevel, setDriverLevel] = useState<DriverLevel>(() => {
@@ -51,12 +51,7 @@ export const useEarningsLevel = () => {
     };
   });
 
-  // Загружаем прогресс при инициализации
-  useEffect(() => {
-    loadLevelProgress();
-  }, []);
-
-  const loadLevelProgress = async () => {
+  const loadLevelProgress = useCallback(async () => {
     try {
       const savedProgress = await AsyncStorage.getItem(LEVEL_PROGRESS_KEY);
       if (savedProgress) {
@@ -72,7 +67,12 @@ export const useEarningsLevel = () => {
       const initialLevel = createInitialLevel();
       setDriverLevel(initialLevel);
     }
-  };
+  }, []);
+
+  // Загружаем прогресс при инициализации
+  useEffect(() => {
+    loadLevelProgress();
+  }, [loadLevelProgress]);
 
   const createInitialLevel = (): DriverLevel => {
     const config = getLevelConfig(1, 1);
@@ -105,7 +105,7 @@ export const useEarningsLevel = () => {
 
   // Функция для расчета VIP уровня: +1 за каждый успешный 30-дневный период (>=20 дней)
   // Расчет ведется по массиву завершенных периодов текущего цикла (до 12 шт.)
-  const calculateVIPLevel = (
+  const calculateVIPLevel = useCallback((
     vipStartDate: string,
     qualifiedDaysInPeriods: number[],
   ): number => {
@@ -115,7 +115,7 @@ export const useEarningsLevel = () => {
     ).length;
     const vipLevel = 1 + successfulPeriods;
     return Math.min(vipLevel, 12);
-  };
+  }, []);
 
   // Принудительно активировать VIP уровень
   const activateVIPLevel = useCallback(async () => {
@@ -316,7 +316,7 @@ export const useEarningsLevel = () => {
       // Возвращаем undefined для обычного прогресса
       return undefined;
     }
-  }, [driverLevel, addEarnings]);
+  }, [driverLevel]);
 
   // Функция для обновления VIP уровня на основе выполненных периодов
   const updateVIPLevel = useCallback(

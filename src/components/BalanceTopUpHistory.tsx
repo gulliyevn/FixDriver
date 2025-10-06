@@ -42,7 +42,7 @@ const BalanceTopUpHistory: React.FC<BalanceTopUpHistoryProps> = ({
       tension: 50,
       friction: 7,
     }).start();
-  }, [showWithdrawals]);
+  }, [showWithdrawals, slideAnim]);
   const clientBalanceHook = useBalance();
   const driverBalanceHook = useDriverBalance();
   const transactions = isDriver

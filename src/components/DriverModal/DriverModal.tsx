@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
+import PropTypes from "prop-types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, TouchableOpacity, Animated, Text, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,7 +20,7 @@ import { useSliderLogic } from "./hooks/useSliderLogic";
 import DriverCallSheet from "./components/DriverCallSheet";
 import { useDriverDetails } from "../../hooks/driver/useDriverDetails";
 
-const DriverModal: React.FC<DriverModalProps> = ({
+const DriverModal: React.FC<DriverModalProps> = memo(({
   isVisible,
   onClose,
   onOverlayClose,
@@ -458,6 +459,17 @@ const DriverModal: React.FC<DriverModalProps> = ({
       </Modal>
     </Modal>
   );
+});
+
+DriverModal.displayName = 'DriverModal';
+
+DriverModal.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onOverlayClose: PropTypes.func.isRequired,
+  role: PropTypes.oneOf(['client', 'driver']),
+  onChat: PropTypes.func,
+  driverId: PropTypes.string.isRequired,
 };
 
 export default DriverModal;
