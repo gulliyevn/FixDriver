@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User, UserRole } from "../types/user";
@@ -54,6 +55,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  console.log('🔵 AuthProvider render, user.id:', user?.id);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -94,65 +96,65 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Инициализация аутентификации при запуске приложения
    */
-  const initializeAuth = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      // ⚠️ DEV ONLY: Проверяем DEV-режим логина
-      if (__DEV__) {
-        const isDevLogin = await AsyncStorage.getItem("dev_mode_login");
-        const savedUser = await AsyncStorage.getItem("user");
-
-        if (isDevLogin === "true" && savedUser) {
-          const user = JSON.parse(savedUser);
-          setUser(user);
-          setIsLoading(false);
-          return; // Выходим, не проверяем токены
-        }
-      }
-
-      // PROD: Проверяем наличие валидного токена
-      const hasToken = await JWTService.hasValidToken();
-
-      if (hasToken) {
-        // Получаем данные пользователя из токена
-        const tokenUser = await JWTService.getCurrentUser();
-
-        if (tokenUser) {
-          // Загружаем полные данные пользователя из AsyncStorage
-          const userData = await AsyncStorage.getItem("user");
-          if (userData) {
-            const fullUser = JSON.parse(userData);
-            setUser(fullUser);
-          } else {
-            // Если данных пользователя нет, но токен валиден - пытаемся восстановить
-            // Не выходим автоматически, даем пользователю остаться в приложении
-          }
-        } else {
-          // Токен невалиден - пытаемся обновить
-
-          const refreshed = await refreshAuth();
-          if (!refreshed) {
-            // Если обновление не удалось, НЕ выходим автоматически
-          }
-        }
-      }
-    } catch (error) {
-      console.warn('Failed to initialize auth context:', error);
-      // Не выходим автоматически при ошибках инициализации
-    } finally {
-      setIsLoading(false);
-    }
-  }, [refreshAuth]);
-
   useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        setIsLoading(true);
+
+        // ⚠️ DEV ONLY: Проверяем DEV-режим логина
+        if (__DEV__) {
+          const isDevLogin = await AsyncStorage.getItem("dev_mode_login");
+          const savedUser = await AsyncStorage.getItem("user");
+
+          if (isDevLogin === "true" && savedUser) {
+            const user = JSON.parse(savedUser);
+            setUser(user);
+            setIsLoading(false);
+            return; // Выходим, не проверяем токены
+          }
+        }
+
+        // PROD: Проверяем наличие валидного токена
+        const hasToken = await JWTService.hasValidToken();
+
+        if (hasToken) {
+          // Получаем данные пользователя из токена
+          const tokenUser = await JWTService.getCurrentUser();
+
+          if (tokenUser) {
+            // Загружаем полные данные пользователя из AsyncStorage
+            const userData = await AsyncStorage.getItem("user");
+            if (userData) {
+              const fullUser = JSON.parse(userData);
+              setUser(fullUser);
+            } else {
+              // Если данных пользователя нет, но токен валиден - пытаемся восстановить
+              // Не выходим автоматически, даем пользователю остаться в приложении
+            }
+          } else {
+            // Токен невалиден - пытаемся обновить
+            const refreshed = await refreshAuth();
+            if (!refreshed) {
+              // Если обновление не удалось, НЕ выходим автоматически
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to initialize auth context:', error);
+        // Не выходим автоматически при ошибках инициализации
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     initializeAuth();
-  }, [initializeAuth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Вход в систему
    */
-  const login = async (
+  const login = useCallback(async (
     email: string,
     password: string,
   ): Promise<boolean> => {
@@ -237,12 +239,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   /**
    * Регистрация пользователя
    */
-  const register = async (
+  const register = useCallback(async (
     userData: Partial<User> & { country: string },
     password: string,
   ): Promise<boolean> => {
@@ -272,7 +274,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   /**
    * Выход из системы
@@ -305,36 +307,45 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Получение заголовка авторизации для API запросов
    */
-  const getAuthHeader = async (): Promise<{ Authorization: string } | null> => {
+  const getAuthHeader = useCallback(async (): Promise<{ Authorization: string } | null> => {
     return await JWTService.getAuthHeader();
-  };
+  }, []);
 
   /**
    * Изменение роли пользователя
    */
   const changeRole = useCallback(
     (role: UserRole) => {
-      if (user) {
-        const updatedUser = { ...user, role };
-        setUser(updatedUser);
-        // Сохраняем обновленного пользователя в AsyncStorage
-        AsyncStorage.setItem("user", JSON.stringify(updatedUser));
-      }
+      setUser((currentUser) => {
+        if (currentUser) {
+          const updatedUser = { ...currentUser, role };
+          // Сохраняем обновленного пользователя в AsyncStorage
+          AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+          return updatedUser;
+        }
+        return currentUser;
+      });
     },
-    [user],
+    [],
   );
 
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    isLoading: isLoading || isRefreshing,
-    login,
-    register,
-    logout,
-    refreshAuth,
-    getAuthHeader,
-    changeRole,
-  };
+  const value: AuthContextType = useMemo(
+    () => {
+      console.log('🔵 AuthContext value updated');
+      return {
+        user,
+        isAuthenticated: !!user,
+        isLoading: isLoading || isRefreshing,
+        login,
+        register,
+        logout,
+        refreshAuth,
+        getAuthHeader,
+        changeRole,
+      };
+    },
+    [user, isLoading, isRefreshing, login, register, logout, refreshAuth, changeRole],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

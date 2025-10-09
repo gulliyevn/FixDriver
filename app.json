@@ -31,7 +31,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.fixdrive.app"
+      "package": "com.fixdrive.app",
+      "compileSdkVersion": 34,
+      "targetSdkVersion": 34,
+      "buildToolsVersion": "34.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -52,6 +55,12 @@
     "scheme": "fixdrive",
     "experiments": {
       "tsconfigPaths": false
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dccf8a91-e751-4ac2-b1cc-0742d4f1d33c"
+      }
     }
   }
 }

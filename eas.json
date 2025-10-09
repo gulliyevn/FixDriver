@@ -10,7 +10,8 @@
         "resourceClass": "m-medium"
       },
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleDebug"
       }
     },
     "preview": {
@@ -19,7 +20,8 @@
         "resourceClass": "m-medium"
       },
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
       },
       "env": {
         "NODE_ENV": "staging"
@@ -30,7 +32,8 @@
         "resourceClass": "m-medium"
       },
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
       },
       "env": {
         "NODE_ENV": "production"
@@ -41,15 +44,16 @@
     "production": {
       "ios": {
         "appleId": "$EXPO_APPLE_ID",
-        "ascAppId": "$EXPO_ASC_APP_ID", 
+        "ascAppId": "$EXPO_ASC_APP_ID",
         "appleTeamId": "$EXPO_APPLE_TEAM_ID"
       },
       "android": {
         "serviceAccountKeyPath": "./credentials/google-service-account.json",
-        "track": "production"
+        "track": "production",
+        "releaseStatus": "completed"
       }
     },
-    "staging": {
+    "preview": {
       "ios": {
         "appleId": "$EXPO_APPLE_ID",
         "ascAppId": "$EXPO_ASC_APP_ID",
@@ -57,7 +61,8 @@
       },
       "android": {
         "serviceAccountKeyPath": "./credentials/google-service-account.json",
-        "track": "internal"
+        "track": "internal",
+        "releaseStatus": "completed"
       }
     }
   }

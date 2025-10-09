@@ -66,11 +66,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
   // Initialize language on mount
   useEffect(() => {
+    console.log('🟣 LanguageContext useEffect 1 triggered');
     initializeLanguage();
   }, []);
 
   // Listen for language changes from other parts of the app
   useEffect(() => {
+    console.log('🟣 LanguageContext useEffect 2 triggered');
     const handleLanguageChange = (newLanguage: SupportedLanguage) => {
       setLanguageState(newLanguage);
     };

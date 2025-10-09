@@ -62,24 +62,28 @@ export const useVIPTimeTracking = (isVIP: boolean) => {
       setUpdateTrigger((prev) => prev + 1);
 
       // Принудительно обновляем VIP данные при изменении статуса
-      if (online && !vipTimeData.isCurrentlyOnline) {
-        const now = Date.now();
-        const newData: VIPTimeData = {
-          ...vipTimeData,
-          isCurrentlyOnline: true,
-          lastOnlineTime: now,
-          periodStartDate: isVIP
-            ? (vipTimeData.periodStartDate ?? getNextLocalMidnightDate())
-            : vipTimeData.periodStartDate,
-        };
-        setVipTimeData(newData);
-        saveVIPTimeData(newData);
-      }
+      setVipTimeData((currentData) => {
+        if (online && !currentData.isCurrentlyOnline) {
+          const now = Date.now();
+          const newData: VIPTimeData = {
+            ...currentData,
+            isCurrentlyOnline: true,
+            lastOnlineTime: now,
+            periodStartDate: isVIP
+              ? (currentData.periodStartDate ?? getNextLocalMidnightDate())
+              : currentData.periodStartDate,
+          };
+          saveVIPTimeData(newData);
+          return newData;
+        }
+        return currentData;
+      });
     });
     return () => {
       unsub();
     };
-  }, [vipTimeData, isVIP]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVIP]);
 
 
   // Инициализируем старт 30-дневного периода только при первом включении онлайн, если VIP и период ещё не установлен

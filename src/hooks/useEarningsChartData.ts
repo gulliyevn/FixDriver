@@ -113,7 +113,7 @@ export const useEarningsChartData = (
         setLoading(false);
       }
     },
-    [period, cacheKey, getCachedData, setCachedData],
+    [driverId, period, cacheKey],
   );
 
   // Дебаунсированная загрузка
@@ -143,7 +143,8 @@ export const useEarningsChartData = (
         abortControllerRef.current.abort();
       }
     };
-  }, [debouncedLoadData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [period, driverId]);
 
   // Функция для принудительного обновления данных
   const refreshData = useCallback(() => {
@@ -169,7 +170,8 @@ export const useEarningsChartData = (
     if (needsRefresh && !loading && chartData) {
       debouncedLoadData(true);
     }
-  }, [needsRefresh, loading, chartData, debouncedLoadData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [needsRefresh, loading, chartData]);
 
   return {
     chartData,

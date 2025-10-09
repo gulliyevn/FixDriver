@@ -72,7 +72,8 @@ export const useEarningsLevel = () => {
   // Загружаем прогресс при инициализации
   useEffect(() => {
     loadLevelProgress();
-  }, [loadLevelProgress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const createInitialLevel = (): DriverLevel => {
     const config = getLevelConfig(1, 1);

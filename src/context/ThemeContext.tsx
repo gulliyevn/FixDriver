@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Theme = "light" | "dark";
@@ -28,6 +28,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
+    console.log('⚫ ThemeContext useEffect triggered');
     loadTheme();
   }, []);
 
@@ -44,22 +45,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   };
 
-  const toggleTheme = async () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
+  const toggleTheme = useCallback(async () => {
+    setTheme((currentTheme) => {
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      AsyncStorage.setItem("theme", newTheme).catch((error) => {
+        console.warn('Failed to save theme:', error);
+      });
+      return newTheme;
+    });
+  }, []);
 
-    try {
-      await AsyncStorage.setItem("theme", newTheme);
-    } catch (error) {
-      console.warn('Failed to save theme:', error);
-    }
-  };
-
-  const value = {
+  const value = useMemo(() => ({
     theme,
     toggleTheme,
     isDark: theme === "dark",
-  };
+  }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
