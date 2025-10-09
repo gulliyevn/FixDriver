@@ -82,7 +82,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {hasError && !fallback && (
         <View style={styles.errorContainer}>
           <Image
-            source={require("@/assets/icon.png")} // Default app icon as fallback
+            source={require("@/assets/fixdrive_logos/in-app/in-app-360x360.png")} // Default app icon as fallback
             style={styles.errorImage}
           />
         </View>

@@ -56,7 +56,7 @@ const RoleSelectScreen: React.FC = () => {
         <View style={styles.headerLogo}>
           <View style={styles.logoIconWrap}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/fixdrive_logos/in-app/in-app-360x360.png")}
               style={{ width: 56, height: 56, borderRadius: 12 }}
               resizeMode="contain"
             />

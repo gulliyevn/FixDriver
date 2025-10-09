@@ -70,7 +70,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
         <View style={styles.appInfo}>
           <View style={[styles.appIcon, dynamicStyles.appIcon]}>
             <Image
-              source={require("../../../assets/icon.png")}
+              source={require("../../../assets/fixdrive_logos/in-app/in-app-360x360.png")}
               style={styles.appIcon}
               resizeMode="contain"
             />
