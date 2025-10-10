@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.fixdrive"
+    namespace "com.fixdrive.app"
     defaultConfig {
-        applicationId "com.fixdrive"
+        applicationId "com.fixdrive.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
