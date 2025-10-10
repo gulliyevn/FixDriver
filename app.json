@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fixdrive.app",
+      "bundleIdentifier": "tech.fixdrive.app",
       "infoPlist": {
         "LSApplicationQueriesSchemes": [
           "comgooglemaps",
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.fixdrive.app"
+      "package": "tech.fixdrive.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

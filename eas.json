@@ -21,7 +21,8 @@
       },
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "withoutCredentials": true
       },
       "env": {
         "NODE_ENV": "staging"
