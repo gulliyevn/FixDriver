@@ -31,10 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.fixdrive.app",
-      "compileSdkVersion": 34,
-      "targetSdkVersion": 34,
-      "buildToolsVersion": "34.0.0"
+      "package": "com.fixdrive.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
