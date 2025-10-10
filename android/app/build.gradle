@@ -17,6 +17,10 @@ react {
     // works correctly with Expo projects.
     cliFile = new File(["node", "--print", "require.resolve('@expo/cli')"].execute(null, rootDir).text.trim())
     bundleCommand = "export:embed"
+    
+    // Disable React Native autolinking (Expo handles it)
+    enableHermes = true
+    enableProguardInReleaseBuilds = false
 
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
@@ -173,5 +177,12 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
+    }
+}
+
+// Disable React Native autolinking tasks (Expo handles autolinking)
+tasks.whenTaskAdded { task ->
+    if (task.name.contains("generateAutolinkingPackageList")) {
+        task.enabled = false
     }
 }
