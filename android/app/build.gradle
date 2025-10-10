@@ -29,6 +29,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "tech.fixdrive.app"
+    
+    buildFeatures {
+        buildConfig = true
+    }
+    
     defaultConfig {
         applicationId "tech.fixdrive.app"
         minSdkVersion rootProject.ext.minSdkVersion

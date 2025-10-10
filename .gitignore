@@ -280,6 +280,7 @@ credentials/app-signing-key.json
 
 # App Store Connect API
 credentials/app-store-connect-api-key.json
+credentials/AuthKey_5J39F6L4QN.p8
 
 # ===== ДОПОЛНИТЕЛЬНЫЕ ИСКЛЮЧЕНИЯ =====
 
