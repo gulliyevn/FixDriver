@@ -2,6 +2,7 @@ import APIClient from "./APIClient";
 import JWTService from "./JWTService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../types/user";
+import { isDevModeEnabled } from "../config/devMode";
 
 export interface ChangePasswordRequest {
   currentPassword: string;
@@ -41,7 +42,7 @@ export class ProfileService {
   static async getProfile(userId: string): Promise<User | null> {
     try {
       // ⚠️ DEV ONLY: Загружаем из локального хранилища
-      if (__DEV__) {
+      if (isDevModeEnabled()) {
         const profileJson = await AsyncStorage.getItem(
           `${this.STORAGE_KEY}${userId}`,
         );
@@ -82,7 +83,7 @@ export class ProfileService {
   ): Promise<{ success: boolean; profile?: User; error?: string }> {
     try {
       // ⚠️ DEV ONLY: Обновляем в локальном хранилище
-      if (__DEV__) {
+      if (isDevModeEnabled()) {
         // Получаем текущий профиль
         const currentProfile = await this.getProfile(userId);
         if (!currentProfile) {
@@ -140,7 +141,7 @@ export class ProfileService {
   ): Promise<{ success: boolean; avatarUrl?: string; error?: string }> {
     try {
       // ⚠️ DEV ONLY: Сохраняем URI локально
-      if (__DEV__) {
+      if (isDevModeEnabled()) {
         const profile = await this.getProfile(userId);
         if (!profile) {
           return { success: false, error: "Profile not found" };
