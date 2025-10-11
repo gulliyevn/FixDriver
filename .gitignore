@@ -329,3 +329,5 @@ $RECYCLE.BIN/
 # !LICENSE
 architecture_src_new/MAPSCREEN_REFACTOR_PLAN.md
 credentials/*.json
+android/
+ios/
