@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { isDevModeEnabled } from "../config/devMode";
 
 const DEV_STORAGE_KEYS = {
   USERS: "@dev_registered_users",
@@ -80,7 +81,12 @@ export const saveClientRegistration = async (data: {
   );
 
   // Проверяем что сохранилось
-  await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
+  const savedUsersJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.USERS);
+  console.log('✅ DEV: Клиент зарегистрирован:', {
+    email: user.email,
+    totalUsers: existingUsers.length,
+    saved: !!savedUsersJson
+  });
 
   return user;
 };
@@ -145,7 +151,12 @@ export const saveDriverRegistration = async (data: {
   );
 
   // Проверяем что сохранилось
-  await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
+  const savedDriversJson = await AsyncStorage.getItem(DEV_STORAGE_KEYS.DRIVERS);
+  console.log('✅ DEV: Водитель зарегистрирован:', {
+    email: driver.email,
+    totalDrivers: existingDrivers.length,
+    saved: !!savedDriversJson
+  });
 
   return driver;
 };
@@ -182,15 +193,15 @@ export const clearAllDevRegistrations = async (): Promise<void> => {
 /**
  * Проверить, включен ли Dev режим
  */
-export const isDevModeEnabled = (): boolean => {
-  return __DEV__;
+export const isDevModeEnabledService = (): boolean => {
+  return isDevModeEnabled();
 };
 
 /**
  * Вывести статистику регистраций в консоль
  */
 export const logDevRegistrationStats = async (): Promise<void> => {
-  if (!__DEV__) return;
+  if (!isDevModeEnabled()) return;
 
   try {
     const users = await getAllDevUsers();
@@ -209,7 +220,7 @@ export const DevRegistrationService = {
   saveDriverRegistration,
   getAllDevUsers,
   clearAllDevRegistrations,
-  isDevModeEnabled,
+  isDevModeEnabledService,
   logDevRegistrationStats,
 };
 

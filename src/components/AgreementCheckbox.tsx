@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Linking } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -15,8 +15,6 @@ const AgreementCheckbox: React.FC<AgreementCheckboxProps> = ({
   styles,
 }) => {
   const { t } = useLanguage();
-  const [showTerms, setShowTerms] = React.useState(false);
-  const [showPrivacy, setShowPrivacy] = React.useState(false);
 
   const agreeTermsRich = t("register.agreeTermsRich");
   const termsMatch = agreeTermsRich.match(/<terms>(.*?)<\/terms>/);
@@ -40,66 +38,16 @@ const AgreementCheckbox: React.FC<AgreementCheckboxProps> = ({
         </TouchableOpacity>
         <Text style={styles.agreeText}>
           {beforeTerms as React.ReactNode}
-          <Text style={styles.link} onPress={() => setShowTerms(true)}>
+          <Text style={styles.link} onPress={() => Linking.openURL('https://fixdrive.tech/terms')}>
             {termsMatch ? termsMatch[1] : ""}
           </Text>
           {afterTerms as React.ReactNode}
-          <Text style={styles.link} onPress={() => setShowPrivacy(true)}>
+          <Text style={styles.link} onPress={() => Linking.openURL('https://fixdrive.tech/privacy')}>
             {privacyMatch ? privacyMatch[1] : ""}
           </Text>
           {afterPrivacy as React.ReactNode}
         </Text>
       </View>
-
-      {/* Модалка для условий */}
-      <Modal
-        visible={showTerms}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowTerms(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              {termsMatch ? termsMatch[1] : t("register.terms")}
-            </Text>
-            <ScrollView style={{ maxHeight: 300 }}>
-              <Text style={styles.modalText}>{t("register.termsText")}</Text>
-            </ScrollView>
-            <TouchableOpacity
-              style={styles.modalCloseBtn}
-              onPress={() => setShowTerms(false)}
-            >
-              <Text style={styles.modalCloseText}>{t("register.ok")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Модалка для политики */}
-      <Modal
-        visible={showPrivacy}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPrivacy(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              {privacyMatch ? privacyMatch[1] : t("register.privacy")}
-            </Text>
-            <ScrollView style={{ maxHeight: 300 }}>
-              <Text style={styles.modalText}>{t("register.privacyText")}</Text>
-            </ScrollView>
-            <TouchableOpacity
-              style={styles.modalCloseBtn}
-              onPress={() => setShowPrivacy(false)}
-            >
-              <Text style={styles.modalCloseText}>{t("register.ok")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </>
   );
 };

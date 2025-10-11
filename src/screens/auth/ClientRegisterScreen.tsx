@@ -10,7 +10,7 @@ import {
   Platform,
   Alert,
   StatusBar,
-  Modal,
+  Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -45,8 +45,6 @@ const ClientRegisterScreen: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
 
   const handleChange = (field: keyof typeof form, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -294,11 +292,11 @@ const ClientRegisterScreen: React.FC = () => {
               </TouchableOpacity>
               <Text style={styles.agreeText}>
                 {beforeTerms as React.ReactNode}
-                <Text style={styles.link} onPress={() => setShowTerms(true)}>
+                <Text style={styles.link} onPress={() => Linking.openURL('https://fixdrive.tech/terms')}>
                   {termsMatch ? termsMatch[1] : ""}
                 </Text>
                 {afterTerms as React.ReactNode}
-                <Text style={styles.link} onPress={() => setShowPrivacy(true)}>
+                <Text style={styles.link} onPress={() => Linking.openURL('https://fixdrive.tech/privacy')}>
                   {privacyMatch ? privacyMatch[1] : ""}
                 </Text>
                 {afterPrivacy as React.ReactNode}
@@ -351,58 +349,6 @@ const ClientRegisterScreen: React.FC = () => {
           <SocialAuthButtons />
         </ScrollView>
       </KeyboardAvoidingView>
-      {/* Модалка для условий */}
-      <Modal
-        visible={showTerms}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowTerms(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              {t("register.agreeTermsRich").match(
-                /<terms>(.*?)<\/terms>/,
-              )?.[1] || t("register.terms")}
-            </Text>
-            <ScrollView style={{ maxHeight: 300 }}>
-              <Text style={styles.modalText}>{t("register.termsText")}</Text>
-            </ScrollView>
-            <TouchableOpacity
-              style={styles.modalCloseBtn}
-              onPress={() => setShowTerms(false)}
-            >
-              <Text style={styles.modalCloseText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-      {/* Модалка для политики */}
-      <Modal
-        visible={showPrivacy}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPrivacy(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              {t("register.agreeTermsRich").match(
-                /<privacy>(.*?)<\/privacy>/,
-              )?.[1] || t("register.privacy")}
-            </Text>
-            <ScrollView style={{ maxHeight: 300 }}>
-              <Text style={styles.modalText}>{t("register.privacyText")}</Text>
-            </ScrollView>
-            <TouchableOpacity
-              style={styles.modalCloseBtn}
-              onPress={() => setShowPrivacy(false)}
-            >
-              <Text style={styles.modalCloseText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };

@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Linking,
-  Modal,
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,8 +33,6 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
   const getScreenTitle = () => {
     return isDriver ? "О приложении" : t("client.about.title");
   };
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const appInfo = {
     name: "FixDrive",
@@ -121,7 +118,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             style={[styles.linkItem, dynamicStyles.linkItem]}
-            onPress={() => handleOpenLink("https://junago.net")}
+            onPress={() => handleOpenLink("https://fixdrive.tech")}
           >
             <Ionicons name="globe" size={24} color={currentColors.primary} />
             <Text style={[styles.linkText, dynamicStyles.linkText]}>
@@ -149,7 +146,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.linkItem, dynamicStyles.linkItem]}
-            onPress={() => setShowPrivacyModal(true)}
+            onPress={() => Linking.openURL('https://fixdrive.tech/privacy')}
           >
             <Ionicons
               name="shield-checkmark"
@@ -167,7 +164,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.linkItem, dynamicStyles.linkItem]}
-            onPress={() => setShowTermsModal(true)}
+            onPress={() => Linking.openURL('https://fixdrive.tech/terms')}
           >
             <Ionicons
               name="document-text"
@@ -185,64 +182,6 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* Модальное окно политики конфиденциальности */}
-      <Modal
-        visible={showPrivacyModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPrivacyModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, dynamicStyles.modalContent]}>
-            <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
-              <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
-                {t("client.about.privacy")}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowPrivacyModal(false)}
-                style={styles.modalCloseButton}
-              >
-                <Ionicons name="close" size={24} color={currentColors.text} />
-              </TouchableOpacity>
-            </View>
-            <ScrollView style={styles.modalScrollView}>
-              <Text style={[styles.modalText, dynamicStyles.modalText]}>
-                {t("client.about.privacyText")}
-              </Text>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Модальное окно условий использования */}
-      <Modal
-        visible={showTermsModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowTermsModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, dynamicStyles.modalContent]}>
-            <View style={[styles.modalHeader, dynamicStyles.modalHeader]}>
-              <Text style={[styles.modalTitle, dynamicStyles.modalTitle]}>
-                {t("client.about.terms")}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowTermsModal(false)}
-                style={styles.modalCloseButton}
-              >
-                <Ionicons name="close" size={24} color={currentColors.text} />
-              </TouchableOpacity>
-            </View>
-            <ScrollView style={styles.modalScrollView}>
-              <Text style={[styles.modalText, dynamicStyles.modalText]}>
-                {t("client.about.termsText")}
-              </Text>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
