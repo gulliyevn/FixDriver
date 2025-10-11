@@ -17,6 +17,9 @@ react {
     // works correctly with Expo projects.
     cliFile = new File(["node", "--print", "require.resolve('@expo/cli')"].execute(null, rootDir).text.trim())
     bundleCommand = "export:embed"
+    
+    // Disable React Native autolinking (Expo handles it via settings.gradle)
+    autolinkLibrariesWithApp()
 }
 
 /**
