@@ -103,7 +103,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsLoading(true);
 
         // ⚠️ DEV ONLY: Проверяем DEV-режим логина
-        if (__DEV__) {
+        if (isDevModeEnabled()) {
           const isDevLogin = await AsyncStorage.getItem("dev_mode_login");
           const savedUser = await AsyncStorage.getItem("user");
 
