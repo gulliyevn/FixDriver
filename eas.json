@@ -46,10 +46,7 @@
       "ios": {
         "appleId": "nicatguliyev006@gmail.com",
         "ascAppId": "6753813492",
-        "appleTeamId": "6KQMH92CC5",
-        "appleApiKeyPath": "./credentials/AuthKey_5J39F6L4QN.p8",
-        "appleApiKeyId": "5J39F6L4QN",
-        "appleApiIssuer": "b058e505-d984-4097-afc7-8083c719f88f"
+        "appleTeamId": "6KQMH92CC5"
       },
       "android": {
         "serviceAccountKeyPath": "./credentials/google-service-account.json",
