@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import DevRegistrationService, {
   DevRegisteredUser,
 } from "../services/DevRegistrationService";
+import { isDevModeEnabled } from "../config/devMode";
 
 export const useDevRegistration = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ export const useDevRegistration = () => {
       firstName: string;
       lastName: string;
     }): Promise<DevRegisteredUser | null> => {
-      if (!__DEV__) {
+      if (!isDevModeEnabled()) {
         return null;
       }
 
@@ -67,7 +68,7 @@ export const useDevRegistration = () => {
       licensePhoto?: string;
       passportPhoto?: string;
     }): Promise<DevRegisteredUser | null> => {
-      if (!__DEV__) {
+      if (!isDevModeEnabled()) {
         return null;
       }
 
@@ -98,7 +99,7 @@ export const useDevRegistration = () => {
    * Получить всех пользователей
    */
   const getAllUsers = useCallback(async (): Promise<DevRegisteredUser[]> => {
-    if (!__DEV__) return [];
+    if (!isDevModeEnabled()) return [];
 
     try {
       return await DevRegistrationService.getAllDevUsers();
@@ -111,7 +112,7 @@ export const useDevRegistration = () => {
    * Очистить все регистрации
    */
   const clearAll = useCallback(async (): Promise<boolean> => {
-    if (!__DEV__) return false;
+    if (!isDevModeEnabled()) return false;
 
     try {
       await DevRegistrationService.clearAllDevRegistrations();
@@ -125,7 +126,7 @@ export const useDevRegistration = () => {
    * Показать статистику
    */
   const showStats = useCallback(async () => {
-    if (!__DEV__) return;
+    if (!isDevModeEnabled()) return;
     await DevRegistrationService.logDevRegistrationStats();
   }, []);
 
@@ -137,7 +138,7 @@ export const useDevRegistration = () => {
     showStats,
     isLoading,
     error,
-    isDevMode: __DEV__,
+    isDevMode: isDevModeEnabled(),
   };
 };
 
