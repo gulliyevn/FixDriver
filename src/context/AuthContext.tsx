@@ -11,6 +11,7 @@ import { User, UserRole } from "../types/user";
 import JWTService from "../services/JWTService";
 import { AuthService } from "../services/AuthService";
 import DevRegistrationService from "../services/DevRegistrationService";
+import { isDevModeEnabled } from "../config/devMode";
 
 interface AuthContextType {
   user: User | null;
@@ -161,8 +162,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
 
-      // ⚠️ DEV ONLY: Проверяем локальных пользователей
-      if (__DEV__) {
+      // ⚠️ DEV MODE: Проверяем локальных пользователей
+      if (isDevModeEnabled()) {
         const devUsers = await DevRegistrationService.getAllDevUsers();
 
         if (devUsers.length > 0) {

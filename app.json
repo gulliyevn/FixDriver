@@ -3,9 +3,30 @@
     "name": "FixDrive",
     "slug": "fixdrive",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/fixdrive_logos/app-icons/app-icons-1024x1024.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "tech.fixdrive.app",
+      "icon": "./assets/fixdrive_logos/app-icons/app-icons-1024x1024.png"
+    },
+    "android": {
+      "package": "tech.fixdrive.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/fixdrive_logos/app-icons/app-icons-512x512.png",
+        "backgroundColor": "#ffffff"
+      },
+      "icon": "./assets/fixdrive_logos/app-icons/app-icons-512x512.png"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },

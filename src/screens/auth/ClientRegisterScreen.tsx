@@ -24,6 +24,7 @@ import {
 import PasswordStrengthIndicator from "../../components/PasswordStrengthIndicator";
 import SocialAuthButtons from "../../components/SocialAuthButtons";
 import DevRegistrationService from "../../services/DevRegistrationService";
+import { isDevModeEnabled } from "../../config/devMode";
 
 const ClientRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -89,8 +90,8 @@ const ClientRegisterScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
-      if (__DEV__) {
+      // ⚠️ DEV MODE: Временная регистрация в AsyncStorage
+      if (isDevModeEnabled()) {
         const user = await DevRegistrationService.saveClientRegistration({
           email: form.email,
           phone: form.phone,
@@ -122,7 +123,7 @@ const ClientRegisterScreen: React.FC = () => {
 
       Alert.alert(
         t("register.successTitle"),
-        __DEV__
+        isDevModeEnabled()
           ? "✅ Клиент зарегистрирован локально (DEV режим)"
           : t("register.successText"),
       );

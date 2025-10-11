@@ -33,6 +33,7 @@ import {
   getTariffOptions,
 } from "../../utils/driverData";
 import DevRegistrationService from "../../services/DevRegistrationService";
+import { isDevModeEnabled } from "../../config/devMode";
 
 const DriverRegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -183,8 +184,8 @@ const DriverRegisterScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      // ⚠️ DEV ONLY: Временная регистрация в AsyncStorage
-      if (__DEV__) {
+      // ⚠️ DEV MODE: Временная регистрация в AsyncStorage
+      if (isDevModeEnabled()) {
         const driver = await DevRegistrationService.saveDriverRegistration({
           email: form.email,
           phone: form.phone,
@@ -238,7 +239,7 @@ const DriverRegisterScreen: React.FC = () => {
 
       Alert.alert(
         t("register.successTitle"),
-        __DEV__
+        isDevModeEnabled()
           ? "✅ Водитель зарегистрирован локально (DEV режим)"
           : t("register.successText"),
       );
