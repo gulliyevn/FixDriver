@@ -186,16 +186,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (devUser) {
           // Создаем объект User из DevRegisteredUser
           const user: User = {
-            id: devUser.id || "",
-            email: devUser.email || "",
-            name: devUser.firstName || "",
-            surname: devUser.lastName || "",
+            id: devUser.id,
+            email: devUser.email,
+            name: devUser.firstName,
+            surname: devUser.lastName,
             role: devUser.role as UserRole,
-            phone: devUser.phone || "",
+            phone: devUser.phone,
             avatar: null,
             rating: 5,
             address: "",
-            createdAt: devUser.registeredAt || "",
+            createdAt: devUser.registeredAt,
             birthDate: undefined,
           };
 

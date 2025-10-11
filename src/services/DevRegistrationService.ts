@@ -7,16 +7,14 @@ const DEV_STORAGE_KEYS = {
 };
 
 export interface DevRegisteredUser {
-  id?: string;
-  email?: string;
-  phone?: string;
-  password?: string; // В реальном приложении НИКОГДА не храним пароли в открытом виде!
-  firstName?: string;
-  lastName?: string;
-  role?: "client" | "driver";
-  registeredAt?: string;
-  success?: boolean;
-  message?: string;
+  id: string;
+  email: string;
+  phone: string;
+  password: string; // В реальном приложении НИКОГДА не храним пароли в открытом виде!
+  firstName: string;
+  lastName: string;
+  role: "client" | "driver";
+  registeredAt: string;
 
   // Driver-specific fields
   country?: string;
@@ -65,10 +63,7 @@ export const saveClientRegistration = async (data: {
   const duplicate = existingUsers.find((u) => u.email === data.email);
   if (duplicate) {
     console.error("Пользователь с таким email уже зарегистрирован");
-    return {
-      success: false,
-      message: "Пользователь с таким email уже зарегистрирован",
-    };
+    return;
   }
 
   // Добавляем нового пользователя
@@ -135,10 +130,7 @@ export const saveDriverRegistration = async (data: {
   const duplicate = existingDrivers.find((d) => d.email === data.email);
   if (duplicate) {
     console.error("Водитель с таким email уже зарегистрирован");
-    return {
-      success: false,
-      message: "Водитель с таким email уже зарегистрирован",
-    };
+    return;
   }
 
   // Добавляем нового водителя
